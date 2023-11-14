@@ -1,0 +1,29 @@
+---
+collections:
+
+  - name: ansible.netcommon
+    source: https://galaxy.ansible.com
+
+  - name: ansible.posix
+    source: https://galaxy.ansible.com
+
+  - name: arista.eos
+    source: https://galaxy.ansible.com
+
+  - name: community.general
+    source: https://galaxy.ansible.com
+
+  - name: community.kubernetes
+    source: https://galaxy.ansible.com
+
+  - name: google.cloud
+    source: https://galaxy.ansible.com
+
+  - name: netbox.netbox
+    source: https://galaxy.ansible.com
+
+  - name: arista.avd
+    source: https://galaxy.ansible.com
+
+  - name: arista.cvp
+    source: https://galaxy.ansible.com
