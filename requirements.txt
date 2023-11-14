@@ -1,4 +1,4 @@
-ansible-core==2.14.11
+ansible-core==2.15.6
 ansible-lint==6.14.3
 asgiref
 black==22.8.0
