@@ -1,0 +1,7 @@
+---
+mac_address_table:
+  aging_time: 1800
+
+arp:
+  aging:
+    timeout_default: 1500

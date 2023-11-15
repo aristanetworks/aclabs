@@ -1,0 +1,81 @@
+tenants: 
+  - name: TENANT1
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: Prod
+        vrf_vni: 50001
+        vtep_diagnostic: 
+          loopback: 101
+          loopback_ip_range: 10.255.10.0/27
+        mlag_ibgp_peering_ipv4_pool: 192.0.0.0/31
+        mlag_ibgp_peering_vlan: 3001
+        svis: 
+          - id: 10
+            name: VRFA_VLAN10
+            profile: VLAN10
+          - id: 20
+            name: VRFA_VLAN20
+            profile: VLAN20
+          - id: 30
+            name: VRFA_VLAN30
+            profile: VLAN30
+          - id: 40
+            name: VRFA_VLAN40
+            profile: VLAN40
+        l3_interfaces:
+          - interfaces:
+            - Ethernet48
+            ip_addresses:
+              - 172.255.0.1/30
+            nodes:
+              - A-LEAF7
+            enabled: true
+      - name: Dev
+        vrf_vni: 50002
+        vtep_diagnostic:
+          loopback: 102
+          loopback_ip_range: 10.255.11.0/27
+        mlag_ibgp_peering_ipv4_pool: 192.0.0.0/31
+        mlag_ibgp_peering_vlan: 3002
+        svis:
+          - id: 50
+            name: VRFB_VLAN50
+            profile: VLAN50
+          - id: 60
+            name: VRFB_VLAN60
+            profile: VLAN60
+          - id: 70
+            name: VRFB_VLAN70
+            profile: VLAN70
+          - id: 80
+            name: VRFB_VLAN80
+            profile: VLAN80
+        
+svi_profiles:
+  - profile: global-svi-profile
+    mtu: 9014
+    enabled: true
+  - profile: VLAN10
+    parent_profile: global-svi-profile
+    ip_address_virtual: 10.10.10.1/24
+  - profile: VLAN20
+    parent_profile: global-svi-profile
+    ip_address_virtual: 10.20.20.1/24
+  - profile: VLAN30
+    parent_profile: global-svi-profile
+    ip_address_virtual: 10.30.30.1/24
+  - profile: VLAN40
+    parent_profile: global-svi-profile
+    ip_address_virtual: 10.40.40.1/24
+  - profile: VLAN50
+    parent_profile: global-svi-profile
+    ip_address_virtual: 10.50.50.1/24
+  - profile: VLAN60
+    parent_profile: global-svi-profile
+    ip_address_virtual: 10.60.60.1/24
+  - profile: VLAN70
+    parent_profile: global-svi-profile
+    ip_address_virtual: 10.70.70.1/24
+  - profile: VLAN80
+    parent_profile: global-svi-profile
+    ip_address_virtual: 10.80.80.1/24

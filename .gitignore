@@ -1,0 +1,5 @@
+# ignore devcontainer
+.devcontainer/
+# ignore avd generated files
+dc-evpn-vxlan/documentation
+dc-evpn-vxlan/intended

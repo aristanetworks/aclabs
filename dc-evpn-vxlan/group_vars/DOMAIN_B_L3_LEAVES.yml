@@ -1,0 +1,16 @@
+---
+type: l3leaf
+
+dhcp_relay:
+  tunnel_requests_disabled: true
+
+custom_structured_configuration_ethernet_interfaces:
+  - name: Ethernet1
+    ip_address: "unnumbered Loopback0"
+  - name: Ethernet2
+    ip_address: "unnumbered Loopback0"
+  - name: Ethernet3
+    ip_address: "unnumbered Loopback0"
+  - name: Ethernet4
+    ip_address: "unnumbered Loopback0"
+

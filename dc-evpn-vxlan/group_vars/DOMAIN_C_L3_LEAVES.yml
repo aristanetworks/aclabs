@@ -1,0 +1,9 @@
+---
+type: l3leaf
+
+dhcp_relay:
+  tunnel_requests_disabled: true
+
+custom_structured_configuration_vlan_interfaces:
+  - name: 'Vlan4094'
+    mtu: 1500

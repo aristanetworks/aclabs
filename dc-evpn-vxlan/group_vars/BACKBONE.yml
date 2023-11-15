@@ -1,0 +1,44 @@
+---
+type: backbone
+
+switchport_default:
+  mode: routed
+
+bgp_peer_groups:
+  evpn_overlay_peers:
+    structured_config:
+      route_reflector_client: true
+  ipv4_underlay_peers:
+    password: 7x4B4rnJhZB438m9+BrBfQ==
+    structured_config:
+      route_reflector_client: true
+
+peer_filters:
+  - name: DC-ASN-RANGE
+    sequence_numbers:
+      - sequence: 10
+        match: "as-range 65100-65499 result accept"
+
+custom_structured_configuration_router_bgp:
+  listen_ranges:
+    - prefix: 10.0.0.0/24
+      peer_group: EVPN-OVERLAY-PEERS
+      remote_as: 65500
+    - prefix: 172.16.0.0/16
+      peer_group: IPv4-UNDERLAY-PEERS
+      peer_filter: DC-ASN-RANGE
+
+backbone:
+  defaults:
+    platform: vEOS-lab
+    loopback_ipv4_pool: 172.16.0.0/24
+    bgp_as: 65500
+    raw_eos_cli: |
+      agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
+  nodes: 
+    - name: BB1
+      id: 1 
+      mgmt_ip: 192.168.0.9/24 
+    - name: BB2
+      id: 2
+      mgmt_ip: 192.168.0.10/24

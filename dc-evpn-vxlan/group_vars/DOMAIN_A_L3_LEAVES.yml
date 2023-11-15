@@ -1,0 +1,23 @@
+---
+type: l3leaf
+
+dhcp_relay:
+  tunnel_requests_disabled: true
+
+custom_structured_configuration_vlan_interfaces:
+  - name: 'Vlan4094'
+    mtu: 1500
+
+# ip_extcommunity_lists_regexp:
+#   - name: evpn-imported
+#     entries:
+#       - type: permit
+#         regexp: RT.*
+
+# custom_structured_configuration_route_maps:
+#   - name: RM-MLAG-PEER-IN
+#     sequence_numbers:
+#       - sequence: 5
+#         type: deny
+#         match:
+#           - 'extcomunity evpn-imported'

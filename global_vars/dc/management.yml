@@ -1,0 +1,27 @@
+---
+mgmt_interface_vrf: default
+
+name_servers:
+  - 10.255.0.2
+
+ntp:
+  servers:
+    - name: 0.pool.ntp.org
+
+local_users: 
+  - name: admin
+    privilege: 15
+    role: network-admin
+    no_password: true
+  - name: cvpadmin
+    privilege: 15
+    role: network-admin
+    sha512_password: $6$JIWpYntS5KpTMCGF$el6rGKnDYPqxKeMcJGutPctkOMiHrV/bej1DTmdTR8jEnuV/gQbTYa76slNHP1vwyN8Gq2kbNsMmXUwVhkwjy1
+
+cvp_instance_ips:
+  - 192.168.0.5
+cvp_token_file: /tmp/token
+
+aaa_authorization:
+  exec:
+    default: local

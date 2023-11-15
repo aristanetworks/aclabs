@@ -1,0 +1,28 @@
+---
+
+- name: Build Switch configuration
+  hosts: FABRIC
+  connection: local
+  gather_facts: false
+  collections:
+    - arista.avd
+    - arista.cvp
+  
+  vars:
+    ansible_user: cvpadmin
+    ansible_password: arista123
+    ansible_network_os: arista.eos.eos
+    # Configure privilege escalation
+    ansible_become: true
+    ansible_become_method: enable
+    # HTTPAPI configuration
+    ansible_connection: httpapi
+    ansible_httpapi_port: 443
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+
+  tasks:
+        
+    - name: deploy eapi
+      ansible.builtin.import_role:
+        name: arista.avd.eos_config_deploy_eapi
