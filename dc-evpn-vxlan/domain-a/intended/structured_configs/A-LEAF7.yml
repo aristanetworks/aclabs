@@ -1,0 +1,665 @@
+hostname: A-LEAF7
+router_bgp:
+  as: '65178'
+  router_id: 10.0.0.11
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  bgp:
+    default:
+      ipv4_unicast: false
+  maximum_paths:
+    paths: 4
+    ecmp: 4
+  graceful_restart:
+    enabled: true
+    restart_time: 300
+  peer_groups:
+  - name: MLAG-IPv4-UNDERLAY-PEER
+    type: ipv4
+    remote_as: '65178'
+    next_hop_self: true
+    description: A-LEAF8
+    password: 4b21pAdCvWeAqpcKDFMdWw==
+    maximum_routes: 12000
+    send_community: all
+    route_map_in: RM-MLAG-PEER-IN
+  - name: IPv4-UNDERLAY-PEERS
+    type: ipv4
+    password: 7x4B4rnJhZB438m9+BrBfQ==
+    maximum_routes: 12000
+    send_community: all
+  - name: EVPN-OVERLAY-PEERS
+    type: evpn
+    update_source: Loopback0
+    bfd: true
+    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
+    send_community: all
+    maximum_routes: 0
+    ebgp_multihop: 3
+  - name: EVPN-OVERLAY-CORE
+    type: evpn
+    update_source: Loopback0
+    bfd: true
+    send_community: all
+    maximum_routes: 0
+    ebgp_multihop: 15
+    local_as: '65500'
+    remove_private_as:
+      replace_as: true
+  address_family_ipv4:
+    peer_groups:
+    - name: MLAG-IPv4-UNDERLAY-PEER
+      activate: true
+    - name: IPv4-UNDERLAY-PEERS
+      activate: true
+    - name: EVPN-OVERLAY-PEERS
+      activate: false
+    - name: EVPN-OVERLAY-CORE
+      activate: false
+  neighbors:
+  - ip_address: 192.0.0.1
+    peer_group: MLAG-IPv4-UNDERLAY-PEER
+    description: A-LEAF8
+  - ip_address: 192.168.1.48
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65100'
+    description: A-SPINE1_Ethernet7
+  - ip_address: 192.168.1.50
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65100'
+    description: A-SPINE2_Ethernet7
+  - ip_address: 192.168.1.52
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65100'
+    description: A-SPINE3_Ethernet7
+  - ip_address: 192.168.1.54
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65100'
+    description: A-SPINE4_Ethernet7
+  - ip_address: 10.0.0.1
+    peer_group: EVPN-OVERLAY-PEERS
+    description: A-SPINE1
+    remote_as: '65100'
+  - ip_address: 10.0.0.2
+    peer_group: EVPN-OVERLAY-PEERS
+    description: A-SPINE2
+    remote_as: '65100'
+  - ip_address: 10.0.0.3
+    peer_group: EVPN-OVERLAY-PEERS
+    description: A-SPINE3
+    remote_as: '65100'
+  - ip_address: 10.0.0.4
+    peer_group: EVPN-OVERLAY-PEERS
+    description: A-SPINE4
+    remote_as: '65100'
+  - ip_address: 172.16.0.1
+    peer_group: EVPN-OVERLAY-CORE
+    description: BB1
+    remote_as: '65500'
+  - ip_address: 172.16.0.2
+    peer_group: EVPN-OVERLAY-CORE
+    description: BB2
+    remote_as: '65500'
+  - ip_address: 172.16.1.1
+    remote_as: '65500'
+    description: BB1
+    peer_group: IPv4-UNDERLAY-PEERS
+  - ip_address: 172.16.1.3
+    remote_as: '65500'
+    description: BB2
+    peer_group: IPv4-UNDERLAY-PEERS
+  redistribute_routes:
+  - source_protocol: connected
+    route_map: RM-CONN-2-BGP
+  address_family_evpn:
+    neighbor_default:
+      next_hop_self_received_evpn_routes:
+        enable: true
+        inter_domain: true
+    peer_groups:
+    - name: EVPN-OVERLAY-PEERS
+      activate: true
+    - name: EVPN-OVERLAY-CORE
+      domain_remote: true
+      activate: true
+    route:
+      import_match_failure_action: discard
+  vrfs:
+  - name: Dev
+    router_id: 10.0.0.11
+    rd: 10.0.0.11:50002
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 50002:50002
+      export:
+      - address_family: evpn
+        route_targets:
+        - 50002:50002
+    redistribute_routes:
+    - source_protocol: connected
+    neighbors:
+    - ip_address: 192.0.0.1
+      peer_group: MLAG-IPv4-UNDERLAY-PEER
+  - name: Prod
+    router_id: 10.0.0.11
+    rd: 10.0.0.11:50001
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 50001:50001
+      export:
+      - address_family: evpn
+        route_targets:
+        - 50001:50001
+    redistribute_routes:
+    - source_protocol: connected
+    neighbors:
+    - ip_address: 192.0.0.1
+      peer_group: MLAG-IPv4-UNDERLAY-PEER
+  vlans:
+  - id: 50
+    tenant: TENANT1
+    rd: 10.0.0.11:10050
+    route_targets:
+      both:
+      - 10050:10050
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10050:10050
+    redistribute_routes:
+    - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.0.0.11:10050
+  - id: 60
+    tenant: TENANT1
+    rd: 10.0.0.11:10060
+    route_targets:
+      both:
+      - 10060:10060
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10060:10060
+    redistribute_routes:
+    - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.0.0.11:10060
+  - id: 70
+    tenant: TENANT1
+    rd: 10.0.0.11:10070
+    route_targets:
+      both:
+      - 10070:10070
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10070:10070
+    redistribute_routes:
+    - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.0.0.11:10070
+  - id: 80
+    tenant: TENANT1
+    rd: 10.0.0.11:10080
+    route_targets:
+      both:
+      - 10080:10080
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10080:10080
+    redistribute_routes:
+    - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.0.0.11:10080
+  - id: 5
+    tenant: TENANT1
+    rd: 10.0.0.11:10005
+    route_targets:
+      both:
+      - 10005:10005
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10005:10005
+    redistribute_routes:
+    - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.0.0.11:10005
+  - id: 10
+    tenant: TENANT1
+    rd: 10.0.0.11:10010
+    route_targets:
+      both:
+      - 10010:10010
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10010:10010
+    redistribute_routes:
+    - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.0.0.11:10010
+  - id: 20
+    tenant: TENANT1
+    rd: 10.0.0.11:10020
+    route_targets:
+      both:
+      - 10020:10020
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10020:10020
+    redistribute_routes:
+    - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.0.0.11:10020
+  - id: 30
+    tenant: TENANT1
+    rd: 10.0.0.11:10030
+    route_targets:
+      both:
+      - 10030:10030
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10030:10030
+    redistribute_routes:
+    - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.0.0.11:10030
+  - id: 40
+    tenant: TENANT1
+    rd: 10.0.0.11:10040
+    route_targets:
+      both:
+      - 10040:10040
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10040:10040
+    redistribute_routes:
+    - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.0.0.11:10040
+service_routing_protocols_model: multi-agent
+ip_routing: true
+daemon_terminattr:
+  cvaddrs:
+  - 192.168.0.5:9910
+  cvauth:
+    method: token
+    token_file: /tmp/token
+  cvvrf: default
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: false
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+ip_name_servers:
+- ip_address: 10.255.0.2
+  vrf: default
+spanning_tree:
+  mode: rapid-pvst
+  rapid_pvst_instances:
+  - id: 1-4094
+    priority: 4096
+  no_spanning_tree_vlan: 4093-4094
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  no_password: true
+- name: cvpadmin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$JIWpYntS5KpTMCGF$el6rGKnDYPqxKeMcJGutPctkOMiHrV/bej1DTmdTR8jEnuV/gQbTYa76slNHP1vwyN8Gq2kbNsMmXUwVhkwjy1
+vrfs:
+- name: default
+  ip_routing: false
+- name: Dev
+  tenant: TENANT1
+  ip_routing: true
+- name: Prod
+  tenant: TENANT1
+  ip_routing: true
+management_interfaces:
+- name: Management1
+  description: oob_management
+  shutdown: false
+  vrf: default
+  ip_address: 192.168.0.107/24
+  gateway: null
+  type: oob
+mac_address_table:
+  aging_time: 1800
+management_api_http:
+  enable_vrfs:
+  - name: default
+  enable_https: true
+eos_cli: 'agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP=''true''
+
+  '
+vlans:
+- id: 4093
+  tenant: system
+  name: LEAF_PEER_L3
+  trunk_groups:
+  - LEAF_PEER_L3
+- id: 4094
+  tenant: system
+  name: MLAG_PEER
+  trunk_groups:
+  - MLAG
+- id: 50
+  name: VRFB_VLAN50
+  tenant: TENANT1
+- id: 60
+  name: VRFB_VLAN60
+  tenant: TENANT1
+- id: 70
+  name: VRFB_VLAN70
+  tenant: TENANT1
+- id: 80
+  name: VRFB_VLAN80
+  tenant: TENANT1
+- id: 3002
+  name: MLAG_iBGP_Dev
+  trunk_groups:
+  - LEAF_PEER_L3
+  tenant: TENANT1
+- id: 5
+  name: VRFA_VLAN5
+  tenant: TENANT1
+- id: 10
+  name: VRFA_VLAN10
+  tenant: TENANT1
+- id: 20
+  name: VRFA_VLAN20
+  tenant: TENANT1
+- id: 30
+  name: VRFA_VLAN30
+  tenant: TENANT1
+- id: 40
+  name: VRFA_VLAN40
+  tenant: TENANT1
+- id: 3001
+  name: MLAG_iBGP_Prod
+  trunk_groups:
+  - LEAF_PEER_L3
+  tenant: TENANT1
+vlan_interfaces:
+- name: Vlan4093
+  description: MLAG_PEER_L3_PEERING
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.0.0.0/31
+- name: Vlan4094
+  description: MLAG_PEER
+  shutdown: false
+  ip_address: 10.0.0.0/31
+  no_autostate: true
+  mtu: 1500
+- name: Vlan50
+  tenant: TENANT1
+  description: VRFB_VLAN50
+  shutdown: false
+  mtu: 9014
+  ip_address_virtual: 10.50.50.1/24
+  vrf: Dev
+- name: Vlan60
+  tenant: TENANT1
+  description: VRFB_VLAN60
+  shutdown: false
+  mtu: 9014
+  ip_address_virtual: 10.60.60.1/24
+  vrf: Dev
+- name: Vlan70
+  tenant: TENANT1
+  description: VRFB_VLAN70
+  shutdown: false
+  mtu: 9014
+  ip_address_virtual: 10.70.70.1/24
+  vrf: Dev
+- name: Vlan80
+  tenant: TENANT1
+  description: VRFB_VLAN80
+  shutdown: false
+  mtu: 9014
+  ip_address_virtual: 10.80.80.1/24
+  vrf: Dev
+- name: Vlan3002
+  tenant: TENANT1
+  type: underlay_peering
+  shutdown: false
+  description: 'MLAG_PEER_L3_iBGP: vrf Dev'
+  vrf: Dev
+  mtu: 9214
+  ip_address: 192.0.0.0/31
+- name: Vlan5
+  tenant: TENANT1
+  description: VRFA_VLAN5
+  shutdown: false
+  mtu: 9014
+  ip_address_virtual: 10.5.5.1/24
+  vrf: Prod
+- name: Vlan10
+  tenant: TENANT1
+  description: VRFA_VLAN10
+  shutdown: false
+  mtu: 9014
+  ip_address_virtual: 10.10.10.1/24
+  vrf: Prod
+- name: Vlan20
+  tenant: TENANT1
+  description: VRFA_VLAN20
+  shutdown: false
+  mtu: 9014
+  ip_address_virtual: 10.20.20.1/24
+  vrf: Prod
+- name: Vlan30
+  tenant: TENANT1
+  description: VRFA_VLAN30
+  shutdown: false
+  mtu: 9014
+  ip_address_virtual: 10.30.30.1/24
+  vrf: Prod
+- name: Vlan40
+  tenant: TENANT1
+  description: VRFA_VLAN40
+  shutdown: false
+  mtu: 9014
+  ip_address_virtual: 10.40.40.1/24
+  vrf: Prod
+- name: Vlan3001
+  tenant: TENANT1
+  type: underlay_peering
+  shutdown: false
+  description: 'MLAG_PEER_L3_iBGP: vrf Prod'
+  vrf: Prod
+  mtu: 9214
+  ip_address: 192.0.0.0/31
+port_channel_interfaces:
+- name: Port-Channel1000
+  description: MLAG_PEER_A-LEAF8_Po1000
+  type: switched
+  shutdown: false
+  mode: trunk
+  trunk_groups:
+  - LEAF_PEER_L3
+  - MLAG
+ethernet_interfaces:
+- name: Ethernet5
+  peer: A-LEAF8
+  peer_interface: Ethernet5
+  peer_type: mlag_peer
+  description: MLAG_PEER_A-LEAF8_Ethernet5
+  type: port-channel-member
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+- name: Ethernet6
+  peer: A-LEAF8
+  peer_interface: Ethernet6
+  peer_type: mlag_peer
+  description: MLAG_PEER_A-LEAF8_Ethernet6
+  type: port-channel-member
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+- name: Ethernet1
+  peer: A-SPINE1
+  peer_interface: Ethernet7
+  peer_type: spine
+  description: P2P_LINK_TO_A-SPINE1_Ethernet7
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 192.168.1.49/31
+- name: Ethernet2
+  peer: A-SPINE2
+  peer_interface: Ethernet7
+  peer_type: spine
+  description: P2P_LINK_TO_A-SPINE2_Ethernet7
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 192.168.1.51/31
+- name: Ethernet3
+  peer: A-SPINE3
+  peer_interface: Ethernet7
+  peer_type: spine
+  description: P2P_LINK_TO_A-SPINE3_Ethernet7
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 192.168.1.53/31
+- name: Ethernet4
+  peer: A-SPINE4
+  peer_interface: Ethernet7
+  peer_type: spine
+  description: P2P_LINK_TO_A-SPINE4_Ethernet7
+  shutdown: false
+  mtu: 9214
+  type: routed
+  ip_address: 192.168.1.55/31
+- name: Ethernet7
+  peer: BB1
+  peer_interface: Ethernet1
+  peer_type: other
+  description: P2P_LINK_TO_BB1_Ethernet1
+  type: routed
+  shutdown: false
+  mtu: 9214
+  ip_address: 172.16.1.0/31
+- name: Ethernet8
+  peer: BB2
+  peer_interface: Ethernet1
+  peer_type: other
+  description: P2P_LINK_TO_BB2_Ethernet1
+  type: routed
+  shutdown: false
+  mtu: 9214
+  ip_address: 172.16.1.2/31
+mlag_configuration:
+  domain_id: '100'
+  local_interface: Vlan4094
+  peer_address: 10.0.0.1
+  peer_link: Port-Channel1000
+  reload_delay_mlag: '300'
+  reload_delay_non_mlag: '330'
+route_maps:
+- name: RM-MLAG-PEER-IN
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    set:
+    - origin incomplete
+    description: Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
+- name: RM-CONN-2-BGP
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+loopback_interfaces:
+- name: Loopback0
+  description: EVPN_Overlay_Peering
+  shutdown: false
+  ip_address: 10.0.0.11/32
+- name: Loopback1
+  description: VTEP_VXLAN_Tunnel_Source
+  shutdown: false
+  ip_address: 10.1.1.11/32
+- name: Loopback102
+  description: Dev_VTEP_DIAGNOSTICS
+  shutdown: false
+  vrf: Dev
+  ip_address: 10.255.11.11/32
+- name: Loopback101
+  description: Prod_VTEP_DIAGNOSTICS
+  shutdown: false
+  vrf: Prod
+  ip_address: 10.255.10.11/32
+prefix_lists:
+- name: PL-LOOPBACKS-EVPN-OVERLAY
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.0.0.0/24 eq 32
+  - sequence: 20
+    action: permit 10.1.1.0/24 eq 32
+router_bfd:
+  multihop:
+    interval: 300
+    min_rx: 300
+    multiplier: 3
+ip_igmp_snooping:
+  globally_enabled: true
+ip_virtual_router_mac_address: 00:1c:73:00:00:01
+vxlan_interface:
+  Vxlan1:
+    description: A-LEAF7_VTEP
+    vxlan:
+      udp_port: 4789
+      source_interface: Loopback1
+      virtual_router_encapsulation_mac_address: mlag-system-id
+      vlans:
+      - id: 50
+        vni: 10050
+      - id: 60
+        vni: 10060
+      - id: 70
+        vni: 10070
+      - id: 80
+        vni: 10080
+      - id: 5
+        vni: 10005
+      - id: 10
+        vni: 10010
+      - id: 20
+        vni: 10020
+      - id: 30
+        vni: 10030
+      - id: 40
+        vni: 10040
+      vrfs:
+      - name: Dev
+        vni: 50002
+      - name: Prod
+        vni: 50001
+virtual_source_nat_vrfs:
+- name: Dev
+  ip_address: 10.255.11.11
+- name: Prod
+  ip_address: 10.255.10.11

@@ -1,0 +1,13 @@
+Node Type,Node,Node Interface,Peer Type,Peer Node,Peer Interface,Node Interface Enabled
+backbone,BB1,Ethernet1,other,A-LEAF7,Ethernet7,True
+backbone,BB1,Ethernet2,other,A-LEAF8,Ethernet7,True
+backbone,BB1,Ethernet3,other,B-LEAF7,Ethernet7,True
+backbone,BB1,Ethernet4,other,B-LEAF8,Ethernet7,True
+backbone,BB1,Ethernet5,other,C-LEAF7,Ethernet7,True
+backbone,BB1,Ethernet6,other,C-LEAF8,Ethernet7,True
+backbone,BB2,Ethernet1,other,A-LEAF7,Ethernet8,True
+backbone,BB2,Ethernet2,other,A-LEAF8,Ethernet8,True
+backbone,BB2,Ethernet3,other,B-LEAF7,Ethernet8,True
+backbone,BB2,Ethernet4,other,B-LEAF8,Ethernet8,True
+backbone,BB2,Ethernet5,other,C-LEAF7,Ethernet8,True
+backbone,BB2,Ethernet6,other,C-LEAF8,Ethernet8,True

@@ -1,0 +1,112 @@
+---
+servers:
+  - name: HostG
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet7, Ethernet7 ]
+        switches: [ B-LEAF1, B-LEAF2 ]
+        vlans: 70
+        mode: access
+        spanning_tree_portfast: edge
+        link_tracking:
+          enabled: true
+          name: CORE-LINKS
+        port_channel:
+          description: HostG
+          mode: active
+          short_esi: 1111:2222:0007
+
+  - name: HostH
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet8, Ethernet8 ]
+        switches: [ B-LEAF1, B-LEAF2 ]
+        vlans: 40
+        mode: access
+        spanning_tree_portfast: edge
+        link_tracking:
+          enabled: true
+          name: CORE-LINKS
+        port_channel:
+          description: HostH
+          mode: active
+          short_esi: 1111:2222:0008
+
+  - name: HostI
+    adapters:
+      - endpoint_ports: [ Ethernet1 ]
+        switch_ports: [ Ethernet7 ]
+        switches: [ B-LEAF3 ]
+        vlans: 60
+        mode: access
+        spanning_tree_portfast: edge
+        description: HostI
+  
+  - name: HostJ
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet8, Ethernet8 ]
+        switches: [ B-LEAF3, B-LEAF4 ]
+        vlans: 10
+        mode: access
+        spanning_tree_portfast: edge
+        link_tracking:
+          enabled: true
+          name: CORE-LINKS
+        port_channel:
+          description: HostJ
+          mode: active
+          short_esi: 3333:4444:0008
+
+  - name: HostK
+    adapters:
+      - endpoint_ports: [ Ethernet1 ]
+        switch_ports: [ Ethernet7 ]
+        switches: [ B-LEAF4 ]
+        vlans: 70
+        mode: access
+        spanning_tree_portfast: edge
+        description: HostK
+
+  - name: HostL
+    adapters:
+      - endpoint_ports: [ Ethernet1 ]
+        switch_ports: [ Ethernet3 ]
+        switches: [ B-SW1 ]
+        vlans: 40
+        mode: access
+        spanning_tree_portfast: edge
+        description: HostL
+    
+  - name: HostM
+    adapters:
+      - endpoint_ports: [ Ethernet1 ]
+        switch_ports: [ Ethernet4 ]
+        switches: [ B-SW1 ]
+        vlans: 80
+        mode: access
+        spanning_tree_portfast: edge
+        description: HostM
+
+network_ports:
+  - switches:
+      - B-LEAF5
+      - B-LEAF6
+    switch_ports:
+      - Ethernet7
+    enabled: true
+    mode: trunk
+    vlans: "40,80"
+    spanning_tree_portfast: edge
+    link_tracking:
+      enabled: true
+      name: CORE-LINKS
+    ethernet_segment:
+      short_esi: 7777:8888:0008
+      redundancy: single-active
+      designated_forwarder_algorithm: preference
+      designated_forwarder_preferences: 
+        - 2000
+        - 1000
+      dont_preempt: true
+    description: AA_TO_B-SW1
