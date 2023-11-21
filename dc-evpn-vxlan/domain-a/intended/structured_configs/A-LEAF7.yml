@@ -141,6 +141,7 @@ router_bgp:
         - 50002:50002
     redistribute_routes:
     - source_protocol: connected
+      route_map: RM-CONN-2-BGP-VRFS
     neighbors:
     - ip_address: 192.0.0.1
       peer_group: MLAG-IPv4-UNDERLAY-PEER
@@ -158,6 +159,7 @@ router_bgp:
         - 50001:50001
     redistribute_routes:
     - source_protocol: connected
+      route_map: RM-CONN-2-BGP-VRFS
     neighbors:
     - ip_address: 192.0.0.1
       peer_group: MLAG-IPv4-UNDERLAY-PEER
@@ -218,20 +220,6 @@ router_bgp:
     rd_evpn_domain:
       domain: remote
       rd: 10.0.0.11:10080
-  - id: 5
-    tenant: TENANT1
-    rd: 10.0.0.11:10005
-    route_targets:
-      both:
-      - 10005:10005
-      import_export_evpn_domains:
-      - domain: remote
-        route_target: 10005:10005
-    redistribute_routes:
-    - learned
-    rd_evpn_domain:
-      domain: remote
-      rd: 10.0.0.11:10005
   - id: 10
     tenant: TENANT1
     rd: 10.0.0.11:10010
@@ -296,7 +284,7 @@ daemon_terminattr:
   cvauth:
     method: token
     token_file: /tmp/token
-  cvvrf: default
+  cvvrf: MGMT
   smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
   ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
   disable_aaa: false
@@ -307,12 +295,12 @@ vlan_internal_order:
     ending: 1199
 ip_name_servers:
 - ip_address: 10.255.0.2
-  vrf: default
+  vrf: MGMT
 spanning_tree:
-  mode: rapid-pvst
-  rapid_pvst_instances:
-  - id: 1-4094
-    priority: 4096
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 0
   no_spanning_tree_vlan: 4093-4094
 local_users:
 - name: admin
@@ -324,7 +312,7 @@ local_users:
   role: network-admin
   sha512_password: $6$JIWpYntS5KpTMCGF$el6rGKnDYPqxKeMcJGutPctkOMiHrV/bej1DTmdTR8jEnuV/gQbTYa76slNHP1vwyN8Gq2kbNsMmXUwVhkwjy1
 vrfs:
-- name: default
+- name: MGMT
   ip_routing: false
 - name: Dev
   tenant: TENANT1
@@ -336,7 +324,7 @@ management_interfaces:
 - name: Management1
   description: oob_management
   shutdown: false
-  vrf: default
+  vrf: MGMT
   ip_address: 192.168.0.107/24
   gateway: null
   type: oob
@@ -344,7 +332,7 @@ mac_address_table:
   aging_time: 1800
 management_api_http:
   enable_vrfs:
-  - name: default
+  - name: MGMT
   enable_https: true
 eos_cli: 'agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP=''true''
 
@@ -361,36 +349,33 @@ vlans:
   trunk_groups:
   - MLAG
 - id: 50
-  name: VRFB_VLAN50
+  name: Yellow
   tenant: TENANT1
 - id: 60
-  name: VRFB_VLAN60
+  name: Red
   tenant: TENANT1
 - id: 70
-  name: VRFB_VLAN70
+  name: Brown
   tenant: TENANT1
 - id: 80
-  name: VRFB_VLAN80
+  name: Black
   tenant: TENANT1
 - id: 3002
   name: MLAG_iBGP_Dev
   trunk_groups:
   - LEAF_PEER_L3
   tenant: TENANT1
-- id: 5
-  name: VRFA_VLAN5
-  tenant: TENANT1
 - id: 10
-  name: VRFA_VLAN10
+  name: Blue
   tenant: TENANT1
 - id: 20
-  name: VRFA_VLAN20
+  name: Green
   tenant: TENANT1
 - id: 30
-  name: VRFA_VLAN30
+  name: Orange
   tenant: TENANT1
 - id: 40
-  name: VRFA_VLAN40
+  name: Purple
   tenant: TENANT1
 - id: 3001
   name: MLAG_iBGP_Prod
@@ -406,33 +391,33 @@ vlan_interfaces:
 - name: Vlan4094
   description: MLAG_PEER
   shutdown: false
-  ip_address: 10.0.0.0/31
+  ip_address: 169.254.0.0/31
   no_autostate: true
   mtu: 1500
 - name: Vlan50
   tenant: TENANT1
-  description: VRFB_VLAN50
+  description: Yellow
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.50.50.1/24
   vrf: Dev
 - name: Vlan60
   tenant: TENANT1
-  description: VRFB_VLAN60
+  description: Red
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.60.60.1/24
   vrf: Dev
 - name: Vlan70
   tenant: TENANT1
-  description: VRFB_VLAN70
+  description: Brown
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.70.70.1/24
   vrf: Dev
 - name: Vlan80
   tenant: TENANT1
-  description: VRFB_VLAN80
+  description: Black
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.80.80.1/24
@@ -445,37 +430,30 @@ vlan_interfaces:
   vrf: Dev
   mtu: 9214
   ip_address: 192.0.0.0/31
-- name: Vlan5
-  tenant: TENANT1
-  description: VRFA_VLAN5
-  shutdown: false
-  mtu: 9014
-  ip_address_virtual: 10.5.5.1/24
-  vrf: Prod
 - name: Vlan10
   tenant: TENANT1
-  description: VRFA_VLAN10
+  description: Blue
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.10.10.1/24
   vrf: Prod
 - name: Vlan20
   tenant: TENANT1
-  description: VRFA_VLAN20
+  description: Green
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.20.20.1/24
   vrf: Prod
 - name: Vlan30
   tenant: TENANT1
-  description: VRFA_VLAN30
+  description: Orange
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.30.30.1/24
   vrf: Prod
 - name: Vlan40
   tenant: TENANT1
-  description: VRFA_VLAN40
+  description: Purple
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.40.40.1/24
@@ -575,7 +553,7 @@ ethernet_interfaces:
 mlag_configuration:
   domain_id: '100'
   local_interface: Vlan4094
-  peer_address: 10.0.0.1
+  peer_address: 169.254.0.1
   peer_link: Port-Channel1000
   reload_delay_mlag: '300'
   reload_delay_non_mlag: '330'
@@ -593,6 +571,14 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+- name: RM-CONN-2-BGP-VRFS
+  sequence_numbers:
+  - sequence: 10
+    type: deny
+    match:
+    - ip address prefix-list PL-MLAG-PEER-VRFS
+  - sequence: 20
+    type: permit
 loopback_interfaces:
 - name: Loopback0
   description: EVPN_Overlay_Peering
@@ -606,12 +592,12 @@ loopback_interfaces:
   description: Dev_VTEP_DIAGNOSTICS
   shutdown: false
   vrf: Dev
-  ip_address: 10.255.11.11/32
+  ip_address: 10.102.102.11/32
 - name: Loopback101
   description: Prod_VTEP_DIAGNOSTICS
   shutdown: false
   vrf: Prod
-  ip_address: 10.255.10.11/32
+  ip_address: 10.101.101.11/32
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -619,6 +605,10 @@ prefix_lists:
     action: permit 10.0.0.0/24 eq 32
   - sequence: 20
     action: permit 10.1.1.0/24 eq 32
+- name: PL-MLAG-PEER-VRFS
+  sequence_numbers:
+  - sequence: 10
+    action: permit 192.0.0.0/31
 router_bfd:
   multihop:
     interval: 300
@@ -643,8 +633,6 @@ vxlan_interface:
         vni: 10070
       - id: 80
         vni: 10080
-      - id: 5
-        vni: 10005
       - id: 10
         vni: 10010
       - id: 20
@@ -660,6 +648,6 @@ vxlan_interface:
         vni: 50001
 virtual_source_nat_vrfs:
 - name: Dev
-  ip_address: 10.255.11.11
+  ip_address: 10.102.102.11
 - name: Prod
-  ip_address: 10.255.10.11
+  ip_address: 10.101.101.11

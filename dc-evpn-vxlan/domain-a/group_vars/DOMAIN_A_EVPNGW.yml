@@ -2,7 +2,3 @@
 type: l3leaf
 evpn_multicast: false
 underlay_multicast: false
-
-custom_structured_configuration_vlan_interfaces:
-  - name: 'Vlan4094'
-    mtu: 1500

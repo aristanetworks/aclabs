@@ -106,6 +106,7 @@ router_bgp:
         - 50002:50002
     redistribute_routes:
     - source_protocol: connected
+      route_map: RM-CONN-2-BGP-VRFS
     neighbors:
     - ip_address: 192.0.0.0
       peer_group: MLAG-IPv4-UNDERLAY-PEER
@@ -123,6 +124,7 @@ router_bgp:
         - 50001:50001
     redistribute_routes:
     - source_protocol: connected
+      route_map: RM-CONN-2-BGP-VRFS
     neighbors:
     - ip_address: 192.0.0.0
       peer_group: MLAG-IPv4-UNDERLAY-PEER
@@ -153,13 +155,17 @@ router_bgp:
     - learned
 service_routing_protocols_model: multi-agent
 ip_routing: true
+router_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
 daemon_terminattr:
   cvaddrs:
   - 192.168.0.5:9910
   cvauth:
     method: token
     token_file: /tmp/token
-  cvvrf: default
+  cvvrf: MGMT
   smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
   ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
   disable_aaa: false
@@ -170,12 +176,12 @@ vlan_internal_order:
     ending: 1199
 ip_name_servers:
 - ip_address: 10.255.0.2
-  vrf: default
+  vrf: MGMT
 spanning_tree:
-  mode: rapid-pvst
-  rapid_pvst_instances:
-  - id: 1-4094
-    priority: 4096
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 0
   no_spanning_tree_vlan: 4093-4094
 local_users:
 - name: admin
@@ -187,7 +193,7 @@ local_users:
   role: network-admin
   sha512_password: $6$JIWpYntS5KpTMCGF$el6rGKnDYPqxKeMcJGutPctkOMiHrV/bej1DTmdTR8jEnuV/gQbTYa76slNHP1vwyN8Gq2kbNsMmXUwVhkwjy1
 vrfs:
-- name: default
+- name: MGMT
   ip_routing: false
 - name: Dev
   tenant: TENANT1
@@ -199,7 +205,7 @@ management_interfaces:
 - name: Management1
   description: oob_management
   shutdown: false
-  vrf: default
+  vrf: MGMT
   ip_address: 192.168.0.104/24
   gateway: null
   type: oob
@@ -207,7 +213,7 @@ mac_address_table:
   aging_time: 1800
 management_api_http:
   enable_vrfs:
-  - name: default
+  - name: MGMT
   enable_https: true
 eos_cli: 'agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP=''true''
 
@@ -224,7 +230,7 @@ vlans:
   trunk_groups:
   - MLAG
 - id: 50
-  name: VRFB_VLAN50
+  name: Yellow
   tenant: TENANT1
 - id: 3002
   name: MLAG_iBGP_Dev
@@ -232,10 +238,10 @@ vlans:
   - LEAF_PEER_L3
   tenant: TENANT1
 - id: 10
-  name: VRFA_VLAN10
+  name: Blue
   tenant: TENANT1
 - id: 30
-  name: VRFA_VLAN30
+  name: Orange
   tenant: TENANT1
 - id: 3001
   name: MLAG_iBGP_Prod
@@ -248,15 +254,18 @@ vlan_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: 192.0.0.1/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Vlan4094
   description: MLAG_PEER
   shutdown: false
-  ip_address: 10.0.0.1/31
+  ip_address: 169.254.0.1/31
   no_autostate: true
   mtu: 1500
 - name: Vlan50
   tenant: TENANT1
-  description: VRFB_VLAN50
+  description: Yellow
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.50.50.1/24
@@ -271,14 +280,14 @@ vlan_interfaces:
   ip_address: 192.0.0.1/31
 - name: Vlan10
   tenant: TENANT1
-  description: VRFA_VLAN10
+  description: Blue
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.10.10.1/24
   vrf: Prod
 - name: Vlan30
   tenant: TENANT1
-  description: VRFA_VLAN30
+  description: Orange
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.30.30.1/24
@@ -338,6 +347,9 @@ ethernet_interfaces:
   mtu: 9214
   type: routed
   ip_address: 192.168.1.25/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet2
   peer: A-SPINE2
   peer_interface: Ethernet4
@@ -347,6 +359,9 @@ ethernet_interfaces:
   mtu: 9214
   type: routed
   ip_address: 192.168.1.27/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet3
   peer: A-SPINE3
   peer_interface: Ethernet4
@@ -356,6 +371,9 @@ ethernet_interfaces:
   mtu: 9214
   type: routed
   ip_address: 192.168.1.29/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet4
   peer: A-SPINE4
   peer_interface: Ethernet4
@@ -365,6 +383,9 @@ ethernet_interfaces:
   mtu: 9214
   type: routed
   ip_address: 192.168.1.31/31
+  pim:
+    ipv4:
+      sparse_mode: true
 - name: Ethernet8
   peer: HostD
   peer_interface: Ethernet2
@@ -388,7 +409,7 @@ ethernet_interfaces:
 mlag_configuration:
   domain_id: '100'
   local_interface: Vlan4094
-  peer_address: 10.0.0.0
+  peer_address: 169.254.0.0
   peer_link: Port-Channel1000
   reload_delay_mlag: '300'
   reload_delay_non_mlag: '330'
@@ -406,6 +427,14 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+- name: RM-CONN-2-BGP-VRFS
+  sequence_numbers:
+  - sequence: 10
+    type: deny
+    match:
+    - ip address prefix-list PL-MLAG-PEER-VRFS
+  - sequence: 20
+    type: permit
 loopback_interfaces:
 - name: Loopback0
   description: EVPN_Overlay_Peering
@@ -419,12 +448,12 @@ loopback_interfaces:
   description: Dev_VTEP_DIAGNOSTICS
   shutdown: false
   vrf: Dev
-  ip_address: 10.255.11.8/32
+  ip_address: 10.102.102.8/32
 - name: Loopback101
   description: Prod_VTEP_DIAGNOSTICS
   shutdown: false
   vrf: Prod
-  ip_address: 10.255.10.8/32
+  ip_address: 10.101.101.8/32
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -432,6 +461,10 @@ prefix_lists:
     action: permit 10.0.0.0/24 eq 32
   - sequence: 20
     action: permit 10.1.1.0/24 eq 32
+- name: PL-MLAG-PEER-VRFS
+  sequence_numbers:
+  - sequence: 10
+    action: permit 192.0.0.0/31
 router_bfd:
   multihop:
     interval: 300
@@ -445,7 +478,8 @@ vxlan_interface:
     description: A-LEAF4_VTEP
     vxlan:
       udp_port: 4789
-      source_interface: Loopback1
+      source_interface: Loopback0
+      mlag_source_interface: Loopback1
       virtual_router_encapsulation_mac_address: mlag-system-id
       vlans:
       - id: 50
@@ -461,6 +495,6 @@ vxlan_interface:
         vni: 50001
 virtual_source_nat_vrfs:
 - name: Dev
-  ip_address: 10.255.11.8
+  ip_address: 10.102.102.8
 - name: Prod
-  ip_address: 10.255.10.8
+  ip_address: 10.101.101.8

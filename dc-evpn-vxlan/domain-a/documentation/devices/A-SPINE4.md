@@ -33,6 +33,9 @@
   - [Router BGP](#router-bgp)
 - [BFD](#bfd)
   - [Router BFD](#router-bfd)
+- [Multicast](#multicast)
+  - [Router Multicast](#router-multicast)
+  - [PIM Sparse Mode](#pim-sparse-mode)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
   - [Route-maps](#route-maps)
@@ -51,13 +54,13 @@
 
 | Management Interface | description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | oob_management | oob | default | 192.168.0.14/24 | - |
+| Management1 | oob_management | oob | MGMT | 192.168.0.14/24 | - |
 
 ##### IPv6
 
 | Management Interface | description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | oob_management | oob | default | - | - |
+| Management1 | oob_management | oob | MGMT | - | - |
 
 #### Management Interfaces Device Configuration
 
@@ -66,6 +69,7 @@
 interface Management1
    description oob_management
    no shutdown
+   vrf MGMT
    ip address 192.168.0.14/24
 ```
 
@@ -75,12 +79,12 @@ interface Management1
 
 | Name Server | VRF | Priority |
 | ----------- | --- | -------- |
-| 10.255.0.2 | default | - |
+| 10.255.0.2 | MGMT | - |
 
 #### IP Name Servers Device Configuration
 
 ```eos
-ip name-server vrf default 10.255.0.2
+ip name-server vrf MGMT 10.255.0.2
 ```
 
 ### NTP
@@ -112,7 +116,7 @@ ntp server 0.pool.ntp.org
 
 | VRF Name | IPv4 ACL | IPv6 ACL |
 | -------- | -------- | -------- |
-| default | - | - |
+| MGMT | - | - |
 
 #### Management API HTTP Configuration
 
@@ -122,7 +126,7 @@ management api http-commands
    protocol https
    no shutdown
    !
-   vrf default
+   vrf MGMT
       no shutdown
 ```
 
@@ -170,14 +174,14 @@ aaa authorization exec default local
 
 | CV Compression | CloudVision Servers | VRF | Authentication | Smash Excludes | Ingest Exclude | Bypass AAA |
 | -------------- | ------------------- | --- | -------------- | -------------- | -------------- | ---------- |
-| gzip | 192.168.0.5:9910 | default | token,/tmp/token | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | False |
+| gzip | 192.168.0.5:9910 | MGMT | token,/tmp/token | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | False |
 
 #### TerminAttr Daemon Device Configuration
 
 ```eos
 !
 daemon TerminAttr
-   exec /usr/bin/TerminAttr -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -cvvrf=default -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
+   exec /usr/bin/TerminAttr -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -cvvrf=MGMT -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
    no shutdown
 ```
 
@@ -271,6 +275,7 @@ interface Ethernet1
    mtu 9214
    no switchport
    ip address 192.168.1.6/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet2
    description P2P_LINK_TO_A-LEAF2_Ethernet4
@@ -278,6 +283,7 @@ interface Ethernet2
    mtu 9214
    no switchport
    ip address 192.168.1.14/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet3
    description P2P_LINK_TO_A-LEAF3_Ethernet4
@@ -285,6 +291,7 @@ interface Ethernet3
    mtu 9214
    no switchport
    ip address 192.168.1.22/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet4
    description P2P_LINK_TO_A-LEAF4_Ethernet4
@@ -292,6 +299,7 @@ interface Ethernet4
    mtu 9214
    no switchport
    ip address 192.168.1.30/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet5
    description P2P_LINK_TO_A-LEAF5_Ethernet4
@@ -299,6 +307,7 @@ interface Ethernet5
    mtu 9214
    no switchport
    ip address 192.168.1.38/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet6
    description P2P_LINK_TO_A-LEAF6_Ethernet4
@@ -306,6 +315,7 @@ interface Ethernet6
    mtu 9214
    no switchport
    ip address 192.168.1.46/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet7
    description P2P_LINK_TO_A-LEAF7_Ethernet4
@@ -367,12 +377,14 @@ service routing protocols model multi-agent
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | True |
+| MGMT | False |
 
 #### IP Routing Device Configuration
 
 ```eos
 !
 ip routing
+no ip routing vrf MGMT
 ```
 
 ### IPv6 Routing
@@ -382,7 +394,7 @@ ip routing
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | False |
-| default | false |
+| MGMT | false |
 
 ### ARP
 
@@ -554,6 +566,37 @@ router bfd
    multihop interval 300 min-rx 300 multiplier 3
 ```
 
+## Multicast
+
+### Router Multicast
+
+#### IP Router Multicast Summary
+
+- Routing for IPv4 multicast is enabled.
+
+#### Router Multicast Device Configuration
+
+```eos
+!
+router multicast
+   ipv4
+      routing
+```
+
+
+### PIM Sparse Mode
+
+#### PIM Sparse Mode enabled interfaces
+
+| Interface Name | VRF Name | IP Version | DR Priority | Local Interface |
+| -------------- | -------- | ---------- | ----------- | --------------- |
+| Ethernet1 | - | IPv4 | - | - |
+| Ethernet2 | - | IPv4 | - | - |
+| Ethernet3 | - | IPv4 | - | - |
+| Ethernet4 | - | IPv4 | - | - |
+| Ethernet5 | - | IPv4 | - | - |
+| Ethernet6 | - | IPv4 | - | - |
+
 ## Filters
 
 ### Prefix-lists
@@ -598,10 +641,13 @@ route-map RM-CONN-2-BGP permit 10
 
 | VRF Name | IP Routing |
 | -------- | ---------- |
+| MGMT | disabled |
 
 ### VRF Instances Device Configuration
 
 ```eos
+!
+vrf instance MGMT
 ```
 
 ## EOS CLI

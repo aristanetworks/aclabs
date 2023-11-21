@@ -47,6 +47,8 @@
   - [Router BFD](#router-bfd)
 - [Multicast](#multicast)
   - [IP IGMP Snooping](#ip-igmp-snooping)
+  - [Router Multicast](#router-multicast)
+  - [PIM Sparse Mode](#pim-sparse-mode)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
   - [Route-maps](#route-maps)
@@ -68,13 +70,13 @@
 
 | Management Interface | description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | oob_management | oob | default | 192.168.0.101/24 | - |
+| Management1 | oob_management | oob | MGMT | 192.168.0.101/24 | - |
 
 ##### IPv6
 
 | Management Interface | description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management1 | oob_management | oob | default | - | - |
+| Management1 | oob_management | oob | MGMT | - | - |
 
 #### Management Interfaces Device Configuration
 
@@ -83,6 +85,7 @@
 interface Management1
    description oob_management
    no shutdown
+   vrf MGMT
    ip address 192.168.0.101/24
 ```
 
@@ -92,12 +95,12 @@ interface Management1
 
 | Name Server | VRF | Priority |
 | ----------- | --- | -------- |
-| 10.255.0.2 | default | - |
+| 10.255.0.2 | MGMT | - |
 
 #### IP Name Servers Device Configuration
 
 ```eos
-ip name-server vrf default 10.255.0.2
+ip name-server vrf MGMT 10.255.0.2
 ```
 
 ### NTP
@@ -129,7 +132,7 @@ ntp server 0.pool.ntp.org
 
 | VRF Name | IPv4 ACL | IPv6 ACL |
 | -------- | -------- | -------- |
-| default | - | - |
+| MGMT | - | - |
 
 #### Management API HTTP Configuration
 
@@ -139,7 +142,7 @@ management api http-commands
    protocol https
    no shutdown
    !
-   vrf default
+   vrf MGMT
       no shutdown
 ```
 
@@ -201,14 +204,14 @@ dhcp relay
 
 | CV Compression | CloudVision Servers | VRF | Authentication | Smash Excludes | Ingest Exclude | Bypass AAA |
 | -------------- | ------------------- | --- | -------------- | -------------- | -------------- | ---------- |
-| gzip | 192.168.0.5:9910 | default | token,/tmp/token | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | False |
+| gzip | 192.168.0.5:9910 | MGMT | token,/tmp/token | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | False |
 
 #### TerminAttr Daemon Device Configuration
 
 ```eos
 !
 daemon TerminAttr
-   exec /usr/bin/TerminAttr -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -cvvrf=default -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
+   exec /usr/bin/TerminAttr -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -cvvrf=MGMT -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
    no shutdown
 ```
 
@@ -218,7 +221,7 @@ daemon TerminAttr
 
 | Domain-id | Local-interface | Peer-address | Peer-link |
 | --------- | --------------- | ------------ | --------- |
-| 100 | Vlan4094 | 10.0.0.1 | Port-Channel1000 |
+| 100 | Vlan4094 | 169.254.0.1 | Port-Channel1000 |
 
 Dual primary detection is disabled.
 
@@ -229,7 +232,7 @@ Dual primary detection is disabled.
 mlag configuration
    domain-id 100
    local-interface Vlan4094
-   peer-address 10.0.0.1
+   peer-address 169.254.0.1
    peer-link Port-Channel1000
    reload-delay mlag 300
    reload-delay non-mlag 330
@@ -239,13 +242,13 @@ mlag configuration
 
 ### Spanning Tree Summary
 
-STP mode: **rapid-pvst**
+STP mode: **mstp**
 
-#### Rapid-PVST Instance and Priority
+#### MSTP Instance and Priority
 
 | Instance(s) | Priority |
 | -------- | -------- |
-| 1-4094 | 4096 |
+| 0 | 0 |
 
 #### Global Spanning-Tree Settings
 
@@ -255,9 +258,9 @@ STP mode: **rapid-pvst**
 
 ```eos
 !
-spanning-tree mode rapid-pvst
+spanning-tree mode mstp
 no spanning-tree vlan-id 4093-4094
-spanning-tree vlan-id 1-4094 priority 4096
+spanning-tree mst 0 priority 0
 ```
 
 ## Internal VLAN Allocation Policy
@@ -281,8 +284,8 @@ vlan internal order ascending range 1006 1199
 
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
-| 5 | VRFA_VLAN5 | - |
-| 30 | VRFA_VLAN30 | - |
+| 10 | Blue | - |
+| 30 | Orange | - |
 | 3001 | MLAG_iBGP_Prod | LEAF_PEER_L3 |
 | 4093 | LEAF_PEER_L3 | LEAF_PEER_L3 |
 | 4094 | MLAG_PEER | MLAG |
@@ -291,11 +294,11 @@ vlan internal order ascending range 1006 1199
 
 ```eos
 !
-vlan 5
-   name VRFA_VLAN5
+vlan 10
+   name Blue
 !
 vlan 30
-   name VRFA_VLAN30
+   name Orange
 !
 vlan 3001
    name MLAG_iBGP_Prod
@@ -335,7 +338,7 @@ mac address-table aging-time 1800
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
 | Ethernet5 | MLAG_PEER_A-LEAF2_Ethernet5 | *trunk | *- | *- | *['LEAF_PEER_L3', 'MLAG'] | 1000 |
 | Ethernet6 | MLAG_PEER_A-LEAF2_Ethernet6 | *trunk | *- | *- | *['LEAF_PEER_L3', 'MLAG'] | 1000 |
-| Ethernet7 | HostA_Ethernet1 | *access | *5 | *- | *- | 7 |
+| Ethernet7 | HostA_Ethernet1 | *access | *10 | *- | *- | 7 |
 | Ethernet8 | HostB_Ethernet1 | *access | *30 | *- | *- | 8 |
 
 *Inherited from Port-Channel Interface
@@ -359,6 +362,7 @@ interface Ethernet1
    mtu 9214
    no switchport
    ip address 192.168.1.1/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet2
    description P2P_LINK_TO_A-SPINE2_Ethernet1
@@ -366,6 +370,7 @@ interface Ethernet2
    mtu 9214
    no switchport
    ip address 192.168.1.3/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet3
    description P2P_LINK_TO_A-SPINE3_Ethernet1
@@ -373,6 +378,7 @@ interface Ethernet3
    mtu 9214
    no switchport
    ip address 192.168.1.5/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet4
    description P2P_LINK_TO_A-SPINE4_Ethernet1
@@ -380,6 +386,7 @@ interface Ethernet4
    mtu 9214
    no switchport
    ip address 192.168.1.7/31
+   pim ipv4 sparse-mode
 !
 interface Ethernet5
    description MLAG_PEER_A-LEAF2_Ethernet5
@@ -410,7 +417,7 @@ interface Ethernet8
 
 | Interface | Description | Type | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel7 | HostA_HostA | switched | access | 5 | - | - | - | - | 7 | - |
+| Port-Channel7 | HostA_HostA | switched | access | 10 | - | - | - | - | 7 | - |
 | Port-Channel8 | HostB_HostB | switched | access | 30 | - | - | - | - | 8 | - |
 | Port-Channel1000 | MLAG_PEER_A-LEAF2_Po1000 | switched | trunk | - | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
 
@@ -422,7 +429,7 @@ interface Port-Channel7
    description HostA_HostA
    no shutdown
    switchport
-   switchport access vlan 5
+   switchport access vlan 10
    mlag 7
    spanning-tree portfast
 !
@@ -453,7 +460,7 @@ interface Port-Channel1000
 | --------- | ----------- | --- | ---------- |
 | Loopback0 | EVPN_Overlay_Peering | default | 10.0.0.5/32 |
 | Loopback1 | VTEP_VXLAN_Tunnel_Source | default | 10.1.1.5/32 |
-| Loopback101 | Prod_VTEP_DIAGNOSTICS | Prod | 10.255.10.5/32 |
+| Loopback101 | Prod_VTEP_DIAGNOSTICS | Prod | 10.101.101.5/32 |
 
 ##### IPv6
 
@@ -482,7 +489,7 @@ interface Loopback101
    description Prod_VTEP_DIAGNOSTICS
    no shutdown
    vrf Prod
-   ip address 10.255.10.5/32
+   ip address 10.101.101.5/32
 ```
 
 ### VLAN Interfaces
@@ -491,8 +498,8 @@ interface Loopback101
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan5 | VRFA_VLAN5 | Prod | 9014 | False |
-| Vlan30 | VRFA_VLAN30 | Prod | 9014 | False |
+| Vlan10 | Blue | Prod | 9014 | False |
+| Vlan30 | Orange | Prod | 9014 | False |
 | Vlan3001 | MLAG_PEER_L3_iBGP: vrf Prod | Prod | 9214 | False |
 | Vlan4093 | MLAG_PEER_L3_PEERING | default | 9214 | False |
 | Vlan4094 | MLAG_PEER | default | 1500 | False |
@@ -501,25 +508,25 @@ interface Loopback101
 
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | VRRP | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ---- | ------ | ------- |
-| Vlan5 |  Prod  |  -  |  10.5.5.1/24  |  -  |  -  |  -  |  -  |
+| Vlan10 |  Prod  |  -  |  10.10.10.1/24  |  -  |  -  |  -  |  -  |
 | Vlan30 |  Prod  |  -  |  10.30.30.1/24  |  -  |  -  |  -  |  -  |
 | Vlan3001 |  Prod  |  192.0.0.0/31  |  -  |  -  |  -  |  -  |  -  |
 | Vlan4093 |  default  |  192.0.0.0/31  |  -  |  -  |  -  |  -  |  -  |
-| Vlan4094 |  default  |  10.0.0.0/31  |  -  |  -  |  -  |  -  |  -  |
+| Vlan4094 |  default  |  169.254.0.0/31  |  -  |  -  |  -  |  -  |  -  |
 
 #### VLAN Interfaces Device Configuration
 
 ```eos
 !
-interface Vlan5
-   description VRFA_VLAN5
+interface Vlan10
+   description Blue
    no shutdown
    mtu 9014
    vrf Prod
-   ip address virtual 10.5.5.1/24
+   ip address virtual 10.10.10.1/24
 !
 interface Vlan30
-   description VRFA_VLAN30
+   description Orange
    no shutdown
    mtu 9014
    vrf Prod
@@ -537,13 +544,14 @@ interface Vlan4093
    no shutdown
    mtu 9214
    ip address 192.0.0.0/31
+   pim ipv4 sparse-mode
 !
 interface Vlan4094
    description MLAG_PEER
    no shutdown
    mtu 1500
    no autostate
-   ip address 10.0.0.0/31
+   ip address 169.254.0.0/31
 ```
 
 ### VXLAN Interface
@@ -552,7 +560,8 @@ interface Vlan4094
 
 | Setting | Value |
 | ------- | ----- |
-| Source Interface | Loopback1 |
+| Source Interface | Loopback0 |
+| MLAG Source Interface | Loopback1 |
 | UDP port | 4789 |
 | EVPN MLAG Shared Router MAC | mlag-system-id |
 
@@ -560,7 +569,7 @@ interface Vlan4094
 
 | VLAN | VNI | Flood List | Multicast Group |
 | ---- | --- | ---------- | --------------- |
-| 5 | 10005 | - | - |
+| 10 | 10010 | - | - |
 | 30 | 10030 | - | - |
 
 ##### VRF to VNI and Multicast Group Mappings
@@ -575,12 +584,13 @@ interface Vlan4094
 !
 interface Vxlan1
    description A-LEAF1_VTEP
-   vxlan source-interface Loopback1
+   vxlan source-interface Loopback0
    vxlan virtual-router encapsulation mac-address mlag-system-id
    vxlan udp-port 4789
-   vxlan vlan 5 vni 10005
+   vxlan vlan 10 vni 10010
    vxlan vlan 30 vni 10030
    vxlan vrf Prod vni 50001
+   vxlan mlag source-interface Loopback1
 ```
 
 ## Routing
@@ -614,6 +624,7 @@ ip virtual-router mac-address 00:1c:73:00:00:01
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | True |
+| MGMT | False |
 | Prod | True |
 
 #### IP Routing Device Configuration
@@ -621,6 +632,7 @@ ip virtual-router mac-address 00:1c:73:00:00:01
 ```eos
 !
 ip routing
+no ip routing vrf MGMT
 ip routing vrf Prod
 ```
 
@@ -631,7 +643,7 @@ ip routing vrf Prod
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | False |
-| default | false |
+| MGMT | false |
 | Prod | false |
 
 ### ARP
@@ -714,7 +726,7 @@ Global ARP timeout: 1500
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 5 | 10.0.0.5:10005 | 10005:10005 | - | - | learned |
+| 10 | 10.0.0.5:10010 | 10010:10010 | - | - | learned |
 | 30 | 10.0.0.5:10030 | 10030:10030 | - | - | learned |
 
 #### Router BGP VRFs
@@ -781,14 +793,14 @@ router bgp 65112
    neighbor 192.168.1.6 description A-SPINE4_Ethernet1
    redistribute connected route-map RM-CONN-2-BGP
    !
+   vlan 10
+      rd 10.0.0.5:10010
+      route-target both 10010:10010
+      redistribute learned
+   !
    vlan 30
       rd 10.0.0.5:10030
       route-target both 10030:10030
-      redistribute learned
-   !
-   vlan 5
-      rd 10.0.0.5:10005
-      route-target both 10005:10005
       redistribute learned
    !
    address-family evpn
@@ -806,7 +818,7 @@ router bgp 65112
       route-target export evpn 50001:50001
       router-id 10.0.0.5
       neighbor 192.0.0.1 peer group MLAG-IPv4-UNDERLAY-PEER
-      redistribute connected
+      redistribute connected route-map RM-CONN-2-BGP-VRFS
 ```
 
 ## BFD
@@ -842,6 +854,36 @@ router bfd
 ```eos
 ```
 
+### Router Multicast
+
+#### IP Router Multicast Summary
+
+- Routing for IPv4 multicast is enabled.
+- Software forwarding by the Software Forwarding Engine (SFE)
+
+#### Router Multicast Device Configuration
+
+```eos
+!
+router multicast
+   ipv4
+      routing
+      software-forwarding sfe
+```
+
+
+### PIM Sparse Mode
+
+#### PIM Sparse Mode enabled interfaces
+
+| Interface Name | VRF Name | IP Version | DR Priority | Local Interface |
+| -------------- | -------- | ---------- | ----------- | --------------- |
+| Ethernet1 | - | IPv4 | - | - |
+| Ethernet2 | - | IPv4 | - | - |
+| Ethernet3 | - | IPv4 | - | - |
+| Ethernet4 | - | IPv4 | - | - |
+| Vlan4093 | - | IPv4 | - | - |
+
 ## Filters
 
 ### Prefix-lists
@@ -855,6 +897,12 @@ router bfd
 | 10 | permit 10.0.0.0/24 eq 32 |
 | 20 | permit 10.1.1.0/24 eq 32 |
 
+##### PL-MLAG-PEER-VRFS
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 192.0.0.0/31 |
+
 #### Prefix-lists Device Configuration
 
 ```eos
@@ -862,6 +910,9 @@ router bfd
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
    seq 10 permit 10.0.0.0/24 eq 32
    seq 20 permit 10.1.1.0/24 eq 32
+!
+ip prefix-list PL-MLAG-PEER-VRFS
+   seq 10 permit 192.0.0.0/31
 ```
 
 ### Route-maps
@@ -873,6 +924,13 @@ ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
 | Sequence | Type | Match | Set | Sub-Route-Map | Continue |
 | -------- | ---- | ----- | --- | ------------- | -------- |
 | 10 | permit | ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY | - | - | - |
+
+##### RM-CONN-2-BGP-VRFS
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | deny | ip address prefix-list PL-MLAG-PEER-VRFS | - | - | - |
+| 20 | permit | - | - | - | - |
 
 ##### RM-MLAG-PEER-IN
 
@@ -887,6 +945,11 @@ ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
 route-map RM-CONN-2-BGP permit 10
    match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
 !
+route-map RM-CONN-2-BGP-VRFS deny 10
+   match ip address prefix-list PL-MLAG-PEER-VRFS
+!
+route-map RM-CONN-2-BGP-VRFS permit 20
+!
 route-map RM-MLAG-PEER-IN permit 10
    description Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
    set origin incomplete
@@ -898,11 +961,14 @@ route-map RM-MLAG-PEER-IN permit 10
 
 | VRF Name | IP Routing |
 | -------- | ---------- |
+| MGMT | disabled |
 | Prod | enabled |
 
 ### VRF Instances Device Configuration
 
 ```eos
+!
+vrf instance MGMT
 !
 vrf instance Prod
 ```
@@ -913,13 +979,13 @@ vrf instance Prod
 
 | Source NAT VRF | Source NAT IP Address |
 | -------------- | --------------------- |
-| Prod | 10.255.10.5 |
+| Prod | 10.101.101.5 |
 
 ### Virtual Source NAT Configuration
 
 ```eos
 !
-ip address virtual source-nat vrf Prod address 10.255.10.5
+ip address virtual source-nat vrf Prod address 10.101.101.5
 ```
 
 ## EOS CLI

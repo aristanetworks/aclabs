@@ -3,8 +3,8 @@
 underlay_routing_protocol: ebgp
 overlay_routing_protocol: ebgp
 
-#underlay_multicast: true
-#evpn_multicast: true
+underlay_multicast: true
+evpn_multicast: true
 
 bgp_peer_groups: 
   evpn_overlay_peers:
@@ -53,15 +53,17 @@ l3leaf:
     uplink_interfaces: ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'] 
     uplink_switches: ['A-SPINE1', 'A-SPINE2', 'A-SPINE3', 'A-SPINE4']
     uplink_ipv4_pool: 192.168.1.0/24
-    mlag_interfaces: ['Ethernet5', 'Ethernet6'] 
-    mlag_peer_ipv4_pool: 10.0.0.0/31
+    mlag_interfaces: ['Ethernet5', 'Ethernet6']
+    mlag_peer_vlan_structured_config: 
+      mtu: 1500 
+    mlag_peer_ipv4_pool: 169.254.0.0/31
     mlag_peer_l3_ipv4_pool: 192.0.0.0/31
     mlag_port_channel_id: 1000
     mlag_domain_id: "100"
     mlag_ibgp_origin_incomplete: true
     virtual_router_mac_address: 00:1c:73:00:00:01
-    spanning_tree_priority: 4096 
-    spanning_tree_mode: rapid-pvst
+    spanning_tree_priority: 0
+    spanning_tree_mode: mstp
     # can remove agent KernelFib command, not in tech library
     raw_eos_cli: |
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
