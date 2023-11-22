@@ -1,29 +1,12 @@
 ---
 
-underlay_routing_protocol: isis
-overlay_routing_protocol: ibgp
+dc_name: domain-b
 
-underlay_multicast: true
-evpn_multicast: true
-
-bgp_peer_groups:
-  evpn_overlay_peers:
-    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
-  ipv4_underlay_peers:
-    password: 7x4B4rnJhZB438m9+BrBfQ==
-  mlag_ipv4_underlay_peer:
-    password: 4b21pAdCvWeAqpcKDFMdWw==
-  evpn_overlay_core:
-    password: 4b21pAdCvWeAqpcKDFMdWw==
-    structured_config:
-      local_as: 65500
-      remove_private_as:
-        replace_as: true
 spine:
   defaults:
     platform: vEOS-lab 
     loopback_ipv4_pool: 10.0.0.64/24
-    isis_system_id_prefix: '0000.0001'
+    isis_system_id_prefix: '0000.000b'
     bgp_as: 65200
     raw_eos_cli: |
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
@@ -49,26 +32,29 @@ l3leaf:
     vtep_loopback_ipv4_pool: 10.2.2.0/24
     uplink_interfaces: ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'] 
     uplink_switches: ['B-SPINE1', 'B-SPINE2', 'B-SPINE3', 'B-SPINE4']
+    uplink_structured_config:
+      ip_address: "unnumbered Loopback0"
     uplink_ipv4_pool: 192.168.1.0/24
-    mlag_interfaces: ['Ethernet5', 'Ethernet6'] 
-    mlag_peer_ipv4_pool: 10.0.0.0/31
-    mlag_peer_l3_ipv4_pool: 192.0.0.0/31
-    mlag_port_channel_id: 1000
-    mlag_domain_id: "100"
     virtual_router_mac_address: 00:1c:73:00:00:01
     spanning_tree_root_super: true
     spanning_tree_mode: rapid-pvst
     bgp_as: 65200
-    isis_system_id_prefix: '0000.0001'
+    isis_system_id_prefix: '0000.000b'
     link_tracking:
       enabled: true
       groups:
         - name: CORE-LINKS
+    filter:
+      tenants:
+        - Prod
+        - Dev
     raw_eos_cli: |
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
   nodes:
     - name: B-LEAF1
       id: 1
+      filter:
+        only_vlans_in_use: true
       mgmt_ip: 192.168.0.111/24
       uplink_switch_interfaces: 
         - Ethernet1
@@ -77,6 +63,8 @@ l3leaf:
         - Ethernet1
     - name: B-LEAF2
       id: 2
+      filter:
+        only_vlans_in_use: true
       mgmt_ip: 192.168.0.112/24
       uplink_switch_interfaces:
         - Ethernet2
@@ -85,6 +73,8 @@ l3leaf:
         - Ethernet2
     - name: B-LEAF3
       id: 3
+      filter:
+        only_vlans_in_use: true
       mgmt_ip: 192.168.0.113/24
       uplink_switch_interfaces: 
         - Ethernet3
@@ -93,6 +83,8 @@ l3leaf:
         - Ethernet3
     - name: B-LEAF4
       id: 4
+      filter:
+        only_vlans_in_use: true
       mgmt_ip: 192.168.0.114/24
       uplink_switch_interfaces:
         - Ethernet4
@@ -101,6 +93,8 @@ l3leaf:
         - Ethernet4
     - name: B-LEAF5
       id: 5
+      filter:
+        only_vlans_in_use: true
       mgmt_ip: 192.168.0.115/24
       uplink_switch_interfaces: 
         - Ethernet5
@@ -109,6 +103,8 @@ l3leaf:
         - Ethernet5
     - name: B-LEAF6
       id: 6
+      filter:
+        only_vlans_in_use: true
       mgmt_ip: 192.168.0.116/24
       uplink_switch_interfaces:
         - Ethernet6
@@ -118,6 +114,10 @@ l3leaf:
   node_groups:       
     - group: DOMAIN_B_EVPNGW
       bgp_as: 65200
+      mlag: false
+      filter:
+        tenants:
+          - EVPNGW
       evpn_gateway:
         # Specific BGP EVPN Gateway functionality for route types 2 (MAC-IP), 3 (IMET) and 5 (IP-PREFIX) can be enabled separately as needed.
         evpn_l2:

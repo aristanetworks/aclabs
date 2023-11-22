@@ -3,21 +3,3 @@ type: spine
 
 switchport_default:
   mode: routed
-
-custom_structured_configuration_ethernet_interfaces:
-  - name: Ethernet1
-    ip_address: "unnumbered Loopback0"
-  - name: Ethernet2
-    ip_address: "unnumbered Loopback0"
-  - name: Ethernet3
-    ip_address: "unnumbered Loopback0"
-  - name: Ethernet4
-    ip_address: "unnumbered Loopback0"
-  - name: Ethernet5
-    ip_address: "unnumbered Loopback0"
-  - name: Ethernet6
-    ip_address: "unnumbered Loopback0"
-  - name: Ethernet7
-    ip_address: "unnumbered Loopback0"
-  - name: Ethernet8
-    ip_address: "unnumbered Loopback0"

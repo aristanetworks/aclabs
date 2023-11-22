@@ -1,2 +1,22 @@
 ---
 fabric_name: FABRIC 
+
+underlay_routing_protocol: isis
+overlay_routing_protocol: ibgp
+
+underlay_multicast: true
+evpn_multicast: true
+
+bgp_peer_groups:
+  evpn_overlay_peers:
+    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
+  ipv4_underlay_peers:
+    password: 7x4B4rnJhZB438m9+BrBfQ==
+  mlag_ipv4_underlay_peer:
+    password: 4b21pAdCvWeAqpcKDFMdWw==
+  evpn_overlay_core:
+    password: 4b21pAdCvWeAqpcKDFMdWw==
+    structured_config:
+      local_as: 65500
+      remove_private_as:
+        replace_as: true

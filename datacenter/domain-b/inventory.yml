@@ -81,16 +81,7 @@ all:
                   ansible_host: 10.255.27.86
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
-        BACKBONE:
-          hosts:
-            BB1:
-              ansible_host: 10.255.40.7
-              ansible_user: cvpadmin
-              ansible_ssh_pass: arista123
-            BB2:
-              ansible_host: 10.255.77.18
-              ansible_user: cvpadmin
-              ansible_ssh_pass: arista123
+                  
     NETWORK_SERVICES:
       children:
         DOMAIN_B_L3_LEAVES:
