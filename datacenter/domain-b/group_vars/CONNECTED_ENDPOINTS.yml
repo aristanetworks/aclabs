@@ -5,7 +5,7 @@ servers:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet7, Ethernet7 ]
         switches: [ B-LEAF1, B-LEAF2 ]
-        vlans: 70
+        vlans: 20
         mode: access
         spanning_tree_portfast: edge
         link_tracking:
@@ -14,7 +14,7 @@ servers:
         port_channel:
           description: HostG
           mode: active
-          short_esi: 1111:2222:0007
+          short_esi: 0021:0022:0007
 
   - name: HostH
     adapters:
@@ -30,7 +30,7 @@ servers:
         port_channel:
           description: HostH
           mode: active
-          short_esi: 1111:2222:0008
+          short_esi: 0021:0022:0008
 
   - name: HostI
     adapters:
@@ -56,7 +56,7 @@ servers:
         port_channel:
           description: HostJ
           mode: active
-          short_esi: 3333:4444:0008
+          short_esi: 0023:0024:0008
 
   - name: HostK
     adapters:
@@ -102,7 +102,7 @@ network_ports:
       enabled: true
       name: CORE-LINKS
     ethernet_segment:
-      short_esi: 7777:8888:0008
+      short_esi: 0025:0026:0007
       redundancy: single-active
       designated_forwarder_algorithm: preference
       designated_forwarder_preferences: 
