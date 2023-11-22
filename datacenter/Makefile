@@ -14,12 +14,12 @@ ping-domain-a: ## Ping Nodes
 build-domain-a: ## Build Configs
 	ansible-playbook playbooks/fabric-build.yml -i domain-a/inventory.yml -e "target_hosts=FABRIC"
 
-.PHONY: deploy-domain-a
-deploy-domain-a: ## Deploy Configs via eAPI
+.PHONY: deploy-eapi-domain-a
+deploy-eapi-domain-a: ## Deploy Configs via eAPI
 	ansible-playbook playbooks/fabric-deploy-eapi.yml -i domain-a/inventory.yml -e "target_hosts=FABRIC"
 
-.PHONY: cvp-domain-a
-cvp-domain-a: ## Deploy Configs via CVP
+.PHONY: deploy-cvp-domain-a
+deploy-cvp-domain-a: ## Deploy Configs via CVP
 	ansible-playbook playbooks/fabric-deploy-cvp.yml -i domain-a/inventory.yml
 
 ########################################################
@@ -34,12 +34,12 @@ ping-domain-b: ## Ping Nodes
 build-domain-b: ## Build Configs
 	ansible-playbook playbooks/fabric-build.yml -i domain-b/inventory.yml -e "target_hosts=FABRIC"
 
-.PHONY: deploy-domain-b
-deploy-domain-b: ## Deploy Configs via eAPI
+.PHONY: deploy-eapi-domain-b
+deploy-eapi-domain-b: ## Deploy Configs via eAPI
 	ansible-playbook playbooks/fabric-deploy-eapi.yml -i domain-b/inventory.yml -e "target_hosts=FABRIC"
 
-.PHONY: cvp-domain-b
-cvp-domain-b: ## Deploy Configs via CVP
+.PHONY: deploy-cvp-domain-b
+deploy-cvp-domain-b: ## Deploy Configs via CVP
 	ansible-playbook playbooks/fabric-deploy-cvp.yml -i domain-b/inventory.yml
 
 ########################################################
@@ -54,12 +54,12 @@ ping-domain-c: ## Ping Nodes
 build-domain-c: ## Build Configs
 	ansible-playbook playbooks/fabric-build.yml -i domain-c/inventory.yml -e "target_hosts=FABRIC"
 
-.PHONY: deploy-domain-c
-deploy-domain-c: ## Deploy Configs via eAPI
+.PHONY: deploy-eapi-domain-c
+deploy-eapi-domain-c: ## Deploy Configs via eAPI
 	ansible-playbook playbooks/fabric-deploy-eapi.yml -i domain-c/inventory.yml -e "target_hosts=FABRIC"
 
-.PHONY: cvp-domain-c
-cvp-domain-c: ## Deploy Configs via CVP
+.PHONY: deploy-cvp-domain-c
+deploy-cvp-domain-c: ## Deploy Configs via CVP
 	ansible-playbook playbooks/fabric-deploy-cvp.yml -i domain-c/inventory.yml
 
 ########################################################
@@ -78,6 +78,6 @@ build-backbone: ## Build Configs
 deploy-backbone: ## Deploy Configs via eAPI
 	ansible-playbook playbooks/fabric-deploy-eapi.yml -i backbone/inventory.yml -e "target_hosts=FABRIC"
 
-.PHONY: cvp-backbone
-cvp-backbone: ## Deploy Configs via CVP
+.PHONY: deploy-cvp-backbone
+deploy-cvp-backbone: ## Deploy Configs via CVP
 	ansible-playbook playbooks/fabric-deploy-cvp.yml -i backbone/inventory.yml
