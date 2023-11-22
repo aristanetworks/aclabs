@@ -538,6 +538,8 @@ interface Vlan10
    no shutdown
    mtu 9014
    vrf Prod
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback101
    ip address virtual 10.10.10.1/24
 !
 interface Vlan30
@@ -545,6 +547,8 @@ interface Vlan30
    no shutdown
    mtu 9014
    vrf Prod
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback101
    ip address virtual 10.30.30.1/24
 !
 interface Vlan50
@@ -552,6 +556,8 @@ interface Vlan50
    no shutdown
    mtu 9014
    vrf Dev
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback102
    ip address virtual 10.50.50.1/24
 !
 interface Vlan3001
@@ -606,8 +612,8 @@ interface Vlan4094
 
 | VRF | VNI | Multicast Group |
 | ---- | --- | --------------- |
-| Dev | 50002 | - |
-| Prod | 50001 | - |
+| Dev | 50002 | 232.2.2.1 |
+| Prod | 50001 | 232.1.1.1 |
 
 #### VXLAN Interface Device Configuration
 
@@ -624,6 +630,8 @@ interface Vxlan1
    vxlan vrf Dev vni 50002
    vxlan vrf Prod vni 50001
    vxlan mlag source-interface Loopback1
+   vxlan vrf Dev multicast group 232.2.2.1
+   vxlan vrf Prod multicast group 232.1.1.1
 ```
 
 ## Routing
@@ -769,10 +777,10 @@ Global ARP timeout: 1500
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute |
-| --- | ------------------- | ------------ |
-| Dev | 10.0.0.8:50002 | connected |
-| Prod | 10.0.0.8:50001 | connected |
+| VRF | Route-Distinguisher | Redistribute | EVPN Multicast |
+| --- | ------------------- | ------------ | -------------- |
+| Dev | 10.0.0.8:50002 | connected | IPv4: True<br>Transit: False |
+| Prod | 10.0.0.8:50001 | connected | IPv4: True<br>Transit: False |
 
 #### Router BGP Device Configuration
 
@@ -858,6 +866,7 @@ router bgp 65134
    !
    vrf Dev
       rd 10.0.0.8:50002
+      evpn multicast
       route-target import evpn 50002:50002
       route-target export evpn 50002:50002
       router-id 10.0.0.8
@@ -866,6 +875,7 @@ router bgp 65134
    !
    vrf Prod
       rd 10.0.0.8:50001
+      evpn multicast
       route-target import evpn 50001:50001
       route-target export evpn 50001:50001
       router-id 10.0.0.8
@@ -913,6 +923,13 @@ router bfd
 - Routing for IPv4 multicast is enabled.
 - Software forwarding by the Software Forwarding Engine (SFE)
 
+#### IP Router Multicast VRFs
+
+| VRF Name | Multicast Routing |
+| -------- | ----------------- |
+| Dev | enabled |
+| Prod | enabled |
+
 #### Router Multicast Device Configuration
 
 ```eos
@@ -921,6 +938,14 @@ router multicast
    ipv4
       routing
       software-forwarding sfe
+   !
+   vrf Dev
+      ipv4
+         routing
+   !
+   vrf Prod
+      ipv4
+         routing
 ```
 
 
@@ -934,6 +959,9 @@ router multicast
 | Ethernet2 | - | IPv4 | - | - |
 | Ethernet3 | - | IPv4 | - | - |
 | Ethernet4 | - | IPv4 | - | - |
+| Vlan10 | Prod | IPv4 | - | Loopback101 |
+| Vlan30 | Prod | IPv4 | - | Loopback101 |
+| Vlan50 | Dev | IPv4 | - | Loopback102 |
 | Vlan4093 | - | IPv4 | - | - |
 
 ## Filters

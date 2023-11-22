@@ -502,6 +502,8 @@ interface Vlan70
    no shutdown
    mtu 9014
    vrf Dev
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback102
    ip address virtual 10.70.70.1/24
 !
 interface Vlan3002
@@ -547,7 +549,7 @@ interface Vlan4094
 
 | VRF | VNI | Multicast Group |
 | ---- | --- | --------------- |
-| Dev | 50002 | - |
+| Dev | 50002 | 232.2.2.1 |
 
 #### VXLAN Interface Device Configuration
 
@@ -561,6 +563,7 @@ interface Vxlan1
    vxlan vlan 70 vni 10070
    vxlan vrf Dev vni 50002
    vxlan mlag source-interface Loopback1
+   vxlan vrf Dev multicast group 232.2.2.1
 ```
 
 ## Routing
@@ -700,9 +703,9 @@ Global ARP timeout: 1500
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute |
-| --- | ------------------- | ------------ |
-| Dev | 10.0.0.9:50002 | connected |
+| VRF | Route-Distinguisher | Redistribute | EVPN Multicast |
+| --- | ------------------- | ------------ | -------------- |
+| Dev | 10.0.0.9:50002 | connected | IPv4: True<br>Transit: False |
 
 #### Router BGP Device Configuration
 
@@ -778,6 +781,7 @@ router bgp 65156
    !
    vrf Dev
       rd 10.0.0.9:50002
+      evpn multicast
       route-target import evpn 50002:50002
       route-target export evpn 50002:50002
       router-id 10.0.0.9
@@ -825,6 +829,12 @@ router bfd
 - Routing for IPv4 multicast is enabled.
 - Software forwarding by the Software Forwarding Engine (SFE)
 
+#### IP Router Multicast VRFs
+
+| VRF Name | Multicast Routing |
+| -------- | ----------------- |
+| Dev | enabled |
+
 #### Router Multicast Device Configuration
 
 ```eos
@@ -833,6 +843,10 @@ router multicast
    ipv4
       routing
       software-forwarding sfe
+   !
+   vrf Dev
+      ipv4
+         routing
 ```
 
 
@@ -846,6 +860,7 @@ router multicast
 | Ethernet2 | - | IPv4 | - | - |
 | Ethernet3 | - | IPv4 | - | - |
 | Ethernet4 | - | IPv4 | - | - |
+| Vlan70 | Dev | IPv4 | - | Loopback102 |
 | Vlan4093 | - | IPv4 | - | - |
 
 ## Filters

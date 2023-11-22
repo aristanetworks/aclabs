@@ -165,7 +165,7 @@ router_bgp:
       peer_group: MLAG-IPv4-UNDERLAY-PEER
   vlans:
   - id: 50
-    tenant: TENANT1
+    tenant: EVPNGW
     rd: 10.0.0.12:10050
     route_targets:
       both:
@@ -179,7 +179,7 @@ router_bgp:
       domain: remote
       rd: 10.0.0.12:10050
   - id: 60
-    tenant: TENANT1
+    tenant: EVPNGW
     rd: 10.0.0.12:10060
     route_targets:
       both:
@@ -193,7 +193,7 @@ router_bgp:
       domain: remote
       rd: 10.0.0.12:10060
   - id: 70
-    tenant: TENANT1
+    tenant: EVPNGW
     rd: 10.0.0.12:10070
     route_targets:
       both:
@@ -207,7 +207,7 @@ router_bgp:
       domain: remote
       rd: 10.0.0.12:10070
   - id: 80
-    tenant: TENANT1
+    tenant: EVPNGW
     rd: 10.0.0.12:10080
     route_targets:
       both:
@@ -221,7 +221,7 @@ router_bgp:
       domain: remote
       rd: 10.0.0.12:10080
   - id: 10
-    tenant: TENANT1
+    tenant: EVPNGW
     rd: 10.0.0.12:10010
     route_targets:
       both:
@@ -235,7 +235,7 @@ router_bgp:
       domain: remote
       rd: 10.0.0.12:10010
   - id: 20
-    tenant: TENANT1
+    tenant: EVPNGW
     rd: 10.0.0.12:10020
     route_targets:
       both:
@@ -249,7 +249,7 @@ router_bgp:
       domain: remote
       rd: 10.0.0.12:10020
   - id: 30
-    tenant: TENANT1
+    tenant: EVPNGW
     rd: 10.0.0.12:10030
     route_targets:
       both:
@@ -263,7 +263,7 @@ router_bgp:
       domain: remote
       rd: 10.0.0.12:10030
   - id: 40
-    tenant: TENANT1
+    tenant: EVPNGW
     rd: 10.0.0.12:10040
     route_targets:
       both:
@@ -315,10 +315,10 @@ vrfs:
 - name: MGMT
   ip_routing: false
 - name: Dev
-  tenant: TENANT1
+  tenant: EVPNGW
   ip_routing: true
 - name: Prod
-  tenant: TENANT1
+  tenant: EVPNGW
   ip_routing: true
 management_interfaces:
 - name: Management1
@@ -350,38 +350,38 @@ vlans:
   - MLAG
 - id: 50
   name: Yellow
-  tenant: TENANT1
+  tenant: EVPNGW
 - id: 60
   name: Red
-  tenant: TENANT1
+  tenant: EVPNGW
 - id: 70
   name: Brown
-  tenant: TENANT1
+  tenant: EVPNGW
 - id: 80
   name: Black
-  tenant: TENANT1
+  tenant: EVPNGW
 - id: 3002
   name: MLAG_iBGP_Dev
   trunk_groups:
   - LEAF_PEER_L3
-  tenant: TENANT1
+  tenant: EVPNGW
 - id: 10
   name: Blue
-  tenant: TENANT1
+  tenant: EVPNGW
 - id: 20
   name: Green
-  tenant: TENANT1
+  tenant: EVPNGW
 - id: 30
   name: Orange
-  tenant: TENANT1
+  tenant: EVPNGW
 - id: 40
   name: Purple
-  tenant: TENANT1
+  tenant: EVPNGW
 - id: 3001
   name: MLAG_iBGP_Prod
   trunk_groups:
   - LEAF_PEER_L3
-  tenant: TENANT1
+  tenant: EVPNGW
 vlan_interfaces:
 - name: Vlan4093
   description: MLAG_PEER_L3_PEERING
@@ -395,35 +395,35 @@ vlan_interfaces:
   no_autostate: true
   mtu: 1500
 - name: Vlan50
-  tenant: TENANT1
+  tenant: EVPNGW
   description: Yellow
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.50.50.1/24
   vrf: Dev
 - name: Vlan60
-  tenant: TENANT1
+  tenant: EVPNGW
   description: Red
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.60.60.1/24
   vrf: Dev
 - name: Vlan70
-  tenant: TENANT1
+  tenant: EVPNGW
   description: Brown
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.70.70.1/24
   vrf: Dev
 - name: Vlan80
-  tenant: TENANT1
+  tenant: EVPNGW
   description: Black
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.80.80.1/24
   vrf: Dev
 - name: Vlan3002
-  tenant: TENANT1
+  tenant: EVPNGW
   type: underlay_peering
   shutdown: false
   description: 'MLAG_PEER_L3_iBGP: vrf Dev'
@@ -431,35 +431,35 @@ vlan_interfaces:
   mtu: 9214
   ip_address: 192.0.0.1/31
 - name: Vlan10
-  tenant: TENANT1
+  tenant: EVPNGW
   description: Blue
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.10.10.1/24
   vrf: Prod
 - name: Vlan20
-  tenant: TENANT1
+  tenant: EVPNGW
   description: Green
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.20.20.1/24
   vrf: Prod
 - name: Vlan30
-  tenant: TENANT1
+  tenant: EVPNGW
   description: Orange
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.30.30.1/24
   vrf: Prod
 - name: Vlan40
-  tenant: TENANT1
+  tenant: EVPNGW
   description: Purple
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.40.40.1/24
   vrf: Prod
 - name: Vlan3001
-  tenant: TENANT1
+  tenant: EVPNGW
   type: underlay_peering
   shutdown: false
   description: 'MLAG_PEER_L3_iBGP: vrf Prod'

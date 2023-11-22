@@ -1,5 +1,5 @@
 tenants: 
-  - name: TENANT1
+  - name: EVPNGW
     mac_vrf_vni_base: 10000
     vrfs:
       - name: Prod
@@ -23,6 +23,62 @@ tenants:
           - id: 40
             name: Purple
             profile: VLAN40
+      - name: Dev
+        vrf_vni: 50002
+        vtep_diagnostic:
+          loopback: 102
+          loopback_ip_range: 10.102.102.0/27
+        mlag_ibgp_peering_ipv4_pool: 192.0.0.0/31
+        mlag_ibgp_peering_vlan: 3002
+        redistribute_mlag_ibgp_peering_vrfs: false
+        svis:
+          - id: 50
+            name: Yellow
+            profile: VLAN50
+          - id: 60
+            name: Red
+            profile: VLAN60
+          - id: 70
+            name: Brown
+            profile: VLAN70
+          - id: 80
+            name: Black
+            profile: VLAN80
+  - name: Prod
+    mac_vrf_vni_base: 10000
+    evpn_l3_multicast:
+      enabled: true
+      evpn_underlay_l3_multicast_group_ipv4_pool: 232.1.1.1/24
+      evpn_underlay_l3_multicast_group_ipv4_pool_offset: -49999
+    vrfs:
+      - name: Prod
+        vrf_vni: 50001
+        vtep_diagnostic: 
+          loopback: 101
+          loopback_ip_range: 10.101.101.0/27
+        mlag_ibgp_peering_ipv4_pool: 192.0.0.0/31
+        mlag_ibgp_peering_vlan: 3001
+        redistribute_mlag_ibgp_peering_vrfs: false
+        svis: 
+          - id: 10
+            name: Blue
+            profile: VLAN10
+          - id: 20
+            name: Green
+            profile: VLAN20
+          - id: 30
+            name: Orange
+            profile: VLAN30
+          - id: 40
+            name: Purple
+            profile: VLAN40
+  - name: Dev
+    mac_vrf_vni_base: 10000
+    evpn_l3_multicast:
+      enabled: true
+      evpn_underlay_l3_multicast_group_ipv4_pool: 232.2.2.1/24
+      evpn_underlay_l3_multicast_group_ipv4_pool_offset: -50000
+    vrfs:
       - name: Dev
         vrf_vni: 50002
         vtep_diagnostic:

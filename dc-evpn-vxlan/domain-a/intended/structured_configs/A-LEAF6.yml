@@ -107,12 +107,13 @@ router_bgp:
     redistribute_routes:
     - source_protocol: connected
       route_map: RM-CONN-2-BGP-VRFS
+    evpn_multicast: true
     neighbors:
     - ip_address: 192.0.0.0
       peer_group: MLAG-IPv4-UNDERLAY-PEER
   vlans:
   - id: 70
-    tenant: TENANT1
+    tenant: Dev
     rd: 10.0.0.10:10070
     route_targets:
       both:
@@ -125,6 +126,10 @@ router_multicast:
   ipv4:
     routing: true
     software_forwarding: sfe
+  vrfs:
+  - name: Dev
+    ipv4:
+      routing: true
 daemon_terminattr:
   cvaddrs:
   - 192.168.0.5:9910
@@ -162,7 +167,7 @@ vrfs:
 - name: MGMT
   ip_routing: false
 - name: Dev
-  tenant: TENANT1
+  tenant: Dev
   ip_routing: true
 management_interfaces:
 - name: Management1
@@ -194,12 +199,12 @@ vlans:
   - MLAG
 - id: 70
   name: Brown
-  tenant: TENANT1
+  tenant: Dev
 - id: 3002
   name: MLAG_iBGP_Dev
   trunk_groups:
   - LEAF_PEER_L3
-  tenant: TENANT1
+  tenant: Dev
 vlan_interfaces:
 - name: Vlan4093
   description: MLAG_PEER_L3_PEERING
@@ -216,14 +221,18 @@ vlan_interfaces:
   no_autostate: true
   mtu: 1500
 - name: Vlan70
-  tenant: TENANT1
+  tenant: Dev
   description: Brown
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.70.70.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback102
   vrf: Dev
 - name: Vlan3002
-  tenant: TENANT1
+  tenant: Dev
   type: underlay_peering
   shutdown: false
   description: 'MLAG_PEER_L3_iBGP: vrf Dev'
@@ -402,6 +411,7 @@ vxlan_interface:
       vrfs:
       - name: Dev
         vni: 50002
+        multicast_group: 232.2.2.1
 virtual_source_nat_vrfs:
 - name: Dev
   ip_address: 10.102.102.10

@@ -75,10 +75,7 @@ all:
                   ansible_host: 10.255.99.61
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
-
-    MULTICAST_SERVICES:
-      children:
-        DOMAIN_A_L3_LEAVES:
+                  
     NETWORK_SERVICES:
       children:
         DOMAIN_A_L3_LEAVES:

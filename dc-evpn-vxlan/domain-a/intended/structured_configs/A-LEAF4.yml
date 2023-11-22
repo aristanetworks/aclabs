@@ -107,6 +107,7 @@ router_bgp:
     redistribute_routes:
     - source_protocol: connected
       route_map: RM-CONN-2-BGP-VRFS
+    evpn_multicast: true
     neighbors:
     - ip_address: 192.0.0.0
       peer_group: MLAG-IPv4-UNDERLAY-PEER
@@ -125,12 +126,13 @@ router_bgp:
     redistribute_routes:
     - source_protocol: connected
       route_map: RM-CONN-2-BGP-VRFS
+    evpn_multicast: true
     neighbors:
     - ip_address: 192.0.0.0
       peer_group: MLAG-IPv4-UNDERLAY-PEER
   vlans:
   - id: 50
-    tenant: TENANT1
+    tenant: Dev
     rd: 10.0.0.8:10050
     route_targets:
       both:
@@ -138,7 +140,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 10
-    tenant: TENANT1
+    tenant: Prod
     rd: 10.0.0.8:10010
     route_targets:
       both:
@@ -146,7 +148,7 @@ router_bgp:
     redistribute_routes:
     - learned
   - id: 30
-    tenant: TENANT1
+    tenant: Prod
     rd: 10.0.0.8:10030
     route_targets:
       both:
@@ -159,6 +161,13 @@ router_multicast:
   ipv4:
     routing: true
     software_forwarding: sfe
+  vrfs:
+  - name: Dev
+    ipv4:
+      routing: true
+  - name: Prod
+    ipv4:
+      routing: true
 daemon_terminattr:
   cvaddrs:
   - 192.168.0.5:9910
@@ -196,10 +205,10 @@ vrfs:
 - name: MGMT
   ip_routing: false
 - name: Dev
-  tenant: TENANT1
+  tenant: Dev
   ip_routing: true
 - name: Prod
-  tenant: TENANT1
+  tenant: Prod
   ip_routing: true
 management_interfaces:
 - name: Management1
@@ -231,23 +240,23 @@ vlans:
   - MLAG
 - id: 50
   name: Yellow
-  tenant: TENANT1
+  tenant: Dev
 - id: 3002
   name: MLAG_iBGP_Dev
   trunk_groups:
   - LEAF_PEER_L3
-  tenant: TENANT1
+  tenant: Dev
 - id: 10
   name: Blue
-  tenant: TENANT1
+  tenant: Prod
 - id: 30
   name: Orange
-  tenant: TENANT1
+  tenant: Prod
 - id: 3001
   name: MLAG_iBGP_Prod
   trunk_groups:
   - LEAF_PEER_L3
-  tenant: TENANT1
+  tenant: Prod
 vlan_interfaces:
 - name: Vlan4093
   description: MLAG_PEER_L3_PEERING
@@ -264,14 +273,18 @@ vlan_interfaces:
   no_autostate: true
   mtu: 1500
 - name: Vlan50
-  tenant: TENANT1
+  tenant: Dev
   description: Yellow
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.50.50.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback102
   vrf: Dev
 - name: Vlan3002
-  tenant: TENANT1
+  tenant: Dev
   type: underlay_peering
   shutdown: false
   description: 'MLAG_PEER_L3_iBGP: vrf Dev'
@@ -279,21 +292,29 @@ vlan_interfaces:
   mtu: 9214
   ip_address: 192.0.0.1/31
 - name: Vlan10
-  tenant: TENANT1
+  tenant: Prod
   description: Blue
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.10.10.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback101
   vrf: Prod
 - name: Vlan30
-  tenant: TENANT1
+  tenant: Prod
   description: Orange
   shutdown: false
   mtu: 9014
   ip_address_virtual: 10.30.30.1/24
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback101
   vrf: Prod
 - name: Vlan3001
-  tenant: TENANT1
+  tenant: Prod
   type: underlay_peering
   shutdown: false
   description: 'MLAG_PEER_L3_iBGP: vrf Prod'
@@ -491,8 +512,10 @@ vxlan_interface:
       vrfs:
       - name: Dev
         vni: 50002
+        multicast_group: 232.2.2.1
       - name: Prod
         vni: 50001
+        multicast_group: 232.1.1.1
 virtual_source_nat_vrfs:
 - name: Dev
   ip_address: 10.102.102.8

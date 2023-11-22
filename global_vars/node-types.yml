@@ -57,7 +57,3 @@ node_type_keys:
       l2: true
     underlay_router: false
     uplink_type: port-channel
-
-network_services_keys:
-  - name: tenants
-  - name: tenants_multicast

@@ -523,6 +523,8 @@ interface Vlan10
    no shutdown
    mtu 9014
    vrf Prod
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback101
    ip address virtual 10.10.10.1/24
 !
 interface Vlan30
@@ -530,6 +532,8 @@ interface Vlan30
    no shutdown
    mtu 9014
    vrf Prod
+   pim ipv4 sparse-mode
+   pim ipv4 local-interface Loopback101
    ip address virtual 10.30.30.1/24
 !
 interface Vlan3001
@@ -576,7 +580,7 @@ interface Vlan4094
 
 | VRF | VNI | Multicast Group |
 | ---- | --- | --------------- |
-| Prod | 50001 | - |
+| Prod | 50001 | 232.1.1.1 |
 
 #### VXLAN Interface Device Configuration
 
@@ -591,6 +595,7 @@ interface Vxlan1
    vxlan vlan 30 vni 10030
    vxlan vrf Prod vni 50001
    vxlan mlag source-interface Loopback1
+   vxlan vrf Prod multicast group 232.1.1.1
 ```
 
 ## Routing
@@ -731,9 +736,9 @@ Global ARP timeout: 1500
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute |
-| --- | ------------------- | ------------ |
-| Prod | 10.0.0.6:50001 | connected |
+| VRF | Route-Distinguisher | Redistribute | EVPN Multicast |
+| --- | ------------------- | ------------ | -------------- |
+| Prod | 10.0.0.6:50001 | connected | IPv4: True<br>Transit: False |
 
 #### Router BGP Device Configuration
 
@@ -814,6 +819,7 @@ router bgp 65112
    !
    vrf Prod
       rd 10.0.0.6:50001
+      evpn multicast
       route-target import evpn 50001:50001
       route-target export evpn 50001:50001
       router-id 10.0.0.6
@@ -861,6 +867,12 @@ router bfd
 - Routing for IPv4 multicast is enabled.
 - Software forwarding by the Software Forwarding Engine (SFE)
 
+#### IP Router Multicast VRFs
+
+| VRF Name | Multicast Routing |
+| -------- | ----------------- |
+| Prod | enabled |
+
 #### Router Multicast Device Configuration
 
 ```eos
@@ -869,6 +881,10 @@ router multicast
    ipv4
       routing
       software-forwarding sfe
+   !
+   vrf Prod
+      ipv4
+         routing
 ```
 
 
@@ -882,6 +898,8 @@ router multicast
 | Ethernet2 | - | IPv4 | - | - |
 | Ethernet3 | - | IPv4 | - | - |
 | Ethernet4 | - | IPv4 | - | - |
+| Vlan10 | Prod | IPv4 | - | Loopback101 |
+| Vlan30 | Prod | IPv4 | - | Loopback101 |
 | Vlan4093 | - | IPv4 | - | - |
 
 ## Filters
