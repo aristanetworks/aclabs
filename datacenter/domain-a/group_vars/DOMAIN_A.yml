@@ -1,0 +1,150 @@
+---
+dc_name: domain-a
+spine:
+  defaults:
+    platform: vEOS-lab 
+    loopback_ipv4_pool: 10.0.0.0/24
+    bgp_as: 65100
+    raw_eos_cli: |
+      agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
+  nodes: 
+    - name: A-SPINE1
+      id: 1 
+      mgmt_ip: 192.168.0.11/24 
+    - name: A-SPINE2
+      id: 2
+      mgmt_ip: 192.168.0.12/24
+    - name: A-SPINE3
+      id: 3
+      mgmt_ip: 192.168.0.13/24 
+    - name: A-SPINE4
+      id: 4
+      mgmt_ip: 192.168.0.14/24
+
+l3leaf:
+  defaults:
+    platform: vEOS-lab
+    loopback_ipv4_pool: 10.0.0.0/24
+    loopback_ipv4_offset: 4
+    vtep_loopback_ipv4_pool: 10.1.1.0/24 
+    uplink_interfaces: ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'] 
+    uplink_switches: ['A-SPINE1', 'A-SPINE2', 'A-SPINE3', 'A-SPINE4']
+    uplink_ipv4_pool: 192.168.1.0/24
+    mlag_interfaces: ['Ethernet5', 'Ethernet6']
+    mlag_peer_vlan_structured_config: 
+      mtu: 1500 
+    mlag_peer_ipv4_pool: 169.254.0.0/31
+    mlag_peer_l3_ipv4_pool: 192.0.0.0/31
+    mlag_port_channel_id: 1000
+    mlag_domain_id: "100"
+    mlag_ibgp_origin_incomplete: true
+    virtual_router_mac_address: 00:1c:73:00:00:01
+    spanning_tree_priority: 0
+    spanning_tree_mode: mstp
+    filter:
+      tenants:
+        - Prod
+        - Dev
+    # can remove agent KernelFib command, not in tech library
+    raw_eos_cli: |
+      agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
+  node_groups: 
+    - group: DOMAIN_A_LA
+      bgp_as: 65112
+      filter:
+        only_vlans_in_use: true
+      nodes:
+        - name: A-LEAF1
+          id: 1
+          mgmt_ip: 192.168.0.101/24
+          uplink_switch_interfaces: 
+            - Ethernet1
+            - Ethernet1
+            - Ethernet1
+            - Ethernet1
+        - name: A-LEAF2
+          id: 2
+          mgmt_ip: 192.168.0.102/24
+          uplink_switch_interfaces:
+            - Ethernet2
+            - Ethernet2
+            - Ethernet2
+            - Ethernet2
+    - group: DOMAIN_A_LB
+      bgp_as: 65134
+      filter:
+        only_vlans_in_use: true
+      nodes:
+        - name: A-LEAF3
+          id: 3
+          mgmt_ip: 192.168.0.103/24
+          uplink_switch_interfaces: 
+            - Ethernet3
+            - Ethernet3
+            - Ethernet3
+            - Ethernet3
+        - name: A-LEAF4
+          id: 4
+          mgmt_ip: 192.168.0.104/24
+          uplink_switch_interfaces:
+            - Ethernet4
+            - Ethernet4
+            - Ethernet4
+            - Ethernet4
+    - group: DOMAIN_A_LC
+      bgp_as: 65156
+      filter:
+        only_vlans_in_use: true
+      nodes:
+        - name: A-LEAF5
+          id: 5
+          mgmt_ip: 192.168.0.105/24
+          uplink_switch_interfaces: 
+            - Ethernet5
+            - Ethernet5
+            - Ethernet5
+            - Ethernet5
+        - name: A-LEAF6
+          id: 6
+          mgmt_ip: 192.168.0.106/24
+          uplink_switch_interfaces:
+            - Ethernet6
+            - Ethernet6
+            - Ethernet6
+            - Ethernet6
+    - group: DOMAIN_A_EVPNGW
+      bgp_as: 65178
+      filter:
+        tenants:
+          - EVPNGW
+      evpn_gateway:
+        # Specific BGP EVPN Gateway functionality for route types 2 (MAC-IP), 3 (IMET) and 5 (IP-PREFIX) can be enabled separately as needed.
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+          inter_domain: true
+        remote_peers:
+          - hostname: BB1
+            bgp_as: 65500
+            ip_address: 172.16.0.1
+          - hostname: BB2
+            bgp_as: 65500
+            ip_address: 172.16.0.2
+      nodes:
+        - name: A-LEAF7
+          id: 7
+          mgmt_ip: 192.168.0.107/24
+          uplink_switch_interfaces: 
+            - Ethernet7
+            - Ethernet7
+            - Ethernet7
+            - Ethernet7
+        - name: A-LEAF8
+          id: 8
+          mgmt_ip: 192.168.0.108/24
+          uplink_switch_interfaces:
+            - Ethernet8
+            - Ethernet8
+            - Ethernet8
+            - Ethernet8

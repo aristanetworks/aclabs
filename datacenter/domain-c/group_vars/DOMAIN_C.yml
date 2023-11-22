@@ -1,18 +1,18 @@
 ---
 
-underlay_routing_protocol: ebgp
+underlay_routing_protocol: ospf
 overlay_routing_protocol: ebgp
 
-#underlay_multicast: true
-#evpn_multicast: true
+vtep_vvtep_ip: 10.3.3.255/32
+
+underlay_multicast: true
+evpn_multicast: true
 
 bgp_peer_groups: 
   evpn_overlay_peers:
     password: Q4fqtbqcZ7oQuKfuWtNGRQ==
   ipv4_underlay_peers:
     password: 7x4B4rnJhZB438m9+BrBfQ==
-  mlag_ipv4_underlay_peer:
-    password: 4b21pAdCvWeAqpcKDFMdWw==
   evpn_overlay_core:
     structured_config:
       local_as: 65500
@@ -22,111 +22,97 @@ bgp_peer_groups:
 spine:
   defaults:
     platform: vEOS-lab 
-    loopback_ipv4_pool: 10.0.0.0/24
-    bgp_as: 65100
+    loopback_ipv4_pool: 10.0.0.128/26
+    vtep_loopback_ipv4_pool: 10.3.3.0/24
+    virtual_router_mac_address: 00:1c:73:00:00:01 
+    bgp_as: 65300
     raw_eos_cli: |
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
   nodes: 
-    - name: A-SPINE1
+    - name: C-SPINE1
       id: 1 
-      mgmt_ip: 192.168.0.11/24 
-    - name: A-SPINE2
+      mgmt_ip: 192.168.0.19/24 
+    - name: C-SPINE2
       id: 2
-      mgmt_ip: 192.168.0.12/24
-    - name: A-SPINE3
-      id: 3
-      mgmt_ip: 192.168.0.13/24 
-    - name: A-SPINE4
-      id: 4
-      mgmt_ip: 192.168.0.14/24
+      mgmt_ip: 192.168.0.20/24
 
 l3leaf:
   defaults:
-    platform: vEOS-lab
-    loopback_ipv4_pool: 10.0.0.0/24
-    loopback_ipv4_offset: 4
-    vtep_loopback_ipv4_pool: 10.1.1.0/24 
-    uplink_interfaces: ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'] 
-    uplink_switches: ['A-SPINE1', 'A-SPINE2', 'A-SPINE3', 'A-SPINE4']
+    platform: vEOS-lab 
+    loopback_ipv4_pool: 10.0.0.128/26
+    loopback_ipv4_offset: 2
+    vtep_loopback_ipv4_pool: 10.3.3.0/24 
+    uplink_interfaces: ['Ethernet1', 'Ethernet2'] 
+    uplink_switches: ['C-SPINE1', 'C-SPINE2']
     uplink_ipv4_pool: 192.168.1.0/24
     mlag_interfaces: ['Ethernet5', 'Ethernet6'] 
     mlag_peer_ipv4_pool: 10.0.0.0/31
     mlag_peer_l3_ipv4_pool: 192.0.0.0/31
     mlag_port_channel_id: 1000
     mlag_domain_id: "100"
-    mlag_ibgp_origin_incomplete: true
     virtual_router_mac_address: 00:1c:73:00:00:01
     spanning_tree_priority: 4096 
     spanning_tree_mode: rapid-pvst
-    # can remove agent KernelFib command, not in tech library
+    evpn_services_l2_only: true
     raw_eos_cli: |
+      dhcp relay
+        mlag peer-link requests disabled
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
   node_groups: 
-    - group: DOMAIN_A_LA
-      bgp_as: 65112
+    - group: DOMAIN_C_LA
+      bgp_as: 65312
       filter:
         only_vlans_in_use: true 
       nodes:
-        - name: A-LEAF1
+        - name: C-LEAF1
           id: 1
-          mgmt_ip: 192.168.0.101/24
+          mgmt_ip: 192.168.0.121/24
           uplink_switch_interfaces: 
             - Ethernet1
             - Ethernet1
-            - Ethernet1
-            - Ethernet1
-        - name: A-LEAF2
+        - name: C-LEAF2
           id: 2
-          mgmt_ip: 192.168.0.102/24
+          mgmt_ip: 192.168.0.122/24
           uplink_switch_interfaces:
             - Ethernet2
             - Ethernet2
-            - Ethernet2
-            - Ethernet2
-    - group: DOMAIN_A_LB
-      bgp_as: 65134
+    - group: DOMAIN_C_LB
+      bgp_as: 65334
       filter:
         only_vlans_in_use: true
       nodes:
-        - name: A-LEAF3
+        - name: C-LEAF3
           id: 3
-          mgmt_ip: 192.168.0.103/24
+          mgmt_ip: 192.168.0.123/24
           uplink_switch_interfaces: 
             - Ethernet3
             - Ethernet3
-            - Ethernet3
-            - Ethernet3
-        - name: A-LEAF4
+        - name: C-LEAF4
           id: 4
-          mgmt_ip: 192.168.0.104/24
+          mgmt_ip: 192.168.0.124/24
           uplink_switch_interfaces:
             - Ethernet4
             - Ethernet4
-            - Ethernet4
-            - Ethernet4
-    - group: DOMAIN_A_LC
-      bgp_as: 65156
+    - group: DOMAIN_C_LC
+      bgp_as: 65356
       filter:
         only_vlans_in_use: true
       nodes:
-        - name: A-LEAF5
+        - name: C-LEAF5
           id: 5
-          mgmt_ip: 192.168.0.105/24
+          mgmt_ip: 192.168.0.125/24
           uplink_switch_interfaces: 
             - Ethernet5
             - Ethernet5
-            - Ethernet5
-            - Ethernet5
-        - name: A-LEAF6
+        - name: C-LEAF6
           id: 6
-          mgmt_ip: 192.168.0.106/24
+          mgmt_ip: 192.168.0.126/24
           uplink_switch_interfaces:
             - Ethernet6
             - Ethernet6
-            - Ethernet6
-            - Ethernet6
-    - group: DOMAIN_A_EVPNGW
-      bgp_as: 65178
+    - group: DOMAIN_C_EVPNGW
+      bgp_as: 65378
+      evpn_services_l2_only: false
       evpn_gateway:
         # Specific BGP EVPN Gateway functionality for route types 2 (MAC-IP), 3 (IMET) and 5 (IP-PREFIX) can be enabled separately as needed.
         evpn_l2:
@@ -140,19 +126,15 @@ l3leaf:
           - hostname: BB2
             bgp_as: 65500
       nodes:
-        - name: A-LEAF7
+        - name: C-LEAF7
           id: 7
-          mgmt_ip: 192.168.0.107/24
+          mgmt_ip: 192.168.0.127/24
           uplink_switch_interfaces: 
             - Ethernet7
             - Ethernet7
-            - Ethernet7
-            - Ethernet7
-        - name: A-LEAF8
+        - name: C-LEAF8
           id: 8
-          mgmt_ip: 192.168.0.108/24
+          mgmt_ip: 192.168.0.128/24
           uplink_switch_interfaces:
-            - Ethernet8
-            - Ethernet8
             - Ethernet8
             - Ethernet8

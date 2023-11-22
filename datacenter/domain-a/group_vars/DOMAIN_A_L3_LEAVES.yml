@@ -1,0 +1,7 @@
+---
+type: l3leaf
+
+dhcp_relay:
+  tunnel_requests_disabled: true
+
+

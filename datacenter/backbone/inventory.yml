@@ -1,0 +1,27 @@
+all:
+  children:
+    CVP:
+      hosts:
+        act_cv:
+          ansible_connection: httpapi
+          ansible_httpapi_use_ssl: true
+          ansible_httpapi_validate_certs: false
+          ansible_network_os: eos
+          ansible_httpapi_port: 443
+          ansible_httpapi_host: 10.255.64.142
+          ansible_host: 10.255.64.142
+          ansible_user: cvpadmin
+          ansible_password: arista123
+          cv_collection: v3
+    FABRIC:
+      children:
+        BACKBONE:
+          hosts:
+            BB1:
+              ansible_host: 10.255.40.7
+              ansible_user: cvpadmin
+              ansible_ssh_pass: arista123
+            BB2:
+              ansible_host: 10.255.77.18
+              ansible_user: cvpadmin
+              ansible_ssh_pass: arista123

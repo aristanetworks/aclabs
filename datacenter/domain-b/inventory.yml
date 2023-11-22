@@ -1,0 +1,106 @@
+all:
+  children:
+    CVP:
+      hosts:
+        cv_ztp:
+          ansible_host: 10.255.64.142
+          ansible_user: root
+          ansible_password: cvproot
+        act_cv:
+          ansible_connection: httpapi
+          ansible_httpapi_use_ssl: true
+          ansible_httpapi_validate_certs: false
+          ansible_network_os: eos
+          ansible_httpapi_port: 443
+          ansible_httpapi_host: 10.255.64.142
+          ansible_host: 10.255.64.142
+          ansible_user: cvpadmin
+          ansible_password: arista123
+          cv_collection: v3
+    FABRIC:
+      children:
+        DOMAIN_B:
+          children:
+            DOMAIN_B_SPINES:
+              hosts:
+                B-SPINE1:
+                  ansible_host: 10.255.99.247
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+                B-SPINE2:
+                  ansible_host: 10.255.22.238
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+                B-SPINE3:
+                  ansible_host: 10.255.57.135
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+                B-SPINE4:
+                  ansible_host: 10.255.64.228
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+            DOMAIN_B_L3_LEAVES:
+              hosts:
+                B-LEAF1:
+                  ansible_host: 10.255.43.229
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+                B-LEAF2:
+                  ansible_host: 10.255.54.251
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+                B-LEAF3:
+                  ansible_host: 10.255.102.4
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+                B-LEAF4:
+                  ansible_host: 10.255.9.208
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+                B-LEAF5:
+                  ansible_host: 10.255.77.40
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+                B-LEAF6:
+                  ansible_host: 10.255.104.16
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+            DOMAIN_B_EVPNGW:
+              hosts:
+                B-LEAF7:
+                  ansible_host: 10.255.6.181
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+                B-LEAF8:
+                  ansible_host: 10.255.117.153
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+            DOMAIN_B_L2_SW:
+              hosts:
+                B-SW1:
+                  ansible_host: 10.255.27.86
+                  ansible_user: cvpadmin
+                  ansible_ssh_pass: arista123
+        BACKBONE:
+          hosts:
+            BB1:
+              ansible_host: 10.255.40.7
+              ansible_user: cvpadmin
+              ansible_ssh_pass: arista123
+            BB2:
+              ansible_host: 10.255.77.18
+              ansible_user: cvpadmin
+              ansible_ssh_pass: arista123
+    NETWORK_SERVICES:
+      children:
+        DOMAIN_B_L3_LEAVES:
+        DOMAIN_B_EVPNGW:
+    CONNECTED_ENDPOINTS:
+      children:
+        DOMAIN_B_L3_LEAVES:
+    DCI:
+      children:
+        FABRIC:
+    ACT:
+      children:
+        FABRIC:

@@ -1,5 +1,5 @@
 ---
-mgmt_interface_vrf: default
+mgmt_interface_vrf: MGMT
 
 name_servers:
   - 10.255.0.2

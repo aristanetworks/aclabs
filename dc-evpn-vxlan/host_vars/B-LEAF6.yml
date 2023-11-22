@@ -1,8 +1,0 @@
-custom_structured_configuration_ethernet_interfaces:
-  - name: Ethernet7
-    evpn_ethernet_segment:
-      identifier: 00bb:000b:5555:6666:0007
-      redundancy: single-active
-      designated_forwarder_election:
-        algorithm: preference
-        preference_value: 1000
