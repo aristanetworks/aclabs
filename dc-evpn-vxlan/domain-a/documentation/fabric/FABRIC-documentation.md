@@ -17,18 +17,18 @@
 
 | POD | Type | Node | Management IP | Platform | Provisioned in CloudVision | Serial Number |
 | --- | ---- | ---- | ------------- | -------- | -------------------------- | ------------- |
-| FABRIC | l3leaf | A-LEAF1 | 192.168.0.101/24 | vEOS-lab | Provisioned | - |
-| FABRIC | l3leaf | A-LEAF2 | 192.168.0.102/24 | vEOS-lab | Provisioned | - |
-| FABRIC | l3leaf | A-LEAF3 | 192.168.0.103/24 | vEOS-lab | Provisioned | - |
-| FABRIC | l3leaf | A-LEAF4 | 192.168.0.104/24 | vEOS-lab | Provisioned | - |
-| FABRIC | l3leaf | A-LEAF5 | 192.168.0.105/24 | vEOS-lab | Provisioned | - |
-| FABRIC | l3leaf | A-LEAF6 | 192.168.0.106/24 | vEOS-lab | Provisioned | - |
-| FABRIC | l3leaf | A-LEAF7 | 192.168.0.107/24 | vEOS-lab | Provisioned | - |
-| FABRIC | l3leaf | A-LEAF8 | 192.168.0.108/24 | vEOS-lab | Provisioned | - |
-| FABRIC | spine | A-SPINE1 | 192.168.0.11/24 | vEOS-lab | Provisioned | - |
-| FABRIC | spine | A-SPINE2 | 192.168.0.12/24 | vEOS-lab | Provisioned | - |
-| FABRIC | spine | A-SPINE3 | 192.168.0.13/24 | vEOS-lab | Provisioned | - |
-| FABRIC | spine | A-SPINE4 | 192.168.0.14/24 | vEOS-lab | Provisioned | - |
+| domain-a | l3leaf | A-LEAF1 | 192.168.0.101/24 | vEOS-lab | Provisioned | - |
+| domain-a | l3leaf | A-LEAF2 | 192.168.0.102/24 | vEOS-lab | Provisioned | - |
+| domain-a | l3leaf | A-LEAF3 | 192.168.0.103/24 | vEOS-lab | Provisioned | - |
+| domain-a | l3leaf | A-LEAF4 | 192.168.0.104/24 | vEOS-lab | Provisioned | - |
+| domain-a | l3leaf | A-LEAF5 | 192.168.0.105/24 | vEOS-lab | Provisioned | - |
+| domain-a | l3leaf | A-LEAF6 | 192.168.0.106/24 | vEOS-lab | Provisioned | - |
+| domain-a | l3leaf | A-LEAF7 | 192.168.0.107/24 | vEOS-lab | Provisioned | - |
+| domain-a | l3leaf | A-LEAF8 | 192.168.0.108/24 | vEOS-lab | Provisioned | - |
+| domain-a | spine | A-SPINE1 | 192.168.0.11/24 | vEOS-lab | Provisioned | - |
+| domain-a | spine | A-SPINE2 | 192.168.0.12/24 | vEOS-lab | Provisioned | - |
+| domain-a | spine | A-SPINE3 | 192.168.0.13/24 | vEOS-lab | Provisioned | - |
+| domain-a | spine | A-SPINE4 | 192.168.0.14/24 | vEOS-lab | Provisioned | - |
 
 > Provision status is based on Ansible inventory declaration and do not represent real status from CloudVision.
 
@@ -137,18 +137,18 @@
 
 | POD | Node | Loopback0 |
 | --- | ---- | --------- |
-| FABRIC | A-LEAF1 | 10.0.0.5/32 |
-| FABRIC | A-LEAF2 | 10.0.0.6/32 |
-| FABRIC | A-LEAF3 | 10.0.0.7/32 |
-| FABRIC | A-LEAF4 | 10.0.0.8/32 |
-| FABRIC | A-LEAF5 | 10.0.0.9/32 |
-| FABRIC | A-LEAF6 | 10.0.0.10/32 |
-| FABRIC | A-LEAF7 | 10.0.0.11/32 |
-| FABRIC | A-LEAF8 | 10.0.0.12/32 |
-| FABRIC | A-SPINE1 | 10.0.0.1/32 |
-| FABRIC | A-SPINE2 | 10.0.0.2/32 |
-| FABRIC | A-SPINE3 | 10.0.0.3/32 |
-| FABRIC | A-SPINE4 | 10.0.0.4/32 |
+| domain-a | A-LEAF1 | 10.0.0.5/32 |
+| domain-a | A-LEAF2 | 10.0.0.6/32 |
+| domain-a | A-LEAF3 | 10.0.0.7/32 |
+| domain-a | A-LEAF4 | 10.0.0.8/32 |
+| domain-a | A-LEAF5 | 10.0.0.9/32 |
+| domain-a | A-LEAF6 | 10.0.0.10/32 |
+| domain-a | A-LEAF7 | 10.0.0.11/32 |
+| domain-a | A-LEAF8 | 10.0.0.12/32 |
+| domain-a | A-SPINE1 | 10.0.0.1/32 |
+| domain-a | A-SPINE2 | 10.0.0.2/32 |
+| domain-a | A-SPINE3 | 10.0.0.3/32 |
+| domain-a | A-SPINE4 | 10.0.0.4/32 |
 
 ### VTEP Loopback VXLAN Tunnel Source Interfaces (VTEPs Only)
 
@@ -160,11 +160,11 @@
 
 | POD | Node | Loopback1 |
 | --- | ---- | --------- |
-| FABRIC | A-LEAF1 | 10.1.1.5/32 |
-| FABRIC | A-LEAF2 | 10.1.1.5/32 |
-| FABRIC | A-LEAF3 | 10.1.1.7/32 |
-| FABRIC | A-LEAF4 | 10.1.1.7/32 |
-| FABRIC | A-LEAF5 | 10.1.1.9/32 |
-| FABRIC | A-LEAF6 | 10.1.1.9/32 |
-| FABRIC | A-LEAF7 | 10.1.1.11/32 |
-| FABRIC | A-LEAF8 | 10.1.1.11/32 |
+| domain-a | A-LEAF1 | 10.1.1.5/32 |
+| domain-a | A-LEAF2 | 10.1.1.5/32 |
+| domain-a | A-LEAF3 | 10.1.1.7/32 |
+| domain-a | A-LEAF4 | 10.1.1.7/32 |
+| domain-a | A-LEAF5 | 10.1.1.9/32 |
+| domain-a | A-LEAF6 | 10.1.1.9/32 |
+| domain-a | A-LEAF7 | 10.1.1.11/32 |
+| domain-a | A-LEAF8 | 10.1.1.11/32 |

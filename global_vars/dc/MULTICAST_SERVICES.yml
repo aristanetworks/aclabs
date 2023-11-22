@@ -1,0 +1,19 @@
+tenants-multicast: 
+  - name: Prod
+    mac_vrf_vni_base: 10000
+    evpn_l3_multicast:
+      enabled: true
+      evpn_underlay_l3_multicast_group_ipv4_pool: 232.1.1.1/24
+      evpn_underlay_l3_multicast_group_ipv4_pool_offset: -49999
+    vrfs:
+      - name: Prod
+        vrf_vni: 50001
+  - name: Dev
+    mac_vrf_vni_base: 10000
+    evpn_l3_multicast:
+      enabled: true
+      evpn_underlay_l3_multicast_group_ipv4_pool: 232.2.2.1/24
+      evpn_underlay_l3_multicast_group_ipv4_pool_offset: -50000
+    vrfs:
+      - name: Dev
+        vrf_vni: 50002
