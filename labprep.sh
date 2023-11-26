@@ -3,6 +3,9 @@
 echo "--> Updating CentOS System"
 echo arista123 | sudo -S yum -y update
 
+echo "--> Disable SELinux"
+echo arista123 | sudo setenforce 0
+
 echo "--> Install Linux Packages"
 echo arista123 | sudo yum install -y ca-certificates \
     curl \
