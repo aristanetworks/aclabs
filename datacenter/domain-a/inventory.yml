@@ -3,7 +3,7 @@ all:
     CVP:
       hosts:
         cv_ztp:
-          ansible_host: 10.255.64.142
+          ansible_host: 10.255.17.107
           ansible_user: root
           ansible_password: cvproot
         act_cv:
@@ -12,8 +12,8 @@ all:
           ansible_httpapi_validate_certs: false
           ansible_network_os: eos
           ansible_httpapi_port: 443
-          ansible_httpapi_host: 10.255.64.142
-          ansible_host: 10.255.64.142
+          ansible_httpapi_host: 10.255.17.107
+          ansible_host: 10.255.17.107
           ansible_user: cvpadmin
           ansible_password: arista123
           cv_collection: v3

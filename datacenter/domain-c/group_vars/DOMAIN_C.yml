@@ -19,6 +19,10 @@ bgp_peer_groups:
       remove_private_as:
         replace_as: true
 
+fabric_ip_addressing:
+  mlag:
+    algorithm: same_subnet
+
 spine:
   defaults:
     platform: vEOS-lab 
