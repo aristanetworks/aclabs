@@ -116,6 +116,9 @@ l3leaf:
             - Ethernet6
     - group: DOMAIN_C_EVPNGW
       bgp_as: 65378
+      filter:
+        tenants:
+          - EVPNGW
       evpn_services_l2_only: false
       evpn_gateway:
         # Specific BGP EVPN Gateway functionality for route types 2 (MAC-IP), 3 (IMET) and 5 (IP-PREFIX) can be enabled separately as needed.
