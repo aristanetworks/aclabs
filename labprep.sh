@@ -26,7 +26,7 @@ alias pip3="pip3.9" \
 alias python="python3.9"
 
 echo "--> Install Python Modules"
-pip3 install -r ~/tech-library-cicd/requirements.txt
+pip3.9 install -r ~/tech-library-cicd/requirements.txt
 
 echo "--> Install Ansible Galaxy Collections"
 ansible-galaxy collection install -r ~/tech-library-cicd/requirements.yml --force
