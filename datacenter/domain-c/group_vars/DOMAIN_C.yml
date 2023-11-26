@@ -130,8 +130,10 @@ l3leaf:
         remote_peers:
           - hostname: BB1
             bgp_as: 65500
+            ip_address: 172.16.0.1
           - hostname: BB2
             bgp_as: 65500
+            ip_address: 172.16.0.2
       nodes:
         - name: C-LEAF7
           id: 7
