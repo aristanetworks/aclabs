@@ -30,3 +30,7 @@ pip3.9 install -r ~/tech-library-cicd/requirements.txt
 
 echo "--> Install Ansible Galaxy Collections"
 ansible-galaxy collection install -r ~/tech-library-cicd/requirements.yml --force
+
+curl -Lk 'https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64' --output vscode_cli.tar.gz
+
+tar -xf vscode_cli.tar.gz
