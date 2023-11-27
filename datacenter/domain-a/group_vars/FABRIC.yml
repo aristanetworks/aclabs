@@ -23,3 +23,6 @@ bgp_peer_groups:
       local_as: 65500
       remove_private_as:
         replace_as: true
+
+custom_templates:
+  - vxlan-mcast-overlay.j2
