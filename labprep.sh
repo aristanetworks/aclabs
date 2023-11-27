@@ -10,6 +10,7 @@ echo "--> Install Linux Packages"
 echo arista123 | sudo yum install -y ca-certificates \
     curl \
     git-all \
+    make \
     nano \
     python39 \
     python39-pip \
