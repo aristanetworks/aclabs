@@ -2,6 +2,10 @@
 help: ## Display help message
 	@grep -E '^[0-9a-zA-Z_-]+\.*[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+.PHONY: deploy-cvp-all
+deploy-cvp-all: ## Ping Nodes
+	make build-domain-a build-domain-b build-domain-c deploy-cvp-domain-a deploy-cvp-domain-b deploy-cvp-domain-c
+
 ########################################################
 # Domain A
 ########################################################
