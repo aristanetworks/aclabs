@@ -1,0 +1,12 @@
+{% if vxlan_interface.Vxlan1 is arista.avd.defined %}
+!
+interface Vxlan1
+{%     for vrf in vxlan_interface.Vxlan1.vxlan.vrfs | arista.avd.natural_sort('name') if vrf.multicast_group is arista.avd.defined %}
+{%      if vrf.name == "Prod" %}
+   vxlan vrf {{ vrf.name }} multicast group overlay {{ _prod_multicast_group_overlay }} encap {{ _prod_multicast_group_encap }} immediate
+{%      endif %}
+{%      if vrf.name == "Dev" %}
+   vxlan vrf {{ vrf.name }} multicast group overlay {{ _dev_multicast_group_overlay }} encap {{ _dev_multicast_group_encap }} immediate
+{%      endif %}
+{%     endfor %}
+{% endif %}
