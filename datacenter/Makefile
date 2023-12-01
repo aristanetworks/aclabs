@@ -85,3 +85,23 @@ deploy-backbone: ## Deploy Configs via eAPI
 .PHONY: deploy-cvp-backbone
 deploy-cvp-backbone: ## Deploy Configs via CVP
 	ansible-playbook playbooks/fabric-deploy-cvp.yml -i backbone/inventory.yml
+
+########################################################
+# Replace domain inventory ansible_hosts with ACT inventory ansible_hosts 
+########################################################
+
+.PHONY: replace-domain-a-inventory
+replace-domain-a-inventory: 
+	python3 scripts/convert_inventory.py domain-a
+
+.PHONY: replace-domain-b-inventory
+replace-domain-b-inventory: 
+	python3 scripts/convert_inventory.py domain-b
+
+.PHONY: replace-domain-c-inventory
+replace-domain-c-inventory: 
+	python3 scripts/convert_inventory.py domain-c
+
+.PHONY: replace-backbone-inventory
+replace-backbone-inventory: 
+	python3 scripts/convert_inventory.py backbone
