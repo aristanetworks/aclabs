@@ -1,0 +1,246 @@
+---
+all:
+  children:
+    CVP:
+      hosts:
+        cv_ztp:
+          ansible_host: 10.255.98.221
+          ansible_user: root
+          ansible_password: cvproot
+        act_cv:
+          ansible_httpapi_host: 10.255.98.221
+          ansible_host: 10.255.98.221
+          ansible_user: cvpadmin
+          ansible_password: cvp123!
+    VEOS:
+      hosts:
+        A-LEAF1:
+          ansible_host: 10.255.15.30
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-LEAF2:
+          ansible_host: 10.255.94.249
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-LEAF3:
+          ansible_host: 10.255.118.87
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-LEAF4:
+          ansible_host: 10.255.104.168
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-LEAF5:
+          ansible_host: 10.255.8.189
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-LEAF6:
+          ansible_host: 10.255.45.184
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-LEAF7:
+          ansible_host: 10.255.53.84
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-LEAF8:
+          ansible_host: 10.255.108.209
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-SPINE1:
+          ansible_host: 10.255.86.188
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-SPINE2:
+          ansible_host: 10.255.1.209
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-SPINE3:
+          ansible_host: 10.255.17.106
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        A-SPINE4:
+          ansible_host: 10.255.101.167
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-LEAF1:
+          ansible_host: 10.255.114.49
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-LEAF2:
+          ansible_host: 10.255.122.92
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-LEAF3:
+          ansible_host: 10.255.62.110
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-LEAF4:
+          ansible_host: 10.255.105.154
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-LEAF5:
+          ansible_host: 10.255.97.173
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-LEAF6:
+          ansible_host: 10.255.120.171
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-LEAF7:
+          ansible_host: 10.255.74.84
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-LEAF8:
+          ansible_host: 10.255.104.225
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-SPINE1:
+          ansible_host: 10.255.104.23
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-SPINE2:
+          ansible_host: 10.255.29.133
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-SPINE3:
+          ansible_host: 10.255.32.87
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-SPINE4:
+          ansible_host: 10.255.104.108
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        B-SW1:
+          ansible_host: 10.255.85.36
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        BB1:
+          ansible_host: 10.255.95.214
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        BB2:
+          ansible_host: 10.255.17.6
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        C-LEAF1:
+          ansible_host: 10.255.25.164
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        C-LEAF2:
+          ansible_host: 10.255.34.239
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        C-LEAF3:
+          ansible_host: 10.255.54.2
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        C-LEAF4:
+          ansible_host: 10.255.112.149
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        C-LEAF5:
+          ansible_host: 10.255.127.178
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        C-LEAF6:
+          ansible_host: 10.255.115.157
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        C-LEAF7:
+          ansible_host: 10.255.9.165
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        C-LEAF8:
+          ansible_host: 10.255.16.247
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        C-SPINE1:
+          ansible_host: 10.255.111.200
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        C-SPINE2:
+          ansible_host: 10.255.89.197
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostA:
+          ansible_host: 10.255.26.241
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostB:
+          ansible_host: 10.255.71.254
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostC:
+          ansible_host: 10.255.118.212
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostD:
+          ansible_host: 10.255.56.9
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostE:
+          ansible_host: 10.255.98.69
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostF:
+          ansible_host: 10.255.16.165
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostG:
+          ansible_host: 10.255.115.52
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostH:
+          ansible_host: 10.255.91.38
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostI:
+          ansible_host: 10.255.14.138
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostJ:
+          ansible_host: 10.255.76.164
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostK:
+          ansible_host: 10.255.21.150
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostL:
+          ansible_host: 10.255.79.173
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostM:
+          ansible_host: 10.255.110.214
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostN:
+          ansible_host: 10.255.39.121
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostO:
+          ansible_host: 10.255.23.135
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostP:
+          ansible_host: 10.255.74.90
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostQ:
+          ansible_host: 10.255.126.239
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostR:
+          ansible_host: 10.255.115.155
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostS:
+          ansible_host: 10.255.100.242
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+    GENERIC:
+      hosts:
+        ansible:
+          ansible_host: 10.255.4.169
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123

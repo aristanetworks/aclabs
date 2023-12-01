@@ -51,10 +51,21 @@
 │   ├── node-types.yml
 │   ├── routing-defaults.yml
 │   └── switching-defaults.yml
-└── playbooks
-    ├── fabric-build.yml
-    ├── fabric-deploy-cvp.yml
-    └── fabric-deploy-eapi.yml
+├── playbooks
+│   ├── fabric-build.yml
+│   ├── fabric-deploy-cvp.yml
+│   ├── fabric-deploy-eapi.yml
+│   └── templates
+│       └── vxlan-mcast-overlay.j2
+├── scripts
+│   └── convert_inventory.py
+```
+
+## Update inventory
+
+Update domain-x inventory `ansible_host` IP's with ACT Lab inventory `ansible_host` IP's
+```
+make replace-domain-<domain>-inventory
 ```
 ## Build
 
