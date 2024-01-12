@@ -1,2 +1,63 @@
 ---
 fabric_name: FABRIC 
+
+underlay_routing_protocol: ospf
+overlay_routing_protocol: ebgp
+
+vtep_vvtep_ip: 10.3.3.255/32
+
+underlay_multicast: true
+evpn_multicast: true
+
+bgp_peer_groups: 
+  evpn_overlay_peers:
+    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
+  ipv4_underlay_peers:
+    password: 7x4B4rnJhZB438m9+BrBfQ==
+  evpn_overlay_core:
+    structured_config:
+      local_as: 65500
+      remove_private_as:
+        replace_as: true
+
+fabric_ip_addressing:
+  mlag:
+    algorithm: same_subnet
+    
+# # L3 Edge port definitions. This can be any port in the entire Fabric, where IP interfaces are defined.
+l3_edge:
+  # Define a new IP pool that will be used to asign IP addreses to L3 Edge interfaces.
+  p2p_links_ip_pools:
+    - name: C_IP_pool 
+      ipv4_pool: 172.16.3.0/24
+  # Define a new link profile which will match the IP pool, the used ASNs and include the defined interface into underlay routing
+  p2p_links_profiles:
+    - name: DCI_C_profile
+      ip_pool: C_IP_pool
+      include_in_underlay_protocol: false
+  # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
+  p2p_links:
+  - nodes: [C-LEAF7, BB1]
+    id: 1
+    interfaces: [Ethernet7, Ethernet5]
+    as: [65378, 65500]
+    profile: DCI_C_profile
+  - nodes: [C-LEAF7, BB2]
+    id: 2
+    interfaces: [Ethernet8, Ethernet6]
+    as: [65378, 65500]
+    profile: DCI_C_profile
+  - nodes: [C-LEAF8, BB1]
+    id: 3
+    interfaces: [Ethernet7, Ethernet7]
+    as: [65378, 65500]
+    profile: DCI_C_profile
+  - nodes: [C-LEAF8, BB2]
+    id: 4
+    interfaces: [Ethernet8, Ethernet8]
+    as: [65378, 65500]
+    profile: DCI_C_profile
+
+
+custom_templates:
+  - vxlan-mcast-overlay.j2
