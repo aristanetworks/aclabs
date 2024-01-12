@@ -36,6 +36,7 @@ node_type_keys:
   - key: backbone
     type: backbone
     default_evpn_role: server
+    default_overlay_routing_protocol: ibgp
   
   - key: l3spine
     type: l3spine

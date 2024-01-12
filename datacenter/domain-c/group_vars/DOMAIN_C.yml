@@ -1,27 +1,5 @@
 ---
-
-underlay_routing_protocol: ospf
-overlay_routing_protocol: ebgp
-
-vtep_vvtep_ip: 10.3.3.255/32
-
-underlay_multicast: true
-evpn_multicast: true
-
-bgp_peer_groups: 
-  evpn_overlay_peers:
-    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
-  ipv4_underlay_peers:
-    password: 7x4B4rnJhZB438m9+BrBfQ==
-  evpn_overlay_core:
-    structured_config:
-      local_as: 65500
-      remove_private_as:
-        replace_as: true
-
-fabric_ip_addressing:
-  mlag:
-    algorithm: same_subnet
+dc_name: domain-c
 
 spine:
   defaults:
@@ -62,6 +40,10 @@ l3leaf:
       dhcp relay
         mlag peer-link requests disabled
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
+    filter:
+      tenants:
+        - Prod
+        - Dev
   node_groups: 
     - group: DOMAIN_C_LA
       bgp_as: 65312

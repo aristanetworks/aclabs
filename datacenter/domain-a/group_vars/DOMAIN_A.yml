@@ -1,9 +1,10 @@
 ---
 dc_name: domain-a
+
 spine:
   defaults:
     platform: vEOS-lab 
-    loopback_ipv4_pool: 10.0.0.0/24
+    loopback_ipv4_pool: 10.0.1.128/25
     bgp_as: 65100
     raw_eos_cli: |
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
@@ -24,8 +25,8 @@ spine:
 l3leaf:
   defaults:
     platform: vEOS-lab
-    loopback_ipv4_pool: 10.0.0.0/24
-    loopback_ipv4_offset: 4
+    loopback_ipv4_pool: 10.0.1.0/25
+    loopback_ipv4_offset: 0
     vtep_loopback_ipv4_pool: 10.1.1.0/24 
     uplink_interfaces: ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'] 
     uplink_switches: ['A-SPINE1', 'A-SPINE2', 'A-SPINE3', 'A-SPINE4']

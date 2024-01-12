@@ -119,7 +119,7 @@ l3leaf:
         tenants:
           - EVPNGW
       evpn_gateway:
-        # Specific BGP EVPN Gateway functionality for route types 2 (MAC-IP), 3 (IMET) and 5 (IP-PREFIX) can be enabled separately as needed.
+    # Specific BGP EVPN Gateway functionality for route types 2 (MAC-IP), 3 (IMET) and 5 (IP-PREFIX) can be enabled separately as needed.
         evpn_l2:
           enabled: true
         evpn_l3:

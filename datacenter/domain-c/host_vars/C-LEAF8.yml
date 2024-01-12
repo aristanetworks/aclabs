@@ -1,0 +1,14 @@
+---
+
+custom_structured_configuration_router_bgp:
+  neighbors:
+  - ip_address: 172.16.3.5
+    peer_group: IPv4-REMOTE-UNDERLAY-PEERS
+    description: BB1_UNDERLAY
+  - ip_address: 172.16.3.7
+    peer_group: IPv4-REMOTE-UNDERLAY-PEERS
+    description: BB2_UNDERLAY
+  address_family_ipv4:
+    peer_groups:
+      - name: IPv4-REMOTE-UNDERLAY-PEERS
+        activate: true

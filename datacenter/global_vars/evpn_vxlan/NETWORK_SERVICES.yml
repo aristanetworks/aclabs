@@ -1,6 +1,15 @@
 tenants: 
   - name: EVPNGW
     mac_vrf_vni_base: 10000
+    bgp_peer_groups:
+      - name: IPv4-REMOTE-UNDERLAY-PEERS
+        nodes:
+          - B-LEAF7
+          - B-LEAF8
+          - C-LEAF7
+          - C-LEAF8
+        remote_as: 65500
+        shutdown: false
     vrfs:
       - name: Prod
         vrf_vni: 50001
