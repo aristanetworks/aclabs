@@ -1,4 +1,4 @@
-{% if vxlan_interface.Vxlan1 is arista.avd.defined %}
+{% if evpn_multicast is arista.avd.defined(true) %}
 !
 interface Vxlan1
 {%     for vrf in vxlan_interface.Vxlan1.vxlan.vrfs | arista.avd.natural_sort('name') if vrf.multicast_group is arista.avd.defined %}

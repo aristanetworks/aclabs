@@ -5,7 +5,6 @@ underlay_routing_protocol: isis
 overlay_routing_protocol: ibgp
 
 underlay_multicast: true
-evpn_multicast: true
 
 bgp_peer_groups: 
   evpn_overlay_peers:
@@ -50,3 +49,7 @@ l3_edge:
     as: [65200, 65500]
     interfaces: [Ethernet8, Ethernet4]
     profile: DCI_B_profile
+
+custom_templates:
+  - vxlan-mcast-overlay.j2
+  - domain-b-af-evpn.j2

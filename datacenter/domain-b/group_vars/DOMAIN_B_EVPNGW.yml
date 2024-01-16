@@ -2,9 +2,64 @@
 type: l3leaf
 evpn_multicast: false
 underlay_multicast: false
-  
-custom_structured_configuration_router_bgp:
-  address_family_ipv4:
-    peer_groups:
-      - name: IPv4-REMOTE-UNDERLAY-PEERS
-        activate: true
+
+bgp_peer_groups: 
+  evpn_overlay_peers:
+    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
+    structured_config:
+      route_map_in: RM-AS65200-EVPN-IN
+      route_map_out: RM-AS65200-EVPN-OUT
+  evpn_overlay_core:
+    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
+    structured_config:
+      local_as: 65500
+      remove_private_as:
+        replace_as: true
+      route_map_in: RM-AS65000-EVPN-IN
+      route_map_out: RM-AS65000-EVPN-OUT
+
+custom_structured_configuration_ip_extcommunity_lists:
+  - name: CL-LOCAL-DOMAIN-ORIGINATED 
+    entries:
+      - type: "permit"
+        extcommunities: "65200:65200"
+  - name: CL-REMOTE-DOMAIN-ORIGINATED
+    entries:
+      - type: "permit"
+        extcommunities: "65000:65000"
+
+custom_structured_configuration_route_maps:
+  - name: RM-AS65000-EVPN-IN
+    sequence_numbers:
+      - sequence: 10
+        type: "permit"
+        set:
+          - "community 65000:65000 additive"
+  - name: RM-AS65000-EVPN-OUT
+    sequence_numbers:
+      - sequence: 5
+        type: "deny"
+        match:
+          - "community CL-REMOTE-DOMAIN-ORIGINATED"
+      - sequence: 10
+        type: "permit"
+  - name: RM-AS65200-EVPN-IN
+    sequence_numbers:
+      - sequence: 10
+        type: "permit"
+        match:
+          - "community CL-REMOTE-DOMAIN-ORIGINATED"
+        set:
+          - "local-preference 0"
+      - sequence: 20
+        type: "permit"
+        set:
+          - "community 65200:65200 additive"
+  - name: RM-AS65200-EVPN-OUT
+    sequence_numbers:
+      - sequence: 5
+        type: "deny"
+        match: 
+          - "community CL-LOCAL-DOMAIN-ORIGINATED"
+      - sequence: 10
+        type: "permit"  
