@@ -10,11 +10,12 @@ servers:
         spanning_tree_portfast: edge
         link_tracking:
           enabled: true
-          name: CORE-LINKS
+          name: ES-LINKS
         port_channel:
           description: HostG
           mode: active
-          short_esi: 0021:0022:0007
+        ethernet_segment:
+          short_esi: 0001:0002:0007
 
   - name: HostH
     adapters:
@@ -26,11 +27,12 @@ servers:
         spanning_tree_portfast: edge
         link_tracking:
           enabled: true
-          name: CORE-LINKS
+          name: ES-LINKS
         port_channel:
           description: HostH
           mode: active
-          short_esi: 0021:0022:0008
+        ethernet_segment:
+          short_esi: 0001:0002:0008
 
   - name: HostI
     adapters:
@@ -52,11 +54,12 @@ servers:
         spanning_tree_portfast: edge
         link_tracking:
           enabled: true
-          name: CORE-LINKS
+          name: ES-LINKS
+        ethernet_segment:
+          short_esi: 0003:0004:0008
         port_channel:
           description: HostJ
           mode: active
-          short_esi: 0023:0024:0008
 
   - name: HostK
     adapters:
@@ -100,9 +103,9 @@ network_ports:
     spanning_tree_portfast: edge
     link_tracking:
       enabled: true
-      name: CORE-LINKS
+      name: ES-LINKS
     ethernet_segment:
-      short_esi: 0025:0026:0007
+      short_esi: 0005:0006:0007
       redundancy: single-active
       designated_forwarder_algorithm: preference
       designated_forwarder_preferences: 

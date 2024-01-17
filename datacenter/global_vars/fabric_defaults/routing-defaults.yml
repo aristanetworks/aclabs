@@ -14,5 +14,3 @@ evpn_import_pruning: true
 
 mlag_ibgp_peering_vrfs:
   base_vlan: 3000
-
-evpn_multicast: true

@@ -6,8 +6,8 @@ overlay_routing_protocol: ebgp
 
 vtep_vvtep_ip: 10.3.3.255/32
 
-underlay_multicast: true
-evpn_multicast: true
+# underlay_multicast: true
+# evpn_multicast: true
 
 bgp_peer_groups: 
   evpn_overlay_peers:

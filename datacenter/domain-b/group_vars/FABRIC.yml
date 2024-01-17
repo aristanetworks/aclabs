@@ -4,7 +4,12 @@ fabric_name: FABRIC
 underlay_routing_protocol: isis
 overlay_routing_protocol: ibgp
 
-underlay_multicast: true
+isis_area_id: 49.1111
+evpn_short_esi_prefix: '0000:000b:'
+
+#underlay_multicast: true
+
+p2p_uplinks_mtu: 1500
 
 bgp_peer_groups: 
   evpn_overlay_peers:

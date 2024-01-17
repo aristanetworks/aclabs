@@ -4,7 +4,7 @@ dc_name: domain-c
 spine:
   defaults:
     platform: vEOS-lab 
-    loopback_ipv4_pool: 10.0.0.128/26
+    loopback_ipv4_pool: 1.1.3.0/24
     vtep_loopback_ipv4_pool: 10.3.3.0/24
     virtual_router_mac_address: 00:1c:73:00:00:01 
     bgp_as: 65300
@@ -12,23 +12,23 @@ spine:
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
   nodes: 
     - name: C-SPINE1
-      id: 1 
+      id: 201 
       mgmt_ip: 192.168.0.19/24 
     - name: C-SPINE2
-      id: 2
+      id: 202
       mgmt_ip: 192.168.0.20/24
 
 l3leaf:
   defaults:
     platform: vEOS-lab 
-    loopback_ipv4_pool: 10.0.0.128/26
-    loopback_ipv4_offset: 2
-    vtep_loopback_ipv4_pool: 10.3.3.0/24 
+    loopback_ipv4_pool: 1.1.3.0/24
+    loopback_ipv4_offset: 0
+    vtep_loopback_ipv4_pool: 2.2.3.0/24 
     uplink_interfaces: ['Ethernet1', 'Ethernet2'] 
     uplink_switches: ['C-SPINE1', 'C-SPINE2']
     uplink_ipv4_pool: 192.168.1.0/24
     mlag_interfaces: ['Ethernet5', 'Ethernet6'] 
-    mlag_peer_ipv4_pool: 10.0.0.0/31
+    mlag_peer_ipv4_pool: 169.254.0.0/31
     mlag_peer_l3_ipv4_pool: 192.0.0.0/31
     mlag_port_channel_id: 1000
     mlag_domain_id: "100"
@@ -112,10 +112,10 @@ l3leaf:
         remote_peers:
           - hostname: BB1
             bgp_as: 65500
-            ip_address: 172.16.0.1
+            ip_address: 1.1.0.1
           - hostname: BB2
             bgp_as: 65500
-            ip_address: 172.16.0.2
+            ip_address: 1.1.0.2
       nodes:
         - name: C-LEAF7
           id: 7

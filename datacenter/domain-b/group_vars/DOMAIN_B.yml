@@ -5,31 +5,31 @@ dc_name: domain-b
 spine:
   defaults:
     platform: vEOS-lab 
-    loopback_ipv4_pool: 10.0.0.64/24
-    isis_system_id_prefix: '0000.000b'
+    loopback_ipv4_pool: 1.1.2.0/24
+    isis_system_id_prefix: '0000.0000'
     bgp_as: 65200
     raw_eos_cli: |
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
   nodes: 
     - name: B-SPINE1
-      id: 1 
+      id: 201 
       mgmt_ip: 192.168.0.15/24 
     - name: B-SPINE2
-      id: 2
+      id: 202
       mgmt_ip: 192.168.0.16/24
     - name: B-SPINE3
-      id: 3
+      id: 203
       mgmt_ip: 192.168.0.17/24 
     - name: B-SPINE4
-      id: 4
+      id: 204
       mgmt_ip: 192.168.0.18/24
 
 l3leaf:
   defaults:
     platform: vEOS-lab 
-    loopback_ipv4_pool: 10.0.0.64/26
-    loopback_ipv4_offset: 4
-    vtep_loopback_ipv4_pool: 10.2.2.0/24
+    loopback_ipv4_pool: 1.1.2.0/24
+    loopback_ipv4_offset: 0
+    vtep_loopback_ipv4_pool: 2.2.2.0/24
     uplink_interfaces: ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'] 
     uplink_switches: ['B-SPINE1', 'B-SPINE2', 'B-SPINE3', 'B-SPINE4']
     uplink_structured_config:
@@ -39,7 +39,7 @@ l3leaf:
     spanning_tree_root_super: true
     spanning_tree_mode: rapid-pvst
     bgp_as: 65200
-    isis_system_id_prefix: '0000.000b'
+    isis_system_id_prefix: '0000.0000'
     link_tracking:
       enabled: true
       groups:
@@ -128,10 +128,10 @@ l3leaf:
         remote_peers:
           - hostname: BB1
             bgp_as: 65500
-            ip_address: 172.16.0.1
+            ip_address: 1.1.0.1
           - hostname: BB2
             bgp_as: 65500
-            ip_address: 172.16.0.2
+            ip_address: 1.1.0.2
       raw_eos_cli: |
         dhcp relay
           mlag peer-link requests disabled

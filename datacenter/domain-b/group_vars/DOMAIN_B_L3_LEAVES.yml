@@ -1,15 +1,16 @@
 ---
 type: l3leaf
 
-evpn_multicast: true
+#evpn_multicast: true
+
 dhcp_relay:
   tunnel_requests_disabled: true
 
 # variables used in custom templates
-_prod_multicast_group_overlay: 239.0.20.101
-_prod_multicast_group_encap: 232.1.1.20
+# _prod_multicast_group_overlay: 239.0.20.101
+# _prod_multicast_group_encap: 232.1.1.20
 
-_dev_multicast_group_overlay: 239.0.60.101
-_dev_multicast_group_encap: 232.2.2.60
+# _dev_multicast_group_overlay: 239.0.60.101
+# _dev_multicast_group_encap: 232.2.2.60
 
 _evpn_aa_multihoming: true
