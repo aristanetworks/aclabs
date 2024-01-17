@@ -1,32 +1,29 @@
 ---
 type: l3leaf
+
 evpn_multicast: false
 underlay_multicast: false
 
 bgp_peer_groups: 
   evpn_overlay_peers:
     password: Q4fqtbqcZ7oQuKfuWtNGRQ==
-    structured_config:
-      route_map_in: RM-AS65200-EVPN-IN
-      route_map_out: RM-AS65200-EVPN-OUT
+    # structured_config:
+    #   route_map_in: RM-AS65200-EVPN-IN
+    #   route_map_out: RM-AS65200-EVPN-OUT
   evpn_overlay_core:
-    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
     structured_config:
       local_as: 65500
       remove_private_as:
         replace_as: true
       route_map_in: RM-AS65000-EVPN-IN
       route_map_out: RM-AS65000-EVPN-OUT
+      route_reflector_client: true
 
-custom_structured_configuration_ip_extcommunity_lists:
+custom_structured_configuration_community_lists:
   - name: CL-LOCAL-DOMAIN-ORIGINATED 
-    entries:
-      - type: "permit"
-        extcommunities: "65200:65200"
+    action: "permit 65200:65200"
   - name: CL-REMOTE-DOMAIN-ORIGINATED
-    entries:
-      - type: "permit"
-        extcommunities: "65000:65000"
+    action: "permit 65000:65000"
 
 custom_structured_configuration_route_maps:
   - name: RM-AS65000-EVPN-IN
@@ -62,4 +59,4 @@ custom_structured_configuration_route_maps:
         match: 
           - "community CL-LOCAL-DOMAIN-ORIGINATED"
       - sequence: 10
-        type: "permit"  
+        type: "permit"

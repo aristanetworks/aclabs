@@ -4,30 +4,30 @@ dc_name: domain-a
 spine:
   defaults:
     platform: vEOS-lab 
-    loopback_ipv4_pool: 10.0.1.128/25
+    loopback_ipv4_pool: 1.1.1.0/24
     bgp_as: 65100
     raw_eos_cli: |
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
   nodes: 
     - name: A-SPINE1
-      id: 1 
+      id: 201 
       mgmt_ip: 192.168.0.11/24 
     - name: A-SPINE2
-      id: 2
+      id: 202
       mgmt_ip: 192.168.0.12/24
     - name: A-SPINE3
-      id: 3
+      id: 203
       mgmt_ip: 192.168.0.13/24 
     - name: A-SPINE4
-      id: 4
+      id: 204
       mgmt_ip: 192.168.0.14/24
 
 l3leaf:
   defaults:
     platform: vEOS-lab
-    loopback_ipv4_pool: 10.0.1.0/25
+    loopback_ipv4_pool: 1.1.1.0/24
     loopback_ipv4_offset: 0
-    vtep_loopback_ipv4_pool: 10.1.1.0/24 
+    vtep_loopback_ipv4_pool: 2.2.1.0/24 
     uplink_interfaces: ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'] 
     uplink_switches: ['A-SPINE1', 'A-SPINE2', 'A-SPINE3', 'A-SPINE4']
     uplink_ipv4_pool: 192.168.1.0/24
@@ -128,10 +128,10 @@ l3leaf:
         remote_peers:
           - hostname: BB1
             bgp_as: 65500
-            ip_address: 172.16.0.1
+            ip_address: 1.1.0.1
           - hostname: BB2
             bgp_as: 65500
-            ip_address: 172.16.0.2
+            ip_address: 1.1.0.2
       nodes:
         - name: A-LEAF7
           id: 7
