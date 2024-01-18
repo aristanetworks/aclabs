@@ -6,7 +6,6 @@ underlay_multicast: false
 
 bgp_peer_groups: 
   evpn_overlay_peers:
-    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
     # structured_config:
     #   route_map_in: RM-AS65200-EVPN-IN
     #   route_map_out: RM-AS65200-EVPN-OUT
