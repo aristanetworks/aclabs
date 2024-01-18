@@ -1,0 +1,26 @@
+---
+
+- name: Deploy server configs
+  hosts: "{{ target_hosts }}"
+  connection: local
+  gather_facts: false
+  vars:
+      # EOS Configuration Directory name
+      eos_config_dir_name: 'server_configs'
+      ansible_user: cvpadmin
+      ansible_password: arista123
+      ansible_network_os: arista.eos.eos
+      # Configure privilege escalation
+      ansible_become: true
+      ansible_become_method: enable
+      # HTTPAPI configuration
+      ansible_connection: httpapi
+      ansible_httpapi_port: 443
+      ansible_httpapi_use_ssl: true
+      ansible_httpapi_validate_certs: false
+
+  tasks:
+        
+    - name: deploy eapi
+      ansible.builtin.import_role:
+        name: arista.avd.eos_config_deploy_eapi

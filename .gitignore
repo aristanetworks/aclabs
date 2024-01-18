@@ -3,5 +3,6 @@
 # ignore avd generated files
 **/documentation/**
 **/intended/**
+**/config_backup/**
 # ignore tl clab configs
 **/tl-configs/**

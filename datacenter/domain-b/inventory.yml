@@ -81,6 +81,36 @@ all:
                   ansible_host: 10.255.112.137
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
+    DOMAIN_B_HOSTS:
+      hosts:
+        HostG:
+          ansible_host: 10.255.100.69
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostH:
+          ansible_host: 10.255.20.191
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostI:
+          ansible_host: 10.255.73.62
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostJ:
+          ansible_host: 10.255.30.180
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostK:
+          ansible_host: 10.255.116.58
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostL:
+          ansible_host: 10.255.85.247
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
+        HostM:
+          ansible_host: 10.255.110.12
+          ansible_user: cvpadmin
+          ansible_ssh_pass: arista123
     NETWORK_SERVICES:
       children:
         DOMAIN_B_L3_LEAVES:
