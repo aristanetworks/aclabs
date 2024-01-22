@@ -38,6 +38,10 @@ deploy-cvp-domain-a: ## Deploy Configs via CVP
 deploy-servers-domain-a: ## Deploy Server Configs via eAPI
 	ansible-playbook playbooks/server-deploy-eapi.yml -i domain-a/inventory.yml -e "target_hosts=DOMAIN_A_HOSTS"
 
+.PHONY: validate-domain-a
+validate-domain-a:
+	ansible-playbook playbooks/fabric-validate-state.yml -i domain-a/inventory.yml -e "target_hosts=DOMAIN_A"
+
 ########################################################
 # Domain B
 ########################################################
@@ -62,6 +66,10 @@ deploy-cvp-domain-b: ## Deploy Configs via CVP
 deploy-servers-domain-b: ## Deploy Server Configs via eAPI
 	ansible-playbook playbooks/server-deploy-eapi.yml -i domain-b/inventory.yml -e "target_hosts=DOMAIN_B_HOSTS"
 
+.PHONY: validate-domain-b
+validate-domain-b:
+	ansible-playbook playbooks/fabric-validate-state.yml -i domain-b/inventory.yml -e "target_hosts=DOMAIN_B"
+
 ########################################################
 # Domain C
 ########################################################
@@ -85,6 +93,10 @@ deploy-cvp-domain-c: ## Deploy Configs via CVP
 .PHONY: deploy-servers-domain-c
 deploy-servers-domain-c: ## Deploy Server Configs via eAPI
 	ansible-playbook playbooks/server-deploy-eapi.yml -i domain-c/inventory.yml -e "target_hosts=DOMAIN_C_HOSTS"
+
+.PHONY: validate-domain-c
+validate-domain-c:
+	ansible-playbook playbooks/fabric-validate-state.yml -i domain-c/inventory.yml -e "target_hosts=DOMAIN_C"
 
 ########################################################
 # BACKBONE
