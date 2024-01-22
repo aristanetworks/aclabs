@@ -1,0 +1,27 @@
+---
+
+- name: validate states on EOS devices
+  hosts: "{{ target_hosts }}"
+  connection: httpapi
+  gather_facts: false
+  collections:
+    - arista.avd
+
+  vars:
+    ansible_user: cvpadmin
+    ansible_password: arista123
+    ansible_network_os: arista.eos.eos
+    # Configure privilege escalation
+    ansible_become: true
+    ansible_become_method: enable
+    # HTTPAPI configuration
+    ansible_connection: httpapi
+    ansible_httpapi_port: 443
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+
+  tasks:
+
+    - name: validate states on EOS devices
+      ansible.builtin.import_role:
+        name: arista.avd.eos_validate_state
