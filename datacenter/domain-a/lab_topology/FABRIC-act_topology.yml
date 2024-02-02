@@ -1,0 +1,296 @@
+veos:
+  # Define the global vEOS node parameters
+  username: cvpadmin
+  password: arista123
+  version: 4.28.5.1M
+
+generic:
+  # Define global generic node parameters
+  username: cvpadmin
+  password: arista123
+  version: Rocky-8.5
+
+cvp:
+  # Define global cvp node parameters
+  username: root
+  password: cvproot
+  version: 2022.3.1
+  instance: singlenode
+
+# List of ACT nodes
+nodes:
+  - A-LEAF1:
+      ip_addr: 192.168.0.101
+      node_type: veos
+      version: 4.28.5.1M
+  - A-LEAF2:
+      ip_addr: 192.168.0.102
+      node_type: veos
+      version: 4.28.5.1M
+  - A-LEAF3:
+      ip_addr: 192.168.0.103
+      node_type: veos
+      version: 4.28.5.1M
+  - A-LEAF4:
+      ip_addr: 192.168.0.104
+      node_type: veos
+      version: 4.28.5.1M
+  - A-LEAF5:
+      ip_addr: 192.168.0.105
+      node_type: veos
+      version: 4.28.5.1M
+  - A-LEAF6:
+      ip_addr: 192.168.0.106
+      node_type: veos
+      version: 4.28.5.1M
+  - A-LEAF7:
+      ip_addr: 192.168.0.107
+      node_type: veos
+      version: 4.28.5.1M
+  - A-LEAF8:
+      ip_addr: 192.168.0.108
+      node_type: veos
+      version: 4.28.5.1M
+  - A-SPINE1:
+      ip_addr: 192.168.0.11
+      node_type: veos
+      version: 4.28.5.1M
+  - A-SPINE2:
+      ip_addr: 192.168.0.12
+      node_type: veos
+      version: 4.28.5.1M
+  - A-SPINE3:
+      ip_addr: 192.168.0.13
+      node_type: veos
+      version: 4.28.5.1M
+  - A-SPINE4:
+      ip_addr: 192.168.0.14
+      node_type: veos
+      version: 4.28.5.1M
+  - HostA:
+      ip_addr: 192.168.0.221
+      node_type: veos
+  - HostB:
+      ip_addr: 192.168.0.222
+      node_type: veos
+  - HostC:
+      ip_addr: 192.168.0.223
+      node_type: veos
+  - HostD:
+      ip_addr: 192.168.0.224
+      node_type: veos
+  - HostE:
+      ip_addr: 192.168.0.225
+      node_type: veos
+  - HostF:
+      ip_addr: 192.168.0.226
+      node_type: veos
+
+  - cvp:
+      ip_addr: 192.168.0.5
+      node_type: cvp
+      auto_configuration: true
+  - ansible:
+      ip_addr: 192.168.0.6
+      node_type: generic
+links:
+  
+    - connection:
+        - A-LEAF1:Ethernet1
+        - A-SPINE1:Ethernet1
+  
+    - connection:
+        - A-LEAF1:Ethernet2
+        - A-SPINE2:Ethernet1
+  
+    - connection:
+        - A-LEAF1:Ethernet3
+        - A-SPINE3:Ethernet1
+  
+    - connection:
+        - A-LEAF1:Ethernet4
+        - A-SPINE4:Ethernet1
+  
+    - connection:
+        - A-LEAF1:Ethernet5
+        - A-LEAF2:Ethernet5
+  
+    - connection:
+        - A-LEAF1:Ethernet6
+        - A-LEAF2:Ethernet6
+  
+    - connection:
+        - A-LEAF1:Ethernet7
+        - HostA:Ethernet1
+  
+    - connection:
+        - A-LEAF1:Ethernet8
+        - HostB:Ethernet1
+  
+    - connection:
+        - A-LEAF2:Ethernet1
+        - A-SPINE1:Ethernet2
+  
+    - connection:
+        - A-LEAF2:Ethernet2
+        - A-SPINE2:Ethernet2
+  
+    - connection:
+        - A-LEAF2:Ethernet3
+        - A-SPINE3:Ethernet2
+  
+    - connection:
+        - A-LEAF2:Ethernet4
+        - A-SPINE4:Ethernet2
+  
+    - connection:
+        - A-LEAF2:Ethernet7
+        - HostA:Ethernet2
+  
+    - connection:
+        - A-LEAF2:Ethernet8
+        - HostB:Ethernet2
+  
+    - connection:
+        - A-LEAF3:Ethernet1
+        - A-SPINE1:Ethernet3
+  
+    - connection:
+        - A-LEAF3:Ethernet2
+        - A-SPINE2:Ethernet3
+  
+    - connection:
+        - A-LEAF3:Ethernet3
+        - A-SPINE3:Ethernet3
+  
+    - connection:
+        - A-LEAF3:Ethernet4
+        - A-SPINE4:Ethernet3
+  
+    - connection:
+        - A-LEAF3:Ethernet5
+        - A-LEAF4:Ethernet5
+  
+    - connection:
+        - A-LEAF3:Ethernet6
+        - A-LEAF4:Ethernet6
+  
+    - connection:
+        - A-LEAF3:Ethernet7
+        - HostC:Ethernet1
+  
+    - connection:
+        - A-LEAF3:Ethernet8
+        - HostD:Ethernet1
+  
+    - connection:
+        - A-LEAF4:Ethernet1
+        - A-SPINE1:Ethernet4
+  
+    - connection:
+        - A-LEAF4:Ethernet2
+        - A-SPINE2:Ethernet4
+  
+    - connection:
+        - A-LEAF4:Ethernet3
+        - A-SPINE3:Ethernet4
+  
+    - connection:
+        - A-LEAF4:Ethernet4
+        - A-SPINE4:Ethernet4
+  
+    - connection:
+        - A-LEAF4:Ethernet7
+        - HostE:Ethernet1
+  
+    - connection:
+        - A-LEAF4:Ethernet8
+        - HostD:Ethernet2
+  
+    - connection:
+        - A-LEAF5:Ethernet1
+        - A-SPINE1:Ethernet5
+  
+    - connection:
+        - A-LEAF5:Ethernet2
+        - A-SPINE2:Ethernet5
+  
+    - connection:
+        - A-LEAF5:Ethernet3
+        - A-SPINE3:Ethernet5
+  
+    - connection:
+        - A-LEAF5:Ethernet4
+        - A-SPINE4:Ethernet5
+  
+    - connection:
+        - A-LEAF5:Ethernet5
+        - A-LEAF6:Ethernet5
+  
+    - connection:
+        - A-LEAF5:Ethernet6
+        - A-LEAF6:Ethernet6
+  
+    - connection:
+        - A-LEAF5:Ethernet7
+        - HostF:Ethernet1
+  
+    - connection:
+        - A-LEAF6:Ethernet1
+        - A-SPINE1:Ethernet6
+  
+    - connection:
+        - A-LEAF6:Ethernet2
+        - A-SPINE2:Ethernet6
+  
+    - connection:
+        - A-LEAF6:Ethernet3
+        - A-SPINE3:Ethernet6
+  
+    - connection:
+        - A-LEAF6:Ethernet4
+        - A-SPINE4:Ethernet6
+  
+    - connection:
+        - A-LEAF6:Ethernet7
+        - HostF:Ethernet2
+  
+    - connection:
+        - A-LEAF7:Ethernet1
+        - A-SPINE1:Ethernet7
+  
+    - connection:
+        - A-LEAF7:Ethernet2
+        - A-SPINE2:Ethernet7
+  
+    - connection:
+        - A-LEAF7:Ethernet3
+        - A-SPINE3:Ethernet7
+  
+    - connection:
+        - A-LEAF7:Ethernet4
+        - A-SPINE4:Ethernet7
+  
+    - connection:
+        - A-LEAF7:Ethernet5
+        - A-LEAF8:Ethernet5
+  
+    - connection:
+        - A-LEAF7:Ethernet6
+        - A-LEAF8:Ethernet6
+  
+    - connection:
+        - A-LEAF8:Ethernet1
+        - A-SPINE1:Ethernet8
+  
+    - connection:
+        - A-LEAF8:Ethernet2
+        - A-SPINE2:Ethernet8
+  
+    - connection:
+        - A-LEAF8:Ethernet3
+        - A-SPINE3:Ethernet8
+  
+    - connection:
+        - A-LEAF8:Ethernet4
+        - A-SPINE4:Ethernet8

@@ -1,0 +1,102 @@
+{% if node_type_keys is arista.avd.defined %}
+{%     set node_types = node_type_keys | arista.avd.convert_dicts('key') | map(attribute="type") %}
+{% else %}
+{%     set default_node_types = {
+           "l3ls-evpn": ["spine", "l3leaf", "l2leaf", "super-spine", "overlay-controller", "back-bone"],
+           "mpls": ["p", "pe", "rr"],
+           "l2ls": ["l3spine", "spine", "leaf"]
+       } %}
+{%     set node_types = default_node_types[design.type | arista.avd.default("l3ls-evpn")] %}
+{% endif %}
+veos:
+  # Define the global vEOS node parameters
+  username: {{ act_veos_username }}
+  password: {{ act_veos_password }}
+  version: {{ veos_version }}
+{% if act_add_ansible_node %}
+
+generic:
+  # Define global generic node parameters
+  username: {{ act_generic_user }}
+  password: {{ act_generic_password }}
+  version: {{ act_generic_os_version }}
+{% endif %}
+{% if act_add_cvp %}
+
+cvp:
+  # Define global cvp node parameters
+  username: {{ act_cvp_user }}
+  password: {{ act_cvp_password }}
+  version: {{ act_cvp_version }}
+  instance: {{ act_cvp_instance_type }}
+{% endif %}
+
+# List of ACT nodes
+nodes:
+{# Iterate through each node in the sorted fabric group #}
+{% for node in groups[fabric_name] | arista.avd.natural_sort %}
+{#  Get the hostvars for the current node #}
+{%  set node_hostvars = hostvars[node] %}
+{#    Check if the current node's type is in the list of defined node types #}
+{%    if node_hostvars.type | arista.avd.default('undefined') in node_types %}
+{%      if node_hostvars.switch.mgmt_ip is undefined %}
+    {# This will appear in the output if node_hostvars.switch.mgmt_ip is undefined #}
+    WARNING: node_hostvars.switch.mgmt_ip is undefined!
+{%      endif %}
+  - {{ node }}:
+      ip_addr: {{ node_hostvars.switch.mgmt_ip | ansible.utils.ipaddr('address') }}
+      node_type: veos
+      version: {{ veos_version }}
+{%    endif %}
+{% endfor %}
+{# add all non fabbric nodes #}
+{% if non_fabric_nodes %}
+  {{ non_fabric_nodes | to_nice_yaml(indent=2) | indent(2)}}
+{% endif %}
+{% if act_add_cvp %}
+  - cvp:
+      ip_addr: {{ act_cvp_ip }}
+      node_type: cvp
+{% if cvp_auto_configuration %}
+      auto_configuration: true
+{% endif %}
+{% endif %}
+{% if act_add_ansible_node %}
+  - ansible:
+      ip_addr: {{ act_ansible_node_ip }}
+      node_type: generic
+{% endif %}
+links:
+{# Initialize an empty list to store rendered connections #}
+{% set rendered_connections = [] %}
+{# Iterate through each node in the sorted fabric group #}
+{% for node in groups[fabric_name] | arista.avd.natural_sort %}
+{# Get the hostvars for the current node #}
+{%  set node_hostvars = hostvars[node] %}
+{# Iterate through the sorted ethernet_interfaces of the current node #}
+{%  for ethernet_interface in node_hostvars.ethernet_interfaces | arista.avd.convert_dicts("name") | arista.avd.natural_sort("name") %}
+{#    Check if the peer_type of the current ethernet interface is in the list of defined node types or is 'mlag_peer' or 'server' #}
+{%    if ethernet_interface.peer_type | arista.avd.default('undefined') in node_types + ['mlag_peer'] + ['server'] %}
+{#      Get the peer for the current ethernet interface #}
+{%      set peer = ethernet_interface.peer %}
+{#      Get the peer_interface for the current ethernet interface #}
+{%      set peer_interface = ethernet_interface.peer_interface %}
+{#      Create a list with the current node and its peer #}
+{%      set endpoints = [node, peer] %}
+{#      Create a reversed list of the endpoints #}
+{%      set reverse_endpoints = [endpoints[1], endpoints[0]] %}
+{#      Create a connection string for the current node and its peer #}
+{%      set connection_string = node ~ ":" ~ ethernet_interface.name ~ "," ~ peer ~ ":" ~ peer_interface %}
+{#      Create a reverse connection string for the current node and its peer #}
+{%      set reverse_connection_string = peer ~ ":" ~ peer_interface ~ "," ~ node ~ ":" ~ ethernet_interface.name %}
+{#      Check if the connection string or its reverse has not been rendered yet #}
+{%      if not (connection_string in rendered_connections or reverse_connection_string in rendered_connections) %}  
+    - connection:
+        - {{ node }}:{{ ethernet_interface.name }}
+        - {{ peer }}:{{ peer_interface }}
+{#      Add the connection string to the rendered_connections list #}
+{%      set _dummy = rendered_connections.append(connection_string) %}
+{%      endif %}
+{%    endif %}
+{%  endfor %}
+{% endfor %}

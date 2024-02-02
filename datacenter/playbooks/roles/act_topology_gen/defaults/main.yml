@@ -1,0 +1,33 @@
+---
+# defaults file for act_topology_gen
+# Output directory
+root_dir: '{{ inventory_dir }}'
+lab_topology_dir_name: 'lab_topology'
+lab_topology_dir: '{{ root_dir }}/{{ lab_topology_dir_name }}'
+
+# vEOS Image and parameters to use
+veos_version: 4.28.5.1M
+act_veos_username: "cvpadmin"
+act_veos_password: "arista123"
+
+# Options to add cvp, ansible node and connected nodes to topology
+act_add_cvp: true
+act_add_ansible_node: true
+# act_add_connected_nodes: false
+
+# Generic node options
+act_generic_user: "cvpadmin"
+act_generic_password: "arista123"
+act_generic_os_version: "Rocky-8.5"
+act_ansible_node_ip: 192.168.0.6
+
+# CVP node options
+act_cvp_version: "2022.3.1"
+cvp_auto_configuration: true
+act_cvp_user: "root"
+act_cvp_password: "cvproot"
+act_cvp_instance_type: "singlenode" # Currently the only supported type
+act_cvp_ip: 192.168.0.5
+
+# Default ACT configuration file generated
+act_configuration: '{{ lab_topology_dir }}/{{ fabric_name }}-act_topology.yml'
