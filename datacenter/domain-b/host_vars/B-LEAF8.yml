@@ -12,3 +12,13 @@ custom_structured_configuration_router_bgp:
     peer_groups:
       - name: IPv4-REMOTE-UNDERLAY-PEERS
         activate: true
+    networks:
+      - prefix: "1.1.2.7/32"
+      - prefix: "1.1.2.8/32"
+      - prefix: "2.2.2.8/32"
+
+custom_structured_configuration_ethernet_interfaces:
+  - name: Ethernet7
+    mtu: 9214
+  - name: Ethernet8
+    mtu: 9214

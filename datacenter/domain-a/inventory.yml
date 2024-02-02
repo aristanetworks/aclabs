@@ -104,9 +104,6 @@ all:
     CONNECTED_ENDPOINTS:
       children:
         DOMAIN_A_L3_LEAVES:
-    DCI:
-      children:
-        FABRIC:
     ACT:
       children:
         FABRIC:

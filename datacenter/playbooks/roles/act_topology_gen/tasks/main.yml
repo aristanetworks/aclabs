@@ -1,0 +1,20 @@
+---
+# tasks file for avd_to_act
+- name: "Create lab topology folder: {{ lab_topology_dir_name }}"
+  tags: [build, act]
+  ansible.builtin.file:
+    path: "{{ lab_topology_dir }}"
+    state: directory
+    mode: 0775
+  delegate_to: localhost
+  run_once: True
+
+- name: Generate Arista Cloud Test topology
+  tags: [build, act]
+  ansible.builtin.template:
+    src: act-topology.j2
+    dest: "{{ act_configuration }}"
+    mode: "644"
+  delegate_to: localhost
+  check_mode: false
+  run_once: True
