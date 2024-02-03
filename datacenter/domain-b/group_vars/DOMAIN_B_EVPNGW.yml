@@ -14,6 +14,7 @@ bgp_peer_groups:
       local_as: 65500
       remove_private_as:
         replace_as: true
+      remote_as: 65500
       route_map_in: RM-AS65000-EVPN-IN
       route_map_out: RM-AS65000-EVPN-OUT
       route_reflector_client: true

@@ -10,7 +10,7 @@ servers:
         spanning_tree_portfast: edge
         link_tracking:
           enabled: true
-          name: ES-LINKS
+          name: CORE-LINKS
         port_channel:
           description: HostG
           mode: active
@@ -27,7 +27,7 @@ servers:
         spanning_tree_portfast: edge
         link_tracking:
           enabled: true
-          name: ES-LINKS
+          name: CORE-LINKS
         port_channel:
           description: HostH
           mode: active
@@ -54,7 +54,7 @@ servers:
         spanning_tree_portfast: edge
         link_tracking:
           enabled: true
-          name: ES-LINKS
+          name: CORE-LINKS
         ethernet_segment:
           short_esi: 0003:0004:0008
         port_channel:
@@ -103,7 +103,7 @@ network_ports:
     spanning_tree_portfast: edge
     link_tracking:
       enabled: true
-      name: ES-LINKS
+      name: CORE-LINKS
     ethernet_segment:
       short_esi: 0005:0006:0007
       redundancy: single-active
