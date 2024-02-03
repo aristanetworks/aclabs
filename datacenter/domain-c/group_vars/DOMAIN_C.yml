@@ -1,6 +1,8 @@
 ---
 dc_name: domain-c
 
+pod_name: pod-c
+
 spine:
   defaults:
     platform: vEOS-lab 

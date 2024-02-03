@@ -15,7 +15,13 @@ tenants:
         vrf_vni: 50001
         vtep_diagnostic: 
           loopback: 101
-          loopback_ip_range: 10.101.101.0/27
+          loopback_ip_pools:
+            - pod: pod-a
+              ipv4_pool: 10.101.101.0/27
+            - pod: pod-b
+              ipv4_pool: 10.101.102.0/27
+            - pod: pod-c
+              ipv4_pool: 10.101.103.0/27
         mlag_ibgp_peering_ipv4_pool: 192.0.0.0/31
         mlag_ibgp_peering_vlan: 3001
         redistribute_mlag_ibgp_peering_vrfs: false
@@ -36,7 +42,13 @@ tenants:
         vrf_vni: 50002
         vtep_diagnostic:
           loopback: 102
-          loopback_ip_range: 10.102.102.0/27
+          loopback_ip_pools:
+            - pod: pod-a
+              ipv4_pool: 10.102.101.0/27
+            - pod: pod-b
+              ipv4_pool: 10.102.102.0/27
+            - pod: pod-c
+              ipv4_pool: 10.102.103.0/27
         mlag_ibgp_peering_ipv4_pool: 192.0.0.0/31
         mlag_ibgp_peering_vlan: 3002
         redistribute_mlag_ibgp_peering_vrfs: false
@@ -64,7 +76,13 @@ tenants:
         vrf_vni: 50001
         vtep_diagnostic: 
           loopback: 101
-          loopback_ip_range: 10.101.101.0/27
+          loopback_ip_pools:
+            - pod: pod-a
+              ipv4_pool: 10.101.101.0/27
+            - pod: pod-b
+              ipv4_pool: 10.101.102.0/27
+            - pod: pod-c
+              ipv4_pool: 10.101.103.0/27
         mlag_ibgp_peering_ipv4_pool: 192.0.0.0/31
         mlag_ibgp_peering_vlan: 3001
         redistribute_mlag_ibgp_peering_vrfs: false
@@ -92,7 +110,13 @@ tenants:
         vrf_vni: 50002
         vtep_diagnostic:
           loopback: 102
-          loopback_ip_range: 10.102.102.0/27
+          loopback_ip_pools:
+            - pod: pod-a
+              ipv4_pool: 10.102.101.0/27
+            - pod: pod-b
+              ipv4_pool: 10.102.102.0/27
+            - pod: pod-c
+              ipv4_pool: 10.102.103.0/27
         mlag_ibgp_peering_ipv4_pool: 192.0.0.0/31
         mlag_ibgp_peering_vlan: 3002
         redistribute_mlag_ibgp_peering_vrfs: false
