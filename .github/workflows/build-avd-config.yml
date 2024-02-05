@@ -13,8 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/aristanetworks/ansible-avd/universal:python3.11-avd-devel
-      options: --user root
+      #options: --user root
     steps:
+      # The "cleanup old checkout" step is needed because of this bug: https://github.com/actions/checkout/issues/1014
+      - name: cleanup old checkout  
+        run: chmod +w -R ${GITHUB_WORKSPACE}; rm -rf ${GITHUB_WORKSPACE}/*;
       - name: Checkout repo
         uses: actions/checkout@v4
       - name: Build Fabric configs
