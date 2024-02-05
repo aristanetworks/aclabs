@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/aristanetworks/ansible-avd/universal:python3.11-avd-devel
+      options: --user root
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
