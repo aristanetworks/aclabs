@@ -1,0 +1,26 @@
+---
+
+name: "Build AVD configs"
+
+on:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - '**/**/group_vars/**'
+jobs:
+  build-configs:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/aristanetworks/ansible-avd/universal:python3.11-avd-devel
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Build Fabric configs
+        run: ansible-playbook datacenter/playbooks/fabric-build.yml -i datacenter/domain-a/inventory.yml
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: datacenter/domain-a/intended/*
+          retention-days: 1
