@@ -34,12 +34,9 @@ jobs:
           ANSIBLE_GATHERING: explicit
           ANSIBLE_JINJA2_EXTENSIONS: "jinja2.ext.loopcontrols,jinja2.ext.do,jinja2.ext.i18n"
           ANSIBLE_PYTHON_INTERPRETER: /usr/bin/python3
-          ANSIBLE_COLLECTIONS_PATH: .ansible_collections
-          ANSIBLE_ROLES_PATH: roles
           ANSIBLE_PERSISTENT_CONNECT_TIMEOUT: 120
           ANSIBLE_DEPRECATION_WARNINGS: "false"
           DEFAULT_TIMEOUT: 120
-          PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
