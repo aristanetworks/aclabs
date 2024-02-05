@@ -16,10 +16,10 @@ jobs:
     steps:
       - name: Install requirements
         run: |
-          pip install --upgrade pip
-          pip install ansible-core>=2.14.0,<2.17.0
+          sudo pip install --upgrade pip
+          sudo pip install ansible-core>=2.14.0,<2.17.0
           ansible-galaxy collection install arista.avd --upgrade
-          pip install -r ~/.ansible/collections/ansible_collections/arista/avd/requirements.txt
+          sudo pip install -r ~/.ansible/collections/ansible_collections/arista/avd/requirements.txt
       - name: Checkout repo
         uses: actions/checkout@v4
       - name: Build Fabric configs
