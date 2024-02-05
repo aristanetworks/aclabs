@@ -1,7 +1,7 @@
 ---
 
 - name: Build Switch configuration
-  hosts: "{{ target_hosts }}"
+  hosts: FABRIC
   connection: local
   gather_facts: false
   collections:

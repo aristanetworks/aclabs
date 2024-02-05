@@ -12,12 +12,31 @@ jobs:
   build-configs:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/aristanetworks/ansible-avd/universal:python3.11-avd-devel
+      image: python:3.9-slim
     steps:
+      - name: Install requirements
+        run: |
+          pip install --upgrade pip
+          pip install ansible-core>=2.15.6
+          ansible-galaxy collection install arista.avd --upgrade
+          pip install -r ~/.ansible/collections/ansible_collections/arista/avd/requirements.txt
       - name: Checkout repo
         uses: actions/checkout@v4
+      - name: Check ansible config location
+        run: ansible --version
       - name: Build Fabric configs
         run: ansible-playbook datacenter/playbooks/fabric-build.yml -i datacenter/domain-a/inventory.yml
+        env:
+          ANSIBLE_INVENTORY_DIR: datacenter
+          ANSIBLE_CONFIG: datacenter/ansible.cfg
+          ANSIBLE_HOST_KEY_CHECKING: "false"
+          ANSIBLE_FORCE_COLOR: "true"
+          ANSIBLE_GATHERING: explicit
+          ANSIBLE_JINJA2_EXTENSIONS: "jinja2.ext.loopcontrols,jinja2.ext.do,jinja2.ext.i18n"
+          ANSIBLE_PYTHON_INTERPRETER: /usr/bin/python3
+          ANSIBLE_PERSISTENT_CONNECT_TIMEOUT: 120
+          ANSIBLE_DEPRECATION_WARNINGS: "false"
+          DEFAULT_TIMEOUT: 120
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
