@@ -22,6 +22,8 @@ jobs:
           pip install -r ~/.ansible/collections/ansible_collections/arista/avd/requirements.txt
       - name: Checkout repo
         uses: actions/checkout@v4
+      - name: Check ansible config location
+        run: ansible --version
       - name: Build Fabric configs
         run: ansible-playbook datacenter/playbooks/fabric-build.yml -i datacenter/domain-a/inventory.yml
       - name: 'Upload Artifact'
