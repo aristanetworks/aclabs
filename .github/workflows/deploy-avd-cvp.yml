@@ -5,10 +5,10 @@ name: "Deploy AVD configs"
 on:
   push:
     branches:
-      - main
-    paths:
-      - 'datacenter/**/group_vars/**'
-      - 'datacenter/global_vars/**'
+      - deploy-workflow
+    # paths:
+    #   - 'datacenter/**/group_vars/**'
+    #   - 'datacenter/global_vars/**'
 
 jobs:
   deploy:
@@ -16,10 +16,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Download a single artifact
-        uses: actions/download-artifact@v4
+
+      - name: Download build artifacts
+        uses: dawidd6/action-download-artifact@v3
         with:
-          name: build-fabric-artifact
+          workflow: build-avd-config.yml
+          workflow_conclusion: success
+          artifact_name: build-fabric-artifact
+
       - name: Move configs
         run: |
           cd build-fabric-artifact
@@ -27,6 +31,7 @@ jobs:
           cp -r domain-a/* ../datacenter/domain-a/
           cp -r domain-b/* ../datacenter/domain-b/
           cp -r domain-c/* ../datacenter/domain-c/
+
       - name: deploy configs to cvp
         run: |
           cd ..
