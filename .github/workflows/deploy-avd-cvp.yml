@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - deploy-workflow
-      - main
+      #- main
     # paths:
     #   - 'datacenter/**/group_vars/**'
     #   - 'datacenter/global_vars/**'
