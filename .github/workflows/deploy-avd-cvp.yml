@@ -26,11 +26,11 @@ jobs:
 
       - name: Move configs
         run: |
-          cd build-fabric-artifact
-          cp -r backbone/* ../datacenter/backbone/
-          cp -r domain-a/* ../datacenter/domain-a/
-          cp -r domain-b/* ../datacenter/domain-b/
-          cp -r domain-c/* ../datacenter/domain-c/
+          cd 
+          cp -r build-fabric-artifact/backbone/* datacenter/backbone/
+          cp -r build-fabric-artifact/domain-a/* datacenter/domain-a/
+          cp -r build-fabric-artifact/domain-b/* datacenter/domain-b/
+          cp -r build-fabric-artifact/domain-c/* datacenter/domain-c/
 
       - name: deploy configs to cvp
         run: |
