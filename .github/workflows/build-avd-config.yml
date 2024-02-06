@@ -12,11 +12,15 @@ on:
 jobs:
   build-configs:
     runs-on: ubuntu-latest
-    container:
-      image: python:3.9-slim
     steps:
       - name: Install requirements
         run: |
+          sudo apt-get install -y make \
+          python39 \
+          python39-pip
+          alias pip="pip3.9"
+          alias pip3="pip3.9"
+          alias python="python3.9"
           pip install ansible-core>=2.15.6
           ansible-galaxy collection install arista.avd --upgrade
           pip install -r ~/.ansible/collections/ansible_collections/arista/avd/requirements.txt
@@ -25,7 +29,6 @@ jobs:
       - name: Build Fabric configs
         run: |
           cd datacenter
-          ansible --version
           make build-all
         env:
           ANSIBLE_INVENTORY_DIR: datacenter
