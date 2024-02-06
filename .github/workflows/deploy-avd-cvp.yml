@@ -17,6 +17,9 @@ jobs:
     steps:
       - name: Install requirements
         run: |
+          sudo apt update
+          sudo apt install -y make \
+          python3-pip
           pip install ansible-core>=2.16.3
           ansible-galaxy collection install arista.avd --upgrade
           pip install -r ~/.ansible/collections/ansible_collections/arista/avd/requirements.txt
