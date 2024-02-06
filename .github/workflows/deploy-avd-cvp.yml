@@ -36,5 +36,6 @@ jobs:
       - name: deploy configs to cvp
         run: |
           cd datacenter
-          ansible --version
+          echo $PATH
+          pwd
           make deploy-cvp-all
