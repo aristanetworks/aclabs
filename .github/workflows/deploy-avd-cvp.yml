@@ -5,11 +5,11 @@ name: "Deploy AVD configs"
 on:
   push:
     branches:
-      - deploy-workflow
-      #- main
-    # paths:
-    #   - 'datacenter/**/group_vars/**'
-    #   - 'datacenter/global_vars/**'
+      - main
+    paths:
+      - 'datacenter/**/host_vars/**'
+      - 'datacenter/**/group_vars/**'
+      - 'datacenter/global_vars/**'
 
 jobs:
   deploy:
