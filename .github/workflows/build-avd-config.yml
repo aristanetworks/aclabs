@@ -7,7 +7,8 @@ on:
     branches-ignore:
       - main
     paths:
-      - '**/**/group_vars/**'
+      - 'datacenter/**/group_vars/**'
+      - 'datacenter/global_vars/**'
 jobs:
   build-configs:
     runs-on: ubuntu-latest
@@ -16,16 +17,16 @@ jobs:
     steps:
       - name: Install requirements
         run: |
-          pip install --upgrade pip
           pip install ansible-core>=2.15.6
           ansible-galaxy collection install arista.avd --upgrade
           pip install -r ~/.ansible/collections/ansible_collections/arista/avd/requirements.txt
       - name: Checkout repo
         uses: actions/checkout@v4
-      - name: Check ansible config location
-        run: ansible --version
       - name: Build Fabric configs
-        run: ansible-playbook datacenter/playbooks/fabric-build.yml -i datacenter/domain-a/inventory.yml
+        run: |
+          cd datacenter
+          ansilbe --version
+          make build-all
         env:
           ANSIBLE_INVENTORY_DIR: datacenter
           ANSIBLE_CONFIG: datacenter/ansible.cfg
@@ -40,6 +41,6 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifact
-          path: datacenter/domain-a/intended/*
+          name: build-fabric-artifact
+          path: datacenter/**/intended/**
           retention-days: 1
