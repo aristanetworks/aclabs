@@ -7,6 +7,7 @@ on:
     branches:
       - main
     paths:
+      - 'datacenter/**/host_vars/**'
       - 'datacenter/**/group_vars/**'
       - 'datacenter/global_vars/**'
 
@@ -14,20 +15,26 @@ jobs:
   deploy:
     runs-on: [self-hosted]
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Download a single artifact
-        uses: actions/download-artifact@v4
+
+      - name: Download build artifacts
+        uses: dawidd6/action-download-artifact@v3
         with:
-          name: build-fabric-artifact
+          workflow: build-avd-config.yml
+          workflow_conclusion: success
+          artifact_name: build-fabric-artifact
+
       - name: Move configs
         run: |
-          cd build-fabric-artifact
-          cp -r backbone/* ../datacenter/backbone/
-          cp -r domain-a/* ../datacenter/domain-a/
-          cp -r domain-b/* ../datacenter/domain-b/
-          cp -r domain-c/* ../datacenter/domain-c/
-      - name: deploy configs to cvp
+          cp -r build-fabric-artifact/backbone/* datacenter/backbone/
+          cp -r build-fabric-artifact/domain-a/* datacenter/domain-a/
+          cp -r build-fabric-artifact/domain-b/* datacenter/domain-b/
+          cp -r build-fabric-artifact/domain-c/* datacenter/domain-c/
+
+      - name: upgrade avd/deploy configs to cvp
         run: |
-          cd ..
+          ansible-galaxy collection install arista.avd --upgrade
+          cd datacenter
           make deploy-cvp-all
