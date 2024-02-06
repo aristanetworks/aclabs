@@ -33,5 +33,5 @@ jobs:
 
       - name: deploy configs to cvp
         run: |
-          cd ..
+          cd datacenter
           make deploy-cvp-all
