@@ -17,7 +17,7 @@ servers:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet8, Ethernet8 ]
         switches: [ A-LEAF1, A-LEAF2 ]
-        vlans: 20
+        vlans: 30
         mode: access
         spanning_tree_portfast: edge
         port_channel:

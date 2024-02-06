@@ -25,7 +25,7 @@ jobs:
       - name: Build Fabric configs
         run: |
           cd datacenter
-          ansilbe --version
+          ansible --version
           make build-all
         env:
           ANSIBLE_INVENTORY_DIR: datacenter
