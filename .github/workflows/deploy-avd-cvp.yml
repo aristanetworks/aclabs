@@ -15,6 +15,12 @@ jobs:
   deploy:
     runs-on: [self-hosted]
     steps:
+      - name: Install requirements
+        run: |
+          pip install ansible-core>=2.16.3
+          ansible-galaxy collection install arista.avd --upgrade
+          pip install -r ~/.ansible/collections/ansible_collections/arista/avd/requirements.txt
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
