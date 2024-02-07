@@ -117,6 +117,7 @@ all:
         DOMAIN_B_EVPNGW:
     CONNECTED_ENDPOINTS:
       children:
+        DOMAIN_B_L2_SW:
         DOMAIN_B_L3_LEAVES:
     DCI:
       children:
