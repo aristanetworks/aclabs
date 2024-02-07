@@ -164,6 +164,8 @@ l2leaf:
     spanning_tree_mode: rapid-pvst
     raw_eos_cli: |
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
+    filter:
+        only_vlans_in_use: true
   nodes:
     - name: B-SW1
       id: 1
