@@ -3,3 +3,30 @@ type: l3leaf
 
 evpn_multicast: false
 underlay_multicast: false
+
+monitor_connectivity:
+  shutdown: false
+  vrfs:
+      # VRF Name
+    - name: Prod
+      interface_sets:
+        - name: Prod-Vtep-Diag
+          interfaces: Loopback101
+      hosts:
+        - name: B-LEAF7-DiagVtep-Prod
+          ip: 10.101.102.7
+          local_interfaces: Prod-Vtep-Diag
+        - name: C-LEAF7-DiagVtep-Prod
+          ip: 10.101.103.7
+          local_interfaces: Prod-Vtep-Diag
+    - name: Dev
+      interface_sets:
+        - name: Dev-Vtep-Diag
+          interfaces: Loopback102
+      hosts:
+        - name: B-LEAF7-DiagVtep-Dev
+          ip: 10.102.102.7
+          local_interfaces: Dev-Vtep-Diag
+        - name: C-LEAF7-DiagVtep-Dev
+          ip: 10.102.103.7
+          local_interfaces: Dev-Vtep-Diag

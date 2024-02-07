@@ -7,3 +7,30 @@ underlay_multicast: false
 custom_structured_configuration_vlan_interfaces:
   - name: 'Vlan4094'
     mtu: 1500
+
+monitor_connectivity:
+  shutdown: false
+  vrfs:
+      # VRF Name
+    - name: Prod
+      interface_sets:
+        - name: Prod-Vtep-Diag
+          interfaces: Loopback101
+      hosts:
+        - name: A-LEAF7-DiagVtep-Prod
+          ip: 10.101.101.7
+          local_interfaces: Prod-Vtep-Diag
+        - name: B-LEAF7-DiagVtep-Prod
+          ip: 10.101.102.7
+          local_interfaces: Prod-Vtep-Diag
+    - name: Dev
+      interface_sets:
+        - name: Dev-Vtep-Diag
+          interfaces: Loopback102
+      hosts:
+        - name: A-LEAF7-DiagVtep-Dev
+          ip: 10.102.101.7
+          local_interfaces: Dev-Vtep-Diag
+        - name: B-LEAF7-DiagVtep-Dev
+          ip: 10.102.102.7
+          local_interfaces: Dev-Vtep-Diag
