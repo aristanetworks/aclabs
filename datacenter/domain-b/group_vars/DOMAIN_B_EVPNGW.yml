@@ -84,6 +84,6 @@ monitor_connectivity:
         - name: A-LEAF7-DiagVtep-Dev
           ip: 10.102.101.7
           local_interfaces: Dev-Vtep-Diag
-        - name: A-LEAF7-DiagVtep-Dev
+        - name: C-LEAF7-DiagVtep-Dev
           ip: 10.102.103.7
           local_interfaces: Dev-Vtep-Diag
