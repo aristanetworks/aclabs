@@ -15,6 +15,7 @@ bgp_peer_groups:
       local_as: 65500
       remove_private_as:
         replace_as: true
+      bfd: false
 
 fabric_ip_addressing:
   mlag:
