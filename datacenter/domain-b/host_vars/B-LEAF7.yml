@@ -1,17 +1,40 @@
 ---
 
 custom_structured_configuration_router_bgp:
+  peer_groups:
+    - name: EVPN-OVERLAY-CORE
+      local_as: 65500
+      remove_private_as:
+        replace_as: true
+      remote_as: 65500
+      route_map_in: RM-AS65000-EVPN-IN
+      route_map_out: RM-AS65000-EVPN-OUT
+      route_reflector_client: true
+      update_source: Loopback0
   neighbors:
-  - ip_address: 172.16.2.1
-    peer_group: IPv4-REMOTE-UNDERLAY-PEERS
-    description: BB1_UNDERLAY
-  - ip_address: 172.16.2.3
-    peer_group: IPv4-REMOTE-UNDERLAY-PEERS
-    description: BB2_UNDERLAY
+    - ip_address: 172.16.2.1
+      peer_group: IPv4-REMOTE-UNDERLAY-PEERS
+      description: BB1_UNDERLAY
+    - ip_address: 172.16.2.3
+      peer_group: IPv4-REMOTE-UNDERLAY-PEERS
+      description: BB2_UNDERLAY
+    - ip_address: 1.1.0.1
+      peer_group:  EVPN-OVERLAY-CORE
+      description: BB1_OVERLAY
+    - ip_address: 1.1.0.2
+      peer_group:  EVPN-OVERLAY-CORE
+      description: BB2_OVERLAY
+  address_family_evpn:
+    peer_groups:
+      - name: EVPN-OVERLAY-CORE
+        activate: true
+        domain_remote: true
   address_family_ipv4:
     peer_groups:
       - name: IPv4-REMOTE-UNDERLAY-PEERS
         activate: true
+      - name: EVPN-OVERLAY-CORE
+        activate: false
     networks:
       - prefix: "1.1.2.7/32"
       - prefix: "1.1.2.8/32"
