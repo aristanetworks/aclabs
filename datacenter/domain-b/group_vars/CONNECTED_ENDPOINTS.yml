@@ -1,13 +1,18 @@
 ---
+
+port_profiles:
+  - profile: DEFAULT
+    spanning_tree_portfast: edge
+    mode: access
+
 servers:
   - name: HostG
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet7, Ethernet7 ]
         switches: [ B-LEAF1, B-LEAF2 ]
+        profile: DEFAULT
         vlans: 20
-        mode: access
-        spanning_tree_portfast: edge
         link_tracking:
           enabled: true
           name: CORE-LINKS
@@ -22,9 +27,8 @@ servers:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet8, Ethernet8 ]
         switches: [ B-LEAF1, B-LEAF2 ]
+        profile: DEFAULT
         vlans: 40
-        mode: access
-        spanning_tree_portfast: edge
         link_tracking:
           enabled: true
           name: CORE-LINKS
@@ -39,9 +43,8 @@ servers:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet7 ]
         switches: [ B-LEAF3 ]
+        profile: DEFAULT
         vlans: 60
-        mode: access
-        spanning_tree_portfast: edge
         description: HostI
   
   - name: HostJ
@@ -49,9 +52,8 @@ servers:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet8, Ethernet8 ]
         switches: [ B-LEAF3, B-LEAF4 ]
+        profile: DEFAULT
         vlans: 10
-        mode: access
-        spanning_tree_portfast: edge
         link_tracking:
           enabled: true
           name: CORE-LINKS
@@ -66,9 +68,8 @@ servers:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet7 ]
         switches: [ B-LEAF4 ]
+        profile: DEFAULT
         vlans: 70
-        mode: access
-        spanning_tree_portfast: edge
         description: HostK
 
   - name: HostL
@@ -76,9 +77,8 @@ servers:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet3 ]
         switches: [ B-SW1 ]
+        profile: DEFAULT
         vlans: 40
-        mode: access
-        spanning_tree_portfast: edge
         description: HostL
     
   - name: HostM
@@ -86,9 +86,8 @@ servers:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet4 ]
         switches: [ B-SW1 ]
+        profile: DEFAULT
         vlans: 80
-        mode: access
-        spanning_tree_portfast: edge
         description: HostM
 
 network_ports:

@@ -1,6 +1,6 @@
 ---
 
-custom_structured_configuration_router_bgp:
+csc_router_bgp:
   neighbors:
   - ip_address: 172.16.3.1
     peer_group: IPv4-REMOTE-UNDERLAY-PEERS

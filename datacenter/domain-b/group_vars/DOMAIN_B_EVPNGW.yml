@@ -4,28 +4,18 @@ type: l3leaf
 evpn_multicast: false
 underlay_multicast: false
 
-# bgp_peer_groups: 
-#   evpn_overlay_peers:
-#     # structured_config:
-#     #   route_map_in: RM-AS65200-EVPN-IN
-#     #   route_map_out: RM-AS65200-EVPN-OUT
-#   evpn_overlay_core:
-#     structured_config:
-#       local_as: 65500
-#       remove_private_as:
-#         replace_as: true
-#       remote_as: 65500
-#       route_map_in: RM-AS65000-EVPN-IN
-#       route_map_out: RM-AS65000-EVPN-OUT
-#       route_reflector_client: true
+bgp_peer_groups: 
+  evpn_overlay_peers:
+    structured_config:
+      route_reflector_client: true
 
-custom_structured_configuration_community_lists:
+csc_community_lists:
   - name: CL-LOCAL-DOMAIN-ORIGINATED 
     action: "permit 65200:65200"
   - name: CL-REMOTE-DOMAIN-ORIGINATED
     action: "permit 65000:65000"
 
-custom_structured_configuration_route_maps:
+csc_route_maps:
   - name: RM-AS65000-EVPN-IN
     sequence_numbers:
       - sequence: 10
@@ -40,6 +30,12 @@ custom_structured_configuration_route_maps:
           - "community CL-REMOTE-DOMAIN-ORIGINATED"
       - sequence: 10
         type: "permit"
+  - name: RM-AS65000-IPV4-OUT
+    sequence_numbers:
+      - sequence: 10
+        type: 'permit'
+        match:
+          - 'ip address prefix-list PL-GATEWAY-LOOP'
   - name: RM-AS65200-EVPN-IN
     sequence_numbers:
       - sequence: 10
