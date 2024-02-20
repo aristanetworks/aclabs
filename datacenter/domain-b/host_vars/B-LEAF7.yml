@@ -1,6 +1,16 @@
 ---
 
-custom_structured_configuration_router_bgp:
+csc_prefix_lists:
+  - name: PL-GATEWAY-LOOP
+    sequence_numbers:
+      - sequence: 10
+        action: 'permit 2.2.2.7/32'
+      - sequence: 20
+        action: 'permit 1.1.2.7/32'
+      - sequence: 30
+        action: 'permit 1.1.2.8/32'
+
+csc_router_bgp:
   peer_groups:
     - name: EVPN-OVERLAY-CORE
       local_as: 65500
@@ -11,6 +21,9 @@ custom_structured_configuration_router_bgp:
       route_map_out: RM-AS65000-EVPN-OUT
       route_reflector_client: true
       update_source: Loopback0
+      bfd: true
+      ebgp_multihop: 15
+      send_community: all
   neighbors:
     - ip_address: 172.16.2.1
       peer_group: IPv4-REMOTE-UNDERLAY-PEERS
@@ -40,7 +53,7 @@ custom_structured_configuration_router_bgp:
       - prefix: "1.1.2.8/32"
       - prefix: "2.2.2.7/32"
 
-custom_structured_configuration_ethernet_interfaces:
+csc_ethernet_interfaces:
   - name: Ethernet7
     mtu: 9214
   - name: Ethernet8

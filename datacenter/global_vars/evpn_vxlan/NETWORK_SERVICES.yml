@@ -9,6 +9,7 @@ tenants:
           - C-LEAF7
           - C-LEAF8
         remote_as: 65500
+        route_map_out: 'RM-AS65000-IPV4-OUT'
         shutdown: false
     vrfs:
       - name: Prod

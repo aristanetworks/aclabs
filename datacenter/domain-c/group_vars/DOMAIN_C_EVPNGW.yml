@@ -4,9 +4,27 @@ type: l3leaf
 evpn_multicast: false
 underlay_multicast: false
 
-custom_structured_configuration_vlan_interfaces:
-  - name: 'Vlan4094'
-    mtu: 1500
+csc_prefix_lists:
+  - name: PL-GATEWAY-LOOP
+    sequence_numbers:
+      - sequence: 10
+        action: 'permit 2.2.3.7/32'
+      - sequence: 20
+        action: 'permit 1.1.3.7/32'
+      - sequence: 30
+        action: 'permit 1.1.3.8/32'
+
+csc_route_maps:
+  - name: RM-AS65000-IPV4-OUT
+    sequence_numbers:
+      - sequence: 10
+        type: 'permit'
+        match:
+          - 'ip address prefix-list PL-GATEWAY-LOOP'
+
+# csc_vlan_interfaces:
+#   - name: 'Vlan4094'
+#     mtu: 1500
 
 monitor_connectivity:
   shutdown: false

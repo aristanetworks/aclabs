@@ -48,6 +48,10 @@ l3leaf:
       tenants:
         - Prod
         - Dev
+    structured_config:
+      spanning_tree:
+        edge_port:
+          bpduguard_default: true
     # can remove agent KernelFib command, not in tech library
     raw_eos_cli: |
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'

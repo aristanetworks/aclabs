@@ -11,13 +11,6 @@ evpn_short_esi_prefix: '0000:000b:'
 
 p2p_uplinks_mtu: 1500
 
-bgp_peer_groups:
-  evpn_overlay_core:
-    structured_config:
-      local_as: 65500
-      remove_private_as:
-        replace_as: true
-
 l3_edge:
   # Define a new IP pool that will be used to asign IP addreses to L3 Edge interfaces.
   p2p_links_ip_pools:

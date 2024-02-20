@@ -1,4 +1,10 @@
 ---
+
+port_profiles:
+  - profile: DEFAULT
+    spanning_tree_portfast: edge
+    mode: access
+
 servers:
   - name: HostN
     adapters:
@@ -6,8 +12,7 @@ servers:
         switch_ports: [ Ethernet7, Ethernet7 ]
         switches: [ C-LEAF1, C-LEAF2 ]
         vlans: 10
-        mode: access
-        spanning_tree_portfast: edge
+        profile: DEFAULT
         port_channel:
           description: HostN
           mode: active
@@ -18,8 +23,7 @@ servers:
         switch_ports: [ Ethernet7 ]
         switches: [ C-LEAF3 ]
         vlans: 20
-        mode: access
-        spanning_tree_portfast: edge
+        profile: DEFAULT
         description: HostO
 
   - name: HostP
@@ -28,8 +32,7 @@ servers:
         switch_ports: [ Ethernet8, Ethernet8 ]
         switches: [ C-LEAF3, C-LEAF4 ]
         vlans: 60
-        mode: access
-        spanning_tree_portfast: edge
+        profile: DEFAULT
         port_channel:
           description: HostP
           mode: active
@@ -40,8 +43,7 @@ servers:
         switch_ports: [ Ethernet7 ]
         switches: [ C-LEAF4 ]
         vlans: 50
-        mode: access
-        spanning_tree_portfast: edge
+        profile: DEFAULT
         description: HostQ
 
   - name: HostR
@@ -50,8 +52,7 @@ servers:
         switch_ports: [ Ethernet7, Ethernet7 ]
         switches: [ C-LEAF5, C-LEAF6 ]
         vlans: 20
-        mode: access
-        spanning_tree_portfast: edge
+        profile: DEFAULT
         port_channel:
           description: HostR
           mode: active
@@ -62,8 +63,7 @@ servers:
         switch_ports: [ Ethernet8, Ethernet8 ]
         switches: [ C-LEAF5, C-LEAF6 ]
         vlans: 60
-        mode: access
-        spanning_tree_portfast: edge
+        profile: DEFAULT
         port_channel:
           description: HostS
           mode: active
