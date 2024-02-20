@@ -1,6 +1,6 @@
 ---
 
-custom_structured_configuration_router_bgp:
+csc_router_bgp:
   address_family_ipv4:
     networks:
       - prefix: 1.1.0.1/32

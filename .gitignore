@@ -7,3 +7,5 @@
 **/config_backup/**
 # ignore tl clab configs
 **/tl-configs/**
+# ignore secrets
+**.tok**
