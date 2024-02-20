@@ -38,6 +38,10 @@ deploy-cvp-domain-a: ## Deploy Configs via CVP
 deploy-servers-domain-a: ## Deploy Server Configs via eAPI
 	ansible-playbook playbooks/server-deploy-eapi.yml -i domain-a/inventory.yml -e "target_hosts=DOMAIN_A_HOSTS"
 
+.PHONY: deploy-cv-ci-domain-a
+deploy-cv-ci-domain-a: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
+	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-a/inventory.yml --extra-vars "cv_svc_token=${CV_SVC_TOKEN}"
+
 .PHONY: validate-domain-a
 validate-domain-a:
 	ansible-playbook playbooks/fabric-validate-state.yml -i domain-a/inventory.yml
@@ -117,6 +121,10 @@ deploy-backbone: ## Deploy Configs via eAPI
 .PHONY: deploy-cvp-backbone
 deploy-cvp-backbone: ## Deploy Configs via CVP
 	ansible-playbook playbooks/fabric-deploy-cvp.yml -i backbone/inventory.yml
+
+.PHONY: deploy-cv-ci-backbone
+deploy-cv-ci-backbone: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
+	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i backbone/inventory.yml --extra-vars "cv_svc_token=${CV_SVC_TOKEN}"
 
 ########################################################
 # Replace domain inventory ansible_hosts with ACT inventory ansible_hosts 
