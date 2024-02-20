@@ -124,7 +124,7 @@ deploy-cvp-backbone: ## Deploy Configs via CVP
 
 .PHONY: deploy-cv-ci-backbone
 deploy-cv-ci-backbone: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
-	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i backbone/inventory.yml --extra-vars "cv_svc_token=${CV_SVC_TOKEN}"
+	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i backbone/inventory.yml
 
 ########################################################
 # Replace domain inventory ansible_hosts with ACT inventory ansible_hosts 
