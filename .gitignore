@@ -1,9 +1,9 @@
 # ignore devcontainer
 .devcontainer/
 # ignore avd generated files
-**/documentation/**
+#**/documentation/**
 **/intended/**
-**/reports/**
+#**/reports/**
 **/config_backup/**
 # ignore tl clab configs
 **/tl-configs/**
