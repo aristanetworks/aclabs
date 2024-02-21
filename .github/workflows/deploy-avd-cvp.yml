@@ -13,9 +13,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, act]
-    env:
-      cv_svc_token: ${{ secrets.CV_SVC_TOKEN }}
+    runs-on: [self-hosted, ci-runner]
     
     steps:
       - name: Checkout repository
@@ -39,4 +37,4 @@ jobs:
         run: |
           ansible-galaxy collection install arista.avd --upgrade
           cd datacenter
-          make deploy-cv-ci-backbone
+          make deploy-cvp-all

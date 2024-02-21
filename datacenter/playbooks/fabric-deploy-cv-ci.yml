@@ -10,3 +10,6 @@
         cv_server: 10-255-110-207.act.arista.com
         cv_token: "{{ lookup('env', 'cv_svc_token') }}"
         deploy_to_cv_accept_preview: true
+        cv_inventory_hostname: act_cv
+        cv_verify_certs: false
+        cv_workspace_name: ns
