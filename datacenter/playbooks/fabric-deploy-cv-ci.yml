@@ -8,7 +8,7 @@
         name: arista.avd.deploy_to_cv
       vars:
         cv_server: 10-255-110-207.act.arista.com
-        cv_token: "{{ lookup('env', 'cv_svc_token') }}"
+        cv_token: "{{ lookup('env', 'CV_SVC_TOKEN') }}"
         deploy_to_cv_accept_preview: true
         cv_inventory_hostname: act_cv
         cv_verify_certs: false

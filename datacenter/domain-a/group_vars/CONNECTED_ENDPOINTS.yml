@@ -11,7 +11,7 @@ servers:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet7, Ethernet7 ]
         switches: [ A-LEAF1, A-LEAF2 ]
-        vlans: 70
+        vlans: 10
         profile: DEFAULT
         port_channel:
           description: HostA
