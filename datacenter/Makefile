@@ -32,7 +32,7 @@ deploy-eapi-domain-a: ## Deploy Configs via eAPI
 
 .PHONY: deploy-cvp-domain-a
 deploy-cvp-domain-a: ## Deploy Configs via CVP
-	ansible-playbook playbooks/fabric-deploy-cvp.yml -i domain-a/inventory.yml
+	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-a/inventory.yml
 
 .PHONY: deploy-servers-domain-a
 deploy-servers-domain-a: ## Deploy Server Configs via eAPI
@@ -64,7 +64,7 @@ deploy-eapi-domain-b: ## Deploy Configs via eAPI
 
 .PHONY: deploy-cvp-domain-b
 deploy-cvp-domain-b: ## Deploy Configs via CVP
-	ansible-playbook playbooks/fabric-deploy-cvp.yml -i domain-b/inventory.yml
+	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-b/inventory.yml
 
 .PHONY: deploy-servers-domain-b
 deploy-servers-domain-b: ## Deploy Server Configs via eAPI
@@ -92,7 +92,7 @@ deploy-eapi-domain-c: ## Deploy Configs via eAPI
 
 .PHONY: deploy-cvp-domain-c
 deploy-cvp-domain-c: ## Deploy Configs via CVP
-	ansible-playbook playbooks/fabric-deploy-cvp.yml -i domain-c/inventory.yml
+	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-c/inventory.yml
 
 .PHONY: deploy-servers-domain-c
 deploy-servers-domain-c: ## Deploy Server Configs via eAPI
@@ -120,7 +120,7 @@ deploy-backbone: ## Deploy Configs via eAPI
 
 .PHONY: deploy-cvp-backbone
 deploy-cvp-backbone: ## Deploy Configs via CVP
-	ansible-playbook playbooks/fabric-deploy-cvp.yml -i backbone/inventory.yml
+	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i backbone/inventory.yml
 
 .PHONY: deploy-cv-ci-backbone
 deploy-cv-ci-backbone: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
