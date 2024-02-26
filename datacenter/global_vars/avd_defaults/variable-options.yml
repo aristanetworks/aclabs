@@ -1,3 +1,6 @@
 ---
 
 custom_structured_configuration_prefix: ['csc_']
+
+generate_cv_tags:
+  topology_hints: true

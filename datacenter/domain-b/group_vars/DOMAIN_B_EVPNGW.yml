@@ -1,5 +1,7 @@
 ---
+
 type: l3leaf
+cv_tags_topology_type: leaf
 
 evpn_multicast: false
 underlay_multicast: false
