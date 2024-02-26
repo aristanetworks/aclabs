@@ -11,7 +11,7 @@ all:
           ansible_httpapi_host: 10.255.53.196
           ansible_host: 10.255.53.196
           ansible_user: cvpadmin
-          ansible_password: cvp123!
+          ansible_password: arista123
     VEOS:
       hosts:
         A-LEAF1:

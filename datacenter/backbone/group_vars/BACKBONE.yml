@@ -1,4 +1,7 @@
 ---
+
+dc_name: backbone
+pod_name: pod-bb
 type: backbone
 
 backbone:
