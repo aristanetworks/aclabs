@@ -31,16 +31,12 @@ deploy-eapi-domain-a: ## Deploy Configs via eAPI
 	ansible-playbook playbooks/fabric-deploy-eapi.yml -i domain-a/inventory.yml
 
 .PHONY: deploy-cvp-domain-a
-deploy-cvp-domain-a: ## Deploy Configs via CVP
+deploy-cvp-domain-a: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
 	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-a/inventory.yml
 
 .PHONY: deploy-servers-domain-a
 deploy-servers-domain-a: ## Deploy Server Configs via eAPI
 	ansible-playbook playbooks/server-deploy-eapi.yml -i domain-a/inventory.yml -e "target_hosts=DOMAIN_A_HOSTS"
-
-.PHONY: deploy-cv-ci-domain-a
-deploy-cv-ci-domain-a: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
-	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-a/inventory.yml --extra-vars "cv_svc_token=${CV_SVC_TOKEN}"
 
 .PHONY: validate-domain-a
 validate-domain-a:
@@ -63,7 +59,7 @@ deploy-eapi-domain-b: ## Deploy Configs via eAPI
 	ansible-playbook playbooks/fabric-deploy-eapi.yml -i domain-b/inventory.yml
 
 .PHONY: deploy-cvp-domain-b
-deploy-cvp-domain-b: ## Deploy Configs via CVP
+deploy-cvp-domain-b: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
 	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-b/inventory.yml
 
 .PHONY: deploy-servers-domain-b
@@ -91,7 +87,7 @@ deploy-eapi-domain-c: ## Deploy Configs via eAPI
 	ansible-playbook playbooks/fabric-deploy-eapi.yml -i domain-c/inventory.yml
 
 .PHONY: deploy-cvp-domain-c
-deploy-cvp-domain-c: ## Deploy Configs via CVP
+deploy-cvp-domain-c: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
 	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-c/inventory.yml
 
 .PHONY: deploy-servers-domain-c
@@ -119,11 +115,7 @@ deploy-backbone: ## Deploy Configs via eAPI
 	ansible-playbook playbooks/fabric-deploy-eapi.yml -i backbone/inventory.yml
 
 .PHONY: deploy-cvp-backbone
-deploy-cvp-backbone: ## Deploy Configs via CVP
-	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i backbone/inventory.yml
-
-.PHONY: deploy-cv-ci-backbone
-deploy-cv-ci-backbone: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
+deploy-cvp-backbone: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
 	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i backbone/inventory.yml
 
 ########################################################
