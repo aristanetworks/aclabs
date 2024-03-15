@@ -11,6 +11,13 @@ bgp_peer_groups:
     structured_config:
       route_reflector_client: true
 
+csc_router_bgp:
+  bgp:
+    bestpath:
+      d_path: true
+  address_family_evpn:
+    domain_identifier: "2:2"
+
 csc_community_lists:
   - name: CL-LOCAL-DOMAIN-ORIGINATED 
     action: "permit 65200:65200"
@@ -85,3 +92,6 @@ monitor_connectivity:
         - name: C-LEAF7-DiagVtep-Dev
           ip: 10.102.103.7
           local_interfaces: Dev-Vtep-Diag
+
+custom_templates:
+  - af-evpn.j2
