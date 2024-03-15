@@ -4,6 +4,7 @@
 router bgp {{ router_bgp.as }}    
    !
    address-family evpn
+      domain identifier 99:99 remote
 {%          if _evpn_aa_multihoming is arista.avd.defined(true) %}
       route export ethernet-segment ip mass-withdraw
       route import ethernet-segment ip mass-withdraw

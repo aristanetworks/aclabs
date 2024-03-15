@@ -24,7 +24,7 @@ ping-domain-a: ## Ping Nodes
 
 .PHONY: build-domain-a
 build-domain-a: ## Build Configs
-	ansible-playbook playbooks/fabric-build.yml -i domain-a/inventory.yml
+	ansible-playbook playbooks/fabric-build.yml --skip-tags documentation -i domain-a/inventory.yml
 
 .PHONY: deploy-eapi-domain-a
 deploy-eapi-domain-a: ## Deploy Configs via eAPI
@@ -52,7 +52,7 @@ ping-domain-b: ## Ping Nodes
 
 .PHONY: build-domain-b
 build-domain-b: ## Build Configs
-	ansible-playbook playbooks/fabric-build.yml -i domain-b/inventory.yml
+	ansible-playbook playbooks/fabric-build.yml --skip-tags documentation -i domain-b/inventory.yml
 
 .PHONY: deploy-eapi-domain-b
 deploy-eapi-domain-b: ## Deploy Configs via eAPI
@@ -80,7 +80,7 @@ ping-domain-c: ## Ping Nodes
 
 .PHONY: build-domain-c
 build-domain-c: ## Build Configs
-	ansible-playbook playbooks/fabric-build.yml -i domain-c/inventory.yml
+	ansible-playbook playbooks/fabric-build.yml --skip-tags documentation -i domain-c/inventory.yml
 
 .PHONY: deploy-eapi-domain-c
 deploy-eapi-domain-c: ## Deploy Configs via eAPI
@@ -108,7 +108,7 @@ ping-backbone: ## Ping Nodes
 
 .PHONY: build-backbone
 build-backbone: ## Build Configs
-	ansible-playbook playbooks/fabric-build.yml -i backbone/inventory.yml
+	ansible-playbook playbooks/fabric-build.yml --skip-tags documentation -i backbone/inventory.yml
 
 .PHONY: deploy-backbone
 deploy-backbone: ## Deploy Configs via eAPI

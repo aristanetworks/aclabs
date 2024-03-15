@@ -4,6 +4,12 @@ type: l3leaf
 evpn_multicast: false
 underlay_multicast: false
 
+csc_router_bgp:
+  bgp:
+    bestpath:
+      d_path: true
+  address_family_evpn:
+    domain_identifier: "1:1"
 monitor_connectivity:
   shutdown: false
   vrfs:
@@ -30,3 +36,6 @@ monitor_connectivity:
         - name: C-LEAF7-DiagVtep-Dev
           ip: 10.102.103.7
           local_interfaces: Dev-Vtep-Diag
+
+custom_templates:
+  - af-evpn.j2
