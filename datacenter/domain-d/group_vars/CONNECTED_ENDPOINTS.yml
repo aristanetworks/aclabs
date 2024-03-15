@@ -1,0 +1,69 @@
+---
+
+port_profiles:
+  - profile: DEFAULT
+    spanning_tree_portfast: edge
+    mode: access
+
+servers:
+  - name: D1
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet7, Ethernet7 ]
+        switches: [ D-LEAF1, D-LEAF2 ]
+        vlans: 10
+        profile: DEFAULT
+        port_channel:
+          description: D1
+          mode: active
+
+  - name: D2
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet8, Ethernet8 ]
+        switches: [ D-LEAF1, D-LEAF2 ]
+        vlans: 90
+        profile: DEFAULT
+        port_channel:
+          description: D2
+          mode: active
+
+  - name: D3
+    adapters:
+      - endpoint_ports: [ Ethernet1 ]
+        switch_ports: [ Ethernet7 ]
+        switches: [ D-LEAF3 ]
+        vlans: 50
+        profile: DEFAULT
+        description: D3
+
+  - name: D4
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet8, Ethernet8 ]
+        switches: [ D-LEAF3, D-LEAF4 ]
+        vlans: 10
+        profile: DEFAULT
+        port_channel:
+          description: D4
+          mode: active
+        
+  - name: D5
+    adapters:
+      - endpoint_ports: [ Ethernet1 ]
+        switch_ports: [ Ethernet7 ]
+        switches: [ D-LEAF4 ]
+        vlans: 90
+        profile: DEFAULT
+        description: D5
+
+  - name: D6
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet7, Ethernet7 ]
+        switches: [ D-LEAF5, D-LEAF6 ]
+        vlans: 70
+        profile: DEFAULT
+        port_channel:
+          description: D6
+          mode: active
