@@ -1,0 +1,8 @@
+---
+type: l3leaf
+
+evpn_multicast: false
+underlay_multicast: false
+
+custom_templates:
+  - af-evpn.j2

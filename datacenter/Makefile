@@ -99,6 +99,34 @@ validate-domain-c:
 	ansible-playbook playbooks/fabric-validate-state.yml -i domain-c/inventory.yml
 
 ########################################################
+# Domain D
+########################################################
+
+.PHONY: ping-domain-d
+ping-domain-d: ## Ping Nodes
+	ansible-playbook playbooks/ping.yml -i domain-d/inventory.yml
+
+.PHONY: build-domain-d
+build-domain-d: ## Build Configs
+	ansible-playbook playbooks/fabric-build.yml --skip-tags documentation -i domain-d/inventory.yml
+
+.PHONY: deploy-eapi-domain-d
+deploy-eapi-domain-d: ## Deploy Configs via eAPI
+	ansible-playbook playbooks/fabric-deploy-eapi.yml -i domain-d/inventory.yml
+
+.PHONY: deploy-cvp-domain-d
+deploy-cvp-domain-d: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
+	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-d/inventory.yml
+
+.PHONY: deploy-servers-domain-d
+deploy-servers-domain-d: ## Deploy Server Configs via eAPI
+	ansible-playbook playbooks/server-deploy-eapi.yml -i domain-d/inventory.yml -e "target_hosts=DOMAIN_D_HOSTS"
+
+.PHONY: validate-domain-d
+validate-domain-d:
+	ansible-playbook playbooks/fabric-validate-state.yml -i domain-d/inventory.yml
+
+########################################################
 # BACKBONE
 ########################################################
 

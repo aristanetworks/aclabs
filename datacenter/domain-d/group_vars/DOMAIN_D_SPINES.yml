@@ -1,0 +1,6 @@
+---
+type: spine
+
+switchport_default:
+  mode: routed
+
