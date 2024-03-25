@@ -86,9 +86,6 @@
 │   ├── scripts
 │   │   └── convert_inventory.py
 │   └── tl-act-topology.yml
-├── labprep.sh
-├── requirements.txt
-└── requirements.yml
 ```
 
 ## Update inventory

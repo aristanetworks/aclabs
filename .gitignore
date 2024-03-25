@@ -9,5 +9,3 @@
 **/tl-configs/**
 # ignore secrets
 **.tok**
-# ignore server configs
-**/server_configs/**

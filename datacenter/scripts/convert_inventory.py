@@ -11,7 +11,7 @@ def update_ansible_host_ips_with_argparse():
 
     # Setup argparse for command line arguments
     parser = argparse.ArgumentParser(description='Update ansible_host IPs in inventory files.')
-    parser.add_argument('directory', choices=['domain-a', 'domain-b', 'domain-c', 'backbone'], 
+    parser.add_argument('directory', choices=['domain-a', 'domain-b', 'domain-c', 'domain-d', 'backbone'], 
                         help='Directory where the inventory files are located')
     args = parser.parse_args()
 
