@@ -6,7 +6,7 @@ lab_topology_dir_name: 'lab_topology'
 lab_topology_dir: '{{ root_dir }}/{{ lab_topology_dir_name }}'
 
 # vEOS Image and parameters to use
-veos_version: 4.28.5.1M
+veos_version: 4.31.2F
 act_veos_username: "cvpadmin"
 act_veos_password: "arista123"
 
@@ -18,11 +18,11 @@ act_add_ansible_node: true
 # Generic node options
 act_generic_user: "cvpadmin"
 act_generic_password: "arista123"
-act_generic_os_version: "Rocky-8.5"
+act_generic_os_version: "ubuntu-2204-lts"
 act_ansible_node_ip: 192.168.0.6
 
 # CVP node options
-act_cvp_version: "2022.3.1"
+act_cvp_version: "2023.3.0"
 cvp_auto_configuration: true
 act_cvp_user: "root"
 act_cvp_password: "cvproot"

@@ -6,7 +6,7 @@ port_profiles:
     mode: access
 
 servers:
-  - name: HostA
+  - name: A1
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet7, Ethernet7 ]
@@ -14,10 +14,10 @@ servers:
         vlans: 20
         profile: DEFAULT
         port_channel:
-          description: HostA
+          description: A1
           mode: active
 
-  - name: HostB
+  - name: A2
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet8, Ethernet8 ]
@@ -25,19 +25,19 @@ servers:
         vlans: 30
         profile: DEFAULT
         port_channel:
-          description: HostB
+          description: A2
           mode: active
 
-  - name: HostC
+  - name: A3
     adapters:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet7 ]
         switches: [ A-LEAF3 ]
         vlans: 50
         profile: DEFAULT
-        description: HostC
+        description: A3
 
-  - name: HostD
+  - name: A4
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet8, Ethernet8 ]
@@ -45,19 +45,19 @@ servers:
         vlans: 10
         profile: DEFAULT
         port_channel:
-          description: HostD
+          description: A4
           mode: active
         
-  - name: HostE
+  - name: A5
     adapters:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet7 ]
         switches: [ A-LEAF4 ]
         vlans: 30
         profile: DEFAULT
-        description: HostE
+        description: A5
 
-  - name: HostF
+  - name: A6
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet7, Ethernet7 ]
@@ -65,5 +65,5 @@ servers:
         vlans: 70
         profile: DEFAULT
         port_channel:
-          description: HostF
+          description: A6
           mode: active

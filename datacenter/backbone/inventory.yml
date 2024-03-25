@@ -25,3 +25,6 @@ all:
               ansible_host: 10.255.2.255
               ansible_user: cvpadmin
               ansible_ssh_pass: arista123
+    ACT:
+      children:
+        FABRIC:
