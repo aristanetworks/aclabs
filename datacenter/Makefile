@@ -4,15 +4,15 @@ help: ## Display help message
 
 .PHONY: build-deploy-cvp-all
 build-deploy-cvp-all: ## Ping Nodes
-	make build-domain-a build-domain-b build-domain-c build-backbone deploy-cvp-domain-a deploy-cvp-domain-b deploy-cvp-domain-c deploy-cvp-backbone
+	make build-domain-a build-domain-b build-domain-c build-domain-d build-domain-backbone deploy-cvp-domain-a deploy-cvp-domain-b deploy-cvp-domain-c build-domain-d deploy-cvp-backbone
 
 .PHONY: deploy-cvp-all
 deploy-cvp-all: ## Ping Nodes
-	make deploy-cvp-domain-a deploy-cvp-domain-b deploy-cvp-domain-c deploy-cvp-backbone
+	make deploy-cvp-domain-a deploy-cvp-domain-b deploy-cvp-domain-c deploy-cvp-domain-d deploy-cvp-backbone
 
 .PHONY: build-all
 build-all: ## Ping Nodes
-	make build-domain-a build-domain-b build-domain-c build-backbone
+	make build-domain-a build-domain-b build-domain-c build-domain-d build-domain-backbone
 
 ########################################################
 # Domain A
@@ -134,11 +134,11 @@ validate-domain-d:
 ping-backbone: ## Ping Nodes
 	ansible-playbook playbooks/ping.yml -i backbone/inventory.yml
 
-.PHONY: build-backbone
+.PHONY: build-domain-backbone
 build-backbone: ## Build Configs
 	ansible-playbook playbooks/fabric-build.yml --skip-tags documentation -i backbone/inventory.yml
 
-.PHONY: deploy-backbone
+.PHONY: deploy-domain-backbone
 deploy-backbone: ## Deploy Configs via eAPI
 	ansible-playbook playbooks/fabric-deploy-eapi.yml -i backbone/inventory.yml
 
@@ -161,6 +161,10 @@ replace-domain-b-inventory:
 .PHONY: replace-domain-c-inventory
 replace-domain-c-inventory: 
 	python3 scripts/convert_inventory.py domain-c
+
+.PHONY: replace-domain-d-inventory
+replace-domain-d-inventory: 
+	python3 scripts/convert_inventory.py domain-d
 
 .PHONY: replace-backbone-inventory
 replace-backbone-inventory: 
