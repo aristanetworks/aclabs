@@ -6,7 +6,7 @@ port_profiles:
     mode: access
 
 servers:
-  - name: HostN
+  - name: C1
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet7, Ethernet7 ]
@@ -14,19 +14,19 @@ servers:
         vlans: 10
         profile: DEFAULT
         port_channel:
-          description: HostN
+          description: C1
           mode: active
 
-  - name: HostO
+  - name: C2
     adapters:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet7 ]
         switches: [ C-LEAF3 ]
         vlans: 20
         profile: DEFAULT
-        description: HostO
+        description: C2
 
-  - name: HostP
+  - name: C3
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet8, Ethernet8 ]
@@ -34,19 +34,19 @@ servers:
         vlans: 60
         profile: DEFAULT
         port_channel:
-          description: HostP
+          description: C3
           mode: active
 
-  - name: HostQ
+  - name: C4
     adapters:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet7 ]
         switches: [ C-LEAF4 ]
         vlans: 50
         profile: DEFAULT
-        description: HostQ
+        description: C4
 
-  - name: HostR
+  - name: C5
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet7, Ethernet7 ]
@@ -54,10 +54,10 @@ servers:
         vlans: 20
         profile: DEFAULT
         port_channel:
-          description: HostR
+          description: C5
           mode: active
   
-  - name: HostS
+  - name: C6
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet8, Ethernet8 ]
@@ -65,5 +65,5 @@ servers:
         vlans: 60
         profile: DEFAULT
         port_channel:
-          description: HostS
+          description: C6
           mode: active

@@ -6,7 +6,7 @@ port_profiles:
     mode: access
 
 servers:
-  - name: HostG
+  - name: B1
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet7, Ethernet7 ]
@@ -17,12 +17,12 @@ servers:
           enabled: true
           name: CORE-LINKS
         port_channel:
-          description: HostG
+          description: B1
           mode: active
         ethernet_segment:
           short_esi: 0001:0002:0007
 
-  - name: HostH
+  - name: B2
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet8, Ethernet8 ]
@@ -33,21 +33,21 @@ servers:
           enabled: true
           name: CORE-LINKS
         port_channel:
-          description: HostH
+          description: B2
           mode: active
         ethernet_segment:
           short_esi: 0001:0002:0008
 
-  - name: HostI
+  - name: B3
     adapters:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet7 ]
         switches: [ B-LEAF3 ]
         profile: DEFAULT
         vlans: 60
-        description: HostI
+        description: B3
   
-  - name: HostJ
+  - name: B4
     adapters:
       - endpoint_ports: [ Ethernet1, Ethernet2 ]
         switch_ports: [ Ethernet8, Ethernet8 ]
@@ -60,35 +60,35 @@ servers:
         ethernet_segment:
           short_esi: 0003:0004:0008
         port_channel:
-          description: HostJ
+          description: B4
           mode: active
 
-  - name: HostK
+  - name: B5
     adapters:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet7 ]
         switches: [ B-LEAF4 ]
         profile: DEFAULT
         vlans: 70
-        description: HostK
+        description: B5
 
-  - name: HostL
+  - name: B6
     adapters:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet3 ]
         switches: [ B-SW1 ]
         profile: DEFAULT
         vlans: 40
-        description: HostL
+        description: B6
     
-  - name: HostM
+  - name: B7
     adapters:
       - endpoint_ports: [ Ethernet1 ]
         switch_ports: [ Ethernet4 ]
         switches: [ B-SW1 ]
         profile: DEFAULT
         vlans: 80
-        description: HostM
+        description: B7
 
 network_ports:
   - switches:

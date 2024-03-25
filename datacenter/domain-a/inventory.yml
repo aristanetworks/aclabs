@@ -8,8 +8,8 @@ all:
           ansible_httpapi_validate_certs: false
           ansible_network_os: eos
           ansible_httpapi_port: 443
-          ansible_httpapi_host: 10.255.53.196
-          ansible_host: 10.255.53.196
+          ansible_httpapi_host: 10.18.143.30
+          ansible_host: 10.18.143.30
           ansible_user: cvpadmin
           ansible_password: arista123
           cv_collection: v3
@@ -20,11 +20,11 @@ all:
             DOMAIN_A_SPINES:
               hosts:
                 A-SPINE1:
-                  ansible_host: 10.255.22.102
+                  ansible_host: 10.18.146.123
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 A-SPINE2:
-                  ansible_host: 10.255.62.22
+                  ansible_host: 10.18.145.124
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 A-SPINE3:
@@ -38,19 +38,19 @@ all:
             DOMAIN_A_L3_LEAVES:
               hosts:
                 A-LEAF1:
-                  ansible_host: 10.255.42.127
+                  ansible_host: 10.18.145.245
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 A-LEAF2:
-                  ansible_host: 10.255.60.171
+                  ansible_host: 10.18.146.110
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 A-LEAF3:
-                  ansible_host: 10.255.69.198
+                  ansible_host: 10.18.146.113
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 A-LEAF4:
-                  ansible_host: 10.255.112.72
+                  ansible_host: 10.18.146.14
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 A-LEAF5:
@@ -64,33 +64,33 @@ all:
             DOMAIN_A_EVPNGW:
               hosts:
                 A-LEAF7:
-                  ansible_host: 10.255.36.138
+                  ansible_host: 10.18.146.116
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 A-LEAF8:
-                  ansible_host: 10.255.126.72
+                  ansible_host: 10.18.145.130
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
     DOMAIN_A_HOSTS:
       hosts:
         HostA:
-          ansible_host: 10.255.20.78
+          ansible_host: 10.18.146.142
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
         HostB:
-          ansible_host: 10.255.88.201
+          ansible_host: 10.18.146.144
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
         HostC:
-          ansible_host: 10.255.113.150
+          ansible_host: 10.18.145.133
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
         HostD:
-          ansible_host: 10.255.2.139
+          ansible_host: 10.18.146.19
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
         HostE:
-          ansible_host: 10.255.70.238
+          ansible_host: 10.18.145.121
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
         HostF:
