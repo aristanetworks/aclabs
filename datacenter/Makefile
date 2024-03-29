@@ -152,20 +152,20 @@ deploy-cvp-backbone: ## Deploy using CV CI workflow (i.e. workspaces, studios, e
 
 .PHONY: replace-domain-a-inventory
 replace-domain-a-inventory: 
-	python3 scripts/convert_inventory.py domain-a
+	python3 scripts/convert_inventory-to-act-inventory.py domain-a
 
 .PHONY: replace-domain-b-inventory
 replace-domain-b-inventory: 
-	python3 scripts/convert_inventory.py domain-b
+	python3 scripts/convert_inventory-to-act-inventory.py domain-b
 
 .PHONY: replace-domain-c-inventory
 replace-domain-c-inventory: 
-	python3 scripts/convert_inventory.py domain-c
+	python3 scripts/convert_inventory-to-act-inventory.py domain-c
 
 .PHONY: replace-domain-d-inventory
 replace-domain-d-inventory: 
-	python3 scripts/convert_inventory.py domain-d
+	python3 scripts/convert_inventory-to-act-inventory.py domain-d
 
 .PHONY: replace-backbone-inventory
 replace-backbone-inventory: 
-	python3 scripts/convert_inventory.py backbone
+	python3 scripts/convert_inventory-to-act-inventory.py backbone
