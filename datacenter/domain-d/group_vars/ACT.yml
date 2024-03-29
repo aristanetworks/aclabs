@@ -2,21 +2,21 @@
 # ACT Server Topology Variable
 
 non_fabric_nodes:
-  - HostD1:
+  - D1:
       ip_addr: 192.168.0.240
       node_type: veos
-  - HostD2:
+  - D2:
       ip_addr: 192.168.0.241
       node_type: veos
-  - HostD3:
+  - D3:
       ip_addr: 192.168.0.242
       node_type: veos
-  - HostD4:
+  - D4:
       ip_addr: 192.168.0.243
       node_type: veos
-  - HostD5:
+  - D5:
       ip_addr: 192.168.0.244
       node_type: veos
-  - HostD6:
+  - D6:
       ip_addr: 192.168.0.245
       node_type: veos

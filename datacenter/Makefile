@@ -135,7 +135,7 @@ ping-backbone: ## Ping Nodes
 	ansible-playbook playbooks/ping.yml -i backbone/inventory.yml
 
 .PHONY: build-domain-backbone
-build-backbone: ## Build Configs
+build-domain-backbone: ## Build Configs
 	ansible-playbook playbooks/fabric-build.yml --skip-tags documentation -i backbone/inventory.yml
 
 .PHONY: deploy-domain-backbone

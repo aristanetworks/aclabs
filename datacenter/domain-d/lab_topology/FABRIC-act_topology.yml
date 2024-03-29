@@ -1,0 +1,312 @@
+veos:
+  # Define the global vEOS node parameters
+  username: cvpadmin
+  password: arista123
+  version: 4.31.2F
+
+generic:
+  # Define global generic node parameters
+  username: cvpadmin
+  password: arista123
+  version: ubuntu-2204-lts
+
+cvp:
+  # Define global cvp node parameters
+  username: root
+  password: cvproot
+  version: 2023.3.0
+  instance: singlenode
+
+# List of ACT nodes
+nodes:
+  - D-LEAF1:
+      ip_addr: 192.168.0.129
+      node_type: veos
+      version: 4.31.2F
+  - D-LEAF2:
+      ip_addr: 192.168.0.130
+      node_type: veos
+      version: 4.31.2F
+  - D-LEAF3:
+      ip_addr: 192.168.0.131
+      node_type: veos
+      version: 4.31.2F
+  - D-LEAF4:
+      ip_addr: 192.168.0.132
+      node_type: veos
+      version: 4.31.2F
+  - D-LEAF5:
+      ip_addr: 192.168.0.133
+      node_type: veos
+      version: 4.31.2F
+  - D-LEAF6:
+      ip_addr: 192.168.0.134
+      node_type: veos
+      version: 4.31.2F
+  - D-LEAF7:
+      ip_addr: 192.168.0.135
+      node_type: veos
+      version: 4.31.2F
+  - D-LEAF8:
+      ip_addr: 192.168.0.136
+      node_type: veos
+      version: 4.31.2F
+  - D-SPINE1:
+      ip_addr: 192.168.0.21
+      node_type: veos
+      version: 4.31.2F
+  - D-SPINE2:
+      ip_addr: 192.168.0.22
+      node_type: veos
+      version: 4.31.2F
+  - D-SPINE3:
+      ip_addr: 192.168.0.23
+      node_type: veos
+      version: 4.31.2F
+  - D-SPINE4:
+      ip_addr: 192.168.0.24
+      node_type: veos
+      version: 4.31.2F
+  - D1:
+      ip_addr: 192.168.0.240
+      node_type: veos
+  - D2:
+      ip_addr: 192.168.0.241
+      node_type: veos
+  - D3:
+      ip_addr: 192.168.0.242
+      node_type: veos
+  - D4:
+      ip_addr: 192.168.0.243
+      node_type: veos
+  - D5:
+      ip_addr: 192.168.0.244
+      node_type: veos
+  - D6:
+      ip_addr: 192.168.0.245
+      node_type: veos
+
+  - act-cv:
+      ip_addr: 192.168.0.5
+      node_type: cvp
+      auto_configuration: true
+  - tool-server:
+      ip_addr: 192.168.0.6
+      node_type: generic
+links:
+  
+    - connection:
+        - D-LEAF1:Ethernet1
+        - D-SPINE1:Ethernet1
+  
+    - connection:
+        - D-LEAF1:Ethernet2
+        - D-SPINE2:Ethernet1
+  
+    - connection:
+        - D-LEAF1:Ethernet3
+        - D-SPINE3:Ethernet1
+  
+    - connection:
+        - D-LEAF1:Ethernet4
+        - D-SPINE4:Ethernet1
+  
+    - connection:
+        - D-LEAF1:Ethernet5
+        - D-LEAF2:Ethernet5
+  
+    - connection:
+        - D-LEAF1:Ethernet6
+        - D-LEAF2:Ethernet6
+  
+    - connection:
+        - D-LEAF1:Ethernet7
+        - D1:Ethernet1
+  
+    - connection:
+        - D-LEAF1:Ethernet8
+        - D2:Ethernet1
+  
+    - connection:
+        - D-LEAF2:Ethernet1
+        - D-SPINE1:Ethernet2
+  
+    - connection:
+        - D-LEAF2:Ethernet2
+        - D-SPINE2:Ethernet2
+  
+    - connection:
+        - D-LEAF2:Ethernet3
+        - D-SPINE3:Ethernet2
+  
+    - connection:
+        - D-LEAF2:Ethernet4
+        - D-SPINE4:Ethernet2
+  
+    - connection:
+        - D-LEAF2:Ethernet7
+        - D1:Ethernet2
+  
+    - connection:
+        - D-LEAF2:Ethernet8
+        - D2:Ethernet2
+  
+    - connection:
+        - D-LEAF3:Ethernet1
+        - D-SPINE1:Ethernet3
+  
+    - connection:
+        - D-LEAF3:Ethernet2
+        - D-SPINE2:Ethernet3
+  
+    - connection:
+        - D-LEAF3:Ethernet3
+        - D-SPINE3:Ethernet3
+  
+    - connection:
+        - D-LEAF3:Ethernet4
+        - D-SPINE4:Ethernet3
+  
+    - connection:
+        - D-LEAF3:Ethernet5
+        - D-LEAF4:Ethernet5
+  
+    - connection:
+        - D-LEAF3:Ethernet6
+        - D-LEAF4:Ethernet6
+  
+    - connection:
+        - D-LEAF3:Ethernet7
+        - D3:Ethernet1
+  
+    - connection:
+        - D-LEAF3:Ethernet8
+        - D4:Ethernet1
+  
+    - connection:
+        - D-LEAF4:Ethernet1
+        - D-SPINE1:Ethernet4
+  
+    - connection:
+        - D-LEAF4:Ethernet2
+        - D-SPINE2:Ethernet4
+  
+    - connection:
+        - D-LEAF4:Ethernet3
+        - D-SPINE3:Ethernet4
+  
+    - connection:
+        - D-LEAF4:Ethernet4
+        - D-SPINE4:Ethernet4
+  
+    - connection:
+        - D-LEAF4:Ethernet7
+        - D5:Ethernet1
+  
+    - connection:
+        - D-LEAF4:Ethernet8
+        - D4:Ethernet2
+  
+    - connection:
+        - D-LEAF5:Ethernet1
+        - D-SPINE1:Ethernet5
+  
+    - connection:
+        - D-LEAF5:Ethernet2
+        - D-SPINE2:Ethernet5
+  
+    - connection:
+        - D-LEAF5:Ethernet3
+        - D-SPINE3:Ethernet5
+  
+    - connection:
+        - D-LEAF5:Ethernet4
+        - D-SPINE4:Ethernet5
+  
+    - connection:
+        - D-LEAF5:Ethernet5
+        - D-LEAF6:Ethernet5
+  
+    - connection:
+        - D-LEAF5:Ethernet6
+        - D-LEAF6:Ethernet6
+  
+    - connection:
+        - D-LEAF5:Ethernet7
+        - D6:Ethernet1
+  
+    - connection:
+        - D-LEAF6:Ethernet1
+        - D-SPINE1:Ethernet6
+  
+    - connection:
+        - D-LEAF6:Ethernet2
+        - D-SPINE2:Ethernet6
+  
+    - connection:
+        - D-LEAF6:Ethernet3
+        - D-SPINE3:Ethernet6
+  
+    - connection:
+        - D-LEAF6:Ethernet4
+        - D-SPINE4:Ethernet6
+  
+    - connection:
+        - D-LEAF6:Ethernet7
+        - D6:Ethernet2
+  
+    - connection:
+        - D-LEAF7:Ethernet1
+        - D-SPINE1:Ethernet7
+  
+    - connection:
+        - D-LEAF7:Ethernet2
+        - D-SPINE2:Ethernet7
+  
+    - connection:
+        - D-LEAF7:Ethernet3
+        - D-SPINE3:Ethernet7
+  
+    - connection:
+        - D-LEAF7:Ethernet4
+        - D-SPINE4:Ethernet7
+  
+    - connection:
+        - D-LEAF7:Ethernet5
+        - D-LEAF8:Ethernet5
+  
+    - connection:
+        - D-LEAF7:Ethernet6
+        - D-LEAF8:Ethernet6
+  
+    - connection:
+        - D-LEAF7:Ethernet7
+        - BB1:Ethernet1
+  
+    - connection:
+        - D-LEAF7:Ethernet8
+        - BB2:Ethernet1
+  
+    - connection:
+        - D-LEAF8:Ethernet1
+        - D-SPINE1:Ethernet8
+  
+    - connection:
+        - D-LEAF8:Ethernet2
+        - D-SPINE2:Ethernet8
+  
+    - connection:
+        - D-LEAF8:Ethernet3
+        - D-SPINE3:Ethernet8
+  
+    - connection:
+        - D-LEAF8:Ethernet4
+        - D-SPINE4:Ethernet8
+  
+    - connection:
+        - D-LEAF8:Ethernet7
+        - BB1:Ethernet2
+  
+    - connection:
+        - D-LEAF8:Ethernet8
+        - BB2:Ethernet2

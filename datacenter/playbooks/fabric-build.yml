@@ -19,3 +19,7 @@
       tags: [build, generate]
       ansible.builtin.import_role:
         name: arista.avd.eos_cli_config_gen
+
+    - name: gen act topo
+      ansible.builtin.import_role:
+        name: act_topology_gen
