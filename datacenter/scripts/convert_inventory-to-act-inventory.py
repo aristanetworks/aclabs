@@ -17,7 +17,7 @@ def update_ansible_host_ips_with_argparse():
 
     # Define the file paths based on the specified directory
     inventory_file = f'{args.directory}/inventory.yml'
-    act_inventory_file = f'act-inventory.yml'
+    act_inventory_file = f'act/act-inventory.yml'
     output_file = f'{args.directory}/inventory.yml'
 
     # Load inventory.yml
