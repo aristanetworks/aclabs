@@ -54,7 +54,7 @@ nodes:
   {{ non_fabric_nodes | to_nice_yaml(indent=2) | indent(2)}}
 {% endif %}
 {% if act_add_cvp %}
-  - cvp:
+  - act-cv:
       ip_addr: {{ act_cvp_ip }}
       node_type: cvp
 {% if cvp_auto_configuration %}
@@ -62,7 +62,7 @@ nodes:
 {% endif %}
 {% endif %}
 {% if act_add_ansible_node %}
-  - ansible:
+  - tool-server:
       ip_addr: {{ act_ansible_node_ip }}
       node_type: generic
 {% endif %}
@@ -76,7 +76,7 @@ links:
 {# Iterate through the sorted ethernet_interfaces of the current node #}
 {%  for ethernet_interface in node_hostvars.ethernet_interfaces | arista.avd.convert_dicts("name") | arista.avd.natural_sort("name") %}
 {#    Check if the peer_type of the current ethernet interface is in the list of defined node types or is 'mlag_peer' or 'server' #}
-{%    if ethernet_interface.peer_type | arista.avd.default('undefined') in node_types + ['mlag_peer'] + ['server'] %}
+{%    if ethernet_interface.peer_type | arista.avd.default('undefined') in node_types + ['mlag_peer'] + ['server'] + ['other'] %}
 {#      Get the peer for the current ethernet interface #}
 {%      set peer = ethernet_interface.peer %}
 {#      Get the peer_interface for the current ethernet interface #}
