@@ -10,8 +10,7 @@ spine:
     loopback_ipv6_pool: 2001:db8:d:1::0/64
     loopback_ipv6_offset: 0
     bgp_as: 65400
-    raw_eos_cli: |
-      agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
+
   nodes: 
     - name: D-SPINE1
       id: 201 
@@ -56,9 +55,7 @@ l3leaf:
       spanning_tree:
         edge_port:
           bpduguard_default: true
-    # can remove agent KernelFib command, not in tech library
-    raw_eos_cli: |
-      agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
+          
   node_groups: 
     - group: DOMAIN_D_LA
       bgp_as: 65412

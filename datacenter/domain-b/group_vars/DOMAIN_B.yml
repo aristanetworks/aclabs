@@ -140,10 +140,6 @@ l3leaf:
           - hostname: BB2
             bgp_as: 65500
             ip_address: 1.1.0.2
-      raw_eos_cli: |
-        dhcp relay
-          mlag peer-link requests disabled
-        agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
       nodes:
         - name: B-LEAF7
           id: 7
