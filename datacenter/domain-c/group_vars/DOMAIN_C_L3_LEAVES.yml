@@ -3,6 +3,7 @@ type: l3leaf
 
 dhcp_relay:
   tunnel_requests_disabled: true
+  mlag_peerlink_requests_disabled: true
 
 csc_vlan_interfaces:
   - name: 'Vlan4094'

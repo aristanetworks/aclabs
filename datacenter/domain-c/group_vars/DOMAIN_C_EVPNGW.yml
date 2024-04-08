@@ -29,10 +29,6 @@ csc_route_maps:
         match:
           - 'ip address prefix-list PL-GATEWAY-LOOP'
 
-# csc_vlan_interfaces:
-#   - name: 'Vlan4094'
-#     mtu: 1500
-
 monitor_connectivity:
   shutdown: false
   vrfs:

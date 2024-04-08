@@ -52,9 +52,6 @@ l3leaf:
       spanning_tree:
         edge_port:
           bpduguard_default: true
-    # can remove agent KernelFib command, not in tech library
-    raw_eos_cli: |
-      agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
   node_groups: 
     - group: DOMAIN_A_LA
       bgp_as: 65112

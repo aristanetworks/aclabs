@@ -9,10 +9,8 @@ spine:
     loopback_ipv4_pool: 1.1.3.0/24
     vtep_loopback_ipv4_pool: 10.3.3.0/24
     virtual_router_mac_address: 00:1c:73:00:00:01 
-    bgp_as: 65300
-    raw_eos_cli: |
-      agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
-  nodes: 
+    bgp_as: 65300  nodes:
+
     - name: C-SPINE1
       id: 201 
       mgmt_ip: 192.168.0.19/24 
@@ -46,10 +44,6 @@ l3leaf:
       spanning_tree:
         edge_port:
           bpduguard_default: true
-    raw_eos_cli: |
-      dhcp relay
-        mlag peer-link requests disabled
-      agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
   node_groups: 
     - group: DOMAIN_C_LA
       bgp_as: 65312

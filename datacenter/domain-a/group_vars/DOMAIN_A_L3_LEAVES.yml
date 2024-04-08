@@ -3,6 +3,7 @@ type: l3leaf
 
 dhcp_relay:
   tunnel_requests_disabled: true
+  mlag_peerlink_requests_disabled: true
 
 # variables used in custom templates
 ## _ prefix = bypass avd schema validation
