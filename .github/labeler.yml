@@ -1,0 +1,26 @@
+datacenter:
+  - datacenter/**
+
+domain-a:
+  - datacenter/domain-a/**
+
+domain-b:
+  - datacenter/domain-b/**
+
+domain-c:
+  - datacenter/domain-c/**
+
+domain-d:
+  - datacenter/domain-d/**
+
+backbone:
+  - datacenter/backbone/**
+
+global-variables:
+  - datacenter/global_variables/**
+
+playbooks:
+  - playbooks/**
+
+workflows:
+  - .github/**

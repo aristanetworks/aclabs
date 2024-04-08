@@ -1,5 +1,3 @@
-# ignore devcontainer
-.devcontainer/
 # ignore avd generated files
 **/documentation/**
 **/intended/**
