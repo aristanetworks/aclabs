@@ -5,10 +5,3 @@ dhcp_relay:
   tunnel_requests_disabled: true
   mlag_peerlink_requests_disabled: true
 
-# variables used in custom templates
-## _ prefix = bypass avd schema validation
-_prod_multicast_group_overlay: 239.0.10.101
-_prod_multicast_group_encap: 232.1.1.10
-
-_dev_multicast_group_overlay: 239.0.50.101
-_dev_multicast_group_encap: 232.2.2.50

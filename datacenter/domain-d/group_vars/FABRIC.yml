@@ -5,9 +5,10 @@ underlay_routing_protocol: ebgp
 overlay_routing_protocol: ebgp
 
 underlay_ipv6: true
-# underlay_multicast: true
-# evpn_multicast: true
 underlay_rfc5549: true
+overlay_mlag_rfc5549: true
+overlay_routing_protocol_address_family: 'ipv6'
+
 fabric_ip_addressing:
   mlag:
     algorithm: same_subnet
@@ -50,6 +51,3 @@ l3_edge:
     nodes: [D-LEAF8, BB2]
     interfaces: [Ethernet8, Ethernet2]
     profile: DCI_D_profile
-    
-custom_templates:
-  - vxlan-mcast-overlay.j2
