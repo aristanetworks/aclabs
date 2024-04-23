@@ -8,8 +8,8 @@ all:
           ansible_httpapi_validate_certs: false
           ansible_network_os: eos
           ansible_httpapi_port: 443
-          ansible_httpapi_host: 10.255.53.196
-          ansible_host: 10.255.53.196
+          ansible_httpapi_host: 10.18.156.170
+          ansible_host: 10.18.156.170
           ansible_user: cvpadmin
           ansible_password: arista123
           cv_collection: v3
@@ -18,11 +18,11 @@ all:
         BACKBONE:
           hosts:
             BB1:
-              ansible_host: 10.255.12.6
+              ansible_host: 10.18.156.171
               ansible_user: cvpadmin
               ansible_ssh_pass: arista123
             BB2:
-              ansible_host: 10.255.2.255
+              ansible_host: 10.18.156.238
               ansible_user: cvpadmin
               ansible_ssh_pass: arista123
     ACT:

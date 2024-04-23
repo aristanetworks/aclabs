@@ -8,8 +8,8 @@ all:
           ansible_httpapi_validate_certs: false
           ansible_network_os: eos
           ansible_httpapi_port: 443
-          ansible_httpapi_host: 10.255.53.196
-          ansible_host: 10.255.53.196
+          ansible_httpapi_host: 10.18.156.170
+          ansible_host: 10.18.156.170
           ansible_user: cvpadmin
           ansible_password: arista123
           cv_collection: v3
@@ -20,81 +20,81 @@ all:
             DOMAIN_D_SPINES:
               hosts:
                 D-SPINE1:
-                  ansible_host: 10.255.22.102
+                  ansible_host: 10.18.156.208
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 D-SPINE2:
-                  ansible_host: 10.255.62.22
+                  ansible_host: 10.18.156.235
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 D-SPINE3:
-                  ansible_host: 10.255.75.233
+                  ansible_host: 10.18.156.190
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 D-SPINE4:
-                  ansible_host: 10.255.19.92
+                  ansible_host: 10.18.156.217
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
             DOMAIN_D_L3_LEAVES:
               hosts:
                 D-LEAF1:
-                  ansible_host: 10.255.42.127
+                  ansible_host: 10.18.156.185
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 D-LEAF2:
-                  ansible_host: 10.255.60.171
+                  ansible_host: 10.18.156.234
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 D-LEAF3:
-                  ansible_host: 10.255.69.198
+                  ansible_host: 10.18.156.197
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 D-LEAF4:
-                  ansible_host: 10.255.112.72
+                  ansible_host: 10.18.156.205
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 D-LEAF5:
-                  ansible_host: 10.255.111.40
+                  ansible_host: 10.18.156.173
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 D-LEAF6:
-                  ansible_host: 10.255.113.154
+                  ansible_host: 10.18.156.194
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
             DOMAIN_D_EVPNGW:
               hosts:
                 D-LEAF7:
-                  ansible_host: 10.255.36.138
+                  ansible_host: 10.18.156.232
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
                 D-LEAF8:
-                  ansible_host: 10.255.126.72
+                  ansible_host: 10.18.156.218
                   ansible_user: cvpadmin
                   ansible_ssh_pass: arista123
     DOMAIN_D_HOSTS:
       hosts:
         D1:
-          ansible_host: 10.255.20.78
+          ansible_host: 10.18.156.203
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
         D2:
-          ansible_host: 10.255.88.201
+          ansible_host: 10.18.156.191
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
         D3:
-          ansible_host: 10.255.113.150
+          ansible_host: 10.18.156.201
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
         D4:
-          ansible_host: 10.255.2.139
+          ansible_host: 10.18.156.219
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
         D5:
-          ansible_host: 10.255.70.238
+          ansible_host: 10.18.156.177
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
         D6:
-          ansible_host: 10.255.119.7
+          ansible_host: 10.18.156.199
           ansible_user: cvpadmin
           ansible_ssh_pass: arista123
     NETWORK_SERVICES:
