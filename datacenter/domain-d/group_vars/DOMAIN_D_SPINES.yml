@@ -4,3 +4,24 @@ type: spine
 switchport_default:
   mode: routed
 
+peer_filters:
+  - name: LEAF-AS-RANGE
+    sequence_numbers: 
+      - sequence: 10
+        match: 'as-range 65401-65499 result accept'
+
+csc_router_bgp:
+  address_family_ipv6:
+    redistribute_routes:
+      - source_protocol: connected
+        route_map: RM-CONN-2-BGP
+  listen_ranges:
+    - prefix: 1.1.0.0/16
+      peer_group: EVPN-OVERLAY-PEERS
+      peer_filter: LEAF-AS-RANGE
+    - prefix: 2001:db8:d:1::/64
+      peer_group: EVPN-OVERLAY-PEERS
+      peer_filter: LEAF-AS-RANGE
+    - prefix: 192.168.1.0/24
+      peer_group: LOCAL-UNDERLAY-PEERS
+      peer_filter: LEAF-AS-RANGE

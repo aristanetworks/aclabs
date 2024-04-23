@@ -5,7 +5,7 @@ pod_name: pod-d
 
 spine:
   defaults:
-    platform: vEOS-lab 
+    platform: vEOS-lab
     loopback_ipv4_pool: 1.1.4.0/24
     loopback_ipv6_pool: 2001:db8:d:1::0/64
     loopback_ipv6_offset: 0
@@ -28,6 +28,7 @@ spine:
 l3leaf:
   defaults:
     platform: vEOS-lab
+    uplink_ipv4_pool: 192.168.1.0/24
     loopback_ipv4_pool: 1.1.4.0/24
     loopback_ipv6_pool: 2001:db8:d:1::0/64
     loopback_ipv4_offset: 0
@@ -35,10 +36,7 @@ l3leaf:
     vtep_loopback_ipv4_pool: 2.2.4.0/24 
     uplink_interfaces: ['Ethernet1', 'Ethernet2', 'Ethernet3', 'Ethernet4'] 
     uplink_switches: ['D-SPINE1', 'D-SPINE2', 'D-SPINE3', 'D-SPINE4']
-    uplink_ipv4_pool: 192.168.1.0/24
     mlag_interfaces: ['Ethernet5', 'Ethernet6']
-    mlag_peer_vlan_structured_config: 
-      mtu: 1500 
     mlag_peer_ipv4_pool: 169.254.0.0/31
     mlag_peer_l3_ipv4_pool: 192.0.0.0/31
     mlag_port_channel_id: 1000
@@ -49,8 +47,7 @@ l3leaf:
     spanning_tree_mode: mstp
     filter:
       tenants:
-        - Prod
-        - Dev
+        - DUALSTACK
     structured_config:
       spanning_tree:
         edge_port:
@@ -65,6 +62,8 @@ l3leaf:
         - name: D-LEAF1
           id: 1
           mgmt_ip: 192.168.0.129/24
+          mlag_peer_vlan_structured_config:
+            ipv6_address: 2001:db8::1/64
           uplink_switch_interfaces: 
             - Ethernet1
             - Ethernet1
@@ -73,6 +72,8 @@ l3leaf:
         - name: D-LEAF2
           id: 2
           mgmt_ip: 192.168.0.130/24
+          mlag_peer_vlan_structured_config:
+            ipv6_address: 2001:db8::2/64
           uplink_switch_interfaces:
             - Ethernet2
             - Ethernet2
@@ -86,6 +87,8 @@ l3leaf:
         - name: D-LEAF3
           id: 3
           mgmt_ip: 192.168.0.131/24
+          mlag_peer_vlan_structured_config:
+            ipv6_address: 2001:db8::1/64
           uplink_switch_interfaces: 
             - Ethernet3
             - Ethernet3
@@ -94,6 +97,8 @@ l3leaf:
         - name: D-LEAF4
           id: 4
           mgmt_ip: 192.168.0.132/24
+          mlag_peer_vlan_structured_config:
+            ipv6_address: 2001:db8::2/64
           uplink_switch_interfaces:
             - Ethernet4
             - Ethernet4
@@ -107,6 +112,8 @@ l3leaf:
         - name: D-LEAF5
           id: 5
           mgmt_ip: 192.168.0.133/24
+          mlag_peer_vlan_structured_config:
+            ipv6_address: 2001:db8::1/64
           uplink_switch_interfaces: 
             - Ethernet5
             - Ethernet5
@@ -115,6 +122,8 @@ l3leaf:
         - name: D-LEAF6
           id: 6
           mgmt_ip: 192.168.0.134/24
+          mlag_peer_vlan_structured_config:
+            ipv6_address: 2001:db8::2/64
           uplink_switch_interfaces:
             - Ethernet6
             - Ethernet6
@@ -122,9 +131,7 @@ l3leaf:
             - Ethernet6
     - group: DOMAIN_D_EVPNGW
       bgp_as: 65478
-      filter:
-        tenants:
-          - EVPNGW
+      mlag: false
       evpn_gateway:
         # Specific BGP EVPN Gateway functionality for route types 2 (MAC-IP), 3 (IMET) and 5 (IP-PREFIX) can be enabled separately as needed.
         evpn_l2:

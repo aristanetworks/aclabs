@@ -2,7 +2,7 @@ cvp:
   instance: singlenode
   password: cvproot
   username: root
-  version: 2023.3.0
+  version: 2024.1.0
 generic:
   password: arista123
   username: cvpadmin
@@ -570,12 +570,6 @@ links:
   - D-LEAF7:Ethernet4
   - D-SPINE4:Ethernet7
 - connection:
-  - D-LEAF7:Ethernet5
-  - D-LEAF8:Ethernet5
-- connection:
-  - D-LEAF7:Ethernet6
-  - D-LEAF8:Ethernet6
-- connection:
   - D-LEAF7:Ethernet7
   - BB1:Ethernet1
 - connection:
@@ -603,11 +597,11 @@ nodes:
 - BB1:
     ip_addr: 192.168.0.9
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - BB2:
     ip_addr: 192.168.0.10
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - act-cv:
     auto_configuration: true
     ip_addr: 192.168.0.5
@@ -618,51 +612,51 @@ nodes:
 - A-LEAF1:
     ip_addr: 192.168.0.101
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-LEAF2:
     ip_addr: 192.168.0.102
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-LEAF3:
     ip_addr: 192.168.0.103
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-LEAF4:
     ip_addr: 192.168.0.104
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-LEAF5:
     ip_addr: 192.168.0.105
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-LEAF6:
     ip_addr: 192.168.0.106
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-LEAF7:
     ip_addr: 192.168.0.107
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-LEAF8:
     ip_addr: 192.168.0.108
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-SPINE1:
     ip_addr: 192.168.0.11
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-SPINE2:
     ip_addr: 192.168.0.12
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-SPINE3:
     ip_addr: 192.168.0.13
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A-SPINE4:
     ip_addr: 192.168.0.14
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - A1:
     ip_addr: 192.168.0.221
     node_type: veos
@@ -684,55 +678,55 @@ nodes:
 - B-LEAF1:
     ip_addr: 192.168.0.111
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-LEAF2:
     ip_addr: 192.168.0.112
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-LEAF3:
     ip_addr: 192.168.0.113
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-LEAF4:
     ip_addr: 192.168.0.114
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-LEAF5:
     ip_addr: 192.168.0.115
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-LEAF6:
     ip_addr: 192.168.0.116
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-LEAF7:
     ip_addr: 192.168.0.117
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-LEAF8:
     ip_addr: 192.168.0.118
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-SPINE1:
     ip_addr: 192.168.0.15
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-SPINE2:
     ip_addr: 192.168.0.16
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-SPINE3:
     ip_addr: 192.168.0.17
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-SPINE4:
     ip_addr: 192.168.0.18
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B-SW1:
     ip_addr: 192.168.0.119
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - B1:
     ip_addr: 192.168.0.227
     node_type: veos
@@ -757,43 +751,43 @@ nodes:
 - C-LEAF1:
     ip_addr: 192.168.0.121
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - C-LEAF2:
     ip_addr: 192.168.0.122
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - C-LEAF3:
     ip_addr: 192.168.0.123
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - C-LEAF4:
     ip_addr: 192.168.0.124
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - C-LEAF5:
     ip_addr: 192.168.0.125
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - C-LEAF6:
     ip_addr: 192.168.0.126
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - C-LEAF7:
     ip_addr: 192.168.0.127
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - C-LEAF8:
     ip_addr: 192.168.0.128
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - C-SPINE1:
     ip_addr: 192.168.0.19
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - C-SPINE2:
     ip_addr: 192.168.0.20
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - C1:
     ip_addr: 192.168.0.234
     node_type: veos
@@ -815,51 +809,51 @@ nodes:
 - D-LEAF1:
     ip_addr: 192.168.0.129
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-LEAF2:
     ip_addr: 192.168.0.130
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-LEAF3:
     ip_addr: 192.168.0.131
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-LEAF4:
     ip_addr: 192.168.0.132
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-LEAF5:
     ip_addr: 192.168.0.133
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-LEAF6:
     ip_addr: 192.168.0.134
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-LEAF7:
     ip_addr: 192.168.0.135
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-LEAF8:
     ip_addr: 192.168.0.136
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-SPINE1:
     ip_addr: 192.168.0.21
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-SPINE2:
     ip_addr: 192.168.0.22
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-SPINE3:
     ip_addr: 192.168.0.23
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D-SPINE4:
     ip_addr: 192.168.0.24
     node_type: veos
-    version: 4.31.2F
+    version: 4.32.0F
 - D1:
     ip_addr: 192.168.0.240
     node_type: veos
@@ -881,4 +875,4 @@ nodes:
 veos:
   password: arista123
   username: cvpadmin
-  version: 4.31.2F
+  version: 4.32.0F
