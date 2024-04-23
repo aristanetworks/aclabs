@@ -4,10 +4,13 @@ fabric_name: FABRIC
 underlay_routing_protocol: ebgp
 overlay_routing_protocol: ebgp
 
+underlay_multicast: false
+evpn_multicast: false
+
 underlay_ipv6: true
 underlay_rfc5549: true
 overlay_mlag_rfc5549: true
-overlay_routing_protocol_address_family: 'ipv6'
+overlay_routing_protocol_address_family: ipv6
 
 fabric_ip_addressing:
   mlag:
@@ -20,6 +23,8 @@ bgp_peer_groups:
       remove_private_as:
         replace_as: true
       bfd: false
+  ipv4_underlay_peers:
+    name: LOCAL-UNDERLAY-PEERS
 
 l3_edge:
   # Define a new IP pool that will be used to asign IP addreses to L3 Edge interfaces.

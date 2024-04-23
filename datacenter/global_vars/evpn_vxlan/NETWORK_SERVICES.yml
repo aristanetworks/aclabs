@@ -68,10 +68,10 @@ tenants:
             profile: VLAN80
   - name: Prod
     mac_vrf_vni_base: 10000
-    # evpn_l3_multicast:
-    #   enabled: true
-    #   evpn_underlay_l3_multicast_group_ipv4_pool: 232.1.1.1/24
-    #   evpn_underlay_l3_multicast_group_ipv4_pool_offset: -49999
+    evpn_l3_multicast:
+      enabled: true
+      evpn_underlay_l3_multicast_group_ipv4_pool: 232.1.1.1/24
+      evpn_underlay_l3_multicast_group_ipv4_pool_offset: -49999
     vrfs:
       - name: Prod
         vrf_vni: 50001
@@ -102,10 +102,10 @@ tenants:
             profile: VLAN40
   - name: Dev
     mac_vrf_vni_base: 10000
-    # evpn_l3_multicast:
-    #   enabled: true
-    #   evpn_underlay_l3_multicast_group_ipv4_pool: 232.2.2.1/24
-    #   evpn_underlay_l3_multicast_group_ipv4_pool_offset: -50000
+    evpn_l3_multicast:
+      enabled: true
+      evpn_underlay_l3_multicast_group_ipv4_pool: 232.2.2.1/24
+      evpn_underlay_l3_multicast_group_ipv4_pool_offset: -50000
     vrfs:
       - name: Dev
         vrf_vni: 50002
@@ -188,6 +188,9 @@ svi_profiles:
   - profile: VLAN80
     parent_profile: global-svi-profile
     ip_address_virtual: 10.80.80.1/24
+  - profile: VLAN90
+    parent_profile: global-svi-profile
+    ip_address_virtual: 10.90.90.1/24
   - profile: IPV6_VLAN10
     parent_profile: global-svi-profile
     ip_address_virtual: 10.10.10.1/24
