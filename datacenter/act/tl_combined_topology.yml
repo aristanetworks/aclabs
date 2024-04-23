@@ -2,7 +2,7 @@ cvp:
   instance: singlenode
   password: cvproot
   username: root
-  version: 2023.3.0
+  version: 2024.1.0
 generic:
   password: arista123
   username: cvpadmin
@@ -569,12 +569,6 @@ links:
 - connection:
   - D-LEAF7:Ethernet4
   - D-SPINE4:Ethernet7
-- connection:
-  - D-LEAF7:Ethernet5
-  - D-LEAF8:Ethernet5
-- connection:
-  - D-LEAF7:Ethernet6
-  - D-LEAF8:Ethernet6
 - connection:
   - D-LEAF7:Ethernet7
   - BB1:Ethernet1
