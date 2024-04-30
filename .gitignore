@@ -7,3 +7,4 @@
 **/tl-configs/**
 # ignore secrets
 **.tok**
+!**/servers/intended/**
