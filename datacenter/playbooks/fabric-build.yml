@@ -23,3 +23,5 @@
     - name: gen act topo
       ansible.builtin.import_role:
         name: act_topology_gen
+      vars:
+        connected_endpoints: true

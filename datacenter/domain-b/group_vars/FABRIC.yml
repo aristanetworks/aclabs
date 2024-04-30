@@ -7,7 +7,7 @@ overlay_routing_protocol: ibgp
 isis_area_id: 49.1111
 evpn_short_esi_prefix: '0000:000b:'
 
-#underlay_multicast: true
+underlay_multicast: true
 
 p2p_uplinks_mtu: 1500
 

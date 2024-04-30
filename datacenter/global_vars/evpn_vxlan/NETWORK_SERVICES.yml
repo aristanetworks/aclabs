@@ -206,7 +206,7 @@ svi_profiles:
     parent_profile: global-svi-profile
     ip_address_virtual: 10.70.70.1/24
     ipv6_address_virtuals: 
-      - '2001:db8:50:50::1/64'
+      - '2001:db8:70:70::1/64'
     ipv6_enable: true
   - profile: IPV6_VLAN90
     parent_profile: global-svi-profile

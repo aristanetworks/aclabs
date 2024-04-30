@@ -32,11 +32,7 @@ deploy-eapi-domain-a: ## Deploy Configs via eAPI
 
 .PHONY: deploy-cvp-domain-a
 deploy-cvp-domain-a: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
-	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-a/inventory.yml
-
-.PHONY: deploy-servers-domain-a
-deploy-servers-domain-a: ## Deploy Server Configs via eAPI
-	ansible-playbook playbooks/server-deploy-eapi.yml -i domain-a/inventory.yml -e "target_hosts=DOMAIN_A_HOSTS"
+	ansible-playbook playbooks/fabric-deploy-cvp.yml -i domain-a/inventory.yml
 
 .PHONY: validate-domain-a
 validate-domain-a:
@@ -59,12 +55,8 @@ deploy-eapi-domain-b: ## Deploy Configs via eAPI
 	ansible-playbook playbooks/fabric-deploy-eapi.yml -i domain-b/inventory.yml
 
 .PHONY: deploy-cvp-domain-b
-deploy-cvp-domain-b: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
-	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-b/inventory.yml
-
-.PHONY: deploy-servers-domain-b
-deploy-servers-domain-b: ## Deploy Server Configs via eAPI
-	ansible-playbook playbooks/server-deploy-eapi.yml -i domain-b/inventory.yml -e "target_hosts=DOMAIN_B_HOSTS"
+deploy-cvp-domain-b: ## Deploy Configs via CVP
+	ansible-playbook playbooks/fabric-deploy-cvp.yml -i domain-b/inventory.yml
 
 .PHONY: validate-domain-b
 validate-domain-b:
@@ -88,11 +80,7 @@ deploy-eapi-domain-c: ## Deploy Configs via eAPI
 
 .PHONY: deploy-cvp-domain-c
 deploy-cvp-domain-c: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
-	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-c/inventory.yml
-
-.PHONY: deploy-servers-domain-c
-deploy-servers-domain-c: ## Deploy Server Configs via eAPI
-	ansible-playbook playbooks/server-deploy-eapi.yml -i domain-c/inventory.yml -e "target_hosts=DOMAIN_C_HOSTS"
+	ansible-playbook playbooks/fabric-deploy-cvp.yml -i domain-c/inventory.yml
 
 .PHONY: validate-domain-c
 validate-domain-c:
@@ -116,7 +104,7 @@ deploy-eapi-domain-d: ## Deploy Configs via eAPI
 
 .PHONY: deploy-cvp-domain-d
 deploy-cvp-domain-d: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
-	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i domain-d/inventory.yml
+	ansible-playbook playbooks/fabric-deploy-cvp.yml -i domain-d/inventory.yml
 
 .PHONY: deploy-servers-domain-d
 deploy-servers-domain-d: ## Deploy Server Configs via eAPI
@@ -144,8 +132,18 @@ deploy-backbone: ## Deploy Configs via eAPI
 
 .PHONY: deploy-cvp-backbone
 deploy-cvp-backbone: ## Deploy using CV CI workflow (i.e. workspaces, studios, etc)
-	ansible-playbook playbooks/fabric-deploy-cv-ci.yml -i backbone/inventory.yml
+	ansible-playbook playbooks/fabric-deploy-cvp.yml -i backbone/inventory.yml
 
+########################################################
+# Servers
+########################################################
+
+.PHONY: deploy-servers-eapi
+	ansible-playbook playbooks/servers-deploy-eapi.yml -i servers/inventory.yml
+
+.PHONY: deploy-servers-cv
+	ansible-playbook playbooks/servers-deploy-cvp.yml -i servers/inventory.yml
+	
 ########################################################
 # Replace domain inventory ansible_hosts with ACT inventory ansible_hosts 
 ########################################################

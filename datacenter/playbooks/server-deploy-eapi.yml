@@ -1,12 +1,10 @@
 ---
 
 - name: Deploy server configs
-  hosts: "{{ target_hosts }}"
+  hosts: SERVERS
   connection: local
   gather_facts: false
   vars:
-      # EOS Configuration Directory name
-      eos_config_dir_name: 'server_configs'
       ansible_user: cvpadmin
       ansible_password: arista123
       ansible_network_os: arista.eos.eos
