@@ -1,2 +1,3 @@
 ---
 # vars file for act_topology_gen
+non_fabric_nodes:

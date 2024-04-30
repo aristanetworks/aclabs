@@ -13,7 +13,6 @@ act_veos_password: "arista123"
 # Options to add cvp, ansible node and connected nodes to topology
 act_add_cvp: true
 act_add_ansible_node: true
-# act_add_connected_nodes: false
 
 # Generic node options
 act_generic_user: "cvpadmin"
@@ -28,6 +27,9 @@ act_cvp_user: "root"
 act_cvp_password: "cvproot"
 act_cvp_instance_type: "singlenode" # Currently the only supported type
 act_cvp_ip: 192.168.0.5
+
+# Add AVD connected endpoints (servers)
+connected_endpoints: false
 
 # Default ACT configuration file generated
 act_configuration: '{{ lab_topology_dir }}/{{ fabric_name }}-act_topology.yml'

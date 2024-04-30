@@ -107,12 +107,22 @@ make build-domain-a build-domain-b build-domain-c build-domain-d build-domain-ba
 ```
 ## Deploy
 
-Deploy using eapi
+Deploy Fabric using eapi
 ```
 make deploy-eapi-domain-<domain>
 ```
 
-Deploy using cvp
+Deploy Fabric using cvp
 ```
 make deploy-cvp-domain-<domain>
+```
+
+Deploy Servers using eapi
+```
+make deploy-servers-eapi
+```
+
+Deploy Servers using CVP
+```
+make deploy-servers-cv
 ```
