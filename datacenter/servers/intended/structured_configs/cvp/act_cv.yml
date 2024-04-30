@@ -1,0 +1,105 @@
+---
+cvp_devices:
+  - fqdn: A1
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_A1
+  - fqdn: A2
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_A2
+  - fqdn: A3
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_A3
+  - fqdn: A4
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_A4
+  - fqdn: A5
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_A5
+  - fqdn: A6
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_A6
+  - fqdn: B1
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_B1
+  - fqdn: B2
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_B2
+  - fqdn: B3
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_B3
+  - fqdn: B4
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_B4
+  - fqdn: B5
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_B5
+  - fqdn: B6
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_B6
+  - fqdn: B7
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_B7
+  - fqdn: C1
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_C1
+  - fqdn: C2
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_C2
+  - fqdn: C3
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_C3
+  - fqdn: C4
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_C4
+  - fqdn: C5
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_C5
+  - fqdn: C6
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_C6
+  - fqdn: D1
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_D1
+  - fqdn: D2
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_D2
+  - fqdn: D3
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_D3
+  - fqdn: D4
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_D4
+  - fqdn: D5
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_D5
+  - fqdn: D6
+    parentContainerName: SERVERS
+    configlets:
+      - AVD_D6
+cvp_containers:
+  SERVERS:
+    parentContainerName: Tenant
