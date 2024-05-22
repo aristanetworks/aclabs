@@ -12,37 +12,40 @@ underlay_multicast: true
 p2p_uplinks_mtu: 1500
 
 l3_edge:
-  # Define a new IP pool that will be used to asign IP addreses to L3 Edge interfaces.
-  p2p_links_ip_pools:
-    - name: B_IP_pool
-      ipv4_pool: 172.16.2.0/24
   # Define a new link profile which will match the IP pool, the used ASNs and include the defined interface into underlay routing
   p2p_links_profiles:
     DCI_B_profile:
-      ip_pool: B_IP_pool
       include_in_underlay_protocol: false
   # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
   p2p_links:
   - id: 1
-    nodes: [B-LEAF7, BB1]
-    as: [65200, 65500]
-    interfaces: [Ethernet7, Ethernet3]
+    nodes: [BB1, B-LEAF7]
+    interfaces: [Ethernet3, Ethernet7]
     profile: DCI_B_profile
+    ip:
+      - 172.16.2.0/31
+      - 172.16.2.1/31
   - id: 2
-    nodes: [B-LEAF7, BB2]
-    as: [65200, 65500]
-    interfaces: [Ethernet8, Ethernet3]
+    nodes: [BB2, B-LEAF7]
+    interfaces: [Ethernet3, Ethernet8]
     profile: DCI_B_profile
+    ip:
+      - 172.16.2.4/31
+      - 172.16.2.5/31
   - id: 3
-    nodes: [B-LEAF8, BB1]
-    as: [65200, 65500]
-    interfaces: [Ethernet7, Ethernet4]
+    nodes: [BB1, B-LEAF8]
+    interfaces: [Ethernet4, Ethernet7]
     profile: DCI_B_profile
+    ip:
+      - 172.16.2.2/31
+      - 172.16.2.3/31
   - id: 4
-    nodes: [B-LEAF8, BB2]
-    as: [65200, 65500]
-    interfaces: [Ethernet8, Ethernet4]
+    nodes: [BB2, B-LEAF8]
+    interfaces: [Ethernet4, Ethernet8]
     profile: DCI_B_profile
+    ip:
+      - 172.16.2.6/31
+      - 172.16.2.7/31
 
 custom_templates:
   - vxlan-mcast-overlay.j2

@@ -25,10 +25,10 @@ csc_router_bgp:
       ebgp_multihop: 15
       send_community: all
   neighbors:
-    - ip_address: 172.16.2.1
+    - ip_address: 172.16.2.0
       peer_group: IPv4-REMOTE-UNDERLAY-PEERS
       description: BB1_UNDERLAY
-    - ip_address: 172.16.2.3
+    - ip_address: 172.16.2.4
       peer_group: IPv4-REMOTE-UNDERLAY-PEERS
       description: BB2_UNDERLAY
     - ip_address: 1.1.0.1

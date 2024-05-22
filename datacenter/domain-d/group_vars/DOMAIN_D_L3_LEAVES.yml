@@ -5,3 +5,8 @@ dhcp_relay:
   tunnel_requests_disabled: true
   mlag_peerlink_requests_disabled: true
 
+ip_extcommunity_lists_regexp:
+  - name: 'evpn-imported'
+    entries:
+      - type: 'permit'
+        regexp: 'RT.*'

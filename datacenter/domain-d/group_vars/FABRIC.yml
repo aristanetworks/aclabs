@@ -27,13 +27,9 @@ bgp_peer_groups:
     name: LOCAL-UNDERLAY-PEERS
 
 l3_edge:
-  # Define a new IP pool that will be used to asign IP addreses to L3 Edge interfaces.
-  p2p_links_ip_pools:
-    D_IP_pool: 172.16.4.0/24
   # Define a new link profile which will match the IP pool, the used ASNs and include the defined interface into underlay routing
   p2p_links_profiles:
     DCI_D_profile:
-      ip_pool: D_IP_pool
       as: 
       - 65478
       - 65500
@@ -41,18 +37,30 @@ l3_edge:
   # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
   p2p_links:
   - id: 1
-    nodes: [D-LEAF7, BB1]
-    interfaces: [Ethernet7, Ethernet1]
+    nodes: [BB1, D-LEAF7]
+    interfaces: [Ethernet7, Ethernet7]
     profile: DCI_D_profile
+    ip:
+      - 172.16.4.0/31
+      - 172.16.4.1/31
   - id: 2
-    nodes: [D-LEAF7, BB2]
-    interfaces: [Ethernet8, Ethernet1]
+    nodes: [BB2, D-LEAF7]
+    interfaces: [Ethernet7, Ethernet8]
     profile: DCI_D_profile
+    ip:
+      - 172.16.4.4/31
+      - 172.16.4.5/31
   - id: 3
-    nodes: [D-LEAF8, BB1]
-    interfaces: [Ethernet7, Ethernet2]
+    nodes: [BB1, D-LEAF8]
+    interfaces: [Ethernet8, Ethernet7]
     profile: DCI_D_profile
+    ip:
+      - 172.16.4.2/31
+      - 172.16.4.3/31
   - id: 4
-    nodes: [D-LEAF8, BB2]
-    interfaces: [Ethernet8, Ethernet2]
+    nodes: [BB2, D-LEAF8]
+    interfaces: [Ethernet8, Ethernet8]
     profile: DCI_D_profile
+    ip:
+      - 172.16.4.6/31
+      - 172.16.4.7/31
