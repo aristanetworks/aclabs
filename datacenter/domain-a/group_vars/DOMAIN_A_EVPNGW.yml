@@ -38,4 +38,4 @@ monitor_connectivity:
           local_interfaces: Dev-Vtep-Diag
 
 custom_templates:
-  - af-evpn.j2
+  - evpngw-af-evpn.j2

@@ -130,10 +130,10 @@ l3leaf:
           inter_domain: true
         remote_peers:
           - hostname: BB1
-            bgp_as: 65500
+            bgp_as: 65000
             ip_address: 1.1.0.1
           - hostname: BB2
-            bgp_as: 65500
+            bgp_as: 65000
             ip_address: 1.1.0.2
       nodes:
         - name: A-LEAF7

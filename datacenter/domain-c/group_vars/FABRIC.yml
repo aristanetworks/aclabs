@@ -12,7 +12,7 @@ evpn_multicast: true
 bgp_peer_groups: 
   evpn_overlay_core:
     structured_config:
-      local_as: 65500
+      local_as: 65000
       remove_private_as:
         replace_as: true
       bfd: false
@@ -23,37 +23,40 @@ fabric_ip_addressing:
     
 # # L3 Edge port definitions. This can be any port in the entire Fabric, where IP interfaces are defined.
 l3_edge:
-  # Define a new IP pool that will be used to asign IP addreses to L3 Edge interfaces.
-  p2p_links_ip_pools:
-    - name: C_IP_pool 
-      ipv4_pool: 172.16.3.0/24
   # Define a new link profile which will match the IP pool, the used ASNs and include the defined interface into underlay routing
   p2p_links_profiles:
     - name: DCI_C_profile
-      ip_pool: C_IP_pool
       include_in_underlay_protocol: false
   # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
   p2p_links:
-  - nodes: [C-LEAF7, BB1]
-    id: 1
-    interfaces: [Ethernet7, Ethernet5]
-    as: [65378, 65500]
+  - id: 1
+    nodes: [BB1, C-LEAF7]
+    interfaces: [Ethernet5, Ethernet7]
     profile: DCI_C_profile
-  - nodes: [C-LEAF7, BB2]
-    id: 2
-    interfaces: [Ethernet8, Ethernet6]
-    as: [65378, 65500]
+    ip:
+      - 172.16.3.0/31
+      - 172.16.3.1/31
+  - id: 2
+    nodes: [BB2, C-LEAF7]
+    interfaces: [Ethernet5, Ethernet8]
     profile: DCI_C_profile
-  - nodes: [C-LEAF8, BB1]
-    id: 3
-    interfaces: [Ethernet7, Ethernet7]
-    as: [65378, 65500]
+    ip:
+      - 172.16.3.4/31
+      - 172.16.3.5/31
+  - id: 3
+    nodes: [BB1, C-LEAF8]
+    interfaces: [Ethernet6, Ethernet7]
     profile: DCI_C_profile
-  - nodes: [C-LEAF8, BB2]
-    id: 4
-    interfaces: [Ethernet8, Ethernet8]
-    as: [65378, 65500]
+    ip:
+      - 172.16.3.2/31
+      - 172.16.3.3/31
+  - id: 4
+    nodes: [BB2, C-LEAF8]
+    interfaces: [Ethernet6, Ethernet8]
     profile: DCI_C_profile
+    ip:
+      - 172.16.3.6/31
+      - 172.16.3.7/31
 
 
 custom_templates:

@@ -1,0 +1,37 @@
+{% if type is arista.avd.defined('l3leaf') %}
+{# ipv6 unicast-routing per vrf and ipv6 addresses on svi's #}
+{%    for vrf in vrfs %}
+{%          if vrf.name is arista.avd.defined('Prod') %}
+ipv6 unicast-routing vrf Prod
+{%          elif vrf.name is arista.avd.defined('Dev') %}
+ipv6 unicast-routing vrf Dev
+{%          endif %}
+{%    endfor %}
+{%    for vlan in vlans %}
+interface Vlan{{ vlan.id }}
+   ipv6 address virtual 2001:db8:{{vlan.id}}:{{vlan.id}}::1/64
+!
+{%    endfor %}
+{# address family evpn #}
+{%    if router_bgp.address_family_evpn is arista.avd.defined %}
+!
+router bgp {{ router_bgp.as }}    
+   !
+   address-family evpn  
+{%          if _evpn_aa_multihoming is arista.avd.defined(true) %}
+      layer-2 fec in-place update
+{%          endif %}
+{%          if hostname == "B-LEAF7" %}
+      evpn ethernet-segment domain all
+         identifier 0000:bbbb:0007:0008:0000
+         designated-forwarder election algorithm preference 2000
+         route-target import 00:bb:bb:07:08:00
+{%          endif %}
+{%          if hostname == "B-LEAF8" %}
+      evpn ethernet-segment domain all
+         identifier 0000:bbbb:0007:0008:0000
+         designated-forwarder election algorithm preference 1000
+         route-target import 00:bb:bb:07:08:00
+{%          endif %}
+{%    endif %}
+{% endif %}

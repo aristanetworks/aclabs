@@ -4,6 +4,10 @@ type: l3leaf
 evpn_multicast: false
 underlay_multicast: false
 
+csc_vlan_interfaces:
+  - name: 'Vlan4094'
+    mtu: 1500
+
 csc_router_bgp:
   bgp:
     bestpath:
@@ -57,4 +61,4 @@ monitor_connectivity:
           local_interfaces: Dev-Vtep-Diag
 
 custom_templates:
-  - af-evpn.j2
+  - evpngw-af-evpn.j2

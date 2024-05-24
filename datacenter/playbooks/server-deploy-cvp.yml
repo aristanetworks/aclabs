@@ -37,4 +37,4 @@
           - 'D5'
           - 'D6'
         state: present
-        execute_tasks: false
+        execute_tasks: true

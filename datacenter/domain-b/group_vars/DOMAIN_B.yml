@@ -135,10 +135,10 @@ l3leaf:
           inter_domain: true
         remote_peers:
           - hostname: BB1
-            bgp_as: 65500
+            bgp_as: 65000
             ip_address: 1.1.0.1
           - hostname: BB2
-            bgp_as: 65500
+            bgp_as: 65000
             ip_address: 1.1.0.2
       nodes:
         - name: B-LEAF7
@@ -161,18 +161,10 @@ l3leaf:
 l2leaf:
   defaults:
     platform: vEOS-lab
-    uplink_interfaces: ['Ethernet1', 'Ethernet2']
-    uplink_switches: ['B-LEAF5','B-LEAF6']
-    spanning_tree_mode: rapid-pvst
-    raw_eos_cli: |
-      agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
-    filter:
-        only_vlans_in_use: true
   nodes:
     - name: B-SW1
       id: 1
       mgmt_ip: 192.168.0.119/24
-      uplink_switch_interfaces:
-        - Ethernet7
-        - Ethernet7
+      filter:
+        only_vlans_in_use: true
       

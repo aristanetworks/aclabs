@@ -5,3 +5,20 @@ dhcp_relay:
   tunnel_requests_disabled: true
   mlag_peerlink_requests_disabled: true
 
+ip_extcommunity_lists_regexp:
+  - name: 'evpn-imported'
+    entries:
+      - type: 'permit'
+        regexp: 'RT.*'
+
+csc_router_bgp:
+  address_family_ipv6:
+    redistribute_routes:
+      - source_protocol: "connected"
+
+csc_vlan_interfaces:
+  - name: 'Vlan4094'
+    mtu: 1500
+
+custom_templates:
+  - dom-d-template.j2

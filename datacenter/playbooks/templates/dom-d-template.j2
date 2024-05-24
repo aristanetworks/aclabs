@@ -1,0 +1,14 @@
+{% if type is arista.avd.defined('l3leaf') %}
+interface Vxlan1
+    vxlan encapsulation ipv4 ipv6
+{%  if hostname == "D-LEAF1" or hostname == "D-LEAF2" %}
+interface Loopback1
+    ipv6 address 2001:db8:d:2::1/64
+{%  elif hostname == "D-LEAF3" or hostname == "D-LEAF4" %}
+interface Loopback1
+    ipv6 address 2001:db8:d:2::3/64
+{%  elif hostname == "D-LEAF5" or hostname == "D-LEAF6" %}
+interface Loopback1
+    ipv6 address 2001:db8:d:2::5/64
+{%  endif %}
+{% endif %}

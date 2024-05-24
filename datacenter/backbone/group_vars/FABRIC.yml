@@ -22,18 +22,23 @@ l3_edge:
   p2p_links_profiles:
     DCI_A_profile:
       as: 
-      - 65500
+      - 65000
       - 65178 
       include_in_underlay_protocol: true
     DCI_B_profile:
       as:
-      - 65500
+      - 65000
       - 65200
       include_in_underlay_protocol: true
     DCI_C_profile:
       as:
-      - 65500
+      - 65000
       - 65378
+      include_in_underlay_protocol: true
+    DCI_D_profile:
+      as:
+      - 65000
+      - 65478
       include_in_underlay_protocol: true
   # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
   p2p_links:
@@ -42,82 +47,110 @@ l3_edge:
     interfaces: [Ethernet1, Ethernet7]
     profile: DCI_A_profile
     ip:
-      - 172.16.1.1/31
       - 172.16.1.0/31
+      - 172.16.1.1/31
   - id: 2
     nodes: [BB2, A-LEAF7]
     interfaces: [Ethernet1, Ethernet8]
     profile: DCI_A_profile
     ip:
-      - 172.16.1.3/31
-      - 172.16.1.2/31
+      - 172.16.1.4/31
+      - 172.16.1.5/31
   - id: 3
     nodes: [BB1, A-LEAF8]
     interfaces: [Ethernet2, Ethernet7]
     profile: DCI_A_profile
     ip:
-      - 172.16.1.5/31
-      - 172.16.1.4/31
+      - 172.16.1.2/31
+      - 172.16.1.3/31
   - id: 4
     nodes: [BB2, A-LEAF8]
     interfaces: [Ethernet2, Ethernet8]
     profile: DCI_A_profile
     ip:
-      - 172.16.1.7/31
       - 172.16.1.6/31
+      - 172.16.1.7/31
   - id: 1
     nodes: [BB1, B-LEAF7]
     interfaces: [Ethernet3, Ethernet7]
     profile: DCI_B_profile
     ip:
-      - 172.16.2.1/31
       - 172.16.2.0/31
+      - 172.16.2.1/31
   - id: 2
     nodes: [BB2, B-LEAF7]
     interfaces: [Ethernet3, Ethernet8]
     profile: DCI_B_profile
     ip:
-      - 172.16.2.3/31
-      - 172.16.2.2/31
+      - 172.16.2.4/31
+      - 172.16.2.5/31
   - id: 3
     nodes: [BB1, B-LEAF8]
     interfaces: [Ethernet4, Ethernet7]
     profile: DCI_B_profile
     ip:
-      - 172.16.2.5/31
-      - 172.16.2.4/31
+      - 172.16.2.2/31
+      - 172.16.2.3/31
   - id: 4
     nodes: [BB2, B-LEAF8]
     interfaces: [Ethernet4, Ethernet8]
     profile: DCI_B_profile
     ip:
-      - 172.16.2.7/31
       - 172.16.2.6/31
+      - 172.16.2.7/31
   - id: 1
     nodes: [BB1, C-LEAF7]
     interfaces: [Ethernet5, Ethernet7]
     profile: DCI_C_profile
     ip:
-      - 172.16.3.1/31
       - 172.16.3.0/31
+      - 172.16.3.1/31
   - id: 2
     nodes: [BB2, C-LEAF7]
     interfaces: [Ethernet5, Ethernet8]
     profile: DCI_C_profile
     ip:
-      - 172.16.3.3/31
-      - 172.16.3.2/31
+      - 172.16.3.4/31
+      - 172.16.3.5/31
   - id: 3
     nodes: [BB1, C-LEAF8]
     interfaces: [Ethernet6, Ethernet7]
     profile: DCI_C_profile
     ip:
-      - 172.16.3.5/31
-      - 172.16.3.4/31
+      - 172.16.3.2/31
+      - 172.16.3.3/31
   - id: 4
     nodes: [BB2, C-LEAF8]
     interfaces: [Ethernet6, Ethernet8]
     profile: DCI_C_profile
     ip:
-      - 172.16.3.7/31
       - 172.16.3.6/31
+      - 172.16.3.7/31
+  - id: 1
+    nodes: [BB1, D-LEAF7]
+    interfaces: [Ethernet7, Ethernet7]
+    profile: DCI_D_profile
+    ip:
+      - 172.16.4.0/31
+      - 172.16.4.1/31
+  - id: 2
+    nodes: [BB2, D-LEAF7]
+    interfaces: [Ethernet7, Ethernet8]
+    profile: DCI_D_profile
+    ip:
+      - 172.16.4.4/31
+      - 172.16.4.5/31
+  - id: 3
+    nodes: [BB1, D-LEAF8]
+    interfaces: [Ethernet8, Ethernet7]
+    profile: DCI_D_profile
+    ip:
+      - 172.16.4.2/31
+      - 172.16.4.3/31
+  - id: 4
+    nodes: [BB2, D-LEAF8]
+    interfaces: [Ethernet8, Ethernet8]
+    profile: DCI_D_profile
+    ip:
+      - 172.16.4.6/31
+      - 172.16.4.7/31

@@ -49,7 +49,6 @@ def merge_topologies(input_files, output_file):
         yaml.dump(master_data, f, default_flow_style=False)  # Try to preserve formatting
 
 input_files = [
-    'backbone/lab_topology/FABRIC-act_topology.yml', 
     'domain-a/lab_topology/FABRIC-act_topology.yml', 
     'domain-b/lab_topology/FABRIC-act_topology.yml',
     'domain-c/lab_topology/FABRIC-act_topology.yml',

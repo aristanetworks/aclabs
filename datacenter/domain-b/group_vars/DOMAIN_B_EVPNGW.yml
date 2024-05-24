@@ -16,7 +16,7 @@ csc_router_bgp:
     bestpath:
       d_path: true
   address_family_evpn:
-    domain_identifier: "2:2"
+    domain_identifier: "2:2" 
 
 csc_community_lists:
   - name: CL-LOCAL-DOMAIN-ORIGINATED 
@@ -94,4 +94,4 @@ monitor_connectivity:
           local_interfaces: Dev-Vtep-Diag
 
 custom_templates:
-  - af-evpn.j2
+  - evpngw-af-evpn.j2
