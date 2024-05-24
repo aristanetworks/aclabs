@@ -22,22 +22,22 @@ l3_edge:
   p2p_links_profiles:
     DCI_A_profile:
       as: 
-      - 65500
+      - 65000
       - 65178 
       include_in_underlay_protocol: true
     DCI_B_profile:
       as:
-      - 65500
+      - 65000
       - 65200
       include_in_underlay_protocol: true
     DCI_C_profile:
       as:
-      - 65500
+      - 65000
       - 65378
       include_in_underlay_protocol: true
     DCI_D_profile:
       as:
-      - 65500
+      - 65000
       - 65478
       include_in_underlay_protocol: true
   # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
