@@ -5,6 +5,9 @@ dhcp_relay:
   tunnel_requests_disabled: true
   mlag_peerlink_requests_disabled: true
 
+router_l2_vpn:
+  arp_learning_bridged: true
+
 csc_vlan_interfaces:
   - name: 'Vlan4094'
     mtu: 1500

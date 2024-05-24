@@ -2,10 +2,10 @@
 
 csc_router_bgp:
   neighbors:
-  - ip_address: 172.16.3.5
+  - ip_address: 172.16.3.2
     peer_group: IPv4-REMOTE-UNDERLAY-PEERS
     description: BB1_UNDERLAY
-  - ip_address: 172.16.3.7
+  - ip_address: 172.16.3.6
     peer_group: IPv4-REMOTE-UNDERLAY-PEERS
     description: BB2_UNDERLAY
   address_family_ipv4:

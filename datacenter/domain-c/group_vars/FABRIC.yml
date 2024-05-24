@@ -12,7 +12,7 @@ evpn_multicast: true
 bgp_peer_groups: 
   evpn_overlay_core:
     structured_config:
-      local_as: 65500
+      local_as: 65000
       remove_private_as:
         replace_as: true
       bfd: false
