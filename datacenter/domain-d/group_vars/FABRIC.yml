@@ -19,7 +19,7 @@ fabric_ip_addressing:
 bgp_peer_groups:
   evpn_overlay_core:
     structured_config:
-      local_as: 65500
+      local_as: 65000
       remove_private_as:
         replace_as: true
       bfd: false
@@ -31,8 +31,8 @@ l3_edge:
   p2p_links_profiles:
     DCI_D_profile:
       as: 
+      - 65000
       - 65478
-      - 65500
       include_in_underlay_protocol: true
   # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
   p2p_links:

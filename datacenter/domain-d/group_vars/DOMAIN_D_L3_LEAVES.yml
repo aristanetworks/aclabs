@@ -10,3 +10,15 @@ ip_extcommunity_lists_regexp:
     entries:
       - type: 'permit'
         regexp: 'RT.*'
+
+csc_router_bgp:
+  address_family_ipv6:
+    redistribute_routes:
+      - source_protocol: "connected"
+
+csc_vlan_interfaces:
+  - name: 'Vlan4094'
+    mtu: 1500
+
+custom_templates:
+  - dom-d-template.j2
