@@ -1,12 +1,16 @@
+veos:
+  password: arista123
+  username: cvpadmin
+  version: 4.32.0F
 cvp:
   instance: singlenode
   password: cvproot
   username: root
-  version: 2024.1.0
-generic:
+  version: 2024.1.1
+tools-server:
   password: arista123
   username: cvpadmin
-  version: ubuntu-2204-lts
+  version: rocky-8-5
 links:
 - connection:
   - BB1:Ethernet1
@@ -27,6 +31,12 @@ links:
   - BB1:Ethernet6
   - C-LEAF8:Ethernet7
 - connection:
+  - BB1:Ethernet7
+  - D-LEAF7:Ethernet7
+- connection:
+  - BB1:Ethernet8
+  - D-LEAF8:Ethernet7
+- connection:
   - BB2:Ethernet1
   - A-LEAF7:Ethernet8
 - connection:
@@ -44,6 +54,15 @@ links:
 - connection:
   - BB2:Ethernet6
   - C-LEAF8:Ethernet8
+- connection:
+  - BB2:Ethernet7
+  - D-LEAF7:Ethernet8
+- connection:
+  - BB2:Ethernet8
+  - D-LEAF8:Ethernet8
+- connection:
+  - BB1:Ethernet9
+  - BB2:Ethernet9
 - connection:
   - A-LEAF1:Ethernet1
   - A-SPINE1:Ethernet1
@@ -423,20 +442,11 @@ links:
   - C-LEAF7:Ethernet6
   - C-LEAF8:Ethernet6
 - connection:
-  - C-LEAF7:Ethernet8
-  - BB2:Ethernet6
-- connection:
   - C-LEAF8:Ethernet1
   - C-SPINE1:Ethernet8
 - connection:
   - C-LEAF8:Ethernet2
   - C-SPINE2:Ethernet8
-- connection:
-  - C-LEAF8:Ethernet7
-  - BB1:Ethernet7
-- connection:
-  - C-LEAF8:Ethernet8
-  - BB2:Ethernet8
 - connection:
   - D-LEAF1:Ethernet1
   - D-SPINE1:Ethernet1
@@ -570,12 +580,6 @@ links:
   - D-LEAF7:Ethernet4
   - D-SPINE4:Ethernet7
 - connection:
-  - D-LEAF7:Ethernet7
-  - BB1:Ethernet1
-- connection:
-  - D-LEAF7:Ethernet8
-  - BB2:Ethernet1
-- connection:
   - D-LEAF8:Ethernet1
   - D-SPINE1:Ethernet8
 - connection:
@@ -587,12 +591,6 @@ links:
 - connection:
   - D-LEAF8:Ethernet4
   - D-SPINE4:Ethernet8
-- connection:
-  - D-LEAF8:Ethernet7
-  - BB1:Ethernet2
-- connection:
-  - D-LEAF8:Ethernet8
-  - BB2:Ethernet2
 nodes:
 - BB1:
     ip_addr: 192.168.0.9
@@ -602,13 +600,6 @@ nodes:
     ip_addr: 192.168.0.10
     node_type: veos
     version: 4.32.0F
-- act-cv:
-    auto_configuration: true
-    ip_addr: 192.168.0.5
-    node_type: cvp
-- tool-server:
-    ip_addr: 192.168.0.6
-    node_type: generic
 - A-LEAF1:
     ip_addr: 192.168.0.101
     node_type: veos
@@ -657,24 +648,13 @@ nodes:
     ip_addr: 192.168.0.14
     node_type: veos
     version: 4.32.0F
-- A1:
-    ip_addr: 192.168.0.221
-    node_type: veos
-- A2:
-    ip_addr: 192.168.0.222
-    node_type: veos
-- A3:
-    ip_addr: 192.168.0.223
-    node_type: veos
-- A4:
-    ip_addr: 192.168.0.224
-    node_type: veos
-- A5:
-    ip_addr: 192.168.0.225
-    node_type: veos
-- A6:
-    ip_addr: 192.168.0.226
-    node_type: veos
+- act-cv:
+    auto_configuration: true
+    ip_addr: 192.168.0.5
+    node_type: cvp
+- ansible-runner:
+    ip_addr: 192.168.0.6
+    node_type: tools-server
 - B-LEAF1:
     ip_addr: 192.168.0.111
     node_type: veos
@@ -727,27 +707,6 @@ nodes:
     ip_addr: 192.168.0.119
     node_type: veos
     version: 4.32.0F
-- B1:
-    ip_addr: 192.168.0.227
-    node_type: veos
-- B2:
-    ip_addr: 192.168.0.228
-    node_type: veos
-- B3:
-    ip_addr: 192.168.0.229
-    node_type: veos
-- B4:
-    ip_addr: 192.168.0.230
-    node_type: veos
-- B5:
-    ip_addr: 192.168.0.231
-    node_type: veos
-- B6:
-    ip_addr: 192.168.0.232
-    node_type: veos
-- B7:
-    ip_addr: 192.168.0.233
-    node_type: veos
 - C-LEAF1:
     ip_addr: 192.168.0.121
     node_type: veos
@@ -788,24 +747,6 @@ nodes:
     ip_addr: 192.168.0.20
     node_type: veos
     version: 4.32.0F
-- C1:
-    ip_addr: 192.168.0.234
-    node_type: veos
-- C2:
-    ip_addr: 192.168.0.235
-    node_type: veos
-- C3:
-    ip_addr: 192.168.0.236
-    node_type: veos
-- C4:
-    ip_addr: 192.168.0.237
-    node_type: veos
-- C5:
-    ip_addr: 192.168.0.238
-    node_type: veos
-- C6:
-    ip_addr: 192.168.0.239
-    node_type: veos
 - D-LEAF1:
     ip_addr: 192.168.0.129
     node_type: veos
@@ -854,6 +795,63 @@ nodes:
     ip_addr: 192.168.0.24
     node_type: veos
     version: 4.32.0F
+- A1:
+    ip_addr: 192.168.0.221
+    node_type: veos
+- A2:
+    ip_addr: 192.168.0.222
+    node_type: veos
+- A3:
+    ip_addr: 192.168.0.223
+    node_type: veos
+- A4:
+    ip_addr: 192.168.0.224
+    node_type: veos
+- A5:
+    ip_addr: 192.168.0.225
+    node_type: veos
+- A6:
+    ip_addr: 192.168.0.226
+    node_type: veos
+- B1:
+    ip_addr: 192.168.0.227
+    node_type: veos
+- B2:
+    ip_addr: 192.168.0.228
+    node_type: veos
+- B3:
+    ip_addr: 192.168.0.229
+    node_type: veos
+- B4:
+    ip_addr: 192.168.0.230
+    node_type: veos
+- B5:
+    ip_addr: 192.168.0.231
+    node_type: veos
+- B6:
+    ip_addr: 192.168.0.232
+    node_type: veos
+- B7:
+    ip_addr: 192.168.0.233
+    node_type: veos    
+- C1:
+    ip_addr: 192.168.0.234
+    node_type: veos
+- C2:
+    ip_addr: 192.168.0.235
+    node_type: veos
+- C3:
+    ip_addr: 192.168.0.236
+    node_type: veos
+- C4:
+    ip_addr: 192.168.0.237
+    node_type: veos
+- C5:
+    ip_addr: 192.168.0.238
+    node_type: veos
+- C6:
+    ip_addr: 192.168.0.239
+    node_type: veos
 - D1:
     ip_addr: 192.168.0.240
     node_type: veos
@@ -871,8 +869,4 @@ nodes:
     node_type: veos
 - D6:
     ip_addr: 192.168.0.245
-    node_type: veos
-veos:
-  password: arista123
-  username: cvpadmin
-  version: 4.32.0F
+    node_type: veos    
