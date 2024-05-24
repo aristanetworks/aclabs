@@ -1,0 +1,17 @@
+---
+
+csc_ethernet_interfaces:
+  - name: Ethernet7
+    evpn_ethernet_segment:
+
+      # EVPN Ethernet Segment Identifier (Type 1 format)
+      identifier: 0000:000b:0005:0006:0007
+      redundancy: single-active
+      designated_forwarder_election:
+        algorithm: preference
+
+        # Preference_value is only used when "algorithm" is "preference"
+        preference_value: 1000
+
+        # Dont_preempt is only used when "algorithm" is "preference"
+        dont_preempt: True

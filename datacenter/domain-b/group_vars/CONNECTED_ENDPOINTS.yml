@@ -89,7 +89,29 @@ servers:
         profile: DEFAULT
         vlans: 80
         description: B7
-
+  
+  # - name: B-SW1-1
+  #   adapters:
+  #     - switch_ports:
+  #         - Ethernet7
+  #       switches:
+  #         - B-LEAF5
+  #       endpoint_ports:
+  #         - Ethernet1
+  #       mode: trunk
+  #       vlans: "40,80"
+  #       spanning_tree_bpduguard: false
+  #       link_tracking:
+  #         enabled: True
+  #         name: CORE-LINKS
+  #       ethernet_segment:
+  #         short_esi: 0005:0006:0007
+  #         redundancy: single-active
+  #         designated_forwarder_algorithm: preference
+  #         designated_forwarder_preferences: 
+  #           - 2000
+  #         dont_preempt: true 
+  #       description: B-SW1
 network_ports:
   - switches:
       - B-LEAF5
@@ -103,12 +125,10 @@ network_ports:
     link_tracking:
       enabled: true
       name: CORE-LINKS
-    ethernet_segment:
-      short_esi: 0005:0006:0007
-      redundancy: single-active
-      designated_forwarder_algorithm: preference
-      designated_forwarder_preferences: 
-        - 2000
-        - 1000
-      dont_preempt: true
-    description: AA_TO_B-SW1
+    description: B-SW1
+  - switches:
+      - B-SW1
+    switch_ports:
+      - Ethernet1-2
+    enabled: true
+    mode: trunk

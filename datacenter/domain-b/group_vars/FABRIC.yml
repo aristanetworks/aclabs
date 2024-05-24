@@ -49,3 +49,4 @@ l3_edge:
 
 custom_templates:
   - vxlan-mcast-overlay.j2
+  - dom-b-template.j2

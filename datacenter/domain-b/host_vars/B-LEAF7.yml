@@ -13,10 +13,10 @@ csc_prefix_lists:
 csc_router_bgp:
   peer_groups:
     - name: EVPN-OVERLAY-CORE
-      local_as: 65500
+      local_as: 65000
       remove_private_as:
         replace_as: true
-      remote_as: 65500
+      remote_as: 65000
       route_map_in: RM-AS65000-EVPN-IN
       route_map_out: RM-AS65000-EVPN-OUT
       route_reflector_client: true
@@ -42,6 +42,10 @@ csc_router_bgp:
       - name: EVPN-OVERLAY-CORE
         activate: true
         domain_remote: true
+    neighbor_default:
+      next_hop_self_received_evpn_routes:
+        enable: true
+        inter_domain: true
   address_family_ipv4:
     peer_groups:
       - name: IPv4-REMOTE-UNDERLAY-PEERS
