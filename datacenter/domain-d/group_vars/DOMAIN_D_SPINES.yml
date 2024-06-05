@@ -1,6 +1,9 @@
 ---
 type: spine
-
+underlay_ipv6: true
+underlay_rfc5549: true
+overlay_mlag_rfc5549: true
+overlay_routing_protocol_address_family: ipv6
 switchport_default:
   mode: routed
 
@@ -11,6 +14,10 @@ peer_filters:
         match: 'as-range 65401-65499 result accept'
 
 csc_router_bgp:
+  address_family_ipv4:
+    peer_groups:
+      - name: LOCAL-UNDERLAY-PEERS
+        activate: true
   address_family_ipv6:
     redistribute_routes:
       - source_protocol: connected

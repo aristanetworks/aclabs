@@ -4,21 +4,24 @@ csc_prefix_lists:
   - name: PL-GATEWAY-LOOP
     sequence_numbers:
       - sequence: 10
-        action: 'permit 2.2.2.7/32'
-      - sequence: 20
         action: 'permit 1.1.2.7/32'
-      - sequence: 30
+      - sequence: 20
         action: 'permit 1.1.2.8/32'
+      - sequence: 30
+        action: 'permit 2.2.2.7/32'
+      - sequence: 40
+        action: 'permit 2.2.2.8/32'
 
 csc_router_bgp:
+  bgp:
+    bestpath:
+      d_path: true
   peer_groups:
     - name: EVPN-OVERLAY-CORE
       local_as: 65000
       remove_private_as:
         replace_as: true
       remote_as: 65000
-      route_map_in: RM-AS65000-EVPN-IN
-      route_map_out: RM-AS65000-EVPN-OUT
       route_reflector_client: true
       update_source: Loopback0
       bfd: true
@@ -42,20 +45,23 @@ csc_router_bgp:
       - name: EVPN-OVERLAY-CORE
         activate: true
         domain_remote: true
+        rcf_in: AS65000_IN_EVPN()
+        rcf_out: AS65000_OUT_EVPN()
+      - name: EVPN-OVERLAY-PEERS
+        rcf_in: AS65200_IN_EVPN()
+        rcf_out: AS65200_OUT_EVPN()
     neighbor_default:
       next_hop_self_received_evpn_routes:
         enable: true
         inter_domain: true
+    domain_identifier: "2:2"
   address_family_ipv4:
     peer_groups:
       - name: IPv4-REMOTE-UNDERLAY-PEERS
         activate: true
+        rcf_out: AS65000_OUT_IPV4()
       - name: EVPN-OVERLAY-CORE
         activate: false
-    networks:
-      - prefix: "1.1.2.7/32"
-      - prefix: "1.1.2.8/32"
-      - prefix: "2.2.2.7/32"
 
 csc_ethernet_interfaces:
   - name: Ethernet7

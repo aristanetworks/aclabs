@@ -1,6 +1,11 @@
 ---
 type: l3leaf
 
+underlay_ipv6: true
+underlay_rfc5549: true
+overlay_mlag_rfc5549: true
+overlay_routing_protocol_address_family: ipv6
+
 dhcp_relay:
   tunnel_requests_disabled: true
   mlag_peerlink_requests_disabled: true

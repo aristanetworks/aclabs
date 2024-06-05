@@ -6,92 +6,54 @@ cv_tags_topology_type: leaf
 evpn_multicast: false
 underlay_multicast: false
 
-bgp_peer_groups: 
-  evpn_overlay_peers:
-    structured_config:
-      route_reflector_client: true
-
-csc_router_bgp:
-  bgp:
-    bestpath:
-      d_path: true
-  address_family_evpn:
-    domain_identifier: "2:2" 
-
-csc_community_lists:
-  - name: CL-LOCAL-DOMAIN-ORIGINATED 
-    action: "permit 65200:65200"
-  - name: CL-REMOTE-DOMAIN-ORIGINATED
-    action: "permit 65000:65000"
-
-csc_route_maps:
-  - name: RM-AS65000-EVPN-IN
-    sequence_numbers:
-      - sequence: 10
-        type: "permit"
-        set:
-          - "community 65000:65000 additive"
-  - name: RM-AS65000-EVPN-OUT
-    sequence_numbers:
-      - sequence: 5
-        type: "deny"
-        match:
-          - "community CL-REMOTE-DOMAIN-ORIGINATED"
-      - sequence: 10
-        type: "permit"
-  - name: RM-AS65000-IPV4-OUT
-    sequence_numbers:
-      - sequence: 10
-        type: 'permit'
-        match:
-          - 'ip address prefix-list PL-GATEWAY-LOOP'
-  - name: RM-AS65200-EVPN-IN
-    sequence_numbers:
-      - sequence: 10
-        type: "permit"
-        match:
-          - "community CL-REMOTE-DOMAIN-ORIGINATED"
-        set:
-          - "local-preference 0"
-      - sequence: 20
-        type: "permit"
-        set:
-          - "community 65200:65200 additive"
-  - name: RM-AS65200-EVPN-OUT
-    sequence_numbers:
-      - sequence: 5
-        type: "deny"
-        match: 
-          - "community CL-LOCAL-DOMAIN-ORIGINATED"
-      - sequence: 10
-        type: "permit"
-
-monitor_connectivity:
-  shutdown: false
-  vrfs:
-      # VRF Name
-    - name: Prod
-      interface_sets:
-        - name: Prod-Vtep-Diag
-          interfaces: Loopback101
-      hosts:
-        - name: A-LEAF7-DiagVtep-Prod
-          ip: 10.101.101.7
-          local_interfaces: Prod-Vtep-Diag
-        - name: C-LEAF7-DiagVtep-Prod
-          ip: 10.101.103.7
-          local_interfaces: Prod-Vtep-Diag
-    - name: Dev
-      interface_sets:
-        - name: Dev-Vtep-Diag
-          interfaces: Loopback102
-      hosts:
-        - name: A-LEAF7-DiagVtep-Dev
-          ip: 10.102.101.7
-          local_interfaces: Dev-Vtep-Diag
-        - name: C-LEAF7-DiagVtep-Dev
-          ip: 10.102.103.7
-          local_interfaces: Dev-Vtep-Diag
+router_general:
+  control_functions:
+    code_units:
+      - name: evpngw-rcf
+        content: |-
+          function PREFIX_ROUTE() {
+            return evpn.route_type is EVPN_IP_PREFIX;
+          }
+          function IMET_ROUTE() {
+            return evpn.route_type is EVPN_IMET;
+          }
+          function FROM_GW_PEER() {
+            return community has_any {2:2};
+          }
+          function GW_LOOPBACK() {
+            return prefix match prefix_list_v4 PL-GATEWAY-LOOP;
+          }
+          function AS65000_OUT_IPV4() {
+            if GW_LOOPBACK(){
+              return true;
+            }
+            return false;
+          }
+          function AS65000_OUT_EVPN() {
+            if IMET_ROUTE() or PREFIX_ROUTE(){
+              community add {2:2};
+            }
+            return true;
+          }
+          function AS65000_IN_EVPN() {
+            if (IMET_ROUTE() or PREFIX_ROUTE()) and FROM_GW_PEER() {
+              return false;
+            }
+            return true;
+          }
+          function AS65400_OUT_EVPN() { 
+            if PREFIX_ROUTE(){
+              community add {2:2};
+            }
+            return true;
+          }
+          function AS65400_IN_EVPN() { 
+            if PREFIX_ROUTE() and FROM_GW_PEER() {
+              return false;
+              }
+            return true;
+          }
+          EOF
 
 custom_templates:
   - evpngw-af-evpn.j2
