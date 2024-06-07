@@ -1,6 +1,12 @@
 ---
 
 csc_router_bgp:
+  bgp:
+    bestpath:
+      d_path: true
+  peer_groups:
+    - name: IPv4-REMOTE-UNDERLAY-PEERS
+      route_map_out: RM-AS65000-IPV4-OUT
   neighbors:
   - ip_address: 172.16.3.2
     peer_group: IPv4-REMOTE-UNDERLAY-PEERS
@@ -16,3 +22,5 @@ csc_router_bgp:
       - prefix: "1.1.3.7/32"
       - prefix: "1.1.3.8/32"
       - prefix: "2.2.3.7/32"
+  address_family_evpn:
+    domain_identifier: "3:3"

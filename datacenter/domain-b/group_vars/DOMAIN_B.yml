@@ -10,6 +10,7 @@ spine:
     loopback_ipv4_pool: 1.1.2.0/24
     isis_system_id_prefix: '0000.0000'
     bgp_as: 65200
+    bgp_cluster_id: 1.1.2.205
     raw_eos_cli: |
       agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
   nodes: 
