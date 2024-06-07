@@ -41,13 +41,13 @@ router_general:
             }
             return true;
           }
-          function AS65400_OUT_EVPN() { 
+          function AS65200_OUT_EVPN() { 
             if PREFIX_ROUTE(){
               community add {2:2};
             }
             return true;
           }
-          function AS65400_IN_EVPN() { 
+          function AS65200_IN_EVPN() { 
             if PREFIX_ROUTE() and FROM_GW_PEER() {
               return false;
               }
