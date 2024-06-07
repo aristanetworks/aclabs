@@ -14,3 +14,5 @@ evpn_import_pruning: true
 
 mlag_ibgp_peering_vrfs:
   base_vlan: 3000
+
+p2p_uplinks_mtu: 1500
