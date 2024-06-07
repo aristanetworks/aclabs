@@ -5,11 +5,18 @@ pod_name: pod-bb
 
 type: backbone
 
+csc_prefix_lists:
+  - name: PL-LOOPBACKS-EVPN-OVERLAY
+    sequence_numbers:
+      - sequence: 30
+        action: 'permit 1.1.0.0/16 eq 32'
+
 backbone:
   defaults:
     platform: vEOS-lab
     loopback_ipv4_pool: 1.1.0.0/24
     bgp_as: 65000
+    bgp_cluster_id: 1.1.0.0
     
   nodes: 
     - name: BB1

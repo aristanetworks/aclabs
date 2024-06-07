@@ -4,6 +4,14 @@ type: l3leaf
 evpn_multicast: false
 underlay_multicast: false
 
+csc_prefix_lists:
+  - name: PL-LOOPBACKS-EVPN-OVERLAY
+    sequence_numbers:
+      - sequence: 30
+        action: 'permit 1.1.0.0/16 eq 32'
+      - sequence: 40
+        action: 'permit 2.2.0.0/16 eq 32'
+
 csc_router_bgp:
   bgp:
     bestpath:
