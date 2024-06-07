@@ -27,6 +27,8 @@ csc_router_bgp:
       bfd: true
       ebgp_multihop: 15
       send_community: all
+    - name: EVPN-OVERLAY-PEERS
+      route_reflector_client: true
   neighbors:
     - ip_address: 172.16.2.2
       peer_group: IPv4-REMOTE-UNDERLAY-PEERS
@@ -62,6 +64,8 @@ csc_router_bgp:
         rcf_out: AS65000_OUT_IPV4()
       - name: EVPN-OVERLAY-CORE
         activate: false
+    redistribute_routes:
+      - source_protocol: "connected"
 
 csc_ethernet_interfaces:
   - name: Ethernet7

@@ -8,13 +8,6 @@ csc_vlan_interfaces:
   - name: 'Vlan4094'
     mtu: 1500
 
-csc_router_bgp:
-  bgp:
-    bestpath:
-      d_path: true
-  address_family_evpn:
-    domain_identifier: "3:3"
-
 csc_prefix_lists:
   - name: PL-GATEWAY-LOOP
     sequence_numbers:
