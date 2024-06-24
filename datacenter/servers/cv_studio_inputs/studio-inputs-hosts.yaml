@@ -1,0 +1,290 @@
+path: []
+inputs:
+  hosts:
+    - description: BLUE-GW
+      ipAddr: 10.10.10.1
+      name: gw_blue
+      url: null
+    - description: GREEN-GW
+      ipAddr: 10.20.20.1
+      name: gw_green
+      url: null
+    - description: ORANGE-GW
+      ipAddr: 10.30.30.1
+      name: gw_orange
+      url: null
+    - description: PURPLE-GW
+      ipAddr: 10.40.40.1
+      name: gw_purple
+      url: null
+    - description: YELLOW-GW
+      ipAddr: 10.50.50.1
+      name: gw_yellow
+      url: null
+    - description: RED-GW
+      ipAddr: 10.60.60.1
+      name: gw_red
+      url: null
+    - description: BROWN-GW
+      ipAddr: 10.70.70.1
+      name: gw_brown
+      url: null
+    - description: BLACK-GW
+      ipAddr: 10.80.80.1
+      name: gw_black
+      url: null
+    - description: PINK-GW
+      ipAddr: 10.90.90.1
+      name: gw_pink
+      url: null
+    # - description: A1
+    #   ipAddr: 10.10.10.101
+    #   name: host_a1
+    #   url: null
+    # - description: A2
+    #   ipAddr: 10.30.30.101
+    #   name: host_a2
+    #   url: null
+    # - description: A3
+    #   ipAddr: 10.50.50.101
+    #   name: host_a3
+    #   url: null
+    # - description: A4
+    #   ipAddr: 10.10.10.102
+    #   name: host_a4
+    #   url: null
+    #   - description: A5
+    #   ipAddr: 10.30.30.102
+    #   name: host_a5
+    #   url: null
+    # - description: A6
+    #   ipAddr: 10.70.70.101
+    #   name: host_a6
+    #   url: null
+    # - description: B1
+    #   ipAddr: 10.20.20.101
+    #   name: host_b1
+    #   url: null
+    # - description: B2
+    #   ipAddr: 10.40.40.101
+    #   name: host_b2
+    #   url: null
+    # - description: B3
+    #   ipAddr: 10.60.60.101
+    #   name: host_b3
+    #   url: null
+    # - description: B4
+    #   ipAddr: 10.10.10.103
+    #   name: host_b4
+    #   url: null
+    #   - description: B5
+    #   ipAddr: 10.70.70.102
+    #   name: host_b5
+    #   url: null
+    # - description: B6
+    #   ipAddr: 10.40.40.102
+    #   name: host_b6
+    #   url: null
+    # - description: B7
+    #   ipAddr: 10.80.80.101
+    #   name: host_b6
+    #   url: null
+    # - description: C1
+    #   ipAddr: 10.10.10.104
+    #   name: host_c1
+    #   url: null
+    # - description: C2
+    #   ipAddr: 10.20.20.102
+    #   name: host_c2
+    #   url: null
+    # - description: C3
+    #   ipAddr: 10.60.60.102
+    #   name: host_c3
+    #   url: null
+    # - description: C4
+    #   ipAddr: 10.50.50.102
+    #   name: host_c4
+    #   url: null
+    #   - description: C5
+    #   ipAddr: 10.20.20.103
+    #   name: host_c5
+    #   url: null
+    # - description: C6
+    #   ipAddr: 10.60.60.103
+    #   name: host_c6
+    #   url: null
+    # - description: D1
+    #   ipAddr: 10.10.10.105
+    #   name: host_d1
+    #   url: null
+    # - description: D2
+    #   ipAddr: 10.90.90.101
+    #   name: host_d2
+    #   url: null
+    # - description: D3
+    #   ipAddr: 10.50.50.103
+    #   name: host_d3
+    #   url: null
+    # - description: D4
+    #   ipAddr: 10.10.10.106
+    #   name: host_d4
+    #   url: null
+    #   - description: D5
+    #   ipAddr: 10.90.90.102
+    #   name: host_a5
+    #   url: null
+    # - description: D6
+    #   ipAddr: 10.70.70.103
+    #   name: host_d6
+    #   url: null
+  networkConfig:
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_blue
+      tags:
+        query: device:SN-A1
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_orange
+      tags:
+        query: device:SN-A2
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_yellow
+      tags:
+        query: device:SN-A3
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_blue
+      tags:
+        query: device:SN-A4
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_orange
+      tags:
+        query: device:SN-A5
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_brown
+      tags:
+        query: device:SN-A6
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_green
+      tags:
+        query: device:SN-B1
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_purple
+      tags:
+        query: device:SN-B2
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_red
+      tags:
+        query: device:SN-B3
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_blue
+      tags:
+        query: device:SN-B4
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_brown
+      tags:
+        query: device:SN-B5
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_purple
+      tags:
+        query: device:SN-B6
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_black
+      tags:
+        query: device:SN-B7
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_blue
+      tags:
+        query: device:SN-C1
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_green
+      tags:
+        query: device:SN-C2
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_red
+      tags:
+        query: device:SN-C3
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_yellow
+      tags:
+        query: device:SN-C4
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_green
+      tags:
+        query: device:SN-C5
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_red
+      tags:
+        query: device:SN-C6
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_blue
+      tags:
+        query: device:SN-D1
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_pink
+      tags:
+        query: device:SN-D2
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_yellow
+      tags:
+        query: device:SN-D3
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_blue
+      tags:
+        query: device:SN-D4
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_pink
+      tags:
+        query: device:SN-D5
+    - inputs:
+        config:
+          monitoredHosts:
+            - host: gw_brown
+      tags:
+        query: device:SN-D6
