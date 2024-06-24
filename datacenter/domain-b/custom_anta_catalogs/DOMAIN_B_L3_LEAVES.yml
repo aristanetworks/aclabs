@@ -1,0 +1,34 @@
+# anta.tests.routing:
+#   isis:
+#     - VerifyISISNeighborState:
+#     - VerifyISISNeighborCount:
+#         interfaces:
+#           - name: Ethernet1
+#             level: 2
+#             count: 1
+#           - name: Ethernet2
+#             level: 2
+#             count: 1
+#           - name: Ethernet3
+#             level: 2
+#             count: 1
+#           - name: Ethernet4
+#             level: 2
+#             count: 1
+
+#             # level is set to 2 by default
+#     - VerifyISISInterfaceMode:
+#         interfaces:
+#           - name: Loopback0
+#             mode: passive
+#           - name: Loopback1
+#             mode: passive
+#             # vrf is set to default by default
+#           - name: Ethernet1
+#             mode: point-to-point
+#           - name: Ethernet2
+#             mode: point-to-point
+#           - name: Ethernet3
+#             mode: point-to-point
+#           - name: Ethernet4
+#             mode: point-to-point
