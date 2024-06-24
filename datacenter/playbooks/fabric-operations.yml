@@ -1,0 +1,48 @@
+---
+- name: Show lldp neighbors
+  hosts: FABRIC
+  connection: local
+  gather_facts: false
+  
+  vars:
+    ansible_user: cvpadmin
+    ansible_password: arista123
+    ansible_network_os: arista.eos.eos
+    ansible_become: true
+    ansible_become_method: enable
+    ansible_connection: httpapi
+    ansible_httpapi_port: 443
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+
+  tasks: 
+    - name: show lldp neighbors
+      arista.eos.eos_command:
+        commands:
+        - command: show lldp neighbors
+      register: result
+
+    - name: initialize lldp output
+      set_fact:
+        lldp_output: []
+
+    - name: parse lldp output
+      set_fact:
+        lldp_output: "{{ lldp_output + [dict(switch=inventory_hostname, local_port=item.split()[0], neighbor=item.split()[1], neighbor_port=item.split()[2])] }}"
+      loop: "{{ result.stdout_lines[0][8:] }}"
+        
+- name: Generate markdown
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Generate markdown table
+      copy:
+        content: |
+          | Switch | Local Port | Neighbor | Neighbor Port |
+          | ------ | ---------- | -------- | ------------- |
+          {% for host in groups['FABRIC'] %}
+          {% for neighbor in hostvars[host]['lldp_output'] %}
+          | {{ neighbor.switch }} | {{ neighbor.local_port }} | {{ neighbor.neighbor }} | {{ neighbor.neighbor_port }} |
+          {% endfor %}
+          {% endfor %}
+        dest: servers/cv_conn_monitoring/results/lldpneighbors.md

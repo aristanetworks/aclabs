@@ -25,3 +25,10 @@
     - name: validate states on EOS devices
       ansible.builtin.import_role:
         name: arista.avd.eos_validate_state
+      vars:
+        # To enable ANTA
+        use_anta: true
+        # To save catalogs
+        save_catalog: true
+        skipped_tests: 
+          - category: AvdTestP2PIPReachability
