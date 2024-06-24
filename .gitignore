@@ -5,6 +5,7 @@
 **/config_backup/**
 # ignore secrets
 **.tok**
-!**/servers/intended/**
 # ignore domain act topos
 **/lab_topology/**
+# ignore act directory
+**/act/**
