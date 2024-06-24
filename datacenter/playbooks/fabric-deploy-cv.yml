@@ -1,0 +1,14 @@
+---
+- name: Configuration deployment
+  hosts: FABRIC
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Deploy configurations and tags to CloudVision
+      ansible.builtin.import_role:
+        name: arista.avd.cv_deploy
+      vars:
+        cv_server: 10.18.136.4
+        cv_token: "{{lookup('file', '../act/tokens/act-cv.tok')}}"
+        cv_verify_certs: false
+        cv_configlet_name_template: "AVD_${hostname}"

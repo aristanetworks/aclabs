@@ -1,0 +1,23 @@
+anta.tests.connectivity:
+  - VerifyReachability:
+      filters:
+        tags: ["Blue"]
+      hosts:
+        - source: Vlan10
+          destination: 10.10.10.101
+          vrf: default
+        - source: Vlan10
+          destination: 10.10.10.102
+          vrf: default
+        - source: Vlan10
+          destination: 10.10.10.103
+          vrf: default
+        - source: Vlan10
+          destination: 10.10.10.104
+          vrf: default
+        - source: Vlan10
+          destination: 10.10.10.105
+          vrf: default
+        - source: Vlan10
+          destination: 10.10.10.106
+          vrf: default

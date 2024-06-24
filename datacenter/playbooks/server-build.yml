@@ -1,0 +1,10 @@
+---
+- name: Configuration deployment
+  hosts: SERVERS
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: build config from structured configs
+      tags: [build]
+      ansible.builtin.import_role:
+        name: arista.avd.eos_cli_config_gen

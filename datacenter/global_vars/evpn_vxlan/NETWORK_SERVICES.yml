@@ -67,6 +67,9 @@ tenants:
           - id: 80
             name: Black
             profile: VLAN80
+          - id: 90
+            name: Pink
+            profile: VLAN90
   - name: Prod
     mac_vrf_vni_base: 10000
     evpn_l3_multicast:
@@ -135,6 +138,9 @@ tenants:
           - id: 80
             name: Black
             profile: VLAN80
+          - id: 90
+            name: Pink
+            profile: VLAN90
   - name: DUALSTACK
     mac_vrf_vni_base: 10000
     vrfs:

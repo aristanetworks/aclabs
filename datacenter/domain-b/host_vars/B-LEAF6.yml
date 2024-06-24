@@ -15,3 +15,4 @@ csc_ethernet_interfaces:
 
         # Dont_preempt is only used when "algorithm" is "preference"
         dont_preempt: True
+    spanning_tree_bpduguard: disabled

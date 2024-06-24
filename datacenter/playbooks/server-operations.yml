@@ -1,0 +1,78 @@
+---
+- name: Fabric Operations
+  hosts: SERVERS
+  connection: local
+  gather_facts: false
+  
+  vars:
+    ansible_user: cvpadmin
+    ansible_password: arista123
+    ansible_network_os: arista.eos.eos
+    ansible_connection: httpapi
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+    ansible_network_os: eos
+
+  tasks:
+    - name: Backup running configs
+      tags: [config-backup]
+      arista.eos.eos_config:
+        backup: yes
+        backup_options:
+          dir_path: "{{ inventory_dir }}/config_backup"
+          filename: "{{ inventory_hostname }}.cfg"
+    
+    - name: shut/no shut connectivity monitor
+      tags: [conn-monitor-restart]
+      arista.eos.eos_command:
+        commands:
+          - configure terminal
+          - monitor connectivity
+          - shutdown
+          - no shutdown
+
+    - name: shut/no shut terminattr
+      tags: [terminattr-restart]
+      arista.eos.eos_command:
+        commands:
+          - configure terminal
+          - daemon TerminAttr
+          - shutdown
+          - no shutdown
+
+    - name: connectivity monitor results
+      tags: [conn-results]
+      arista.eos.eos_command:
+        commands:
+          - show monitor connectivity
+      register: conn_results
+
+    - name: Extract host names
+      tags: [conn-results]
+      set_fact:
+        monitor_output: []
+
+    - name: parse monitor output
+      tags: [conn-results]
+      set_fact:
+        monitor_output: "{{ monitor_output + [dict(hostname=inventory_hostname, destination=item.split()[0], latency=item.split()[2], jitter=item.split()[4], packetLoss=item.split()[6])]}}"
+      loop: "{{ conn_results.stdout_lines[0][7:] }}"
+
+- name: Generate markdown table
+  hosts: localhost
+  gather_facts: false
+  tags: [conn-results]
+  tasks:
+    - name: markdown conn results
+      tags: [conn-results]
+      copy:
+        content: |
+          | Server | destination | latency | jitter | packet loss |
+          | ------ | ----------- | ------- | ------ | ----------- |
+          {% for host in groups['SERVERS'] %}
+          {% for destination in hostvars[host]['monitor_output'] %}
+          | {{ destination.hostname }} | {{ destination.destination }} | {{ destination.latency }} | {{ destination.jitter }} | {{ destination.packetLoss }}
+          {% endfor %}
+          {% endfor %}
+        dest: ../servers/cv_conn_monitoring/results/connection-monitoring-gateways.md
+      

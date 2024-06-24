@@ -1,0 +1,61 @@
+hostname: B5
+is_deployed: true
+service_routing_protocols_model: multi-agent
+ip_routing: false
+daemon_terminattr:
+  cvaddrs:
+  - 192.168.0.5:9910
+  cvauth:
+    method: token
+    token_file: /tmp/token
+  cvvrf: default
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: false
+spanning_tree:
+  mode: none
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  no_password: true
+- name: cvpadmin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$JIWpYntS5KpTMCGF$el6rGKnDYPqxKeMcJGutPctkOMiHrV/bej1DTmdTR8jEnuV/gQbTYa76slNHP1vwyN8Gq2kbNsMmXUwVhkwjy1
+management_interfaces:
+- name: Management1
+  description: oob_management
+  shutdown: false
+  vrf: default
+  ip_address: 192.168.0.231/24
+  gateway: null
+  type: oob
+management_api_http:
+  enable_vrfs:
+  - name: default
+  enable_https: true
+vlans:
+  - id: 70
+vlan_interfaces:
+  - name: Vlan70
+    ip_address: 10.70.70.102/24
+ethernet_interfaces:
+  - name: Ethernet1
+    type: switched
+    shutdown: false
+    mode: access
+    vlans: '70'
+static_routes:
+  - vrf: default
+    destination_address_prefix: 10.50.50.0/24
+    gateway: 10.70.70.1
+  - vrf: default
+    destination_address_prefix: 10.60.60.0/24
+    gateway: 10.70.70.1
+  - vrf: default
+    destination_address_prefix: 10.80.80.0/24
+    gateway: 10.70.70.1
+  - vrf: default
+    destination_address_prefix: 10.90.90.0/24
+    gateway: 10.70.70.1
