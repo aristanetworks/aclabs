@@ -1,0 +1,77 @@
+anta_inventory:
+  hosts:
+  - host: 10.18.164.108
+    name: A1
+    tags: ["Prod", "Blue"]
+  - host: 10.18.137.203
+    name: A2
+    tags: ["Prod"]
+  - host: 10.18.137.202
+    name: A3
+    tags: ["Dev"]
+  - host: 10.18.142.151
+    name: A4
+    tags: ["Prod", "Blue"]
+  - host: 10.18.137.141
+    name: A5
+    tags: ["Prod"]
+  - host: 10.18.157.208
+    name: A6
+    tags: ["Dev"]
+  - host: 10.18.164.28
+    name: B1
+    tags: ["Prod"]
+  - host: 10.18.151.42
+    name: B2
+    tags: ["Prod"]
+  - host: 10.18.152.107
+    name: B3
+    tags: ["Dev"]
+  - host: 10.18.164.26
+    name: B4
+    tags: ["Prod", "Blue"]
+  - host: 10.18.157.161
+    name: B5
+    tags: ["Dev"]
+  - host: 10.18.164.2
+    name: B6
+    tags: ["Prod"]
+  - host: 10.18.151.254
+    name: B7
+    tags: ["Dev"]
+  - host: 10.18.164.12
+    name: C1
+    tags: ["Prod", "Blue"]
+  - host: 10.18.142.152
+    name: C2
+    tags: ["Prod"]
+  - host: 10.18.157.19
+    name: C3
+    tags: ["Dev"]
+  - host: 10.18.164.36
+    name: C4
+    tags: ["Dev"]
+  - host: 10.18.157.243
+    name: C5
+    tags: ["Prod"]
+  - host: 10.18.157.237
+    name: C6
+    tags: ["Dev"]
+  - host: 10.18.160.139
+    name: D1
+    tags: ["Prod", "Blue"]
+  - host: 10.18.154.199
+    name: D2
+    tags: ["Dev"]
+  - host: 10.18.164.25
+    name: D3
+    tags: ["Dev"]
+  - host: 10.18.157.235
+    name: D4
+    tags: ["Prod", "Blue"]
+  - host: 10.18.164.9
+    name: D5
+    tags: ["Dev"]
+  - host: 10.18.137.222
+    name: D6
+    tags: ["Dev"]
