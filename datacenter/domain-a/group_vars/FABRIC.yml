@@ -17,7 +17,7 @@ bgp_peer_groups:
       local_as: 65000
       remove_private_as:
         replace_as: true
-      bfd: false
+      
 
 l3_edge:
   # Define a new link profile which will match the IP pool, the used ASNs and include the defined interface into underlay routing
