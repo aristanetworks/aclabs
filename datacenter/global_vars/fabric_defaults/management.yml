@@ -2,11 +2,12 @@
 mgmt_interface_vrf: default
 
 name_servers:
-  - 10.255.0.2
+  - 4.2.2.2
 
 ntp:
   servers:
     - name: 0.pool.ntp.org
+      iburst: true
 
 local_users: 
   - name: admin
