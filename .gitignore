@@ -8,4 +8,4 @@
 # ignore domain act topos
 **/lab_topology/**
 # ignore act directory
-**/act/**
+**/act/*inventory.yml
