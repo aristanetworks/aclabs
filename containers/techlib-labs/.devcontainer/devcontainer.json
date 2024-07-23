@@ -1,0 +1,36 @@
+{
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "FROM_IMAGE": "${localEnv:FROM_IMAGE}",
+            "FROM_VARIANT": "${localEnv:FROM_VARIANT}",
+            "USERNAME": "${localEnv:USERNAME}",
+            "CLAB_VERSION": "${localEnv:CLAB_VERSION}",
+            "CEOS_LAB_VERSION_ARG": "${localEnv:CEOS_LAB_VERSION_ARG}",
+            "GIT_INIT_ARG": "${localEnv:GIT_INIT_ARG}"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                // git essentials
+                "piotrpalarz.vscode-gitignore-generator",
+                "mhutchie.git-graph",
+                "donjayamanne.githistory",
+                // spell checker
+                "streetsidesoftware.code-spell-checker",
+                // drawio and tldraw
+                // excalidraw is pre-installed in universal
+                "hediet.vscode-drawio",
+                "tldraw-org.tldraw-vscode",
+                // markdown
+                "yzhang.markdown-all-in-one",
+                "bierner.markdown-checkbox",
+                "DavidAnson.vscode-markdownlint",
+                // various tools
+                "tuxtina.json2yaml",
+                "mutantdino.resourcemonitor"
+            ]
+        }
+    }
+}

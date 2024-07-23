@@ -1,0 +1,27 @@
+---
+name: build container for CVaaS and AVD Demo, EVPN MLAG
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/container_build_child.yml
+      - .github/workflows/container_build_parent_matrix.yml
+      - containers/**
+  workflow_dispatch:
+    branches: [main]
+
+jobs:
+  build-lab-containers:
+    uses: ./.github/workflows/container_build_child.yml
+    strategy:
+      matrix:
+        from_image: ["ghcr.io/aristanetworks/avd/universal"]
+        from_variant: ["python3.11-avd-v4.9.0"]
+        clab_version: ["0.54.2"]
+        ceos_lab_version: ["4.32.1F"]
+    with:
+      from_image: ${{ matrix.from_image }}
+      from_variant: ${{ matrix.from_variant }}
+      clab_version: ${{ matrix.clab_version }}
+      ceos_lab_version: ${{ matrix.ceos_lab_version }}
