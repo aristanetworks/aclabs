@@ -11,6 +11,9 @@ on:
   workflow_dispatch:
     branches: [main]
 
+permissions:
+  packages: write
+
 jobs:
   build-lab-containers:
     uses: ./.github/workflows/container_build_child.yml
