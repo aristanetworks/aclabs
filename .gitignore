@@ -1,11 +1,2 @@
-# ignore avd generated files
-**/documentation/**
-**/intended/**
-**/reports/**
-**/config_backup/**
 # ignore secrets
 **.tok**
-# ignore domain act topos
-**/lab_topology/**
-# ignore act directory
-**/act/*inventory.yml
