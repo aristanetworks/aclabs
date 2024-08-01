@@ -22,7 +22,7 @@ topology:
       image: ceos:latest
       memory: 4g
     linux:
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
 
   nodes:
 ###############################################################
@@ -160,7 +160,7 @@ topology:
 
     HostA1:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.201
       ports:
         - '22201:22'
@@ -169,7 +169,7 @@ topology:
 
     HostA2:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.202
       ports:
         - '22202:22'
@@ -178,7 +178,7 @@ topology:
 
     HostA3:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.203
       ports:
         - '22203:22'
@@ -187,7 +187,7 @@ topology:
 
     HostA4:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.204
       ports:
         - '22204:22'
@@ -196,7 +196,7 @@ topology:
 
     HostA5:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.205
       ports:
         - '22205:22'
@@ -205,7 +205,7 @@ topology:
 
     HostA6:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.206
       ports:
         - '22206:22'
@@ -370,7 +370,7 @@ topology:
 
     HostB1:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.207
       startup-delay: 30
       ports:
@@ -380,7 +380,7 @@ topology:
 
     HostB2:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.208
       startup-delay: 30
       ports:
@@ -390,7 +390,7 @@ topology:
 
     HostB3:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.209
       startup-delay: 30
       ports:
@@ -400,7 +400,7 @@ topology:
 
     HostB4:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.210
       startup-delay: 30
       ports:
@@ -410,7 +410,7 @@ topology:
 
     HostB5:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.211
       startup-delay: 30
       ports:
@@ -420,7 +420,7 @@ topology:
 
     HostB6:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.212
       startup-delay: 30
       ports:
@@ -430,7 +430,7 @@ topology:
 
     HostB7:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.213
       startup-delay: 30
       ports:
@@ -567,7 +567,7 @@ topology:
 
     HostC1:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.214
       startup-delay: 60
       ports:
@@ -577,7 +577,7 @@ topology:
 
     HostC2:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.215
       startup-delay: 60
       ports:
@@ -587,7 +587,7 @@ topology:
 
     HostC3:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.216
       startup-delay: 60
       ports:
@@ -597,7 +597,7 @@ topology:
 
     HostC4:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.217
       startup-delay: 60
       ports:
@@ -607,7 +607,7 @@ topology:
 
     HostC5:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.218
       startup-delay: 60
       ports:
@@ -617,7 +617,7 @@ topology:
 
     HostC6:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.219
       startup-delay: 60
       ports:
@@ -773,7 +773,7 @@ topology:
 
     HostD1:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.220
       startup-delay: 90
       ports:
@@ -783,7 +783,7 @@ topology:
 
     HostD2:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.221
       startup-delay: 90
       ports:
@@ -793,7 +793,7 @@ topology:
 
     HostD3:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.222
       startup-delay: 90
       ports:
@@ -803,7 +803,7 @@ topology:
 
     HostD4:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.223
       startup-delay: 90
       ports:
@@ -813,7 +813,7 @@ topology:
 
     HostD5:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.224
       startup-delay: 90
       ports:
@@ -823,7 +823,7 @@ topology:
 
     HostD6:
       kind: linux
-      image: mitchv85/devhost
+      image: mitchv85/devhost:24.04
       mgmt-ipv4: 172.100.100.225
       startup-delay: 90
       ports:
