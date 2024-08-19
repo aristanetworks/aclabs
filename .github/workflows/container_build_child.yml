@@ -74,6 +74,10 @@ jobs:
             echo "image_tags=${{ inputs.image_tags }}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Convert Github repository name to lowercase ⬇️
+        id: gh_repo
+        run: echo "name_lowcase=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
       - name: Setup QEMU for multi-arch builds 🏗️
         uses: docker/setup-qemu-action@v3
         with:
@@ -102,7 +106,7 @@ jobs:
           GIT_INIT_ARG: ${{ inputs.git_init }}
         with:
           subFolder: containers/${{ inputs.container_name }}
-          imageName: ghcr.io/${{ github.repository }}/${{ inputs.container_name }}
+          imageName: ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}
           imageTag: ${{ steps.build-tags.outputs.image_tags }}
           platform: ${{ inputs.platform }}
           push: always
