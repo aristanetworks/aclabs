@@ -1,0 +1,37 @@
+{
+    "build": {
+        "dockerfile": "./Dockerfile",
+        "context": ".",
+        "args": {
+            "FROM_IMAGE": "${localEnv:FROM_IMAGE}",
+            "FROM_VARIANT": "${localEnv:FROM_VARIANT}",
+            "USERNAME": "${localEnv:USERNAME}"
+        }
+    },
+  "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "samuelcolvin.jinjahtml",
+                "oderwat.indent-rainbow",
+                "AykutSarac.jsoncrack-vscode",
+                "hilleer.yaml-plus-json",
+                // marp preview extension
+                "marp-team.marp-vscode",
+                // errors and highlighters
+                "mechatroner.rainbow-csv",
+                // excalidraw, drawio and tldraw
+                "pomdtr.excalidraw-editor",
+                "hediet.vscode-drawio",
+                "tldraw-org.tldraw-vscode",
+                // markdown
+                "yzhang.markdown-all-in-one",
+                "bierner.markdown-checkbox",
+                "DavidAnson.vscode-markdownlint",
+                // various tools
+                "tuxtina.json2yaml",
+                "mutantdino.resourcemonitor"
+            ]
+        }
+    }
+  }
