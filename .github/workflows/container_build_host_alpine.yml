@@ -5,9 +5,9 @@ on:
   push:
     branches: ['**']  # branches will be filtered in the jobs
     paths:
-      - .github/workflows/container_build_acl_dev.yml
+      - .github/workflows/container_build_host_alpine.yml
       - .github/workflows/container_build_child.yml
-      - containers/acl-dev/**
+      - containers/host-alpine/**
   workflow_dispatch:
     branches: ['**']  # branches will be filtered in the jobs
 
