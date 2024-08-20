@@ -5,9 +5,9 @@ on:
   push:
     branches: ['**']  # branches will be filtered in the jobs
     paths:
-      - .github/workflows/container_build_acl_dev.yml
+      - .github/workflows/container_build_dev.yml
       - .github/workflows/container_build_child.yml
-      - containers/acl-dev/**
+      - containers/dev/**
   workflow_dispatch:
     branches: ['**']  # branches will be filtered in the jobs
 
@@ -18,7 +18,7 @@ jobs:
     if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
     uses: ./.github/workflows/container_build_child.yml
     with:
-      container_name: "acl-dev"
+      container_name: "dev"
       image_tags: "latest"
       from_image: "mcr.microsoft.com/devcontainers/base"
       from_variant: "ubuntu-22.04"
