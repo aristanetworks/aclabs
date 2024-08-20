@@ -1,3 +1,5 @@
-# tech-library-avd
+# acLabs (Arista Community Labs)
 
-AVD data models based on Tech Library deployment guides
+> WARNING: Under Construction!
+
+To run the test lab click Codespace button and pick test-lab.
