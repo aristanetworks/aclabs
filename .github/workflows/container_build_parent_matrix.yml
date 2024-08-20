@@ -1,5 +1,5 @@
 ---
-name: build container for CVaaS and AVD Demo, EVPN MLAG
+name: build techlib-labs containers
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     paths:
       - .github/workflows/container_build_child.yml
       - .github/workflows/container_build_parent_matrix.yml
-      - containers/**
+      - containers/techlib-labs/**
   workflow_dispatch:
     branches: ['**']  # branches will be filtered in the jobs
 
