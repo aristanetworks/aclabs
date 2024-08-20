@@ -1,4 +1,3 @@
 {
-    "name": "AVD Universal",
-    "image": "ghcr.io/aristanetworks/avd/universal:python3.11-avd-devel"
+    "image": "ghcr.io/aristanetworks/aclabs/dev:latest"
 }
