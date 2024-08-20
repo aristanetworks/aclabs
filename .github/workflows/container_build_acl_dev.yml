@@ -3,17 +3,20 @@ name: Create pre-built container for acLabs development
 
 on:
   push:
-    branches: [main]
+    branches: ['**']  # branches will be filtered in the jobs
     paths:
       - .github/workflows/container_build_acl_dev.yml
-      - .github/workflows/container-build-child-workflow.yml
+      - .github/workflows/container_build_child.yml
       - containers/acl-dev/**
   workflow_dispatch:
-    branches: [main]
+    branches: ['**']  # branches will be filtered in the jobs
 
 jobs:
   build-demo-container:
-    uses: ./.github/workflows/container-build-child-workflow.yml
+    # fork - build container from any branch for testing
+    # parent repo - build on main branch only
+    if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/container_build_child.yml
     with:
       container_name: "acl-dev"
       image_tags: "latest"
