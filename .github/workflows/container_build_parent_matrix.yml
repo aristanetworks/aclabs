@@ -3,19 +3,22 @@ name: build container for CVaaS and AVD Demo, EVPN MLAG
 
 on:
   push:
-    branches: [main]
+    branches: ['**']  # branches will be filtered in the jobs
     paths:
       - .github/workflows/container_build_child.yml
       - .github/workflows/container_build_parent_matrix.yml
       - containers/**
   workflow_dispatch:
-    branches: [main]
+    branches: ['**']  # branches will be filtered in the jobs
 
 permissions:
   packages: write
 
 jobs:
   build-lab-containers:
+    # fork - build container from any branch for testing
+    # parent repo - build on main branch only
+    if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
     uses: ./.github/workflows/container_build_child.yml
     strategy:
       matrix:
