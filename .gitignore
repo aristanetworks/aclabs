@@ -1,2 +1,6 @@
 # ignore secrets
 **.tok**
+
+# clab auto-created directories and files
+**clab-*
+*.yml.bak
