@@ -22,7 +22,7 @@ topology:
       image: ceos:latest
       memory: 4g
     linux:
-      image: mitchv85/devhost:latest
+      image: mitchv85/devhost
 
   nodes:
 ###############################################################
