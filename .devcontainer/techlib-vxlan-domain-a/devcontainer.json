@@ -19,5 +19,5 @@
     },
     "postCreateCommand": "postCreate.sh",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/test-lab"
+    "workspaceFolder": "/techlib-vxlan-domain-a"
 }
