@@ -22,7 +22,7 @@ topology:
     ceos:
       env:
         CLAB_MGMT_VRF: MGMT
-      image: ceos:latest
+      image: ceos:trunk
       memory: 4g
     linux:
       image: mitchv85/devhost
@@ -101,7 +101,7 @@ topology:
       ports:
         - '22202:22'
       exec:
-        - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.20.20.101/24 -i6 2001:db8:20:20::101/64 -g 10.20.20.1
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.20.20.101/24 -i6 2001:db8:20:20::101/64 -g 10.20.20.1
 
     HostA3:
       kind: linux
@@ -314,7 +314,7 @@ topology:
       ports:
         - '22210:22'
       exec:
-        - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.60.60.101/24 -i6 2001:db8:60:60::101/64 -g 10.60.60.1
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.60.60.101/24 -i6 2001:db8:60:60::101/64 -g 10.60.60.1
 
     HostB3:
       kind: linux
