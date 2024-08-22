@@ -20,10 +20,12 @@ topology:
 
   kinds:
     ceos:
-      image: ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+      image: ceos:trunk
       memory: 4g
     linux:
-      image: mitchv85/devhost:22.04
+      image: mitchv85/devhost
 
   nodes:
 ###############################################################
@@ -85,19 +87,28 @@ topology:
 
     HostA1:
       kind: linux
-      image: mitchv85/devhost:22.04
+      image: mitchv85/devhost
       mgmt-ipv4: 172.100.100.201
       ports:
         - '22201:22'
       exec:
-        - bash /usr/local/bin/hostnetconfig.sh -i4 10.10.10.101/24 -i6 2001:db8:10:10::101/64 -g 10.10.10.1
+        - bash /usr/local/bin/hostnetconfig.sh -p -i4 10.10.10.101/24 -i6 2001:db8:10:10::101/64 -g 10.10.10.1
 
     HostA2:
       kind: linux
-      image: mitchv85/devhost:22.04
+      image: mitchv85/devhost
       mgmt-ipv4: 172.100.100.202
       ports:
         - '22202:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.20.20.101/24 -i6 2001:db8:20:20::101/64 -g 10.20.20.1
+
+    HostA3:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.203
+      ports:
+        - '22203:22'
       exec:
         - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.30.30.101/24 -i6 2001:db8:30:30::101/64 -g 10.30.30.1
 
@@ -114,14 +125,14 @@ topology:
         - '8005:80'
         - '44305:443'
 
-    HostA3:
+    HostA4:
       kind: linux
-      image: mitchv85/devhost:22.04
-      mgmt-ipv4: 172.100.100.203
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.204
       ports:
-        - '22203:22'
+        - '22204:22'
       exec:
-        - bash /usr/local/bin/hostnetconfig.sh -i4 10.20.20.101/24 -i6 2001:db8:20:20::101/64 -g 10.20.20.1
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.20.20.102/24 -i6 2001:db8:20:20::102/64 -g 10.20.20.1
 
 ###############################
 # Campus Pod A, Access Pod 3  #
@@ -172,27 +183,18 @@ topology:
         - '8010:80'
         - '44310:443'
 
-    HostA4:
-      kind: linux
-      image: mitchv85/devhost:22.04
-      mgmt-ipv4: 172.100.100.204
-      ports:
-        - '22204:22'
-      exec:
-        - bash /usr/local/bin/hostnetconfig.sh -i4 10.10.10.102/24 -i6 2001:db8:10:10::102/64 -g 10.10.10.1
-
     HostA5:
       kind: linux
-      image: mitchv85/devhost:22.04
+      image: mitchv85/devhost
       mgmt-ipv4: 172.100.100.205
       ports:
         - '22205:22'
       exec:
-        - bash /usr/local/bin/hostnetconfig.sh -i4 10.20.20.102/24 -i6 2001:db8:20:20::102/64 -g 10.20.20.1
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.10.10.102/24 -i6 2001:db8:10:10::102/64 -g 10.10.10.1
 
     HostA6:
       kind: linux
-      image: mitchv85/devhost:22.04
+      image: mitchv85/devhost
       mgmt-ipv4: 172.100.100.206
       ports:
         - '22206:22'
@@ -201,12 +203,43 @@ topology:
 
     HostA7:
       kind: linux
-      image: mitchv85/devhost:22.04
+      image: mitchv85/devhost
       mgmt-ipv4: 172.100.100.207
       ports:
         - '22207:22'
       exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.20.20.104/24 -i6 2001:db8:20:20::104/64 -g 10.20.20.1
+
+    HostA8:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.208
+      ports:
+        - '22208:22'
+      exec:
         - bash /usr/local/bin/hostnetconfig.sh -i4 10.40.40.101/24 -i6 2001:db8:40:40::101/64 -g 10.40.40.1
+
+###############################
+# Campus Pod A, GW Nodes  #
+###############################
+
+    A-GW1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.123
+      startup-config: ../configs/A-GW1.cfg
+      ports:
+        - '22023:22'
+        - '8023:80'
+        - '44323:443'
+
+    A-GW2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.124
+      startup-config: ../configs/A-GW2.cfg
+      ports:
+        - '22024:22'
+        - '8024:80'
+        - '44324:443'
 
 ###############################################################
 ###############################################################
@@ -267,19 +300,28 @@ topology:
 
     HostB1:
       kind: linux
-      image: mitchv85/devhost:22.04
-      mgmt-ipv4: 172.100.100.208
-      ports:
-        - '22208:22'
-      exec:
-        - bash /usr/local/bin/hostnetconfig.sh -i4 10.50.50.101/24 -i6 2001:db8:50:50::101/64 -g 10.50.50.1
-
-    HostB2:
-      kind: linux
-      image: mitchv85/devhost:22.04
+      image: mitchv85/devhost
       mgmt-ipv4: 172.100.100.209
       ports:
         - '22209:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -p -i4 10.50.50.101/24 -i6 2001:db8:50:50::101/64 -g 10.50.50.1
+
+    HostB2:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.210
+      ports:
+        - '22210:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.60.60.101/24 -i6 2001:db8:60:60::101/64 -g 10.60.60.1
+
+    HostB3:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.211
+      ports:
+        - '22211:22'
       exec:
         - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.70.70.101/24 -i6 2001:db8:70:70::101/64 -g 10.70.70.1
 
@@ -296,17 +338,17 @@ topology:
         - '8015:80'
         - '44315:443'
 
-    HostB3:
+    HostB4:
       kind: linux
-      image: mitchv85/devhost:22.04
-      mgmt-ipv4: 172.100.100.210
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.212
       ports:
-        - '22210:22'
+        - '22212:22'
       exec:
-        - bash /usr/local/bin/hostnetconfig.sh -i4 10.60.60.101/24 -i6 2001:db8:60:60::101/64 -g 10.60.60.1
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.60.60.102/24 -i6 2001:db8:60:60::102/64 -g 10.60.60.1
 
 ##############################
-# Campus Pod 1, Access Pod 3 #
+# Campus Pod B, Access Pod 3 #
 ##############################
 
     B-POD3-L1:
@@ -354,52 +396,186 @@ topology:
         - '8020:80'
         - '44320:443'
 
-    HostB4:
-      kind: linux
-      image: mitchv85/devhost:22.04
-      mgmt-ipv4: 172.100.100.211
-      ports:
-        - '22211:22'
-      exec:
-        - bash /usr/local/bin/hostnetconfig.sh -i4 10.50.50.102/24 -i6 2001:db8:50:50::102/64 -g 10.50.50.1
-
     HostB5:
       kind: linux
-      image: mitchv85/devhost:22.04
-      mgmt-ipv4: 172.100.100.212
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.213
       ports:
-        - '22212:22'
+        - '22213:22'
       exec:
-        - bash /usr/local/bin/hostnetconfig.sh -i4 10.60.60.102/24 -i6 2001:db8:60:60::102/64 -g 10.60.60.1
+        - bash /usr/local/bin/hostnetconfig.sh -p -i4 10.50.50.102/24 -i6 2001:db8:50:50::102/64 -g 10.50.50.1
 
     HostB6:
       kind: linux
-      image: mitchv85/devhost:22.04
-      mgmt-ipv4: 172.100.100.213pwd
-      
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.214
       ports:
-        - '22213:22'
+        - '22214:22'
       exec:
         - bash /usr/local/bin/hostnetconfig.sh -i4 10.60.60.103/24 -i6 2001:db8:60:60::103/64 -g 10.60.60.1
 
     HostB7:
       kind: linux
-      image: mitchv85/devhost:22.04
-      mgmt-ipv4: 172.100.100.214
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.215
       ports:
-        - '22214:22'
+        - '22215:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.60.60.104/24 -i6 2001:db8:60:60::104/64 -g 10.60.60.1
+
+    HostB8:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.216
+      ports:
+        - '22216:22'
       exec:
         - bash /usr/local/bin/hostnetconfig.sh -i4 10.80.80.101/24 -i6 2001:db8:80:80::101/64 -g 10.80.80.1
 
+###############################
+# Campus Pod B, GW Nodes      #
+###############################
+
+    B-GW1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.125
+      startup-config: ../configs/B-GW1.cfg
+      ports:
+        - '22025:22'
+        - '8025:80'
+        - '44325:443'
+
+    B-GW2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.126
+      startup-config: ../configs/B-GW2.cfg
+      ports:
+        - '22026:22'
+        - '8026:80'
+        - '44326:443'
+
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+#                        Backbone                             #
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+
+    BB1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.121
+      startup-config: ../configs/BB1.cfg
+      ports:
+        - '22021:22'
+        - '8021:80'
+        - '44321:443'
+
+    BB2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.122
+      startup-config: ../configs/BB2.cfg
+      ports:
+        - '22022:22'
+        - '8022:80'
+        - '44322:443'
+
   links:
 ######################
-# A-SPINE1 to LEAF   #
+# A-POD1             #
 ######################
-    - endpoints: ["A-SPINE1:et1", "A-LEAF1:et1"]
-    - endpoints: ["A-SPINE1:et2", "A-LEAF2:et1"]
-    - endpoints: ["A-SPINE1:et3", "A-LEAF3:et1"]
-    - endpoints: ["A-SPINE1:et4", "A-LEAF4:et1"]
-    - endpoints: ["A-SPINE1:et5", "A-LEAF5:et1"]
-    - endpoints: ["A-SPINE1:et6", "A-LEAF6:et1"]
-    - endpoints: ["A-SPINE1:et7", "A-LEAF7:et1"]
-    - endpoints: ["A-SPINE1:et8", "A-LEAF8:et1"]
+    - endpoints: ["A-SPINE1:et1", "A-POD1-L1:et1"]
+    - endpoints: ["A-SPINE2:et1", "A-POD1-L2:et1"]
+    - endpoints: ["A-POD1-L1:et10", "A-POD1-L2:et10"]
+    - endpoints: ["A-POD1-L1:et11", "A-POD1-L2:et11"]
+    - endpoints: ["A-POD1-L1:et2", "HostA1:eth1"]
+    - endpoints: ["A-POD1-L1:et3", "HostA3:eth1"]
+    - endpoints: ["A-POD1-L2:et3", "HostA3:eth2"]
+    - endpoints: ["HostA1:eth2", "HostA2:eth1"]
+######################
+# A-POD2             #
+######################
+    - endpoints: ["A-SPINE1:et2", "A-POD2-L1:et1"]
+    - endpoints: ["A-SPINE2:et2", "A-POD2-L1:et2"]
+    - endpoints: ["A-POD2-L1:et3", "HostA4:eth1"]
+######################
+# A-POD3             #
+######################
+    - endpoints: ["A-SPINE1:et3", "A-POD3-L1:et1"]
+    - endpoints: ["A-SPINE1:et4", "A-POD3-L2:et1"]
+    - endpoints: ["A-SPINE2:et3", "A-POD3-L1:et2"]
+    - endpoints: ["A-SPINE2:et4", "A-POD3-L2:et2"]
+    - endpoints: ["A-POD3-L1:et10", "A-POD3-L2:et10"]
+    - endpoints: ["A-POD3-L1:et11", "A-POD3-L2:et11"]
+    - endpoints: ["A-POD3-L1:et3", "A-POD3-L3:et1"]
+    - endpoints: ["A-POD3-L1:et4", "A-POD3-L4:et1"]
+    - endpoints: ["A-POD3-L1:et5", "A-POD3-L5:et1"]
+    - endpoints: ["A-POD3-L2:et3", "A-POD3-L3:et2"]
+    - endpoints: ["A-POD3-L2:et4", "A-POD3-L4:et2"]
+    - endpoints: ["A-POD3-L2:et5", "A-POD3-L5:et2"]
+    - endpoints: ["A-POD3-L3:et3", "HostA5:eth1"]
+    - endpoints: ["HostA5:eth2", "HostA6:eth1"]
+    - endpoints: ["A-POD3-L4:et3", "HostA7:eth1"]
+    - endpoints: ["A-POD3-L5:et3", "HostA8:eth1"]
+######################
+# A-GW               #
+######################
+    - endpoints: ["A-SPINE1:et5", "A-GW1:et3"]
+    - endpoints: ["A-SPINE1:et6", "A-GW2:et3"]
+    - endpoints: ["A-SPINE2:et5", "A-GW1:et4"]
+    - endpoints: ["A-SPINE2:et6", "A-GW2:et4"]
+    - endpoints: ["A-GW1:et10", "A-GW2:et10"]
+    - endpoints: ["A-GW1:et11", "A-GW2:et11"]
+    - endpoints: ["A-GW1:et1", "BB1:et1"]
+    - endpoints: ["A-GW2:et1", "BB2:et1"]
+######################
+# B-POD1             #
+######################
+    - endpoints: ["B-SPINE1:et1", "B-POD1-L1:et1"]
+    - endpoints: ["B-SPINE2:et1", "B-POD1-L2:et1"]
+    - endpoints: ["B-POD1-L1:et10", "B-POD1-L2:et10"]
+    - endpoints: ["B-POD1-L1:et11", "B-POD1-L2:et11"]
+    - endpoints: ["B-POD1-L1:et2", "HostB1:eth1"]
+    - endpoints: ["B-POD1-L1:et3", "HostB3:eth1"]
+    - endpoints: ["B-POD1-L2:et3", "HostB3:eth2"]
+    - endpoints: ["HostB1:eth2", "HostB2:eth1"]
+######################
+# B-POD2             #
+######################
+    - endpoints: ["B-SPINE1:et2", "B-POD2-L1:et1"]
+    - endpoints: ["B-SPINE2:et2", "B-POD2-L1:et2"]
+    - endpoints: ["B-POD2-L1:et3", "HostB4:eth1"]
+######################
+# B-POD3             #
+######################
+    - endpoints: ["B-SPINE1:et3", "B-POD3-L1:et1"]
+    - endpoints: ["B-SPINE1:et4", "B-POD3-L2:et1"]
+    - endpoints: ["B-SPINE2:et3", "B-POD3-L1:et2"]
+    - endpoints: ["B-SPINE2:et4", "B-POD3-L2:et2"]
+    - endpoints: ["B-POD3-L1:et10", "B-POD3-L2:et10"]
+    - endpoints: ["B-POD3-L1:et11", "B-POD3-L2:et11"]
+    - endpoints: ["B-POD3-L1:et3", "B-POD3-L3:et1"]
+    - endpoints: ["B-POD3-L1:et4", "B-POD3-L4:et1"]
+    - endpoints: ["B-POD3-L1:et5", "B-POD3-L5:et1"]
+    - endpoints: ["B-POD3-L2:et3", "B-POD3-L3:et2"]
+    - endpoints: ["B-POD3-L2:et4", "B-POD3-L4:et2"]
+    - endpoints: ["B-POD3-L2:et5", "B-POD3-L5:et2"]
+    - endpoints: ["B-POD3-L3:et3", "HostB5:eth1"]
+    - endpoints: ["HostB5:eth2", "HostB6:eth1"]
+    - endpoints: ["B-POD3-L4:et3", "HostB7:eth1"]
+    - endpoints: ["B-POD3-L5:et3", "HostB8:eth1"]
+######################
+# B-GW               #
+######################
+    - endpoints: ["B-SPINE1:et5", "B-GW1:et3"]
+    - endpoints: ["B-SPINE1:et6", "B-GW2:et3"]
+    - endpoints: ["B-SPINE2:et5", "B-GW1:et4"]
+    - endpoints: ["B-SPINE2:et6", "B-GW2:et4"]
+    - endpoints: ["B-GW1:et10", "B-GW2:et10"]
+    - endpoints: ["B-GW1:et11", "B-GW2:et11"]
+    - endpoints: ["B-GW1:et1", "BB1:et2"]
+    - endpoints: ["B-GW2:et1", "BB2:et2"]

@@ -1,0 +1,116 @@
+---
+all:
+  children:
+    eos:
+      children:
+        lab:
+          hosts:
+###############################################################
+###############################################################
+#                     DOMAIN "A"                         #
+###############################################################
+###############################################################
+            A-SPINE1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22001
+              ansible_httpapi_port: 44301
+            A-SPINE2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22002
+              ansible_httpapi_port: 44302
+            A-GW1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22023
+              ansible_httpapi_port: 44323
+            A-GW2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22024
+              ansible_httpapi_port: 44324
+            A-POD1-L1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22003
+              ansible_httpapi_port: 44303
+            A-POD1-L2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22004
+              ansible_httpapi_port: 44304
+            A-POD2-L1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22005
+              ansible_httpapi_port: 44305
+            A-POD3-L1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22006
+              ansible_httpapi_port: 44306
+            A-POD3-L2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22007
+              ansible_httpapi_port: 44307
+            A-POD3-L3:
+              ansible_host: 127.0.0.1
+              ansible_port: 22008
+              ansible_httpapi_port: 44308
+            A-POD3-L4:
+              ansible_host: 127.0.0.1
+              ansible_port: 22009
+              ansible_httpapi_port: 44309
+            A-POD3-L5:
+              ansible_host: 127.0.0.1
+              ansible_port: 22010
+              ansible_httpapi_port: 44310
+            B-SPINE1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22011
+              ansible_httpapi_port: 44311
+            B-SPINE2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22012
+              ansible_httpapi_port: 44312
+            B-GW1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22025
+              ansible_httpapi_port: 44325
+            B-GW2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22026
+              ansible_httpapi_port: 44326
+            B-POD1-L1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22013
+              ansible_httpapi_port: 44313
+            B-POD1-L2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22014
+              ansible_httpapi_port: 44314
+            B-POD2-L1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22015
+              ansible_httpapi_port: 44315
+            B-POD3-L1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22016
+              ansible_httpapi_port: 44316
+            B-POD3-L2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22017
+              ansible_httpapi_port: 44317
+            B-POD3-L3:
+              ansible_host: 127.0.0.1
+              ansible_port: 22018
+              ansible_httpapi_port: 44318
+            B-POD3-L4:
+              ansible_host: 127.0.0.1
+              ansible_port: 22019
+              ansible_httpapi_port: 44319
+            B-POD3-L5:
+              ansible_host: 127.0.0.1
+              ansible_port: 22020
+              ansible_httpapi_port: 44320
+            BB1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22021
+              ansible_httpapi_port: 44321
+            BB2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22022
+              ansible_httpapi_port: 44322
