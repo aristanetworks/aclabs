@@ -44,22 +44,22 @@ topology:
     A-SPINE1:
       kind: ceos
       mgmt-ipv4: 172.100.100.101
-      # startup-config: ./configs/A-SPINE1.cfg
+      startup-config: init-configs/A-SPINE1.cfg
 
     A-SPINE2:
       kind: ceos
       mgmt-ipv4: 172.100.100.102
-      # startup-config: ./configs/A-SPINE2.cfg
+      startup-config: init-configs/A-SPINE2.cfg
 
     A-SPINE3:
       kind: ceos
       mgmt-ipv4: 172.100.100.103
-      # startup-config: ./configs/A-SPINE3.cfg
+      startup-config: init-configs/A-SPINE3.cfg
 
     A-SPINE4:
       kind: ceos
       mgmt-ipv4: 172.100.100.104
-      # startup-config: ./configs/A-SPINE4.cfg
+      startup-config: init-configs/A-SPINE4.cfg
 
 #########################
 # DC "A" LEAF           #
@@ -68,42 +68,42 @@ topology:
     A-LEAF1:
       kind: ceos
       mgmt-ipv4: 172.100.100.105
-      # startup-config: ./configs/A-LEAF1.cfg
+      startup-config: init-configs/A-LEAF1.cfg
 
     A-LEAF2:
       kind: ceos
       mgmt-ipv4: 172.100.100.106
-      # startup-config: ./configs/A-LEAF2.cfg
+      startup-config: init-configs/A-LEAF2.cfg
 
     A-LEAF3:
       kind: ceos
       mgmt-ipv4: 172.100.100.107
-      # startup-config: ./configs/A-LEAF3.cfg
+      startup-config: init-configs/A-LEAF3.cfg
 
     A-LEAF4:
       kind: ceos
       mgmt-ipv4: 172.100.100.108
-      # startup-config: ./configs/A-LEAF4.cfg
+      startup-config: init-configs/A-LEAF4.cfg
 
     A-LEAF5:
       kind: ceos
       mgmt-ipv4: 172.100.100.109
-      # startup-config: ./configs/A-LEAF5.cfg
+      startup-config: init-configs/A-LEAF5.cfg
 
     A-LEAF6:
       kind: ceos
       mgmt-ipv4: 172.100.100.110
-      # startup-config: ./configs/A-LEAF6.cfg
+      startup-config: init-configs/A-LEAF6.cfg
 
     A-LEAF7:
       kind: ceos
       mgmt-ipv4: 172.100.100.111
-      # startup-config: ./configs/A-LEAF7.cfg
+      startup-config: init-configs/A-LEAF7.cfg
 
     A-LEAF8:
       kind: ceos
       mgmt-ipv4: 172.100.100.112
-      # startup-config: ./configs/A-LEAF8.cfg
+      startup-config: init-configs/A-LEAF8.cfg
 
 #########################
 # DC "A" HostC6          #
