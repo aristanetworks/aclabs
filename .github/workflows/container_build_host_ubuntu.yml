@@ -23,5 +23,5 @@ jobs:
       from_image: "ubuntu"
       from_variant: "24.04"
       username: "admin"
-      UID: "1001"
-      GID: "1001"
+      user_id: "1001"
+      group_id: "1001"
