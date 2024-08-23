@@ -112,6 +112,10 @@ topology:
     HostA1:
       kind: linux
       mgmt-ipv4: 172.100.100.201
+      env:
+        TMODE: lacp
+        IP4: 172.100.100.201
+        GW: 172.100.100.1
       # exec:
       #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.10.10.101/24 -i6 2001:db8:10:10::101/64 -g 10.10.10.1
 
