@@ -1,0 +1,25 @@
+---
+name: Create Ubuntu host container image
+
+on:
+  push:
+    branches: ['**']  # branches will be filtered in the jobs
+    paths:
+      - .github/workflows/container_build_host_ubuntu.yml
+      - .github/workflows/container_build_child.yml
+      - containers/host-ubuntu/**
+  workflow_dispatch:
+    branches: ['**']  # branches will be filtered in the jobs
+
+jobs:
+  build-demo-container:
+    # fork - build container from any branch for testing
+    # parent repo - build on main branch only
+    if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/container_build_child.yml
+    with:
+      container_name: "host-ubuntu"
+      image_tags: "latest"
+      from_image: "ubuntu"
+      from_variant: "24.04"
+      username: "admin"
