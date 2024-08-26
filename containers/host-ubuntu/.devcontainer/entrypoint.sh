@@ -83,3 +83,15 @@ if ! [ -z "${GW}" ]; then
     ip route add ${STATIC_ROUTE} via ${GW} dev ${UPLINK}
     ip route add 224.0.0.0/4 via ${GW} dev ${UPLINK}
 fi
+
+# Execute command from docker cli if any.
+if [ ${@+True} ]; then
+  exec "$@"
+# Otherwise just enter sh or zsh.
+else
+  if [ -f "/bin/zsh" ]; then
+    exec zsh
+  else
+    exec sh
+  fi
+fi
