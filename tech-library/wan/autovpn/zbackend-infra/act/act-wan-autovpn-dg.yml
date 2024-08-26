@@ -11,11 +11,6 @@ cloudeos:
     username: arista
     version: 4.32.1F
 
-cvp:
-    password: cvproot
-    username: root
-    version: 2024.2.0
-
 generic:
     password: ansible
     username: ansible
@@ -197,14 +192,9 @@ nodes:
             - Ethernet1-10
 ##############################
 ##############################
-### CV and Tools Server
+### Tools Server
 ##############################
 ##############################
-    - cvp:
-        ip_addr: 192.168.0.5
-        node_type: cvp
-        instance_type: xlarge
-        auto_configuration: true
     - tools:
         ip_addr: 192.168.0.9
         node_type: tools-server
