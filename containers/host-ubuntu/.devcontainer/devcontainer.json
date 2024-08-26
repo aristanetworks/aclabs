@@ -20,6 +20,10 @@
             "userGid": "${localEnv:GID}",
             // do not update packages to reduce build time
             "upgradePackages": "false"
+        },
+        // Add sshd
+        "ghcr.io/devcontainers/features/sshd:1": {
+            "version": "latest"
         }
     },
 
