@@ -31,10 +31,11 @@ if [ "$TMODE" == 'lacp' ]; then
     ip link set eth1 master ${UPLINK}
     ip link set eth2 master ${UPLINK}
 
-    RAND_HEX_1=$(openssl rand -hex 1)
-    RAND_HEX_2=$(openssl rand -hex 1)
-    BOND_MAC="c0:d6:82:00:${RAND_HEX_1}:${RAND_HEX_2}"
-    ip link set dev ${UPLINK} address $BOND_MAC
+    # RAND_HEX_1=$(openssl rand -hex 1)
+    # RAND_HEX_2=$(openssl rand -hex 1)
+    # BOND_MAC="c0:d6:82:00:${RAND_HEX_1}:${RAND_HEX_2}"
+    # ip link set dev ${UPLINK} address $BOND_MAC
+    ip link set dev ${UPLINK} address "c0:d6:82:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
     ip link set ${UPLINK} up
 
 elif ! [ -z "${PHONE}" ] ; then
@@ -44,10 +45,11 @@ elif ! [ -z "${PHONE}" ] ; then
     # Create br0
     ip link add name br0 type bridge
 
-    RAND_HEX_1=$(openssl rand -hex 1)
-    RAND_HEX_2=$(openssl rand -hex 1)
-    BOND_MAC="30:86:2d:00:${RAND_HEX_1}:${RAND_HEX_2}"
-    ip link set ${UPLINK} address $BOND_MAC
+    # RAND_HEX_1=$(openssl rand -hex 1)
+    # RAND_HEX_2=$(openssl rand -hex 1)
+    # BOND_MAC="30:86:2d:00:${RAND_HEX_1}:${RAND_HEX_2}"
+    # ip link set ${UPLINK} address $BOND_MAC
+    ip link set dev ${UPLINK} address "c0:d6:82:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
 
     # Disable STP, provide add'l visibility
     ip link set ${UPLINK} type bridge stp_state 0
@@ -77,7 +79,7 @@ if ! [ -z "${IPV6}" ]; then
 fi
 
 if ! [ -z "${GW}" ]; then
-    # add default route
-    ip route add default via ${GW} dev ${UPLINK}
+    # add static routes
+    ip route add ${STATIC_ROUTE} via ${GW} dev ${UPLINK}
     ip route add 224.0.0.0/4 via ${GW} dev ${UPLINK}
 fi
