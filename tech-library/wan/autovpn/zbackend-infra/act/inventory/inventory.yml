@@ -3,16 +3,12 @@ all:
   children:
     eos:
       children:
-        lab:
+        switches:
           hosts:
             DC1-SPINE:
               ansible_host: 192.168.0.11
             DC1-LEAF:
               ansible_host: 192.168.0.12
-            DC1-R1:
-              ansible_host: 192.168.0.13
-            DC1-R2:
-              ansible_host: 192.168.0.14
             DC1-BORDER1:
               ansible_host: 192.168.0.15
             DC1-BORDER2:
@@ -21,25 +17,31 @@ all:
               ansible_host: 192.168.0.17
             DC2-LEAF:
               ansible_host: 192.168.0.18
-            DC2-R1:
-              ansible_host: 192.168.0.19
-            DC2-R2:
-              ansible_host: 192.168.0.20
             DC2-BORDER1:
               ansible_host: 192.168.0.21
             DC2-BORDER2:
               ansible_host: 192.168.0.22
-            S1-R1:
-              ansible_host: 192.168.0.23
-            S1-R2:
-              ansible_host: 192.168.0.24
             S1-SW1:
               ansible_host: 192.168.0.25
-            S2-R1:
-              ansible_host: 192.168.0.26
             S2-SW1:
               ansible_host: 192.168.0.27
             INTERNET:
               ansible_host: 192.168.0.28
             DCI-MPLS:
               ansible_host: 192.168.0.29
+        routers:
+          hosts:
+            DC1-R1:
+              ansible_host: 192.168.0.13
+            DC1-R2:
+              ansible_host: 192.168.0.14
+            DC2-R1:
+              ansible_host: 192.168.0.19
+            DC2-R2:
+              ansible_host: 192.168.0.20
+            S1-R1:
+              ansible_host: 192.168.0.23
+            S1-R2:
+              ansible_host: 192.168.0.24
+            S2-R1:
+              ansible_host: 192.168.0.26

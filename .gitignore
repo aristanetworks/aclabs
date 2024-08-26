@@ -4,3 +4,6 @@
 # clab auto-created directories and files
 **clab-*
 *.yml.bak
+
+# license files
+*license*.json

@@ -2,7 +2,7 @@
 
 - name: Get configs from all switches in topology
   connection: httpapi
-  hosts: lab
+  hosts: all
   gather_facts: false
 
   vars:
