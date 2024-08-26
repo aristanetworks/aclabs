@@ -34,7 +34,7 @@ all:
             S1-R2:
               ansible_host: 192.168.0.24
             S1-SW1:
-              ansible_host: 192.1686.0.25
+              ansible_host: 192.168.0.25
             S2-R1:
               ansible_host: 192.168.0.26
             S2-SW1:
