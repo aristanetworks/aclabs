@@ -46,11 +46,10 @@ if [ "$TMODE" == 'lacp' ]; then
     sudo ip link set eth1 master ${UPLINK}
     sudo ip link set eth2 master ${UPLINK}
 
-    # RAND_HEX_1=$(openssl rand -hex 1)
-    # RAND_HEX_2=$(openssl rand -hex 1)
-    # BOND_MAC="c0:d6:82:00:${RAND_HEX_1}:${RAND_HEX_2}"
-    # ip link set dev ${UPLINK} address $BOND_MAC
-    sudo ip link set dev ${UPLINK} address "c0:d6:82:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
+    if [ -z "$UPLINK_MAC" ]; then
+      UPLINK_MAC="c0:d6:82:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
+    fi
+    sudo ip link set dev ${UPLINK} address "${UPLINK_MAC}"
     sudo ip link set ${UPLINK} up
 
 elif ! [ -z "${PHONE}" ] ; then
@@ -60,11 +59,10 @@ elif ! [ -z "${PHONE}" ] ; then
     # Create br0
     sudo ip link add name br0 type bridge
 
-    # RAND_HEX_1=$(openssl rand -hex 1)
-    # RAND_HEX_2=$(openssl rand -hex 1)
-    # BOND_MAC="30:86:2d:00:${RAND_HEX_1}:${RAND_HEX_2}"
-    # ip link set ${UPLINK} address $BOND_MAC
-    sudo ip link set dev ${UPLINK} address "30:86:2d:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
+    if [ -z "$UPLINK_MAC" ]; then
+      UPLINK_MAC="30:86:2d:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
+    fi
+    sudo ip link set dev ${UPLINK} address "${UPLINK_MAC}"
 
     # Disable STP, provide add'l visibility
     sudo ip link set ${UPLINK} type bridge stp_state 0
