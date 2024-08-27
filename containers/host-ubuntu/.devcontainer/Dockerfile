@@ -3,6 +3,8 @@ ARG FROM_VARIANT
 
 FROM ${FROM_IMAGE}:${FROM_VARIANT}
 
+ARG USERNAME
+
 # Install essential tools.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -46,5 +48,7 @@ RUN apt-get update \
 
 COPY ./entrypoint.sh /bin/entrypoint.sh
 RUN chmod +x /bin/entrypoint.sh
+
+USER ${USERNAME}
 
 ENTRYPOINT [ "/bin/entrypoint.sh" ]
