@@ -5,7 +5,7 @@ if [ -z "${SSH_PASSWORD}" ]; then
   SSH_PASSWORD='admin'
 fi
 
-echo "admin:${SSH_PASSWORD}" | chpasswd
+echo "admin:${SSH_PASSWORD}" | sudo chpasswd
 
 # start SSH server
 sudo service ssh start
