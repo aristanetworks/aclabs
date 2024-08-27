@@ -37,7 +37,7 @@ RUN apt-get update \
     openssh-server \
     snapd \
     tzdata \
-    ufw \
+    # ufw \
     vim
     # no need to reduce the image size for now
     # && rm -rf /var/lib/apt/lists/* \

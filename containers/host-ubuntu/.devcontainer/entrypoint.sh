@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# set admin password for SSH access
+if [ -z "${SSH_PASSWORD}" ]; then
+  SSH_PASSWORD='admin'
+fi
+
+echo "admin:${SSH_PASSWORD}" | chpasswd
+
 UPLINK='eth1'
 
 # TMODE is expected to be set via the containerlab topology file prior to deployment

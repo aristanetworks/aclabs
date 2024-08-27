@@ -20,11 +20,11 @@
             "userGid": "${localEnv:GID}",
             // do not update packages to reduce build time
             "upgradePackages": "false"
-        },
-        // Add sshd
-        "ghcr.io/devcontainers/features/sshd:1": {
-            "version": "latest"
         }
+        // Add sshd
+        // "ghcr.io/devcontainers/features/sshd:1": {
+        //     "version": "latest"
+        // }
     },
 
 	// Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
