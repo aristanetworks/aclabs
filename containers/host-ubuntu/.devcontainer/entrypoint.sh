@@ -49,7 +49,7 @@ elif ! [ -z "${PHONE}" ] ; then
     # RAND_HEX_2=$(openssl rand -hex 1)
     # BOND_MAC="30:86:2d:00:${RAND_HEX_1}:${RAND_HEX_2}"
     # ip link set ${UPLINK} address $BOND_MAC
-    ip link set dev ${UPLINK} address "c0:d6:82:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
+    ip link set dev ${UPLINK} address "30:86:2d:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
 
     # Disable STP, provide add'l visibility
     ip link set ${UPLINK} type bridge stp_state 0
