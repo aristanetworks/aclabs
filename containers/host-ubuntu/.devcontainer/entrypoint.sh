@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# preserve environment variables
+if [ "$(id -u)" != "0" ]; then
+  exec sudo --preserve-env=TMODE,TACTIVE,TBACKUP,SSH_PASSWORD,IPV4,IPV6,GW,STATIC_ROUTE "$0" "$@"
+fi
+
 # set admin password for SSH access
 if [ -z "${SSH_PASSWORD}" ]; then
   SSH_PASSWORD='admin'
@@ -33,47 +38,47 @@ if [ "$TMODE" == 'lacp' ]; then
 
     UPLINK='bond0'
 
-    ip link set eth1 down
-    ip link set eth2 down
+    sudo ip link set eth1 down
+    sudo ip link set eth2 down
 
-    ip link add ${UPLINK} type bond mode 802.3ad
+    sudo ip link add ${UPLINK} type bond mode 802.3ad
 
-    ip link set eth1 master ${UPLINK}
-    ip link set eth2 master ${UPLINK}
+    sudo ip link set eth1 master ${UPLINK}
+    sudo ip link set eth2 master ${UPLINK}
 
     # RAND_HEX_1=$(openssl rand -hex 1)
     # RAND_HEX_2=$(openssl rand -hex 1)
     # BOND_MAC="c0:d6:82:00:${RAND_HEX_1}:${RAND_HEX_2}"
     # ip link set dev ${UPLINK} address $BOND_MAC
-    ip link set dev ${UPLINK} address "c0:d6:82:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
-    ip link set ${UPLINK} up
+    sudo ip link set dev ${UPLINK} address "c0:d6:82:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
+    sudo ip link set ${UPLINK} up
 
 elif ! [ -z "${PHONE}" ] ; then
 
     UPLINK='br0'
 
     # Create br0
-    ip link add name br0 type bridge
+    sudo ip link add name br0 type bridge
 
     # RAND_HEX_1=$(openssl rand -hex 1)
     # RAND_HEX_2=$(openssl rand -hex 1)
     # BOND_MAC="30:86:2d:00:${RAND_HEX_1}:${RAND_HEX_2}"
     # ip link set ${UPLINK} address $BOND_MAC
-    ip link set dev ${UPLINK} address "30:86:2d:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
+    sudo ip link set dev ${UPLINK} address "30:86:2d:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
 
     # Disable STP, provide add'l visibility
-    ip link set ${UPLINK} type bridge stp_state 0
-    ip link set ${UPLINK} type bridge vlan_stats_per_port 1
+    sudo ip link set ${UPLINK} type bridge stp_state 0
+    sudo ip link set ${UPLINK} type bridge vlan_stats_per_port 1
 
     # Bring up Bridge Interface and add eth1 & eth2 (Note: eths must be UP to add)
-    ip link set dev ${UPLINK} up
-    ip link set eth1 master ${UPLINK}
-    ip link set eth2 master ${UPLINK}
+    sudo ip link set dev ${UPLINK} up
+    sudo ip link set eth1 master ${UPLINK}
+    sudo ip link set eth2 master ${UPLINK}
 
     # Add Simple Multicast Support
     #sysctl net.ipv4.conf.br0.mc_forwarding=1
     #sysctl net.ipv6.conf.br0.mc_forwarding=1
-    ip link set ${UPLINK} type bridge mcast_stats_enabled 1
+    sudo ip link set ${UPLINK} type bridge mcast_stats_enabled 1
 
     # Customize LLDP
     # lldpcli configure ports eth1,eth2,br0 lldp status rx-only
@@ -81,17 +86,17 @@ fi
 
 # configure IP addresses and routes
 if ! [ -z "${IPV4}" ]; then
-    ip addr add ${IPV4} dev ${UPLINK}
+    sudo ip addr add ${IPV4} dev ${UPLINK}
 fi
 
 if ! [ -z "${IPV6}" ]; then
-    ip -6 addr add ${IPV6} dev ${UPLINK}
+    sudo ip -6 addr add ${IPV6} dev ${UPLINK}
 fi
 
 if ! [ -z "${GW}" ]; then
     # add static routes
-    ip route add ${STATIC_ROUTE} via ${GW} dev ${UPLINK}
-    ip route add 224.0.0.0/4 via ${GW} dev ${UPLINK}
+    sudo ip route add ${STATIC_ROUTE} via ${GW} dev ${UPLINK}
+    sudo ip route add 224.0.0.0/4 via ${GW} dev ${UPLINK}
 fi
 
 # Execute command from docker cli if any.
