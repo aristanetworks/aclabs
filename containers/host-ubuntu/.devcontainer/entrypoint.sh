@@ -7,6 +7,9 @@ fi
 
 echo "admin:${SSH_PASSWORD}" | chpasswd
 
+# start SSH server
+service ssh start
+
 UPLINK='eth1'
 
 # TMODE is expected to be set via the containerlab topology file prior to deployment
