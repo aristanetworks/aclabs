@@ -8,7 +8,7 @@ fi
 echo "admin:${SSH_PASSWORD}" | chpasswd
 
 # start SSH server
-service ssh start
+sudo service ssh start
 
 UPLINK='eth1'
 
