@@ -120,84 +120,84 @@ topology:
     HostB1:
       kind: linux
       mgmt-ipv4: 172.100.100.207
-      # env:
-      #   TMODE: lacp
-      #   IPV4: 10.10.10.101/24
-      #   STATIC_ROUTE: 10.0.0.0/8
-      #   GW: 10.10.10.1
-      #   IPV6: 2001:db8:10:10::101/64
+      env:
+        TMODE: lacp
+        IPV4: 10.20.20.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.20.20.1
+        IPV6: 2001:db8:20:20::101/64
       # exec:
       #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.20.20.101/24 -i6 2001:db8:20:20::101/64 -g 10.20.20.1
 
     HostB2:
       kind: linux
       mgmt-ipv4: 172.100.100.208
-      # env:
-      #   TMODE: lacp
-      #   IPV4: 10.10.10.101/24
-      #   STATIC_ROUTE: 10.0.0.0/8
-      #   GW: 10.10.10.1
-      #   IPV6: 2001:db8:10:10::101/64
+      env:
+        TMODE: lacp
+        IPV4: 10.40.40.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.40.40.1
+        IPV6: 2001:db8:40:40::101/64
       # exec:
       #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.40.40.101/24 -i6 2001:db8:40:40::101/64 -g 10.40.40.1
 
     HostB3:
       kind: linux
       mgmt-ipv4: 172.100.100.209
-      # env:
-      #   TMODE: lacp
-      #   IPV4: 10.10.10.101/24
-      #   STATIC_ROUTE: 10.0.0.0/8
-      #   GW: 10.10.10.1
-      #   IPV6: 2001:db8:10:10::101/64
+      env:
+        TMODE: lacp
+        IPV4: 10.60.60.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.60.60.1
+        IPV6: 2001:db8:60:60::101/64
       # exec:
       #   - bash /usr/local/bin/hostnetconfig.sh -i4 10.60.60.101/24 -i6 2001:db8:60:60::101/64 -g 10.60.60.1
 
     HostB4:
       kind: linux
       mgmt-ipv4: 172.100.100.210
-      # env:
-      #   TMODE: lacp
-      #   IPV4: 10.10.10.101/24
-      #   STATIC_ROUTE: 10.0.0.0/8
-      #   GW: 10.10.10.1
-      #   IPV6: 2001:db8:10:10::101/64
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.103/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        IPV6: 2001:db8:10:10::103/64
       # exec:
       #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.10.10.103/24 -i6 2001:db8:10:10::103/64 -g 10.10.10.1
 
     HostB5:
       kind: linux
       mgmt-ipv4: 172.100.100.211
-      # env:
-      #   TMODE: lacp
-      #   IPV4: 10.10.10.101/24
-      #   STATIC_ROUTE: 10.0.0.0/8
-      #   GW: 10.10.10.1
-      #   IPV6: 2001:db8:10:10::101/64
+      env:
+        TMODE: lacp
+        IPV4: 10.70.70.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.70.70.1
+        IPV6: 2001:db8:70:70::102/64
       # exec:
       #   - bash /usr/local/bin/hostnetconfig.sh -i4 10.70.70.102/24 -i6 2001:db8:70:70::102/64 -g 10.70.70.1
 
     HostB6:
       kind: linux
       mgmt-ipv4: 172.100.100.212
-      # env:
-      #   TMODE: lacp
-      #   IPV4: 10.10.10.101/24
-      #   STATIC_ROUTE: 10.0.0.0/8
-      #   GW: 10.10.10.1
-      #   IPV6: 2001:db8:10:10::101/64
+      env:
+        TMODE: lacp
+        IPV4: 10.40.40.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.40.40.1
+        IPV6: 2001:db8:40:40::102/64
       # exec:
       #   - bash /usr/local/bin/hostnetconfig.sh -i4 10.40.40.102/24 -i6 2001:db8:40:40::102/64 -g 10.40.40.1
 
     HostB7:
       kind: linux
       mgmt-ipv4: 172.100.100.213
-      # env:
-      #   TMODE: lacp
-      #   IPV4: 10.10.10.101/24
-      #   STATIC_ROUTE: 10.0.0.0/8
-      #   GW: 10.10.10.1
-      #   IPV6: 2001:db8:10:10::101/64
+      env:
+        TMODE: lacp
+        IPV4: 10.80.80.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.80.80.1
+        IPV6: 2001:db8:80:80::101/64
       # exec:
       #   - bash /usr/local/bin/hostnetconfig.sh -i4 10.80.80.101/24 -i6 2001:db8:80:80::101/64 -g 10.80.80.1
 
