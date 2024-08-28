@@ -12,8 +12,8 @@ fi
 
 echo "admin:${SSH_PASSWORD}" | sudo chpasswd
 
-# start SSH server
-sudo service ssh start
+# start SSH server and LLDP
+sudo service ssh start && sudo lldpd
 
 UPLINK='eth1'
 
