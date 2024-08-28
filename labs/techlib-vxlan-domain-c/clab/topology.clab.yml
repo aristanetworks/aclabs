@@ -1,0 +1,232 @@
+---
+# --------------------------------------------------------------
+# Arista EVPN Deployment Guide Topology
+# --------------------------------------------------------------
+
+name: arista-evpn-dg
+
+prefix: ""
+
+mgmt:
+  network: mgmt
+  ipv4-subnet: 172.100.100.0/24
+
+topology:
+
+  defaults:
+    env:
+      INTFTYPE: et
+
+  kinds:
+    ceos:
+      image: arista/ceos:4.32.1F
+    linux:
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:latest
+      binds:
+        - /techlib-vxlan-domain-c:/workspace:ro
+
+  nodes:
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+#                     DOMAIN "C"                         #
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+
+
+#########################
+# DC "C" SPINE          #
+#########################
+
+    C-SPINE1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.127
+      startup-config: init-configs/C-SPINE1.cfg
+
+    C-SPINE2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.128
+      startup-config: init-configs/C-SPINE2.cfg
+
+#########################
+# DC "C" LEAF           #
+#########################
+
+    C-LEAF1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.129
+      startup-config: init-configs/C-LEAF1.cfg
+
+    C-LEAF2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.130
+      startup-config: init-configs/C-LEAF2.cfg
+
+    C-LEAF3:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.131
+      startup-config: init-configs/C-LEAF3.cfg
+
+    C-LEAF4:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.132
+      startup-config: init-configs/C-LEAF4.cfg
+
+    C-LEAF5:
+      kind: ceos
+      group: leaf
+      mgmt-ipv4: 172.100.100.133
+      startup-config: init-configs/C-LEAF5.cfg
+
+    C-LEAF6:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.134
+      startup-config: init-configs/C-LEAF6.cfg
+
+    C-LEAF7:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.135
+      startup-config: init-configs/C-LEAF7.cfg
+
+    C-LEAF8:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.136
+      startup-config: init-configs/C-LEAF8.cfg
+
+#########################
+# DC "C" HostC6          #
+#########################
+
+    HostC1:
+      kind: linux
+      mgmt-ipv4: 172.100.100.214
+      # env:
+      #   TMODE: lacp
+      #   IPV4: 10.10.10.101/24
+      #   STATIC_ROUTE: 10.0.0.0/8
+      #   GW: 10.10.10.1
+      #   IPV6: 2001:db8:10:10::101/64
+      # exec:
+      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.10.10.104/24 -i6 2001:db8:10:10::104/64 -g 10.10.10.1
+
+    HostC2:
+      kind: linux
+      mgmt-ipv4: 172.100.100.215
+      # env:
+      #   TMODE: lacp
+      #   IPV4: 10.10.10.101/24
+      #   STATIC_ROUTE: 10.0.0.0/8
+      #   GW: 10.10.10.1
+      #   IPV6: 2001:db8:10:10::101/64
+      # exec:
+      #   - bash /usr/local/bin/hostnetconfig.sh -i4 10.20.20.102/24 -i6 2001:db8:20:20::102/64 -g 10.20.20.1
+
+    HostC3:
+      kind: linux
+      mgmt-ipv4: 172.100.100.216
+      # env:
+      #   TMODE: lacp
+      #   IPV4: 10.10.10.101/24
+      #   STATIC_ROUTE: 10.0.0.0/8
+      #   GW: 10.10.10.1
+      #   IPV6: 2001:db8:10:10::101/64
+      # exec:
+      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.60.60.102/24 -i6 2001:db8:60:60::102/64 -g 10.60.60.1
+
+    HostC4:
+      kind: linux
+      mgmt-ipv4: 172.100.100.217
+      # env:
+      #   TMODE: lacp
+      #   IPV4: 10.10.10.101/24
+      #   STATIC_ROUTE: 10.0.0.0/8
+      #   GW: 10.10.10.1
+      #   IPV6: 2001:db8:10:10::101/64
+      # exec:
+      #   - bash /usr/local/bin/hostnetconfig.sh -i4 10.50.50.102/24 -i6 2001:db8:50:50::102/64 -g 10.50.50.1
+
+    HostC5:
+      kind: linux
+      mgmt-ipv4: 172.100.100.218
+      # env:
+      #   TMODE: lacp
+      #   IPV4: 10.10.10.101/24
+      #   STATIC_ROUTE: 10.0.0.0/8
+      #   GW: 10.10.10.1
+      #   IPV6: 2001:db8:10:10::101/64
+      # exec:
+      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.20.20.103/24 -i6 2001:db8:20:20::103/64 -g 10.20.20.1
+
+    HostC6:
+      kind: linux
+      mgmt-ipv4: 172.100.100.219
+      # env:
+      #   TMODE: lacp
+      #   IPV4: 10.10.10.101/24
+      #   STATIC_ROUTE: 10.0.0.0/8
+      #   GW: 10.10.10.1
+      #   IPV6: 2001:db8:10:10::101/64
+      # exec:
+      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.60.60.103/24 -i6 2001:db8:60:60::103/64 -g 10.60.60.1
+
+  links:
+######################
+# C-SPINE1 to LEAF   #
+######################
+    - endpoints: ["C-SPINE1:et1", "C-LEAF1:et1"]
+    - endpoints: ["C-SPINE1:et2", "C-LEAF2:et1"]
+    - endpoints: ["C-SPINE1:et3", "C-LEAF3:et1"]
+    - endpoints: ["C-SPINE1:et4", "C-LEAF4:et1"]
+    - endpoints: ["C-SPINE1:et5", "C-LEAF5:et1"]
+    - endpoints: ["C-SPINE1:et6", "C-LEAF6:et1"]
+    - endpoints: ["C-SPINE1:et7", "C-LEAF7:et1"]
+    - endpoints: ["C-SPINE1:et8", "C-LEAF8:et1"]
+######################
+# C-SPINE2 to LEAF   #
+######################
+    - endpoints: ["C-SPINE2:et1", "C-LEAF1:et2"]
+    - endpoints: ["C-SPINE2:et2", "C-LEAF2:et2"]
+    - endpoints: ["C-SPINE2:et3", "C-LEAF3:et2"]
+    - endpoints: ["C-SPINE2:et4", "C-LEAF4:et2"]
+    - endpoints: ["C-SPINE2:et5", "C-LEAF5:et2"]
+    - endpoints: ["C-SPINE2:et6", "C-LEAF6:et2"]
+    - endpoints: ["C-SPINE2:et7", "C-LEAF7:et2"]
+    - endpoints: ["C-SPINE2:et8", "C-LEAF8:et2"]
+########################
+# C-LEAF1 to C-LEAF2   #
+########################
+    - endpoints: ["C-LEAF1:et5", "C-LEAF2:et5"]
+    - endpoints: ["C-LEAF1:et6", "C-LEAF2:et6"]
+########################
+# C-LEAF3 to C-LEAF4   #
+########################
+    - endpoints: ["C-LEAF3:et5", "C-LEAF4:et5"]
+    - endpoints: ["C-LEAF3:et6", "C-LEAF4:et6"]
+########################
+# C-LEAF5 to C-LEAF6   #
+########################
+    - endpoints: ["C-LEAF5:et5", "C-LEAF6:et5"]
+    - endpoints: ["C-LEAF5:et6", "C-LEAF6:et6"]
+########################
+# C-LEAF7 to C-LEAF8   #
+########################
+    - endpoints: ["C-LEAF7:et5", "C-LEAF8:et5"]
+    - endpoints: ["C-LEAF7:et6", "C-LEAF8:et6"]
+########################
+# DC "C" HostC6         #
+########################
+    - endpoints: ["HostC1:eth1", "C-LEAF1:et7"]
+    - endpoints: ["HostC1:eth2", "C-LEAF2:et7"]
+    - endpoints: ["HostC2:eth1", "C-LEAF3:et7"]
+    - endpoints: ["HostC3:eth1", "C-LEAF3:et8"]
+    - endpoints: ["HostC3:eth2", "C-LEAF4:et8"]
+    - endpoints: ["HostC4:eth1", "C-LEAF4:et7"]
+    - endpoints: ["HostC5:eth1", "C-LEAF5:et7"]
+    - endpoints: ["HostC5:eth2", "C-LEAF6:et7"]
+    - endpoints: ["HostC6:eth1", "C-LEAF5:et8"]
+    - endpoints: ["HostC6:eth2", "C-LEAF6:et8"]
