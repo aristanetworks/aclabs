@@ -9,7 +9,7 @@ veos:
 cloudeos:
     password: Arista123!
     username: arista
-    version: 4.32.1F
+    version: 4.32.2F
 
 generic:
     password: ansible
