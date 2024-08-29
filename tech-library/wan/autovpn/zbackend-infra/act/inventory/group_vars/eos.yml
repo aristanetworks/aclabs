@@ -1,7 +1,7 @@
 ansible_network_os: eos
 ansible_connection: httpapi
-ansible_user: admin
-ansible_password: admin
+ansible_user: arista
+ansible_password: Arista123!
 ansible_become: true
 ansible_become_method: enable
 ansible_httpapi_use_ssl: true

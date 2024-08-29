@@ -1,0 +1,328 @@
+---
+
+veos:
+    password: Arista123!
+    username: arista
+    version: 4.32.2F
+    switchport_default_mode_routed: true
+
+cloudeos:
+    password: Arista123!
+    username: arista
+    version: 4.32.2F
+
+generic:
+    password: ansible
+    username: ansible
+    version: ubuntu-2204-lts
+
+tools-server:
+    password: ansible
+    username: ansible
+    version: ubuntu-2204-lts
+
+nodes:
+##############################
+##############################
+### DC 1
+##############################
+##############################
+    - DC1-SPINE:
+        ip_addr: 192.168.0.11
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+    - DC1-LEAF:
+        ip_addr: 192.168.0.12
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+    - DC1-R1:
+        ip_addr: 192.168.0.13
+        node_type: cloudeos
+        instance_type: xlarge
+        # ports:
+        #     - Ethernet1-10
+    - DC1-R2:
+        ip_addr: 192.168.0.14
+        node_type: cloudeos
+        instance_type: xlarge
+        # ports:
+        #     - Ethernet1-10
+    - DC1-BORDER1:
+        ip_addr: 192.168.0.15
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+    - DC1-BORDER2:
+        ip_addr: 192.168.0.16
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+    - A1:
+        ip_addr: 192.168.0.201
+        node_type: generic
+    - A2:
+        ip_addr: 192.168.0.202
+        node_type: generic
+##############################
+##############################
+### DC 2
+##############################
+##############################
+    - DC2-SPINE:
+        ip_addr: 192.168.0.17
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+    - DC2-LEAF:
+        ip_addr: 192.168.0.18
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+    - DC2-R1:
+        ip_addr: 192.168.0.19
+        node_type: cloudeos
+        instance_type: xlarge
+        # ports:
+        #     - Ethernet1-10
+    - DC2-R2:
+        ip_addr: 192.168.0.20
+        node_type: cloudeos
+        instance_type: xlarge
+        # ports:
+        #     - Ethernet1-10
+    - DC2-BORDER1:
+        ip_addr: 192.168.0.21
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+    - DC2-BORDER2:
+        ip_addr: 192.168.0.22
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+    - B1:
+        ip_addr: 192.168.0.203
+        node_type: generic
+    - B2:
+        ip_addr: 192.168.0.204
+        node_type: generic
+##############################
+##############################
+### Site 1
+##############################
+##############################
+    - S1-R1:
+        ip_addr: 192.168.0.23
+        node_type: cloudeos
+        instance_type: xlarge
+        # ports:
+        #     - Ethernet1-10
+    - S1-R2:
+        ip_addr: 192.168.0.24
+        node_type: cloudeos
+        instance_type: xlarge
+        # ports:
+        #     - Ethernet1-10
+    - S1-SW1:
+        ip_addr: 192.168.0.25
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+    - C1:
+        ip_addr: 192.168.0.205
+        node_type: generic
+    - C2:
+        ip_addr: 192.168.0.206
+        node_type: generic
+##############################
+##############################
+### Site 2
+##############################
+##############################
+    - S2-R1:
+        ip_addr: 192.168.0.26
+        node_type: cloudeos
+        instance_type: xlarge
+        # ports:
+        #     - Ethernet1-10
+    - S2-SW1:
+        ip_addr: 192.168.0.27
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+    - D1:
+        ip_addr: 192.168.0.207
+        node_type: generic
+    - D2:
+        ip_addr: 192.168.0.208
+        node_type: generic
+##############################
+##############################
+### Internet
+##############################
+##############################
+    - INTERNET:
+        ip_addr: 192.168.0.28
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+##############################
+##############################
+### DCI-MPLS
+##############################
+##############################
+    - DCI-MPLS:
+        ip_addr: 192.168.0.29
+        node_type: veos
+        instance_type: xlarge
+        ports:
+            - Ethernet1-10
+##############################
+##############################
+### Tools Server
+##############################
+##############################
+    - tools:
+        ip_addr: 192.168.0.9
+        node_type: tools-server
+        instance_type: xlarge
+links:
+##############################
+##############################
+### DC1
+##############################
+##############################
+    - connection:
+        - DC1-SPINE:Ethernet1
+        - DC1-LEAF:Ethernet1
+    - connection:
+        - DC1-SPINE:Ethernet2
+        - DC1-R1:Ethernet1
+    - connection:
+        - DC1-SPINE:Ethernet3
+        - DC1-R2:Ethernet1
+    - connection:
+        - DC1-SPINE:Ethernet4
+        - DC1-BORDER1:Ethernet1
+    - connection:
+        - DC1-SPINE:Ethernet5
+        - DC1-BORDER2:Ethernet1
+    - connection:
+        - DC1-LEAF:Ethernet2
+        - A1:Ethernet1
+    - connection:
+        - DC1-LEAF:Ethernet3
+        - A2:Ethernet1
+##############################
+##############################
+### DC2
+##############################
+##############################
+    - connection:
+        - DC2-SPINE:Ethernet1
+        - DC2-LEAF:Ethernet1
+    - connection:
+        - DC2-SPINE:Ethernet2
+        - DC2-R1:Ethernet1
+    - connection:
+        - DC2-SPINE:Ethernet3
+        - DC2-R2:Ethernet1
+    - connection:
+        - DC2-SPINE:Ethernet4
+        - DC2-BORDER1:Ethernet1
+    - connection:
+        - DC2-SPINE:Ethernet5
+        - DC2-BORDER2:Ethernet1
+    - connection:
+        - DC2-LEAF:Ethernet2
+        - B1:Ethernet1
+    - connection:
+        - DC2-LEAF:Ethernet3
+        - B2:Ethernet1
+##############################
+##############################
+### SITE1
+##############################
+##############################
+    - connection:
+        - S1-R1:Ethernet1
+        - S1-SW1:Ethernet1
+    - connection:
+        - S1-R2:Ethernet1
+        - S1-SW1:Ethernet2
+    - connection:
+        - S1-SW1:Ethernet3
+        - C1:Ethernet1
+    - connection:
+        - S1-SW1:Ethernet4
+        - C2:Ethernet1
+##############################
+##############################
+### SITE2
+##############################
+##############################
+    - connection:
+        - S2-R1:Ethernet1
+        - S2-SW1:Ethernet1
+    - connection:
+        - S2-SW1:Ethernet2
+        - D1:Ethernet1
+    - connection:
+        - S2-SW1:Ethernet3
+        - D2:Ethernet1
+##############################
+##############################
+### INTERNET
+##############################
+##############################
+    - connection:
+        - INTERNET:Ethernet1
+        - DC1-R1:Ethernet2
+    - connection:
+        - INTERNET:Ethernet2
+        - DC1-R2:Ethernet2
+    - connection:
+        - INTERNET:Ethernet3
+        - DC2-R2:Ethernet2
+    - connection:
+        - INTERNET:Ethernet4
+        - DC2-R1:Ethernet2
+    - connection:
+        - INTERNET:Ethernet5
+        - S1-R1:Ethernet2
+    - connection:
+        - INTERNET:Ethernet6
+        - S1-R2:Ethernet2
+    - connection:
+        - INTERNET:Ethernet7
+        - S2-R1:Ethernet2
+##############################
+##############################
+### DCI-MPLS
+##############################
+##############################
+    - connection:
+        - DCI-MPLS:Ethernet1
+        - DC1-BORDER1:Ethernet2
+    - connection:
+        - DCI-MPLS:Ethernet2
+        - DC1-BORDER2:Ethernet2
+    - connection:
+        - DCI-MPLS:Ethernet3
+        - DC2-BORDER2:Ethernet2
+    - connection:
+        - DCI-MPLS:Ethernet4
+        - DC2-BORDER1:Ethernet2
