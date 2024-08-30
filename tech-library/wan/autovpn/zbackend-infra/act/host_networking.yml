@@ -1,0 +1,9 @@
+hostnets:
+  HOSTA1:
+    int: et1
+    ip: 10.10.10.101
+    gw: 10.10.10.1
+  HOSTA2:
+    int: et1
+    ip: 10.20.20.101
+    gw: 10.20.20.1
