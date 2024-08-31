@@ -1,0 +1,391 @@
+---
+
+# --------------------------------------------------------------
+# Arista AutoVPN Deployment Guide Topology
+# --------------------------------------------------------------
+
+name: arista-wan-autovpn-dg
+
+prefix: ""
+
+mgmt:
+  network: mgmt
+  ipv4-subnet: 172.100.100.0/24
+
+topology:
+
+  defaults:
+    env:
+      INTFTYPE: et
+
+  kinds:
+    ceos:
+      env:
+        CLAB_MGMT_VRF: MGMT
+      image: ceos:trunk
+      memory: 4g
+    linux:
+      image: mitchv85/devhost
+
+  nodes:
+
+  ###########################
+  ##### DC1
+  ###########################
+
+    DC1-SPINE:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.100
+      startup-config: ./configs/DC1-SPINE.cfg
+      ports:
+        - '22000:22'
+        - '8000:80'
+        - '44300:443'
+
+    DC1-LEAF:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.101
+      startup-config: ./configs/DC1-LEAF.cfg
+      ports:
+        - '22001:22'
+        - '8001:80'
+        - '44301:443'
+
+    DC1-R1:
+      kind: ceos
+      image: cloudeos:latest
+      mgmt-ipv4: 172.100.100.102
+      env:
+        INTFTYPE: eth
+        SIMULATION_SFE_DPDK_MEM: 4096
+        SIMULATION_SFE_BUFFERS: 4096
+        SIMULATION_SFE_MAXVRFS: 8
+      startup-config: ./configs/DC1-R1.cfg
+      ports:
+        - '22002:22'
+        - '8002:80'
+        - '44302:443'
+
+    DC1-R2:
+      kind: ceos
+      image: cloudeos:latest
+      mgmt-ipv4: 172.100.100.103
+      env:
+        INTFTYPE: eth
+        SIMULATION_SFE_DPDK_MEM: 4096
+        SIMULATION_SFE_BUFFERS: 4096
+        SIMULATION_SFE_MAXVRFS: 8
+      startup-config: ./configs/DC1-R2.cfg
+      ports:
+        - '22003:22'
+        - '8003:80'
+        - '44303:443'
+
+    DC1-BORDER1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.104
+      startup-config: ./configs/DC1-BORDER1.cfg
+      ports:
+        - '22004:22'
+        - '8004:80'
+        - '44304:443'
+
+    DC1-BORDER2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.105
+      startup-config: ./configs/DC1-BORDER2.cfg
+      ports:
+        - '22005:22'
+        - '8005:80'
+        - '44305:443'
+
+    HostA1:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.201
+      ports:
+        - '22201:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.10.10.101/24 -i6 2001:db8:10:10::101/64 -g 10.10.10.1
+
+    HostA2:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.202
+      ports:
+        - '22202:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.20.20.101/24 -i6 2001:db8:20:20::101/64 -g 10.20.20.1
+
+  ###########################
+  ##### DC2
+  ###########################
+
+    DC2-SPINE:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.106
+      startup-config: ./configs/DC2-SPINE.cfg
+      ports:
+        - '22006:22'
+        - '8006:80'
+        - '44306:443'
+
+    DC2-LEAF:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.107
+      startup-config: ./configs/DC2-LEAF.cfg
+      ports:
+        - '22007:22'
+        - '8007:80'
+        - '44307:443'
+
+    DC2-R1:
+      kind: ceos
+      image: cloudeos:latest
+      mgmt-ipv4: 172.100.100.108
+      env:
+        INTFTYPE: eth
+        SIMULATION_SFE_DPDK_MEM: 4096
+        SIMULATION_SFE_BUFFERS: 4096
+        SIMULATION_SFE_MAXVRFS: 8
+      startup-config: ./configs/DC2-R1.cfg
+      ports:
+        - '22008:22'
+        - '8008:80'
+        - '44308:443'
+
+    DC2-R2:
+      kind: ceos
+      image: cloudeos:latest
+      mgmt-ipv4: 172.100.100.109
+      env:
+        INTFTYPE: eth
+        SIMULATION_SFE_DPDK_MEM: 4096
+        SIMULATION_SFE_BUFFERS: 4096
+        SIMULATION_SFE_MAXVRFS: 8
+      startup-config: ./configs/DC2-R2.cfg
+      ports:
+        - '22009:22'
+        - '8009:80'
+        - '44309:443'
+
+    DC2-BORDER1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.110
+      startup-config: ./configs/DC2-BORDER1.cfg
+      ports:
+        - '22010:22'
+        - '8010:80'
+        - '44310:443'
+
+    DC2-BORDER2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.111
+      startup-config: ./configs/DC2-BORDER2.cfg
+      ports:
+        - '22011:22'
+        - '8011:80'
+        - '44311:443'
+
+    HostB1:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.203
+      ports:
+        - '22203:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.10.10.102/24 -i6 2001:db8:10:10::102/64 -g 10.10.10.1
+
+    HostB2:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.204
+      ports:
+        - '22204:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.30.30.101/24 -i6 2001:db8:30:30::101/64 -g 10.30.30.1
+
+  ###########################
+  ##### SITE1
+  ###########################
+
+    S1-R1:
+      kind: ceos
+      image: cloudeos:latest
+      mgmt-ipv4: 172.100.100.112
+      env:
+        INTFTYPE: eth
+        SIMULATION_SFE_DPDK_MEM: 4096
+        SIMULATION_SFE_BUFFERS: 4096
+        SIMULATION_SFE_MAXVRFS: 8
+      startup-config: ./configs/S1-R1.cfg
+      ports:
+        - '22012:22'
+        - '8012:80'
+        - '44312:443'
+
+    S1-R2:
+      kind: ceos
+      image: cloudeos:latest
+      mgmt-ipv4: 172.100.100.113
+      env:
+        INTFTYPE: eth
+        SIMULATION_SFE_DPDK_MEM: 4096
+        SIMULATION_SFE_BUFFERS: 4096
+        SIMULATION_SFE_MAXVRFS: 8
+      startup-config: ./configs/S1-R2.cfg
+      ports:
+        - '22013:22'
+        - '8013:80'
+        - '44313:443'
+
+    S1-SW1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.114
+      startup-config: ./configs/S1-SW1.cfg
+      ports:
+        - '22014:22'
+        - '8014:80'
+        - '44314:443'
+
+    HostC1:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.205
+      ports:
+        - '22205:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.40.40.101/24 -i6 2001:db8:40:40::102/64 -g 10.40.40.1
+
+    HostC2:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.206
+      ports:
+        - '22206:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.50.50.101/24 -i6 2001:db8:50:50::101/64 -g 10.50.50.1
+
+  ###########################
+  ##### SITE2
+  ###########################
+
+    S2-R1:
+      kind: ceos
+      image: cloudeos:latest
+      mgmt-ipv4: 172.100.100.115
+      env:
+        INTFTYPE: eth
+        SIMULATION_SFE_DPDK_MEM: 4096
+        SIMULATION_SFE_BUFFERS: 4096
+        SIMULATION_SFE_MAXVRFS: 8
+      startup-config: ./configs/S2-R1.cfg
+      ports:
+        - '22015:22'
+        - '8015:80'
+        - '44315:443'
+
+    S2-SW1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.116
+      startup-config: ./configs/S2-SW1.cfg
+      ports:
+        - '22016:22'
+        - '8016:80'
+        - '44316:443'
+
+    HostD1:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.207
+      ports:
+        - '22207:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.60.60.101/24 -i6 2001:db8:60:60::102/64 -g 10.60.60.1
+
+    HostD2:
+      kind: linux
+      image: mitchv85/devhost
+      mgmt-ipv4: 172.100.100.208
+      ports:
+        - '22208:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -i4 10.70.70.101/24 -i6 2001:db8:70:70::101/64 -g 10.70.70.1
+
+  ###########################
+  ##### INTERNET
+  ###########################
+
+    INTERNET:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.118
+      startup-config: ./configs/INTERNET.cfg
+      ports:
+        - '22018:22'
+        - '8018:80'
+        - '44318:443'
+
+  ###########################
+  ##### DCI-MPLS
+  ###########################
+
+    DCI-MPLS:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.119
+      startup-config: ./configs/DCI-MPLS.cfg
+      ports:
+        - '22019:22'
+        - '8019:80'
+        - '44319:443'
+
+  links:
+  #####################
+  ### DC1 1
+  #####################
+    - endpoints: ["DC1-SPINE:et1", "DC1-LEAF:et1"]
+    - endpoints: ["DC1-SPINE:et2", "DC1-R1:eth1"]
+    - endpoints: ["DC1-SPINE:et3", "DC1-R2:eth1"]
+    - endpoints: ["DC1-SPINE:et4", "DC1-BORDER1:et1"]
+    - endpoints: ["DC1-SPINE:et5", "DC1-BORDER2:et1"]
+    - endpoints: ["DC1-LEAF:et2", "HostA1:eth1"]
+    - endpoints: ["DC1-LEAF:et3", "HostA2:eth1"]
+  #####################
+  ### DC1 2
+  #####################
+    - endpoints: ["DC2-SPINE:et1", "DC2-LEAF:et1"]
+    - endpoints: ["DC2-SPINE:et2", "DC2-R1:eth1"]
+    - endpoints: ["DC2-SPINE:et3", "DC2-R2:eth1"]
+    - endpoints: ["DC2-SPINE:et4", "DC2-BORDER1:et1"]
+    - endpoints: ["DC2-SPINE:et5", "DC2-BORDER2:et1"]
+    - endpoints: ["DC2-LEAF:et2", "HostB1:eth1"]
+    - endpoints: ["DC2-LEAF:et3", "HostB2:eth1"]
+  #####################
+  ### Site1
+  #####################
+    - endpoints: ["S1-R1:eth1", "S1-SW1:et1"]
+    - endpoints: ["S1-R2:eth1", "S1-SW1:et2"]
+    - endpoints: ["S1-SW1:et3", "HostC1:eth1"]
+    - endpoints: ["S1-SW1:et4", "HostC2:eth1"]
+  #####################
+  ### Site2
+  #####################
+    - endpoints: ["S2-R1:eth1", "S2-SW1:et1"]
+    - endpoints: ["S2-SW1:et2", "HostD1:eth1"]
+    - endpoints: ["S2-SW1:et3", "HostD2:eth1"]
+  #####################
+  ### INTERNET
+  #####################
+    - endpoints: ["INTERNET:et1", "DC1-R1:eth2"]
+    - endpoints: ["INTERNET:et2", "DC1-R2:eth2"]
+    - endpoints: ["INTERNET:et3", "DC2-R1:eth2"]
+    - endpoints: ["INTERNET:et4", "DC2-R2:eth2"]
+    - endpoints: ["INTERNET:et5", "S1-R1:eth2"]
+    - endpoints: ["INTERNET:et6", "S1-R2:eth2"]
+    - endpoints: ["INTERNET:et7", "S2-R1:eth2"]
+  #####################
+  ### DCI-MPLS
+  #####################
+    - endpoints: ["DCI-MPLS:et1", "DC1-BORDER1:et2"]
+    - endpoints: ["DCI-MPLS:et2", "DC1-BORDER2:et2"]
+    - endpoints: ["DCI-MPLS:et3", "DC2-BORDER1:et2"]
+    - endpoints: ["DCI-MPLS:et4", "DC2-BORDER2:et2"]
