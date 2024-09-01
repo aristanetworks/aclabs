@@ -35,12 +35,12 @@ topology:
 
     DC1-SPINE:
       kind: ceos
-      mgmt-ipv4: 172.100.100.100
+      mgmt-ipv4: 172.100.100.199
       startup-config: ./configs/DC1-SPINE.cfg
       ports:
-        - '22000:22'
-        - '8000:80'
-        - '44300:443'
+        - '22099:22'
+        - '8099:80'
+        - '44399:443'
 
     DC1-LEAF:
       kind: ceos
@@ -61,6 +61,8 @@ topology:
         SIMULATION_SFE_BUFFERS: 4096
         SIMULATION_SFE_MAXVRFS: 8
       startup-config: ./configs/DC1-R1.cfg
+      binds:
+       - ipsec-license.json:/mnt/flash/ipsec-license.json:ro
       ports:
         - '22002:22'
         - '8002:80'
@@ -76,6 +78,8 @@ topology:
         SIMULATION_SFE_BUFFERS: 4096
         SIMULATION_SFE_MAXVRFS: 8
       startup-config: ./configs/DC1-R2.cfg
+      binds:
+        - ipsec-license.json:/mnt/flash/ipsec-license.json:ro
       ports:
         - '22003:22'
         - '8003:80'
@@ -149,6 +153,8 @@ topology:
         SIMULATION_SFE_BUFFERS: 4096
         SIMULATION_SFE_MAXVRFS: 8
       startup-config: ./configs/DC2-R1.cfg
+      binds:
+        - ipsec-license.json:/mnt/flash/ipsec-license.json:ro
       ports:
         - '22008:22'
         - '8008:80'
@@ -164,6 +170,8 @@ topology:
         SIMULATION_SFE_BUFFERS: 4096
         SIMULATION_SFE_MAXVRFS: 8
       startup-config: ./configs/DC2-R2.cfg
+      binds:
+        - ipsec-license.json:/mnt/flash/ipsec-license.json:ro
       ports:
         - '22009:22'
         - '8009:80'
@@ -219,6 +227,8 @@ topology:
         SIMULATION_SFE_BUFFERS: 4096
         SIMULATION_SFE_MAXVRFS: 8
       startup-config: ./configs/S1-R1.cfg
+      binds:
+        - ipsec-license.json:/mnt/flash/ipsec-license.json:ro
       ports:
         - '22012:22'
         - '8012:80'
@@ -234,6 +244,8 @@ topology:
         SIMULATION_SFE_BUFFERS: 4096
         SIMULATION_SFE_MAXVRFS: 8
       startup-config: ./configs/S1-R2.cfg
+      binds:
+        - ipsec-license.json:/mnt/flash/ipsec-license.json:ro
       ports:
         - '22013:22'
         - '8013:80'
@@ -280,6 +292,8 @@ topology:
         SIMULATION_SFE_BUFFERS: 4096
         SIMULATION_SFE_MAXVRFS: 8
       startup-config: ./configs/S2-R1.cfg
+      binds:
+        - ipsec-license.json:/mnt/flash/ipsec-license.json:ro
       ports:
         - '22015:22'
         - '8015:80'

@@ -1,0 +1,80 @@
+all:
+  children:
+    eos:
+      hosts:
+        DC1-BORDER1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22004
+              ansible_httpapi_port: 44304
+        DC1-BORDER2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22005
+              ansible_httpapi_port: 44305
+        DC1-LEAF:
+              ansible_host: 127.0.0.1
+              ansible_port: 22001
+              ansible_httpapi_port: 44301
+        DC1-R1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22002
+              ansible_httpapi_port: 44302
+        DC1-R2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22003
+              ansible_httpapi_port: 44303
+        DC1-SPINE:
+              ansible_host: 127.0.0.1
+              ansible_port: 22099
+              ansible_httpapi_port: 44399
+        DC2-BORDER1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22010
+              ansible_httpapi_port: 44310
+        DC2-BORDER2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22011
+              ansible_httpapi_port: 44311
+        DC2-LEAF:
+              ansible_host: 127.0.0.1
+              ansible_port: 22007
+              ansible_httpapi_port: 44307
+        DC2-R1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22008
+              ansible_httpapi_port: 44308
+        DC2-R2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22009
+              ansible_httpapi_port: 44309
+        DC2-SPINE:
+              ansible_host: 127.0.0.1
+              ansible_port: 22006
+              ansible_httpapi_port: 44306
+        DCI-MPLS:
+              ansible_host: 127.0.0.1
+              ansible_port: 22019
+              ansible_httpapi_port: 44319
+        INTERNET:
+              ansible_host: 127.0.0.1
+              ansible_port: 22018
+              ansible_httpapi_port: 44318
+        S1-R1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22012
+              ansible_httpapi_port: 44312
+        S1-R2:
+              ansible_host: 127.0.0.1
+              ansible_port: 22013
+              ansible_httpapi_port: 44313
+        S1-SW1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22014
+              ansible_httpapi_port: 44314
+        S2-R1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22015
+              ansible_httpapi_port: 44315
+        S2-SW1:
+              ansible_host: 127.0.0.1
+              ansible_port: 22016
+              ansible_httpapi_port: 44316
