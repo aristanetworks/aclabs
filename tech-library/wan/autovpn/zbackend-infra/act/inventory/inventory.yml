@@ -45,3 +45,9 @@ all:
               ansible_host: 192.168.0.24
             S2-R1:
               ansible_host: 192.168.0.26
+    endhosts:
+      hosts:
+        HOSTA1:
+          ansible_host: 192.168.0.201
+        HOSTA2:
+          ansible_host: 192.168.0.202

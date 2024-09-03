@@ -1,0 +1,21 @@
+---
+
+- name: Copy license file
+  hosts: DC*-R*:S*-R*
+  gather_facts: false
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+
+  - name: Copy license file to {{ inventory_hostname }}
+    ansible.netcommon.net_put:
+      src: ./ipsec-license.json
+      protocol: sftp
+      dest: /mnt/flash/ipsec-license.json
+
+  - name: Install license
+    eos_command:
+      commands:
+        - "license import flash:ipsec-license.json"
+        - "license update"

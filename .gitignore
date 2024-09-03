@@ -2,7 +2,8 @@
 **.tok**
 
 # clab auto-created directories and files
-**clab-*
+**.clab-*
+*clab-*/
 *.yml.bak
 
 # license files
