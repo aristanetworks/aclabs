@@ -8,11 +8,11 @@
 
   tasks:
 
-  - name: Copy license file to {{ inventory_hostname }}
-    ansible.netcommon.net_put:
-      src: ./ipsec-license.json
-      protocol: sftp
-      dest: /mnt/flash/ipsec-license.json
+  # - name: Copy license file to {{ inventory_hostname }}
+  #   ansible.netcommon.net_put:
+  #     src: ./ipsec-license.json
+  #     protocol: sftp
+  #     dest: /mnt/flash/ipsec-license.json
 
   - name: Install license
     eos_command:
