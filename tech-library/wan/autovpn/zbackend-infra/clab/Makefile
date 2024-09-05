@@ -12,5 +12,13 @@ grab-configs: ## Grab configs from the lab
 
 .PHONY: push-license
 push-license: ## Push license to CloudEOS nodes
-	pip3 install paramiko ansible-pylibssh
+	ansible-galaxy collection install arista.eos
 	ansible-playbook push_license.yml -e ansible_connection=network_cli
+
+.PHONY: start
+start: ## Start the lab
+	sudo clab deploy -t clab-wan-autovpn-dg.yml --reconfigure
+
+.PHONY: stop
+stop: ## Stop the lab
+	sudo clab destroy -t clab-wan-autovpn-dg.yml --cleanup
