@@ -8,3 +8,6 @@
 
 # license files
 *license*.json
+
+# ignore mkdocs serve privacy cache
+.cache
