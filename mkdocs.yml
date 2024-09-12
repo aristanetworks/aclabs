@@ -1,13 +1,14 @@
 ---
-site_name: Arista Community Labs
+site_name: acLabs
 site_url: https://aclabs.arista.com
 repo_name: Arista Community Labs
 repo_url: https://github.com/aristanetworks/aclabs
 
-# extra_css:
-#   - assets/stylesheets/extra.css
+extra_css:
+  - assets/stylesheets/extra.css
 
 theme:
+  logo: assets/img/arista-logo.png
   name: material
   features:
     - announce.dismiss
@@ -46,6 +47,20 @@ theme:
     repo: fontawesome/brands/github
     logo: fontawesome/solid/gears
 
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      accent: red
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+
 markdown_extensions:
   - attr_list
   - admonition
@@ -72,9 +87,41 @@ markdown_extensions:
 copyright: >
   &nbsp;&#x1F36A;&nbsp;<a href="#__consent">Change cookie settings</a>
 
+extra:
+  consent:
+    title: Cookie consent
+    actions:
+      - accept
+      - reject
+    description: >- 
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+  # analytics:
+  #   provider: google
+  #   property: G-SJDW948EQD
+  #   feedback:
+  #     title: Was this page helpful?
+  #     ratings:
+  #       - icon: material/emoticon-happy-outline
+  #         name: This page was helpful
+  #         data: 1
+  #         note: >-
+  #           Thanks for your feedback!
+  #       - icon: material/emoticon-sad-outline
+  #         name: This page could be improved
+  #         data: 0
+  #         note: >- 
+  #           Thanks for your feedback! Help us improve this page by
+  #           using our <a href="..." target="_blank" rel="noopener">feedback form</a>.
+
 plugins:
   - privacy
   - search
+  # - macros:
+  #     include_yaml:
+  #       - gh: docs/assets/data/github.yml
 
 nav:
   - Home:

@@ -1,0 +1,50 @@
+@keyframes heartbeat {
+    0%, 40%, 80%, 100% {
+        transform: scale(1);
+    }
+    20%, 60% {
+        transform: scale(1.15);
+    }
+    }
+    .heartbeat {
+    animation: heartbeat 1000ms infinite;
+    }
+    .opacity05 {
+        opacity: 0.5;
+    }
+    .opacity06 {
+        opacity: 0.6;
+    }
+    .opacity07 {
+        opacity: 0.7;
+    }
+    .opacity08 {
+        opacity: 0.8;
+    }
+    .opacity09 {
+        opacity: 0.9;
+    }
+    .contrast90 {
+        filter: contrast(90%);
+    }
+    .md-header {
+        background: linear-gradient(to right, #16325B, #146095);
+    }
+    .md-tabs {
+        background: linear-gradient(to right, #16325B, #146095);
+    }
+    .md-footer {
+        background: linear-gradient(to right, #16325B, #146095);
+    }
+    a.md-button.md-button--primary {
+        background-color: #4473a9;
+    }
+    [data-md-color-scheme="slate"] {
+        --md-footer-bg-color: linear-gradient(to right, #16325B, #146095);
+        --md-footer-bg-color--dark: linear-gradient(to right, #16325B, #146095);
+        --md-default-bg-color: #000000;
+    }
+    [data-md-color-scheme="default"] {
+        --md-footer-bg-color: linear-gradient(to right, #16325B, #146095);
+        --md-footer-bg-color--dark: linear-gradient(to right, #16325B, #146095);
+    }
