@@ -28,23 +28,29 @@
         filter: contrast(90%);
     }
     .md-header {
-        background: linear-gradient(to right, #16325B, #146095);
+        background: linear-gradient(to right, #16325B, #146095) !important;
     }
     .md-tabs {
-        background: linear-gradient(to right, #16325B, #146095);
+        background: linear-gradient(to right, #16325B, #146095) !important;
     }
     .md-footer {
-        background: linear-gradient(to right, #16325B, #146095);
+        background: linear-gradient(to right, #16325B, #146095) !important;
     }
     a.md-button.md-button--primary {
         background-color: #4473a9;
     }
     [data-md-color-scheme="slate"] {
-        --md-footer-bg-color: linear-gradient(to right, #16325B, #146095);
-        --md-footer-bg-color--dark: linear-gradient(to right, #16325B, #146095);
+        /* Arista True Black as dark mode background */
         --md-default-bg-color: #000000;
+        /* settings below require for small screen or window */
+        --md-primary-fg-color--dark: #16325B;
+        --md-primary-fg-color--light: #16325B;
+        --md-primary-fg-color: #16325B;
+        --md-default-fg-color--lightest: #16325B;
     }
     [data-md-color-scheme="default"] {
-        --md-footer-bg-color: linear-gradient(to right, #16325B, #146095);
-        --md-footer-bg-color--dark: linear-gradient(to right, #16325B, #146095);
+        /* settings below require for small screen or window */
+        --md-primary-fg-color--dark: #16325B;
+        --md-primary-fg-color--light: #16325B;
+        --md-primary-fg-color: #16325B;
     }
