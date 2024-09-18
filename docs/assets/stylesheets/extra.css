@@ -28,13 +28,13 @@
         filter: contrast(90%);
     }
     .md-header {
-        background: linear-gradient(to right, #16325B, #146095) !important;
+        background: #16325B !important;
     }
     .md-tabs {
-        background: linear-gradient(to right, #16325B, #146095) !important;
+        background: #16325B !important;
     }
     .md-footer {
-        background: linear-gradient(to right, #16325B, #146095) !important;
+        background: #16325B !important;
     }
     /* Explicitly set the color for filled buttons */
     a.md-button.md-button--primary {
