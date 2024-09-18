@@ -42,6 +42,8 @@
     [data-md-color-scheme="slate"] {
         /* Arista True Black as dark mode background */
         --md-default-bg-color: #000000;
+        /* Footer to Arista dark blue in dark mode */
+        --md-footer-bg-color--dark: #16325B !important;
         /* settings below require for small screen or window */
         --md-primary-fg-color--dark: #16325B;
         --md-primary-fg-color--light: #16325B;
