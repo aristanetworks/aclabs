@@ -36,8 +36,9 @@
     .md-footer {
         background: linear-gradient(to right, #16325B, #146095) !important;
     }
+    /* Explicitly set the color for filled buttons */
     a.md-button.md-button--primary {
-        background-color: #4473a9;
+        background-color: #4473a9 !important;
     }
     [data-md-color-scheme="slate"] {
         /* Arista True Black as dark mode background */
