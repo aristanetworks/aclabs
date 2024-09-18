@@ -147,3 +147,15 @@ docker image ls
 ```
 
 Double-check that `arista/ceos:latest` is the name used by the lab definition file and update accordingly if not.
+
+It's not as convenient as using tokens, but is a small price to pay to start and amazing lab! 😄
+
+## Final Tips
+
+!!! Tip "How to be green and save money"
+
+    Do NOT forget to set your Codespaces `Idle timeout` to 30 min or lower and `Retention period` to 1 day. To save resources, it's also feasible to delete the Codespaces immediately once you stop using them from the list of Codespaces here: [github.com/codespaces](https://github.com/codespaces)
+
+!!! Warning "Never enable pre-builds"
+
+    Do NOT enable Codespaces pre-builds! This may lead to excessive use of Codespaces storage across different regions and increased costs / reduced free time. We don't need Codespaces pre-builds for any demo and to speed up the container start we simply rely on Github packages that are free for public repositories.
