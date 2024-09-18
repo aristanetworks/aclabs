@@ -1,5 +1,5 @@
 ---
-site_name: acLabs
+site_name: Community Labs
 site_url: https://aclabs.arista.com
 repo_name: Arista Community Labs
 repo_url: https://github.com/aristanetworks/aclabs
@@ -46,6 +46,7 @@ theme:
   icon:
     repo: fontawesome/brands/github
     logo: fontawesome/solid/gears
+    annotation: material/plus-circle
 
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -125,4 +126,7 @@ plugins:
 
 nav:
   - Home:
-    - Home: index.md
+    - About acLabs: index.md
+    - Codespaces Quickstart Guide: codespaces-quickstart.md
+    - Credits: credits.md
+  - Tech Library Labs: tech-library-labs.md

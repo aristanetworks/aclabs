@@ -28,23 +28,32 @@
         filter: contrast(90%);
     }
     .md-header {
-        background: linear-gradient(to right, #16325B, #146095);
+        background: #16325B !important;
     }
     .md-tabs {
-        background: linear-gradient(to right, #16325B, #146095);
+        background: #16325B !important;
     }
     .md-footer {
-        background: linear-gradient(to right, #16325B, #146095);
+        background: #16325B !important;
     }
+    /* Explicitly set the color for filled buttons */
     a.md-button.md-button--primary {
-        background-color: #4473a9;
+        background-color: #4473a9 !important;
     }
     [data-md-color-scheme="slate"] {
-        --md-footer-bg-color: linear-gradient(to right, #16325B, #146095);
-        --md-footer-bg-color--dark: linear-gradient(to right, #16325B, #146095);
+        /* Arista True Black as dark mode background */
         --md-default-bg-color: #000000;
+        /* Footer to Arista dark blue in dark mode */
+        --md-footer-bg-color--dark: #16325B !important;
+        /* settings below require for small screen or window */
+        --md-primary-fg-color--dark: #16325B;
+        --md-primary-fg-color--light: #16325B;
+        --md-primary-fg-color: #16325B;
+        --md-default-fg-color--lightest: #16325B;
     }
     [data-md-color-scheme="default"] {
-        --md-footer-bg-color: linear-gradient(to right, #16325B, #146095);
-        --md-footer-bg-color--dark: linear-gradient(to right, #16325B, #146095);
+        /* settings below require for small screen or window */
+        --md-primary-fg-color--dark: #16325B;
+        --md-primary-fg-color--light: #16325B;
+        --md-primary-fg-color: #16325B;
     }

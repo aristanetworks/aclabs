@@ -1,0 +1,20 @@
+{
+    "markdownlint.config": {
+        "default": true,
+        // allow multiple H1s for Marp
+        "MD025": false,
+        "MD004": false,
+        "MD033": {
+            "allowed_elements": [
+                "div",
+                "span",
+                "style",
+                "br",
+                "sup"
+            ]
+        },
+        // allow fenced blocks in Markdown
+        "MD046": false,
+    },
+    "markdown.marp.enableHtml": true
+}
