@@ -1,5 +1,9 @@
 # Codespaces Quickstart Guide
 
+!!! Tip "Github Account"
+
+    You must have a Github account before you start using Github Codespaces. If you don't have one - [register now](https://github.com/signup) and login before you start using acLabs.
+
 ## What is Github Codespaces
 
 [Github Codespaces](https://github.com/features/codespaces) allows you to start a fully configured development environment directly on the Github cloud infrastructure. There is no need to setup your own machine and with the help of a [deep link](https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/setting-up-your-repository/facilitating-quick-creation-and-resumption-of-codespaces#creating-a-link-to-the-codespace-creation-page-for-your-repository) the entire environment can be started by pressing a button.
@@ -32,5 +36,12 @@ The storage is billed monthly, but will be consumed as long as container exists.
 The list of all running Codespaces is available on [github.com/codespaces](https://github.com/codespaces). The best way to reduce CPU and storage utilization is to delete them from the list immediately when you finish working with the lab.
 
 ![codespace delete](assets/img/codespace-delete.png)
+
+Sometimes it helps to get a detailed billing report for the current month by clicking `Settings`(1) > `Billing and plans` > `Plans and Usage` > `Get usage report`
+{ .annotate }
+
+1. ![gh account settings](assets/img/gh-account-settings.png){ .opacity09 }
+
+![gh get usage report](assets/img/gh-get-usage-report.png){ .opacity09 }
 
 You can find more details about Codespaces billing on [Github documentation](https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces).
