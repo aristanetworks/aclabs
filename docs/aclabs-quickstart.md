@@ -8,9 +8,9 @@ A deep understanding of GitHub Codespaces is not required to begin using Arista 
 
 Before launching an Arista Community Lab, we need to ensure we have the following:
 
-1. An arista.com account with the ability to download cEOS-lab via [Software Downloads](https://www.arista.com/en/support/software-download)
+1. An [Arista](https://www.arista.com) account with the ability to download cEOS-lab via [Software Downloads](https://www.arista.com/en/support/software-download)
 2. A [GitHub account](https://github.com/signup)
-3. A copy of our [arista.com user token](https://www.arista.com/en/users/profile)
+3. Our [Arista user token](https://www.arista.com/en/users/profile)
 
 We can find our user token by logging into [arista.com](https://www.arista.com) and selecting `My Profile`.
 
@@ -179,5 +179,10 @@ If we choose `My Codespaces`, this will open a webpage containing a list of [our
 ![My Codespaces](/assets/img/aclabs-quickstart-my-codespaces.png "My Codespaces"){ width=800px }
 <figcaption>Our Current Codespaces (Click to Zoom)</figcaption>
 </figure>
+
+!!! question "What if I forget about my lab? :scream:"
+    By default, GitHub Codespaces will be stopped after being idle for 45 minutes and deleted after 30 days of inactivity.
+
+    The `Default idle timeout` and `Default retention period` values can be modified under our [GitHub account's Codespaces settings](https://github.com/settings/codespaces).
 
 :test_tube: Happy labbing! :test_tube:
