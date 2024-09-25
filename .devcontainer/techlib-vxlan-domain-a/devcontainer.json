@@ -17,7 +17,7 @@
         "memory": "64gb",
         "storage": "128gb"
     },
-    "postCreateCommand": "postCreate.sh; make start",
+    "postCreateCommand": "postCreate.sh; make start; make inspect",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/techlib-vxlan-domain-a"
 }
