@@ -43,6 +43,7 @@ jobs:
           pip install mkdocs-material
           pip install mkdocs-macros-plugin
           pip install mdx_truly_sane_lists
+          pip install mkdocs-glightbox
           mkdocs build
 
       - name: Setup Pages 📖

@@ -11,3 +11,10 @@ start: ## Deploy ceos lab
 .PHONY: stop
 stop: ## Destroy ceos lab
 	sudo containerlab destroy --debug --topo $(CURRENT_DIR)/clab/topology.clab.yml --cleanup
+
+.PHONY: inspect
+inspect: ## Inspect ceos lab
+	@sudo containerlab inspect --topo $(CURRENT_DIR)/clab/topology.clab.yml
+	@echo ""
+	@echo "You can check the lab status, hostnames and management addresses above."
+	@echo "To connect to a lab device use \`ssh admin@<hostname>\` and password \`admin\`."
