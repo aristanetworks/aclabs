@@ -14,7 +14,7 @@ on:
       container_name:
         required: false
         type: string
-        default: techlib-labs
+        default: lab-base
       image_tags:
         required: false
         type: string
@@ -49,7 +49,7 @@ on:
       clab_version:
         required: false
         type: string
-      ceos_lab_version:
+      container_revision:
         required: false
         type: string
         default: latest
@@ -68,7 +68,7 @@ jobs:
         run: |
           if [ -z "${{ inputs.image_tags }}" ]; then
             echo "No image tags provided. Building tags."
-            echo "image_tags=${{ inputs.from_variant }}-clab${{ inputs.clab_version }}-ceos${{ inputs.ceos_lab_version }}" >> $GITHUB_OUTPUT
+            echo "image_tags=${{ inputs.from_variant }}-clab${{ inputs.clab_version }}-rev${{ inputs.container_revision }}" >> $GITHUB_OUTPUT
           else
             echo "Using provided image tags."
             echo "image_tags=${{ inputs.image_tags }}" >> $GITHUB_OUTPUT

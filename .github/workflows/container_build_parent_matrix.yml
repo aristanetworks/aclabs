@@ -7,7 +7,7 @@ on:
     paths:
       - .github/workflows/container_build_child.yml
       - .github/workflows/container_build_parent_matrix.yml
-      - containers/techlib-labs/**
+      - containers/lab-base/**
   workflow_dispatch:
     branches: ['**']  # branches will be filtered in the jobs
 
@@ -23,11 +23,11 @@ jobs:
     strategy:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
-        from_variant: ["python3.11-avd-v4.9.0", "python3.11-avd-v4.10.0"]
-        clab_version: ["0.54.2", "0.56.0"]
-        ceos_lab_version: ["4.32.1F", "4.32.2F"]
+        from_variant: ["python3.11-avd-v4.9.0", "python3.11-avd-v4.10.0", "python3.11-avd-v4.10.2"]
+        clab_version: ["0.54.2", "0.56.0", "0.57.5"]
     with:
       from_image: ${{ matrix.from_image }}
       from_variant: ${{ matrix.from_variant }}
       clab_version: ${{ matrix.clab_version }}
-      ceos_lab_version: ${{ matrix.ceos_lab_version }}
+      # the rev number will be updated with each run
+      container_revision: "${{ github.run_number }}"
