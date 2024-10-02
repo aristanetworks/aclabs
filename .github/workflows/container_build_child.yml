@@ -96,8 +96,8 @@ jobs:
       - name: Check if image already exists on container registry 🕵️
         id: check-image
         run: |
-          manifest=$(curl -X GET https://ghcr.io/v2/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}/manifests/$GITHUB_SHA -u $GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }} | jq '.')
-          echo $manifest
+          echo "exit_code=0" >> $GITHUB_OUTPUT
+          docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:${image_tag} || echo "exit_code=1" >> $GITHUB_OUTPUT
   # IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
   # for image_tag in "${image_tags[@]}"; do
   #   docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:${image_tag} > /dev/null 2>&1
