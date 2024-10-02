@@ -19,6 +19,6 @@ jobs:
     uses: ./.github/workflows/container_build_child.yml
     with:
       container_name: "host-alpine"
-      image_tags: "latest,rev1.0"
+      image_tags: "latest,rev${{ github.run_number }}"
       from_image: "alpine"
       from_variant: "latest"
