@@ -7,7 +7,7 @@ on:
     paths:
       - .github/workflows/container_build_child.yml
       - .github/workflows/container_build_parent_matrix.yml
-      - containers/techlib-labs/**
+      - containers/lab-base/**
   workflow_dispatch:
     branches: ['**']  # branches will be filtered in the jobs
 
