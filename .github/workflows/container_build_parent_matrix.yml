@@ -29,6 +29,5 @@ jobs:
       from_image: ${{ matrix.from_image }}
       from_variant: ${{ matrix.from_variant }}
       clab_version: ${{ matrix.clab_version }}
-      # the revision must be changed in case of fixes touching entire container matrix
-      # it also must be changed if matrix is expanded to avoid re-building existing images
-      container_revision: "1.0"
+      # the rev number will be updated with each run
+      container_revision: "${{ github.run_number }}"
