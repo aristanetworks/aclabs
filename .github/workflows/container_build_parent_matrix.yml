@@ -1,5 +1,5 @@
 ---
-name: build techlib-labs containers
+name: build lab-base images
 
 on:
   push:
