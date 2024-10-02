@@ -2,7 +2,7 @@
 
 set +e
 
-ardl get eos --image-type cEOS --version ${CEOS_LAB_VERSION}  --import-docker
+ardl get eos --image-type cEOS --version ${CEOS_LAB_VERSION} --import-docker --latest
 
 # init demo dir as Git repo if requested for this demo env
 if ${GIT_INIT}; then
