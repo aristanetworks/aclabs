@@ -97,7 +97,10 @@ jobs:
         id: check-image
         run: |
           echo "exit_code=0" >> $GITHUB_OUTPUT
-          docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:$image_tag || echo "exit_code=1" >> $GITHUB_OUTPUT
+          IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
+          for image_tag in "${image_tags[@]}"; do
+            docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:$image_tag || echo "exit_code=1" >> $GITHUB_OUTPUT
+          done
   # IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
   # for image_tag in "${image_tags[@]}"; do
   #   docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:${image_tag} > /dev/null 2>&1
