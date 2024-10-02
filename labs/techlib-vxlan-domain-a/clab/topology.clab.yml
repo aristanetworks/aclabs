@@ -111,6 +111,7 @@ topology:
 # DC "A" HostC6          #
 #########################
 
+    # HostA1 is connected to LEAF1 eth7 and LEAF2 eth7
     HostA1:
       kind: linux
       mgmt-ipv4: 172.100.100.201
@@ -120,9 +121,8 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::101/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.10.10.101/24 -i6 2001:db8:10:10::101/64 -g 10.10.10.1
 
+    # HostA2 is connected to LEAF1 eth8 and LEAF2 eth8
     HostA2:
       kind: linux
       mgmt-ipv4: 172.100.100.202
@@ -132,21 +132,18 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.30.30.1
         IPV6: 2001:db8:30:30::101/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.30.30.101/24 -i6 2001:db8:30:30::101/64 -g 10.30.30.1
 
+    # HostA3 is a Linux host with a single interface connected to LEAF3 eth7
     HostA3:
       kind: linux
       mgmt-ipv4: 172.100.100.203
       env:
-        TMODE: lacp
         IPV4: 10.50.50.101/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.50.50.1
         IPV6: 2001:db8:50:50::101/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -i4 10.50.50.101/24 -i6 2001:db8:50:50::101/64 -g 10.50.50.1
 
+    # HostA4 is connected to LEAF3 eth8 and LEAF4 eth8
     HostA4:
       kind: linux
       mgmt-ipv4: 172.100.100.204
@@ -156,21 +153,18 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::102/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.10.10.102/24 -i6 2001:db8:10:10::102/64 -g 10.10.10.1
 
+    # HostA5 is connected to LEAF4 eth7
     HostA5:
       kind: linux
       mgmt-ipv4: 172.100.100.205
       env:
-        TMODE: lacp
         IPV4: 10.30.30.102/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.30.30.1
         IPV6: 2001:db8:30:30::102/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -i4 10.30.30.102/24 -i6 2001:db8:30:30::102/64 -g 10.30.30.1
 
+    # HostA6 is connected to LEAF5 eth7 and LEAF6 eth7
     HostA6:
       kind: linux
       mgmt-ipv4: 172.100.100.206
@@ -180,8 +174,6 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.70.70.1
         IPV6: 2001:db8:70:70::101/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.70.70.101/24 -i6 2001:db8:70:70::101/64 -g 10.70.70.1
 
   links:
 ######################
