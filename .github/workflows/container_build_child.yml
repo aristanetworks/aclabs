@@ -96,11 +96,13 @@ jobs:
       - name: Check if image already exists on container registry 🕵️
         id: check-image
         run: |
-          IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
-          for image_tag in "${image_tags[@]}"; do
-            docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:${image_tag} > /dev/null 2>&1
-          done
-          echo "exit_code=$?" >> $GITHUB_OUTPUT
+          manifest=$(curl -X GET https://ghcr.io/v2/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}/manifests/$GITHUB_SHA -u $GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }} | jq '.')
+          echo $manifest
+  # IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
+  # for image_tag in "${image_tags[@]}"; do
+  #   docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:${image_tag} > /dev/null 2>&1
+  # done
+  # echo "exit_code=$?" >> $GITHUB_OUTPUT
 
       - name: Pre-build dev container image 🔨
         uses: devcontainers/ci@v0.3
