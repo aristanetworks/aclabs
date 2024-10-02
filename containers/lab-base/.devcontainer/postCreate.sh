@@ -2,7 +2,8 @@
 
 set +e
 
-ardl get eos --image-type cEOS --version ${CEOS_LAB_VERSION} --import-docker --latest
+ardl get eos --image-type cEOS --version ${CEOS_LAB_VERSION} --import-docker
+docker tag arista/ceos:${CEOS_LAB_VERSION} arista/ceos:latest
 
 # init demo dir as Git repo if requested for this demo env
 if ${GIT_INIT}; then
