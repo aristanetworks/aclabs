@@ -23,8 +23,8 @@ jobs:
     strategy:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
-        from_variant: ["python3.11-avd-v4.9.0", "python3.11-avd-v4.10.0"]
-        clab_version: ["0.54.2", "0.56.0"]
+        from_variant: ["python3.11-avd-v4.9.0", "python3.11-avd-v4.10.0", "python3.11-avd-v4.10.2"]
+        clab_version: ["0.54.2", "0.56.0", "0.57.5"]
     with:
       from_image: ${{ matrix.from_image }}
       from_variant: ${{ matrix.from_variant }}
