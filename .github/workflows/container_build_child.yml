@@ -93,8 +93,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check if image already exists on container registry 🕵️
+        id: check-image
+        run: |
+          docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:${{ steps.build-tags.outputs.image_tags }} > /dev/null
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+
       - name: Pre-build dev container image 🔨
         uses: devcontainers/ci@v0.3
+        if: steps.check-image.outputs.exit_code != 0
         env:
           FROM_IMAGE: ${{ inputs.from_image }}
           FROM_VARIANT: ${{ inputs.from_variant }}
