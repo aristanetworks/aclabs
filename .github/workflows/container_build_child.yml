@@ -98,7 +98,7 @@ jobs:
         run: |
           IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
           for image_tag in "${image_tags[@]}"; do
-            docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:${image_tag} > /dev/null
+            docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:${image_tag} > /dev/null 2>&1
           done
           echo "exit_code=$?" >> $GITHUB_OUTPUT
 
