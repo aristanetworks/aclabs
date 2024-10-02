@@ -19,7 +19,7 @@ jobs:
     uses: ./.github/workflows/container_build_child.yml
     with:
       container_name: "host-ubuntu"
-      image_tags: "latest"
+      image_tags: "latest,rev1.0"
       from_image: "ubuntu"
       from_variant: "24.04"
       username: "admin"
