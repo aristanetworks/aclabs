@@ -226,7 +226,7 @@ ssh admin@A-SPINE1
 
 ### API
 
-All nodes are accessible via API from within the codespace. The codespace comes pre-packaged with tools such as Python and the Arista [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/) Ansible Galaxy collections.
+All nodes are accessible via API from within the codespace. The codespace comes pre-packaged with tools like Python and the Arista [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/) Ansible Galaxy collections.
 
 ## Stopping the Lab
 
