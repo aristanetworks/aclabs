@@ -60,7 +60,7 @@ In the Arista Community Labs, we pre-package these Codespaces with the tools nec
 
 GitHub Codespaces is a commercial offering from GitHub. As of October 2024, all GitHub users have 120 hours of Codespace time available for free each month.
 
-By default, if all 120 hours are consumed and the [Spending Limit](https://github.com/settings/billing/spending_limit) for Codespaces is at $0, then Codespace usage cannot continue until the hours are replenished the following month.
+By default, if all 120 hours are consumed and the [Spending Limit](https://github.com/settings/billing/spending_limit) for Codespaces is $0, then Codespace usage cannot continue until the hours are replenished the following month.
 
 ??? question "When and how would GitHub charge me for this?💰"
     A GitHub user will never be charged for Codespace usage by default. The feature will stop working until the hours are renewed the next month.
