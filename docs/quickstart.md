@@ -85,7 +85,7 @@ Codespaces can be deleted at anytime from the [Codespaces section of GitHub](htt
 
 ### Machine Types
 
-Different machine types are availble within Codespaces. As general rule, the greater the number of CPU cores, the greater number of hours that will be consumed during the runtime of a Codespace.
+Different machine types are available within Codespaces. As a general rule, the greater the number of CPU cores, the greater number of hours that will be consumed during a Codespace's runtime.
 
 [GitHub's Pricing for Paid Usage](https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#pricing-for-paid-usage) chart provides the details of the `usage multiplier` for each available machine type.
 
