@@ -44,7 +44,7 @@ The tabs below illustrate the steps needed to locate and copy the token:
     </figure>
 
 ??? question "What's with the token? :coin:"
-    When an Arista Community Lab is started, the user token will be used to automatically download and import the necesary cEOS-lab image into the lab environment
+    When an Arista Community Lab is started, the user token will be used to automatically download and import the necessary cEOS-lab image into the lab environment.
 
 ## GitHub Codespaces Primer
 
