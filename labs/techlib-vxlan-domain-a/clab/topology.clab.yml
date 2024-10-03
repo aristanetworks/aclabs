@@ -23,7 +23,7 @@ topology:
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
       binds:
-        - /techlib-vxlan-domain-b:/workspace:ro
+        - /techlib-vxlan-domain-a:/workspace:ro
 
   nodes:
 ###############################################################
