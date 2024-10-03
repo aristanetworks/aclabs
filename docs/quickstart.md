@@ -230,7 +230,7 @@ All nodes are accessible via API from within the codespace. The codespace comes 
 
 ## Stopping the Lab
 
-When finished with the lab, simply close the codespace by exiting the browser window. By default, a GitHub Codespace will be stopped after being idle for 45 minutes and deleted after 30 days of inactivity.
+When you're finished with the lab, simply close the codespace by exiting the browser window. By default, a GitHub Codespace is stopped after 45 minutes of idleness and deleted after 30 days of inactivity.
 
 ??? question "What if I forget about my lab? :scream:"
     The `Default idle timeout` and `Default retention period` values can be modified under our [GitHub account's Codespaces settings](https://github.com/settings/codespaces).
