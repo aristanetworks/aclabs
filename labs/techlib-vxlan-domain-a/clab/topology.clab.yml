@@ -21,7 +21,7 @@ topology:
     ceos:
       image: arista/ceos:latest
     linux:
-      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev3
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
       binds:
         - /techlib-vxlan-domain-a:/home/admin:ro
 
