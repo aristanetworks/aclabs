@@ -50,7 +50,7 @@ The tabs below illustrate the steps needed to locate and copy the token:
 
 ### Overview
 
-GitHub Codespaces provides the ability to instantiate a fully configured development or lab environment hosted entirely on GitHub's cloud infrastructure with a simple click of a button, on any machine. Making the environments incredibly portable!
+GitHub Codespaces can instantiate a fully configured development or lab environment hosted entirely on GitHub's cloud infrastructure with a simple click of a button, on any machine. Making the environments incredibly portable!
 
 In the Arista Community Labs, we pre-package these Codespaces with the tools necessary to interact with the nodes within the lab. Quick examples of this are Python, Ansible, and Ansible Galaxy collections such as [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/).
 
