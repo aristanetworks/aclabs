@@ -96,6 +96,7 @@ jobs:
       - name: Check if image already exists on container registry 🕵️
         id: check-image
         run: |
+          echo "Checking if ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:$image_tag already exists."
           echo "exit_code=0" >> $GITHUB_OUTPUT
           IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
           for image_tag in "${image_tags[@]}"; do
