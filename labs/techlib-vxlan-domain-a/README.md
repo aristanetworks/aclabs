@@ -18,6 +18,6 @@ To connect to any device use:
 ssh admin@<a-lab-device-hostname>
 ```
 
-To check connectivity, ssh to any host and use `pingcheck pingcheck/ipv4_list_vrf_dev` or `pingcheck pingcheck/ipv4_list_vrf_prod` to start fping to the lab hosts.
+To check connectivity, ssh to any host and use `pingcheck /workspace/ip-lists/ipv4_list_vrf_dev` or `pingcheck /workspace/ip-lists/ipv4_list_vrf_prod` to start fping to the lab hosts.
 
 Enjoy the lab!
