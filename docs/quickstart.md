@@ -4,11 +4,22 @@ This guide is intended for individuals looking to familiarize themselves with th
 
 ## Pre-Requisites
 
-Before launching an Arista Community Lab, we need to ensure we have the following:
+Before launching an Arista Community Lab, the following pre-requisites must be met:
 
-1. [Arista](https://www.arista.com) account with the ability to download cEOS-lab via [Software Downloads](https://www.arista.com/en/support/software-download)
+<div class="annotate" markdown>
+
+1. [Arista account](https://www.arista.com)(1) with the ability to download cEOS-lab via [Software Downloads](https://www.arista.com/en/support/software-download)
 2. [GitHub account](https://github.com/signup)
-3. [Arista user token](https://www.arista.com/en/users/profile)
+3. [GitHub Codespaces Access](https://github.com/features/codespaces)(2)
+4. [Arista user token](https://www.arista.com/en/users/profile)
+
+</div>
+
+1. Need an account? Register here! [Arista account registration](https://www.arista.com/en/user-registration).
+
+    The email address used for the account must be associated with a corporate email domain (no Gmail, Yahoo, etc.).
+
+2. For those that have never used Codespaces before, no worries! There is a quick primer on Codespaces included below!
 
 We can find the user token by logging into [arista.com](https://www.arista.com) and selecting `My Profile`.
 
@@ -16,24 +27,88 @@ The tabs below illustrate the steps needed to locate and copy the token:
 
 === "Login"
     <figure markdown>
-    ![Arista Login](/assets/img/aclasbs-quickstart-aristalogin.png "Arista Login"){ width=700px }
+    ![Arista Login](/assets/img/aclabs-quickstart-aristalogin.png "Arista Login"){ width=700px }
     <figcaption>Arista - Login</figcaption>
     </figure>
 
 === "My Profile"
     <figure markdown>
-    ![Arista My Profile](/assets/img/aclasbs-quickstart-arista-myprofile.png "My Profile"){ width=700px }
+    ![Arista My Profile](/assets/img/aclabs-quickstart-arista-myprofile.png "My Profile"){ width=700px }
     <figcaption>Arista - My Profile</figcaption>
     </figure>
 
 === "User Token"
     <figure markdown>
-    ![Arista Token](/assets/img/aclasbs-quickstart-arista-portalaccess.png "User Token"){ width=700px }
+    ![Arista Token](/assets/img/aclabs-quickstart-arista-portalaccess.png "User Token"){ width=700px }
     <figcaption>Arista - User Token (Blurred) </figcaption>
     </figure>
 
 ??? question "What's with the token? :coin:"
     When an Arista Community Lab is started, the user token will be used to automatically download and import the necesary cEOS-lab image into the lab environment
+
+## GitHub Codespaces Primer
+
+### Overview
+
+GitHub Codespaces provides the ability to instantiate a fully configured development or lab environment hosted entirely on GitHub's cloud infrastructure with a simple click of a button, on any machine. Making the environments incredibly portable!
+
+In the Arista Community Labs, we pre-package these Codespaces with the tools necessary to interact with the nodes within the lab. Quick examples of this are Python, Ansible, and Ansible Galaxy collections such as [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/).
+
+The use of [Docker in Docker](https://github.com/microsoft/vscode-dev-containers/blob/main/containers/docker-in-docker/README.md) in alignment with the [Dev Container Specification](https://containers.dev/implementors/spec/) is what makes this possible in Codespaces.
+
+### Costs
+
+GitHub Codespaces is a commercial offering from GitHub. As of this writing in October of 2024, all GitHub users have 120 hours of Codespace time available for free each month.
+
+By default, if all 120 hours are consumed and the [Spending Limit](https://github.com/settings/billing/spending_limit) for Codespaces is at $0, then Codespace usage cannot continue until the hours are replenished the following month.
+
+??? question "When and how would GitHub charge me for this?💰"
+    By default, a GitHub user will never be charged by default for Codespace usage. The feature will simply stop working until the hours are renewed the next month.
+
+Users have the option of defining a [Payment Method](https://github.com/settings/billing/payment_information) and [Spending Limit](https://github.com/settings/billing/spending_limit) for Codespaces. Once defined, usage beyond 120 hours can continue as long as the spending limit is not exceeded. Once a defined spending limit has been reach, Codespace usage cannot continue until the next month.
+
+Additional information can be found in [GitHub's Codespaces Billing Overivew Page](https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-codespaces/about-billing-for-github-codespaces)
+
+??? question "What if I forget about my Codespace? :scream:"
+    Don't worry! It won't run forever, at least not by default.
+
+    The `Default idle timeout` and `Default retention period` values can be modified within [GitHub Codespaces Settings](https://github.com/settings/codespaces).
+
+    These parameters can be changed at any time, and should be defined with values that make the most sense for your usage patterns.
+
+    A general recommendation for these values is provided below:
+
+     - **Default idle timeout**: `30 Minutes`
+     - **Default retention period**: `1 Day`
+
+Codespaces can be deleted at anytime from the [Codespaces section of GitHub](https://github.com/codespaces).
+
+### Machine Types
+
+Different machine types are availble within Codespaces. As general rule, the greater the number of CPU cores, the greater number of hours that will be consumed during the runtime of a Codespace.
+
+[GitHub's Pricing for Paid Usage](https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#pricing-for-paid-usage) chart provides the details of the `usage multiplier` for each available machine type.
+
+For example, as of the writing of this guide:
+
+- :fontawesome-solid-microchip: `2 Core` Machine Types will consume `2` hours for every hour of runtime
+- :fontawesome-solid-microchip: `8 Core` Machine Types will consume `8` hours for every hour of runtime
+- :fontawesome-solid-microchip: `16 Core` Machine Types will consume `16` hours for every hour of runtime
+
+Some Arista Community Labs make use of larger machine types, such as the :fontawesome-solid-microchip: `16 Core` option.
+
+??? question "My GitHub Account doesn't have access to a larger :fontawesome-solid-microchip: `8 Core` or :fontawesome-solid-microchip: `16 Core` machine types?"
+    By default, some larger machine types may not be available for use. In order to resolve this, a ticket can be opened with [GitHub support](https://support.github.com/contact?source=subtitle&tags=rr-general-technical) requesting access to these larger machine types.
+
+    Listed below is a template that can be used for this request:
+
+    ```yaml
+    Hello - Can the 8-core and 16-core codespace machine types please be enabled for my account?
+    The default 2-core and 4-core machines lack the necessary resources for my use cases.
+    If additional information is needed, please let me know. Thanks!
+    ```
+
+    Once completed, select **Create a Ticket**
 
 ## Starting the Lab
 
@@ -145,7 +220,7 @@ To access a node, use the `ssh` command followed by `admin@hostname` as shown in
 ssh admin@A-SPINE1
 ```
 
-!!! question "What's the password? :lock:"
+??? question "What's the password? :lock:"
     Unless stated otherwise, the default username of `admin` and password of `admin` is used for all nodes in an Arista Community lab
 
 ### API
@@ -156,7 +231,7 @@ All nodes are accessible via API from within the codespace. The codespace comes 
 
 When finished with the lab, simply close the codespace by exiting the browser window. By default, a GitHub Codespace will be stopped after being idle for 45 minutes and deleted after 30 days of inactivity.
 
-!!! question "What if I forget about my lab? :scream:"
+??? question "What if I forget about my lab? :scream:"
     The `Default idle timeout` and `Default retention period` values can be modified under our [GitHub account's Codespaces settings](https://github.com/settings/codespaces).
 
 A list of all codespaces can be found in the [Codespaces section of GitHub](https://github.com/codespaces). From here, a codespace can be resumed, stopped, deleted, renamed, and more!
