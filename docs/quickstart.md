@@ -63,7 +63,7 @@ GitHub Codespaces is a commercial offering from GitHub. As of October 2024, all 
 By default, if all 120 hours are consumed and the [Spending Limit](https://github.com/settings/billing/spending_limit) for Codespaces is at $0, then Codespace usage cannot continue until the hours are replenished the following month.
 
 ??? question "When and how would GitHub charge me for this?💰"
-    By default, a GitHub user will never be charged by default for Codespace usage. The feature will simply stop working until the hours are renewed the next month.
+    A GitHub user will never be charged for Codespace usage by default. The feature will stop working until the hours are renewed the next month.
 
 Users have the option of defining a [Payment Method](https://github.com/settings/billing/payment_information) and [Spending Limit](https://github.com/settings/billing/spending_limit) for Codespaces. Once defined, usage beyond 120 hours can continue as long as the spending limit is not exceeded. Once a defined spending limit has been reach, Codespace usage cannot continue until the next month.
 
