@@ -102,14 +102,10 @@ jobs:
             echo "Checking if ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:$image_tag already exists."
             docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:$image_tag || echo "exit_code=1" >> $GITHUB_OUTPUT
           done
-  # IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
-  # for image_tag in "${image_tags[@]}"; do
-  #   docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:${image_tag} > /dev/null 2>&1
-  # done
-  # echo "exit_code=$?" >> $GITHUB_OUTPUT
 
       - name: Pre-build dev container image 🔨
         uses: devcontainers/ci@v0.3
+        # Only build and push the image if at least one of the image tags does not exist.
         if: steps.check-image.outputs.exit_code != 0
         env:
           FROM_IMAGE: ${{ inputs.from_image }}
