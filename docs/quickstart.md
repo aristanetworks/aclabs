@@ -128,7 +128,8 @@ In the `ARTOKEN` field, paste the user token copied from the arista.com user pro
     Once entered, the token is saved as a GitHub Codespaces `Secret`. This can be viewed via the [Codespaces section of GitHub account settings](https://github.com/settings/codespaces).
 
 ??? note "Watch the expiration date! :hourglass_flowing_sand:"
-    User tokens on arista.com have an expiration date associated with them, listed in the `Token Valid Till` field in the `Portal Access` section of the user profile.
+    User tokens on arista.com have an expiration date listed in the `Token Valid Till` field in the `Portal Access` section of the user profile.
+If the token has expired, click Regenerate Token to create a new one. A token expires one year after it was generated; the user cannot modify this value.
 
     If the token has expired, simply click `Regenerate Token` to create a new one. A token expires one year after it was generated; This value cannot be modified by the user.
 
