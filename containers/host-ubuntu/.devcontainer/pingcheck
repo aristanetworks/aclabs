@@ -4,13 +4,13 @@ set +e
 
 if [ -f "$1" ]; then
 
-  while true
-  do
-    echo "fpinging the targets..."
-    fping -f $1
-    sleep 2
-    clear
-  done
+  echo "fpinging the targets..."
+  watch -n 0.5 fping -f $1
+
+elif [ -f "/workspace/ip-lists/$1" ]; then
+
+  echo "fpinging the targets..."
+  watch -n 0.5 fping -f "/workspace/ip-lists/$1"
 
 else
 
