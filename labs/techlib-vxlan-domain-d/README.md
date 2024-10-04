@@ -18,6 +18,6 @@ To connect to any device use:
 ssh admin@<a-lab-device-hostname>
 ```
 
-To check connectivity, ssh to any host and use `pingcheck dualstack_vrf_prod` or `pingcheck dualstack_vrf_dev` to start fping to the lab hosts.
+To check connectivity, ssh to any host and use `pingcheck dualstack_vrf_prod` or `pingcheck dualstack_vrf_dev` to start fping to the lab hosts. You have to wait a few minutes after the lab start for ping to be successful.
 
 Enjoy the lab!
