@@ -10,7 +10,9 @@
                 "span",
                 "style",
                 "br",
-                "sup"
+                "sup",
+                "figure",
+                "figcaption"
             ]
         },
         // allow fenced blocks in Markdown

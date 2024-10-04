@@ -12,6 +12,9 @@
 
 !!! Warning "Under Construction!"
 
-    DO NOT ENTER! :skull_and_crossbones:{ .heartbeat }
+    This repository is still under construction. We are actively working on the new content and moving existing labs from:
 
-    ![stay back](assets/img/pexels-danne-555709.jpg)
+    - [One-Click SE Demos](https://arista-netdevops-community.github.io/one-click-se-demos/)
+    - [avd-cEOS-Lab](https://arista-netdevops-community.github.io/avd-cEOS-Lab/)
+
+    Check this repository once in a few weeks for the new content.
