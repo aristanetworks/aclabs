@@ -29,4 +29,4 @@
     "initializeCommand": "echo 'pingcheck() { watch -n 0.5 fping -f $1 }' >> ~/.zshrc",
 	// Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "${localEnv:USERNAME}"
-  }
+}
