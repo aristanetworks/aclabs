@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set +e
+
+if [ -f "$1" ]; then
+
+  echo "fpinging the targets..."
+  watch -n 0.5 fping -f $1
+
+elif [ -f "/workspace/ip-lists/$1" ]; then
+
+  echo "fpinging the targets..."
+  watch -n 0.5 fping -f "/workspace/ip-lists/$1"
+
+else
+
+  echo "You must provide a valid filename with target IP address list."
+
+fi
