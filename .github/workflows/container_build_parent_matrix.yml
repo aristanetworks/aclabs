@@ -1,5 +1,5 @@
 ---
-name: build techlib-labs containers
+name: build lab-base images
 
 on:
   push:
@@ -30,4 +30,4 @@ jobs:
       from_variant: ${{ matrix.from_variant }}
       clab_version: ${{ matrix.clab_version }}
       # the rev number will be updated with each run
-      container_revision: "${{ github.run_number }}"
+      container_revision: "1.0"

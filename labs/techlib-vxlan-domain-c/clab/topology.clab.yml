@@ -19,9 +19,9 @@ topology:
 
   kinds:
     ceos:
-      image: arista/ceos:4.32.1F
+      image: arista/ceos:latest
     linux:
-      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev3
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
       binds:
         - /techlib-vxlan-domain-c:/workspace:ro
 
@@ -102,6 +102,7 @@ topology:
 # DC "C" HostC6          #
 #########################
 
+    # HostC1 is connected to LEAF1 eth7 and LEAF2 eth7
     HostC1:
       kind: linux
       mgmt-ipv4: 172.100.100.214
@@ -111,21 +112,18 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::104/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.10.10.104/24 -i6 2001:db8:10:10::104/64 -g 10.10.10.1
 
+    # HostC2 is connected to LEAF3 eth7
     HostC2:
       kind: linux
       mgmt-ipv4: 172.100.100.215
       env:
-        TMODE: lacp
         IPV4: 10.20.20.102/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.20.20.1
         IPV6: 2001:db8:20:20::102/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -i4 10.20.20.102/24 -i6 2001:db8:20:20::102/64 -g 10.20.20.1
 
+    # HostC3 is connected to LEAF3 eth8 and LEAF4 eth8
     HostC3:
       kind: linux
       mgmt-ipv4: 172.100.100.216
@@ -135,21 +133,18 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.60.60.1
         IPV6: 2001:db8:60:60::102/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.60.60.102/24 -i6 2001:db8:60:60::102/64 -g 10.60.60.1
 
+    # HostC4 is connected to LEAF4 eth7
     HostC4:
       kind: linux
       mgmt-ipv4: 172.100.100.217
       env:
-        TMODE: lacp
         IPV4: 10.50.50.102/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.50.50.1
         IPV6: 2001:db8:50:50::102/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -i4 10.50.50.102/24 -i6 2001:db8:50:50::102/64 -g 10.50.50.1
 
+    # HostC5 is connected to LEAF5 eth7 and LEAF6 eth7
     HostC5:
       kind: linux
       mgmt-ipv4: 172.100.100.218
@@ -159,9 +154,8 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.20.20.1
         IPV6: 2001:db8:20:20::103/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.20.20.103/24 -i6 2001:db8:20:20::103/64 -g 10.20.20.1
 
+    # HostC6 is connected to LEAF5 eth8 and LEAF6 eth8
     HostC6:
       kind: linux
       mgmt-ipv4: 172.100.100.219
@@ -171,8 +165,6 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.60.60.1
         IPV6: 2001:db8:60:60::103/64
-      # exec:
-      #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.60.60.103/24 -i6 2001:db8:60:60::103/64 -g 10.60.60.1
 
   links:
 ######################
