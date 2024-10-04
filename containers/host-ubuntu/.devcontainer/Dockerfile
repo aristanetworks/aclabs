@@ -51,6 +51,4 @@ RUN chmod +x /bin/entrypoint.sh
 
 USER ${USERNAME}
 
-RUN echo 'pingcheck() { watch -n 0.5 fping -f $1 }' >> ~/.zshrc
-
 ENTRYPOINT [ "/bin/entrypoint.sh" ]
