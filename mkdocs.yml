@@ -129,7 +129,7 @@ plugins:
 nav:
   - Home:
     - About acLabs: index.md
-    - acLabs Quickstart: aclabs-quickstart.md
-    - Codespaces Quickstart: codespaces-quickstart.md
+    - Quickstart: quickstart.md
+    # - Codespaces Quickstart: codespaces-quickstart.md
     - Credits: credits.md
   - Tech Library Labs: tech-library-labs.md
