@@ -130,6 +130,6 @@ nav:
   - Home:
     - About acLabs: index.md
     - Quickstart: quickstart.md
-    - Codespaces Quickstart: codespaces-quickstart.md
+    # - Codespaces Quickstart: codespaces-quickstart.md
     - Credits: credits.md
   - Tech Library Labs: tech-library-labs.md
