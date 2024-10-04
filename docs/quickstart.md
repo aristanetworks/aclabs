@@ -98,14 +98,15 @@ For example, as of the writing of this guide:
 Some Arista Community Labs make use of larger machine types, such as the :fontawesome-solid-microchip: `16 Core` option.
 
 ??? question "My GitHub Account doesn't have access to a larger :fontawesome-solid-microchip: `8 Core` or :fontawesome-solid-microchip: `16 Core` machine types?"
-    By default, some larger machine types may not be available for use. In order to resolve this, a ticket can be opened with [GitHub support](https://support.github.com/contact?source=subtitle&tags=rr-general-technical) requesting access to these larger machine types.
+    By default, some larger machine types may not be available for use. In order to resolve this, a ticket can be opened via [GitHub support](https://support.github.com/contact?source=subtitle&tags=rr-general-technical) requesting access to these larger machine types.
 
     Listed below is a template that can be used for this request:
 
     ```yaml
     Hello - Can the 8-core and 16-core codespace machine types please be enabled for my account?
     The default 2-core and 4-core machines lack the necessary resources for my use cases.
-    If additional information is needed, please let me know. Thanks!
+    A payment method has been added to my account. If additional information is needed, please let me know.
+    Thanks!
     ```
 
     Once completed, select **Create a Ticket**
@@ -113,12 +114,12 @@ Some Arista Community Labs make use of larger machine types, such as the :fontaw
 ## Starting the Lab
 
 !!! note
-    Throughout this guide, the [EVPN Domain A](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-a%2Fdevcontainer.json) lab associated with the [EVPN/VXLAN Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/) on [Arista's Tech Library](https://tech-library.arista.com) will be used as a reference point. All community labs hosted via Codespaces will follow the same process.
+    All community labs hosted via Codespaces will follow a similar process to the one defined below. Labs that contain exceptions to the process below will have this specifically called out via a note associated with the lab launch button.
 
 Once a lab has been launched via it's respective 'Start Lab' button, a `Create Codespace` window will be opened via a web browser:
 
 <figure markdown>
-![Create Codespace](assets/img/aclabs-quickstart-1.png "Create Codespace"){ width=500px }
+![Create Codespace](assets/img/lab-enter-token.png "Create Codespace"){ width=500px }
 <figcaption> Create a Codespace - Enter our user token </figcaption>
 </figure>
 
@@ -127,11 +128,15 @@ In the `ARTOKEN` field, paste the user token copied from the arista.com user pro
 ??? question "Where is the token saved? :thinking:"
     Once entered, the token is saved as a GitHub Codespaces `Secret`. This can be viewed via the [Codespaces section of GitHub account settings](https://github.com/settings/codespaces).
 
+    <figure markdown>
+    ![Create Codespace](assets/img/codespaces-secrets.png "Codespaces Secrets"){ width=500px }
+    <figcaption> Codespaces Secrets </figcaption>
+    </figure>
+
 ??? note "Watch the expiration date! :hourglass_flowing_sand:"
     User tokens on arista.com have an expiration date listed in the `Token Valid Till` field in the `Portal Access` section of the user profile.
-If the token has expired, click Regenerate Token to create a new one. A token expires one year after it was generated; the user cannot modify this value.
 
-    If the token has expired, simply click `Regenerate Token` to create a new one. A token expires one year after it was generated; This value cannot be modified by the user.
+    If the token has expired, click Regenerate Token to create a new one. A token expires one year after it was generated; the user cannot modify this value.
 
 Once the token has been entered, and `Create new Codespace` has been selected, a new tab will open in the browser containing the codespace
 
@@ -222,7 +227,7 @@ ssh admin@A-SPINE1
 ```
 
 ??? question "What's the password? :lock:"
-    Unless stated otherwise, the default username of `admin` and password of `admin` is used for all nodes in an Arista Community lab
+    The credentials used to access nodes within an Arista Community Lab environment will always be listed in the lab's documentation.
 
 ### API
 
@@ -232,9 +237,7 @@ All nodes are accessible via API from within the codespace. The codespace comes 
 
 When you're finished with the lab, simply close the codespace by exiting the browser window. By default, a GitHub Codespace is stopped after 45 minutes of idleness and deleted after 30 days of inactivity.
 
-??? question "What if I forget about my lab? :scream:"
-    Don't worry! It won't run forever, at least not by default.
-
+??? tip "Conserve those hours and save some money! 💵💷💶💴"
     The `Default idle timeout` and `Default retention period` values can be modified within [GitHub Codespaces Settings](https://github.com/settings/codespaces).
 
     These parameters can be changed at any time, and should be defined with values that make the most sense for your usage patterns.
