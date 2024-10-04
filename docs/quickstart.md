@@ -27,19 +27,19 @@ The tabs below illustrate the steps needed to locate and copy the token:
 
 === "Login"
     <figure markdown>
-    ![Arista Login](/assets/img/aclabs-quickstart-aristalogin.png "Arista Login"){ width=700px }
+    ![Arista Login](assets/img/aclabs-quickstart-aristalogin.png "Arista Login"){ width=700px }
     <figcaption>Arista - Login</figcaption>
     </figure>
 
 === "My Profile"
     <figure markdown>
-    ![Arista My Profile](/assets/img/aclabs-quickstart-arista-myprofile.png "My Profile"){ width=700px }
+    ![Arista My Profile](assets/img/aclabs-quickstart-arista-myprofile.png "My Profile"){ width=700px }
     <figcaption>Arista - My Profile</figcaption>
     </figure>
 
 === "User Token"
     <figure markdown>
-    ![Arista Token](/assets/img/aclabs-quickstart-arista-portalaccess.png "User Token"){ width=700px }
+    ![Arista Token](assets/img/aclabs-quickstart-arista-portalaccess.png "User Token"){ width=700px }
     <figcaption>Arista - User Token (Blurred) </figcaption>
     </figure>
 
@@ -143,7 +143,7 @@ In the newly launched Codespace, a tab is opened displaying an overview of the l
 The `Post Deploy Script` can be seen running in the terminal, and will take a few minutes to complete.
 
 <figure markdown>
-![Post Deployment Script](/assets/img/aclabs-quickstart-postdeploy.png "Post Deploy"){ width=800px }
+![Post Deployment Script](assets/img/aclabs-quickstart-postdeploy.png "Post Deploy"){ width=800px }
 <figcaption>Post Deploy Script Running (Click to Zoom)</figcaption>
 </figure>
 
@@ -155,7 +155,7 @@ Once the post deployment script has completed, the terminal prompt will change t
 In the screenshot below, the GitHub username is `MitchV85` and the lab is `techlib-vxlan-domain-a`.
 
 <figure markdown>
-![Post Deployment Script](/assets/img/aclabs-quickstart-postdeploy-complete.png "Post Deploy"){ width=800px }
+![Post Deployment Script](assets/img/aclabs-quickstart-postdeploy-complete.png "Post Deploy"){ width=800px }
 <figcaption>Post Deploy Script Complete (Click to Zoom)</figcaption>
 </figure>
 
@@ -166,7 +166,7 @@ make inspect
 ```
 
 <figure markdown>
-![Post Deployment Script](/assets/img/aclabs-quickstart-make-inspect.png "Post Deploy"){ width=800px }
+![Post Deployment Script](assets/img/aclabs-quickstart-make-inspect.png "Post Deploy"){ width=800px }
 <figcaption>Lab Status Output (Click to Zoom)</figcaption>
 </figure>
 
@@ -180,7 +180,7 @@ Once the lab is up and running, we can use the terminal in our Codespace to SSH 
     Increase the size of the terminal by selecting the `Maximize Panel Size` button to the right of the terminal:
 
     <figure markdown>
-    ![Post Deployment Script](/assets/img/aclabs-quickstart-maximize-panel.png "Post Deploy"){ width=800px }
+    ![Post Deployment Script](assets/img/aclabs-quickstart-maximize-panel.png "Post Deploy"){ width=800px }
     <figcaption>Maximize the Terminal (Click to Zoom)</figcaption>
     </figure>
 
@@ -193,19 +193,19 @@ Once the lab is up and running, we can use the terminal in our Codespace to SSH 
 
     === "New Terminal"
         <figure markdown>
-        ![Post Deployment Script](/assets/img/aclabs-quickstart-new-tab.png "Post Deploy"){ width=800px }
+        ![Post Deployment Script](assets/img/aclabs-quickstart-new-tab.png "Post Deploy"){ width=800px }
         <figcaption>New Terminal Tab (Click to Zoom)</figcaption>
         </figure>
 
     === "Rename the Tab"
         <figure markdown>
-        ![Post Deployment Script](/assets/img/aclabs-quickstart-rename-tab.png "Post Deploy"){ width=800px }
+        ![Post Deployment Script](assets/img/aclabs-quickstart-rename-tab.png "Post Deploy"){ width=800px }
         <figcaption>Rename the Terminal Tab (Click to Zoom)</figcaption>
         </figure>
 
     === "Party Time 🎉"
         <figure markdown>
-        ![Post Deployment Script](/assets/img/aclabs-quickstart-renamed-tabs.png "Post Deploy"){ width=800px }
+        ![Post Deployment Script](assets/img/aclabs-quickstart-renamed-tabs.png "Post Deploy"){ width=800px }
         <figcaption>Rename the Terminal Tab (Click to Zoom)</figcaption>
         </figure>
 
@@ -233,7 +233,16 @@ All nodes are accessible via API from within the codespace. The codespace comes 
 When you're finished with the lab, simply close the codespace by exiting the browser window. By default, a GitHub Codespace is stopped after 45 minutes of idleness and deleted after 30 days of inactivity.
 
 ??? question "What if I forget about my lab? :scream:"
-    The `Default idle timeout` and `Default retention period` values can be modified under our [GitHub account's Codespaces settings](https://github.com/settings/codespaces).
+    Don't worry! It won't run forever, at least not by default.
+
+    The `Default idle timeout` and `Default retention period` values can be modified within [GitHub Codespaces Settings](https://github.com/settings/codespaces).
+
+    These parameters can be changed at any time, and should be defined with values that make the most sense for your usage patterns.
+
+    A general recommendation for these values is provided below:
+
+     - **Default idle timeout**: `30 Minutes`
+     - **Default retention period**: `1 Day`
 
 A list of all codespaces can be found in the [Codespaces section of GitHub](https://github.com/codespaces). From here, a codespace can be resumed, stopped, deleted, renamed, and more!
 
