@@ -53,6 +53,8 @@ Once started, labs will automatically download(1) the necessary cEOS-lab(2) and 
 ## How do I get started?
 
 The [Quickstart Guide](./quickstart.md) is available to help folks who are trying out the labs for the first time or just need a refresher.
-
+ 
+[Get Started :material-greater-than:](./quickstart.md){ .md-button .md-button--primary }
+ 
 [^1]: This site uses the [Pexels](https://www.pexels.com/) royalty-free image library. Thank you to all Pexels authors and contributors!
 [^2]: Containerlab is distributed under the [BSD-3 license](https://github.com/srl-labs/containerlab/blob/main/LICENSE).
