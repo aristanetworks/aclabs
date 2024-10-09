@@ -30,13 +30,13 @@ Arista Community Labs reduce the burden of this task, with each lab environment 
 
     ---
 
-    The only local software requirement is a web browser
+    The only local software requirement is a web browser.
 
 -   :material-puzzle:{ .lg .middle } __Modularity__
 
     ---
 
-    Nodes, image versions, and tools are easily modified by the lab maintainers
+    Nodes, image versions, and tools are easily modified over time.
 
 </div>
 
