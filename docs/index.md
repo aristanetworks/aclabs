@@ -42,7 +42,7 @@ Arista Community Labs reduce the burden of this task, with each lab environment 
 
 The lab environments are pre-packaged with tools such as Ansible, Python, and the Arista [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/) Ansible Galaxy collections.
 
-Labs are created through the use of templates, [Github Actions](https://docs.github.com/en/actions), [Github Codespaces](https://github.com/features/codespaces), and [ContainerLab](https://containerlab.dev).'
+Labs are created through the use of templates, [Github Actions](https://docs.github.com/en/actions), [Github Codespaces](https://github.com/features/codespaces), and [ContainerLab](https://containerlab.dev)[^1].'
 
 Once started, labs will automatically download(1) the necessary cEOS-lab(2) and other container images necessary for the toplogy.
 { .annotate }
@@ -53,3 +53,5 @@ Once started, labs will automatically download(1) the necessary cEOS-lab(2) and 
 ## How do I get started?
 
 The [Quickstart Guide](./quickstart.md) is available to help folks who are trying out the labs for the first time or just need a refresher.
+
+[^1]: Containerlab is distributed under conditions of [BSD-3 license](https://github.com/srl-labs/containerlab/blob/main/LICENSE).
