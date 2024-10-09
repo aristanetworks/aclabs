@@ -65,6 +65,7 @@ theme:
 markdown_extensions:
   - attr_list
   - admonition
+  - footnotes
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.critic
