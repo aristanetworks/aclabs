@@ -4,7 +4,7 @@ Welcome to Arista Community Labs!
 
 This site serves as a repository of labs built by the Arista community, for the Arista community.
 
-??? info "🚧  Pardon our dust 🏗️"
+???+ info "🚧  Pardon our dust 🏗️"
     The Arista Community Labs repository is under active development with new labs and features coming soon!
 
     Labs that currently reside in the following locations are being migrated to Arista Community Labs:
