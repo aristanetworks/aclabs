@@ -2,6 +2,15 @@
 
 This guide is intended for individuals looking to familiarize themselves with the steps necessary to get started with Arista Community Labs, powered by [GitHub Codespaces](https://github.com/features/codespaces/).
 
+<div class="grid cards" markdown>
+
+- :octicons-tasklist-16: [Pre-Requisites](#pre-requisites)
+- :octicons-rocket-16: [Start the Lab](#starting-the-lab)
+- :material-cursor-default-click: [Interact with the Lab](#interacting-with-the-lab)
+- :fontawesome-regular-circle-stop: [Stop the Lab](#interacting-with-the-lab)
+
+</div>
+
 ## Pre-Requisites
 
 Before launching an Arista Community Lab, the following pre-requisites must be met:
