@@ -186,9 +186,15 @@ make inspect
 
 ## Interacting with the Lab
 
-### SSH
+Once the lab is up and running, we can interact with the topology nodes.
 
-Once the lab is up and running, we can use the terminal in our Codespace to SSH into the nodes.
+Both SSH and API access to the nodes are available via the Codespace. Lab environments are pre-packaged with tools like Python and the Arista [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/) Ansible Galaxy collections.
+
+Labs that leverage tools such as AVD for configuration, documentation, and testing will provide the instructions associated with these API interactions in their lab guide.
+
+Accessing the environment via SSH is detailed below:
+
+### SSH
 
 ??? tip "More real estate for those SSH sessions 🏠"
     Increase the size of the terminal by selecting the `Maximize Panel Size` button to the right of the terminal:
@@ -197,6 +203,21 @@ Once the lab is up and running, we can use the terminal in our Codespace to SSH 
     ![Post Deployment Script](assets/img/aclabs-quickstart-maximize-panel.png "Post Deploy"){ width=800px }
     <figcaption>Maximize the Terminal (Click to Zoom)</figcaption>
     </figure>
+
+A list of `Lab Hosts` that are accessible via `SSH` from within the codespace can be viewed at any time from the terminal by entering the following command:
+
+```bash
+make inspect
+```
+
+To access a node, use the `ssh` command followed by `admin@hostname` as shown in the example below
+
+```bash
+ssh admin@A-SPINE1
+```
+
+??? question "What's the password? :lock:"
+    The credentials used to access nodes within an Arista Community Lab environment will always be listed in the lab's documentation.
 
 ??? tip "Use tabs 📑"
     Create a new tab for an SSH session by selecting `New Terminal` to the right of the terminal.
@@ -222,25 +243,6 @@ Once the lab is up and running, we can use the terminal in our Codespace to SSH 
         ![Post Deployment Script](assets/img/aclabs-quickstart-renamed-tabs.png "Post Deploy"){ width=800px }
         <figcaption>Rename the Terminal Tab (Click to Zoom)</figcaption>
         </figure>
-
-A list of `Lab Hosts` that are accessible via `SSH` from within the codespace can be viewed at any time from the terminal by entering the following command:
-
-```bash
-make inspect
-```
-
-To access a node, use the `ssh` command followed by `admin@hostname` as shown in the example below
-
-```bash
-ssh admin@A-SPINE1
-```
-
-??? question "What's the password? :lock:"
-    The credentials used to access nodes within an Arista Community Lab environment will always be listed in the lab's documentation.
-
-### API
-
-All nodes are accessible via API from within the codespace. The codespace comes pre-packaged with tools like Python and the Arista [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/) Ansible Galaxy collections.
 
 ## Stopping the Lab
 
