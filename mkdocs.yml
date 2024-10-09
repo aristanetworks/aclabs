@@ -87,6 +87,7 @@ markdown_extensions:
   - md_in_html #Enable the use of captioned images via techniques shown here: https://squidfunk.github.io/mkdocs-material/reference/images/
 
 copyright: >
+  Copyright &copy; 2024 Arista Networks
   &nbsp;&#x1F36A;&nbsp;<a href="#__consent">Change cookie settings</a>
 
 extra:
