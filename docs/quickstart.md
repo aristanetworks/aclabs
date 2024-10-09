@@ -7,7 +7,7 @@ This guide is intended for individuals looking to familiarize themselves with th
 - :octicons-tasklist-16: [Pre-Requisites](#pre-requisites)
 - :octicons-rocket-16: [Start the Lab](#starting-the-lab)
 - :material-cursor-default-click: [Interact with the Lab](#interacting-with-the-lab)
-- :fontawesome-regular-circle-stop: [Stop the Lab](#interacting-with-the-lab)
+- :fontawesome-regular-circle-stop: [Stop the Lab](#stopping-the-lab)
 
 </div>
 
