@@ -190,7 +190,7 @@ Once the lab is up and running, we can interact with the topology nodes.
 
 Both SSH and API access to the nodes are available via the Codespace. Lab environments are pre-packaged with tools like Python and the Arista [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/) Ansible Galaxy collections.
 
-Labs that leverage tools such as AVD for configuration, documentation, and testing will provide the instructions associated with these API interactions in their lab guide.
+Labs that leverage tools such as AVD for configuration, documentation, and testing will provide the instructions in their lab guide.
 
 Accessing the environment via SSH is detailed below:
 
