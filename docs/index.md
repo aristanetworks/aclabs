@@ -1,20 +1,60 @@
 # Arista Community Labs
 
-!!! Abstract "Great labs for the great community!"
+Welcome to Arista Community Labs!
 
-    The goal of acLabs is to provide a central place to share labs build by Arista community and for Arista comminity.  
-    acLabs is also used as a lab "backend" for an amazing [TecLibrary](https://tech-library.arista.com/) portal hosting a great quality documentation avalailable to all registered Arista customers.
+This site serves as a repository of labs built by the Arista community, for the Arista community.
 
-    The core values of acLabs is simplicity and user experience. Every lab must be easy to build, maintain and use. We aim to present complex and deeply technical environments in a simple way and rely on templating, [Github Actions](https://docs.github.com/en/actions) and [Github Codespaces](https://github.com/features/codespaces)(1) to deliver that.
-    { .annotate }
+??? info "🚧  Pardon our dust 🏗️"
+    The Arista Community Labs repository is under active development with new labs and features coming soon!
 
-    1. acLabs is the successor of the one-click-se-demos repository that was the first repository to use Github Codespaces for network labs.
+    Labs that currently reside in the following locations are being migrated to Arista Community Labs:
 
-!!! Warning "Under Construction!"
+    - [One-Click Demos](https://arista-netdevops-community.github.io/one-click-se-demos/)
+    - [AVD with cEOS-Lab](https://arista-netdevops-community.github.io/avd-cEOS-Lab/)
 
-    This repository is still under construction. We are actively working on the new content and moving existing labs from:
+## What is a Community Lab?
 
-    - [One-Click SE Demos](https://arista-netdevops-community.github.io/one-click-se-demos/)
-    - [avd-cEOS-Lab](https://arista-netdevops-community.github.io/avd-cEOS-Lab/)
+Whether refreshing one's skills, performing testing, or learning new technologies, protocols, features, and tools, building and maintaining the lab environments necessary to support these endeavors can be a daunting task fraught with software dependencies and caveats.
 
-    Check this repository once in a few weeks for the new content.
+Arista Community Labs reduce the burden of this task, with each lab environment built with three primary objectives:
+
+<div class="grid cards" markdown>
+
+-   :material-clock-fast:{ .lg .middle } __Ease of Consumption__
+
+    ---
+
+    Labs can be instantiated at any time with the click of a button.
+
+-   :fontawesome-solid-person-running:{ .lg .middle } __Portability__
+
+    ---
+
+    The only local software requirement is a web browser.
+
+-   :material-puzzle:{ .lg .middle } __Modularity__
+
+    ---
+
+    Nodes, image versions, and tools are easily modified over time.
+
+</div>
+
+The lab environments are pre-packaged with tools such as Ansible, Python, and the Arista [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/) Ansible Galaxy collections.
+
+Labs are created through the use of templates, [Github Actions](https://docs.github.com/en/actions), [Github Codespaces](https://github.com/features/codespaces), and [ContainerLab](https://containerlab.dev)[^2].'
+
+Once started, labs will automatically download(1) the necessary cEOS-lab(2) and other container images necessary for the toplogy.
+{ .annotate }
+
+1. Automatic download of cEOS-lab is accomplished via the [Arista EOS Downloader](https://pypi.org/project/eos-downloader/) utility.
+2. Downloading cEOS-lab requires an [Arista user token](https://www.arista.com/en/users/profile). See the [Quickstart Guide](./quickstart.md) for more information.
+
+## How do I get started?
+
+The [Quickstart Guide](./quickstart.md) is available to help folks who are trying out the labs for the first time or just need a refresher.
+
+[Get Started :material-greater-than:](./quickstart.md){ .md-button .md-button--primary }
+
+[^1]: This site uses the [Pexels](https://www.pexels.com/) royalty-free image library. Thank you to all Pexels authors and contributors!
+[^2]: Containerlab is distributed under the [BSD-3 license](https://github.com/srl-labs/containerlab/blob/main/LICENSE).

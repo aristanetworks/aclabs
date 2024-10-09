@@ -38,7 +38,7 @@
     }
     /* Explicitly set the color for filled buttons */
     a.md-button.md-button--primary {
-        background-color: #4473a9 !important;
+        background-color: #16325B !important;
     }
     [data-md-color-scheme="slate"] {
         /* Arista True Black as dark mode background */
