@@ -2,7 +2,7 @@
 
 [Arista's Tech Library](https://arista.com/en/tech-library) contains guides developed to assist customers and partners with designing, deploying, and operating their Arista networks.
 
-Arista Community Labs allows readers to quickly instantiate a fully configured lab environment that matches a Deployment Guide topology.
+Arista Community Labs enables readers to quickly instantiate a fully configured lab environment that matches a Deployment Guide topology.
 
 ??? question "How can I access the Tech Library?🤔"
      The [Tech Library](https://arista.com/en/tech-library) is accessible to all Arista customers and partners. For individuals who are not currently customers, temporary access can be provided by contacting your local Arista account team.
