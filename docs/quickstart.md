@@ -217,7 +217,7 @@ Once the lab is up and running, we can use the terminal in our Codespace to SSH 
         <figcaption>Rename the Terminal Tab (Click to Zoom)</figcaption>
         </figure>
 
-    === "Party Time 🎉"
+    === "Renamed Tabs 🎉"
         <figure markdown>
         ![Post Deployment Script](assets/img/aclabs-quickstart-renamed-tabs.png "Post Deploy"){ width=800px }
         <figcaption>Rename the Terminal Tab (Click to Zoom)</figcaption>
