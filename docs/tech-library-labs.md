@@ -5,7 +5,7 @@
 Arista Community Labs allows readers to quickly instantiate a fully configured lab environment that matches a Deployment Guide topology.
 
 ??? question "How can I access the Tech Library?🤔"
-     The Tech Library is accessible to all Arista customers and partners. For individuals who are not currently customers, temporary access can be provided by contacting your local Arista account team.
+     The [Tech Library](https://arista.com/en/tech-library) is accessible to all Arista customers and partners. For individuals who are not currently customers, temporary access can be provided by contacting your local Arista account team.
 
      A verified email address in a valid corporate email domain is required for temporary access (no Gmail, Yahoo, etc.)
 
