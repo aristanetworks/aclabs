@@ -1,14 +1,22 @@
 # Tech Library Labs
 
-Tech Library is an amazing technical documentation resource available to all Arista customers from [arista.com](https://www.arista.com/).
-You can access the labs supporting Tech Library documentation from the Tech Library docs itself or directly from this page.
+[Arista's Tech Library](https://arista.com/en/tech-library) contains guides developed to assist customers and partners with designing, deploying, and operating their Arista networks.
 
-## EVPN
+Arista Community Labs allows readers to quickly instantiate a fully configured lab environment that matches a Deployment Guide topology.
 
-[Start :octicons-play-16: Domain-A Lab in Codespace :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-a%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+??? question "How can I access the Tech Library?🤔"
+     The Tech Library is accessible to all Arista customers and partners. For individuals who are not currently customers, temporary access can be provided by contacting your local Arista account team.
 
-[Start :octicons-play-16: Domain-B Lab in Codespace :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-b%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+     A verified email address in a valid corporate email domain is required for temporary access (no Gmail, Yahoo, etc.)
 
-[Start :octicons-play-16: Domain-C Lab in Codespace :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-c%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+## EVPN/VXLAN Deployment Guide
 
-[Start :octicons-play-16: Domain-D Lab in Codespace :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-d%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+Labs that align with the EVPN Domains found in Arista's [EVPN/VXLAN Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/) can be found below:
+
+[Start :octicons-play-16: Domain-A Lab :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-a%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+
+[Start :octicons-play-16: Domain-B Lab :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-b%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+
+[Start :octicons-play-16: Domain-C Lab :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-c%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+
+[Start :octicons-play-16: Domain-D Lab :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-d%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
