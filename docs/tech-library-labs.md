@@ -20,7 +20,3 @@ Labs that align with the EVPN Domains found in Arista's [EVPN/VXLAN Deployment G
 [Start :octicons-play-16: Domain-C Lab :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-c%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
 
 [Start :octicons-play-16: Domain-D Lab :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Ftechlib-vxlan-domain-d%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
-
-## Telemetry labs
-
-[Start :octicons-play-16: gNMIc-Prometheus-Grafana Lab :octicons-mark-github-24:](https://codespaces.new/noredistribution/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Fgnmic-prometheus-grafana%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}

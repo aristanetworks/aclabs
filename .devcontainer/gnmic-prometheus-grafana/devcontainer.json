@@ -15,11 +15,12 @@
         }
     },
     "hostRequirements": {
-        "cpus": 16,
-        "memory": "64gb",
-        "storage": "128gb"
+        "cpus": 8,
+        "memory": "32gb",
+        "storage": "48gb"
     },
     "postCreateCommand": "postCreate.sh; make start; make inspect",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/gnmic-prometheus-grafana"
+    "workspaceFolder": "/gnmic-prometheus-grafana",
+    "forwardPorts": [3001, 9090]
 }

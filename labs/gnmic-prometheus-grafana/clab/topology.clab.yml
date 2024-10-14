@@ -10,7 +10,7 @@ topology:
         - FastCli -p 15 -c 'security pki key generate rsa 4096 eAPI.key'
         - FastCli -p 15 -c 'security pki certificate generate self-signed eAPI.crt key eAPI.key generate rsa 4096 validity 30000 parameters common-name eAPI'
     linux:
-      image: alpine-host
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
   defaults:
     kind: ceos
   nodes:
