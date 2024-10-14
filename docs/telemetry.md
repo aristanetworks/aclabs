@@ -138,34 +138,10 @@ However you must take care of you VSCode setup and setting up environment variab
 
 ### Lab details
 
-The Containerlab file
-
-<details><summary>Reveal output</summary>
-<p>
-
-```yaml
---8<-- "../labs/gnmic-prometheus-grafana/clab/topology.clab.yml"
-```
-
-</p>
-</details>
-
-Looking at the `gnmic.yml` file
-
-<details><summary>Reveal output</summary>
-<p>
-
-```bash
---8<-- "../labs/gnmic-prometheus-grafana/clab/gnmic.yml"
-```
-
-We can see that we're going to use `gnmic` to subscribe to several OpenConfig and EOS native paths
+Looking at the [gnmic.yml file](../labs/gnmic-prometheus-grafana/clab/gnmic.yml) we can see that we're going to use `gnmic` to subscribe to several OpenConfig and EOS native paths
 and write the data into Prometheus either in their raw states or modifying them
 with [processors](https://gnmic.openconfig.net/user_guide/event_processors/intro/), which
 are needed due to Prometheus only accepting numerical values.
-
-</p>
-</details>
 
 For additional paths please check the [EOS Path report](https://www.arista.com/en/support/toi/path-support).
 
