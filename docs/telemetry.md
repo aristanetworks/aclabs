@@ -44,9 +44,15 @@ To run the labs in this workshop, you can use one of the following options:
 
 [Start :octicons-play-16: gNMIc-Prometheus-Grafana Lab :octicons-mark-github-24:](https://codespaces.new/noredistribution/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Fgnmic-prometheus-grafana%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
 
+!!! Note
+
+    The ARTOKEN variable should be set for the scripts to be able to download the cEOS-lab image. Please set this before clicking on `Create new codespace` as mentioned in the [Quickstart](quickstart.md#starting-the-lab)
+
 Once the web based vscode starts the containerlab topology should be automatically deployed via the `postCreate.sh` script, and once the grafana container is ready, Codespaces will send a notification and reveal the `Open in Browser` button.
 
 ![codespace-grafana](assets/img/codespace-grafana.png)
+
+To access Grafana use the `arista/arista` credentials.
 
 To add configurations to the switches, such as configuring EVPN, we can use AVD for instance (This will be needed for the L3 Telemetry dashboard):
 
@@ -118,7 +124,7 @@ However you must take care of you VSCode setup and setting up environment variab
   +----+--------------------+--------------+--------------------------------------------------+-------+---------+--------------------+--------------+
   ```
 
-6. Access Grafana on your laptop by going to [localhost:3001](http://localhost:3001)
+6. Access Grafana on your laptop by going to [localhost:3001](http://localhost:3001) (arista/arista)
 
   ![grafana1](assets/img/aclabs-telemetryA-grafana-ex1.png)
 
