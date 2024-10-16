@@ -1,5 +1,11 @@
 # Telemetry labs
 
+
+???+ info "How to run this lab?"
+
+    Please read the [Quickstart guide](https://aclabs.arista.com/quickstart/)!
+
+
 ## gNMIc Prometheus Grafana Lab
 
 ### Lab Topology
@@ -8,41 +14,15 @@
 
 ### Demo Details
 
-!!! Success "Container Requirements"
+!!! Warning "Container Requirements"
 
     CPUs: 8
     Memory: 32 GB
-    Storage: 64 GB
-
-### CPU Architechture
-
-- Only x86 CPU architecture is supported!
-- ARM support coming soon!
-
-### How To Run The Workshop
-
-???+ Tip "Wait until cEOS-lab image will be imported"
-
-    You can confirm if image was imported correctly with `docker image ls`.
-    In some rare cases the cEOS-lab image may fail to be downloaded.
-    For example due to incorrecte token or other API failure on arista.com.
-    In that case you can upload the image manually by right-clicking the Explorer tab of the VSCode interface.
-
-To run the labs in this workshop, you can use one of the following options:
-
-- Build you own Ubuntu VM from scratch. (Recommended!)
-  - This option will allow you to experience the entire cLab enviroment build process from the very start, without any pre-installed dependancies
-  - Requirements
-    - Ubuntu LTS 22.04 or later
-    - 32 GB RAM and 8 vCPUs
-- Start the [Github Codespace](https://codespaces.new/noredistribution/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Fgnmic-prometheus-grafana%2Fdevcontainer.json) from this repository. (Fastest!)
-- Open the lab dev container locally on your laptop with Docker Desktop or sever with Docker CE:
-  - download one of the prepackage AVD+Python+Containerlab containers from [aclabs packages](https://github.com/aristanetworks/aclabs/pkgs/container/aclabs%2Flab-base)
-  - when running the lab locally, you must set all required environment variables on your machine
+    Storage: 48 GB
 
 ### Run it in Codespaces
 
-[Start :octicons-play-16: gNMIc-Prometheus-Grafana Lab :octicons-mark-github-24:](https://codespaces.new/noredistribution/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Fgnmic-prometheus-grafana%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+[Start :octicons-play-16: gNMIc-Prometheus-Grafana Lab :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Fgnmic-prometheus-grafana%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
 
 !!! Note
 
@@ -164,6 +144,7 @@ export GITHUB_REPOSITORY="aristanetworks/aclabs"
 
 `ARTOKEN` is needed so that the cEOS-lab image can be auto-downloaded from arista.com. This can be generated from the [My Profile](https://www.arista.com/en/users/profile)
  page.
+
 ### Setup Docker on the Host
 
 > Check if Docker is already installed. In this case you can skip the steps below.

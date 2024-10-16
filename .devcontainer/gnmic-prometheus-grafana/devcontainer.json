@@ -1,5 +1,4 @@
 {
-    // "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v4.10.2-clab0.57.5-rev9",
     "image": "ghcr.io/aristanetworks/aclabs/lab-base:python3.11-avd-v4.10.2-clab0.57.5-rev1.0",
     // containerEnv set the variables applied to entire container
     "containerEnv": {
