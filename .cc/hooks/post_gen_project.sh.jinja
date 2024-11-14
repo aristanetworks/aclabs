@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 cp -r ./ ../
-rm -rf /workspaces/$(basename `git rev-parse --show-toplevel`)/{{ .__demo_slug }}
+rm -rf /workspaces/$(basename `git rev-parse --show-toplevel`)/{{ .__lab_slug }}
 
 # print additional instructions
-echo "The required files for {{ cookiecutter.demo_name }} were generated."
+echo "The required files for {{ cookiecutter.lab_name }} were generated."
 echo "Please review them before committing."
 echo ""
 echo "If you are creating a new demo, please do not forget to reference it in the 'nav' section of 'mkdocs.yml'"
@@ -12,5 +12,5 @@ echo ""
 echo "Example:"
 echo ""
 echo "nav:"
-echo "  - {{ cookiecutter.demo_group }}:"
-echo "      - {{ cookiecutter.demo_name }}: {{ cookiecutter.__demo_slug }}.md"
+echo "  - {{ cookiecutter.lab_group }}:"
+echo "      - {{ cookiecutter.lab_name }}: {{ cookiecutter.__lab_slug }}.md"
