@@ -8,6 +8,7 @@ import shutil
 from cookiecutter.main import cookiecutter
 from cookiecutter import config as cc_config
 import argparse
+import re
 
 
 def read_csv_file(filename):
@@ -152,9 +153,79 @@ if __name__ == "__main__":
         '-in', '--input_directory', default='.cc',
         help='Directory with CSV or YAML files to load as extra context for Cookiecutter'
     )
+    parser.add_argument(
+        '-t', '--tags', default='all',
+        help='Specify what templates to render. Default is all. Options: all, lab, docs, slides, gh_actions, container. Tags must be separated by comma.'
+    )
     args = parser.parse_args()
 
-    cookiecutter_dict = cc_config.get_config(".cc/cookiecutter.json")
+    # set a pattern to search for jinja variables without cookiecutter prefix
+    re_pattern = r"(\{\{-*|\{%-*)((?:\s*\w+\s+|\s*)+)((?:\.\w+[\w\(\)\"',\s\[\]-]*)+)(\s*)(-*\}\}|-*%\})"
+    files_to_copy = list()
+    tag_list = [tag for tag in args.tags.split(',')]
+    for root, _, files in os.walk(".cc"):
+        for filename in files:
+            full_src_path = os.path.join(root, filename)
+            if '.cc-fragments/' in full_src_path:
+                # find out if file must be copied based on the tag
+                fragment_file_tag = re.sub(r".*\.cc-fragments\/", "" , full_src_path).split("/")[0]
+                if (fragment_file_tag in tag_list) or ('all' in tag_list):
+                    # remove .cc-fragments/fragment_tag from the path
+                    full_dst_path = re.sub(r"\/.cc-fragments\/"+f"{fragment_file_tag}", "", full_src_path)
+                    full_dst_path = re.sub(re_pattern, r"\1\2cookiecutter\3\4\5", full_dst_path)
+                    files_to_copy.append((full_src_path, full_dst_path.replace(".cc/", ".cc-init/")))
+            else:
+                if full_src_path.endswith("cookiecutter.jsonc"):
+                    pass  # do not copy original cookiecutter.jsonc with comments
+                else:
+                    # add cookiecutter prefix (if not present) to all files that have jinja pattern in the filename
+                    full_dst_path = re.sub(re_pattern, r"\1\2cookiecutter\3\4\5", full_src_path)
+
+                    files_to_copy.append((full_src_path, full_dst_path.replace(".cc/", ".cc-init/")))
+
+    for src_file, dst_file in files_to_copy:
+        os.makedirs(os.path.dirname(dst_file), exist_ok=True)
+        shutil.copy(src=src_file, dst=dst_file)
+        # add cookiecutter. to variables, if missing in .jinja files
+        if dst_file.endswith(".jinja"):
+            with open(dst_file, 'r') as f:
+                file_string = f.read()
+                file_string = re.sub(re_pattern, r"\1\2cookiecutter\3\4\5", file_string)
+            with open(dst_file, 'w') as f:
+                f.write(file_string)
+
+    # remove irrelevan data from cookiecutter.json
+    json_string_without_comments = ""
+    with open('.cc/cookiecutter.jsonc', 'r') as f:
+        jsonc_line_list = f.readlines()
+        for line in jsonc_line_list:
+            if re.findall(r"//.*$", line):
+                for tag in tag_list:
+                    tag_pattern = r"//.*" + tag + ".*$"
+                    if re.findall(tag_pattern, line) or (tag == 'all'):
+                        updated_line = re.sub(r"//.*$", "", line)
+                        json_string_without_comments += updated_line
+            else:
+                json_string_without_comments += line
+    with open('.cc-init/cookiecutter.json', 'w') as f:
+        f.write(json_string_without_comments)
+
+    # copy any hand-written files to the .cc-init directory
+    for root, _, files in os.walk("handwritten"):
+        for filename in files:
+            full_src_path = os.path.join(root, filename)
+            full_dst_path = full_src_path.replace("handwritten", ".cc-init/templates")
+            os.makedirs(os.path.dirname(full_dst_path), exist_ok=True)
+            shutil.copy(src=full_src_path, dst=full_dst_path)
+            # add cookiecutter. to variables, if missing in .jinja files
+            if full_dst_path.endswith(".jinja"):
+                with open(full_dst_path, 'r') as f:
+                    file_string = f.read()
+                    file_string = re.sub(re_pattern, r"\1\2cookiecutter\3\4\5", file_string)
+                with open(full_dst_path, 'w') as f:
+                    f.write(file_string)
+
+    cookiecutter_dict = cc_config.get_config(".cc-init/cookiecutter.json")
     cc_extras = cookiecutter_load(args.input_directory)
     cookiecutter_dict.update({
         '__lab': cc_extras
@@ -162,7 +233,7 @@ if __name__ == "__main__":
 
     files_to_copy = list()
     file_index_list = list()
-    for root, _, files in os.walk(".cc"):
+    for root, _, files in os.walk(".cc-init"):
         for filename in files:
             full_src_path = os.path.join(root, filename)
             f, extension = os.path.splitext(filename)
@@ -175,12 +246,12 @@ if __name__ == "__main__":
                         loop_over = loop_over[k]
                     loop_key = for_loop.split()[2]
                     for i, d in enumerate(loop_over):
-                        file_index_list.append((os.path.join(root, d[loop_key]+true_ext).replace(".cc/", ".cc-temp/"), i))
-                        files_to_copy.append((full_src_path, os.path.join(root, d[loop_key]+true_ext).replace(".cc/", ".cc-temp/")))
+                        file_index_list.append((os.path.join(root, d[loop_key]+true_ext).replace(".cc-init/", ".cc-temp/"), i))
+                        files_to_copy.append((full_src_path, os.path.join(root, d[loop_key]+true_ext).replace(".cc-init/", ".cc-temp/")))
                 else:
-                    files_to_copy.append((full_src_path, os.path.join(root, f).replace(".cc/", ".cc-temp/")))
+                    files_to_copy.append((full_src_path, os.path.join(root, f).replace(".cc-init/", ".cc-temp/")))
             else:
-                files_to_copy.append((full_src_path, full_src_path.replace(".cc/", ".cc-temp/")))
+                files_to_copy.append((full_src_path, full_src_path.replace(".cc-init/", ".cc-temp/")))
 
     for src_file, dst_file in files_to_copy:
         os.makedirs(os.path.dirname(dst_file), exist_ok=True)
@@ -194,4 +265,6 @@ if __name__ == "__main__":
 
     cookiecutter(template='.cc-temp', overwrite_if_exists=True, extra_context={'__lab': cc_extras})
 
+    # delete temporary directories
+    shutil.rmtree(".cc-init")
     shutil.rmtree(".cc-temp")
