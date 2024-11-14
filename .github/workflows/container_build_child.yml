@@ -97,11 +97,14 @@ jobs:
         id: check-image
         run: |
           echo "exit_code=0" >> $GITHUB_OUTPUT
-          IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
-          for image_tag in "${image_tags[@]}"; do
-            echo "Checking if ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:$image_tag already exists."
-            docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:$image_tag || echo "exit_code=1" >> $GITHUB_OUTPUT
-          done
+          # always rebuild dev image, but check if already exists for other images
+          if [ "${{ inputs.container_name }}" != "dev" ]; then
+            IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
+            for image_tag in "${image_tags[@]}"; do
+              echo "Checking if ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:$image_tag already exists."
+              docker manifest inspect ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:$image_tag || echo "exit_code=1" >> $GITHUB_OUTPUT
+            done
+          fi
 
       - name: Pre-build dev container image 🔨
         uses: devcontainers/ci@v0.3
