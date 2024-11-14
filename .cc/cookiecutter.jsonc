@@ -7,6 +7,6 @@
     "lab_author": "Petr Ankudinov",
     "python_version": [ "3.11", "3.12", "3.13" ],  // lab
     "avd_version": [ "4.10.2", "5.0.0" ],  // lab
-    "clab_version": [ "0.57.5", "5.0.0" ],  // lab
+    "clab_version": [ "0.57.5", "0.59.0" ],  // lab
     "lab_container_revision": [ "1.1" ]  // lab
 }
