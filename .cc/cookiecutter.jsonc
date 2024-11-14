@@ -15,5 +15,6 @@
         {"cpus": 8, "memory": "32 GB", "storage": "64 GB"},  // docs, lab
         {"cpus": 16, "memory": "64 GB", "storage": "128 GB"},  // docs, lab
         {"cpus": 32, "memory": "128 GB", "storage": "128 GB"}  // docs, lab
-    ]  // docs, lab
+    ],  // docs, lab
+    "cv_api_token_required": false  // lab
 }
