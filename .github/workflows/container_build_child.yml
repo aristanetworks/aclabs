@@ -97,8 +97,10 @@ jobs:
         id: check-image
         run: |
           echo "exit_code=0" >> $GITHUB_OUTPUT
-          # always rebuild dev image, but check if already exists for other images
           if [ "${{ inputs.container_name }}" != "dev" ]; then
+            # always rebuild dev image, but check if already exists for other images
+            echo "exit_code=1" >> $GITHUB_OUTPUT
+          else
             IFS=',' read -ra image_tags <<< ${{ steps.build-tags.outputs.image_tags }}
             for image_tag in "${image_tags[@]}"; do
               echo "Checking if ghcr.io/${{ steps.gh_repo.outputs.name_lowcase }}/${{ inputs.container_name }}:$image_tag already exists."
