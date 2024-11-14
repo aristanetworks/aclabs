@@ -17,6 +17,7 @@
     ],  // docs, lab
     "cv_api_token_required": false,  // lab
     "git_init": true,  // gh, containers, lab
+    "ceos_lab_version": "4.32.2.1F",  //  lab
     "clab_version": [ "0.59.0", "0.57.5" ],  // lab
     "clab_user": "arista",  // containers, lab
     "clab_password": "arista",  // containers, lab
