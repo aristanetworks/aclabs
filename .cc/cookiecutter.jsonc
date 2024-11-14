@@ -1,0 +1,12 @@
+{
+    "lab_name": "A New Lab",
+    "lab_group": "unsorted",
+    "__lab_name": "{{ cookiecutter.lab_name.lower().replace(' ','-').replace(',','-').replace('[','').replace(']','') }}",
+    "__lab_group": "{{ cookiecutter.lab_group.lower() }}",
+    "__lab_slug": "{{ cookiecutter.__lab_group }}-{{ cookiecutter.__lab_name }}",
+    "lab_author": "Petr Ankudinov",
+    "python_version": [ "3.11", "3.12", "3.13" ],  // lab
+    "avd_version": [ "4.10.2", "5.0.0" ],  // lab
+    "clab_version": [ "0.57.5", "5.0.0" ],  // lab
+    "lab_container_revision": [ "1.1" ]  // lab
+}
