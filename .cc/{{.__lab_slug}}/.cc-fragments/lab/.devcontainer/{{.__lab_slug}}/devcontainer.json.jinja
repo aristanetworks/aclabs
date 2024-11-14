@@ -28,5 +28,6 @@
     {% raw %}},{% endraw %}
     "postCreateCommand": "postCreate.sh",
     "workspaceMount": "source=${localWorkspaceFolder}/demos/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/{{ .__lab_slug }}"
+    "workspaceFolder": "/{{ .__lab_slug }}",
+    "containerUser": "avd"
 {% raw %}}{% endraw %}

@@ -6,8 +6,7 @@
     "__lab_slug": "{{ cookiecutter.__lab_group }}-{{ cookiecutter.__lab_name }}",
     "lab_author": "Petr Ankudinov",
     "python_version": [ "3.11", "3.12", "3.13" ],  // lab
-    "avd_version": [ "4.10.2", "5.0.0" ],  // lab
-    "clab_version": [ "0.57.5", "0.59.0" ],  // lab
+    "avd_version": [ "5.0.0", "4.10.2" ],  // lab
     "lab_container_revision": [ "1.1" ],  // lab
     "container_size": [  // docs, lab
         {"cpus": 2, "memory": "8 GB", "storage": "32 GB"},  // docs, lab
@@ -16,5 +15,13 @@
         {"cpus": 16, "memory": "64 GB", "storage": "128 GB"},  // docs, lab
         {"cpus": 32, "memory": "128 GB", "storage": "128 GB"}  // docs, lab
     ],  // docs, lab
-    "cv_api_token_required": false  // lab
+    "cv_api_token_required": false,  // lab
+    "git_init": true,  // gh, containers, lab
+    "clab_version": [ "0.59.0", "0.57.5" ],  // lab
+    "clab_user": "arista",  // containers, lab
+    "clab_password": "arista",  // containers, lab
+    "clab_mgmt_subnet": "10.0.0.0",  // lab
+    "clab_mgmt_mask": "16",  // lab
+    "clab_mgmt_gw": "10.0.0.1",  // lab
+    "__lab": null
 }
