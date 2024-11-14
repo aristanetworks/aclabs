@@ -1,3 +1,32 @@
 {% raw %}{{% endraw %}
-    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python{{.python_version}}-avd-v{{.avd_version}}-clab{{.clab_version}}-rev{{.lab_container_revision}}"
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python{{.python_version}}-avd-v{{.avd_version}}-clab{{.clab_version}}-rev{{.lab_container_revision}}",
+    // containerEnv set the variables applied to entire container
+    "containerEnv": {% raw %}{{% endraw %}
+        "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
+{%- if .cv_api_token_required %}
+        "CV_API_TOKEN": "${localEnv:CV_API_TOKEN}",
+{%- endif %}
+        "CONTAINERWSF": "${containerWorkspaceFolder}",
+        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}"
+    {% raw %}},{% endraw %}
+    "secrets": {% raw %}{{% endraw %}
+{%- if .cv_api_token_required %}
+        "CV_API_TOKEN": {% raw %}{{% endraw %}
+            "description": "CVaaS service account token."
+            // "documentationUrl": "https://example.com/link/to/info"
+        {% raw %}},{% endraw %}
+{%- endif %}
+        "ARTOKEN": {% raw %}{{% endraw %}
+            "description": "token to auto-download EOS images from arista.com."
+            // "documentationUrl": "https://example.com/link/to/info"
+        {% raw %}}{% endraw %}
+    {% raw %}},{% endraw %}
+    "hostRequirements": {% raw %}{{% endraw %}
+        "cpus": {{ .container_size.cpus }},
+        "memory": "{{ .container_size.memory.lower().replace(' ','') }}",
+        "storage": "{{ .container_size.storage.lower().replace(' ','') }}"
+    {% raw %}},{% endraw %}
+    "postCreateCommand": "postCreate.sh",
+    "workspaceMount": "source=${localWorkspaceFolder}/demos/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
+    "workspaceFolder": "/{{ .__lab_slug }}"
 {% raw %}}{% endraw %}

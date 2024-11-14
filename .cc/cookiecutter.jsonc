@@ -8,5 +8,12 @@
     "python_version": [ "3.11", "3.12", "3.13" ],  // lab
     "avd_version": [ "4.10.2", "5.0.0" ],  // lab
     "clab_version": [ "0.57.5", "0.59.0" ],  // lab
-    "lab_container_revision": [ "1.1" ]  // lab
+    "lab_container_revision": [ "1.1" ],  // lab
+    "container_size": [  // docs, lab
+        {"cpus": 2, "memory": "8 GB", "storage": "32 GB"},  // docs, lab
+        {"cpus": 4, "memory": "16 GB", "storage": "32 GB"},  // docs, lab
+        {"cpus": 8, "memory": "32 GB", "storage": "64 GB"},  // docs, lab
+        {"cpus": 16, "memory": "64 GB", "storage": "128 GB"},  // docs, lab
+        {"cpus": 32, "memory": "128 GB", "storage": "128 GB"}  // docs, lab
+    ]  // docs, lab
 }
