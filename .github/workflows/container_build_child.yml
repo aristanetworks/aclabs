@@ -97,7 +97,7 @@ jobs:
         id: check-image
         run: |
           echo "exit_code=0" >> $GITHUB_OUTPUT
-          if [ "${{ inputs.container_name }}" != "dev" ]; then
+          if [ "${{ inputs.container_name }}" == "dev" ]; then
             # always rebuild dev image, but check if already exists for other images
             echo "exit_code=1" >> $GITHUB_OUTPUT
           else
