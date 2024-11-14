@@ -38,7 +38,7 @@ fi
 if [ -f "${CONTAINERWSF}/postCreate.sh" ]; then
   chmod +x ${CONTAINERWSF}/postCreate.sh
   ${CONTAINERWSF}/postCreate.sh
-  # delet postCreate.sh after use to avoid confusing lab user
+  # delete postCreate.sh after use to avoid confusing lab user
   rm ${CONTAINERWSF}/postCreate.sh
 fi
 
