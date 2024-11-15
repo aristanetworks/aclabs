@@ -7,10 +7,6 @@
 [Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/slides/{{ .__lab_slug }}.html){ target=_blank }  
 [PDF Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/pdfs/{{ .__lab_slug }}.pdf){ target=_blank }  
 
-!!! Info "Last reviewed: {% now 'local', '%d/%m/%Y' %}"
-
-    Demos and labs reviewed over 6 month age may be outdated.
-
 ## How To Run The Lab on Your Machine
 
 It is possible to run the lab on your local machine (or any server) instead of using Github Codespaces.  
@@ -34,6 +30,8 @@ make start
 ???+ Tip "Wait until all devices will start streaming to CVaaS."
 
     This may take a while.
+
+{% include ["lab-extra-info.md"] %}
 
 {% if .update_existing_files %}
 {%-    with a_handwritten_tempate_name = "docs/" ~ cookiecutter.__lab_slug ~ ".md" %}
