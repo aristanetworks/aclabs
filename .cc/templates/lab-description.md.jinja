@@ -1,0 +1,17 @@
+{%- if .container_size.cpus in ["2", "4"] %}
+!!! Success "Container Requirements"
+
+    :fontawesome-solid-microchip: CPUs: {{ .container_size.cpus }}  
+    :fontawesome-solid-memory: Memory: {{ .container_size.memory }}  
+    :fontawesome-solid-hard-drive: Storage: {{ .container_size.storage }}  
+
+    :material-checkbox-marked-outline: Works with default Codespaces sizing!
+{%- else %}
+!!! Warning "Container Requirements"
+
+    :fontawesome-solid-microchip: CPUs: {{ .container_size.cpus }}  
+    :fontawesome-solid-memory: Memory: {{ .container_size.memory }}  
+    :fontawesome-solid-hard-drive: Storage: {{ .container_size.storage }}  
+
+    :material-alert-circle-outline:{ .heartbeat } Please request high spec Codespace machines from [Github support](https://support.github.com/) first!
+{%- endif %}

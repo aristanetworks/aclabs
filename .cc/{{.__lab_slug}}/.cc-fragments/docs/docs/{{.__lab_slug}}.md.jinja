@@ -1,23 +1,6 @@
 # {{ .lab_name }}
 
-## Demo Details
-{% if .container_size.cpus in ["2", "4"] %}
-!!! Success "Container Requirements"
-
-    CPUs: {{ .container_size.cpus }}  
-    Memory: {{ .container_size.memory }}  
-    Storage: {{ .container_size.storage }}  
-
-    :material-checkbox-marked-outline: Works with default Codespaces sizing!
-{%- else %}
-!!! Warning "Container Requirements"
-
-    CPUs: {{ .container_size.cpus }}  
-    Memory: {{ .container_size.memory }}  
-    Storage: {{ .container_size.storage }}  
-
-    :material-alert-circle-outline:{ .heartbeat } Please request high spec Codespace machines from [Github support](https://support.github.com/) first!
-{%- endif %}
+{% include ["lab-description.md"] %}
 
 [Start "{{ .lab_name }}" in Codespace](https://codespaces.new/{% raw %}{{gh.repository}}{%endraw%}/tree/{% raw %}{{gh.branch}}{%endraw%}?quickstart=1&devcontainer_path=.devcontainer%2F{{ .__lab_slug }}%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
 
@@ -57,5 +40,5 @@ make start
 {%-        include [a_handwritten_tempate_name] ignore missing %}
 {%-    endwith %}
 {%- else %}
-{%- include ["cc-under-construction-warning.md"] ignore missing %}
+{%- include ["cc-under-construction-warning.md"] %}
 {%- endif %}
