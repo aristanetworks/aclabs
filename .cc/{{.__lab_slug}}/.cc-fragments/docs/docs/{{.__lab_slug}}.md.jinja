@@ -52,6 +52,10 @@ make start
 
     This may take a while.
 
-{% with a_handwritten_tempate_name = "docs/" ~ cookiecutter.__lab_slug ~ ".md" %}
-{%- include [a_handwritten_tempate_name] ignore missing %}
-{%- endwith %}
+{% if .update_existing_files %}
+{%-    with a_handwritten_tempate_name = "docs/" ~ cookiecutter.__lab_slug ~ ".md" %}
+{%-        include [a_handwritten_tempate_name] ignore missing %}
+{%-    endwith %}
+{%- else %}
+{%- include ["cc-under-construction-warning.md"] ignore missing %}
+{%- endif %}

@@ -1,9 +1,1 @@
-!!! Warning "Lab Documents Not Finished"
-
-    DO NOT ENTER! :skull_and_crossbones:{ .heartbeat }
-
-    ![stay back](assets/img/pexels-danne-555709.jpg)
-
-    This document is created from a Cookiecutter template.
-    If you see this message - the lab is not finished and likely published for testing purposes.
-    Don't use it unless you are the author.
+{%- include ["cc-under-construction-warning.md"] ignore missing %}
