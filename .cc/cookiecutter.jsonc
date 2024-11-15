@@ -25,6 +25,8 @@
     "clab_password": "arista",  // containers, lab
     "clab_mgmt_subnet": "10.0.0.0",  // lab
     "clab_mgmt_mask": "16",  // lab
-    "clab_mgmt_gw": "10.0.0.1",  // lab
+    "clab_mgmt_gw": "10.0.0.1",  // lab,
+    "marp_theme": ["default", "beam", "jobs", "einstein"],  // slides
+    "marp_class": ["none", "invert"],  // slides
     "__lab": null
 }
