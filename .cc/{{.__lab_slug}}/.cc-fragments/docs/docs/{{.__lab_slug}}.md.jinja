@@ -1,0 +1,57 @@
+# {{ .lab_name }}
+
+## Demo Details
+{% if .container_size.cpus in ["2", "4"] %}
+!!! Success "Container Requirements"
+
+    CPUs: {{ .container_size.cpus }}  
+    Memory: {{ .container_size.memory }}  
+    Storage: {{ .container_size.storage }}  
+
+    :material-checkbox-marked-outline: Works with default Codespaces sizing!
+{%- else %}
+!!! Warning "Container Requirements"
+
+    CPUs: {{ .container_size.cpus }}  
+    Memory: {{ .container_size.memory }}  
+    Storage: {{ .container_size.storage }}  
+
+    :material-alert-circle-outline:{ .heartbeat } Please request high spec Codespace machines from [Github support](https://support.github.com/) first!
+{%- endif %}
+
+[Start "{{ .demo_name }}" in Codespace](https://codespaces.new/{% raw %}{{gh.repository}}{%endraw%}/tree/{% raw %}{{gh.branch}}{%endraw%}?quickstart=1&devcontainer_path=.devcontainer%2F{{ .__lab_slug }}%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+
+[Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/slides/{{ .__lab_slug }}.html){ target=_blank }  
+[PDF Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/pdfs/{{ .__lab_slug }}.pdf){ target=_blank }  
+
+!!! Info "Last reviewed: {% now 'local', '%d/%m/%Y' %}"
+
+    Demos and labs reviewed over 6 month age may be outdated.
+
+## How To Run The Lab on Your Machine
+
+It is possible to run the lab on your local machine (or any server) instead of using Github Codespaces.  
+You can [download all required lab files here](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/one-click-se-demos/lab_archives/{{ .__lab_slug }}.tar.gz).  
+However you must take care of you VSCode setup and setting up environment variables. Also keep in mind that auto-downloaded image will not work on ARM-based MacBooks.
+
+## How To Run The Demo
+
+???+ Tip "Wait until cEOS-lab image will be imported"
+
+    You can confirm if image was imported correctly with `docker image ls`.  
+    In some rare cases the cEOS-lab image may fail to be downloaded.
+    For example due to incorrecte token or other API failure on arista.com.  
+    In that case you can upload the image manually by right-clicking the Explorer tab of the VSCode interface.
+
+```bash
+# 1. start cLab
+make start
+```
+
+???+ Tip "Wait until all devices will start streaming to CVaaS."
+
+    This may take a while.
+
+{%- with a_handwritten_tempate_name = "docs/" ~ cookiecutter.__lab_slug ~ ".md" %}
+{%- include [a_handwritten_tempate_name] ignore missing %}
+{%- endwith %}

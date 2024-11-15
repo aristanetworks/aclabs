@@ -1,4 +1,5 @@
 {
+    "update_existing_files": false,
     "lab_name": "A New Lab",
     "lab_group": "unsorted",
     "__lab_name": "{{ cookiecutter.lab_name.lower().replace(' ','-').replace(',','-').replace('[','').replace(']','') }}",
