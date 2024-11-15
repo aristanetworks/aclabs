@@ -9,8 +9,9 @@ To run the lab on your own machine, you can download all required files using th
 
 ## How To Run The Demo
 
-???+ Tip "Wait until cEOS-lab image will be imported"
+???+ Tip "Wait until the lab is ready"
 
+    When lab container starts, the `postCreate.sh` takes care of cEOS-lab image download and making some last minute changes in the lab environment. After that, `make start` shortcut is executed to start the lab.
+    This requires a some time. :stopwatch: Please be patient. :coffee: :croissant:
+    Sometimes cEOS-lab image download may fail. For example, due to incorrect token. In that case `postCreate.sh` script will fail and the lab will not be started.  
     You can confirm if image was imported correctly with `docker image ls`.  
-    Sometimes cEOS-lab image download may fail. For example, due to incorrect token.  
-    In that case you can upload the image manually by right-clicking the Explorer tab of the VSCode interface.
