@@ -36,32 +36,13 @@ style: |
     }
 ---
 
-# {{ .lab_name }}
-
-<!-- Do not add page number on this slide -->
-<!--
-_paginate: false
--->
-
-```text
-{{ .lab_name }} Demo
-{{ .lab_author }}
-                                    {% now 'local', '%d/%m/%Y' %}
-```
-
-![bg right](img/leonardo-yip-unsplash.jpg)
-
----
-
-# Agenda
-
-<style scoped>section {font-size: 22px;}</style>
-
-![bg right opacity:75%](img/pexels-suzy-hazelwood-1226398.jpg)
-
-- item1
-- item2
-- item3
+{% if .update_existing_files %}
+{%-    with a_handwritten_tempate_name = "slides/" ~ cookiecutter.__lab_slug ~ ".md" %}
+{%-        include [a_handwritten_tempate_name] ignore missing %}
+{%-    endwith %}
+{%- else %}
+{%- include ["slides/under-construction.md"] %}
+{%- endif %}
 
 ---
 
