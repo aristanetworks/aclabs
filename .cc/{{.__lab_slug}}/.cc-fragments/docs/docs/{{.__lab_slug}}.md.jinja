@@ -19,7 +19,7 @@
     :material-alert-circle-outline:{ .heartbeat } Please request high spec Codespace machines from [Github support](https://support.github.com/) first!
 {%- endif %}
 
-[Start "{{ .demo_name }}" in Codespace](https://codespaces.new/{% raw %}{{gh.repository}}{%endraw%}/tree/{% raw %}{{gh.branch}}{%endraw%}?quickstart=1&devcontainer_path=.devcontainer%2F{{ .__lab_slug }}%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+[Start "{{ .lab_name }}" in Codespace](https://codespaces.new/{% raw %}{{gh.repository}}{%endraw%}/tree/{% raw %}{{gh.branch}}{%endraw%}?quickstart=1&devcontainer_path=.devcontainer%2F{{ .__lab_slug }}%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
 
 [Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/slides/{{ .__lab_slug }}.html){ target=_blank }  
 [PDF Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/pdfs/{{ .__lab_slug }}.pdf){ target=_blank }  
@@ -52,6 +52,6 @@ make start
 
     This may take a while.
 
-{%- with a_handwritten_tempate_name = "docs/" ~ cookiecutter.__lab_slug ~ ".md" %}
+{% with a_handwritten_tempate_name = "docs/" ~ cookiecutter.__lab_slug ~ ".md" %}
 {%- include [a_handwritten_tempate_name] ignore missing %}
 {%- endwith %}
