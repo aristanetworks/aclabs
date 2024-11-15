@@ -45,6 +45,14 @@ router_bgp:
     send_community: all
     maximum_routes: 0
     ebgp_multihop: 3
+  - name: REMOTE-EVPN-PEERS
+    type: evpn
+    update_source: Loopback0
+    bfd: true
+    password: IO6gE/ln7Sp2wt33WX/Asg==
+    send_community: all
+    maximum_routes: 0
+    ebgp_multihop: 15
   address_family_ipv4:
     peer_groups:
     - name: MLAG-IPV4-PEER
@@ -52,6 +60,8 @@ router_bgp:
     - name: LOCAL-IPV4-PEERS
       activate: true
     - name: LOCAL-EVPN-PEERS
+      activate: false
+    - name: REMOTE-EVPN-PEERS
       activate: false
   neighbors:
   - ip_address: 192.0.0.1
@@ -98,8 +108,25 @@ router_bgp:
     peer: A-SPINE4
     description: A-SPINE4_Loopback0
     remote_as: '65100'
+  - ip_address: 1.1.0.1
+    peer_group: REMOTE-EVPN-PEERS
+    peer: BB1
+    description: BB1
+    remote_as: '65000'
+  - ip_address: 1.1.0.2
+    peer_group: REMOTE-EVPN-PEERS
+    peer: BB2
+    description: BB2
+    remote_as: '65000'
   address_family_evpn:
+    neighbor_default:
+      next_hop_self_received_evpn_routes:
+        enable: true
+        inter_domain: true
     peer_groups:
+    - name: REMOTE-EVPN-PEERS
+      domain_remote: true
+      activate: true
     - name: LOCAL-EVPN-PEERS
       activate: true
     route:
@@ -158,24 +185,42 @@ router_bgp:
     route_targets:
       both:
       - 10050:10050
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10050:10050
     redistribute_routes:
     - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 1.1.1.7:10050
   - id: 70
     tenant: DOMAIN_A_FABRIC
     rd: 1.1.1.7:10070
     route_targets:
       both:
       - 10070:10070
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10070:10070
     redistribute_routes:
     - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 1.1.1.7:10070
   - id: 10
     tenant: DOMAIN_A_FABRIC
     rd: 1.1.1.7:10010
     route_targets:
       both:
       - 10010:10010
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10010:10010
     redistribute_routes:
     - learned
+    rd_evpn_domain:
+      domain: remote
+      rd: 1.1.1.7:10010
   - id: 30
     tenant: DOMAIN_A_FABRIC
     rd: 1.1.1.7:10030

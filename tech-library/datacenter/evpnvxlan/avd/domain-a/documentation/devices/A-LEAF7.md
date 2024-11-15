@@ -865,10 +865,23 @@ ASN Notation: asplain
 | Send community | all |
 | Maximum routes | 12000 |
 
+##### REMOTE-EVPN-PEERS
+
+| Settings | Value |
+| -------- | ----- |
+| Address Family | evpn |
+| Source | Loopback0 |
+| BFD | True |
+| Ebgp multihop | 15 |
+| Send community | all |
+| Maximum routes | 0 (no limit) |
+
 #### BGP Neighbors
 
 | Neighbor | Remote AS | VRF | Shutdown | Send-community | Maximum-routes | Allowas-in | BFD | RIB Pre-Policy Retain | Route-Reflector Client | Passive | TTL Max Hops |
 | -------- | --------- | --- | -------- | -------------- | -------------- | ---------- | --- | --------------------- | ---------------------- | ------- | ------------ |
+| 1.1.0.1 | 65000 | default | - | Inherited from peer group REMOTE-EVPN-PEERS | Inherited from peer group REMOTE-EVPN-PEERS | - | Inherited from peer group REMOTE-EVPN-PEERS | - | - | - | - |
+| 1.1.0.2 | 65000 | default | - | Inherited from peer group REMOTE-EVPN-PEERS | Inherited from peer group REMOTE-EVPN-PEERS | - | Inherited from peer group REMOTE-EVPN-PEERS | - | - | - | - |
 | 1.1.1.201 | 65100 | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
 | 1.1.1.202 | 65100 | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
 | 1.1.1.203 | 65100 | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
@@ -887,18 +900,27 @@ ASN Notation: asplain
 
 ##### EVPN Peer Groups
 
-| Peer Group | Activate | Encapsulation |
-| ---------- | -------- | ------------- |
-| LOCAL-EVPN-PEERS | True | default |
+| Peer Group | Activate | Route-map In | Route-map Out | Encapsulation |
+| ---------- | -------- | ------------ | ------------- | ------------- |
+| LOCAL-EVPN-PEERS | True |  - | - | default |
+| REMOTE-EVPN-PEERS | True |  - | - | default |
+
+##### EVPN DCI Gateway Summary
+
+| Settings | Value |
+| -------- | ----- |
+| Remote Domain Peer Groups | REMOTE-EVPN-PEERS |
+| L3 Gateway Configured | True |
+| L3 Gateway Inter-domain | True |
 
 #### Router BGP VLANs
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 10 | 1.1.1.7:10010 | 10010:10010 | - | - | learned |
+| 10 | 1.1.1.7:10010 | 10010:10010<br>remote 10010:10010 | - | - | learned |
 | 30 | 1.1.1.7:10030 | 10030:10030 | - | - | learned |
-| 50 | 1.1.1.7:10050 | 10050:10050 | - | - | learned |
-| 70 | 1.1.1.7:10070 | 10070:10070 | - | - | learned |
+| 50 | 1.1.1.7:10050 | 10050:10050<br>remote 10050:10050 | - | - | learned |
+| 70 | 1.1.1.7:10070 | 10070:10070<br>remote 10070:10070 | - | - | learned |
 
 #### Router BGP VRFs
 
@@ -938,6 +960,19 @@ router bgp 65178
    neighbor MLAG-IPV4-PEER password 7 <removed>
    neighbor MLAG-IPV4-PEER send-community
    neighbor MLAG-IPV4-PEER maximum-routes 12000
+   neighbor REMOTE-EVPN-PEERS peer group
+   neighbor REMOTE-EVPN-PEERS update-source Loopback0
+   neighbor REMOTE-EVPN-PEERS bfd
+   neighbor REMOTE-EVPN-PEERS ebgp-multihop 15
+   neighbor REMOTE-EVPN-PEERS password 7 <removed>
+   neighbor REMOTE-EVPN-PEERS send-community
+   neighbor REMOTE-EVPN-PEERS maximum-routes 0
+   neighbor 1.1.0.1 peer group REMOTE-EVPN-PEERS
+   neighbor 1.1.0.1 remote-as 65000
+   neighbor 1.1.0.1 description BB1
+   neighbor 1.1.0.2 peer group REMOTE-EVPN-PEERS
+   neighbor 1.1.0.2 remote-as 65000
+   neighbor 1.1.0.2 description BB2
    neighbor 1.1.1.201 peer group LOCAL-EVPN-PEERS
    neighbor 1.1.1.201 remote-as 65100
    neighbor 1.1.1.201 description A-SPINE1_Loopback0
@@ -968,7 +1003,9 @@ router bgp 65178
    !
    vlan 10
       rd 1.1.1.7:10010
+      rd evpn domain remote 1.1.1.7:10010
       route-target both 10010:10010
+      route-target import export evpn domain remote 10010:10010
       redistribute learned
    !
    vlan 30
@@ -978,22 +1015,30 @@ router bgp 65178
    !
    vlan 50
       rd 1.1.1.7:10050
+      rd evpn domain remote 1.1.1.7:10050
       route-target both 10050:10050
+      route-target import export evpn domain remote 10050:10050
       redistribute learned
    !
    vlan 70
       rd 1.1.1.7:10070
+      rd evpn domain remote 1.1.1.7:10070
       route-target both 10070:10070
+      route-target import export evpn domain remote 10070:10070
       redistribute learned
    !
    address-family evpn
       neighbor LOCAL-EVPN-PEERS activate
+      neighbor REMOTE-EVPN-PEERS activate
+      neighbor REMOTE-EVPN-PEERS domain remote
       route import match-failure action discard
+      neighbor default next-hop-self received-evpn-routes route-type ip-prefix inter-domain
    !
    address-family ipv4
       no neighbor LOCAL-EVPN-PEERS activate
       neighbor LOCAL-IPV4-PEERS activate
       neighbor MLAG-IPV4-PEER activate
+      no neighbor REMOTE-EVPN-PEERS activate
    !
    vrf DEV
       rd 1.1.1.7:50002
@@ -1182,7 +1227,7 @@ route-map RM-MLAG-PEER-IN permit 20
 
 | List Name | Type | Regular Expression |
 | --------- | ---- | ------------------ |
-| CL-EVPN-IMPORTED | permit | RT.* |
+| CL-EVPN-IMPORTED | permit | `RT.*` |
 
 #### IP Extended Community RegExp Lists Device Configuration
 
@@ -1216,10 +1261,10 @@ vrf instance PROD
 
 ### Virtual Source NAT Summary
 
-| Source NAT VRF | Source NAT IP Address |
-| -------------- | --------------------- |
-| DEV | 10.102.102.7 |
-| PROD | 10.101.101.7 |
+| Source NAT VRF | Source NAT IPv4 Address | Source NAT IPv6 Address |
+| -------------- | ----------------------- | ----------------------- |
+| DEV | 10.102.102.7 | - |
+| PROD | 10.101.101.7 | - |
 
 ### Virtual Source NAT Configuration
 

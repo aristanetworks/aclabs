@@ -156,6 +156,18 @@ l3leaf:
 ########################################################
     - group: POD4
       bgp_as: 65178
+      evpn_gateway:
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+        remote_peers:
+          - hostname: BB1
+            ip_address: 1.1.0.1
+            bgp_as: 65000
+          - hostname: BB2
+            ip_address: 1.1.0.2
+            bgp_as: 65000
       nodes:
         - name: A-LEAF7
           id: 7
