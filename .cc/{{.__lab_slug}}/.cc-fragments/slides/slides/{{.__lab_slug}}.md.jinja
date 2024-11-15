@@ -1,34 +1,34 @@
 ---
 marp: true
 theme: {{ .marp_theme }}
-{% if .marp_class != "none"  %}
+{%- if cookiecutter.marp_class != "none" %}
 class: {{ .marp_class }}
-{% endif %}
-author: {{ .demo_author }}
+{%- endif %}
+author: {{ .lab_author }}
 # size 16:9 1280px 720px
 size: 16:9
 paginate: true
 math: mathjax
 style: |
     :root {
-      background: linear-gradient(to bottom, #000000, #434343);
+        background: linear-gradient(to bottom, #000000, #434343);
     }
     img[alt~="custom"] {
-      float: right;
+        float: right;
     }
     .columns {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1rem;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
     }
     footer {
-      font-size: 14px;
+        font-size: 14px;
     }
     section::after {
-      font-size: 14px;
+        font-size: 14px;
     }
     img {
-      background-color: transparent;
+        background-color: transparent;
     }
     pre {
         background: linear-gradient(to top, #000000, #434343);
@@ -36,7 +36,7 @@ style: |
     }
 ---
 
-# {{ .demo_name }}
+# {{ .lab_name }}
 
 <!-- Do not add page number on this slide -->
 <!--
@@ -44,8 +44,8 @@ _paginate: false
 -->
 
 ```text
-{{ .demo_name }} Demo
-{{ .demo_author }}
+{{ .lab_name }} Demo
+{{ .lab_author }}
                                     {% now 'local', '%d/%m/%Y' %}
 ```
 
