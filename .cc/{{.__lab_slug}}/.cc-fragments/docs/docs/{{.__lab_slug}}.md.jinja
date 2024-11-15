@@ -4,11 +4,11 @@
 
 [Start "{{ .lab_name }}" in Codespace](https://codespaces.new/{% raw %}{{gh.repository}}{%endraw%}/tree/{% raw %}{{gh.branch}}{%endraw%}?quickstart=1&devcontainer_path=.devcontainer%2F{{ .__lab_slug }}%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
 
-{% if marp_slides %}
+{% if .marp_slides -%}
 [Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/slides/{{ .__lab_slug }}.html){ target=_blank }  
-[PDF Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/pdfs/{{ .__lab_slug }}.pdf){ target=_blank }  
-{% endif %}
+[PDF Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/pdfs/{{ .__lab_slug }}.pdf){ target=_blank }
 
+{% endif -%}
 ## How To Run The Lab on Your Machine
 
 It is possible to run the lab on your local machine (or any server) instead of using Github Codespaces.  
