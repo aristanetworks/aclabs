@@ -949,16 +949,15 @@ ASN Notation: asplain
 
 ##### EVPN Peer Groups
 
-| Peer Group | Activate | Route-map In | Route-map Out | Encapsulation |
-| ---------- | -------- | ------------ | ------------- | ------------- |
-| LOCAL-EVPN-PEERS | True |  - | - | default |
-| REMOTE-EVPN-PEERS | True |  - | - | default |
+| Peer Group | Activate | Encapsulation |
+| ---------- | -------- | ------------- |
+| LOCAL-EVPN-PEERS | True | default |
+| REMOTE-EVPN-PEERS | True | default |
 
 ##### EVPN DCI Gateway Summary
 
 | Settings | Value |
 | -------- | ----- |
-| Local Domain | 1:1 |
 | Remote Domain Peer Groups | REMOTE-EVPN-PEERS |
 | L3 Gateway Configured | True |
 | L3 Gateway Inter-domain | True |
@@ -1312,7 +1311,7 @@ route-map RM-MLAG-PEER-IN permit 20
 
 | List Name | Type | Regular Expression |
 | --------- | ---- | ------------------ |
-| CL-EVPN-IMPORTED | permit | `RT.*` |
+| CL-EVPN-IMPORTED | permit | RT.* |
 
 #### IP Extended Community RegExp Lists Device Configuration
 
@@ -1346,10 +1345,10 @@ vrf instance PROD
 
 ### Virtual Source NAT Summary
 
-| Source NAT VRF | Source NAT IPv4 Address | Source NAT IPv6 Address |
-| -------------- | ----------------------- | ----------------------- |
-| DEV | 10.102.102.8 | - |
-| PROD | 10.101.101.8 | - |
+| Source NAT VRF | Source NAT IP Address |
+| -------------- | --------------------- |
+| DEV | 10.102.102.8 |
+| PROD | 10.101.101.8 |
 
 ### Virtual Source NAT Configuration
 

@@ -874,9 +874,9 @@ ASN Notation: asplain
 
 ##### EVPN Peer Groups
 
-| Peer Group | Activate | Route-map In | Route-map Out | Encapsulation |
-| ---------- | -------- | ------------ | ------------- | ------------- |
-| LOCAL-EVPN-PEERS | True |  - | - | default |
+| Peer Group | Activate | Encapsulation |
+| ---------- | -------- | ------------- |
+| LOCAL-EVPN-PEERS | True | default |
 
 #### Router BGP VLANs
 
@@ -1138,7 +1138,7 @@ route-map RM-MLAG-PEER-IN permit 20
 
 | List Name | Type | Regular Expression |
 | --------- | ---- | ------------------ |
-| CL-EVPN-IMPORTED | permit | `RT.*` |
+| CL-EVPN-IMPORTED | permit | RT.* |
 
 #### IP Extended Community RegExp Lists Device Configuration
 
@@ -1169,9 +1169,9 @@ vrf instance PROD
 
 ### Virtual Source NAT Summary
 
-| Source NAT VRF | Source NAT IPv4 Address | Source NAT IPv6 Address |
-| -------------- | ----------------------- | ----------------------- |
-| PROD | 10.101.101.2 | - |
+| Source NAT VRF | Source NAT IP Address |
+| -------------- | --------------------- |
+| PROD | 10.101.101.2 |
 
 ### Virtual Source NAT Configuration
 

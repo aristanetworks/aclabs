@@ -582,9 +582,9 @@ ASN Notation: asplain
 
 ##### EVPN Peer Groups
 
-| Peer Group | Activate | Route-map In | Route-map Out | Encapsulation |
-| ---------- | -------- | ------------ | ------------- | ------------- |
-| LOCAL-EVPN-PEERS | True |  - | - | default |
+| Peer Group | Activate | Encapsulation |
+| ---------- | -------- | ------------- |
+| LOCAL-EVPN-PEERS | True | default |
 
 #### Router BGP Device Configuration
 
