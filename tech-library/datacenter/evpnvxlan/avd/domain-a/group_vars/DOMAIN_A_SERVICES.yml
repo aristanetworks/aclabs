@@ -1,17 +1,6 @@
 ---
 
 ###################################################
-# Customized Structured Config                    #
-###################################################
-custom_vtep_evpn_multicast_vrf_prod:
-  vxlan1:
-    eos_cli: vxlan vrf PROD multicast group overlay 239.0.10.101 encap 232.1.1.10 immediate
-
-custom_vtep_evpn_multicast_vrf_dev:
-  vxlan1:
-    eos_cli: vxlan vrf DEV multicast group overlay 239.0.50.101 encap 232.2.2.50 immediate
-
-###################################################
 # Tenants and Per-VRF Config                      #
 ###################################################
 tenants:
@@ -26,8 +15,6 @@ tenants:
           evpn_underlay_l3_multicast_group: 232.1.1.1
         mlag_ibgp_peering_vlan: 3001
         mlag_ibgp_peering_ipv4_pool: 192.2.2.0/31
-        structured_config:
-          vxlan_interface: "{{ custom_vtep_evpn_multicast_vrf_prod }}"
         vtep_diagnostic:
           loopback: 101
           loopback_ip_range: 10.101.101.0/24
@@ -56,8 +43,6 @@ tenants:
           evpn_underlay_l3_multicast_group: 232.2.2.2
         mlag_ibgp_peering_vlan: 3002
         mlag_ibgp_peering_ipv4_pool: 192.2.2.0/31
-        structured_config:
-          vxlan_interface: "{{ custom_vtep_evpn_multicast_vrf_dev }}"
         vtep_diagnostic:
           loopback: 102
           loopback_ip_range: 10.102.102.0/24

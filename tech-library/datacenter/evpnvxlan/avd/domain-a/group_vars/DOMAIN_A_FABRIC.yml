@@ -53,7 +53,6 @@ custom_evpn_gw_bgp_config:
         activate: true
   address_family_evpn:
     domain_identifier: '1:1'
-    domain_remote: '99:99'
   bgp:
     bestpath:
       d_path: true
