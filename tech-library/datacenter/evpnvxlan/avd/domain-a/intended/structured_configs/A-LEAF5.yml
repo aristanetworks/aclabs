@@ -447,6 +447,11 @@ virtual_source_nat_vrfs:
   ip_address: 10.102.102.5
 metadata:
   platform: cEOS-LAB
+dhcp_relay:
+  tunnel_requests_disabled: true
+  mlag_peerlink_requests_disabled: true
+ip_dhcp_relay:
+  information_option: true
 ip_extcommunity_lists_regexp:
 - name: CL-EVPN-IMPORTED
   entries:

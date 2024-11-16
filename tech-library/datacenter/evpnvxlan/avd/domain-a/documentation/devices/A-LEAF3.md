@@ -16,6 +16,9 @@
   - [Local Users](#local-users)
   - [Enable Password](#enable-password)
   - [AAA Authorization](#aaa-authorization)
+- [DHCP Relay](#dhcp-relay)
+  - [DHCP Relay Summary](#dhcp-relay-summary)
+  - [DHCP Relay Device Configuration](#dhcp-relay-device-configuration)
 - [MLAG](#mlag)
   - [MLAG Summary](#mlag-summary)
   - [MLAG Device Configuration](#mlag-device-configuration)
@@ -62,6 +65,9 @@
 - [Virtual Source NAT](#virtual-source-nat)
   - [Virtual Source NAT Summary](#virtual-source-nat-summary)
   - [Virtual Source NAT Configuration](#virtual-source-nat-configuration)
+- [IP DHCP Relay](#ip-dhcp-relay)
+  - [IP DHCP Relay Summary](#ip-dhcp-relay-summary)
+  - [IP DHCP Relay Device Configuration](#ip-dhcp-relay-device-configuration)
 
 ## Management
 
@@ -291,6 +297,22 @@ Authorization for configuration commands is disabled.
 ```eos
 aaa authorization exec default local
 !
+```
+
+## DHCP Relay
+
+### DHCP Relay Summary
+
+- DHCP Relay is disabled for tunnelled requests
+- DHCP Relay is disabled for MLAG peer-link requests
+
+### DHCP Relay Device Configuration
+
+```eos
+!
+dhcp relay
+   tunnel requests disabled
+   mlag peer-link requests disabled
 ```
 
 ## MLAG
@@ -1227,4 +1249,17 @@ vrf instance PROD
 !
 ip address virtual source-nat vrf DEV address 10.102.102.3
 ip address virtual source-nat vrf PROD address 10.101.101.3
+```
+
+## IP DHCP Relay
+
+### IP DHCP Relay Summary
+
+IP DHCP Relay Option 82 is enabled.
+
+### IP DHCP Relay Device Configuration
+
+```eos
+!
+ip dhcp relay information option
 ```

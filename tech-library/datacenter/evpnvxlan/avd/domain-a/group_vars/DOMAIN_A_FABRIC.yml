@@ -46,6 +46,13 @@ vtep_loopback_description: "VTEP IP"
 ###################################################
 # Customized Structured Config                    #
 ###################################################
+custom_vtep_dhcp_relay:
+  tunnel_requests_disabled: true
+  mlag_peerlink_requests_disabled: true
+
+custom_vtep_ip_dhcp_relay:
+  information_option: true
+
 custom_evpn_gw_bgp_config:
   address_family_ipv4:
     peer_groups:
@@ -174,6 +181,8 @@ l3leaf:
     spanning_tree_mode: mstp
     spanning_tree_priority: 0
     structured_config:
+      dhcp_relay: "{{ custom_vtep_dhcp_relay }}"
+      ip_dhcp_relay: "{{ custom_vtep_ip_dhcp_relay }}"
       ip_extcommunity_lists_regexp: "{{ custom_vtep_ext_community_lists }}"
       route_maps: "{{ custom_vtep_route_maps }}"
   node_groups:
