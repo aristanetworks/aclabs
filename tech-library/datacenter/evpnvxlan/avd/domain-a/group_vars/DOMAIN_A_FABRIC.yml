@@ -47,13 +47,17 @@ vtep_loopback_description: "VTEP IP"
 # Customized Structured Config                    #
 ###################################################
 custom_evpn_gw_bgp_config:
-  router_bgp:
+  address_family_ipv4:
     peer_groups:
       - name: REMOTE-IPV4-PEERS
-        password: dkvBq1jk4inJHsHfMjYRnQ==
-        remote_as: 65000
-        route_map_out: RM-AS65000-IPV4-OUT
-        send_community: all
+        activate: true
+  peer_groups:
+    - name: REMOTE-IPV4-PEERS
+      local_as: 65000
+      password: dkvBq1jk4inJHsHfMjYRnQ==
+      remote_as: 65000
+      route_map_out: RM-AS65000-IPV4-OUT
+      send_community: all
 
 custom_evpn_gw_prefix_lists:
   - name: PL-GATEWAY-LOOP
@@ -215,7 +219,7 @@ l3leaf:
             ip_address: 1.1.0.2
             bgp_as: 65000
       structured_config:
-        router_bgp: "{{ custom_evpn_gw_peer groups }}"
+        router_bgp: "{{ custom_evpn_gw_bgp_config }}"
         prefix_lists: "{{ custom_evpn_gw_prefix_lists }}"
         route_maps: "{{ custom_evpn_gw_route_maps }}"
       nodes:

@@ -54,6 +54,7 @@ router_bgp:
     maximum_routes: 0
     ebgp_multihop: 15
   - name: REMOTE-IPV4-PEERS
+    local_as: '65000'
     password: dkvBq1jk4inJHsHfMjYRnQ==
     remote_as: '65000'
     route_map_out: RM-AS65000-IPV4-OUT
@@ -68,6 +69,8 @@ router_bgp:
       activate: false
     - name: REMOTE-EVPN-PEERS
       activate: false
+    - name: REMOTE-IPV4-PEERS
+      activate: true
   neighbors:
   - ip_address: 192.0.0.0
     peer_group: MLAG-IPV4-PEER

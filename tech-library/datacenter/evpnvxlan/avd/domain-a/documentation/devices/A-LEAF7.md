@@ -897,6 +897,7 @@ ASN Notation: asplain
 | Settings | Value |
 | -------- | ----- |
 | Remote AS | 65000 |
+| Local AS | 65000 |
 | Send community | all |
 
 #### BGP Neighbors
@@ -994,6 +995,7 @@ router bgp 65178
    neighbor REMOTE-EVPN-PEERS maximum-routes 0
    neighbor REMOTE-IPV4-PEERS peer group
    neighbor REMOTE-IPV4-PEERS remote-as 65000
+   neighbor REMOTE-IPV4-PEERS local-as 65000 no-prepend replace-as
    neighbor REMOTE-IPV4-PEERS route-map RM-AS65000-IPV4-OUT out
    neighbor REMOTE-IPV4-PEERS password 7 <removed>
    neighbor REMOTE-IPV4-PEERS send-community
@@ -1073,6 +1075,7 @@ router bgp 65178
       neighbor LOCAL-IPV4-PEERS activate
       neighbor MLAG-IPV4-PEER activate
       no neighbor REMOTE-EVPN-PEERS activate
+      neighbor REMOTE-IPV4-PEERS activate
    !
    vrf DEV
       rd 1.1.1.7:50002
