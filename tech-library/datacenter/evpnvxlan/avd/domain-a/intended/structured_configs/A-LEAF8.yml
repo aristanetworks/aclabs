@@ -53,6 +53,11 @@ router_bgp:
     send_community: all
     maximum_routes: 0
     ebgp_multihop: 15
+  - name: REMOTE-IPV4-PEERS
+    password: dkvBq1jk4inJHsHfMjYRnQ==
+    remote_as: '65000'
+    route_map_out: RM-AS65000-IPV4-OUT
+    send_community: all
   address_family_ipv4:
     peer_groups:
     - name: MLAG-IPV4-PEER
@@ -118,6 +123,12 @@ router_bgp:
     peer: BB2
     description: BB2
     remote_as: '65000'
+  - ip_address: 172.16.1.2
+    peer_group: REMOTE-IPV4-PEERS
+    description: BB1.IPV4
+  - ip_address: 172.16.1.6
+    peer_group: REMOTE-IPV4-PEERS
+    description: BB2.IPV4
   address_family_evpn:
     neighbor_default:
       next_hop_self_received_evpn_routes:
@@ -510,6 +521,26 @@ ethernet_interfaces:
   pim:
     ipv4:
       sparse_mode: true
+- name: Ethernet7
+  peer: BB1
+  peer_interface: Ethernet1
+  peer_type: other
+  switchport:
+    enabled: false
+  shutdown: false
+  mtu: 9214
+  ip_address: 172.16.1.3/31
+  description: P2P_BB1_Ethernet1
+- name: Ethernet8
+  peer: BB2
+  peer_interface: Ethernet1
+  peer_type: other
+  switchport:
+    enabled: false
+  shutdown: false
+  mtu: 9214
+  ip_address: 172.16.1.7/31
+  description: P2P_BB2_Ethernet1
 mlag_configuration:
   domain_id: POD4
   local_interface: Vlan4094
@@ -546,6 +577,12 @@ route_maps:
     - ip address prefix-list PL-MLAG-PEER-VRFS
   - sequence: 20
     type: permit
+- name: RM-AS65000-IPV4-OUT
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-GATEWAY-LOOP
 loopback_interfaces:
 - name: Loopback0
   description: Globally Unique Address
@@ -576,6 +613,14 @@ prefix_lists:
   sequence_numbers:
   - sequence: 10
     action: permit 192.2.2.0/31
+- name: PL-GATEWAY-LOOP
+  sequence_numbers:
+  - sequence: 10
+    action: permit 2.2.1.7/32
+  - sequence: 20
+    action: permit 1.1.1.7/32
+  - sequence: 30
+    action: permit 1.1.1.8/32
 router_bfd:
   multihop:
     interval: 300

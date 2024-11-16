@@ -453,6 +453,8 @@ switchport default mode routed
 | Ethernet2 | P2P_A-SPINE2_Ethernet7 | - | 192.168.0.51/31 | default | 9214 | False | - | - |
 | Ethernet3 | P2P_A-SPINE3_Ethernet7 | - | 192.168.0.53/31 | default | 9214 | False | - | - |
 | Ethernet4 | P2P_A-SPINE4_Ethernet7 | - | 192.168.0.55/31 | default | 9214 | False | - | - |
+| Ethernet7 | P2P_BB1_Ethernet1 | - | 172.16.1.1/31 | default | 9214 | False | - | - |
+| Ethernet8 | P2P_BB2_Ethernet1 | - | 172.16.1.5/31 | default | 9214 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -499,6 +501,20 @@ interface Ethernet6
    description MLAG_A-LEAF8_Ethernet6
    no shutdown
    channel-group 1000 mode active
+!
+interface Ethernet7
+   description P2P_BB1_Ethernet1
+   no shutdown
+   mtu 9214
+   no switchport
+   ip address 172.16.1.1/31
+!
+interface Ethernet8
+   description P2P_BB2_Ethernet1
+   no shutdown
+   mtu 9214
+   no switchport
+   ip address 172.16.1.5/31
 ```
 
 ### Port-Channel Interfaces
@@ -876,6 +892,13 @@ ASN Notation: asplain
 | Send community | all |
 | Maximum routes | 0 (no limit) |
 
+##### REMOTE-IPV4-PEERS
+
+| Settings | Value |
+| -------- | ----- |
+| Remote AS | 65000 |
+| Send community | all |
+
 #### BGP Neighbors
 
 | Neighbor | Remote AS | VRF | Shutdown | Send-community | Maximum-routes | Allowas-in | BFD | RIB Pre-Policy Retain | Route-Reflector Client | Passive | TTL Max Hops |
@@ -886,6 +909,8 @@ ASN Notation: asplain
 | 1.1.1.202 | 65100 | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
 | 1.1.1.203 | 65100 | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
 | 1.1.1.204 | 65100 | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
+| 172.16.1.0 | Inherited from peer group REMOTE-IPV4-PEERS | default | - | Inherited from peer group REMOTE-IPV4-PEERS | - | - | - | - | - | - | - |
+| 172.16.1.4 | Inherited from peer group REMOTE-IPV4-PEERS | default | - | Inherited from peer group REMOTE-IPV4-PEERS | - | - | - | - | - | - | - |
 | 192.0.0.1 | Inherited from peer group MLAG-IPV4-PEER | default | - | Inherited from peer group MLAG-IPV4-PEER | Inherited from peer group MLAG-IPV4-PEER | - | - | - | - | - | - |
 | 192.168.0.48 | 65100 | default | - | Inherited from peer group LOCAL-IPV4-PEERS | Inherited from peer group LOCAL-IPV4-PEERS | - | - | - | - | - | - |
 | 192.168.0.50 | 65100 | default | - | Inherited from peer group LOCAL-IPV4-PEERS | Inherited from peer group LOCAL-IPV4-PEERS | - | - | - | - | - | - |
@@ -967,6 +992,11 @@ router bgp 65178
    neighbor REMOTE-EVPN-PEERS password 7 <removed>
    neighbor REMOTE-EVPN-PEERS send-community
    neighbor REMOTE-EVPN-PEERS maximum-routes 0
+   neighbor REMOTE-IPV4-PEERS peer group
+   neighbor REMOTE-IPV4-PEERS remote-as 65000
+   neighbor REMOTE-IPV4-PEERS route-map RM-AS65000-IPV4-OUT out
+   neighbor REMOTE-IPV4-PEERS password 7 <removed>
+   neighbor REMOTE-IPV4-PEERS send-community
    neighbor 1.1.0.1 peer group REMOTE-EVPN-PEERS
    neighbor 1.1.0.1 remote-as 65000
    neighbor 1.1.0.1 description BB1
@@ -985,6 +1015,10 @@ router bgp 65178
    neighbor 1.1.1.204 peer group LOCAL-EVPN-PEERS
    neighbor 1.1.1.204 remote-as 65100
    neighbor 1.1.1.204 description A-SPINE4_Loopback0
+   neighbor 172.16.1.0 peer group REMOTE-IPV4-PEERS
+   neighbor 172.16.1.0 description BB1.IPV4
+   neighbor 172.16.1.4 peer group REMOTE-IPV4-PEERS
+   neighbor 172.16.1.4 description BB2.IPV4
    neighbor 192.0.0.1 peer group MLAG-IPV4-PEER
    neighbor 192.0.0.1 description A-LEAF8_Vlan4093
    neighbor 192.168.0.48 peer group LOCAL-IPV4-PEERS
@@ -1150,6 +1184,14 @@ router multicast
 
 #### Prefix-lists Summary
 
+##### PL-GATEWAY-LOOP
+
+| Sequence | Action |
+| -------- | ------ |
+| 10 | permit 2.2.1.7/32 |
+| 20 | permit 1.1.1.7/32 |
+| 30 | permit 1.1.1.8/32 |
+
 ##### PL-LOOPBACKS-EVPN-OVERLAY
 
 | Sequence | Action |
@@ -1167,6 +1209,11 @@ router multicast
 
 ```eos
 !
+ip prefix-list PL-GATEWAY-LOOP
+   seq 10 permit 2.2.1.7/32
+   seq 20 permit 1.1.1.7/32
+   seq 30 permit 1.1.1.8/32
+!
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
    seq 10 permit 1.1.1.0/24 eq 32
    seq 20 permit 2.2.1.0/24 eq 32
@@ -1178,6 +1225,12 @@ ip prefix-list PL-MLAG-PEER-VRFS
 ### Route-maps
 
 #### Route-maps Summary
+
+##### RM-AS65000-IPV4-OUT
+
+| Sequence | Type | Match | Set | Sub-Route-Map | Continue |
+| -------- | ---- | ----- | --- | ------------- | -------- |
+| 10 | permit | ip address prefix-list PL-GATEWAY-LOOP | - | - | - |
 
 ##### RM-CONN-2-BGP
 
@@ -1202,6 +1255,9 @@ ip prefix-list PL-MLAG-PEER-VRFS
 #### Route-maps Device Configuration
 
 ```eos
+!
+route-map RM-AS65000-IPV4-OUT permit 10
+   match ip address prefix-list PL-GATEWAY-LOOP
 !
 route-map RM-CONN-2-BGP permit 10
    match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
