@@ -747,6 +747,7 @@ interface Vxlan1
    vxlan mlag source-interface Loopback1
    vxlan vrf DEV multicast group 232.2.2.2
    vxlan vrf PROD multicast group 232.1.1.1
+   vxlan vrf PROD multicast group overlay 239.0.10.101 encap 232.1.1.10 immediate
 ```
 
 ## Routing
@@ -845,6 +846,7 @@ ASN Notation: asplain
 | ---------- |
 | graceful-restart restart-time 300 |
 | graceful-restart |
+| bgp bestpath d-path |
 | update wait-install |
 | no bgp default ipv4-unicast |
 | distance bgp 20 200 200 |
@@ -935,6 +937,7 @@ ASN Notation: asplain
 
 | Settings | Value |
 | -------- | ----- |
+| Local Domain | 1:1 |
 | Remote Domain Peer Groups | REMOTE-EVPN-PEERS |
 | L3 Gateway Configured | True |
 | L3 Gateway Inter-domain | True |
@@ -967,6 +970,7 @@ router bgp 65178
    graceful-restart restart-time 300
    graceful-restart
    maximum-paths 4 ecmp 4
+   bgp bestpath d-path
    neighbor LOCAL-EVPN-PEERS peer group
    neighbor LOCAL-EVPN-PEERS update-source Loopback0
    neighbor LOCAL-EVPN-PEERS bfd
@@ -1067,6 +1071,7 @@ router bgp 65178
       neighbor LOCAL-EVPN-PEERS activate
       neighbor REMOTE-EVPN-PEERS activate
       neighbor REMOTE-EVPN-PEERS domain remote
+      domain identifier 1:1
       route import match-failure action discard
       neighbor default next-hop-self received-evpn-routes route-type ip-prefix inter-domain
    !

@@ -566,6 +566,7 @@ vxlan_interface:
       - name: PROD
         vni: 50001
         multicast_group: 232.1.1.1
+    eos_cli: vxlan vrf PROD multicast group overlay 239.0.10.101 encap 232.1.1.10 immediate
 virtual_source_nat_vrfs:
 - name: DEV
   ip_address: 10.102.102.4

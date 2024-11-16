@@ -700,6 +700,7 @@ interface Vxlan1
    vxlan vrf PROD vni 50001
    vxlan mlag source-interface Loopback1
    vxlan vrf PROD multicast group 232.1.1.1
+   vxlan vrf PROD multicast group overlay 239.0.10.101 encap 232.1.1.10 immediate
 ```
 
 ## Routing
