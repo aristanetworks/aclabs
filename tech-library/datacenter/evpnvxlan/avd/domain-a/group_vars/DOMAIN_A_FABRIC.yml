@@ -53,11 +53,12 @@ custom_evpn_gw_bgp_config:
         activate: true
   peer_groups:
     - name: REMOTE-IPV4-PEERS
-      local_as: 65000
       password: dkvBq1jk4inJHsHfMjYRnQ==
       remote_as: 65000
       route_map_out: RM-AS65000-IPV4-OUT
       send_community: all
+    - name: REMOTE-EVPN-PEERS
+      local_as: 65000
 
 custom_evpn_gw_prefix_lists:
   - name: PL-GATEWAY-LOOP

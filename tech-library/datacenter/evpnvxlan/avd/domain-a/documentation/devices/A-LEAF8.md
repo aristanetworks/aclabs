@@ -886,6 +886,7 @@ ASN Notation: asplain
 | Settings | Value |
 | -------- | ----- |
 | Address Family | evpn |
+| Local AS | 65000 |
 | Source | Loopback0 |
 | BFD | True |
 | Ebgp multihop | 15 |
@@ -897,7 +898,6 @@ ASN Notation: asplain
 | Settings | Value |
 | -------- | ----- |
 | Remote AS | 65000 |
-| Local AS | 65000 |
 | Send community | all |
 
 #### BGP Neighbors
@@ -987,6 +987,7 @@ router bgp 65178
    neighbor MLAG-IPV4-PEER send-community
    neighbor MLAG-IPV4-PEER maximum-routes 12000
    neighbor REMOTE-EVPN-PEERS peer group
+   neighbor REMOTE-EVPN-PEERS local-as 65000 no-prepend replace-as
    neighbor REMOTE-EVPN-PEERS update-source Loopback0
    neighbor REMOTE-EVPN-PEERS bfd
    neighbor REMOTE-EVPN-PEERS ebgp-multihop 15
@@ -995,7 +996,6 @@ router bgp 65178
    neighbor REMOTE-EVPN-PEERS maximum-routes 0
    neighbor REMOTE-IPV4-PEERS peer group
    neighbor REMOTE-IPV4-PEERS remote-as 65000
-   neighbor REMOTE-IPV4-PEERS local-as 65000 no-prepend replace-as
    neighbor REMOTE-IPV4-PEERS route-map RM-AS65000-IPV4-OUT out
    neighbor REMOTE-IPV4-PEERS password 7 <removed>
    neighbor REMOTE-IPV4-PEERS send-community

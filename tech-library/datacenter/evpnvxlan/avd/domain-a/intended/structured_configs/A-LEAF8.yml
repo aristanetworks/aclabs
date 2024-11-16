@@ -53,8 +53,8 @@ router_bgp:
     send_community: all
     maximum_routes: 0
     ebgp_multihop: 15
-  - name: REMOTE-IPV4-PEERS
     local_as: '65000'
+  - name: REMOTE-IPV4-PEERS
     password: dkvBq1jk4inJHsHfMjYRnQ==
     remote_as: '65000'
     route_map_out: RM-AS65000-IPV4-OUT
