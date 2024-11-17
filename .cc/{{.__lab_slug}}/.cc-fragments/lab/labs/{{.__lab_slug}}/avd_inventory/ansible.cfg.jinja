@@ -1,4 +1,6 @@
 [defaults]
-{%- if .container_size.cpus in ["2", "4"] %}forks = 1{%endif%}
+{%- if .container_size.cpus in ["2", "4"] %}
+forks = 1
+{%- endif%}
 inventory = inventory.yml
 jinja2_extensions =  jinja2.ext.loopcontrols,jinja2.ext.do,jinja2.ext.i18n
