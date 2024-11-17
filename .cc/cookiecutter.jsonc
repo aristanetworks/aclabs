@@ -7,6 +7,7 @@
     "__lab_slug": "{{ cookiecutter.__lab_group }}-{{ cookiecutter.__lab_name }}",
     "lab_author": "Petr Ankudinov",
     "marp_slides": true,
+    "avd_inventory": true,
     "python_version": [ "3.11", "3.12", "3.13" ],  // lab
     "avd_version": [ "5.0.0", "4.10.2" ],  // lab
     "lab_container_revision": [ "1.1" ],  // lab
