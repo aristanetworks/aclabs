@@ -200,11 +200,14 @@ if __name__ == "__main__":
         jsonc_line_list = f.readlines()
         for line in jsonc_line_list:
             if re.findall(r"//.*$", line):
+                add_the_line = False
                 for tag in tag_list:
                     tag_pattern = r"//.*" + tag + ".*$"
                     if re.findall(tag_pattern, line) or (tag == 'all'):
-                        updated_line = re.sub(r"//.*$", "", line)
-                        json_string_without_comments += updated_line
+                        add_the_line = True
+                if add_the_line:
+                    updated_line = re.sub(r"//.*$", "", line)
+                    json_string_without_comments += updated_line
             else:
                 json_string_without_comments += line
     with open('.cc-init/cookiecutter.json', 'w') as f:
