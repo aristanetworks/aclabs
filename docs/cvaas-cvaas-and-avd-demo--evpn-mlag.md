@@ -39,7 +39,7 @@ To run the lab on your own machine, you can download all required files using th
 
 ## Lab Topology
 
-![lab topology](assets/img/topos/small-l3ls-mlag.png)
+![lab topology](assets/topos/small-l3ls-mlag.png)
 
 ## How To Run The Demo
 
