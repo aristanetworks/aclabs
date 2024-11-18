@@ -74,14 +74,14 @@ jobs:
         run: |
           mkdir site/lab_archives
           mkdir temp_labs
-          for DEMO_DIR in demos/*
+          for DEMO_DIR in labs/*
           do
             DEMO_NAME="${DEMO_DIR##*/}"
             mkdir temp_labs/${DEMO_NAME}
             mkdir temp_labs/${DEMO_NAME}/.devcontainer
-            mkdir temp_labs/${DEMO_NAME}/demos
+            mkdir temp_labs/${DEMO_NAME}/labs
             cp -r .devcontainer/${DEMO_NAME}/* temp_labs/${DEMO_NAME}/.devcontainer/
-            cp -r demos/${DEMO_NAME}/ temp_labs/${DEMO_NAME}/demos/
+            cp -r labs/${DEMO_NAME}/ temp_labs/${DEMO_NAME}/labs/
             cd temp_labs
             tar -czvf ../site/lab_archives/${DEMO_NAME}.tar.gz ${DEMO_NAME}
           done
