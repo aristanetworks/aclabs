@@ -82,7 +82,7 @@ jobs:
             mkdir temp_labs/${DEMO_NAME}/labs
             cp -r .devcontainer/${DEMO_NAME}/* temp_labs/${DEMO_NAME}/.devcontainer/
             cp -r labs/${DEMO_NAME}/ temp_labs/${DEMO_NAME}/labs/
-            tar -czvf ../site/lab_archives/${DEMO_NAME}.tar.gz temp_labs/${DEMO_NAME} --directory temp_labs/
+            tar -czvf site/lab_archives/${DEMO_NAME}.tar.gz temp_labs/${DEMO_NAME} --directory temp_labs/
           done
           rm -rf temp_labs/
 
