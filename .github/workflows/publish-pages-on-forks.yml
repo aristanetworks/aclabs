@@ -57,6 +57,7 @@ jobs:
       - name: Build Directories and Copy images 🖼️
         run: |
           mkdir site/slides \
+          && mkdir site/slides/assets \
           && mkdir site/pdfs \
           && cp -R slides/assets/img site/slides/assets/img
 
