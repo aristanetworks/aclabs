@@ -3,6 +3,7 @@
     // containerEnv set the variables applied to entire container
     "containerEnv": {% raw %}{{% endraw %}
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
+        "CEOS_LAB_VERSION": "{{.ceos_lab_version}}",
 {%- if .cv_api_token_required %}
         "CV_API_TOKEN": "${localEnv:CV_API_TOKEN}",
 {%- endif %}
