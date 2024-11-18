@@ -14,13 +14,13 @@ topology:
     defaults:
         kind: ceos
 {%- if .cv_api_token_required %}
-    extras:
-        ceos-copy-to-flash:
-        - clab/cv-onboarding-token
-    # an alternative to ceos-copy-to-flash could be bind
-    # keeping the bind settings here just in case
-    # binds:
-    #   - cv-onboarding-token:/mnt/flash/cv-onboarding-token:ro
+        extras:
+            ceos-copy-to-flash:
+            - clab/cv-onboarding-token
+        # an alternative to ceos-copy-to-flash could be bind
+        # keeping the bind settings here just in case
+        # binds:
+        #   - cv-onboarding-token:/mnt/flash/cv-onboarding-token:ro
 {%- endif %}
     nodes:
 {%- for node in .__lab.lab_inventory %}

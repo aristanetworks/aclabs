@@ -13,13 +13,13 @@ topology:
             image: arista/ceos:4.32.3M
     defaults:
         kind: ceos
-    extras:
-        ceos-copy-to-flash:
-        - clab/cv-onboarding-token
-    # an alternative to ceos-copy-to-flash could be bind
-    # keeping the bind settings here just in case
-    # binds:
-    #   - cv-onboarding-token:/mnt/flash/cv-onboarding-token:ro
+        extras:
+            ceos-copy-to-flash:
+            - clab/cv-onboarding-token
+        # an alternative to ceos-copy-to-flash could be bind
+        # keeping the bind settings here just in case
+        # binds:
+        #   - cv-onboarding-token:/mnt/flash/cv-onboarding-token:ro
     nodes:
         s01:
             mgmt-ipv4: 10.0.1.1
