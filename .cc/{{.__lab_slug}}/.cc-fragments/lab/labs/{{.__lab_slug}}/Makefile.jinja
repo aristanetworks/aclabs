@@ -18,3 +18,25 @@ inspect: ## Inspect the lab
 	@echo ""
 	@echo "You can check the lab status, hostnames and management addresses above."
 	@echo "To connect to a lab device use \`ssh {{.clab_user}}@<hostname>\` and password \`{{.clab_password}}\`."
+
+{%- if .avd_inventory %}
+.PHONY: build
+build: ## Generate AVD configs
+	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_build.yml
+
+.PHONY: deploy_eapi
+deploy_eapi: ## Deploy AVD configs using eAPI
+	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_deploy.yml
+
+.PHONY: deploy_cvp
+deploy_cvp: ## Deploy AVD configs using eAPI
+	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_deploy_cvp.yml
+
+.PHONY: diff
+diff: ## Show the diff between running config and designed config
+	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook --diff --check playbooks/avd_deploy.yml
+
+.PHONY: test
+test: ## validate the network state
+	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_validate.yml
+{%- endif %}
