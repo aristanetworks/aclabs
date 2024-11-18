@@ -31,7 +31,7 @@
         "storage": "{{ .container_size.storage.lower().replace(' ','') }}"
     {% raw %}},{% endraw %}
     "postCreateCommand": "postCreate.sh; make start",
-    "workspaceMount": "source=${localWorkspaceFolder}/demos/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
+    "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/{{ .__lab_slug }}",
     "containerUser": "avd"
 {% raw %}}{% endraw %}

@@ -11,7 +11,7 @@ on:
     - img/**
     - .github/workflows/publish-pages-on-forks.yml
     # also trigger if lab archives changed
-    - demos/**
+    - labs/**
     - .devcontainer/**
   workflow_dispatch:
     branches: [ '**' ]

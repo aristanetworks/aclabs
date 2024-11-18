@@ -18,7 +18,7 @@
 You can run the lab on [Github Codespaces](https://codespaces.new/{{gh.repository}}/tree/{{gh.branch}}?quickstart=1&devcontainer_path=.devcontainer%2Fcvaas-cvaas-and-avd-demo--evpn-mlag%2Fdevcontainer.json) or your own machine.
 To run the lab on your own machine, you can download all required files using the button below.
 
-[Download all required lab files](https://{{gh.org_name}}.github.io/one-click-se-demos/lab_archives/cvaas-cvaas-and-avd-demo--evpn-mlag.tar.gz){ .md-button .md-button--primary target=_blank}
+[Download all required lab files](https://{{gh.org_name}}.github.io/aclabs/lab_archives/cvaas-cvaas-and-avd-demo--evpn-mlag.tar.gz){ .md-button .md-button--primary target=_blank}
 
 > WARNING: Currently only x86 hosts are supported. cEOS-lab for ARM is not yet available and it's not possible to start the lab on your MacBook yet.
 

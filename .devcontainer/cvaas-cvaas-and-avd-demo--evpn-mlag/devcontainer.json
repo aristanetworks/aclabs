@@ -27,7 +27,7 @@
         "storage": "64gb"
     },
     "postCreateCommand": "postCreate.sh; make start",
-    "workspaceMount": "source=${localWorkspaceFolder}/demos/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
+    "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/cvaas-cvaas-and-avd-demo--evpn-mlag",
     "containerUser": "avd"
 }
