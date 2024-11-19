@@ -21,3 +21,7 @@ tenants:
       name: VLAN200
       evpn_vlan_bundle: VRF1
       tags: [l03,l04]
+
+evpn_vlan_bundles:
+  - name: VRF1
+    id: 1
