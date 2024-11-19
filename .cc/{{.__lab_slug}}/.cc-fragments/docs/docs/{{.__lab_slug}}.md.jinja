@@ -2,8 +2,6 @@
 
 {% include ["lab-description.md"] %}
 
-[Start "{{ .lab_name }}" in Codespace](https://codespaces.new/{% raw %}{{gh.repository}}{%endraw%}/tree/{% raw %}{{gh.branch}}{%endraw%}?quickstart=1&devcontainer_path=.devcontainer%2F{{ .__lab_slug }}%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
-
 {% if .marp_slides -%}
 [Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/slides/{{ .__lab_slug }}.html){ target=_blank }  
 [PDF Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/pdfs/{{ .__lab_slug }}.pdf){ target=_blank }
@@ -13,6 +11,10 @@
 {% include ["lab-how-to-run.md"] %}
 
 {% include ["lab-extra-info.md"] %}
+
+{%- if cookiecutter.lab_topology != "custom" %}
+{%     include ["docs/lab-topology.md"] %}
+{%- endif %}
 
 {% if .update_existing_files %}
 {%-    with a_handwritten_tempate_name = "docs/" ~ cookiecutter.__lab_slug ~ ".md" %}

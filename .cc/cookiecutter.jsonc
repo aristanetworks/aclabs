@@ -20,6 +20,7 @@
     ],  // docs, lab
     "cv_api_token_required": false,  // lab
     "git_init": true,  // gh, containers, lab
+    "lab_topology": ["atd-l3ls", "minimalistic-l3ls-aa", "minimalistic-l3ls-mlag", "small-l3ls-aa", "small-l3ls-mlag", "custom"],  // docs, lab
     "ceos_lab_version": "4.32.3M",  //  lab
     "clab_version": [ "0.59.0", "0.57.5" ],  // lab
     "clab_user": "arista",  // containers, lab

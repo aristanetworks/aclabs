@@ -8,21 +8,20 @@
 
     :material-alert-circle-outline:{ .heartbeat } Please request high spec Codespace machines from [Github support](https://support.github.com/) first!
 
-[Start "CVaaS and AVD Demo, EVPN MLAG" in Codespace](https://codespaces.new/{{gh.repository}}/tree/{{gh.branch}}?quickstart=1&devcontainer_path=.devcontainer%2Fcvaas-cvaas-and-avd-demo--evpn-mlag%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
-
 [Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/slides/cvaas-cvaas-and-avd-demo--evpn-mlag.html){ target=_blank }  
 [PDF Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/pdfs/cvaas-cvaas-and-avd-demo--evpn-mlag.pdf){ target=_blank }
 
 ## How To Run The Lab
 
 You can run the lab on [Github Codespaces](https://codespaces.new/{{gh.repository}}/tree/{{gh.branch}}?quickstart=1&devcontainer_path=.devcontainer%2Fcvaas-cvaas-and-avd-demo--evpn-mlag%2Fdevcontainer.json) or your own machine.
+
+[Start :octicons-play-16: "CVaaS and AVD Demo, EVPN MLAG" in Codespace :octicons-mark-github-24:](https://codespaces.new/{{gh.repository}}/tree/{{gh.branch}}?quickstart=1&devcontainer_path=.devcontainer%2Fcvaas-cvaas-and-avd-demo--evpn-mlag%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+
 To run the lab on your own machine, you can download all required files using the button below.
 
 [Download all required lab files](https://{{gh.org_name}}.github.io/aclabs/lab_archives/cvaas-cvaas-and-avd-demo--evpn-mlag.tar.gz){ .md-button .md-button--primary target=_blank}
 
 > WARNING: Currently only x86 hosts are supported. cEOS-lab for ARM is not yet available and it's not possible to start the lab on your MacBook yet.
-
-## How To Run The Demo
 
 ???+ Tip "Wait until the lab is ready"
 
@@ -33,27 +32,15 @@ To run the lab on your own machine, you can download all required files using th
 
 ## Last Updated
 
-!!! Info "Last reviewed: 18/11/2024"
+!!! Info "Last reviewed: 19/11/2024"
 
     Demos and labs reviewed over 6 month age may be outdated.
 
-## Lab Topology
+# Lab Topology
 
 ![lab topology](assets/topos/small-l3ls-mlag.png)
 
-## How To Run The Demo
-
-???+ Tip "Wait until cEOS-lab image will be imported"
-
-    You can confirm if image was imported correctly with `docker image ls`.  
-    In some rare cases the cEOS-lab image may fail to be downloaded.
-    For example due to incorrecte token or other API failure on arista.com.  
-    In that case you can upload the image manually by right-clicking the Explorer tab of the VSCode interface.
-
-```bash
-# 1. start cLab
-make start
-```
+# How To Use The Lab
 
 ???+ Tip "Wait until all devices will start streaming to CVaaS."
 
