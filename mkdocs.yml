@@ -135,6 +135,7 @@ nav:
       # - Codespaces Quickstart: codespaces-quickstart.md
       # - Credits: credits.md
       - Tech Library Labs: tech-library-labs.md
-      - Telemetry Labs: telemetry.md
   - CVaaS:
       - CVaaS and AVD Demo, EVPN MLAG: cvaas-cvaas-and-avd-demo--evpn-mlag.md
+  - Telemetry:
+      gNMIc Prometheus Grafana Lab: telemetry.md
