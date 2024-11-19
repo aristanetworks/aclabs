@@ -38,4 +38,3 @@ diff: ## Show the diff between running config and designed config
 .PHONY: test
 test: ## validate the network state
 	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_validate.yml
-

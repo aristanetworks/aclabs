@@ -18,8 +18,7 @@ inspect: ## Inspect the lab
 	@echo ""
 	@echo "You can check the lab status, hostnames and management addresses above."
 	@echo "To connect to a lab device use \`ssh {{.clab_user}}@<hostname>\` and password \`{{.clab_password}}\`."
-
-{%- if .avd_inventory %}
+{% if .avd_inventory -%}
 .PHONY: build
 build: ## Generate AVD configs
 	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_build.yml

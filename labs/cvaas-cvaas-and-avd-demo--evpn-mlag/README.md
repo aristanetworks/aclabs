@@ -9,7 +9,7 @@ This lab is tested for:
     memory: 32 GB  
     storage: 64 GB  
 
-Last reviewed: 18/11/2024  
+Last reviewed: 19/11/2024  
 
 Lab Credentials
   Username: arista
