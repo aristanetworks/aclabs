@@ -27,7 +27,7 @@
         "memory": "32gb",
         "storage": "64gb"
     },
-    "onCreateCommand": ["chmod", "+x", "/cvaas-cvaas-and-avd-demo--evpn-mlag/addAliases.sh;", "/cvaas-cvaas-and-avd-demo--evpn-mlag/addAliases.sh"],
+    "onCreateCommand": "chmod +x cvaas-cvaas-and-avd-demo--evpn-mlag/addAliases.sh; /cvaas-cvaas-and-avd-demo--evpn-mlag/addAliases.sh",
     "postCreateCommand": "postCreate.sh; make start",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/cvaas-cvaas-and-avd-demo--evpn-mlag",
