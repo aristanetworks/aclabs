@@ -30,8 +30,7 @@
                 "DavidAnson.vscode-markdownlint",
                 // various tools
                 "tuxtina.json2yaml",
-                "mutantdino.resourcemonitor",
-                "saurabh.terminal-manager"
+                "mutantdino.resourcemonitor"
             ]
         }
     }

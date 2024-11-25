@@ -10,7 +10,7 @@ topology:
     kinds:
         ceos:
             enforce-startup-config: true
-            image: arista/ceos:{{ ceos_lab_version }}
+            image: arista/ceos:latest
     defaults:
         kind: ceos
 {%- if 'cvaas' | _in(lab_features) %}
