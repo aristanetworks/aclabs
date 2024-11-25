@@ -17,6 +17,6 @@ Last reviewed: 25/11/2024
 
 Please check the lab materials:
 
-- [Lab Documentation](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/cvaas-cvaas-and-avd-demo--evpn-mlag/cvaas-cvaas-and-avd-demo--evpn-mlag/)
+- [Lab Documentation](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/cvaas-cvaas-and-avd-demo--evpn-mlag/)
 - [HTML Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/slides/cvaas-cvaas-and-avd-demo--evpn-mlag.html)
 - [PDF Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/pdfs/cvaas-cvaas-and-avd-demo--evpn-mlag.pdf)
