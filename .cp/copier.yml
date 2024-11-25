@@ -164,3 +164,18 @@ validate_vars:
     {% if not templates %}
     ERROR: `templates` variable is mandatory!
     {% endif %}
+
+_message_after_copy: |
+  Copier successfully generated {{ templates }} files for "{{ lab_name }}"".
+  Please review them before committing.
+
+  Before testing a new lab on your fork, please check if all container images were created.
+  Go to the `Actions` section of your fork and trigger required container build workflows manually if required.
+  
+  If you generated a new Markdown document for MkDocs, please do not forget to reference it in the 'nav' section of 'mkdocs.yml'
+
+  Example:
+
+  nav:
+    - {{ lab_group }}:
+      - {{ lab_name }}: {{ lab_slug }}.md
