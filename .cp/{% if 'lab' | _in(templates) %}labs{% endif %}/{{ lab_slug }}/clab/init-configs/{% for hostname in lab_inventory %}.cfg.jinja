@@ -15,6 +15,9 @@ vrf instance MGMT
 ip name-server vrf MGMT 8.8.8.8
 dns domain avd.lab
 !
+platform tfa
+   personality arfa
+!
 ntp local-interface vrf MGMT Management0
 ntp server vrf MGMT time.apple.com
 ntp server vrf MGMT time.google.com

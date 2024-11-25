@@ -31,6 +31,9 @@
         "memory": "{{ container_size.memory.lower().replace(' ','') }}",
         "storage": "{{ container_size.storage.lower().replace(' ','') }}"
     {% raw %}},{% endraw %}
+{%- if 'addAliases' | _in(lab_features) %}
+    "onCreateCommand": "chmod +x /{{ lab_slug }}/addAliases.sh; /{{ lab_slug }}/addAliases.sh",
+{%- endif %}
     "postCreateCommand": "postCreate.sh; make start",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/{{ lab_slug }}",

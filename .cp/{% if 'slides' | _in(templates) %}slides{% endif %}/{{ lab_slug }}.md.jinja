@@ -38,9 +38,9 @@ style: |
 
 {%- with a_handwritten_tempate_name = "handwritten/slides/" ~ lab_slug ~ ".md.jinja" %}
 {%-     if a_handwritten_tempate_name | fileglob %}
-{%-         include [a_handwritten_tempate_name] %}
+{%         include [a_handwritten_tempate_name] %}
 {%-     else  %}
-{%-         include ["include/slides/under-construction.md.jinja"] %}
+{%         include ["include/slides/under-construction.md.jinja"] %}
 {%-     endif  %}
 {%- endwith %}
 

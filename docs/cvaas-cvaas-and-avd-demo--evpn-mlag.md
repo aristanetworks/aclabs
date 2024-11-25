@@ -32,7 +32,7 @@ To run the lab on your own machine, you can download all required files using th
 
 ## Last Updated
 
-!!! Info "Last reviewed: 19/11/2024"
+!!! Info "Last reviewed: 25/11/2024"
 
     Demos and labs reviewed over 6 month age may be outdated.
 

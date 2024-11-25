@@ -58,6 +58,7 @@ lab_features:
     - cvaas
     - git
     - slides
+    - addAliases
 
 lab_author:
   type: str
