@@ -35,11 +35,11 @@ jobs:
 
       - name: Replace URLs to match git repo ✂️
         run: |
-          grep -rl '${localEnv:GITHUB_REPOSITORY}' . --exclude-dir {.git,.cp,.github,.vscode} | xargs sed -i 's@${localEnv:GITHUB_REPOSITORY}@'"${{ github.repository }}"'@g'
-          grep -rl '{{gh.repo_name}}' . --exclude-dir {.git,.cp,.github,.vscode} | xargs sed -i 's/{{gh.repo_name}}/'"${{ github.event.repository.name }}"'/g'
-          grep -rl '{{gh.org_name}}' . --exclude-dir {.git,.cp,.github,.vscode} | xargs sed -i 's/{{gh.org_name}}/'"${{ github.repository_owner }}"'/g'
-          grep -rl '{{gh.repository}}' . --exclude-dir {.git,.cp,.github,.vscode} | xargs sed -i 's@{{gh.repository}}@'"${{ github.repository }}"'@g'
-          grep -rl '{{gh.branch}}' . --exclude-dir {.git,.cp,.github,.vscode} | xargs sed -i 's@{{gh.branch}}@'"${{ steps.find_branch.outputs.branch }}"'@g'
+          grep -rl '${localEnv:GITHUB_REPOSITORY}' . --exclude-dir .git --exclude-dir .cp | xargs sed -i 's@${localEnv:GITHUB_REPOSITORY}@'"${{ github.repository }}"'@g'
+          grep -rl '{{gh.repo_name}}' . --exclude-dir .git --exclude-dir .cp | xargs sed -i 's/{{gh.repo_name}}/'"${{ github.event.repository.name }}"'/g'
+          grep -rl '{{gh.org_name}}' . --exclude-dir .git --exclude-dir .cp | xargs sed -i 's/{{gh.org_name}}/'"${{ github.repository_owner }}"'/g'
+          grep -rl '{{gh.repository}}' . --exclude-dir .git --exclude-dir .cp | xargs sed -i 's@{{gh.repository}}@'"${{ github.repository }}"'@g'
+          grep -rl '{{gh.branch}}' . --exclude-dir .git --exclude-dir .cp | xargs sed -i 's@{{gh.branch}}@'"${{ steps.find_branch.outputs.branch }}"'@g'
 
       - name: Setup Python3 🐍
         uses: actions/setup-python@v5
