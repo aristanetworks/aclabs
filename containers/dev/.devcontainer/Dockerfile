@@ -17,8 +17,8 @@ RUN apt-get update \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
     && apt-get clean
 
-COPY cc.py /bin/cook
-RUN chmod +x /bin/cook
+COPY cp.py /bin/copy
+RUN chmod +x /bin/copy
 
 ENV TZ=UTC
 
