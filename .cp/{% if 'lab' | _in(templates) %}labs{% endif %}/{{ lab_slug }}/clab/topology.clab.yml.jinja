@@ -1,0 +1,42 @@
+---
+name: {{ lab_name }}
+prefix: ""
+
+mgmt:
+    network: custom_mgmt
+    ipv4-subnet: {{ clab_mgmt_subnet }}/{{ clab_mgmt_mask }}
+
+topology:
+    kinds:
+        ceos:
+            enforce-startup-config: true
+            image: arista/ceos:{{ ceos_lab_version }}
+    defaults:
+        kind: ceos
+{%- if 'cvaas' | _in(lab_features) %}
+        extras:
+            ceos-copy-to-flash:
+            - clab/cv-onboarding-token
+        # an alternative to ceos-copy-to-flash could be bind
+        # keeping the bind settings here just in case
+        # binds:
+        #   - cv-onboarding-token:/mnt/flash/cv-onboarding-token:ro
+{%- endif %}
+    nodes:
+{%- for node in lab_inventory %}
+        {{ node.hostname }}:
+            mgmt-ipv4: {{ node.mgmt_ip }}
+            binds:
+            - sn/{{ node.hostname }}.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/{{ node.hostname }}.cfg
+{%- endfor %}
+{%- for node in lab_host_inventory %}
+        {{ node.hostname }}:
+            mgmt-ipv4: {{ node.mgmt_ip }}
+            startup-config: init-configs/{{ node.hostname }}.cfg
+{%- endfor %}
+
+    links:
+{%- for link in lab_cabling_plan %}
+    - endpoints: ["{{ link.local_switch }}:{{ link.local_interface }}", "{{ link.remote_switch }}:{{ link.remote_interface }}"]
+{%- endfor %}

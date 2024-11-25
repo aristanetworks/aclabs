@@ -1,0 +1,22 @@
+# {{ lab_name }}
+
+This lab is tested for:  
+
+  cEOS-lab version: {{ ceos_lab_version }}  
+  Containerlab Version: {{ clab_version }}  
+  Codespace Container Size  
+    CPUs: {{ container_size.cpus }}  
+    memory: {{ container_size.memory }}  
+    storage: {{ container_size.storage }}  
+
+Last reviewed: {{ '%d/%m/%Y' | strftime }}  
+
+Lab Credentials
+&nbsp;&nbsp;&nbsp;&nbsp;Username: {{ clab_user}}
+&nbsp;&nbsp;&nbsp;&nbsp;Password: {{ clab_password}}
+
+Please check the lab materials:
+
+- [Lab Documentation](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/{{ lab_slug }}/{{ lab_slug }}/)
+- [HTML Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/slides/{{ lab_slug }}.html)
+- [PDF Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/pdfs/{{ lab_slug }}.pdf)

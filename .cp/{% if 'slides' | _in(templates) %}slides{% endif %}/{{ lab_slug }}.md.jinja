@@ -1,0 +1,56 @@
+---
+marp: true
+theme: {{ marp_theme }}
+{%- if marp_class != "none" %}
+class: {{ marp_class }}
+{%- endif %}
+author: {{ lab_author }}
+# size 16:9 1280px 720px
+size: 16:9
+paginate: true
+math: mathjax
+style: |
+    :root {
+        background: linear-gradient(to bottom, #000000, #434343);
+    }
+    img[alt~="custom"] {
+        float: right;
+    }
+    .columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+    footer {
+        font-size: 14px;
+    }
+    section::after {
+        font-size: 14px;
+    }
+    img {
+        background-color: transparent;
+    }
+    pre {
+        background: linear-gradient(to top, #000000, #434343);
+        background-color: transparent;
+    }
+---
+
+{%- with a_handwritten_tempate_name = "handwritten/slides/" ~ lab_slug ~ ".md.jinja" %}
+{%-     if a_handwritten_tempate_name | fileglob %}
+{%-         include [a_handwritten_tempate_name] %}
+{%-     else  %}
+{%-         include ["include/slides/under-construction.md.jinja"] %}
+{%-     endif  %}
+{%- endwith %}
+
+---
+
+<style scoped>section {font-size: 45px;}</style>
+
+![bg left opacity:75%](img/pexels-ann-h-7186206.jpg)
+
+# Q&A
+
+- [Ansible AVD](https://avd.arista.com/)
+- [This repository](https://github.com/{% raw %}'{{gh.repository}}'{%endraw%})

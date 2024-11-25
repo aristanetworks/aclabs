@@ -1,0 +1,36 @@
+hostname {{ lab_inventory[copier_file_index].hostname }}
+!
+no aaa root
+!
+username {{ clab_user }} privilege 15 role network-admin secret {{ clab_password }}
+!
+vrf instance MGMT
+!
+ip name-server vrf MGMT 8.8.8.8
+dns domain avd.lab
+!
+ntp local-interface vrf MGMT Management0
+ntp server vrf MGMT time.apple.com
+ntp server vrf MGMT time.google.com
+ntp server vrf MGMT time.windows.com
+!
+service routing protocols model multi-agent
+!
+management api http-commands
+   protocol https
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+aaa authorization exec default local
+!
+interface Management0
+   vrf MGMT
+      ip address {{ lab_inventory[copier_file_index].mgmt_ip }}/{{ clab_mgmt_mask }}
+!
+ip route vrf MGMT 0.0.0.0/0 {{ clab_mgmt_gw }}
+!
+ip name-server vrf MGMT 8.8.8.8
+!
+end

@@ -1,0 +1,23 @@
+# {{ lab_name }}
+
+{% include ["include/docs/lab-description.md.jinja"] %}
+
+{% if 'slides' | _in(lab_features) -%}
+[Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/slides/{{ lab_slug }}.html){ target=_blank }  
+[PDF Slides](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/{% raw %}{{gh.repo_name}}{%endraw%}/pdfs/{{ lab_slug }}.pdf){ target=_blank }
+
+{% endif -%}
+
+{% include ["include/docs/lab-how-to-run.md.jinja"] %}
+
+{% include ["include/docs/lab-extra-info.md.jinja"] %}
+
+{% include ["include/docs/lab-topology.md.jinja"] %}
+
+{%- with a_handwritten_tempate_name = "handwritten/docs/" ~ lab_slug ~ ".md.jinja" %}
+{%-     if a_handwritten_tempate_name | fileglob %}
+{%-         include [a_handwritten_tempate_name] %}
+{%-     else  %}
+{%-         include ["include/docs/under-construction.md.jinja"] %}
+{%-     endif  %}
+{%- endwith %}

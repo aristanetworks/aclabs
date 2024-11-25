@@ -1,0 +1,38 @@
+{% raw %}{{% endraw %}
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python{{ python_version }}-avd-v{{ avd_version }}-clab{{ clab_version }}-rev{{ lab_container_revision }}",
+    // containerEnv set the variables applied to entire container
+    "containerEnv": {% raw %}{{% endraw %}
+        "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
+        "CEOS_LAB_VERSION": "{{ ceos_lab_version }}",
+{%- if 'cvaas' | _in(lab_features) %}
+        "CV_API_TOKEN": "${localEnv:CV_API_TOKEN}",
+{%- endif %}
+        "CONTAINERWSF": "${containerWorkspaceFolder}",
+        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}"
+    {% raw %}},{% endraw %}
+    "secrets": {% raw %}{{% endraw %}
+{%- if 'cvaas' | _in(lab_features) %}
+        "CV_API_TOKEN": {% raw %}{{% endraw %}
+            "description": "CVaaS service account token."
+            // "documentationUrl": "https://example.com/link/to/info"
+        {% raw %}},{% endraw %}
+        "CVURL": {% raw %}{{% endraw %}
+            "description": "(Optional) URL to be used to access CVaaS. Default is `cv-staging.corp.arista.io`"
+            // "documentationUrl": "https://example.com/link/to/info"
+        {% raw %}},{% endraw %}
+{%- endif %}
+        "ARTOKEN": {% raw %}{{% endraw %}
+            "description": "token to auto-download EOS images from arista.com."
+            // "documentationUrl": "https://example.com/link/to/info"
+        {% raw %}}{% endraw %}
+    {% raw %}},{% endraw %}
+    "hostRequirements": {% raw %}{{% endraw %}
+        "cpus": {{ container_size.cpus }},
+        "memory": "{{ container_size.memory.lower().replace(' ','') }}",
+        "storage": "{{ container_size.storage.lower().replace(' ','') }}"
+    {% raw %}},{% endraw %}
+    "postCreateCommand": "postCreate.sh; make start",
+    "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
+    "workspaceFolder": "/{{ lab_slug }}",
+    "containerUser": "avd"
+{% raw %}}{% endraw %}
