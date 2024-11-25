@@ -10,6 +10,9 @@ _exclude:
   - _macros
   - include
   - copier.yml
+  # exclude handwritten files copied by python script
+  - handwritten/docs
+  - handwritten/slides
 
 lab_name:
   type: str

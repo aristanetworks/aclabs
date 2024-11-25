@@ -87,6 +87,7 @@ if __name__ == "__main__":
     default_template_dir = '.cp'
     default_input_dir = '.cp/extra-vars/default'
     temp_template_dir = '.cp-temp'
+    handwritten_dir = 'handwritten'
 
     # get directory to load extra context
     parser = argparse.ArgumentParser(
@@ -111,6 +112,7 @@ if __name__ == "__main__":
 
     files_to_copy = list()
     file_index_list = list()
+    # find template files and for loops
     for root, _, files in os.walk(default_template_dir):
         for filename in files:
             full_src_path = os.path.join(root, filename)
@@ -125,6 +127,12 @@ if __name__ == "__main__":
                     files_to_copy.append((full_src_path, os.path.join(root, d[loop_key]+true_ext).replace(default_template_dir, temp_template_dir)))
             else:
                 files_to_copy.append((full_src_path, full_src_path.replace(default_template_dir, temp_template_dir)))
+    # add existing handwritten templates to copier temp directory
+    for root, _, files in os.walk(handwritten_dir):
+        for filename in files:
+            full_src_path = os.path.join(root, filename)
+            f, extension = os.path.splitext(filename)
+            files_to_copy.append((full_src_path, full_src_path.replace(handwritten_dir, f"{temp_template_dir}/{handwritten_dir}")))
 
     for src_file, dst_file in files_to_copy:
         os.makedirs(os.path.dirname(dst_file), exist_ok=True)
