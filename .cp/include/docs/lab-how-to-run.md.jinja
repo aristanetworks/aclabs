@@ -22,7 +22,7 @@ To run the lab on your own machine, you can download all required files using th
     `CVURL` (Optional) - URL to be used to access CVaaS. Default is `cv-staging.corp.arista.io`
 {%- endif %}
 
-    When starting the lab on Github Codespaces, the required data can be provided via Web form if not yet associated with the repository. When running the lab on your own machine - set corresponding environment variables **BEFORE** :warning: opening VSCode.
+    When starting the lab on Github Codespaces, the required data can be provided via `Create codespace` form if not yet associated with the repository. When running the lab on your own machine - set corresponding environment variables **BEFORE** :warning: opening the VSCode.
 
 ???+ Tip "Wait until the lab is ready"
 
@@ -30,3 +30,18 @@ To run the lab on your own machine, you can download all required files using th
     This requires a some time. :stopwatch: Please be patient. :coffee: :croissant:
     Sometimes cEOS-lab image download may fail. For example, due to incorrect token. In that case `postCreate.sh` script will fail and the lab will not be started.  
     You can confirm if image was imported correctly with `docker image ls`.  
+
+## Lab Inventory
+
+This lab has following devices:
+
+| Hostname | Type | OS | Management Address | Username | Password |
+| -------- | ---- | -- | ------------------ | -------- | -------- |
+{%- for node in lab_inventory %}
+| {{ node.hostname }} | switch | cEOS-lab, {{ ceos_lab_version }} | {{ node.mgmt_ip }} | {{ clab_user }} | {{ clab_password }} |
+{%- endfor %}
+{%- for node in lab_host_inventory %}
+| {{ node.hostname }} | host | cEOS-lab, {{ ceos_lab_version }} | {{ node.mgmt_ip }} | {{ clab_user }} | {{ clab_password }} |
+{%- endfor %}
+
+> To access any device, use `ssh <username>@<hostname>` or simply type `<hostname>` to use the SSH alias.

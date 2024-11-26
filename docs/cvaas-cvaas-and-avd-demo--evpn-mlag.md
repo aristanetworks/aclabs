@@ -30,8 +30,10 @@ To run the lab on your own machine, you can download all required files using th
     This lab requires following environment variables and secrets to be set.
 
     `ARISTA_TOKEN` - the token required to download cEOS-lab image from [arista.com](https://arista.com).
+    `CV_API_TOKEN` - CVaaS service account token. It's required to generate onboarding token on CVaaS and allow streaming from the lab devices.
+    `CVURL` (Optional) - URL to be used to access CVaaS. Default is `cv-staging.corp.arista.io`
 
-    When starting the lab on Github Codespaces, the required data can be provided via Web form if not yet associated with the repository. When running the lab on your own machine - set corresponding environment variables **BEFORE** :warning: opening VSCode.
+    When starting the lab on Github Codespaces, the required data can be provided via `Create codespace` form if not yet associated with the repository. When running the lab on your own machine - set corresponding environment variables **BEFORE** :warning: opening the VSCode.
 
 ???+ Tip "Wait until the lab is ready"
 
@@ -39,6 +41,23 @@ To run the lab on your own machine, you can download all required files using th
     This requires a some time. :stopwatch: Please be patient. :coffee: :croissant:
     Sometimes cEOS-lab image download may fail. For example, due to incorrect token. In that case `postCreate.sh` script will fail and the lab will not be started.  
     You can confirm if image was imported correctly with `docker image ls`.  
+
+## Lab Inventory
+
+This lab has following devices:
+
+| Hostname | Type | OS | Management Address | Login | Password |
+| -------- | ---- | -- | ------------------ | ----- | -------- |
+| s01 | switch | cEOS-lab, 4.32.3M | 10.0.1.1 | arista | arista |
+| s02 | switch | cEOS-lab, 4.32.3M | 10.0.1.2 | arista | arista |
+| l01 | switch | cEOS-lab, 4.32.3M | 10.0.2.1 | arista | arista |
+| l02 | switch | cEOS-lab, 4.32.3M | 10.0.2.2 | arista | arista |
+| l03 | switch | cEOS-lab, 4.32.3M | 10.0.2.3 | arista | arista |
+| l04 | switch | cEOS-lab, 4.32.3M | 10.0.2.4 | arista | arista |
+| h01 | host | cEOS-lab, 4.32.3M | 10.0.3.1 | arista | arista |
+| h02 | host | cEOS-lab, 4.32.3M | 10.0.3.2 | arista | arista |
+
+> To access any device, use `ssh <username>@<hostname>` or simply type `<hostname>` to use the SSH alias.
 
 ## Last Updated
 
