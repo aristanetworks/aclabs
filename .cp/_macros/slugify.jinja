@@ -1,0 +1,4 @@
+{# slugify names to make unique lab ids -#}
+{% macro slugify(value) -%}
+{{ value|lower|replace(' ', '-')|replace('.','-')|replace(',','-')|replace('[','')|replace(']','') }}
+{%- endmacro %}

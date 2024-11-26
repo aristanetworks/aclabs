@@ -11,7 +11,7 @@ on:
     - img/**
     - .github/workflows/publish-pages.yml
     # also trigger if lab archives changed
-    - demos/**
+    - labs/**
     - .devcontainer/**
   workflow_dispatch:
     branches: [main]
@@ -28,6 +28,14 @@ jobs:
       - name: Checkout code ✅
         uses: actions/checkout@v4
 
+      - name: Replace URLs to match git repo ✂️
+        run: |
+          grep -rl '${localEnv:GITHUB_REPOSITORY}' . --exclude-dir .git --exclude-dir .cp | xargs sed -i 's@${localEnv:GITHUB_REPOSITORY}@'"${{ github.repository }}"'@g'
+          grep -rl '{{gh.repo_name}}' . --exclude-dir .git --exclude-dir .cp | xargs sed -i 's/{{gh.repo_name}}/'"${{ github.event.repository.name }}"'/g'
+          grep -rl '{{gh.org_name}}' . --exclude-dir .git --exclude-dir .cp | xargs sed -i 's/{{gh.org_name}}/'"${{ github.repository_owner }}"'/g'
+          grep -rl '{{gh.repository}}' . --exclude-dir .git --exclude-dir .cp | xargs sed -i 's@{{gh.repository}}@'"${{ github.repository }}"'@g'
+          grep -rl '{{gh.branch}}' . --exclude-dir .git --exclude-dir .cp | xargs sed -i 's@{{gh.branch}}@'"main"'@g'
+
       - name: Setup Python3 🐍
         uses: actions/setup-python@v5
         with:
@@ -40,6 +48,43 @@ jobs:
           pip install mdx_truly_sane_lists
           pip install mkdocs-glightbox
           mkdocs build
+
+      - name: Build Directories and Copy images 🖼️
+        run: |
+          mkdir site/slides \
+          && mkdir site/slides/assets \
+          && mkdir site/pdfs \
+          && cp -R slides/assets/img site/slides/assets/img
+
+      - name: Build HTML from Marp 🔨
+        uses: docker://marpteam/marp-cli:v3.4.0
+        with:
+          args:  --theme-set ./assets/themes/ --html --input-dir slides/ -o site/slides/
+        env:
+          MARP_USER: root:root
+
+      - name: Build PDF from marp_slides.md 🔨
+        uses: docker://marpteam/marp-cli:v3.4.0
+        with:
+          args:  --theme-set ./assets/themes/ --html --pdf --allow-local-files --input-dir slides/ -o site/pdfs/
+        env:
+          MARP_USER: root:root
+
+      - name: Add lab archive for local download
+        run: |
+          mkdir site/lab_archives
+          mkdir temp_labs
+          for DEMO_DIR in labs/*
+          do
+            DEMO_NAME="${DEMO_DIR##*/}"
+            mkdir temp_labs/${DEMO_NAME}
+            mkdir temp_labs/${DEMO_NAME}/.devcontainer
+            mkdir temp_labs/${DEMO_NAME}/labs
+            cp -r .devcontainer/${DEMO_NAME}/* temp_labs/${DEMO_NAME}/.devcontainer/
+            cp -r labs/${DEMO_NAME}/ temp_labs/${DEMO_NAME}/labs/
+            tar -czvf site/lab_archives/${DEMO_NAME}.tar.gz --directory temp_labs/ ${DEMO_NAME}
+          done
+          rm -rf temp_labs/
 
       - name: Setup Pages 📖
         uses: actions/configure-pages@v5

@@ -1,0 +1,7 @@
+local_switch,local_interface,remote_switch,remote_interface
+l01,eth1,s01,eth1
+l01,eth2,s02,eth1
+l02,eth1,s01,eth2
+l02,eth2,s02,eth2
+h01,eth1,l01,eth10
+h01,eth2,l02,eth10

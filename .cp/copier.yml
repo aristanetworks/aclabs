@@ -1,0 +1,181 @@
+---
+_jinja_extensions:
+  - copier_templates_extensions.TemplateExtensionLoader
+  - extensions/issubset.py:SubsetExtension
+  - extensions/_in.py:InExtension
+
+_exclude:
+  - extra-vars
+  - extensions
+  - _macros
+  - include
+  - copier.yml
+  # exclude handwritten files copied by python script
+  - handwritten/docs
+  - handwritten/slides
+
+lab_name:
+  type: str
+  help: |
+    lab_name:
+        The name of the lab. Can be any string without line breaks.
+  default: "A New Lab"
+
+lab_group:
+  type: str
+  help: |
+    lab_group:
+        A short string used to create a MkDocs tab.
+        Use existing categories if possible.
+  default: "unsorted"
+
+lab_slug:
+  type: str
+  help: |
+    lab_slug:
+        The formatted name for the lab that will be used to create directory prefixes.
+  default: "{{lab_group|lower()}}-{% from '_macros/slugify.jinja' import slugify %}{{ slugify(lab_name) }}"
+  when: false  # do not prompt
+
+templates:
+  type: str
+  multiselect: True
+  help: |
+    templates:
+      Select the templates you want to use.
+  choices:
+    - lab
+    - docs
+    - slides
+
+lab_features:
+  type: str
+  multiselect: True
+  help: Please select required lab features
+  when: "{{ 'lab' | _in(templates) }}"
+  choices:
+    - avd
+    - cvaas
+    - git
+    - slides
+    - addAliases
+
+lab_author:
+  type: str
+  help: Please enter the lab author name.
+  default: Petr Ankudinov
+  when: "{{ 'docs' | _in(templates) }}"
+
+python_version:
+  type: str
+  help: Please pick required Python version.
+  when: "{{ 'lab' | _in(templates) }}"
+  choices: ["3.11", "3.12", "3.13"]
+
+avd_version:
+  type: str
+  help: Pick required AVD version.
+  when: "{{ 'lab' | _in(templates) }}"
+  choices: ["5.0.0", "4.10.2"]
+
+lab_container_revision:
+  type: str
+  help: Please select lab container revision.
+  choices: ["1.1"]
+  default: "1.1"
+  when: false  # no need to display this question due to a single choice
+
+container_size:
+  help: |
+    container_size:
+        The size of the container to be used for the lab.
+  when: "{{ 'lab,docs' | _in(templates) }}"
+  choices: [
+    {"cpus": 2, "memory": "8 GB", "storage": "32 GB"},
+    {"cpus": 4, "memory": "16 GB", "storage": "32 GB"},
+    {"cpus": 8, "memory": "32 GB", "storage": "64 GB"},
+    {"cpus": 16, "memory": "64 GB", "storage": "128 GB"},
+    {"cpus": 32, "memory": "128 GB", "storage": "128 GB"}
+  ]
+
+ceos_lab_version:
+  type: str
+  help: Please select the cEOS-lab version.
+  when: "{{ 'lab' | _in(templates) }}"
+  choices: ["4.32.3M"]
+
+clab_version:
+  type: str
+  help: Please select the Containerlab version.
+  when: "{{ 'lab' | _in(templates) }}"
+  choices: ["0.59.0", "0.57.5"]
+
+clab_user:
+  type: str
+  help: Username for all lab devices.
+  when: "{{ 'lab' | _in(templates) }}"
+  default: arista
+
+clab_password:
+  type: str
+  help: Password for all lab devices.
+  when: "{{ 'lab' | _in(templates) }}"
+  default: arista
+
+clab_mgmt_subnet:
+  type: str
+  help: Password for all lab devices.
+  when: "{{ 'lab' | _in(templates) }}"
+  default: "10.0.0.0"
+
+clab_mgmt_mask:
+  type: str
+  help: Password for all lab devices.
+  when: "{{ 'lab' | _in(templates) }}"
+  default: "16"
+
+clab_mgmt_gw:
+  type: str
+  help: Password for all lab devices.
+  when: "{{ 'lab' | _in(templates) }}"
+  default: "10.0.0.1"
+
+marp_theme:
+  type: str
+  help: Please select the Marp theme.
+  when: "{{ 'slides' | _in(templates) }}"
+  choices: ["default", "beam", "jobs", "einstein"]
+
+lab_topology:
+  type: str
+  help: Please select the lab topology you are going to use. Select `custom` if it's not standard.
+  when: "{{ 'docs' | _in(templates) }}"
+  choices: ["atd-l3ls", "minimalistic-l3ls-aa", "minimalistic-l3ls-mlag", "small-l3ls-aa", "small-l3ls-mlag", "custom"]
+
+marp_class:
+  type: str
+  help: Please select the Marp class.
+  when: "{{ 'slides' | _in(templates) }}"
+  choices: ["none", "invert"]
+
+validate_vars:
+  help: Verify answers provided by user.
+  validator: >-
+    {% if not templates %}
+    ERROR: `templates` variable is mandatory!
+    {% endif %}
+
+_message_after_copy: |
+  Copier successfully generated {{ templates }} files for "{{ lab_name }}"".
+  Please review them before committing.
+
+  Before testing a new lab on your fork, please check if all container images were created.
+  Go to the `Actions` section of your fork and trigger required container build workflows manually if required.
+  
+  If you generated a new Markdown document for MkDocs, please do not forget to reference it in the 'nav' section of 'mkdocs.yml'
+
+  Example:
+
+  nav:
+    - {{ lab_group }}:
+      - {{ lab_name }}: {{ lab_slug }}.md

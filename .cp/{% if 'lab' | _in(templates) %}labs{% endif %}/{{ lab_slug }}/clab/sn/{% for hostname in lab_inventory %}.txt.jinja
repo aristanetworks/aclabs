@@ -1,0 +1,7 @@
+{%- macro random_id(len) %}
+    {%- for a_digit in range(len) %}
+{{- [0,1,2,3,4,5,6,7,8,9,"A","B","C","D","F"]|random }}
+    {%- endfor %}
+{%- endmacro -%}
+SERIALNUMBER=1C68470A1E0CD6EF7418D78A9582{{ random_id(4) }}
+SYSTEMMACADDR=001c.7301.{{ random_id(4) }}
