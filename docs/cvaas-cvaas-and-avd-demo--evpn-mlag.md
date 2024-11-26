@@ -57,7 +57,7 @@ make tags
 make test
 ```
 
-1. !!! Tip "Review and execute the change control on CVP when all tasks will be created."
+1. !!! Tip "Review and execute the change control on CVP when all tasks will be created. If you don't have CVaaS available and prefer to deploy the configuration via eAPI, you can use `make deploy` shortcut instead."
 2. !!! Bug "Currently there is a bug with disabling LLDP on Ma0, which prevents topology view from functioning correctly."
 
 Connect to a host (h01 or h02) and execute `test` alias to confirm connectivity.  
