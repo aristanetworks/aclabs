@@ -70,7 +70,7 @@ Petr Ankudinov
 
 - [AVD](https://avd.arista.com/) stands for Arista Validated Design as it was based on the [EVPN Deployment Guide](https://www.arista.com/custom_data/downloads/?f=/support/download/DesignGuides/EVPN_Deployment_Guide.pdf)
 - A very successful community project used to deploy EVPN based Data Center fabrics
-  - Over [200 stars on Github](https://github.com/aristanetworks/ansible-avd) and 79 contributors as of Sep 2023
+  - Over [299 stars on Github](https://github.com/aristanetworks/ansible-avd) and 108 contributors as of Nov 2023
   - The most active Arista collection on [Ansible Galaxy](https://galaxy.ansible.com/arista/avd)
 - High level workflow:
   - Define abstracted group/host vars using AVD data model
