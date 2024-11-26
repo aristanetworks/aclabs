@@ -47,13 +47,13 @@ To run the lab on your own machine, you can download all required files using th
     This may take a while.
 
 ```bash
-# 2. build configs with AVD
+# 1. build configs with AVD
 make build
-# 3. create CVP change control (1)
+# 2. create CVP change control (1)
 make deploy_cvp
-# 4. assign tags for CVP topology view (2)
+# 3. assign tags for CVP topology view (2)
 make tags
-# 5. validate the deployment with ANTA preview
+# 4. validate the deployment with ANTA preview
 make test
 ```
 
