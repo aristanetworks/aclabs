@@ -1,5 +1,7 @@
 ## How To Run The Lab
 
+Please read the [Quickstart guide](https://ankudinov.github.io/aclabs/quickstart/) before using the lab.
+
 You can run the lab on [Github Codespaces](https://codespaces.new/{% raw %}{{gh.repository}}{%endraw%}/tree/{% raw %}{{gh.branch}}{%endraw%}?quickstart=1&devcontainer_path=.devcontainer%2F{{ lab_slug }}%2Fdevcontainer.json) or your own machine.
 
 [Start :octicons-play-16: "{{ lab_name }}" in Codespace :octicons-mark-github-24:](https://codespaces.new/{% raw %}{{gh.repository}}{%endraw%}/tree/{% raw %}{{gh.branch}}{%endraw%}?quickstart=1&devcontainer_path=.devcontainer%2F{{ lab_slug }}%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
@@ -9,6 +11,18 @@ To run the lab on your own machine, you can download all required files using th
 [Download all required lab files](https://{% raw %}{{gh.org_name}}{%endraw%}.github.io/aclabs/lab_archives/{{ lab_slug }}.tar.gz){ .md-button .md-button--primary target=_blank}
 
 > WARNING: Currently only x86 hosts are supported. cEOS-lab for ARM is not yet available and it's not possible to start the lab on your MacBook yet.
+
+!!! info "Environment variables and secrets"
+
+    This lab requires following environment variables and secrets to be set.
+
+    `ARISTA_TOKEN` - the token required to download cEOS-lab image from [arista.com](https://arista.com).
+{%- if 'cvaas' | _in(lab_features) %}
+    `CV_API_TOKEN` - CVaaS service account token. It's required to generate onboarding token on CVaaS and allow streaming from the lab devices.
+    `CVURL` (Optional) - URL to be used to access CVaaS. Default is `cv-staging.corp.arista.io`
+{%- endif %}
+
+    When starting the lab on Github Codespaces, the required data can be provided via Web form if not yet associated with the repository. When running the lab on your own machine - set corresponding environment variables **BEFORE** :warning: opening VSCode.
 
 ???+ Tip "Wait until the lab is ready"
 

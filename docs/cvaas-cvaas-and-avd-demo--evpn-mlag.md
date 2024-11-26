@@ -13,6 +13,8 @@
 
 ## How To Run The Lab
 
+Please read the [Quickstart guide](https://ankudinov.github.io/aclabs/quickstart/) before using the lab.
+
 You can run the lab on [Github Codespaces](https://codespaces.new/{{gh.repository}}/tree/{{gh.branch}}?quickstart=1&devcontainer_path=.devcontainer%2Fcvaas-cvaas-and-avd-demo--evpn-mlag%2Fdevcontainer.json) or your own machine.
 
 [Start :octicons-play-16: "CVaaS and AVD Demo, EVPN MLAG" in Codespace :octicons-mark-github-24:](https://codespaces.new/{{gh.repository}}/tree/{{gh.branch}}?quickstart=1&devcontainer_path=.devcontainer%2Fcvaas-cvaas-and-avd-demo--evpn-mlag%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
@@ -23,6 +25,14 @@ To run the lab on your own machine, you can download all required files using th
 
 > WARNING: Currently only x86 hosts are supported. cEOS-lab for ARM is not yet available and it's not possible to start the lab on your MacBook yet.
 
+!!! info "Environment variables and secrets"
+
+    This lab requires following environment variables and secrets to be set.
+
+    `ARISTA_TOKEN` - the token required to download cEOS-lab image from [arista.com](https://arista.com).
+
+    When starting the lab on Github Codespaces, the required data can be provided via Web form if not yet associated with the repository. When running the lab on your own machine - set corresponding environment variables **BEFORE** :warning: opening VSCode.
+
 ???+ Tip "Wait until the lab is ready"
 
     When lab container starts, the `postCreate.sh` takes care of cEOS-lab image download and making some last minute changes in the lab environment. After that, `make start` shortcut is executed to start the lab.
@@ -32,7 +42,7 @@ To run the lab on your own machine, you can download all required files using th
 
 ## Last Updated
 
-!!! Info "Last reviewed: 25/11/2024"
+!!! Info "Last reviewed: 26/11/2024"
 
     Demos and labs reviewed over 6 month age may be outdated.
 
