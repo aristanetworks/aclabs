@@ -1,0 +1,65 @@
+---
+mgmt_gateway: 10.0.0.1
+mgmt_interface: Management0
+
+## disabled due to a bug
+## try if you need a challenge =)
+# eos_cli: |
+#   interface Management0
+#       no lldp receive
+#       no lldp transmit
+
+name_servers:
+  - 8.8.8.8
+
+# NTP servers
+ntp:
+  local_interface:
+    name: Management0
+    vrf: MGMT
+  servers:
+    - name: time.google.com
+      vrf: MGMT
+    - name: time.windows.com
+      vrf: MGMT
+    - name: time.apple.com
+      vrf: MGMT
+
+dns_domain: avd.lab
+
+# Local Users
+local_users:
+  - name: arista
+    privilege: 15
+    role: network-admin
+    sha512_password: "{{ ansible_password | password_hash(rounds=5000, salt=1) }}"
+
+# AAA Authorization Settings
+aaa_authorization:
+  exec:
+    default: local
+
+ansible_user: arista
+ansible_password: arista
+ansible_network_os: arista.eos.eos
+# Configure privilege escalation
+ansible_become: true
+ansible_become_method: enable
+# HTTPAPI configuration
+ansible_connection: httpapi
+ansible_httpapi_port: 443
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: false
+ansible_python_interpreter: $(which python3)
+avd_data_validation_mode: error
+
+daemon_terminattr:
+  cvaddrs:
+    - "apiserver.cv-staging.corp.arista.io:443"
+  cvauth:
+    method: token-secure
+    token_file: "/mnt/flash/cv-onboarding-token"
+  cvvrf: MGMT
+  smashexcludes: "ale,flexCounter,hardware,kni,pulse,strata"
+  ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
+  disable_aaa: True

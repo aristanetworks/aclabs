@@ -8,7 +8,7 @@
             "USERNAME": "${localEnv:USERNAME}"
         }
     },
-  "customizations": {
+    "customizations": {
         "vscode": {
             "extensions": [
                 "ms-python.python",
@@ -34,4 +34,4 @@
             ]
         }
     }
-  }
+}

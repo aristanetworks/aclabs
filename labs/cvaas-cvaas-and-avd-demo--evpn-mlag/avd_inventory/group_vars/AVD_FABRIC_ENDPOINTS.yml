@@ -1,0 +1,28 @@
+---
+servers:
+
+- name: h01
+  adapters:
+  - mode: trunk
+    switch_ports:
+    - Ethernet10
+    - Ethernet10
+    switches:
+    - l01
+    - l02
+    vlans: 100
+    port_channel:
+      mode: active
+
+- name: h02
+  adapters:
+  - mode: trunk
+    switch_ports:
+    - Ethernet20
+    - Ethernet20
+    switches:
+    - l03
+    - l04
+    vlans: 200
+    port_channel:
+      mode: active

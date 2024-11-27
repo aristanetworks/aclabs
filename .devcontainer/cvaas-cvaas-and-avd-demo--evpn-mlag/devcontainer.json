@@ -1,0 +1,35 @@
+{
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.0.0-clab0.59.0-rev1.1",
+    // containerEnv set the variables applied to entire container
+    "containerEnv": {
+        "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
+        "CEOS_LAB_VERSION": "4.32.3M",
+        "CV_API_TOKEN": "${localEnv:CV_API_TOKEN}",
+        "CONTAINERWSF": "${containerWorkspaceFolder}",
+        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}"
+    },
+    "secrets": {
+        "CV_API_TOKEN": {
+            "description": "CVaaS service account token."
+            // "documentationUrl": "https://example.com/link/to/info"
+        },
+        "CVURL": {
+            "description": "(Optional) URL to be used to access CVaaS. Default is `cv-staging.corp.arista.io`"
+            // "documentationUrl": "https://example.com/link/to/info"
+        },
+        "ARTOKEN": {
+            "description": "token to auto-download EOS images from arista.com."
+            // "documentationUrl": "https://example.com/link/to/info"
+        }
+    },
+    "hostRequirements": {
+        "cpus": 8,
+        "memory": "32gb",
+        "storage": "64gb"
+    },
+    "onCreateCommand": "chmod +x /cvaas-cvaas-and-avd-demo--evpn-mlag/addAliases.sh; /cvaas-cvaas-and-avd-demo--evpn-mlag/addAliases.sh",
+    "postCreateCommand": "postCreate.sh; make start",
+    "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
+    "workspaceFolder": "/cvaas-cvaas-and-avd-demo--evpn-mlag",
+    "containerUser": "avd"
+}

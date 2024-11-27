@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set +e
+{%- for node in lab_inventory %}
+echo "alias {{ node.hostname }}='sshpass -p {{ clab_password }} ssh -o \"StrictHostKeyChecking no\" {{ clab_user }}@{{ node.mgmt_ip }}'" >> ~/.zshrc
+{%- endfor %}
+{%- for node in lab_host_inventory %}
+echo "alias {{ node.hostname }}='sshpass -p {{ clab_password }} ssh -o \"StrictHostKeyChecking no\" {{ clab_user }}@{{ node.mgmt_ip }}'" >> ~/.zshrc
+{%- endfor %}
