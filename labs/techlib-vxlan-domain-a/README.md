@@ -13,7 +13,7 @@ This lab is tested for:
 > [!IMPORTANT]
 > Please wait until the postCreate.sh script completes before opening the interactive lab topology link below
 
-[Interactive Lab Topology](https://{{gh.codespace_name}}-8080.{{gh.codespaces_port_forwarding_domain}}/graphite)
+[Interactive Lab Topology](https://{{gh.codespace_name}}-8080.app.github.dev/graphite)
 
 To inspect the lab details use `make inspect` shortcut. This will list the host names and management addresses for all lab devices.
 To connect to any device use:
