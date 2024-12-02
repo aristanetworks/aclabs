@@ -11,7 +11,7 @@ This lab is tested for:
 ## Interactive Lab Toplogy
 
 > [!IMPORTANT]
-> Please wait until postCreate.sh script completes before opening the interactive lab topology link below
+> Please wait until the postCreate.sh script completes before opening the interactive lab topology link below
 
 [Interactive Lab Topology](https://{{gh.codespace_name}}-8080.{{gh.codespaces_port_forwarding_domain}}/graphite)
 
