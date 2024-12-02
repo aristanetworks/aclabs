@@ -10,7 +10,7 @@ This lab is tested for:
 
 ## Interactive Lab Toplogy
 
-[Lab Topology](https://{{gh.codespace_name}}-8080.{{gh.github_codespaces_port_forwarding_domain}}/graphite)
+[Lab Topology](https://{{gh.codespace_name}}-8080.{{gh.codespaces_port_forwarding_domain}}/graphite)
 
 To inspect the lab details use `make inspect` shortcut. This will list the host names and management addresses for all lab devices.
 To connect to any device use:
