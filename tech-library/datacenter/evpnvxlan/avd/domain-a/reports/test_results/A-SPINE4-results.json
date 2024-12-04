@@ -1,0 +1,491 @@
+[
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP EVPN Peer: A-LEAF1 (IP: 1.1.1.1)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP EVPN Peer: A-LEAF2 (IP: 1.1.1.2)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP EVPN Peer: A-LEAF3 (IP: 1.1.1.3)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP EVPN Peer: A-LEAF4 (IP: 1.1.1.4)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP EVPN Peer: A-LEAF5 (IP: 1.1.1.5)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP EVPN Peer: A-LEAF6 (IP: 1.1.1.6)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP EVPN Peer: A-LEAF7 (IP: 1.1.1.7)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP EVPN Peer: A-LEAF8 (IP: 1.1.1.8)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP IPv4 Unicast Peer: A-LEAF1 (IP: 192.168.0.7)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP IPv4 Unicast Peer: A-LEAF2 (IP: 192.168.0.15)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP IPv4 Unicast Peer: A-LEAF3 (IP: 192.168.0.23)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP IPv4 Unicast Peer: A-LEAF4 (IP: 192.168.0.31)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP IPv4 Unicast Peer: A-LEAF5 (IP: 192.168.0.39)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP IPv4 Unicast Peer: A-LEAF6 (IP: 192.168.0.47)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP IPv4 Unicast Peer: A-LEAF7 (IP: 192.168.0.55)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyBGPSpecificPeers",
+    "categories": [
+      "bgp"
+    ],
+    "description": "Verifies the health of specific BGP peer(s).",
+    "result": "success",
+    "custom_field": "BGP IPv4 Unicast Peer: A-LEAF8 (IP: 192.168.0.63)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyLLDPNeighbors",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Verifies that the provided LLDP neighbors are connected properly.",
+    "result": "success",
+    "custom_field": "Local: Ethernet1 - Remote: A-LEAF1 Ethernet4"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyLLDPNeighbors",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Verifies that the provided LLDP neighbors are connected properly.",
+    "result": "success",
+    "custom_field": "Local: Ethernet2 - Remote: A-LEAF2 Ethernet4"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyLLDPNeighbors",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Verifies that the provided LLDP neighbors are connected properly.",
+    "result": "success",
+    "custom_field": "Local: Ethernet3 - Remote: A-LEAF3 Ethernet4"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyLLDPNeighbors",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Verifies that the provided LLDP neighbors are connected properly.",
+    "result": "success",
+    "custom_field": "Local: Ethernet4 - Remote: A-LEAF4 Ethernet4"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyLLDPNeighbors",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Verifies that the provided LLDP neighbors are connected properly.",
+    "result": "success",
+    "custom_field": "Local: Ethernet5 - Remote: A-LEAF5 Ethernet4"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyLLDPNeighbors",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Verifies that the provided LLDP neighbors are connected properly.",
+    "result": "success",
+    "custom_field": "Local: Ethernet6 - Remote: A-LEAF6 Ethernet4"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyLLDPNeighbors",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Verifies that the provided LLDP neighbors are connected properly.",
+    "result": "success",
+    "custom_field": "Local: Ethernet7 - Remote: A-LEAF7 Ethernet4"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyLLDPNeighbors",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Verifies that the provided LLDP neighbors are connected properly.",
+    "result": "success",
+    "custom_field": "Local: Ethernet8 - Remote: A-LEAF8 Ethernet4"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyReachability",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Test the network reachability to one or many destination IP(s).",
+    "result": "success",
+    "custom_field": "Source: P2P Interface Ethernet1 (IP: 192.168.0.6) - Destination: A-LEAF1 Ethernet4 (IP: 192.168.0.7)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyReachability",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Test the network reachability to one or many destination IP(s).",
+    "result": "success",
+    "custom_field": "Source: P2P Interface Ethernet2 (IP: 192.168.0.14) - Destination: A-LEAF2 Ethernet4 (IP: 192.168.0.15)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyReachability",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Test the network reachability to one or many destination IP(s).",
+    "result": "success",
+    "custom_field": "Source: P2P Interface Ethernet3 (IP: 192.168.0.22) - Destination: A-LEAF3 Ethernet4 (IP: 192.168.0.23)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyReachability",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Test the network reachability to one or many destination IP(s).",
+    "result": "success",
+    "custom_field": "Source: P2P Interface Ethernet4 (IP: 192.168.0.30) - Destination: A-LEAF4 Ethernet4 (IP: 192.168.0.31)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyReachability",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Test the network reachability to one or many destination IP(s).",
+    "result": "success",
+    "custom_field": "Source: P2P Interface Ethernet5 (IP: 192.168.0.38) - Destination: A-LEAF5 Ethernet4 (IP: 192.168.0.39)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyReachability",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Test the network reachability to one or many destination IP(s).",
+    "result": "success",
+    "custom_field": "Source: P2P Interface Ethernet6 (IP: 192.168.0.46) - Destination: A-LEAF6 Ethernet4 (IP: 192.168.0.47)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyReachability",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Test the network reachability to one or many destination IP(s).",
+    "result": "success",
+    "custom_field": "Source: P2P Interface Ethernet7 (IP: 192.168.0.54) - Destination: A-LEAF7 Ethernet4 (IP: 192.168.0.55)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyReachability",
+    "categories": [
+      "connectivity"
+    ],
+    "description": "Test the network reachability to one or many destination IP(s).",
+    "result": "success",
+    "custom_field": "Source: P2P Interface Ethernet8 (IP: 192.168.0.62) - Destination: A-LEAF8 Ethernet4 (IP: 192.168.0.63)"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyEnvironmentCooling",
+    "categories": [
+      "hardware"
+    ],
+    "description": "Verifies the status of power supply fans and all fan trays.",
+    "result": "skipped",
+    "messages": [
+      "VerifyEnvironmentCooling test is not supported on cEOSLab."
+    ],
+    "custom_field": "Accepted States: 'ok'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyEnvironmentPower",
+    "categories": [
+      "hardware"
+    ],
+    "description": "Verifies the power supplies status.",
+    "result": "skipped",
+    "messages": [
+      "VerifyEnvironmentPower test is not supported on cEOSLab."
+    ],
+    "custom_field": "Accepted States: 'ok'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyTemperature",
+    "categories": [
+      "hardware"
+    ],
+    "description": "Verifies the device temperature.",
+    "result": "skipped",
+    "messages": [
+      "VerifyTemperature test is not supported on cEOSLab."
+    ]
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyTransceiversManufacturers",
+    "categories": [
+      "hardware"
+    ],
+    "description": "Verifies if all transceivers come from approved manufacturers.",
+    "result": "skipped",
+    "messages": [
+      "VerifyTransceiversManufacturers test is not supported on cEOSLab."
+    ],
+    "custom_field": "Accepted Manufacturers: 'Arista Networks', 'Arastra, Inc.', 'Not Present'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyInterfacesStatus",
+    "categories": [
+      "interfaces"
+    ],
+    "description": "Verifies the status of the provided interfaces.",
+    "result": "success",
+    "custom_field": "Interface Ethernet1 - P2P_A-LEAF1_Ethernet4 = 'up'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyInterfacesStatus",
+    "categories": [
+      "interfaces"
+    ],
+    "description": "Verifies the status of the provided interfaces.",
+    "result": "success",
+    "custom_field": "Interface Ethernet2 - P2P_A-LEAF2_Ethernet4 = 'up'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyInterfacesStatus",
+    "categories": [
+      "interfaces"
+    ],
+    "description": "Verifies the status of the provided interfaces.",
+    "result": "success",
+    "custom_field": "Interface Ethernet3 - P2P_A-LEAF3_Ethernet4 = 'up'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyInterfacesStatus",
+    "categories": [
+      "interfaces"
+    ],
+    "description": "Verifies the status of the provided interfaces.",
+    "result": "success",
+    "custom_field": "Interface Ethernet4 - P2P_A-LEAF4_Ethernet4 = 'up'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyInterfacesStatus",
+    "categories": [
+      "interfaces"
+    ],
+    "description": "Verifies the status of the provided interfaces.",
+    "result": "success",
+    "custom_field": "Interface Ethernet5 - P2P_A-LEAF5_Ethernet4 = 'up'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyInterfacesStatus",
+    "categories": [
+      "interfaces"
+    ],
+    "description": "Verifies the status of the provided interfaces.",
+    "result": "success",
+    "custom_field": "Interface Ethernet6 - P2P_A-LEAF6_Ethernet4 = 'up'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyInterfacesStatus",
+    "categories": [
+      "interfaces"
+    ],
+    "description": "Verifies the status of the provided interfaces.",
+    "result": "success",
+    "custom_field": "Interface Ethernet7 - P2P_A-LEAF7_Ethernet4 = 'up'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyInterfacesStatus",
+    "categories": [
+      "interfaces"
+    ],
+    "description": "Verifies the status of the provided interfaces.",
+    "result": "success",
+    "custom_field": "Interface Ethernet8 - P2P_A-LEAF8_Ethernet4 = 'up'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyInterfacesStatus",
+    "categories": [
+      "interfaces"
+    ],
+    "description": "Verifies the status of the provided interfaces.",
+    "result": "success",
+    "custom_field": "Interface Loopback0 - Globally Unique Address = 'up'"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyRoutingProtocolModel",
+    "categories": [
+      "routing"
+    ],
+    "description": "Verifies the configured routing protocol model.",
+    "result": "success",
+    "custom_field": "Routing protocol model: multi-agent"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyNTP",
+    "categories": [
+      "system"
+    ],
+    "description": "Verifies if NTP is synchronised.",
+    "result": "success"
+  },
+  {
+    "name": "A-SPINE4",
+    "test": "VerifyReloadCause",
+    "categories": [
+      "system"
+    ],
+    "description": "Verifies the last reload cause of the device.",
+    "result": "success"
+  }
+]
