@@ -16,6 +16,8 @@
                 "oderwat.indent-rainbow",
                 "AykutSarac.jsoncrack-vscode",
                 "hilleer.yaml-plus-json",
+                // spell checker
+                "streetsidesoftware.code-spell-checker",
                 // marp preview extension
                 "marp-team.marp-vscode",
                 // errors and highlighters
