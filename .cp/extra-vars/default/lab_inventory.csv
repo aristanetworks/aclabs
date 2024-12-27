@@ -1,7 +1,9 @@
-hostname,mgmt_ip
-s01,10.0.1.1
-s02,10.0.1.2
-l01,10.0.2.1
-l02,10.0.2.2
-l03,10.0.2.3
-l04,10.0.2.4
+hostname,mgmt_ip,role,platform,terminals_icon,terminals_color,terminals_split
+s01,10.0.1.1,spine,ceos
+s02,10.0.1.2,spine,ceos,,,s01
+l01,10.0.2.1,leaf,ceos,bookmark,terminal.ansiRed
+l02,10.0.2.2,leaf,ceos,bookmark,terminal.ansiRed,l01
+l03,10.0.2.3,leaf,ceos,,terminal.ansiGreen
+l04,10.0.2.4,leaf,ceos,,terminal.ansiGreen,l03
+h01,10.0.3.1,host,ceos
+h02,10.0.3.2,host,ceos
