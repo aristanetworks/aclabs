@@ -1,30 +1,113 @@
-# TechLibrary EVPN Domain-A Lab
+# Arista's Tech Library EVPN/VXLAN Domain A Lab
 
-This lab is tested for:  
+## Overview
+This lab has been validated as fully functional with:
 
-  cEOS-lab version: 4.32.2.1F  
-  Codespace Container Size  
-    CPUs: 16  
-    memory: 64 GB  
-    storage: 128 GB  
+- cEOS-lab: 4.32.3M
+- AVD: 5.1.0
+- ContainerLab: 0.60.1
+
+## Quick Links
+
+[Interactive Lab Topology](#interactive-lab-toplogy)
+
+[Building Configurations](#building-configurations)
+
+[Deploying Configurations](#deploying-configurations)
+
+[Validating the Topology](#validating-the-topology)
+
+[Topology Status](#topology-status)
+
+[Connecting to Nodes via the Terminal](#connecting-to-nodes-via-terminal)
+
+[Starting the Topology](#starting-the-topology)
+
+[Stopping the Topology](#stopping-the-topology)
 
 ## Interactive Lab Toplogy
+
+An interactive topology is available via the link below, and can be used to access the nodes via web SSH. All nodes have a username of `admin` and password of `admin`
 
 > [!IMPORTANT]
 > Please wait until the postCreate.sh script completes before opening the interactive lab topology link below
 
 [Interactive Lab Topology](https://{{gh.codespace_name}}-8080.app.github.dev/graphite)
 
-To inspect the lab details use `make inspect` shortcut. This will list the host names and management addresses for all lab devices.
-To connect to any device use:
+## Building Configurations
+
+Pre-built AVD data models are located in the `avd/group_vars` directory. These data models will render configurations for the nodes in Domain A as shown in the EVPN/VXLAN Deployment Guide.
+
+Issuing the below command at the terminal will render all configuration and documentation based on the pre-built data models.
+
+```bash
+make build
+```
+
+> [!TIP]
+> Be sure to explore and experiment with the data models! More information on AVD can be found at https://avd.arista.com.
+
+## Deploying Configurations
+
+Once rendered, the AVD-generated configurations can be deployed to the nodes by issuing the below command at the terminal
+
+```bash
+make deploy
+```
+
+## Validating the Topology
+
+The [Arista Network Test Automation (ANTA)](https://anta.arista.com/) framework can be used to validate that the topology is built and operational as defined in the AVD data models.
+
+Issue the below command at the terminal will initiate the validation testing.
+
+```
+make validate
+```
+
+> [!TIP]
+> ANTA has an extensive and continually growing [test catalog](https://anta.arista.com/stable/api/tests/). Be sure to explore and test with the available options!
+
+## Additional Tasks
+
+### Topology Status
+
+The current status of the lab environment can be retrieved at any time by issuing the below command at the terminal.
+
+```bash
+make inspect
+```
+
+This will list the host names and management addresses for all lab devices.
+
+### Connecting to Nodes via Terminal
+
+As an alternative to the [Interactive Lab Topology](https://{{gh.codespace_name}}-8080.app.github.dev/graphite), all nodes can be accessed via SSH directly from the terminal as shown below.
 
 ```bash
 # the password is `admin`
 ssh admin@<a-lab-device-hostname>
 ```
 
-To check connectivity, ssh to any host and use `pingcheck ipv4_vrf_prod` or `pingcheck ipv4_vrf_dev` to start fping to the lab hosts. You have to wait a few minutes after the lab start for ping to be successful.
+### Stopping the topology
 
-Enjoy the lab!
+If needed, the topology can be stopped by issuing the below command at the terminal:
 
-Last reviewed: December 2nd, 2024
+```
+make stop
+```
+
+### Starting the topology
+
+> [!IMPORTANT]
+> The topology is automatically started upon the initial launch of the Codespace lab.
+
+If the topology is stopped for any reason, either manually or automatically due to the user's configured Codespace idle timeout value, it can be restarted by issuing the below command at the terminal:
+
+```
+make start
+```
+
+# Enjoy the lab!
+
+Last reviewed: January 4th, 2025
