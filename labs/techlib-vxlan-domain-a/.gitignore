@@ -115,6 +115,9 @@ avd_inventory/config_backup/
 # gitignore downloaded cEOS-lab images
 cEOS-lab-*
 
-# ingnore images and other files not to be uploaded to GitHub
+# ignore images and other files not to be uploaded to GitHub
 .gitignored/*
 !.gitignored/.gitkeep
+
+# ignore AVD config_backups
+avd/config_backup
