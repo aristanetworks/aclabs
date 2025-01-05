@@ -18,3 +18,15 @@ inspect: ## Inspect ceos lab
 	@echo ""
 	@echo "You can check the lab status, hostnames and management addresses above."
 	@echo "To connect to a lab device use \`ssh admin@<hostname>\` and password \`admin\`."
+
+.PHONY: build
+build: ## Build Configs
+	ansible-playbook avd/playbooks/build.yml -i avd/inventory.yml -e "target_hosts=DOMAIN_A_FABRIC"
+
+.PHONY: deploy
+deploy: ## Deploy Configs via eAPI
+	ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml -e "target_hosts=DOMAIN_A_FABRIC"
+
+.PHONY: validate
+validate: ## Validate Fabric
+	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml -e "target_hosts=DOMAIN_A_FABRIC"
