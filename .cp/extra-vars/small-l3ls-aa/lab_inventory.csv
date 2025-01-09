@@ -1,7 +1,9 @@
-hostname,mgmt_ip
-s01,10.0.1.1
-s02,10.0.1.2
-l01,10.0.2.1
-l02,10.0.2.2
-l03,10.0.2.3
-l04,10.0.2.4
+hostname,mgmt_ip,role,platform
+s01,10.0.1.1,spine,ceos
+s02,10.0.1.2,spine,ceos
+l01,10.0.2.1,leaf,ceos
+l02,10.0.2.2,leaf,ceos
+l03,10.0.2.3,leaf,ceos
+l04,10.0.2.4,leaf,ceos
+h01,10.0.3.1,host,ceos
+h02,10.0.3.2,host,ceos

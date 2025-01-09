@@ -26,13 +26,10 @@ topology:
 {%- for node in lab_inventory %}
         {{ node.hostname }}:
             mgmt-ipv4: {{ node.mgmt_ip }}
+{%- if node.role in ['spine','leaf']  %}
             binds:
             - sn/{{ node.hostname }}.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/{{ node.hostname }}.cfg
-{%- endfor %}
-{%- for node in lab_host_inventory %}
-        {{ node.hostname }}:
-            mgmt-ipv4: {{ node.mgmt_ip }}
+{%- endif  %}
             startup-config: init-configs/{{ node.hostname }}.cfg
 {%- endfor %}
 
