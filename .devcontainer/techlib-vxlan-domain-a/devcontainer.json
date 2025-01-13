@@ -20,5 +20,6 @@
     },
     "postCreateCommand": "postCreate.sh; make start; make inspect",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/techlib-vxlan-domain-a"
+    "workspaceFolder": "/techlib-vxlan-domain-a",
+    "containerUser": "avd"
 }
