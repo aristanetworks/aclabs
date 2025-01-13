@@ -46,8 +46,8 @@ To run the lab on your own machine, you can download all required files using th
 
 This lab has following devices:
 
-| Hostname | Type | OS | Management Address | Login | Password |
-| -------- | ---- | -- | ------------------ | ----- | -------- |
+| Hostname | Type | OS | Management Address | Username | Password |
+| -------- | ---- | -- | ------------------ | -------- | -------- |
 | s01 | switch | cEOS-lab, 4.32.3M | 10.0.1.1 | arista | arista |
 | s02 | switch | cEOS-lab, 4.32.3M | 10.0.1.2 | arista | arista |
 | l01 | switch | cEOS-lab, 4.32.3M | 10.0.2.1 | arista | arista |
@@ -61,7 +61,7 @@ This lab has following devices:
 
 ## Last Updated
 
-!!! Info "Last reviewed: 26/11/2024"
+!!! Info "Last reviewed: 13/01/2025"
 
     Demos and labs reviewed over 6 month age may be outdated.
 
