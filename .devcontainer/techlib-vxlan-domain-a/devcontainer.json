@@ -1,5 +1,5 @@
 {
-    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.1.0-clab0.60.1-rev1.1",
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.1.0-clab0.61.0-rev1.2",
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
@@ -20,5 +20,7 @@
     },
     "postCreateCommand": "postCreate.sh; make start; make inspect",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/techlib-vxlan-domain-a"
+    "onCreateCommand": "chmod +x /techlib-vxlan-domain-a/addAliases.sh; /techlib-vxlan-domain-a/addAliases.sh",
+    "workspaceFolder": "/techlib-vxlan-domain-a",
+    "containerUser": "avd"
 }
