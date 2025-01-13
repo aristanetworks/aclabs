@@ -115,60 +115,6 @@
             "recycle": false,
             "open": true,
             "focus": true
-        },
-        {
-            "name": "HostA1",
-            "icon": "bookmark",
-            "color": "terminal.ansiRed",
-            "command": "terminals.sh HostA1",
-            "recycle": false,
-            "open": true,
-            "focus": true
-        },
-        {
-            "name": "HostA2",
-            "icon": "bookmark",
-            "color": "terminal.ansiRed",
-            "command": "terminals.sh HostA2",
-            "recycle": false,
-            "open": true,
-            "focus": true
-        },
-        {
-            "name": "HostA3",
-            "icon": "bookmark",
-            "color": "terminal.ansiRed",
-            "command": "terminals.sh HostA3",
-            "recycle": false,
-            "open": true,
-            "focus": true
-        },
-        {
-            "name": "HostA4",
-            "icon": "bookmark",
-            "color": "terminal.ansiRed",
-            "command": "terminals.sh HostA4",
-            "recycle": false,
-            "open": true,
-            "focus": true
-        },
-        {
-            "name": "HostA5",
-            "icon": "bookmark",
-            "color": "terminal.ansiRed",
-            "command": "terminals.sh HostA5",
-            "recycle": false,
-            "open": true,
-            "focus": true
-        },
-        {
-            "name": "HostA6",
-            "icon": "bookmark",
-            "color": "terminal.ansiRed",
-            "command": "terminals.sh HostA6",
-            "recycle": false,
-            "open": true,
-            "focus": true
         }
     ]
 }
