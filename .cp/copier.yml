@@ -59,6 +59,7 @@ lab_features:
     - git
     - slides
     - addAliases
+    - terminals
 
 lab_author:
   type: str

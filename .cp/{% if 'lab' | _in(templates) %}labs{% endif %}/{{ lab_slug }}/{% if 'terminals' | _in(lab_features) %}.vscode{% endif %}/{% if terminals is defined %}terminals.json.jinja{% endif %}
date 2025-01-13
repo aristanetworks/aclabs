@@ -1,0 +1,38 @@
+{% raw %}{{% endraw %}
+    "autorun": true,
+    "autokill": true,
+    "env": {% raw %}{{% endraw %}
+        "TERMINAL_READY_MESSAGE": "Please check the README.md and the lab documentation before using the lab.",
+        "TERMINAL_SHELL": "bash",
+        "TERMINAL_STATUS_COMMAND": "Cli -p 15 -c 'show version'",
+        "TERMINAL_READY_COMMAND": "Cli -p 15"
+    {% raw %}},{% endraw %}
+    "terminals": {% raw %}[{% endraw %}
+{%- for node in terminals %}
+        {% raw %}{{% endraw %}
+            "name": "{{ node.hostname }}",
+{%- if node.terminals_description | default(false, true) %}
+            "description": "{{ node.terminals_description | default("", true) }}",
+{%- endif %}
+{%- if node.terminals_icon is defined %}
+            "icon": "{{ node.terminals_icon | default("code", true) }}",
+{%- endif %}
+{%- if node.terminals_color | default(false, true) %}
+            "color": "{{ node.terminals_color }}",
+{%- endif %}
+{%- if node.terminals_split | default(false, true) %}
+            "split": "{{ node.terminals_split }}",
+{%- endif %}
+            "command": "terminals.sh {{ node.hostname }}",
+            "recycle": false,
+            "open": true,
+            "focus": true
+{%- if not loop.last %}
+        {% raw %}},{% endraw %}
+{%- else  %}
+        {% raw %}}{% endraw %}
+{%- endif %}
+{%- endfor %}
+    {% raw %}]{% endraw %}
+{% raw %}}{% endraw %}
+{%- endif %}
