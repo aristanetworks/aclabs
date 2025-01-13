@@ -60,6 +60,7 @@ Temporary Items
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+{%- if 'terminals' | _in(lab_features) %}!.vscode/terminals.json{% endif %}
 
 # Local History for Visual Studio Code
 .history/
