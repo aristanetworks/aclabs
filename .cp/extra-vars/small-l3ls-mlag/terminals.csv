@@ -1,0 +1,5 @@
+hostname,terminals_icon,terminals_color,terminals_split
+l01,bookmark,terminal.ansiRed
+l02,bookmark,terminal.ansiRed,l01
+h01,,terminal.ansiGreen
+h02,,terminal.ansiGreen,h01

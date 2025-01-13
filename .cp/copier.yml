@@ -59,6 +59,7 @@ lab_features:
     - git
     - slides
     - addAliases
+    - terminals
 
 lab_author:
   type: str
@@ -76,13 +77,13 @@ avd_version:
   type: str
   help: Pick required AVD version.
   when: "{{ 'lab' | _in(templates) }}"
-  choices: ["5.0.0", "4.10.2"]
+  choices: ["5.0.0", "4.10.2", "5.1.0"]
 
 lab_container_revision:
   type: str
   help: Please select lab container revision.
-  choices: ["1.1"]
-  default: "1.1"
+  choices: ["1.1", "1.2"]
+  default: "1.2"
   when: false  # no need to display this question due to a single choice
 
 container_size:
@@ -108,7 +109,7 @@ clab_version:
   type: str
   help: Please select the Containerlab version.
   when: "{{ 'lab' | _in(templates) }}"
-  choices: ["0.59.0", "0.57.5"]
+  choices: ["0.59.0", "0.60.1", "0.61.0"]
 
 clab_user:
   type: str
@@ -124,19 +125,19 @@ clab_password:
 
 clab_mgmt_subnet:
   type: str
-  help: Password for all lab devices.
+  help: cLab management subnet.
   when: "{{ 'lab' | _in(templates) }}"
   default: "10.0.0.0"
 
 clab_mgmt_mask:
   type: str
-  help: Password for all lab devices.
+  help: cLab management subnet mask.
   when: "{{ 'lab' | _in(templates) }}"
   default: "16"
 
 clab_mgmt_gw:
   type: str
-  help: Password for all lab devices.
+  help: cLab management subnet gateway.
   when: "{{ 'lab' | _in(templates) }}"
   default: "10.0.0.1"
 

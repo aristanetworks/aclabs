@@ -27,6 +27,10 @@
                 "yzhang.markdown-all-in-one",
                 "bierner.markdown-checkbox",
                 "DavidAnson.vscode-markdownlint",
+                // jinja
+                "samuelcolvin.jinjahtml",
+                // terminals manager
+                "fabiospampinato.vscode-terminals",
                 // various tools
                 "tuxtina.json2yaml",
                 "mutantdino.resourcemonitor"

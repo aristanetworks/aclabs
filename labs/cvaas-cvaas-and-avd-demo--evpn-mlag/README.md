@@ -3,13 +3,13 @@
 This lab is tested for:  
 
   cEOS-lab version: 4.32.3M  
-  Containerlab Version: 0.59.0  
+  Containerlab Version: 0.61.0  
   Codespace Container Size  
     CPUs: 8  
     memory: 32 GB  
     storage: 64 GB  
 
-Last reviewed: 26/11/2024  
+Last reviewed: 13/01/2025  
 
 > Lab Credentials  
 &nbsp;&nbsp;&nbsp;&nbsp;Username: arista  
@@ -25,8 +25,8 @@ Please check the lab materials:
 
 This lab has following devices:
 
-| Hostname | Type | OS | Management Address | Login | Password |
-| -------- | ---- | -- | ------------------ | ----- | -------- |
+| Hostname | Type | OS | Management Address | Username | Password |
+| -------- | ---- | -- | ------------------ | -------- | -------- |
 | s01 | switch | cEOS-lab, 4.32.3M | 10.0.1.1 | arista | arista |
 | s02 | switch | cEOS-lab, 4.32.3M | 10.0.1.2 | arista | arista |
 | l01 | switch | cEOS-lab, 4.32.3M | 10.0.2.1 | arista | arista |
