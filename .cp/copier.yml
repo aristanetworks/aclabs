@@ -125,19 +125,19 @@ clab_password:
 
 clab_mgmt_subnet:
   type: str
-  help: Password for all lab devices.
+  help: cLab management subnet.
   when: "{{ 'lab' | _in(templates) }}"
   default: "10.0.0.0"
 
 clab_mgmt_mask:
   type: str
-  help: Password for all lab devices.
+  help: cLab management subnet mask.
   when: "{{ 'lab' | _in(templates) }}"
   default: "16"
 
 clab_mgmt_gw:
   type: str
-  help: Password for all lab devices.
+  help: cLab management subnet gateway.
   when: "{{ 'lab' | _in(templates) }}"
   default: "10.0.0.1"
 
