@@ -1,6 +1,6 @@
 ---
-name: marp-and-mkdocs-to-pages
-concurrency: marp-and-mkdocs-to-pages
+name: forks_only_marp-and-mkdocs-to-pages-on
+concurrency: forks_only_marp-and-mkdocs-to-pages
 on:
   push:
     branches: [ '**' ]
@@ -62,14 +62,14 @@ jobs:
           && cp -R slides/assets/img site/slides/assets/img
 
       - name: Build HTML from Marp 🔨
-        uses: docker://marpteam/marp-cli:v3.4.0
+        uses: docker://ghcr.io/marp-team/marp-cli:v4.0.2
         with:
           args:  --theme-set ./assets/themes/ --html --input-dir slides/ -o site/slides/
         env:
           MARP_USER: root:root
 
       - name: Build PDF from marp_slides.md 🔨
-        uses: docker://marpteam/marp-cli:v3.4.0
+        uses: docker://ghcr.io/marp-team/marp-cli:v4.0.2
         with:
           args:  --theme-set ./assets/themes/ --html --pdf --allow-local-files --input-dir slides/ -o site/pdfs/
         env:
