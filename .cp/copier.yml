@@ -82,8 +82,8 @@ avd_version:
 lab_container_revision:
   type: str
   help: Please select lab container revision.
-  choices: ["1.1"]
-  default: "1.1"
+  choices: ["1.1", "1.2"]
+  default: "1.2"
   when: false  # no need to display this question due to a single choice
 
 container_size:
