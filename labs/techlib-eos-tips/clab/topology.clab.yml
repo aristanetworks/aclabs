@@ -14,7 +14,7 @@ topology:
     defaults:
         kind: ceos
     nodes:
-        s01:
+        SPINE1:
             mgmt-ipv4: 10.0.1.1
             binds:
             - sn/s01.txt:/mnt/flash/ceos-config:ro
@@ -23,7 +23,7 @@ topology:
                 graph-icon: spine
                 graph-group: "Data Center Spine"
                 graph-level: 2
-        s02:
+        SPINE2:
             mgmt-ipv4: 10.0.1.2
             binds:
             - sn/s02.txt:/mnt/flash/ceos-config:ro
@@ -32,7 +32,7 @@ topology:
                 graph-icon: spine
                 graph-group: "Data Center Spine"
                 graph-level: 2
-        l01:
+        LEAF1:
             mgmt-ipv4: 10.0.2.1
             binds:
             - sn/l01.txt:/mnt/flash/ceos-config:ro
@@ -41,7 +41,7 @@ topology:
                 graph-icon: leaf
                 graph-group: "Data Center Leaf"
                 graph-level: 3
-        l02:
+        LEAF2:
             mgmt-ipv4: 10.0.2.2
             binds:
             - sn/l02.txt:/mnt/flash/ceos-config:ro
@@ -50,7 +50,7 @@ topology:
                 graph-icon: leaf
                 graph-group: "Data Center Leaf"
                 graph-level: 3
-        l03:
+        LEAF3:
             mgmt-ipv4: 10.0.2.3
             binds:
             - sn/l03.txt:/mnt/flash/ceos-config:ro
@@ -59,7 +59,7 @@ topology:
                 graph-icon: leaf
                 graph-group: "Data Center Leaf"
                 graph-level: 3
-        l04:
+        LEAF4:
             mgmt-ipv4: 10.0.2.4
             binds:
             - sn/l04.txt:/mnt/flash/ceos-config:ro
@@ -68,14 +68,14 @@ topology:
                 graph-icon: leaf
                 graph-group: "Data Center Leaf"
                 graph-level: 3
-        h01:
+        Host1:
             mgmt-ipv4: 10.0.3.1
             startup-config: init-configs/h01.cfg
             labels:
                 graph-icon: client
                 graph-group: "Data Center Client"
                 graph-level: 4
-        h02:
+        Host2:
             mgmt-ipv4: 10.0.3.2
             startup-config: init-configs/h02.cfg
             labels:
@@ -84,15 +84,19 @@ topology:
                 graph-level: 4
 
     links:
-    - endpoints: ["l01:eth1", "s01:eth1"]
-    - endpoints: ["l01:eth2", "s02:eth1"]
-    - endpoints: ["l02:eth1", "s01:eth2"]
-    - endpoints: ["l02:eth2", "s02:eth2"]
-    - endpoints: ["l03:eth1", "s01:eth3"]
-    - endpoints: ["l03:eth2", "s02:eth3"]
-    - endpoints: ["l04:eth1", "s01:eth4"]
-    - endpoints: ["l04:eth2", "s02:eth4"]
-    - endpoints: ["h01:eth1", "l01:eth10"]
-    - endpoints: ["h01:eth2", "l02:eth10"]
-    - endpoints: ["h02:eth1", "l03:eth20"]
-    - endpoints: ["h02:eth2", "l04:eth20"]
+    - endpoints: ["LEAF1:eth1", "SPINE1:eth1"]
+    - endpoints: ["LEAF1:eth2", "SPINE2:eth1"]
+    - endpoints: ["LEAF2:eth1", "SPINE1:eth2"]
+    - endpoints: ["LEAF2:eth2", "SPINE2:eth2"]
+    - endpoints: ["LEAF3:eth1", "SPINE1:eth3"]
+    - endpoints: ["LEAF3:eth2", "SPINE2:eth3"]
+    - endpoints: ["LEAF4:eth1", "SPINE1:eth4"]
+    - endpoints: ["LEAF4:eth2", "SPINE2:eth4"]
+    - endpoints: ["LEAF1:eth3", "LEAF2:eth3"]
+    - endpoints: ["LEAF1:eth4", "LEAF2:eth4"]
+    - endpoints: ["LEAF3:eth3", "LEAF4:eth3"]
+    - endpoints: ["LEAF3:eth4", "LEAF4:eth4"]
+    - endpoints: ["Host1:eth1", "LEAF1:eth10"]
+    - endpoints: ["Host1:eth2", "LEAF2:eth10"]
+    - endpoints: ["Host2:eth1", "LEAF3:eth10"]
+    - endpoints: ["Host2:eth2", "LEAF4:eth10"]
