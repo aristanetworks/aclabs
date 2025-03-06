@@ -35,9 +35,7 @@
                 "srl-labs.vscode-containerlab",
                 // various tools
                 "tuxtina.json2yaml",
-                "mutantdino.resourcemonitor",
-                // Catpuccin Theme Palette
-                "Catppuccin.catppuccin-vsc"
+                "mutantdino.resourcemonitor"
             ]
         }
     }
