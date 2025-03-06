@@ -29,6 +29,8 @@
                 "DavidAnson.vscode-markdownlint",
                 // jinja
                 "samuelcolvin.jinjahtml",
+                // terminals manager
+                "fabiospampinato.vscode-terminals",
                 // ContainerLab
                 "srl-labs.vscode-containerlab",
                 // various tools
