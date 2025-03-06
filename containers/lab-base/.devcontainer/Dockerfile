@@ -35,5 +35,5 @@ USER ${USERNAME}
 # install the latest containerlab, yamllint, cook-and-cut and eos-downloader
 RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
     && pip3 install --user yamllint \
-    && pip install --user "eos-downloader>=0.10.1" \
+    && pip install --user "eos-downloader>=0.12.1" \
     && pip install --user passlib
