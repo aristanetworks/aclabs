@@ -29,18 +29,18 @@ Accessing the nodes in the topology is accomplished via the ContainerLab VSCode 
 
 Begin by opening the extension by clicking the icon found on the lefthand side of the Codespace:
 
-![ContainerLab Extension](images/cLab-extension.png)
+![ContainerLab Extension](images/cLabextension.png)
 
 Once opened, expand the topology by using the dropdown button next to the topology name:
 
-![ContainerLab Extension Dropdown](images/clab-extension2.png)
+![ContainerLab Extension Dropdown](images/clabextension2.png)
 
 Next, right-click on any node in the topology and select `Connect to SSH`
 
-![ContainerLab Extension Connect SSH](images/clab-extension3.png)
+![ContainerLab Extension Connect SSH](images/clabextension3.png)
 
 A new terminal tab will be opened, with a prompt requesting the password for the node. Enter `admin` to connect:
 
-![ContainerLab Extension Connect SSH](images/clab-extension4.png)
+![ContainerLab Extension Connect SSH](images/clabextension4.png)
 
 Happy Labbing!
