@@ -3,9 +3,9 @@
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
+        "CEOS_LAB_VERSION": "4.32.3M",
         "CONTAINERWSF": "${containerWorkspaceFolder}",
-        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}",
-        "CEOS_LAB_VERSION": "4.32.2.1F"
+        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}"
     },
     "secrets": {
         "ARTOKEN": {
@@ -14,11 +14,11 @@
         }
     },
     "hostRequirements": {
-        "cpus": 16,
-        "memory": "64gb",
-        "storage": "128gb"
+        "cpus": 4,
+        "memory": "16gb",
+        "storage": "32gb"
     },
     "postCreateCommand": "postCreate.sh; make start; make inspect",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/techlib-vxlan-domain-c"
+    "workspaceFolder": "/techlib-eos-tips"
 }

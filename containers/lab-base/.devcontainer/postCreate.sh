@@ -23,7 +23,7 @@ else
   grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"cv-staging.corp.arista.io"'@g'
 fi
 
-ardl get eos --image-type cEOS --version ${CEOS_LAB_VERSION} --import-docker
+ardl get eos --format cEOS64 --version ${CEOS_LAB_VERSION} --import-docker
 docker tag arista/ceos:${CEOS_LAB_VERSION} arista/ceos:latest
 
 if [ "${CV_API_TOKEN}" ]; then
