@@ -19,57 +19,69 @@ topology:
             binds:
             - sn/s01.txt:/mnt/flash/ceos-config:ro
             startup-config: init-configs/s01.cfg
-            group: "Data Center Spine"
             labels:
-                topoViewer-role: spine
+                graph-icon: spine
+                graph-group: "Data Center Spine"
+                graph-level: 2
         s02:
             mgmt-ipv4: 10.0.1.2
             binds:
             - sn/s02.txt:/mnt/flash/ceos-config:ro
             startup-config: init-configs/s02.cfg
-            group: "Data Center Spine"
             labels:
-                topoViewer-role: spine
+                graph-icon: spine
+                graph-group: "Data Center Spine"
+                graph-level: 2
         l01:
             mgmt-ipv4: 10.0.2.1
             binds:
             - sn/l01.txt:/mnt/flash/ceos-config:ro
             startup-config: init-configs/l01.cfg
-            group: "Data Center Leaf"
             labels:
-                topoViewer-role: leaf
+                graph-icon: leaf
+                graph-group: "Data Center Leaf"
+                graph-level: 3
         l02:
             mgmt-ipv4: 10.0.2.2
             binds:
             - sn/l02.txt:/mnt/flash/ceos-config:ro
             startup-config: init-configs/l02.cfg
-            group: "Data Center Leaf"
             labels:
-                topoViewer-role: leaf
+                graph-icon: leaf
+                graph-group: "Data Center Leaf"
+                graph-level: 3
         l03:
             mgmt-ipv4: 10.0.2.3
             binds:
             - sn/l03.txt:/mnt/flash/ceos-config:ro
             startup-config: init-configs/l03.cfg
-            group: "Data Center Leaf"
             labels:
-                topoViewer-role: leaf
+                graph-icon: leaf
+                graph-group: "Data Center Leaf"
+                graph-level: 3
         l04:
             mgmt-ipv4: 10.0.2.4
             binds:
             - sn/l04.txt:/mnt/flash/ceos-config:ro
             startup-config: init-configs/l04.cfg
-            group: "Data Center Leaf"
             labels:
-                topoViewer-role: leaf
+                graph-icon: leaf
+                graph-group: "Data Center Leaf"
+                graph-level: 3
         h01:
             mgmt-ipv4: 10.0.3.1
             startup-config: init-configs/h01.cfg
-            group: "Data Center Host"
+            labels:
+                graph-icon: client
+                graph-group: "Data Center Client"
+                graph-level: 4
         h02:
             mgmt-ipv4: 10.0.3.2
             startup-config: init-configs/h02.cfg
-            group: "Data Center Host"
+            labels:
+                graph-icon: client
+                graph-group: "Data Center Client"
+                graph-level: 4
 
     links:
     - endpoints: ["l01:eth1", "s01:eth1"]
