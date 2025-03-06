@@ -41,15 +41,6 @@ topology:
                 graph-icon: leaf
                 graph-group: "Data Center Leaf"
                 graph-level: 3
-        LEAF2:
-            mgmt-ipv4: 10.0.2.2
-            binds:
-            - sn/LEAF2.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/LEAF2.cfg
-            labels:
-                graph-icon: leaf
-                graph-group: "Data Center Leaf"
-                graph-level: 3
         Host1:
             mgmt-ipv4: 10.0.3.1
             binds:
@@ -72,11 +63,7 @@ topology:
     links:
     - endpoints: ["LEAF1:eth1", "SPINE1:eth1"]
     - endpoints: ["LEAF1:eth2", "SPINE2:eth1"]
-    - endpoints: ["LEAF2:eth1", "SPINE1:eth2"]
-    - endpoints: ["LEAF2:eth2", "SPINE2:eth2"]
-    - endpoints: ["LEAF1:eth3", "LEAF2:eth3"]
-    - endpoints: ["LEAF1:eth4", "LEAF2:eth4"]
-    - endpoints: ["Host1:eth1", "LEAF1:eth10"]
-    - endpoints: ["Host1:eth2", "LEAF2:eth10"]
-    - endpoints: ["Host2:eth1", "LEAF1:eth11"]
-    - endpoints: ["Host2:eth2", "LEAF2:eth12"]
+    - endpoints: ["SPINE1:eth47", "SPINE2:eth47"]
+    - endpoints: ["SPINE1:eth48", "SPINE2:eth48"]
+    - endpoints: ["Host1:eth1", "LEAF1:eth11"]
+    - endpoints: ["Host2:eth1", "LEAF1:eth12"]
