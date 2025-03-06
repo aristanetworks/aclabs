@@ -14,6 +14,11 @@ topology:
     defaults:
         kind: ceos
     nodes:
+        topoviewer:
+            kind: linux
+            image: ghcr.io/asadarafat/topoviewer:nightly-24.10.30
+            labels:
+                topoViewer-role: controller
         s01:
             mgmt-ipv4: 10.0.1.1
             binds:
