@@ -1,39 +1,46 @@
-# eos-tips
+# Arista EOS Tips for Network Operators
 
-This lab is tested for:  
+This lab is intended to be used as a sandbox companion to the [EOS Tips for Network Operators Guide](https://tech-library.arista.com/eos/eos_ops/) in [Arista's Tech Library](https://tech-library.arista.com/).
 
-  cEOS-lab version: 4.32.3M  
-  Containerlab Version: 0.61.0  
-  Codespace Container Size  
-    CPUs: 4  
-    memory: 16 GB  
-    storage: 32 GB  
+This lab is tested for:
 
-Last reviewed: 06/03/2025  
+- cEOS-lab: **4.32.3M**
+- Containerlab: **0.65.1**
+- Codespace Machine Type:
+  - CPUs: **4**
+  - Memory: **16 GB**
+  - Storage: **32 GB**
 
-> Lab Credentials  
-&nbsp;&nbsp;&nbsp;&nbsp;Username: arista  
-&nbsp;&nbsp;&nbsp;&nbsp;Password: arista  
+Last reviewed: March 6th, 2025
 
-Please check the lab materials:
+## Topology
 
-- [Lab Documentation](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/techlib-eos-tips/)
-- [HTML Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/slides/techlib-eos-tips.html)
-- [PDF Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/pdfs/techlib-eos-tips.pdf)
+![EOS Tips Topology](images/eos-tips-topo.png)
 
-## Lab Inventory
+## Credentials
 
-This lab has following devices:
+Username: admin
 
-| Hostname | Type | OS | Management Address | Username | Password |
-| -------- | ---- | -- | ------------------ | -------- | -------- |
-| s01 | switch | cEOS-lab, 4.32.3M | 10.0.1.1 | arista | arista |
-| s02 | switch | cEOS-lab, 4.32.3M | 10.0.1.2 | arista | arista |
-| l01 | switch | cEOS-lab, 4.32.3M | 10.0.2.1 | arista | arista |
-| l02 | switch | cEOS-lab, 4.32.3M | 10.0.2.2 | arista | arista |
-| l03 | switch | cEOS-lab, 4.32.3M | 10.0.2.3 | arista | arista |
-| l04 | switch | cEOS-lab, 4.32.3M | 10.0.2.4 | arista | arista |
-| h01 | host | cEOS-lab, 4.32.3M | 10.0.3.1 | arista | arista |
-| h02 | host | cEOS-lab, 4.32.3M | 10.0.3.2 | arista | arista |
+Password: admin
 
-> To access any device, use `ssh <username>@<hostname>` or simply type `<hostname>` to use the SSH alias.
+## Accessing the Lab
+
+Accessing the nodes in the topology is accomplished via the ContainerLab VSCode Extension.
+
+Begin by opening the extension by clicking the icon found on the lefthand side of the Codespace:
+
+![ContainerLab Extension](images/cLab-extension.png)
+
+Once opened, expand the topology by using the dropdown button next to the topology name:
+
+![ContainerLab Extension Dropdown](images/clab-extension2.png)
+
+Next, right-click on any node in the topology and select `Connect to SSH`
+
+![ContainerLab Extension Connect SSH](images/clab-extension3.png)
+
+A new terminal tab will be opened, with a prompt requesting the password for the node. Enter `admin` to connect:
+
+![ContainerLab Extension Connect SSH](images/clab-extension4.png)
+
+Happy Labbing!
