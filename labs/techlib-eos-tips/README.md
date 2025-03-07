@@ -1,9 +1,9 @@
 # Arista EOS Tips for Network Operators
 
 > [!IMPORTANT]
-> The average deployment time for this lab is ~5 minutes. Please wait until the `PostCreateCommand` process has finished before interacting with the lab.
+> The average deployment time for this lab is ~5 minutes. Please wait until the `postCreateCommand` process has finished before interacting with the lab.
 
-This lab is intended to be used as a sandbox companion to the [EOS Tips for Network Operators Guide](https://tech-library.arista.com/eos/eos_ops/) in [Arista's Tech Library](https://tech-library.arista.com/).
+This pre-configured lab is intended to be used as a sandbox companion to the [EOS Tips for Network Operators Guide](https://tech-library.arista.com/eos/eos_ops/) in [Arista's Tech Library](https://tech-library.arista.com/).
 
 It has been built and validated with:
 

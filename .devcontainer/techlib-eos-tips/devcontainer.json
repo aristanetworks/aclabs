@@ -18,7 +18,17 @@
         "memory": "16gb",
         "storage": "32gb"
     },
-    "postCreateCommand": "postCreate.sh; make start; make inspect",
+    "postCreateCommand": "echo 'Please open README.md if it was not automatically opened'; postCreate.sh; make start; make inspect",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/techlib-eos-tips"
+    "workspaceFolder": "/techlib-eos-tips",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "workbench.startupEditor": "readme",
+                "workbench.editorAssociations": {
+                    "*.md": "vscode.markdown.preview.editor"
+                }
+            }
+        }
+    }
 }
