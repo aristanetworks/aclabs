@@ -22,11 +22,6 @@
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/techlib-eos-tips",
     "customizations": {
-        "codespaces": {
-            "openFiles": [
-                "README.md"
-                ]
-            },
         "vscode": {
             "settings": {
                 "workbench.editorAssociations": {
