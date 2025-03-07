@@ -24,6 +24,7 @@
     "customizations": {
         "vscode": {
             "settings": {
+                "workbench.startupEditor": "readme",
                 "workbench.editorAssociations": {
                     "*.md": "vscode.markdown.preview.editor"
                 }
