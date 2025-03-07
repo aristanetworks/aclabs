@@ -18,13 +18,13 @@ Last reviewed: March 6th, 2025
 
 ## Topology
 
-![EOS Tips Topology](images/eos-tips-topo.png)
+<img src="images/eos-tips-topo.png" width="1080"/>
 
 ## Credentials
 
-Username: admin
+Username: `admin`
 
-Password: admin
+Password: `admin`
 
 ## Accessing the Lab
 
