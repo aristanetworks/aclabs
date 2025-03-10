@@ -265,11 +265,11 @@ A list of all codespaces can be found in the [Codespaces section of GitHub](http
 
 ### Tip 1 - 'docker login': denied
 
-When a lab is launched, the user's [Arista Access Token](https://www.arista.com/en/users/profile) is used to download cEOS-lab into the Codespace and import it into Docker.
+During the initial lab provisioning, the user's [Arista Access Token](https://www.arista.com/en/users/profile) is used to download cEOS-lab into the Codespace and import it into Docker.
 
 In the event that the user's Arista Access Token has expired, or is not present, the lab will fail to download cEOS-lab from [arista.com](https://www.arista.com/en/support/software-download) and attempt to download the cEOS-lab image from DockerHub.
 
-When this happens, the user's lab will display the following message:
+When this happens, the lab terminal will display the following message:
 
 ```bash
 Error: Error response from daemon: pull access denied for arista/ceos, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
@@ -280,19 +280,19 @@ make: *** [Makefile:9: start] Error 1
 
 When a token is created in a user's [arista.com profile](https://www.arista.com/en/users/profile), it is valid for one year.
 
-Follow the steps below to generate a new token, and update the `ARTOKEN` secret used by acLabs Codespaces.
+Follow the steps below to generate a new token and update the `ARTOKEN` secret used by acLabs Codespaces.
 
-1. Open your [arista.com user profile](https://www.arista.com/en/users/profile)
+- Open your [arista.com user profile](https://www.arista.com/en/users/profile)
 
-2. Choose `Regenerate Token`
+- Choose `Regenerate Token`
 
 ![Regenerate Token](assets/img/aclabs-quickstart-regen-token.png){ width=600px }
 
-3. Copy the token
+- Copy the token
 
 <div class="annotate" markdown>
 
-4. Update the `ARTOKEN`(1) value in your [GitHub Codespaces Settings](https://github.com/settings/codespaces)
+- Update the `ARTOKEN` value in your [GitHub Codespaces Settings](https://github.com/settings/codespaces)(1)
 
 </div>
 
@@ -302,7 +302,7 @@ Follow the steps below to generate a new token, and update the `ARTOKEN` secret 
 
 ![Update ARTOKEN](assets/img/aclabs-quickstart-update-artoken.png){ width=600px }
 
-Once updated, launch a new(1) acLab and cEOS-lab will be downloaded from [arista.com](https://www.arista.com/en/support/software-download).
+Once updated, launch a new acLab(1) and get back to labbing! :lab_coat:
 { .annotate }
 
 1. :pencil2: It's recommended to delete the Codespace where the failure occurred, and instead create a new one by choosing `Create a new one` when prompted to resume the failed Codespace
