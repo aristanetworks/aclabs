@@ -8,6 +8,7 @@ This guide is intended for individuals looking to familiarize themselves with th
 - :octicons-rocket-16: [Start the Lab](#starting-the-lab)
 - :material-cursor-default-click: [Interact with the Lab](#interacting-with-the-lab)
 - :fontawesome-regular-circle-stop: [Stop the Lab](#stopping-the-lab)
+- :fontawesome-regular-circle-stop: [Tips and Troubleshooting](#tips-and-troubleshooting)
 
 </div>
 
@@ -260,4 +261,102 @@ When you're finished with the lab, simply close the codespace by exiting the bro
 
 A list of all codespaces can be found in the [Codespaces section of GitHub](https://github.com/codespaces). From here, a codespace can be resumed, stopped, deleted, renamed, and more!
 
-:test_tube: Happy labbing! :test_tube:
+## Tips and Troubleshooting
+
+### Tip 1 - 'docker login': denied
+
+During the initial lab provisioning, the user's [Arista Access Token](https://www.arista.com/en/users/profile) is used to download cEOS-lab into the Codespace and import it into Docker.
+
+In the event that the user's Arista Access Token has expired, or is not present, the lab will fail to download cEOS-lab from [arista.com](https://www.arista.com/en/support/software-download) and attempt to download the cEOS-lab image from DockerHub.
+
+When this happens, the lab terminal will display the following message:
+
+```bash
+Error: Error response from daemon: pull access denied for arista/ceos, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+make: *** [Makefile:9: start] Error 1
+```
+
+!!! success "Solution - Update ARTOKEN with new token :arrow_down:"
+
+When a token is created in a user's [arista.com profile](https://www.arista.com/en/users/profile), it is valid for one year.
+
+Follow the steps below to generate a new token and update the `ARTOKEN` secret used by acLabs Codespaces.
+
+- Open your [arista.com user profile](https://www.arista.com/en/users/profile)
+
+- Choose `Regenerate Token`
+
+![Regenerate Token](assets/img/aclabs-quickstart-regen-token.png){ width=600px }
+
+- Copy the token
+
+<div class="annotate" markdown>
+
+- Update the `ARTOKEN` value in your [GitHub Codespaces Settings](https://github.com/settings/codespaces)(1)
+
+</div>
+
+1. :pencil2: In the event that the `ARTOKEN` secret doesn't exist in your [GitHub Codespaces Settings](https://github.com/settings/codespaces), choose `New secret` and create it.
+
+    This value is created automatically the first time an acLabs lab is launched, but in rare situations this auto-creation may not occur.
+
+![Update ARTOKEN](assets/img/aclabs-quickstart-update-artoken.png){ width=600px }
+
+Once updated, launch a new acLab(1) and get back to labbing! :lab_coat:
+{ .annotate }
+
+1. :pencil2: It's recommended to delete the Codespace where the failure occurred, and instead create a new one by choosing `Create a new one` when prompted to resume the failed Codespace
+    ![New Codespace](assets/img/aclabs-quickstart-new-codespace.png){ width=600px }
+
+### Tip 2 - Resuming an acLab
+
+By default, GitHub Codespaces will automatically shutdown(1) after 30 minutes, and will be deleted(2) after 30 days of inactivity.
+{ .annotate }
+
+1. :pencil2: Default idle timeout
+2. :pencil2: Default retention period
+
+These `Default idle timeout` and `Default retention period` parameters can be changed at any time within [GitHub Codespaces Settings](https://github.com/settings/codespaces).
+
+A general recommendation for these values is provided below:
+
+- **Default idle timeout**: `30 Minutes`
+- **Default retention period**: `1 Day`
+
+!!! tip "How to resume an acLab :arrow_down:"
+
+If the `Default idle timeout` has been reached, then a user may find themselves presented with the following message when re-launching the lab:
+
+![Resume Codespace Prompt](assets/img/aclabs-quickstart-resume-codespace-generic.png){ width=600px }
+
+Multiple choices exist at the above prompt:
+
+<div class="annotate" markdown>
+
+1. Create a new instance of the lab in a new Codespace (1)
+2. Resume an existing lab that was shutdown due to the idle timeout being reached
+3. Delete the existing codespace(2)
+
+</div>
+
+1. Disregard the remainder of this section and jump into the lab! :smile:
+2. ![Delete Codespace](assets/img/aclabs-quickstart-delete-codespace.png)
+
+Select `Resume this codespace` to bring the codespace back up.
+
+Once the Codespace is ready(1) the lab can be resumed via the ContainerLab extension by right-clicking the lab name and selecting `Redeploy`
+{ .annotate }
+
+1. If the terminal is open and responsive, the Codespace is back up and running!
+
+![Redeploy lab](assets/img/aclabs-quickstart-redeploy-lab.png)
+
+After selecting `Redeploy`, the terminal will present a message indicating that ContainerLab is in the process of redeploying the lab.
+
+If desired, select `View Logs` to monitor the process of the lab as it is started back up.
+
+![Redeploy logs](assets/img/aclabs-quickstart-redeploy-clab-logs.png)
+
+When complete, a message indicating success will be presented and it's time to jump back into the lab! :partying_face:
+
+## :test_tube: Happy labbing! :test_tube:
