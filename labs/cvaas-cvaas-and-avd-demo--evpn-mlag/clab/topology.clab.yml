@@ -15,7 +15,7 @@ topology:
         kind: ceos
         extras:
             ceos-copy-to-flash:
-            - clab/cv-onboarding-token
+            - cv-onboarding-token
         # an alternative to ceos-copy-to-flash could be bind
         # keeping the bind settings here just in case
         # binds:
