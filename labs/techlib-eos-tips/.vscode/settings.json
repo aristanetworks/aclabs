@@ -1,6 +1,0 @@
-{
-    "containerlab.showWelcomePage": false,
-    "workbench.editorAssociations": {   
-        "*.md": "vscode.markdown.preview.editor"
-    }
-}
