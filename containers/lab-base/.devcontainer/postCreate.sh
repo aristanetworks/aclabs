@@ -55,5 +55,3 @@ if ${GIT_INIT}; then
     git commit -m "git init"
   fi
 fi
-
-code --install-extension ${CONTAINERWSF}/Rcf-VS-Code-Plugin-4.32.2.vsix
