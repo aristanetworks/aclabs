@@ -22,5 +22,16 @@
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "onCreateCommand": "chmod +x /techlib-vxlan-domain-a/addAliases.sh; /techlib-vxlan-domain-a/addAliases.sh",
     "workspaceFolder": "/techlib-vxlan-domain-a",
-    "containerUser": "avd"
+    "containerUser": "avd",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "containerlab.showWelcomePage": false,
+                "workbench.startupEditor": "readme",
+                "workbench.editorAssociations": {
+                    "*.md": "vscode.markdown.preview.editor"
+                }
+            }
+        }
+    }
 }
