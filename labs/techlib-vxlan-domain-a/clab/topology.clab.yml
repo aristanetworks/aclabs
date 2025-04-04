@@ -88,6 +88,7 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.100.100.105
       startup-config: init-configs/A-LEAF1.cfg
+      startup-delay: 30
       labels:
         graph-icon: leaf
         graph-group: "Data Center Leaf"
@@ -97,6 +98,7 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.100.100.106
       startup-config: init-configs/A-LEAF2.cfg
+      startup-delay: 30
       labels:
         graph-icon: leaf
         graph-group: "Data Center Leaf"
@@ -106,6 +108,7 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.100.100.107
       startup-config: init-configs/A-LEAF3.cfg
+      startup-delay: 30
       labels:
         graph-icon: leaf
         graph-group: "Data Center Leaf"
@@ -115,6 +118,7 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.100.100.108
       startup-config: init-configs/A-LEAF4.cfg
+      startup-delay: 30
       labels:
         graph-icon: leaf
         graph-group: "Data Center Leaf"
@@ -124,6 +128,7 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.100.100.109
       startup-config: init-configs/A-LEAF5.cfg
+      startup-delay: 30
       labels:
         graph-icon: leaf
         graph-group: "Data Center Leaf"
@@ -133,6 +138,7 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.100.100.110
       startup-config: init-configs/A-LEAF6.cfg
+      startup-delay: 30
       labels:
         graph-icon: leaf
         graph-group: "Data Center Leaf"
@@ -142,6 +148,7 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.100.100.111
       startup-config: init-configs/A-LEAF7.cfg
+      startup-delay: 30
       labels:
         graph-icon: dcgw
         graph-group: "EVPN Gateway"
@@ -151,6 +158,7 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.100.100.112
       startup-config: init-configs/A-LEAF8.cfg
+      startup-delay: 30
       labels:
         graph-icon: dcgw
         graph-group: "EVPN Gateway"
@@ -164,6 +172,7 @@ topology:
     HostA1:
       kind: linux
       mgmt-ipv4: 172.100.100.201
+      startup-delay: 60
       env:
         TMODE: lacp
         IPV4: 10.10.10.101/24
@@ -179,6 +188,7 @@ topology:
     HostA2:
       kind: linux
       mgmt-ipv4: 172.100.100.202
+      startup-delay: 60
       env:
         TMODE: lacp
         IPV4: 10.30.30.101/24
@@ -194,6 +204,7 @@ topology:
     HostA3:
       kind: linux
       mgmt-ipv4: 172.100.100.203
+      startup-delay: 60
       env:
         IPV4: 10.50.50.101/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -208,6 +219,7 @@ topology:
     HostA4:
       kind: linux
       mgmt-ipv4: 172.100.100.204
+      startup-delay: 60
       env:
         TMODE: lacp
         IPV4: 10.10.10.102/24
@@ -223,6 +235,7 @@ topology:
     HostA5:
       kind: linux
       mgmt-ipv4: 172.100.100.205
+      startup-delay: 60
       env:
         IPV4: 10.30.30.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -237,6 +250,7 @@ topology:
     HostA6:
       kind: linux
       mgmt-ipv4: 172.100.100.206
+      startup-delay: 60
       env:
         TMODE: lacp
         IPV4: 10.70.70.101/24
