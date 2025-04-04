@@ -48,37 +48,25 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.100.100.101
       startup-config: init-configs/A-SPINE1.cfg
-      labels:
-        graph-icon: spine
-        graph-group: "Data Center Spine"
-        graph-level: 3
+      group: 'spine'
 
     A-SPINE2:
       kind: ceos
       mgmt-ipv4: 172.100.100.102
       startup-config: init-configs/A-SPINE2.cfg
-      labels:
-        graph-icon: spine
-        graph-group: "Data Center Spine"
-        graph-level: 3
+      group: 'spine'
 
     A-SPINE3:
       kind: ceos
       mgmt-ipv4: 172.100.100.103
       startup-config: init-configs/A-SPINE3.cfg
-      labels:
-        graph-icon: spine
-        graph-group: "Data Center Spine"
-        graph-level: 3
+      group: 'spine'
 
     A-SPINE4:
       kind: ceos
       mgmt-ipv4: 172.100.100.104
       startup-config: init-configs/A-SPINE4.cfg
-      labels:
-        graph-icon: spine
-        graph-group: "Data Center Spine"
-        graph-level: 3
+      group: 'spine'
 
 #########################
 # Domain A LEAF         #
@@ -89,80 +77,56 @@ topology:
       mgmt-ipv4: 172.100.100.105
       startup-config: init-configs/A-LEAF1.cfg
       startup-delay: 30
-      labels:
-        graph-icon: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: 4
+      group: 'leaf'
 
     A-LEAF2:
       kind: ceos
       mgmt-ipv4: 172.100.100.106
       startup-config: init-configs/A-LEAF2.cfg
       startup-delay: 30
-      labels:
-        graph-icon: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: 4
+      group: 'leaf'
 
     A-LEAF3:
       kind: ceos
       mgmt-ipv4: 172.100.100.107
       startup-config: init-configs/A-LEAF3.cfg
       startup-delay: 30
-      labels:
-        graph-icon: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: 4
+      group: 'leaf'
 
     A-LEAF4:
       kind: ceos
       mgmt-ipv4: 172.100.100.108
       startup-config: init-configs/A-LEAF4.cfg
       startup-delay: 30
-      labels:
-        graph-icon: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: 4
+      group: 'leaf'
 
     A-LEAF5:
       kind: ceos
       mgmt-ipv4: 172.100.100.109
       startup-config: init-configs/A-LEAF5.cfg
       startup-delay: 30
-      labels:
-        graph-icon: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: 4
+      group: 'leaf'
 
     A-LEAF6:
       kind: ceos
       mgmt-ipv4: 172.100.100.110
       startup-config: init-configs/A-LEAF6.cfg
       startup-delay: 30
-      labels:
-        graph-icon: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: 4
+      group: 'leaf'
 
     A-LEAF7:
       kind: ceos
       mgmt-ipv4: 172.100.100.111
       startup-config: init-configs/A-LEAF7.cfg
       startup-delay: 30
-      labels:
-        graph-icon: dcgw
-        graph-group: "EVPN Gateway"
-        graph-level: 2
+      group: 'dc-gw'
 
     A-LEAF8:
       kind: ceos
       mgmt-ipv4: 172.100.100.112
       startup-config: init-configs/A-LEAF8.cfg
       startup-delay: 30
-      labels:
-        graph-icon: dcgw
-        graph-group: "EVPN Gateway"
-        graph-level: 2
+      group: 'dc-gw'
 
 #########################
 # Domain A Hosts        #
@@ -179,10 +143,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::101/64
-      labels:
-        graph-icon: server
-        graph-group: "endpoint"
-        graph-level: 5
+      group: 'server'
 
     # HostA2 is connected to LEAF1 eth8 and LEAF2 eth8
     HostA2:
@@ -195,10 +156,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.30.30.1
         IPV6: 2001:db8:30:30::101/64
-      labels:
-        graph-icon: server
-        graph-group: "endpoint"
-        graph-level: 5
+      group: 'server'
 
     # HostA3 is a Linux host with a single interface connected to LEAF3 eth7
     HostA3:
@@ -210,10 +168,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.50.50.1
         IPV6: 2001:db8:50:50::101/64
-      labels:
-        graph-icon: server
-        graph-group: "endpoint"
-        graph-level: 5
+      group: 'server'
 
     # HostA4 is connected to LEAF3 eth8 and LEAF4 eth8
     HostA4:
@@ -226,10 +181,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::102/64
-      labels:
-        graph-icon: server
-        graph-group: "endpoint"
-        graph-level: 5
+      group: 'server'
 
     # HostA5 is connected to LEAF4 eth7
     HostA5:
@@ -241,10 +193,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.30.30.1
         IPV6: 2001:db8:30:30::102/64
-      labels:
-        graph-icon: server
-        graph-group: "endpoint"
-        graph-level: 5
+      group: 'server'
 
     # HostA6 is connected to LEAF5 eth7 and LEAF6 eth7
     HostA6:
@@ -257,10 +206,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.70.70.1
         IPV6: 2001:db8:70:70::101/64
-      labels:
-        graph-icon: server
-        graph-group: "endpoint"
-        graph-level: 5
+      group: 'server'
 
 #########################
 # Backbone              #
@@ -270,19 +216,13 @@ topology:
       kind: ceos
       mgmt-ipv4: 172.100.100.113
       startup-config: init-configs/BB1.cfg
-      labels:
-        graph-icon: router
-        graph-group: "Backbone"
-        graph-level: 1
+      group: 'superspine'
 
     BB2:
       kind: ceos
       mgmt-ipv4: 172.100.100.114
       startup-config: init-configs/BB2.cfg
-      labels:
-        graph-icon: router
-        graph-group: "Backbone"
-        graph-level: 1
+      group: 'superspine'
 
   links:
 ######################
