@@ -31,7 +31,7 @@ Before launching an Arista Community Lab, the following pre-requisites must be m
 
 2. For those that have never used Codespaces before, no worries! There is a quick primer on Codespaces included below!
 
-We can find the user token by logging into [arista.com](https://www.arista.com) and selecting `My Profile`.
+We can find the user token by logging into [arista.com](https://www.arista.com) and selecting [My Profile](https://www.arista.com/en/users/profile).
 
 The tabs below illustrate the steps needed to locate and copy the token:
 
@@ -60,24 +60,24 @@ The tabs below illustrate the steps needed to locate and copy the token:
 
 ### Overview
 
-GitHub Codespaces can instantiate a fully configured development or lab environment hosted entirely on GitHub's cloud infrastructure with a simple click of a button, on any machine. Making the environments incredibly portable!
+GitHub Codespaces can instantiate a fully configured development or lab environment hosted on GitHub's cloud infrastructure with the click of a button.
 
-In the Arista Community Labs, we pre-package these Codespaces with the tools necessary to interact with the nodes within the lab. Quick examples are Python, Ansible, and Ansible Galaxy collections such as [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/).
+Codespaces for Arista Community Labs are pre-packaged with tools such as Python, Ansible, and Ansible Galaxy Collections including [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/).
 
-[Docker in Docker](https://github.com/microsoft/vscode-dev-containers/blob/main/containers/docker-in-docker/README.md) in alignment with the [Dev Container Specification](https://containers.dev/implementors/spec/) makes this possible in Codespaces.
+[Docker in Docker](https://github.com/microsoft/vscode-dev-containers/blob/main/containers/docker-in-docker/README.md) in alignment with the [Dev Container Specification](https://containers.dev/implementors/spec/) makes all of this possible with Codespaces.
 
 ### Costs
 
 GitHub Codespaces is a commercial offering from GitHub. As of October 2024, all GitHub users have 120 hours of Codespace time available for free each month.
 
-By default, if all 120 hours are consumed and the [Spending Limit](https://github.com/settings/billing/spending_limit) for Codespaces is $0, then Codespace usage cannot continue until the hours are replenished the following month.
+By default, if all 120 hours are consumed and the [User's Spending Limit](https://github.com/settings/billing/spending_limit) for Codespaces is $0, then Codespace usage will stop and cannot continue until the hours are replenished the following month.
 
 ??? question "When and how would GitHub charge me for this?💰"
-    A GitHub user will never be charged for Codespace usage by default. The feature will stop working until the hours are renewed the next month.
+    A GitHub user will never be charged for Codespace usage by default. Codespaces will stop working until the hours are renewed the next month.
 
 Users can define a [Payment Method](https://github.com/settings/billing/payment_information) and [Spending Limit](https://github.com/settings/billing/spending_limit) for Codespaces. Once defined, usage beyond 120 hours can continue as long as the spending limit is not exceeded. Once a defined spending limit has been reached, Codespace usage cannot continue until the next month.
 
-Additional information can be found in [GitHub's Codespaces Billing Overivew Page](https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-codespaces/about-billing-for-github-codespaces)
+Additional information can be found in [GitHub's Codespaces Billing Overivew Page](https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-codespaces/about-billing-for-github-codespaces).
 
 ??? question "What if I forget about my Codespace? :scream:"
     Don't worry! It won't run forever, at least not by default.
@@ -95,7 +95,7 @@ Codespaces can be deleted at anytime from the [Codespaces section of GitHub](htt
 
 ### Machine Types
 
-Different machine types are available within Codespaces. As a general rule, the greater the number of CPU cores, the greater number of hours that will be consumed during a Codespace's runtime.
+Different machine types are available within Codespaces. As a general rule, the greater the number of CPU cores, the greater number of hours that will be consumed during the Codespace's runtime.
 
 [GitHub's Pricing for Paid Usage](https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#pricing-for-paid-usage) chart provides the details of the `usage multiplier` for each available machine type.
 
@@ -115,7 +115,7 @@ Some Arista Community Labs make use of larger machine types, such as the :fontaw
     ```yaml
     Hello - Can the 8-core and 16-core codespace machine types please be enabled for my account?
     The default 2-core and 4-core machines lack the necessary resources for my use cases.
-    A payment method has been added to my account. If additional information is needed, please let me know.
+    If additional information is needed, please let me know.
     Thanks!
     ```
 
@@ -130,10 +130,12 @@ Once a lab has been launched via it's respective 'Start Lab' button, a `Create C
 
 <figure markdown>
 ![Create Codespace](assets/img/lab-enter-token.png "Create Codespace"){ width=500px }
-<figcaption> Create a Codespace - Enter our user token </figcaption>
+<figcaption> Create a Codespace - Enter your Arista User Token </figcaption>
 </figure>
 
-In the `ARTOKEN` field, paste the user token copied from the arista.com user profile. This is a one time requirement, and will be saved for all subsequent Arista Community Lab deployments.
+In the `ARTOKEN` field, paste the user token copied from [your arista.com user profile](https://www.arista.com/en/users/profile).
+
+This is a one time requirement, and will be saved for all subsequent Arista Community Lab deployments.
 
 ??? question "Where is the token saved? :thinking:"
     Once entered, the token is saved as a GitHub Codespaces `Secret`. This can be viewed via the [Codespaces section of GitHub account settings](https://github.com/settings/codespaces).
@@ -151,11 +153,11 @@ In the `ARTOKEN` field, paste the user token copied from the arista.com user pro
 Once the token has been entered, and `Create new Codespace` has been selected, a new tab will open in the browser containing the codespace
 
 ??? question "Wait...the codespace opened in my local VS Code!"
-    Not a problem - this just means that VS Code is locally installed and `Visual Studio Code` is selected in the `Editor preference` section of the [GitHub account's Codespaces settings](https://github.com/settings/codespaces).
+    Not a problem! This just means that VS Code is locally installed and `Visual Studio Code` is selected in the `Editor preference` section of the [GitHub account's Codespaces settings](https://github.com/settings/codespaces).
 
 In the newly launched Codespace, a tab is opened displaying an overview of the lab.
 
-The `Post Deploy Script` can be seen running in the terminal, and will take a few minutes to complete.
+The `Post Deploy Script` can be seen running in the terminal, and will take between five and nine minutes to complete depending on the size of the lab.
 
 <figure markdown>
 ![Post Deployment Script](assets/img/aclabs-quickstart-postdeploy.png "Post Deploy"){ width=800px }
