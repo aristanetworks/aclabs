@@ -4,7 +4,7 @@
 This lab has been validated as fully functional with:
 
 - cEOS-lab: 4.33.2F
-- AVD: 5.2.0
+- AVD: 5.2.3
 - ContainerLab: 0.67.0
 
 ## Quick Links
