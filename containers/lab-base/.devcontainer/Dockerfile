@@ -26,6 +26,8 @@ RUN apt-get update \
 # copy postCreate script
 COPY ./postCreate.sh /bin/postCreate.sh
 RUN chmod +x /bin/postCreate.sh
+# copy terminals script
+COPY ./terminals.sh /bin/terminals.sh
 
 USER ${USERNAME}
 

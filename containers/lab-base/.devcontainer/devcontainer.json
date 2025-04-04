@@ -27,6 +27,8 @@
                 "yzhang.markdown-all-in-one",
                 "bierner.markdown-checkbox",
                 "DavidAnson.vscode-markdownlint",
+                // // terminals manager
+                // "fabiospampinato.vscode-terminals",
                 // jinja
                 "samuelcolvin.jinjahtml",
                 // ContainerLab
