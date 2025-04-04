@@ -5,7 +5,7 @@
 
 clear
 echo 'Waiting for the lab to start...'
-until docker exec -it $1 ${TERMINAL_SHELL} -c "${TERMINAL_STATUS_COMMAND} 2> /dev/null" >/dev/null 2>&1; do 
+until docker exec -it $1 ${TERMINAL_SHELL} -c "${TERMINAL_STATUS_COMMAND} 2> /dev/null" >/dev/null 2>&1; do
     sleep 5
 done
 clear

@@ -27,10 +27,10 @@
                 "yzhang.markdown-all-in-one",
                 "bierner.markdown-checkbox",
                 "DavidAnson.vscode-markdownlint",
+                // // terminals manager
+                // "fabiospampinato.vscode-terminals",
                 // jinja
                 "samuelcolvin.jinjahtml",
-                // terminals manager
-                "fabiospampinato.vscode-terminals",
                 // ContainerLab
                 "srl-labs.vscode-containerlab",
                 // various tools
