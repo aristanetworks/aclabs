@@ -7,7 +7,6 @@ This guide is intended for individuals looking to familiarize themselves with th
 - :octicons-tasklist-16: [Pre-Requisites](#pre-requisites)
 - :octicons-rocket-16: [Start the Lab](#starting-the-lab)
 - :material-cursor-default-click: [Interact with the Lab](#interacting-with-the-lab)
-- :fontawesome-regular-circle-stop: [Stop the Lab](#stopping-the-lab)
 - :fontawesome-regular-circle-stop: [Tips and Troubleshooting](#tips-and-troubleshooting)
 
 </div>
@@ -37,19 +36,19 @@ The tabs below illustrate the steps needed to locate and copy the token:
 
 === "Login"
     <figure markdown>
-    ![Arista Login](assets/img/aclabs-quickstart-aristalogin.png "Arista Login"){ width=700px }
+    ![Arista Login](assets/img/aclabs-quickstart-aristalogin.png "Arista Login"){ width=500px }
     <figcaption>Arista - Login</figcaption>
     </figure>
 
 === "My Profile"
     <figure markdown>
-    ![Arista My Profile](assets/img/aclabs-quickstart-arista-myprofile.png "My Profile"){ width=700px }
+    ![Arista My Profile](assets/img/aclabs-quickstart-arista-myprofile.png "My Profile"){ width=500px }
     <figcaption>Arista - My Profile</figcaption>
     </figure>
 
 === "User Token"
     <figure markdown>
-    ![Arista Token](assets/img/aclabs-quickstart-arista-portalaccess.png "User Token"){ width=700px }
+    ![Arista Token](assets/img/aclabs-quickstart-arista-portalaccess.png "User Token"){ width=500px }
     <figcaption>Arista - User Token (Blurred) </figcaption>
     </figure>
 
@@ -223,7 +222,6 @@ After selecting `Connect to SSH`, a new tab containing the SSH session to the se
     <figcaption>ContainerLab Extension - Log into device (Click to Zoom)</figcaption>
     </figure>
 
-
 ### Check Lab Status
 
 The status of a lab can be checked at any time in the [ContainerLab extension](https://containerlab.dev/manual/vsc-extension/) by right-clicking the lab topology name selecting `Inspect Lab`.
@@ -244,22 +242,78 @@ Once selected, a new tab displaying the status of the lab topology will be autom
     <figcaption>ContainerLab Extension - Lab Status (Click to Zoom)</figcaption>
     </figure>
 
-### Display Lab Topology
-
-asdf
-
 ### Stop the Lab
 
-asdf
+A lab can be stopped at any time by right-clicking the lab topology within the [ContainerLab extension](https://containerlab.dev/manual/vsc-extension/) and selecting `Destroy`.
+
+Once the lab has been successfully stopped, a prompt will be shown in the Codespace indicating that it was successfully destroyed.
+
+=== "Stop Lab"
+
+    <figure markdown>
+    ![cLab Extension - Stop Lab](assets/img/clab-extension-6.png "cLab Extension - Stop Lab"){ width=400px }
+    <figcaption>ContainerLab Extension - Stop Lab (Click to Zoom)</figcaption>
+    </figure>
+
+=== "Success Message"
+
+    <figure markdown>
+    ![cLab Extension - Successfully Stopped](assets/img/clab-extension-7.png "cLab Extension - Successfully Stopped"){ width=500px }
+    <figcaption>ContainerLab Extension - Successfully Stopped (Click to Zoom)</figcaption>
+    </figure>
+
+??? question "What about the Codespace? :thinking:"
+    Stopping the lab via the [ContainerLab extension](https://containerlab.dev/manual/vsc-extension/) will stop the cLab topology.
+
+    It ***will not*** stop or destroy the Codespace itself.
+
+    There are two common methods for the Codespace itself to be stopped or deleted
+
+    <div class="annotate" markdown>
+
+    - Manually stop and/or delete the Codespace via you [GitHub Codespaces Dashboard](https://github.com/codespaces) (1)
+
+    </div>
+
+    1. <figure markdown>
+    ![Delete Codespace](assets/img/clab-extension-8.png "Delete Codespace"){ width=400px }
+    <figcaption>Delete Codespace (Click to Zoom)</figcaption>
+    </figure>
+
+    <div class="annotate" markdown>
+
+    - Wait for the `Default idle timeout` and `Default retention time` timers to expire in your [GitHub Codespaces Settings](https://github.com/settings/codespaces) (1)
+
+    </div>
+
+    3. <figure markdown>
+    ![Codespace Timers](assets/img/clab-extension-9.png "Codespace Timers"){ width=400px }
+    <figcaption>Codespace Timers (Click to Zoom)</figcaption>
+    </figure>
 
 ### Restart the Lab
 
-asdf
+If stopped, a lab topology can be started back up by right-clicking on the topology and selecting `Deploy` within the [ContainerLab VS Code Extension User Manual](https://containerlab.dev/manual/vsc-extension/).
 
-??? note "But wait...there's more!"
-    Additional features and functionality provided by the ContainerLab VS Code extension can be found in the [ContainerLab VS Code Extension User Manual](https://containerlab.dev/manual/vsc-extension/). :octicons-beaker-16:"
+If the intent is to restart a lab that is currently running, then select the `Redeploy` option.
 
-When you're finished with the lab, simply close the codespace by exiting the browser window. By default, a GitHub Codespace is stopped after 45 minutes of idleness and deleted after 30 days of inactivity.
+=== "Start a Stopped Topology"
+
+    <figure markdown>
+    ![cLab Extension - Start the Lab](assets/img/clab-extension-11.png "cLab Extension - Start the Lab"){ width=250px }
+    <figcaption>Start a Stopped Lab (Click to Zoom)</figcaption>
+    </figure>
+
+=== "Restart a Running Topology"
+
+    <figure markdown>
+    ![cLab Extension - Restart Lab](assets/img/clab-extension-12.png "cLab Extension - Restart Lab"){ width=250px }
+    <figcaption>Restart a Running Lab (Click to Zoom)</figcaption>
+    </figure>
+
+Additional features and functionality provided by the ContainerLab VS Code extension can be found in the [ContainerLab VS Code Extension User Manual](https://containerlab.dev/manual/vsc-extension/). :octicons-beaker-16:
+
+A list of all codespaces can be found in the [Codespaces section of GitHub](https://github.com/codespaces). From here, a codespace can be resumed, stopped, deleted, renamed, and more!
 
 ??? note "Conserve those hours! :timer:"
     The `Default idle timeout` and `Default retention period` values can be modified within [GitHub Codespaces Settings](https://github.com/settings/codespaces).
@@ -270,8 +324,6 @@ When you're finished with the lab, simply close the codespace by exiting the bro
 
      - **Default idle timeout**: `30 Minutes`
      - **Default retention period**: `1 Day`
-
-A list of all codespaces can be found in the [Codespaces section of GitHub](https://github.com/codespaces). From here, a codespace can be resumed, stopped, deleted, renamed, and more!
 
 ## Tips and Troubleshooting
 
@@ -288,6 +340,31 @@ Error: Error response from daemon: pull access denied for arista/ceos, repositor
 make: *** [Makefile:9: start] Error 1
 ```
 
+??? question "I don't see any error messsages, but my lab didn't start! :confused:"
+    If the `Codespace Creation Log` is not automatically opened, it can be accessed via the VS Code `Command Palette`:
+
+    - Open the Command Palette by using the key combination aligned to your OS
+
+       - :fontawesome-brands-windows: ++ctrl+shift+p++
+       - :simple-apple: ++cmd+shift+p++
+
+    <div class="annotate" markdown>
+
+    - Enter `View` into the Command Palette prompt (1)
+
+    </div>
+
+    1. <figure markdown>
+    ![View Creation Log](assets/img/clab-extension-10.png "View Creation Log"){ width=400px }
+    <figcaption>View Creation Log (Click to Zoom)</figcaption>
+    </figure>
+
+    - Select `Codespaces: View Creation Log`
+
+    This will open a full creation log including what errors may have been encountered during the Codespace creation process.
+
+    An expired or non-existent [Arista user token](https://www.arista.com/en/users/profile) will result in either an `Authentication Failed` when downloading cEOS-lab from arista.com or `docker login: denied`
+
 !!! success "Solution - Update ARTOKEN with new token :arrow_down:"
 
 When a token is created in a user's [arista.com profile](https://www.arista.com/en/users/profile), it is valid for one year.
@@ -298,7 +375,10 @@ Follow the steps below to generate a new token and update the `ARTOKEN` secret u
 
 - Choose `Regenerate Token`
 
-![Regenerate Token](assets/img/aclabs-quickstart-regen-token.png){ width=600px }
+<figure markdown>
+![Regenerate Token](assets/img/aclabs-quickstart-regen-token.png "Regenerate Token"){ width=500px }
+<figcaption>Regenerate Token (Click to Zoom)</figcaption>
+</figure>
 
 - Copy the token
 
@@ -312,7 +392,10 @@ Follow the steps below to generate a new token and update the `ARTOKEN` secret u
 
     This value is created automatically the first time an acLabs lab is launched, but in rare situations this auto-creation may not occur.
 
-![Update ARTOKEN](assets/img/aclabs-quickstart-update-artoken.png){ width=600px }
+<figure markdown>
+![Update Token in GitHub](assets/img/aclabs-quickstart-update-artoken.png "Update Token in GitHub"){ width=500px }
+<figcaption>Update Arista Token in GitHub Codespace Settings (Click to Zoom)</figcaption>
+</figure>
 
 Once updated, launch a new acLab(1) and get back to labbing! :lab_coat:
 { .annotate }
@@ -335,11 +418,12 @@ A general recommendation for these values is provided below:
 - **Default idle timeout**: `30 Minutes`
 - **Default retention period**: `1 Day`
 
-!!! tip "How to resume an acLab :arrow_down:"
-
 If the `Default idle timeout` has been reached, then a user may find themselves presented with the following message when re-launching the lab:
 
-![Resume Codespace Prompt](assets/img/aclabs-quickstart-resume-codespace-generic.png){ width=600px }
+<figure markdown>
+![Resume the Codespace](assets/img/aclabs-quickstart-resume-codespace-generic.png "Resume the Codespace"){ width=500px }
+<figcaption>Resume the Codespace (Click to Zoom)</figcaption>
+</figure>
 
 Multiple choices exist at the above prompt:
 
@@ -361,13 +445,19 @@ Once the Codespace is ready(1) the lab can be resumed via the ContainerLab exten
 
 1. If the terminal is open and responsive, the Codespace is back up and running!
 
-![Redeploy lab](assets/img/aclabs-quickstart-redeploy-lab.png)
+<figure markdown>
+![cLab Extension - Redeploy Lab](assets/img/aclabs-quickstart-redeploy-lab.png "cLab Extension - Redeploy Lab"){ width=500px }
+<figcaption>Redeploy the Lab Topology (Click to Zoom)</figcaption>
+</figure>
 
 After selecting `Redeploy`, the terminal will present a message indicating that ContainerLab is in the process of redeploying the lab.
 
 If desired, select `View Logs` to monitor the process of the lab as it is started back up.
 
-![Redeploy logs](assets/img/aclabs-quickstart-redeploy-clab-logs.png)
+<figure markdown>
+![cLab Extension - Redeploy Logs](assets/img/aclabs-quickstart-redeploy-clab-logs.png "cLab Extension - Redeploy Logs"){ width=650px }
+<figcaption>Redeploy Topology Logs (Click to Zoom)</figcaption>
+</figure>
 
 When complete, a message indicating success will be presented and it's time to jump back into the lab! :partying_face:
 
