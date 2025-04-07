@@ -1,20 +1,13 @@
 # Arista Community Labs
 
-Welcome to Arista Community Labs!
-
-This site serves as a repository of labs built by the Arista community, for the Arista community.
-
 ???+ info "🚧  Pardon our dust 🏗️"
-    The Arista Community Labs repository is under active development with new labs and features coming soon!
-
-    Labs that currently reside in the following locations are being migrated to Arista Community Labs:
-
-    - [One-Click Demos](https://arista-netdevops-community.github.io/one-click-se-demos/)
-    - [AVD with cEOS-Lab](https://arista-netdevops-community.github.io/avd-cEOS-Lab/)
+    The Arista Community Labs repository is under active development with new labs, features, and functionality coming soon!
 
 ## What is a Community Lab?
 
-Whether refreshing one's skills, performing testing, or learning new technologies, protocols, features, and tools, building and maintaining the lab environments necessary to support these endeavors can be a daunting task fraught with software dependencies and caveats.
+Labs built by the Arista community, for the Arista community!
+
+Whether refreshing one's skills, performing testing, or learning new technologies, protocols, features, and tools, building and maintaining the lab environments necessary to support these endeavors can be fraught with software dependencies and caveats.
 
 Arista Community Labs reduce the burden of this task, with each lab environment built with three primary objectives:
 
