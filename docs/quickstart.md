@@ -5,8 +5,8 @@ This guide is intended for individuals looking to familiarize themselves with th
 <div class="grid cards" markdown>
 
 - :octicons-tasklist-16: [Pre-Requisites](#pre-requisites)
-- :octicons-rocket-16: [Start the Lab](#starting-the-lab)
-- :material-cursor-default-click: [Interact with the Lab](#interacting-with-the-lab)
+- :octicons-rocket-16: [Starting the Lab](#starting-the-lab)
+- :material-cursor-default-click: [Interacting with the Lab](#interacting-with-the-lab)
 - :fontawesome-regular-circle-stop: [Tips and Troubleshooting](#tips-and-troubleshooting)
 
 </div>

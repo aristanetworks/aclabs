@@ -14,11 +14,7 @@ It has been built and validated with:
   - Memory: **16 GB**
   - Storage: **32 GB**
 
-Last reviewed: April 4th, 2025
-
-## Topology
-
-<img src="images/eos-tips-topo.png" width="1080"/>
+*Last reviewed: April 7th, 2025*
 
 ## Credentials
 
@@ -26,9 +22,13 @@ Username: `admin`
 
 Password: `admin`
 
+## Topology
+
+<img src="images/eos-tips-topo.png" width="1080"/>
+
 ## Accessing the Lab
 
-Accessing the nodes in the topology is accomplished via the ContainerLab VSCode Extension.
+The [Arista Community Labs QuickStart Guide](https://aclabs.arista.com/quickstart/)
 
 Begin by opening the extension by clicking the icon found on the lefthand side of the Codespace:
 
