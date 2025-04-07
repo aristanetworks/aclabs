@@ -1,5 +1,8 @@
 # Arista Community Labs
 
+???+ info "🚧  Pardon our dust 🏗️"
+    The Arista Community Labs repository is under active development with new labs, features, and functionality.
+
 ## What is a Community Lab?
 
 Labs built by the Arista community, for the Arista community!

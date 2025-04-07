@@ -9,6 +9,10 @@ Arista Community Labs enables readers to quickly instantiate a fully configured 
 
      A verified email address in a valid corporate email domain is required for temporary access (no Gmail, Yahoo, etc.)
 
+## EOS Tips for Network Operators
+
+A sandbox lab companion to the [EOS Tips for Operators](https://tech-library.arista.com/eos/eos_ops/) guide on the [Tech Library](https://arista.com/en/tech-library).
+
 ## EVPN/VXLAN Deployment Guide
 
 Labs that align with the EVPN Domains found in Arista's [EVPN/VXLAN Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/) can be found below:

@@ -365,8 +365,6 @@ make: *** [Makefile:9: start] Error 1
 
     An expired or non-existent [Arista user token](https://www.arista.com/en/users/profile) will result in either an `Authentication Failed` when downloading cEOS-lab from arista.com or `docker login: denied`
 
-!!! success "Solution - Update ARTOKEN with new token :arrow_down:"
-
 When a token is created in a user's [arista.com profile](https://www.arista.com/en/users/profile), it is valid for one year.
 
 Follow the steps below to generate a new token and update the `ARTOKEN` secret used by acLabs Codespaces.
