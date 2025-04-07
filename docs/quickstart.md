@@ -29,7 +29,7 @@ Before launching an Arista Community Lab, the following pre-requisites must be m
 
     The email address used for the account must be associated with a corporate email domain (no Gmail, Yahoo, etc.).
 
-2. For those that have never used Codespaces before, no worries! There is a quick primer on Codespaces included below!
+2. For those that have never used Codespaces before, no worries! There is a quick primer on Codespaces included below.
 
 We can find the user token by logging into [arista.com](https://www.arista.com) and selecting [My Profile](https://www.arista.com/en/users/profile).
 
@@ -115,8 +115,8 @@ Some Arista Community Labs make use of larger machine types, such as the :fontaw
     ```yaml
     Hello - Can the 8-core and 16-core codespace machine types please be enabled for my account?
     The default 2-core and 4-core machines lack the necessary resources for my use cases.
-    If additional information is needed, please let me know.
-    Thanks!
+
+    Thank you!
     ```
 
     Once completed, select **Create a Ticket**
@@ -157,22 +157,22 @@ Once the token has been entered, and `Create new Codespace` has been selected, a
 
 In the newly launched Codespace, a tab is opened displaying an overview of the lab.
 
-The `Post Deploy Script` can be seen running in the terminal, and will take between five and nine minutes to complete depending on the size of the lab.
+The `Post Deploy Script` can be seen running in the terminal.
 
 <figure markdown>
-![Post Deployment Script](assets/img/aclabs-quickstart-postdeploy.png "Post Deploy"){ width=800px }
+![Post Deployment Script](assets/img/aclabs-quickstart-postdeploy.png "Post Deploy"){ width=500px }
 <figcaption>Post Deploy Script Running (Click to Zoom)</figcaption>
 </figure>
 
 !!! note "Grab a coffee! :coffee:"
-    The post deployment script can take a few minutes to run. Grab a coffee while the lab environment is being created.
+    Depending on the size of the lab, the post deployment script will take between five and ten minutes to complete.
 
 Once the post deployment script has completed, the terminal prompt will change to the GitHub username followed by the name of the lab.
 
-In the screenshot below, the GitHub username is `MitchV85` and the lab is `techlib-vxlan-domain-a`.
+In the screenshot below, the GitHub username is `mitchv85` and the lab is `techlib-eos-tips`.
 
 <figure markdown>
-![Post Deployment Script](assets/img/aclabs-quickstart-postdeploy-complete.png "Post Deploy"){ width=800px }
+![Post Deployment Script](assets/img/aclabs-quickstart-postdeploy-complete.png "Post Deploy"){ width=500px }
 <figcaption>Post Deploy Script Complete (Click to Zoom)</figcaption>
 </figure>
 
@@ -183,75 +183,85 @@ make inspect
 ```
 
 <figure markdown>
-![Post Deployment Script](assets/img/aclabs-quickstart-make-inspect.png "Post Deploy"){ width=800px }
+![Post Deployment Script](assets/img/aclabs-quickstart-make-inspect.png "Post Deploy"){ width=600px }
 <figcaption>Lab Status Output (Click to Zoom)</figcaption>
 </figure>
 
+??? danger "Lab didn't start? :bug:"
+    If the lab did not start up correctly, please check out the [Tips and Troubleshooting](#tips-and-troubleshooting) section of this guide.
+
+    If this section does not contain a solution, please [open an issue](https://github.com/aristanetworks/aclabs/issues) on the [Arista Community Labs repository](https://github.com/aristanetworks/aclabs).
+
 ## Interacting with the Lab
 
-Once the lab is up and running, we can interact with the topology nodes.
+### Accessing Lab Nodes
 
-Both SSH and API access to the nodes are available via the Codespace. Lab environments are pre-packaged with tools like Python and the Arista [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/) Ansible Galaxy collections.
+Once the lab is up and running, open the [ContainerLab extension](https://containerlab.dev/manual/vsc-extension/) by clicking it's icon within the Codespace.
 
-Labs that leverage tools such as AVD for configuration, documentation, and testing will provide the instructions in their lab guide.
+Once in the ContainerLab extension, establish SSH connectivity to any node by expanding the lab topology, right-clicking on the node, and selecting `Connect to SSH`.
 
-Accessing the environment via SSH is detailed below:
+After selecting `Connect to SSH`, a new tab containing the SSH session to the selected node will be opened in the terminal window.
 
-### SSH
-
-??? tip "More real estate for those SSH sessions 🏠"
-    Increase the size of the terminal by selecting the `Maximize Panel Size` button to the right of the terminal:
+=== "ContainerLab Extension"
 
     <figure markdown>
-    ![Post Deployment Script](assets/img/aclabs-quickstart-maximize-panel.png "Post Deploy"){ width=800px }
-    <figcaption>Maximize the Terminal (Click to Zoom)</figcaption>
+    ![ContainerLab Extension](assets/img/clab-extension-1.png "ContainerLab Extension"){ width=250px }
+    <figcaption>ContainerLab Extension Icon (Click to Zoom)</figcaption>
     </figure>
 
-A list of `Lab Hosts` that are accessible via `SSH` from within the codespace can be viewed at any time from the terminal by entering the following command:
+=== "Connect to SSH"
 
-```bash
-make inspect
-```
+    <figure markdown>
+    ![cLab Connect to SSH](assets/img/clab-extension-2.png "cLab Connect to SSH"){ width=400px }
+    <figcaption>ContainerLab Extension - Connect to SSH (Click to Zoom)</figcaption>
+    </figure>
 
-To access a node, use the `ssh` command followed by `admin@hostname` as shown in the example below
+=== "SSH Tab in Terminal"
 
-```bash
-ssh admin@A-SPINE1
-```
+    <figure markdown>
+    ![cLab Extension - Log into device](assets/img/clab-extension-3.png "cLab Extension - Log into device"){ width=600px }
+    <figcaption>ContainerLab Extension - Log into device (Click to Zoom)</figcaption>
+    </figure>
 
-??? question "What's the password? :lock:"
-    The credentials used to access nodes within an Arista Community Lab environment will always be listed in the lab's documentation.
 
-??? tip "Use tabs 📑"
-    Create a new tab for an SSH session by selecting `New Terminal` to the right of the terminal.
+### Check Lab Status
 
-    Alternatively, the following keyboard shortcut can be used to open a new tab on both Windows and macOS: ++ctrl+shift+single-quote++
+The status of a lab can be checked at any time in the [ContainerLab extension](https://containerlab.dev/manual/vsc-extension/) by right-clicking the lab topology name selecting `Inspect Lab`.
 
-    Once opened, the new terminal tab can be renamed by right-clicking on the tab and selecting `Rename`
+Once selected, a new tab displaying the status of the lab topology will be automatically opened.
 
-    === "New Terminal"
-        <figure markdown>
-        ![Post Deployment Script](assets/img/aclabs-quickstart-new-tab.png "Post Deploy"){ width=800px }
-        <figcaption>New Terminal Tab (Click to Zoom)</figcaption>
-        </figure>
+=== "Inspect Lab"
 
-    === "Rename the Tab"
-        <figure markdown>
-        ![Post Deployment Script](assets/img/aclabs-quickstart-rename-tab.png "Post Deploy"){ width=800px }
-        <figcaption>Rename the Terminal Tab (Click to Zoom)</figcaption>
-        </figure>
+    <figure markdown>
+    ![cLab Extension - Inspect Lab](assets/img/clab-extension-4.png "cLab Extension - Inspect Lab"){ width=400px }
+    <figcaption>ContainerLab Extension - Inspect Lab (Click to Zoom)</figcaption>
+    </figure>
 
-    === "Renamed Tabs 🎉"
-        <figure markdown>
-        ![Post Deployment Script](assets/img/aclabs-quickstart-renamed-tabs.png "Post Deploy"){ width=800px }
-        <figcaption>Rename the Terminal Tab (Click to Zoom)</figcaption>
-        </figure>
+=== "Lab Status Output"
 
-## Stopping the Lab
+    <figure markdown>
+    ![cLab Extension - Lab Status](assets/img/clab-extension-5.png "cLab Extension - Lab Status"){ width=600px }
+    <figcaption>ContainerLab Extension - Lab Status (Click to Zoom)</figcaption>
+    </figure>
+
+### Display Lab Topology
+
+asdf
+
+### Stop the Lab
+
+asdf
+
+### Restart the Lab
+
+asdf
+
+??? note "But wait...there's more!"
+    Additional features and functionality provided by the ContainerLab VS Code extension can be found in the [ContainerLab VS Code Extension User Manual](https://containerlab.dev/manual/vsc-extension/). :octicons-beaker-16:"
 
 When you're finished with the lab, simply close the codespace by exiting the browser window. By default, a GitHub Codespace is stopped after 45 minutes of idleness and deleted after 30 days of inactivity.
 
-??? tip "Conserve those hours and save some money! 💵💷💶💴"
+??? note "Conserve those hours! :timer:"
     The `Default idle timeout` and `Default retention period` values can be modified within [GitHub Codespaces Settings](https://github.com/settings/codespaces).
 
     These parameters can be changed at any time, and should be defined with values that make the most sense for your usage patterns.

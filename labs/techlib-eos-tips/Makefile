@@ -15,6 +15,3 @@ stop: ## Destroy the lab
 .PHONY: inspect
 inspect: ## Inspect the lab
 	@sudo containerlab inspect --topo $(CURRENT_DIR)/clab/topology.clab.yml
-	@echo ""
-	@echo "You can check the lab status, hostnames and management addresses above."
-	@echo "To connect to a lab device use \`ssh arista@<hostname>\` and password \`arista\`."

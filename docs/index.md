@@ -1,10 +1,8 @@
 # Arista Community Labs
 
-Welcome to Arista Community Labs!
-
-This site serves as a repository of labs built by the Arista community, for the Arista community.
-
 ## What is a Community Lab?
+
+Labs built by the Arista community, for the Arista community!
 
 Whether refreshing one's skills, performing testing, or learning new technologies, protocols, features, and tools, building and maintaining the lab environments necessary to support these endeavors can be fraught with software dependencies and caveats.
 
