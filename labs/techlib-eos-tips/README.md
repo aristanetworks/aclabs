@@ -26,24 +26,13 @@ Password: `admin`
 
 <img src="images/eos-tips-topo.png" width="1080"/>
 
-## Accessing the Lab
+## Navigating the Lab
 
-The [Arista Community Labs QuickStart Guide](https://aclabs.arista.com/quickstart/)
+Please refer to the [Arista Community Labs QuickStart Guide](https://aclabs.arista.com/quickstart/) for a step-by-step guide on how to navigate the lab.
 
-Begin by opening the extension by clicking the icon found on the lefthand side of the Codespace:
+Quick Links:
 
-![ContainerLab Extension](images/cLabextension.png)
-
-Once opened, expand the topology by using the dropdown button next to the topology name:
-
-![ContainerLab Extension Dropdown](images/clabextension2.png)
-
-Next, right-click on any node in the topology and select `Connect to SSH`
-
-![ContainerLab Extension Connect SSH](images/clabextension3.png)
-
-A new terminal tab will be opened, with a prompt requesting the password for the node. Enter `admin` to connect:
-
-![ContainerLab Extension Connect SSH](images/clabextension4.png)
+- [Interacting with the Lab](https://aclabs.arista.com/quickstart/#interacting-with-the-lab)
+- [Tips and Troubleshooting](https://aclabs.arista.com/quickstart/#tips-and-troubleshooting)
 
 Happy Labbing!
