@@ -172,13 +172,13 @@ topology:
 
     BB1:
       kind: ceos
-      mgmt-ipv4: 172.100.100.113
+      mgmt-ipv4: 172.100.100.111
       startup-config: init-configs/BB1.cfg
       group: 'superspine'
 
     BB2:
       kind: ceos
-      mgmt-ipv4: 172.100.100.115
+      mgmt-ipv4: 172.100.100.112
       startup-config: init-configs/BB2.cfg
       group: 'superspine'
 
