@@ -45,22 +45,22 @@ topology:
 
     D-SPINE1:
       kind: ceos
-      mgmt-ipv4: 172.100.100.140
+      mgmt-ipv4: 172.100.100.101
       startup-config: init-configs/D-SPINE1.cfg
 
     D-SPINE2:
       kind: ceos
-      mgmt-ipv4: 172.100.100.141
+      mgmt-ipv4: 172.100.100.102
       startup-config: init-configs/D-SPINE2.cfg
 
     D-SPINE3:
       kind: ceos
-      mgmt-ipv4: 172.100.100.142
+      mgmt-ipv4: 172.100.100.103
       startup-config: init-configs/D-SPINE3.cfg
 
     D-SPINE4:
       kind: ceos
-      mgmt-ipv4: 172.100.100.143
+      mgmt-ipv4: 172.100.100.104
       startup-config: init-configs/D-SPINE4.cfg
 
 #########################
@@ -69,42 +69,42 @@ topology:
 
     D-LEAF1:
       kind: ceos
-      mgmt-ipv4: 172.100.100.144
+      mgmt-ipv4: 172.100.100.105
       startup-config: init-configs/D-LEAF1.cfg
 
     D-LEAF2:
       kind: ceos
-      mgmt-ipv4: 172.100.100.145
+      mgmt-ipv4: 172.100.100.106
       startup-config: init-configs/D-LEAF2.cfg
 
     D-LEAF3:
       kind: ceos
-      mgmt-ipv4: 172.100.100.146
+      mgmt-ipv4: 172.100.100.107
       startup-config: init-configs/D-LEAF3.cfg
 
     D-LEAF4:
       kind: ceos
-      mgmt-ipv4: 172.100.100.147
+      mgmt-ipv4: 172.100.100.108
       startup-config: init-configs/D-LEAF4.cfg
 
     D-LEAF5:
       kind: ceos
-      mgmt-ipv4: 172.100.100.148
+      mgmt-ipv4: 172.100.100.109
       startup-config: init-configs/D-LEAF5.cfg
 
     D-LEAF6:
       kind: ceos
-      mgmt-ipv4: 172.100.100.149
+      mgmt-ipv4: 172.100.100.110
       startup-config: init-configs/D-LEAF6.cfg
 
     D-LEAF7:
       kind: ceos
-      mgmt-ipv4: 172.100.100.150
+      mgmt-ipv4: 172.100.100.111
       startup-config: init-configs/D-LEAF7.cfg
 
     D-LEAF8:
       kind: ceos
-      mgmt-ipv4: 172.100.100.151
+      mgmt-ipv4: 172.100.100.112
       startup-config: init-configs/D-LEAF8.cfg
 
 #########################
@@ -176,6 +176,22 @@ topology:
         IPV6: 2001:db8:70:70::103/64
       # exec:
       #   - bash /usr/local/bin/hostnetconfig.sh -b -i4 10.70.70.103/24 -i6 2001:db8:70:70::103/64 -g 10.70.70.1
+
+#########################
+# Backbone              #
+#########################
+
+    BB1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.113
+      startup-config: init-configs/BB1.cfg
+      group: 'superspine'
+
+    BB2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.114
+      startup-config: init-configs/BB2.cfg
+      group: 'superspine'
 
   links:
 ######################
@@ -255,3 +271,10 @@ topology:
     - endpoints: ["HostD5:eth1", "D-LEAF4:et7"]
     - endpoints: ["HostD6:eth1", "D-LEAF5:et7"]
     - endpoints: ["HostD6:eth2", "D-LEAF6:et7"]
+########################
+# Backbone             #
+########################
+    - endpoints: ["BB1:et7", "D-LEAF7:et7"]
+    - endpoints: ["BB1:et8", "D-LEAF8:et7"]
+    - endpoints: ["BB2:et7", "D-LEAF7:et8"]
+    - endpoints: ["BB2:et8", "D-LEAF8:et8"]

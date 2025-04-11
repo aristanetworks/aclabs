@@ -283,3 +283,8 @@ avd_inventory/config_backup/
 
 # ignore mkdocs serve privacy cache
 .cache
+
+# ContainerLab
+
+clab-*/
+.clab*.bak
