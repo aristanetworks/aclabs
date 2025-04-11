@@ -45,12 +45,12 @@ topology:
 
     C-SPINE1:
       kind: ceos
-      mgmt-ipv4: 172.100.100.127
+      mgmt-ipv4: 172.100.100.101
       startup-config: init-configs/C-SPINE1.cfg
 
     C-SPINE2:
       kind: ceos
-      mgmt-ipv4: 172.100.100.128
+      mgmt-ipv4: 172.100.100.102
       startup-config: init-configs/C-SPINE2.cfg
 
 #########################
@@ -59,43 +59,43 @@ topology:
 
     C-LEAF1:
       kind: ceos
-      mgmt-ipv4: 172.100.100.129
+      mgmt-ipv4: 172.100.100.103
       startup-config: init-configs/C-LEAF1.cfg
 
     C-LEAF2:
       kind: ceos
-      mgmt-ipv4: 172.100.100.130
+      mgmt-ipv4: 172.100.100.104
       startup-config: init-configs/C-LEAF2.cfg
 
     C-LEAF3:
       kind: ceos
-      mgmt-ipv4: 172.100.100.131
+      mgmt-ipv4: 172.100.100.105
       startup-config: init-configs/C-LEAF3.cfg
 
     C-LEAF4:
       kind: ceos
-      mgmt-ipv4: 172.100.100.132
+      mgmt-ipv4: 172.100.100.106
       startup-config: init-configs/C-LEAF4.cfg
 
     C-LEAF5:
       kind: ceos
       group: leaf
-      mgmt-ipv4: 172.100.100.133
+      mgmt-ipv4: 172.100.100.107
       startup-config: init-configs/C-LEAF5.cfg
 
     C-LEAF6:
       kind: ceos
-      mgmt-ipv4: 172.100.100.134
+      mgmt-ipv4: 172.100.100.108
       startup-config: init-configs/C-LEAF6.cfg
 
     C-LEAF7:
       kind: ceos
-      mgmt-ipv4: 172.100.100.135
+      mgmt-ipv4: 172.100.100.109
       startup-config: init-configs/C-LEAF7.cfg
 
     C-LEAF8:
       kind: ceos
-      mgmt-ipv4: 172.100.100.136
+      mgmt-ipv4: 172.100.100.110
       startup-config: init-configs/C-LEAF8.cfg
 
 #########################
@@ -105,7 +105,7 @@ topology:
     # HostC1 is connected to LEAF1 eth7 and LEAF2 eth7
     HostC1:
       kind: linux
-      mgmt-ipv4: 172.100.100.214
+      mgmt-ipv4: 172.100.100.201
       env:
         TMODE: lacp
         IPV4: 10.10.10.104/24
@@ -116,7 +116,7 @@ topology:
     # HostC2 is connected to LEAF3 eth7
     HostC2:
       kind: linux
-      mgmt-ipv4: 172.100.100.215
+      mgmt-ipv4: 172.100.100.202
       env:
         IPV4: 10.20.20.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -126,7 +126,7 @@ topology:
     # HostC3 is connected to LEAF3 eth8 and LEAF4 eth8
     HostC3:
       kind: linux
-      mgmt-ipv4: 172.100.100.216
+      mgmt-ipv4: 172.100.100.203
       env:
         TMODE: lacp
         IPV4: 10.60.60.102/24
@@ -137,7 +137,7 @@ topology:
     # HostC4 is connected to LEAF4 eth7
     HostC4:
       kind: linux
-      mgmt-ipv4: 172.100.100.217
+      mgmt-ipv4: 172.100.100.204
       env:
         IPV4: 10.50.50.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -147,7 +147,7 @@ topology:
     # HostC5 is connected to LEAF5 eth7 and LEAF6 eth7
     HostC5:
       kind: linux
-      mgmt-ipv4: 172.100.100.218
+      mgmt-ipv4: 172.100.100.205
       env:
         TMODE: lacp
         IPV4: 10.20.20.103/24
@@ -158,13 +158,29 @@ topology:
     # HostC6 is connected to LEAF5 eth8 and LEAF6 eth8
     HostC6:
       kind: linux
-      mgmt-ipv4: 172.100.100.219
+      mgmt-ipv4: 172.100.100.206
       env:
         TMODE: lacp
         IPV4: 10.60.60.103/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.60.60.1
         IPV6: 2001:db8:60:60::103/64
+
+#########################
+# Backbone              #
+#########################
+
+    BB1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.113
+      startup-config: init-configs/BB1.cfg
+      group: 'superspine'
+
+    BB2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.115
+      startup-config: init-configs/BB2.cfg
+      group: 'superspine'
 
   links:
 ######################
@@ -222,3 +238,10 @@ topology:
     - endpoints: ["HostC5:eth2", "C-LEAF6:et7"]
     - endpoints: ["HostC6:eth1", "C-LEAF5:et8"]
     - endpoints: ["HostC6:eth2", "C-LEAF6:et8"]
+########################
+# Backbone             #
+########################
+    - endpoints: ["BB1:et5", "C-LEAF7:et7"]
+    - endpoints: ["BB1:et6", "C-LEAF8:et7"]
+    - endpoints: ["BB2:et5", "C-LEAF7:et8"]
+    - endpoints: ["BB2:et6", "C-LEAF8:et8"]
