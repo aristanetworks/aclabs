@@ -47,21 +47,29 @@ topology:
     B-SPINE1:
       kind: ceos
       mgmt-ipv4: 172.100.100.101
+      binds:
+        - sn/b-spine1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE1.cfg
 
     B-SPINE2:
       kind: ceos
       mgmt-ipv4: 172.100.100.102
+      binds:
+        - sn/b-spine2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE2.cfg
 
     B-SPINE3:
       kind: ceos
       mgmt-ipv4: 172.100.100.103
+      binds:
+        - sn/b-spine3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE3.cfg
 
     B-SPINE4:
       kind: ceos
       mgmt-ipv4: 172.100.100.104
+      binds:
+        - sn/b-spine4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE4.cfg
 
 #########################
@@ -71,50 +79,67 @@ topology:
     B-LEAF1:
       kind: ceos
       mgmt-ipv4: 172.100.100.105
+      binds:
+        - sn/b-leaf1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF1.cfg
 
     B-LEAF2:
       kind: ceos
       mgmt-ipv4: 172.100.100.106
+      binds:
+        - sn/b-leaf2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF2.cfg
 
     B-LEAF3:
       kind: ceos
       mgmt-ipv4: 172.100.100.107
+      binds:
+        - sn/b-leaf3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF3.cfg
 
     B-LEAF4:
       kind: ceos
       mgmt-ipv4: 172.100.100.108
+      binds:
+        - sn/b-leaf4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF4.cfg
 
     B-LEAF5:
       kind: ceos
-      mgmt-ipv4: 172.100.100.109
+      binds:
+        - sn/b-leaf5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF5.cfg
 
     B-LEAF6:
       kind: ceos
       mgmt-ipv4: 172.100.100.110
+      binds:
+        - sn/b-leaf6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF6.cfg
 
     B-LEAF7:
       kind: ceos
       mgmt-ipv4: 172.100.100.111
+      binds:
+        - sn/b-leaf7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF7.cfg
 
     B-LEAF8:
       kind: ceos
       mgmt-ipv4: 172.100.100.112
+      binds:
+        - sn/b-leaf8.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF8.cfg
 
     B-SW1:
       kind: ceos
       mgmt-ipv4: 172.100.100.113
+      binds:
+        - sn/b-sw1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SW1.cfg
 
 #########################
-# DC "B" HostC6          #
+# DC "B" Hosts          #
 #########################
 
     # HostB1 is connected to LEAF1 eth7 and LEAF2 eth7
@@ -197,12 +222,16 @@ topology:
     BB1:
       kind: ceos
       mgmt-ipv4: 172.100.100.114
+      binds:
+        - sn/bb1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB1.cfg
       group: 'superspine'
 
     BB2:
       kind: ceos
       mgmt-ipv4: 172.100.100.115
+      binds:
+        - sn/bb2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB2.cfg
       group: 'superspine'
 
