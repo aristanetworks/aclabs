@@ -47,24 +47,32 @@ topology:
     A-SPINE1:
       kind: ceos
       mgmt-ipv4: 172.100.100.101
+      binds:
+        - sn/a-spine1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE1.cfg
       group: 'spine'
 
     A-SPINE2:
       kind: ceos
       mgmt-ipv4: 172.100.100.102
+      binds:
+        - sn/a-spine2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE2.cfg
       group: 'spine'
 
     A-SPINE3:
       kind: ceos
       mgmt-ipv4: 172.100.100.103
+      binds:
+        - sn/a-spine3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE3.cfg
       group: 'spine'
 
     A-SPINE4:
       kind: ceos
       mgmt-ipv4: 172.100.100.104
+      binds:
+        - sn/a-spine4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE4.cfg
       group: 'spine'
 
@@ -75,6 +83,8 @@ topology:
     A-LEAF1:
       kind: ceos
       mgmt-ipv4: 172.100.100.105
+      binds:
+        - sn/a-leaf1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF1.cfg
       startup-delay: 30
       group: 'leaf'
@@ -82,6 +92,8 @@ topology:
     A-LEAF2:
       kind: ceos
       mgmt-ipv4: 172.100.100.106
+      binds:
+        - sn/a-leaf2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF2.cfg
       startup-delay: 30
       group: 'leaf'
@@ -89,6 +101,8 @@ topology:
     A-LEAF3:
       kind: ceos
       mgmt-ipv4: 172.100.100.107
+      binds:
+        - sn/a-leaf3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF3.cfg
       startup-delay: 30
       group: 'leaf'
@@ -96,6 +110,8 @@ topology:
     A-LEAF4:
       kind: ceos
       mgmt-ipv4: 172.100.100.108
+      binds:
+        - sn/a-leaf4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF4.cfg
       startup-delay: 30
       group: 'leaf'
@@ -103,6 +119,8 @@ topology:
     A-LEAF5:
       kind: ceos
       mgmt-ipv4: 172.100.100.109
+      binds:
+        - sn/a-leaf5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF5.cfg
       startup-delay: 30
       group: 'leaf'
@@ -110,6 +128,8 @@ topology:
     A-LEAF6:
       kind: ceos
       mgmt-ipv4: 172.100.100.110
+      binds:
+        - sn/a-leaf6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF6.cfg
       startup-delay: 30
       group: 'leaf'
@@ -117,6 +137,8 @@ topology:
     A-LEAF7:
       kind: ceos
       mgmt-ipv4: 172.100.100.111
+      binds:
+        - sn/a-leaf7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF7.cfg
       startup-delay: 30
       group: 'dc-gw'
@@ -124,6 +146,8 @@ topology:
     A-LEAF8:
       kind: ceos
       mgmt-ipv4: 172.100.100.112
+      binds:
+        - sn/a-leaf8.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF8.cfg
       startup-delay: 30
       group: 'dc-gw'
@@ -215,12 +239,16 @@ topology:
     BB1:
       kind: ceos
       mgmt-ipv4: 172.100.100.113
+      binds:
+        - sn/bb1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB1.cfg
       group: 'superspine'
 
     BB2:
       kind: ceos
       mgmt-ipv4: 172.100.100.114
+      binds:
+        - sn/bb2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB2.cfg
       group: 'superspine'
 
