@@ -1,7 +1,7 @@
 # Arista's Tech Library EVPN/VXLAN Domain C Lab
 
 > [!IMPORTANT]
-> The average deployment time for this lab is ~10 minutes. Please wait until the `postCreateCommand` process has finished before interacting with the lab.
+> The average deployment time for this lab is ~8 minutes. Please wait until the `postCreateCommand` process has finished before interacting with the lab.
 
 ## Overview
 
