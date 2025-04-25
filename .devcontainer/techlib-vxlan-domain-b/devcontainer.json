@@ -20,5 +20,17 @@
     },
     "postCreateCommand": "postCreate.sh; make start; make inspect",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/techlib-vxlan-domain-b"
+    "workspaceFolder": "/techlib-vxlan-domain-b",
+    "containerUser": "avd",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "containerlab.showWelcomePage": false,
+                "workbench.startupEditor": "readme",
+                "workbench.editorAssociations": {
+                    "*.md": "vscode.markdown.preview.editor"
+                }
+            }
+        }
+    }
 }

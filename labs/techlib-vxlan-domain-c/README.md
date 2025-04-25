@@ -1,23 +1,35 @@
-# TechLibrary EVPN Domain-C Lab
+# Arista's Tech Library EVPN/VXLAN Domain C Lab
 
-This lab is tested for:  
+> [!IMPORTANT]
+> The average deployment time for this lab is ~8 minutes. Please wait until the `postCreateCommand` process has finished before interacting with the lab.
 
-  cEOS-lab version: 4.32.2.1F  
-  Codespace Container Size  
-    CPUs: 16  
-    memory: 64 GB  
-    storage: 128 GB  
+## Overview
 
-Last reviewed: 02/10/2024
+This lab has been built and validated with:
 
-To inspect the lab details use `make inspect` shortcut. This will list the host names and management addresses for all lab devices.
-To connect to any device use:
+- cEOS-lab: **4.34.0F**
+- AVD: **5.2.3**
+- ContainerLab: **0.67.0**
+- Codespace Machine Type:
+  - CPUs: **16**
+  - Memory: **64 GB**
+  - Storage: **128 GB**
 
-```bash
-# the password is `admin`
-ssh admin@<a-lab-device-hostname>
-```
+## Credentials
 
-To check connectivity, ssh to any host and use `pingcheck ipv4_vrf_prod` or `pingcheck ipv4_vrf_dev` to start fping to the lab hosts. You have to wait a few minutes after the lab start for ping to be successful.
+Username: `admin`
 
-Enjoy the lab!
+Password: `admin`
+
+## Navigating the Lab
+
+Please refer to the [Arista Community Labs QuickStart Guide](https://aclabs.arista.com/quickstart/) for a step-by-step guide on how to navigate the lab.
+
+Quick Links:
+
+- [Interacting with the Lab](https://aclabs.arista.com/quickstart/#interacting-with-the-lab)
+- [Tips and Troubleshooting](https://aclabs.arista.com/quickstart/#tips-and-troubleshooting)
+
+Happy Labbing!
+
+Last reviewed: April 25th, 2025
