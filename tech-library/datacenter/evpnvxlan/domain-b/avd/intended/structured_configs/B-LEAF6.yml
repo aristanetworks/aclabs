@@ -74,6 +74,19 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
+- name: Ethernet7
+  shutdown: false
+  evpn_ethernet_segment:
+    identifier: 0000:000b:0005:0006:0007
+    redundancy: single-active
+  spanning_tree_portfast: edge
+  bgp:
+    session_tracker: TRACK-LOCAL-EVPN-PEERS
+  peer_type: network_port
+  port_profile: L2LEAF-TRUNK
+  switchport:
+    enabled: true
+    mode: trunk
 event_monitor:
   enabled: true
 hostname: B-LEAF6

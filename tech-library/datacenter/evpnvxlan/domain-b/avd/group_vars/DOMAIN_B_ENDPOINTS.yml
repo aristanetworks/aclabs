@@ -1,6 +1,18 @@
 ---
 
 ########################################################
+# Network Ports                                        #
+########################################################
+network_ports:
+  - switches:
+      - B-LEAF5
+      - B-LEAF6
+    switch_ports:
+      - Ethernet7
+    enabled: true
+    profile: L2LEAF-TRUNK
+
+########################################################
 # Port Profiles                                        #
 ########################################################
 custom_evpn_aa_structured_config:
@@ -10,7 +22,19 @@ custom_evpn_aa_structured_config:
     identifier: 'auto lacp'
   lacp_id: c0d6.8200.0000
 
+custom_evpn_sa_structured_config:
+  bgp:
+    session_tracker: TRACK-LOCAL-EVPN-PEERS
+  evpn_ethernet_segment:
+    identifier: 0000:000b:0005:0006:0007
+    redundancy: single-active
+
 port_profiles:
+  - profile: L2LEAF-TRUNK
+    mode: trunk
+    spanning_tree_portfast: edge
+    structured_config: "{{ custom_evpn_sa_structured_config }}"
+
   - profile: PROF-BLUE-AA
     mode: access
     spanning_tree_portfast: edge

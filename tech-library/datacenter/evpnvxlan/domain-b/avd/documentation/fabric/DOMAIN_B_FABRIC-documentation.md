@@ -30,6 +30,7 @@
 | DOMAIN_B_FABRIC | spine | B-SPINE2 | 172.100.100.102/24 | cEOS-LAB | Provisioned | - |
 | DOMAIN_B_FABRIC | spine | B-SPINE3 | 172.100.100.103/24 | cEOS-LAB | Provisioned | - |
 | DOMAIN_B_FABRIC | spine | B-SPINE4 | 172.100.100.104/24 | cEOS-LAB | Provisioned | - |
+| DOMAIN_B_FABRIC | l2leaf | B-SW1 | 172.100.100.113/24 | cEOS-LAB | Provisioned | - |
 
 > Provision status is based on Ansible inventory declaration and do not represent real status from CloudVision.
 

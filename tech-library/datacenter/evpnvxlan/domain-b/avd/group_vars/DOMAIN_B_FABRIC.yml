@@ -250,6 +250,23 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet8, Ethernet8, Ethernet8, Ethernet8]
           structured_config:
             router_bgp: "{{ b_leaf8_dci_bgp_peers }}"
+##################################################
+# DOMAIN L2 LEAFS                                #
+##################################################
+l2leaf:
+  defaults:
+    platform: cEOS-LAB
+    # uplink_interfaces: ['Ethernet1', 'Ethernet2']
+    # uplink_switches: ['B-LEAF5', 'B-LEAF6']
+    spanning_tree_mode: mstp
+    filter:
+      only_vlans_in_use: true
+  nodes:
+    - name: B-SW1
+      id: 9
+      mgmt_ip: 172.100.100.113/24
+      # uplink_switch_interfaces: ['Ethernet7', 'Ethernet7']
+
 ##########################################################
 # DCI Connectivity                                       #
 ##########################################################
