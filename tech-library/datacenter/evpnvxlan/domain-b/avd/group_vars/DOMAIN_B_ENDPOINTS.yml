@@ -10,6 +10,10 @@ csc_evpn_all_active:
     identifier: 'auto lacp'
   lacp_id: c0d6.8200.0000
 
+csc_evpn_single_active:
+  bgp:
+    session_tracker: TRACK-LOCAL-EVPN-PEERS
+
 port_profiles:
 
   - profile: PROF-BLUE-AA
@@ -129,3 +133,4 @@ servers:
         redundancy: single-active
         short_esi: 0005:0006:0007
       mode: trunk
+      structured_config: "{{ csc_evpn_single_active }}"

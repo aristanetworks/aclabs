@@ -495,6 +495,7 @@ interface Ethernet4
 interface Ethernet7
    description SERVER_B-SW1
    no shutdown
+   bgp session tracker TRACK-LOCAL-EVPN-PEERS
    switchport mode trunk
    switchport
    !
