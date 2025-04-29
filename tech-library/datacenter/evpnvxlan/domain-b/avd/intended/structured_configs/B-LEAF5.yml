@@ -84,6 +84,8 @@ ethernet_interfaces:
       algorithm: preference
       preference_value: 2000
     route_target: 00:05:00:06:00:07
+  spanning_tree_bpduguard: disabled
+  spanning_tree_portfast: edge
   bgp:
     session_tracker: TRACK-LOCAL-EVPN-PEERS
   peer: B-SW1
@@ -91,6 +93,8 @@ ethernet_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 40,80
 event_monitor:
   enabled: true
 hostname: B-LEAF5

@@ -404,7 +404,7 @@ switchport default mode routed
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet7 | SERVER_B-SW1 | trunk | - | - | - | - |
+| Ethernet7 | SERVER_B-SW1 | trunk | 40,80 | - | - | - |
 
 *Inherited from Port-Channel Interface
 
@@ -496,6 +496,7 @@ interface Ethernet7
    description SERVER_B-SW1
    no shutdown
    bgp session tracker TRACK-LOCAL-EVPN-PEERS
+   switchport trunk allowed vlan 40,80
    switchport mode trunk
    switchport
    !
@@ -504,6 +505,8 @@ interface Ethernet7
       redundancy single-active
       designated-forwarder election algorithm preference 1000
       route-target import 00:05:00:06:00:07
+   spanning-tree portfast
+   spanning-tree bpduguard disable
 ```
 
 ### Loopback Interfaces

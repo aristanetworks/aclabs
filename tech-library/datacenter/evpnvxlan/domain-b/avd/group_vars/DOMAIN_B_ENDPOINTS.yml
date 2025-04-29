@@ -133,4 +133,7 @@ servers:
         redundancy: single-active
         short_esi: 0005:0006:0007
       mode: trunk
+      spanning_tree_portfast: edge
+      spanning_tree_bpduguard: disabled
       structured_config: "{{ csc_evpn_single_active }}"
+      vlans: 40,80
