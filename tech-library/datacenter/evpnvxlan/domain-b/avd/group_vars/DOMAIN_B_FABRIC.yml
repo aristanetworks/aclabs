@@ -50,6 +50,13 @@ vtep_loopback_description: "VTEP IP"
 ###################################################
 
 custom_vtep_bgp_config:
+  address_family_evpn:
+    layer_2_fec_in_place_update:
+      enabled: true
+    route:
+      import_ethernet_segment_ip_mass_withdraw: true
+      export_ethernet_segment_ip_mass_withdraw: true
+
   eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
 
 custom_vtep_dhcp_relay:
@@ -150,7 +157,7 @@ l3leaf:
     uplink_switches: [B-SPINE1, B-SPINE2, B-SPINE3, B-SPINE4]
     uplink_ipv4_pool: 192.168.0.0/24
     uplink_structured_config:
-      ip_address: "unnumbered loopback0"
+      ip_address: "unnumbered Loopback0"
     virtual_router_mac_address: 00:1c:73:00:00:01
     spanning_tree_mode: mstp
     spanning_tree_root_super: true
@@ -165,14 +172,14 @@ l3leaf:
 ########################################################
     - group: POD1
       filter:
-        tags: ['BLUE', 'ORANGE']
+        tags: ['GREEN', 'PURPLE']
       nodes:
         - name: B-LEAF1
-          id: 21
+          id: 1
           mgmt_ip: 172.100.100.105/24
           uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
         - name: B-LEAF2
-          id: 22
+          id: 2
           mgmt_ip: 172.100.100.106/24
           uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
 ########################################################
@@ -180,14 +187,14 @@ l3leaf:
 ########################################################
     - group: POD2
       filter:
-        tags: ['BLUE', 'ORANGE', 'YELLOW']
+        tags: ['BLUE', 'RED', 'BROWN']
       nodes:
         - name: B-LEAF3
-          id: 23
+          id: 3
           mgmt_ip: 172.100.100.107/24
           uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
         - name: B-LEAF4
-          id: 24
+          id: 4
           mgmt_ip: 172.100.100.108/24
           uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
 ########################################################
@@ -195,14 +202,14 @@ l3leaf:
 ########################################################
     - group: POD3
       filter:
-        tags: ['BROWN']
+        tags: ['PURPLE', 'BLACK']
       nodes:
         - name: B-LEAF5
-          id: 25
+          id: 5
           mgmt_ip: 172.100.100.109/24
           uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
         - name: B-LEAF6
-          id: 26
+          id: 6
           mgmt_ip: 172.100.100.110/24
           uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
 ########################################################
@@ -227,13 +234,13 @@ l3leaf:
         route_maps: "{{ custom_evpn_gw_route_maps }}"
       nodes:
         - name: B-LEAF7
-          id: 27
+          id: 7
           mgmt_ip: 172.100.100.111/24
           uplink_switch_interfaces: [Ethernet7, Ethernet7, Ethernet7, Ethernet7]
           structured_config:
             router_bgp: "{{ b_leaf7_dci_bgp_peers }}"
         - name: B-LEAF8
-          id: 28
+          id: 8
           mgmt_ip: 172.100.100.112/24
           uplink_switch_interfaces: [Ethernet8, Ethernet8, Ethernet8, Ethernet8]
           structured_config:

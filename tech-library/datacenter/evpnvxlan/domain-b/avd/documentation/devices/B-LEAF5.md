@@ -354,14 +354,18 @@ vlan internal order ascending range 1006 1199
 
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
-| 70 | Brown | - |
+| 40 | Purple | - |
+| 80 | Black | - |
 
 ### VLANs Device Configuration
 
 ```eos
 !
-vlan 70
-   name Brown
+vlan 40
+   name Purple
+!
+vlan 80
+   name Black
 ```
 
 ## MAC Address Table
@@ -407,10 +411,10 @@ switchport default mode routed
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_B-SPINE1_Ethernet5 | - | unnumbered loopback0 | default | 9214 | False | - | - |
-| Ethernet2 | P2P_B-SPINE2_Ethernet5 | - | unnumbered loopback0 | default | 9214 | False | - | - |
-| Ethernet3 | P2P_B-SPINE3_Ethernet5 | - | unnumbered loopback0 | default | 9214 | False | - | - |
-| Ethernet4 | P2P_B-SPINE4_Ethernet5 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet1 | P2P_B-SPINE1_Ethernet5 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
+| Ethernet2 | P2P_B-SPINE2_Ethernet5 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
+| Ethernet3 | P2P_B-SPINE3_Ethernet5 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
+| Ethernet4 | P2P_B-SPINE4_Ethernet5 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
 
 ##### ISIS
 
@@ -430,7 +434,7 @@ interface Ethernet1
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -442,7 +446,7 @@ interface Ethernet2
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -454,7 +458,7 @@ interface Ethernet3
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -466,7 +470,7 @@ interface Ethernet4
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -482,9 +486,10 @@ interface Ethernet4
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | Globally Unique Address | default | 1.1.2.25/32 |
-| Loopback1 | VTEP IP | default | 2.2.2.25/32 |
-| Loopback102 | Unique Loopback for VRF DEV | DEV | 10.102.2.25/32 |
+| Loopback0 | Globally Unique Address | default | 1.1.2.5/32 |
+| Loopback1 | VTEP IP | default | 2.2.2.5/32 |
+| Loopback101 | Unique Loopback for VRF PROD | PROD | 10.101.2.5/32 |
+| Loopback102 | Unique Loopback for VRF DEV | DEV | 10.102.2.5/32 |
 
 ##### IPv6
 
@@ -492,6 +497,7 @@ interface Ethernet4
 | --------- | ----------- | --- | ------------ |
 | Loopback0 | Globally Unique Address | default | - |
 | Loopback1 | VTEP IP | default | - |
+| Loopback101 | Unique Loopback for VRF PROD | PROD | - |
 | Loopback102 | Unique Loopback for VRF DEV | DEV | - |
 
 ##### ISIS
@@ -508,22 +514,28 @@ interface Ethernet4
 interface Loopback0
    description Globally Unique Address
    no shutdown
-   ip address 1.1.2.25/32
+   ip address 1.1.2.5/32
    isis enable 100
    isis passive
 !
 interface Loopback1
    description VTEP IP
    no shutdown
-   ip address 2.2.2.25/32
+   ip address 2.2.2.5/32
    isis enable 100
    isis passive
+!
+interface Loopback101
+   description Unique Loopback for VRF PROD
+   no shutdown
+   vrf PROD
+   ip address 10.101.2.5/32
 !
 interface Loopback102
    description Unique Loopback for VRF DEV
    no shutdown
    vrf DEV
-   ip address 10.102.2.25/32
+   ip address 10.102.2.5/32
 ```
 
 ### VLAN Interfaces
@@ -532,34 +544,48 @@ interface Loopback102
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan70 | Brown Network | DEV | 9014 | False |
+| Vlan40 | Purple Network | PROD | 9014 | False |
+| Vlan80 | Black Network | DEV | 9014 | False |
 
 ##### IPv4
 
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
-| Vlan70 |  DEV  |  -  |  10.70.70.1/24  |  -  |  -  |  -  |
+| Vlan40 |  PROD  |  -  |  10.40.40.1/24  |  -  |  -  |  -  |
+| Vlan80 |  DEV  |  -  |  10.80.80.1/24  |  -  |  -  |  -  |
 
 ##### IPv6
 
 | Interface | VRF | IPv6 Address | IPv6 Virtual Addresses | Virtual Router Addresses | ND RA Disabled | Managed Config Flag | Other Config Flag | IPv6 ACL In | IPv6 ACL Out |
 | --------- | --- | ------------ | ---------------------- | ------------------------ | -------------- | ------------------- | ----------------- | ----------- | ------------ |
-| Vlan70 | DEV | - | 2001:db8:70:70::1/64 | - | - | - | - | - | - |
+| Vlan40 | PROD | - | 2001:db8:40:40::1/64 | - | - | - | - | - | - |
+| Vlan80 | DEV | - | 2001:db8:80:80::1/64 | - | - | - | - | - | - |
 
 #### VLAN Interfaces Device Configuration
 
 ```eos
 !
-interface Vlan70
-   description Brown Network
+interface Vlan40
+   description Purple Network
+   no shutdown
+   mtu 9014
+   vrf PROD
+   ip igmp
+   ipv6 enable
+   pim ipv4 local-interface Loopback101
+   ip address virtual 10.40.40.1/24
+   ipv6 address virtual 2001:db8:40:40::1/64
+!
+interface Vlan80
+   description Black Network
    no shutdown
    mtu 9014
    vrf DEV
    ip igmp
    ipv6 enable
    pim ipv4 local-interface Loopback102
-   ip address virtual 10.70.70.1/24
-   ipv6 address virtual 2001:db8:70:70::1/64
+   ip address virtual 10.80.80.1/24
+   ipv6 address virtual 2001:db8:80:80::1/64
 ```
 
 ### VXLAN Interface
@@ -575,13 +601,15 @@ interface Vlan70
 
 | VLAN | VNI | Flood List | Multicast Group |
 | ---- | --- | ---------- | --------------- |
-| 70 | 10070 | - | - |
+| 40 | 10040 | - | - |
+| 80 | 10080 | - | - |
 
 ##### VRF to VNI and Multicast Group Mappings
 
 | VRF | VNI | Multicast Group |
 | ---- | --- | --------------- |
 | DEV | 50002 | 232.2.2.2 |
+| PROD | 50001 | 232.1.1.1 |
 
 #### VXLAN Interface Device Configuration
 
@@ -591,9 +619,12 @@ interface Vxlan1
    description B-LEAF5_VTEP
    vxlan source-interface Loopback1
    vxlan udp-port 4789
-   vxlan vlan 70 vni 10070
+   vxlan vlan 40 vni 10040
+   vxlan vlan 80 vni 10080
    vxlan vrf DEV vni 50002
+   vxlan vrf PROD vni 50001
    vxlan vrf DEV multicast group 232.2.2.2
+   vxlan vrf PROD multicast group 232.1.1.1
 ```
 
 ## Routing
@@ -629,6 +660,7 @@ ip virtual-router mac-address 00:1c:73:00:00:01
 | default | True |
 | DEV | True |
 | MGMT | False |
+| PROD | True |
 
 #### IP Routing Device Configuration
 
@@ -637,6 +669,7 @@ ip virtual-router mac-address 00:1c:73:00:00:01
 ip routing
 ip routing vrf DEV
 no ip routing vrf MGMT
+ip routing vrf PROD
 ```
 
 ### IPv6 Routing
@@ -648,6 +681,7 @@ no ip routing vrf MGMT
 | default | False |
 | DEV | true |
 | MGMT | false |
+| PROD | true |
 
 ### Static Routes
 
@@ -682,9 +716,9 @@ arp aging timeout default 1500
 | Settings | Value |
 | -------- | ----- |
 | Instance | 100 |
-| Net-ID | 49.1111.0010.0100.2025.00 |
+| Net-ID | 49.1111.0010.0100.2005.00 |
 | Type | level-2 |
-| Router-ID | 1.1.2.25 |
+| Router-ID | 1.1.2.5 |
 | Log Adjacency Changes | True |
 
 #### ISIS Interfaces Summary
@@ -710,8 +744,8 @@ arp aging timeout default 1500
 ```eos
 !
 router isis 100
-   net 49.1111.0010.0100.2025.00
-   router-id ipv4 1.1.2.25
+   net 49.1111.0010.0100.2005.00
+   router-id ipv4 1.1.2.5
    is-type level-2
    log-adjacency-changes
    !
@@ -728,7 +762,7 @@ ASN Notation: asplain
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65200 | 1.1.2.25 |
+| 65200 | 1.1.2.5 |
 
 | BGP Tuning |
 | ---------- |
@@ -764,6 +798,7 @@ ASN Notation: asplain
 #### Router BGP EVPN Address Family
 
 - VPN import pruning is **enabled**
+- Layer-2 In-place FEC update operation enabled
 
 ##### EVPN Peer Groups
 
@@ -775,20 +810,22 @@ ASN Notation: asplain
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 70 | 1.1.2.25:10070 | 10070:10070 | - | - | learned |
+| 40 | 1.1.2.5:10040 | 10040:10040 | - | - | learned |
+| 80 | 1.1.2.5:10080 | 10080:10080 | - | - | learned |
 
 #### Router BGP VRFs
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart | EVPN Multicast |
 | --- | ------------------- | ------------ | ---------------- | -------------- |
-| DEV | 1.1.2.25:50002 | connected | - | IPv4: True<br>Transit: False |
+| DEV | 1.1.2.5:50002 | connected | - | IPv4: True<br>Transit: False |
+| PROD | 1.1.2.5:50001 | connected | - | IPv4: True<br>Transit: False |
 
 #### Router BGP Device Configuration
 
 ```eos
 !
 router bgp 65200
-   router-id 1.1.2.25
+   router-id 1.1.2.5
    update wait-install
    no bgp default ipv4-unicast
    distance bgp 20 200 200
@@ -811,25 +848,41 @@ router bgp 65200
    neighbor 1.1.1.204 peer group LOCAL-EVPN-PEERS
    neighbor 1.1.1.204 description B-SPINE4_Loopback0
    !
-   vlan 70
-      rd 1.1.2.25:10070
-      route-target both 10070:10070
+   vlan 40
+      rd 1.1.2.5:10040
+      route-target both 10040:10040
+      redistribute learned
+   !
+   vlan 80
+      rd 1.1.2.5:10080
+      route-target both 10080:10080
       redistribute learned
    !
    address-family evpn
+      route export ethernet-segment ip mass-withdraw
+      route import ethernet-segment ip mass-withdraw
       neighbor LOCAL-EVPN-PEERS activate
       neighbor LOCAL-EVPN-PEERS route-map RM-EVPN-SOO-IN in
       neighbor LOCAL-EVPN-PEERS route-map RM-EVPN-SOO-OUT out
       route import match-failure action discard
+      layer-2 fec in-place update
    !
    address-family ipv4
       no neighbor LOCAL-EVPN-PEERS activate
    !
    vrf DEV
-      rd 1.1.2.25:50002
+      rd 1.1.2.5:50002
       route-target import evpn 50002:50002
       route-target export evpn 50002:50002
-      router-id 1.1.2.25
+      router-id 1.1.2.5
+      redistribute connected
+      evpn multicast
+   !
+   vrf PROD
+      rd 1.1.2.5:50001
+      route-target import evpn 50001:50001
+      route-target export evpn 50001:50001
+      router-id 1.1.2.5
       redistribute connected
       evpn multicast
    !
@@ -882,6 +935,7 @@ router bfd
 | VRF Name | Multicast Routing |
 | -------- | ----------------- |
 | DEV | enabled |
+| PROD | enabled |
 
 #### Router Multicast Device Configuration
 
@@ -893,6 +947,10 @@ router multicast
       software-forwarding sfe
    !
    vrf DEV
+      ipv4
+         routing
+   !
+   vrf PROD
       ipv4
          routing
 ```
@@ -925,7 +983,7 @@ router multicast
 
 | Sequence | Type | Match | Set | Sub-Route-Map | Continue |
 | -------- | ---- | ----- | --- | ------------- | -------- |
-| 10 | permit | - | extcommunity soo 2.2.2.25:1 additive | - | - |
+| 10 | permit | - | extcommunity soo 2.2.2.5:1 additive | - | - |
 
 #### Route-maps Device Configuration
 
@@ -937,7 +995,7 @@ route-map RM-EVPN-SOO-IN deny 10
 route-map RM-EVPN-SOO-IN permit 20
 !
 route-map RM-EVPN-SOO-OUT permit 10
-   set extcommunity soo 2.2.2.25:1 additive
+   set extcommunity soo 2.2.2.5:1 additive
 ```
 
 ### IP Extended Community Lists
@@ -946,13 +1004,13 @@ route-map RM-EVPN-SOO-OUT permit 10
 
 | List Name | Type | Extended Communities |
 | --------- | ---- | -------------------- |
-| ECL-EVPN-SOO | permit | soo 2.2.2.25:1 |
+| ECL-EVPN-SOO | permit | soo 2.2.2.5:1 |
 
 #### IP Extended Community Lists Device Configuration
 
 ```eos
 !
-ip extcommunity-list ECL-EVPN-SOO permit soo 2.2.2.25:1
+ip extcommunity-list ECL-EVPN-SOO permit soo 2.2.2.5:1
 ```
 
 ## VRF Instances
@@ -963,6 +1021,7 @@ ip extcommunity-list ECL-EVPN-SOO permit soo 2.2.2.25:1
 | -------- | ---------- |
 | DEV | enabled |
 | MGMT | disabled |
+| PROD | enabled |
 
 ### VRF Instances Device Configuration
 
@@ -971,6 +1030,8 @@ ip extcommunity-list ECL-EVPN-SOO permit soo 2.2.2.25:1
 vrf instance DEV
 !
 vrf instance MGMT
+!
+vrf instance PROD
 ```
 
 ## Virtual Source NAT
@@ -979,13 +1040,15 @@ vrf instance MGMT
 
 | Source NAT VRF | Source NAT IPv4 Address | Source NAT IPv6 Address |
 | -------------- | ----------------------- | ----------------------- |
-| DEV | 10.102.2.25 | - |
+| DEV | 10.102.2.5 | - |
+| PROD | 10.101.2.5 | - |
 
 ### Virtual Source NAT Configuration
 
 ```eos
 !
-ip address virtual source-nat vrf DEV address 10.102.2.25
+ip address virtual source-nat vrf DEV address 10.102.2.5
+ip address virtual source-nat vrf PROD address 10.101.2.5
 ```
 
 ## IP DHCP Relay

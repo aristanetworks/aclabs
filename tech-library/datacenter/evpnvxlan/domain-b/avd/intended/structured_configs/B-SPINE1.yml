@@ -8,7 +8,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF1_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -25,7 +25,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF2_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -42,7 +42,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF3_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -59,7 +59,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF4_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -76,7 +76,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF5_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -93,7 +93,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF6_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -110,7 +110,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF7_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -127,7 +127,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF8_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -213,35 +213,35 @@ router_bgp:
     send_community: all
     maximum_routes: 0
   neighbors:
-  - ip_address: 1.1.2.21
+  - ip_address: 1.1.2.1
     peer_group: LOCAL-EVPN-PEERS
     peer: B-LEAF1
     description: B-LEAF1_Loopback0
-  - ip_address: 1.1.2.22
+  - ip_address: 1.1.2.2
     peer_group: LOCAL-EVPN-PEERS
     peer: B-LEAF2
     description: B-LEAF2_Loopback0
-  - ip_address: 1.1.2.23
+  - ip_address: 1.1.2.3
     peer_group: LOCAL-EVPN-PEERS
     peer: B-LEAF3
     description: B-LEAF3_Loopback0
-  - ip_address: 1.1.2.24
+  - ip_address: 1.1.2.4
     peer_group: LOCAL-EVPN-PEERS
     peer: B-LEAF4
     description: B-LEAF4_Loopback0
-  - ip_address: 1.1.2.25
+  - ip_address: 1.1.2.5
     peer_group: LOCAL-EVPN-PEERS
     peer: B-LEAF5
     description: B-LEAF5_Loopback0
-  - ip_address: 1.1.2.26
+  - ip_address: 1.1.2.6
     peer_group: LOCAL-EVPN-PEERS
     peer: B-LEAF6
     description: B-LEAF6_Loopback0
-  - ip_address: 1.1.2.27
+  - ip_address: 1.1.2.7
     peer_group: LOCAL-EVPN-PEERS
     peer: B-LEAF7
     description: B-LEAF7_Loopback0
-  - ip_address: 1.1.2.28
+  - ip_address: 1.1.2.8
     peer_group: LOCAL-EVPN-PEERS
     peer: B-LEAF8
     description: B-LEAF8_Loopback0

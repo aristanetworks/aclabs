@@ -10,7 +10,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE1_Ethernet7
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -27,7 +27,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE2_Ethernet7
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -44,7 +44,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE3_Ethernet7
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -61,7 +61,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE4_Ethernet7
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -103,7 +103,7 @@ ip_extcommunity_lists:
 - name: ECL-EVPN-SOO
   entries:
   - type: permit
-    extcommunities: soo 2.2.2.27:1
+    extcommunities: soo 2.2.2.7:1
 ip_igmp_snooping:
   globally_enabled: true
 ip_routing: true
@@ -122,25 +122,25 @@ loopback_interfaces:
 - name: Loopback0
   description: Globally Unique Address
   shutdown: false
-  ip_address: 1.1.2.27/32
+  ip_address: 1.1.2.7/32
   isis_enable: '100'
   isis_passive: true
 - name: Loopback1
   description: VTEP IP
   shutdown: false
-  ip_address: 2.2.2.27/32
+  ip_address: 2.2.2.7/32
   isis_enable: '100'
   isis_passive: true
 - name: Loopback102
   description: Unique Loopback for VRF DEV
   shutdown: false
   vrf: DEV
-  ip_address: 10.102.2.27/32
+  ip_address: 10.102.2.7/32
 - name: Loopback101
   description: Unique Loopback for VRF PROD
   shutdown: false
   vrf: PROD
-  ip_address: 10.101.2.27/32
+  ip_address: 10.101.2.7/32
 mac_address_table:
   aging_time: 1800
 management_api_http:
@@ -183,7 +183,7 @@ route_maps:
   - sequence: 10
     type: permit
     set:
-    - extcommunity soo 2.2.2.27:1 additive
+    - extcommunity soo 2.2.2.7:1 additive
 - name: RM-AS65000-IPV4-OUT
   sequence_numbers:
   - sequence: 10
@@ -197,7 +197,7 @@ router_bfd:
     multiplier: 3
 router_bgp:
   as: '65200'
-  router_id: 1.1.2.27
+  router_id: 1.1.2.7
   distance:
     external_routes: 20
     internal_routes: 200
@@ -257,10 +257,10 @@ router_bgp:
   vlans:
   - id: 60
     tenant: DOMAIN_B_FABRIC
-    rd: 1.1.2.27:10060
+    rd: 1.1.2.7:10060
     rd_evpn_domain:
       domain: remote
-      rd: 1.1.2.27:10060
+      rd: 1.1.2.7:10060
     route_targets:
       both:
       - 10060:10060
@@ -271,10 +271,10 @@ router_bgp:
     - learned
   - id: 70
     tenant: DOMAIN_B_FABRIC
-    rd: 1.1.2.27:10070
+    rd: 1.1.2.7:10070
     rd_evpn_domain:
       domain: remote
-      rd: 1.1.2.27:10070
+      rd: 1.1.2.7:10070
     route_targets:
       both:
       - 10070:10070
@@ -285,10 +285,10 @@ router_bgp:
     - learned
   - id: 80
     tenant: DOMAIN_B_FABRIC
-    rd: 1.1.2.27:10080
+    rd: 1.1.2.7:10080
     rd_evpn_domain:
       domain: remote
-      rd: 1.1.2.27:10080
+      rd: 1.1.2.7:10080
     route_targets:
       both:
       - 10080:10080
@@ -299,10 +299,10 @@ router_bgp:
     - learned
   - id: 10
     tenant: DOMAIN_B_FABRIC
-    rd: 1.1.2.27:10010
+    rd: 1.1.2.7:10010
     rd_evpn_domain:
       domain: remote
-      rd: 1.1.2.27:10010
+      rd: 1.1.2.7:10010
     route_targets:
       both:
       - 10010:10010
@@ -313,7 +313,7 @@ router_bgp:
     - learned
   - id: 20
     tenant: DOMAIN_B_FABRIC
-    rd: 1.1.2.27:10020
+    rd: 1.1.2.7:10020
     route_targets:
       both:
       - 10020:10020
@@ -321,7 +321,7 @@ router_bgp:
     - learned
   - id: 40
     tenant: DOMAIN_B_FABRIC
-    rd: 1.1.2.27:10040
+    rd: 1.1.2.7:10040
     route_targets:
       both:
       - 10040:10040
@@ -337,6 +337,10 @@ router_bgp:
       route_map_out: RM-EVPN-SOO-OUT
     route:
       import_match_failure_action: discard
+      import_ethernet_segment_ip_mass_withdraw: true
+      export_ethernet_segment_ip_mass_withdraw: true
+    layer_2_fec_in_place_update:
+      enabled: true
   address_family_ipv4:
     peer_groups:
     - name: LOCAL-EVPN-PEERS
@@ -345,7 +349,7 @@ router_bgp:
       activate: true
   vrfs:
   - name: DEV
-    rd: 1.1.2.27:50002
+    rd: 1.1.2.7:50002
     evpn_multicast: true
     route_targets:
       import:
@@ -356,12 +360,12 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - 50002:50002
-    router_id: 1.1.2.27
+    router_id: 1.1.2.7
     redistribute:
       connected:
         enabled: true
   - name: PROD
-    rd: 1.1.2.27:50001
+    rd: 1.1.2.7:50001
     evpn_multicast: true
     route_targets:
       import:
@@ -372,15 +376,15 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - 50001:50001
-    router_id: 1.1.2.27
+    router_id: 1.1.2.7
     redistribute:
       connected:
         enabled: true
   eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
 router_isis:
   instance: '100'
-  net: 49.1111.0010.0100.2027.00
-  router_id: 1.1.2.27
+  net: 49.1111.0010.0100.2007.00
+  router_id: 1.1.2.7
   is_type: level-2
   log_adjacency_changes: true
   address_family_ipv4:
@@ -411,9 +415,9 @@ static_routes:
 transceiver_qsfp_default_mode_4x10: true
 virtual_source_nat_vrfs:
 - name: DEV
-  ip_address: 10.102.2.27
+  ip_address: 10.102.2.7
 - name: PROD
-  ip_address: 10.101.2.27
+  ip_address: 10.101.2.7
 vlan_interfaces:
 - name: Vlan60
   description: Red Network

@@ -87,38 +87,38 @@
 
 | Node | Node Interface | Node IP Address | Peer Node | Peer Interface | Peer IP Address |
 | ---- | -------------- | --------------- | --------- | -------------- | --------------- |
-| B-LEAF1 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet1 | unnumbered loopback0 |
-| B-LEAF1 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet1 | unnumbered loopback0 |
-| B-LEAF1 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet1 | unnumbered loopback0 |
-| B-LEAF1 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet1 | unnumbered loopback0 |
-| B-LEAF2 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet2 | unnumbered loopback0 |
-| B-LEAF2 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet2 | unnumbered loopback0 |
-| B-LEAF2 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet2 | unnumbered loopback0 |
-| B-LEAF2 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet2 | unnumbered loopback0 |
-| B-LEAF3 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet3 | unnumbered loopback0 |
-| B-LEAF3 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet3 | unnumbered loopback0 |
-| B-LEAF3 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet3 | unnumbered loopback0 |
-| B-LEAF3 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet3 | unnumbered loopback0 |
-| B-LEAF4 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet4 | unnumbered loopback0 |
-| B-LEAF4 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet4 | unnumbered loopback0 |
-| B-LEAF4 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet4 | unnumbered loopback0 |
-| B-LEAF4 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet4 | unnumbered loopback0 |
-| B-LEAF5 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet5 | unnumbered loopback0 |
-| B-LEAF5 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet5 | unnumbered loopback0 |
-| B-LEAF5 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet5 | unnumbered loopback0 |
-| B-LEAF5 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet5 | unnumbered loopback0 |
-| B-LEAF6 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet6 | unnumbered loopback0 |
-| B-LEAF6 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet6 | unnumbered loopback0 |
-| B-LEAF6 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet6 | unnumbered loopback0 |
-| B-LEAF6 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet6 | unnumbered loopback0 |
-| B-LEAF7 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet7 | unnumbered loopback0 |
-| B-LEAF7 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet7 | unnumbered loopback0 |
-| B-LEAF7 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet7 | unnumbered loopback0 |
-| B-LEAF7 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet7 | unnumbered loopback0 |
-| B-LEAF8 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet8 | unnumbered loopback0 |
-| B-LEAF8 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet8 | unnumbered loopback0 |
-| B-LEAF8 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet8 | unnumbered loopback0 |
-| B-LEAF8 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet8 | unnumbered loopback0 |
+| B-LEAF1 | Ethernet1 | unnumbered Loopback0 | B-SPINE1 | Ethernet1 | unnumbered Loopback0 |
+| B-LEAF1 | Ethernet2 | unnumbered Loopback0 | B-SPINE2 | Ethernet1 | unnumbered Loopback0 |
+| B-LEAF1 | Ethernet3 | unnumbered Loopback0 | B-SPINE3 | Ethernet1 | unnumbered Loopback0 |
+| B-LEAF1 | Ethernet4 | unnumbered Loopback0 | B-SPINE4 | Ethernet1 | unnumbered Loopback0 |
+| B-LEAF2 | Ethernet1 | unnumbered Loopback0 | B-SPINE1 | Ethernet2 | unnumbered Loopback0 |
+| B-LEAF2 | Ethernet2 | unnumbered Loopback0 | B-SPINE2 | Ethernet2 | unnumbered Loopback0 |
+| B-LEAF2 | Ethernet3 | unnumbered Loopback0 | B-SPINE3 | Ethernet2 | unnumbered Loopback0 |
+| B-LEAF2 | Ethernet4 | unnumbered Loopback0 | B-SPINE4 | Ethernet2 | unnumbered Loopback0 |
+| B-LEAF3 | Ethernet1 | unnumbered Loopback0 | B-SPINE1 | Ethernet3 | unnumbered Loopback0 |
+| B-LEAF3 | Ethernet2 | unnumbered Loopback0 | B-SPINE2 | Ethernet3 | unnumbered Loopback0 |
+| B-LEAF3 | Ethernet3 | unnumbered Loopback0 | B-SPINE3 | Ethernet3 | unnumbered Loopback0 |
+| B-LEAF3 | Ethernet4 | unnumbered Loopback0 | B-SPINE4 | Ethernet3 | unnumbered Loopback0 |
+| B-LEAF4 | Ethernet1 | unnumbered Loopback0 | B-SPINE1 | Ethernet4 | unnumbered Loopback0 |
+| B-LEAF4 | Ethernet2 | unnumbered Loopback0 | B-SPINE2 | Ethernet4 | unnumbered Loopback0 |
+| B-LEAF4 | Ethernet3 | unnumbered Loopback0 | B-SPINE3 | Ethernet4 | unnumbered Loopback0 |
+| B-LEAF4 | Ethernet4 | unnumbered Loopback0 | B-SPINE4 | Ethernet4 | unnumbered Loopback0 |
+| B-LEAF5 | Ethernet1 | unnumbered Loopback0 | B-SPINE1 | Ethernet5 | unnumbered Loopback0 |
+| B-LEAF5 | Ethernet2 | unnumbered Loopback0 | B-SPINE2 | Ethernet5 | unnumbered Loopback0 |
+| B-LEAF5 | Ethernet3 | unnumbered Loopback0 | B-SPINE3 | Ethernet5 | unnumbered Loopback0 |
+| B-LEAF5 | Ethernet4 | unnumbered Loopback0 | B-SPINE4 | Ethernet5 | unnumbered Loopback0 |
+| B-LEAF6 | Ethernet1 | unnumbered Loopback0 | B-SPINE1 | Ethernet6 | unnumbered Loopback0 |
+| B-LEAF6 | Ethernet2 | unnumbered Loopback0 | B-SPINE2 | Ethernet6 | unnumbered Loopback0 |
+| B-LEAF6 | Ethernet3 | unnumbered Loopback0 | B-SPINE3 | Ethernet6 | unnumbered Loopback0 |
+| B-LEAF6 | Ethernet4 | unnumbered Loopback0 | B-SPINE4 | Ethernet6 | unnumbered Loopback0 |
+| B-LEAF7 | Ethernet1 | unnumbered Loopback0 | B-SPINE1 | Ethernet7 | unnumbered Loopback0 |
+| B-LEAF7 | Ethernet2 | unnumbered Loopback0 | B-SPINE2 | Ethernet7 | unnumbered Loopback0 |
+| B-LEAF7 | Ethernet3 | unnumbered Loopback0 | B-SPINE3 | Ethernet7 | unnumbered Loopback0 |
+| B-LEAF7 | Ethernet4 | unnumbered Loopback0 | B-SPINE4 | Ethernet7 | unnumbered Loopback0 |
+| B-LEAF8 | Ethernet1 | unnumbered Loopback0 | B-SPINE1 | Ethernet8 | unnumbered Loopback0 |
+| B-LEAF8 | Ethernet2 | unnumbered Loopback0 | B-SPINE2 | Ethernet8 | unnumbered Loopback0 |
+| B-LEAF8 | Ethernet3 | unnumbered Loopback0 | B-SPINE3 | Ethernet8 | unnumbered Loopback0 |
+| B-LEAF8 | Ethernet4 | unnumbered Loopback0 | B-SPINE4 | Ethernet8 | unnumbered Loopback0 |
 
 ### Loopback Interfaces (BGP EVPN Peering)
 
@@ -131,14 +131,14 @@
 
 | POD | Node | Loopback0 |
 | --- | ---- | --------- |
-| DOMAIN_B_FABRIC | B-LEAF1 | 1.1.2.21/32 |
-| DOMAIN_B_FABRIC | B-LEAF2 | 1.1.2.22/32 |
-| DOMAIN_B_FABRIC | B-LEAF3 | 1.1.2.23/32 |
-| DOMAIN_B_FABRIC | B-LEAF4 | 1.1.2.24/32 |
-| DOMAIN_B_FABRIC | B-LEAF5 | 1.1.2.25/32 |
-| DOMAIN_B_FABRIC | B-LEAF6 | 1.1.2.26/32 |
-| DOMAIN_B_FABRIC | B-LEAF7 | 1.1.2.27/32 |
-| DOMAIN_B_FABRIC | B-LEAF8 | 1.1.2.28/32 |
+| DOMAIN_B_FABRIC | B-LEAF1 | 1.1.2.1/32 |
+| DOMAIN_B_FABRIC | B-LEAF2 | 1.1.2.2/32 |
+| DOMAIN_B_FABRIC | B-LEAF3 | 1.1.2.3/32 |
+| DOMAIN_B_FABRIC | B-LEAF4 | 1.1.2.4/32 |
+| DOMAIN_B_FABRIC | B-LEAF5 | 1.1.2.5/32 |
+| DOMAIN_B_FABRIC | B-LEAF6 | 1.1.2.6/32 |
+| DOMAIN_B_FABRIC | B-LEAF7 | 1.1.2.7/32 |
+| DOMAIN_B_FABRIC | B-LEAF8 | 1.1.2.8/32 |
 | DOMAIN_B_FABRIC | B-SPINE1 | 1.1.1.201/32 |
 | DOMAIN_B_FABRIC | B-SPINE2 | 1.1.1.202/32 |
 | DOMAIN_B_FABRIC | B-SPINE3 | 1.1.1.203/32 |
@@ -148,14 +148,14 @@
 
 | POD | Node | CLNS Address |
 | --- | ---- | ------------ |
-| DOMAIN_B_FABRIC | B-LEAF1 | 49.1111.0010.0100.2021.00 |
-| DOMAIN_B_FABRIC | B-LEAF2 | 49.1111.0010.0100.2022.00 |
-| DOMAIN_B_FABRIC | B-LEAF3 | 49.1111.0010.0100.2023.00 |
-| DOMAIN_B_FABRIC | B-LEAF4 | 49.1111.0010.0100.2024.00 |
-| DOMAIN_B_FABRIC | B-LEAF5 | 49.1111.0010.0100.2025.00 |
-| DOMAIN_B_FABRIC | B-LEAF6 | 49.1111.0010.0100.2026.00 |
-| DOMAIN_B_FABRIC | B-LEAF7 | 49.1111.0010.0100.2027.00 |
-| DOMAIN_B_FABRIC | B-LEAF8 | 49.1111.0010.0100.2028.00 |
+| DOMAIN_B_FABRIC | B-LEAF1 | 49.1111.0010.0100.2001.00 |
+| DOMAIN_B_FABRIC | B-LEAF2 | 49.1111.0010.0100.2002.00 |
+| DOMAIN_B_FABRIC | B-LEAF3 | 49.1111.0010.0100.2003.00 |
+| DOMAIN_B_FABRIC | B-LEAF4 | 49.1111.0010.0100.2004.00 |
+| DOMAIN_B_FABRIC | B-LEAF5 | 49.1111.0010.0100.2005.00 |
+| DOMAIN_B_FABRIC | B-LEAF6 | 49.1111.0010.0100.2006.00 |
+| DOMAIN_B_FABRIC | B-LEAF7 | 49.1111.0010.0100.2007.00 |
+| DOMAIN_B_FABRIC | B-LEAF8 | 49.1111.0010.0100.2008.00 |
 | DOMAIN_B_FABRIC | B-SPINE1 | 49.1111.0010.0100.1201.00 |
 | DOMAIN_B_FABRIC | B-SPINE2 | 49.1111.0010.0100.1202.00 |
 | DOMAIN_B_FABRIC | B-SPINE3 | 49.1111.0010.0100.1203.00 |
@@ -171,11 +171,11 @@
 
 | POD | Node | Loopback1 |
 | --- | ---- | --------- |
-| DOMAIN_B_FABRIC | B-LEAF1 | 2.2.2.21/32 |
-| DOMAIN_B_FABRIC | B-LEAF2 | 2.2.2.22/32 |
-| DOMAIN_B_FABRIC | B-LEAF3 | 2.2.2.23/32 |
-| DOMAIN_B_FABRIC | B-LEAF4 | 2.2.2.24/32 |
-| DOMAIN_B_FABRIC | B-LEAF5 | 2.2.2.25/32 |
-| DOMAIN_B_FABRIC | B-LEAF6 | 2.2.2.26/32 |
-| DOMAIN_B_FABRIC | B-LEAF7 | 2.2.2.27/32 |
-| DOMAIN_B_FABRIC | B-LEAF8 | 2.2.2.28/32 |
+| DOMAIN_B_FABRIC | B-LEAF1 | 2.2.2.1/32 |
+| DOMAIN_B_FABRIC | B-LEAF2 | 2.2.2.2/32 |
+| DOMAIN_B_FABRIC | B-LEAF3 | 2.2.2.3/32 |
+| DOMAIN_B_FABRIC | B-LEAF4 | 2.2.2.4/32 |
+| DOMAIN_B_FABRIC | B-LEAF5 | 2.2.2.5/32 |
+| DOMAIN_B_FABRIC | B-LEAF6 | 2.2.2.6/32 |
+| DOMAIN_B_FABRIC | B-LEAF7 | 2.2.2.7/32 |
+| DOMAIN_B_FABRIC | B-LEAF8 | 2.2.2.8/32 |

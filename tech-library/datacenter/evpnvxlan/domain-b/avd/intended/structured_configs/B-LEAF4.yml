@@ -10,7 +10,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE1_Ethernet4
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -27,7 +27,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE2_Ethernet4
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -44,7 +44,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE3_Ethernet4
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -61,7 +61,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE4_Ethernet4
   shutdown: false
   mtu: 9214
-  ip_address: unnumbered loopback0
+  ip_address: unnumbered Loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -106,7 +106,7 @@ ip_extcommunity_lists:
 - name: ECL-EVPN-SOO
   entries:
   - type: permit
-    extcommunities: soo 2.2.2.24:1
+    extcommunities: soo 2.2.2.4:1
 ip_igmp_snooping:
   globally_enabled: true
 ip_routing: true
@@ -125,20 +125,25 @@ loopback_interfaces:
 - name: Loopback0
   description: Globally Unique Address
   shutdown: false
-  ip_address: 1.1.2.24/32
+  ip_address: 1.1.2.4/32
   isis_enable: '100'
   isis_passive: true
 - name: Loopback1
   description: VTEP IP
   shutdown: false
-  ip_address: 2.2.2.24/32
+  ip_address: 2.2.2.4/32
   isis_enable: '100'
   isis_passive: true
+- name: Loopback102
+  description: Unique Loopback for VRF DEV
+  shutdown: false
+  vrf: DEV
+  ip_address: 10.102.2.4/32
 - name: Loopback101
   description: Unique Loopback for VRF PROD
   shutdown: false
   vrf: PROD
-  ip_address: 10.101.2.24/32
+  ip_address: 10.101.2.4/32
 mac_address_table:
   aging_time: 1800
 management_api_http:
@@ -183,7 +188,7 @@ route_maps:
   - sequence: 10
     type: permit
     set:
-    - extcommunity soo 2.2.2.24:1 additive
+    - extcommunity soo 2.2.2.4:1 additive
 router_bfd:
   multihop:
     interval: 300
@@ -191,7 +196,7 @@ router_bfd:
     multiplier: 3
 router_bgp:
   as: '65200'
-  router_id: 1.1.2.24
+  router_id: 1.1.2.4
   distance:
     external_routes: 20
     internal_routes: 200
@@ -234,9 +239,25 @@ router_bgp:
     peer: B-SPINE4
     description: B-SPINE4_Loopback0
   vlans:
+  - id: 60
+    tenant: DOMAIN_B_FABRIC
+    rd: 1.1.2.4:10060
+    route_targets:
+      both:
+      - 10060:10060
+    redistribute_routes:
+    - learned
+  - id: 70
+    tenant: DOMAIN_B_FABRIC
+    rd: 1.1.2.4:10070
+    route_targets:
+      both:
+      - 10070:10070
+    redistribute_routes:
+    - learned
   - id: 10
     tenant: DOMAIN_B_FABRIC
-    rd: 1.1.2.24:10010
+    rd: 1.1.2.4:10010
     route_targets:
       both:
       - 10010:10010
@@ -250,13 +271,33 @@ router_bgp:
       route_map_out: RM-EVPN-SOO-OUT
     route:
       import_match_failure_action: discard
+      import_ethernet_segment_ip_mass_withdraw: true
+      export_ethernet_segment_ip_mass_withdraw: true
+    layer_2_fec_in_place_update:
+      enabled: true
   address_family_ipv4:
     peer_groups:
     - name: LOCAL-EVPN-PEERS
       activate: false
   vrfs:
+  - name: DEV
+    rd: 1.1.2.4:50002
+    evpn_multicast: true
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 50002:50002
+      export:
+      - address_family: evpn
+        route_targets:
+        - 50002:50002
+    router_id: 1.1.2.4
+    redistribute:
+      connected:
+        enabled: true
   - name: PROD
-    rd: 1.1.2.24:50001
+    rd: 1.1.2.4:50001
     evpn_multicast: true
     route_targets:
       import:
@@ -267,15 +308,15 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - 50001:50001
-    router_id: 1.1.2.24
+    router_id: 1.1.2.4
     redistribute:
       connected:
         enabled: true
   eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
 router_isis:
   instance: '100'
-  net: 49.1111.0010.0100.2024.00
-  router_id: 1.1.2.24
+  net: 49.1111.0010.0100.2004.00
+  router_id: 1.1.2.4
   is_type: level-2
   log_adjacency_changes: true
   address_family_ipv4:
@@ -286,6 +327,9 @@ router_multicast:
     routing: true
     software_forwarding: sfe
   vrfs:
+  - name: DEV
+    ipv4:
+      routing: true
   - name: PROD
     ipv4:
       routing: true
@@ -302,9 +346,45 @@ static_routes:
   gateway: 172.100.100.1
 transceiver_qsfp_default_mode_4x10: true
 virtual_source_nat_vrfs:
+- name: DEV
+  ip_address: 10.102.2.4
 - name: PROD
-  ip_address: 10.101.2.24
+  ip_address: 10.101.2.4
 vlan_interfaces:
+- name: Vlan60
+  description: Red Network
+  shutdown: false
+  vrf: DEV
+  ip_address_virtual: 10.60.60.1/24
+  ip_igmp: true
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:60:60::1/64
+  pim:
+    ipv4:
+      local_interface: Loopback102
+  mtu: 9014
+  tenant: DOMAIN_B_FABRIC
+  tags:
+  - DEV
+  - RED
+- name: Vlan70
+  description: Brown Network
+  shutdown: false
+  vrf: DEV
+  ip_address_virtual: 10.70.70.1/24
+  ip_igmp: true
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:70:70::1/64
+  pim:
+    ipv4:
+      local_interface: Loopback102
+  mtu: 9014
+  tenant: DOMAIN_B_FABRIC
+  tags:
+  - DEV
+  - BROWN
 - name: Vlan10
   description: Blue Network
   shutdown: false
@@ -328,12 +408,22 @@ vlan_internal_order:
     beginning: 1006
     ending: 1199
 vlans:
+- id: 60
+  name: Red
+  tenant: DOMAIN_B_FABRIC
+- id: 70
+  name: Brown
+  tenant: DOMAIN_B_FABRIC
 - id: 10
   name: Blue
   tenant: DOMAIN_B_FABRIC
 vrfs:
 - name: MGMT
   ip_routing: false
+- name: DEV
+  ip_routing: true
+  ipv6_routing: true
+  tenant: DOMAIN_B_FABRIC
 - name: PROD
   ip_routing: true
   ipv6_routing: true
@@ -345,9 +435,16 @@ vxlan_interface:
       source_interface: Loopback1
       udp_port: 4789
       vlans:
+      - id: 60
+        vni: 10060
+      - id: 70
+        vni: 10070
       - id: 10
         vni: 10010
       vrfs:
+      - name: DEV
+        vni: 50002
+        multicast_group: 232.2.2.2
       - name: PROD
         vni: 50001
         multicast_group: 232.1.1.1

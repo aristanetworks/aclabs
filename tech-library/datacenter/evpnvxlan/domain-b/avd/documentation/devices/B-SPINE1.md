@@ -347,14 +347,14 @@ switchport default mode routed
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_B-LEAF1_Ethernet1 | - | unnumbered loopback0 | default | 9214 | False | - | - |
-| Ethernet2 | P2P_B-LEAF2_Ethernet1 | - | unnumbered loopback0 | default | 9214 | False | - | - |
-| Ethernet3 | P2P_B-LEAF3_Ethernet1 | - | unnumbered loopback0 | default | 9214 | False | - | - |
-| Ethernet4 | P2P_B-LEAF4_Ethernet1 | - | unnumbered loopback0 | default | 9214 | False | - | - |
-| Ethernet5 | P2P_B-LEAF5_Ethernet1 | - | unnumbered loopback0 | default | 9214 | False | - | - |
-| Ethernet6 | P2P_B-LEAF6_Ethernet1 | - | unnumbered loopback0 | default | 9214 | False | - | - |
-| Ethernet7 | P2P_B-LEAF7_Ethernet1 | - | unnumbered loopback0 | default | 9214 | False | - | - |
-| Ethernet8 | P2P_B-LEAF8_Ethernet1 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet1 | P2P_B-LEAF1_Ethernet1 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
+| Ethernet2 | P2P_B-LEAF2_Ethernet1 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
+| Ethernet3 | P2P_B-LEAF3_Ethernet1 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
+| Ethernet4 | P2P_B-LEAF4_Ethernet1 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
+| Ethernet5 | P2P_B-LEAF5_Ethernet1 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
+| Ethernet6 | P2P_B-LEAF6_Ethernet1 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
+| Ethernet7 | P2P_B-LEAF7_Ethernet1 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
+| Ethernet8 | P2P_B-LEAF8_Ethernet1 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
 
 ##### ISIS
 
@@ -378,7 +378,7 @@ interface Ethernet1
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -390,7 +390,7 @@ interface Ethernet2
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -402,7 +402,7 @@ interface Ethernet3
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -414,7 +414,7 @@ interface Ethernet4
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -426,7 +426,7 @@ interface Ethernet5
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -438,7 +438,7 @@ interface Ethernet6
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -450,7 +450,7 @@ interface Ethernet7
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -462,7 +462,7 @@ interface Ethernet8
    no shutdown
    mtu 9214
    no switchport
-   ip address unnumbered loopback0
+   ip address unnumbered Loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -656,14 +656,14 @@ ASN Notation: asplain
 
 | Neighbor | Remote AS | VRF | Shutdown | Send-community | Maximum-routes | Allowas-in | BFD | RIB Pre-Policy Retain | Route-Reflector Client | Passive | TTL Max Hops |
 | -------- | --------- | --- | -------- | -------------- | -------------- | ---------- | --- | --------------------- | ---------------------- | ------- | ------------ |
-| 1.1.2.21 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
-| 1.1.2.22 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
-| 1.1.2.23 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
-| 1.1.2.24 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
-| 1.1.2.25 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
-| 1.1.2.26 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
-| 1.1.2.27 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
-| 1.1.2.28 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
+| 1.1.2.1 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
+| 1.1.2.2 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
+| 1.1.2.3 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
+| 1.1.2.4 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
+| 1.1.2.5 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
+| 1.1.2.6 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
+| 1.1.2.7 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
+| 1.1.2.8 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - |
 
 #### Router BGP EVPN Address Family
 
@@ -694,22 +694,22 @@ router bgp 65200
    neighbor LOCAL-EVPN-PEERS password 7 <removed>
    neighbor LOCAL-EVPN-PEERS send-community
    neighbor LOCAL-EVPN-PEERS maximum-routes 0
-   neighbor 1.1.2.21 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.2.21 description B-LEAF1_Loopback0
-   neighbor 1.1.2.22 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.2.22 description B-LEAF2_Loopback0
-   neighbor 1.1.2.23 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.2.23 description B-LEAF3_Loopback0
-   neighbor 1.1.2.24 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.2.24 description B-LEAF4_Loopback0
-   neighbor 1.1.2.25 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.2.25 description B-LEAF5_Loopback0
-   neighbor 1.1.2.26 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.2.26 description B-LEAF6_Loopback0
-   neighbor 1.1.2.27 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.2.27 description B-LEAF7_Loopback0
-   neighbor 1.1.2.28 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.2.28 description B-LEAF8_Loopback0
+   neighbor 1.1.2.1 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.1 description B-LEAF1_Loopback0
+   neighbor 1.1.2.2 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.2 description B-LEAF2_Loopback0
+   neighbor 1.1.2.3 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.3 description B-LEAF3_Loopback0
+   neighbor 1.1.2.4 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.4 description B-LEAF4_Loopback0
+   neighbor 1.1.2.5 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.5 description B-LEAF5_Loopback0
+   neighbor 1.1.2.6 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.6 description B-LEAF6_Loopback0
+   neighbor 1.1.2.7 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.7 description B-LEAF7_Loopback0
+   neighbor 1.1.2.8 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.8 description B-LEAF8_Loopback0
    !
    address-family evpn
       neighbor LOCAL-EVPN-PEERS activate
