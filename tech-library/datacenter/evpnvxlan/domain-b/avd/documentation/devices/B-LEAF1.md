@@ -518,6 +518,7 @@ interface Ethernet8
 interface Port-Channel7
    description SERVER_HostB1
    no shutdown
+   bgp session tracker TRACK-LOCAL-EVPN-PEERS
    switchport access vlan 20
    switchport mode access
    switchport
@@ -531,6 +532,7 @@ interface Port-Channel7
 interface Port-Channel8
    description SERVER_HostB2
    no shutdown
+   bgp session tracker TRACK-LOCAL-EVPN-PEERS
    switchport access vlan 40
    switchport mode access
    switchport

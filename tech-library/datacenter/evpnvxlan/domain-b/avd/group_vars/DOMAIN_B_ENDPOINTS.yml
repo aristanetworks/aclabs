@@ -7,7 +7,6 @@ custom_evpn_aa_structured_config:
   evpn_ethernet_segment:
     identifier: 'auto lacp'
 
-
 port_profiles:
   - profile: PROF-BLUE-AA
     mode: access
@@ -17,6 +16,8 @@ port_profiles:
     port_channel:
       mode: active
       structured_config:
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
         evpn_ethernet_segment:
           identifier: 'auto lacp'
         lacp_id: c0d6.8200.0000
@@ -30,6 +31,8 @@ port_profiles:
     port_channel:
       mode: active
       structured_config:
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
         evpn_ethernet_segment:
           identifier: 'auto lacp'
         lacp_id: c0d6.8200.0000
@@ -42,6 +45,8 @@ port_profiles:
     port_channel:
       mode: active
       structured_config:
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
         evpn_ethernet_segment:
           identifier: 'auto lacp'
         lacp_id: c0d6.8200.0000

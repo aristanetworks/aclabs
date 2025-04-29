@@ -524,6 +524,7 @@ interface Ethernet8
 interface Port-Channel8
    description SERVER_HostB4
    no shutdown
+   bgp session tracker TRACK-LOCAL-EVPN-PEERS
    switchport access vlan 10
    switchport mode access
    switchport

@@ -162,6 +162,8 @@ port_channel_interfaces:
   lacp_id: c0d6.8200.0000
   spanning_tree_bpduguard: 'True'
   spanning_tree_portfast: edge
+  bgp:
+    session_tracker: TRACK-LOCAL-EVPN-PEERS
   switchport:
     enabled: true
     mode: access
@@ -174,6 +176,8 @@ port_channel_interfaces:
   lacp_id: c0d6.8200.0000
   spanning_tree_bpduguard: 'True'
   spanning_tree_portfast: edge
+  bgp:
+    session_tracker: TRACK-LOCAL-EVPN-PEERS
   switchport:
     enabled: true
     mode: access
