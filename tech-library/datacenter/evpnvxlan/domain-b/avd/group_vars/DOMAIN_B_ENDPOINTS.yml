@@ -3,7 +3,7 @@
 ########################################################
 # Port Profiles                                        #
 ########################################################
-custom_evpn_aa_structured_config:
+csc_evpn_all_active:
   bgp:
     session_tracker: TRACK-LOCAL-EVPN-PEERS
   evpn_ethernet_segment:
@@ -19,7 +19,7 @@ port_profiles:
     vlans: 10
     port_channel:
       mode: active
-      structured_config: "{{ custom_evpn_aa_structured_config }}"
+      structured_config: "{{ csc_evpn_all_active }}"
 
   - profile: PROF-GREEN-AA
     mode: access
@@ -28,7 +28,7 @@ port_profiles:
     vlans: 20
     port_channel:
       mode: active
-      structured_config: "{{ custom_evpn_aa_structured_config }}"
+      structured_config: "{{ csc_evpn_all_active }}"
 
   - profile: PROF-PURPLE-AA
     mode: access
@@ -37,7 +37,7 @@ port_profiles:
     vlans: 40
     port_channel:
       mode: active
-      structured_config: "{{ custom_evpn_aa_structured_config }}"
+      structured_config: "{{ csc_evpn_all_active }}"
 
   - profile: PROF-PURPLE-SINGLE-HOMED
     mode: access
@@ -62,25 +62,6 @@ port_profiles:
     spanning_tree_portfast: edge
     spanning_tree_bpduguard: true
     vlans: 80
-
-########################################################
-# Network Ports                                        #
-########################################################
-network_ports:
-  - switches:
-      - B-LEAF5
-      - B-LEAF6
-    switch_ports:
-      - Ethernet7
-    enabled: true
-    ethernet_segment:
-      designated_forwarder_algorithm: preference
-      designated_forwarder_preferences:
-        - 2000
-        - 1000
-      redundancy: single-active
-      short_esi: auto
-    mode: trunk
 
 ########################################################
 # End hosts                                            #

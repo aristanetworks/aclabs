@@ -51,7 +51,7 @@ vtep_loopback_description: "VTEP IP"
 # Customized Structured Config                    #
 ###################################################
 
-custom_vtep_bgp_config:
+csc_vtep_bgp:
   address_family_evpn:
     layer_2_fec_in_place_update:
       enabled: true
@@ -64,13 +64,13 @@ custom_vtep_bgp_config:
 
   eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
 
-custom_vtep_dhcp_relay:
+csc_vtep_dhcp_relay:
   tunnel_requests_disabled: true
 
-custom_vtep_ip_dhcp_relay:
+csc_vtep_ip_dhcp_relay:
   information_option: true
 
-custom_evpn_gw_bgp_config:
+csc_evpn_gw_bgp:
   address_family_ipv4:
     peer_groups:
       - name: REMOTE-IPV4-PEERS
@@ -90,7 +90,7 @@ custom_evpn_gw_bgp_config:
     - name: REMOTE-EVPN-PEERS
       local_as: 65000
 
-custom_evpn_gw_prefix_lists:
+csc_evpn_gw_prefix_lists:
   - name: PL-GATEWAY-LOOP
     sequence_numbers:
       - sequence: 10
@@ -102,7 +102,7 @@ custom_evpn_gw_prefix_lists:
       - sequence: 40
         action: permit 1.1.2.8/32
 
-custom_evpn_gw_route_maps:
+csc_evpn_gw_route_maps:
   - name: RM-AS65000-IPV4-OUT
     sequence_numbers:
       - sequence: 10
@@ -168,9 +168,9 @@ l3leaf:
     spanning_tree_root_super: true
     spanning_tree_priority: 0
     structured_config:
-      dhcp_relay: "{{ custom_vtep_dhcp_relay }}"
-      ip_dhcp_relay: "{{ custom_vtep_ip_dhcp_relay }}"
-      router_bgp: "{{ custom_vtep_bgp_config }}"
+      dhcp_relay: "{{ csc_vtep_dhcp_relay }}"
+      ip_dhcp_relay: "{{ csc_vtep_ip_dhcp_relay }}"
+      router_bgp: "{{ csc_vtep_bgp }}"
   node_groups:
 ########################################################
 # DOMAIN B POD 1                                       #
@@ -234,9 +234,9 @@ l3leaf:
             ip_address: 1.1.0.2
             bgp_as: 65000
       structured_config:
-        router_bgp: "{{ custom_evpn_gw_bgp_config }}"
-        prefix_lists: "{{ custom_evpn_gw_prefix_lists }}"
-        route_maps: "{{ custom_evpn_gw_route_maps }}"
+        router_bgp: "{{ csc_evpn_gw_bgp }}"
+        prefix_lists: "{{ csc_evpn_gw_prefix_lists }}"
+        route_maps: "{{ csc_evpn_gw_route_maps }}"
       nodes:
         - name: B-LEAF7
           id: 7
