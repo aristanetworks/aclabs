@@ -30,6 +30,12 @@ ethernet_interfaces:
     enabled: true
     mode: access
     access_vlan: 80
+- name: Ethernet1
+  switchport:
+    mode: trunk
+- name: Ethernet2
+  switchport:
+    mode: trunk
 event_monitor:
   enabled: true
 hostname: B-SW1

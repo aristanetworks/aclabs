@@ -364,6 +364,8 @@ switchport default mode routed
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
+| Ethernet1 | - | trunk | - | - | - | - |
+| Ethernet2 | - | trunk | - | - | - | - |
 | Ethernet3 | SERVER_HostB6_eth1 | access | 40 | - | - | - |
 | Ethernet4 | SERVER_HostB7_eth1 | access | 80 | - | - | - |
 
@@ -372,6 +374,12 @@ switchport default mode routed
 #### Ethernet Interfaces Device Configuration
 
 ```eos
+!
+interface Ethernet1
+   switchport mode trunk
+!
+interface Ethernet2
+   switchport mode trunk
 !
 interface Ethernet3
    description SERVER_HostB6_eth1

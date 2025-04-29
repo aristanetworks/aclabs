@@ -404,7 +404,7 @@ switchport default mode routed
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet7 | - | trunk | - | - | - | - |
+| Ethernet7 | SERVER_B-SW1 | trunk | - | - | - | - |
 
 *Inherited from Port-Channel Interface
 
@@ -432,7 +432,13 @@ switchport default mode routed
 
 | Interface | Ethernet Segment Identifier | Multihoming Redundancy Mode | Route Target |
 | --------- | --------------------------- | --------------------------- | ------------ |
-| Ethernet7 | 0000:000b:0005:0006:0007 | single-active | - |
+| Ethernet7 | 0000:0000:0005:0006:0007 | single-active | 00:05:00:06:00:07 |
+
+####### Designated Forwarder Election Summary
+
+| Interface | Algorithm | Preference Value | Dont Preempt | Hold time | Subsequent Hold Time | Candidate Reachability Required |
+| --------- | --------- | ---------------- | ------------ | --------- | -------------------- | ------------------------------- |
+| Ethernet7 | preference | 1000 | False | - | - | False |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -487,15 +493,16 @@ interface Ethernet4
    isis network point-to-point
 !
 interface Ethernet7
+   description SERVER_B-SW1
    no shutdown
-   bgp session tracker TRACK-LOCAL-EVPN-PEERS
    switchport mode trunk
    switchport
    !
    evpn ethernet-segment
-      identifier 0000:000b:0005:0006:0007
+      identifier 0000:0000:0005:0006:0007
       redundancy single-active
-   spanning-tree portfast
+      designated-forwarder election algorithm preference 1000
+      route-target import 00:05:00:06:00:07
 ```
 
 ### Loopback Interfaces

@@ -75,15 +75,17 @@ ethernet_interfaces:
   switchport:
     enabled: false
 - name: Ethernet7
+  description: SERVER_B-SW1
   shutdown: false
   evpn_ethernet_segment:
-    identifier: 0000:000b:0005:0006:0007
+    identifier: 0000:0000:0005:0006:0007
     redundancy: single-active
-  spanning_tree_portfast: edge
-  bgp:
-    session_tracker: TRACK-LOCAL-EVPN-PEERS
-  peer_type: network_port
-  port_profile: L2LEAF-TRUNK
+    designated_forwarder_election:
+      algorithm: preference
+      preference_value: 1000
+    route_target: 00:05:00:06:00:07
+  peer: B-SW1
+  peer_type: server
   switchport:
     enabled: true
     mode: trunk

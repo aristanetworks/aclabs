@@ -256,16 +256,22 @@ l3leaf:
 l2leaf:
   defaults:
     platform: cEOS-LAB
-    # uplink_interfaces: ['Ethernet1', 'Ethernet2']
-    # uplink_switches: ['B-LEAF5', 'B-LEAF6']
     spanning_tree_mode: mstp
     filter:
-      only_vlans_in_use: true
+      tags: ['PURPLE', 'BLACK']
   nodes:
     - name: B-SW1
       id: 9
       mgmt_ip: 172.100.100.113/24
-      # uplink_switch_interfaces: ['Ethernet7', 'Ethernet7']
+      structured_config:
+        ethernet_interfaces:
+          - name: Ethernet1
+            switchport:
+              mode: trunk
+          - name: Ethernet2
+            switchport:
+              mode: trunk
+
 
 ##########################################################
 # DCI Connectivity                                       #
