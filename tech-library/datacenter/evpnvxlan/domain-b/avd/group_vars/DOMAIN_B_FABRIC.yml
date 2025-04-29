@@ -143,9 +143,9 @@ spine:
 l3leaf:
   defaults:
     platform: cEOS-LAB
-    loopback_ipv4_pool: 1.1.1.0/24
+    loopback_ipv4_pool: 1.1.2.0/24
     mlag: false
-    vtep_loopback_ipv4_pool: 2.2.1.0/24
+    vtep_loopback_ipv4_pool: 2.2.2.0/24
     uplink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4]
     uplink_switches: [B-SPINE1, B-SPINE2, B-SPINE3, B-SPINE4]
     uplink_ipv4_pool: 192.168.0.0/24
@@ -168,11 +168,11 @@ l3leaf:
         tags: ['BLUE', 'ORANGE']
       nodes:
         - name: B-LEAF1
-          id: 1
+          id: 21
           mgmt_ip: 172.100.100.105/24
           uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
         - name: B-LEAF2
-          id: 2
+          id: 22
           mgmt_ip: 172.100.100.106/24
           uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
 ########################################################
@@ -183,11 +183,11 @@ l3leaf:
         tags: ['BLUE', 'ORANGE', 'YELLOW']
       nodes:
         - name: B-LEAF3
-          id: 3
+          id: 23
           mgmt_ip: 172.100.100.107/24
           uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
         - name: B-LEAF4
-          id: 4
+          id: 24
           mgmt_ip: 172.100.100.108/24
           uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
 ########################################################
@@ -198,11 +198,11 @@ l3leaf:
         tags: ['BROWN']
       nodes:
         - name: B-LEAF5
-          id: 5
+          id: 25
           mgmt_ip: 172.100.100.109/24
           uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
         - name: B-LEAF6
-          id: 6
+          id: 26
           mgmt_ip: 172.100.100.110/24
           uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
 ########################################################
@@ -227,13 +227,13 @@ l3leaf:
         route_maps: "{{ custom_evpn_gw_route_maps }}"
       nodes:
         - name: B-LEAF7
-          id: 7
+          id: 27
           mgmt_ip: 172.100.100.111/24
           uplink_switch_interfaces: [Ethernet7, Ethernet7, Ethernet7, Ethernet7]
           structured_config:
             router_bgp: "{{ b_leaf7_dci_bgp_peers }}"
         - name: B-LEAF8
-          id: 8
+          id: 28
           mgmt_ip: 172.100.100.112/24
           uplink_switch_interfaces: [Ethernet8, Ethernet8, Ethernet8, Ethernet8]
           structured_config:

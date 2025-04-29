@@ -103,7 +103,7 @@ ip_extcommunity_lists:
 - name: ECL-EVPN-SOO
   entries:
   - type: permit
-    extcommunities: soo 2.2.1.2:1
+    extcommunities: soo 2.2.2.22:1
 ip_igmp_snooping:
   globally_enabled: true
 ip_routing: true
@@ -122,20 +122,20 @@ loopback_interfaces:
 - name: Loopback0
   description: Globally Unique Address
   shutdown: false
-  ip_address: 1.1.1.2/32
+  ip_address: 1.1.2.22/32
   isis_enable: '100'
   isis_passive: true
 - name: Loopback1
   description: VTEP IP
   shutdown: false
-  ip_address: 2.2.1.2/32
+  ip_address: 2.2.2.22/32
   isis_enable: '100'
   isis_passive: true
 - name: Loopback101
   description: Unique Loopback for VRF PROD
   shutdown: false
   vrf: PROD
-  ip_address: 10.101.2.2/32
+  ip_address: 10.101.2.22/32
 mac_address_table:
   aging_time: 1800
 management_api_http:
@@ -192,7 +192,7 @@ route_maps:
   - sequence: 10
     type: permit
     set:
-    - extcommunity soo 2.2.1.2:1 additive
+    - extcommunity soo 2.2.2.22:1 additive
 router_bfd:
   multihop:
     interval: 300
@@ -200,7 +200,7 @@ router_bfd:
     multiplier: 3
 router_bgp:
   as: '65200'
-  router_id: 1.1.1.2
+  router_id: 1.1.2.22
   distance:
     external_routes: 20
     internal_routes: 200
@@ -245,7 +245,7 @@ router_bgp:
   vlans:
   - id: 10
     tenant: DOMAIN_B_FABRIC
-    rd: 1.1.1.2:10010
+    rd: 1.1.2.22:10010
     route_targets:
       both:
       - 10010:10010
@@ -265,7 +265,7 @@ router_bgp:
       activate: false
   vrfs:
   - name: PROD
-    rd: 1.1.1.2:50001
+    rd: 1.1.2.22:50001
     evpn_multicast: true
     route_targets:
       import:
@@ -276,15 +276,15 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - 50001:50001
-    router_id: 1.1.1.2
+    router_id: 1.1.2.22
     redistribute:
       connected:
         enabled: true
   eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
 router_isis:
   instance: '100'
-  net: 49.1111.0010.0100.1002.00
-  router_id: 1.1.1.2
+  net: 49.1111.0010.0100.2022.00
+  router_id: 1.1.2.22
   is_type: level-2
   log_adjacency_changes: true
   address_family_ipv4:
@@ -312,7 +312,7 @@ static_routes:
 transceiver_qsfp_default_mode_4x10: true
 virtual_source_nat_vrfs:
 - name: PROD
-  ip_address: 10.101.2.2
+  ip_address: 10.101.2.22
 vlan_interfaces:
 - name: Vlan10
   description: Blue Network

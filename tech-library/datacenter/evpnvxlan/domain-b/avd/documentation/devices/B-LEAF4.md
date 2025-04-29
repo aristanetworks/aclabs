@@ -535,9 +535,9 @@ interface Port-Channel8
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | Globally Unique Address | default | 1.1.1.4/32 |
-| Loopback1 | VTEP IP | default | 2.2.1.4/32 |
-| Loopback101 | Unique Loopback for VRF PROD | PROD | 10.101.2.4/32 |
+| Loopback0 | Globally Unique Address | default | 1.1.2.24/32 |
+| Loopback1 | VTEP IP | default | 2.2.2.24/32 |
+| Loopback101 | Unique Loopback for VRF PROD | PROD | 10.101.2.24/32 |
 
 ##### IPv6
 
@@ -561,14 +561,14 @@ interface Port-Channel8
 interface Loopback0
    description Globally Unique Address
    no shutdown
-   ip address 1.1.1.4/32
+   ip address 1.1.2.24/32
    isis enable 100
    isis passive
 !
 interface Loopback1
    description VTEP IP
    no shutdown
-   ip address 2.2.1.4/32
+   ip address 2.2.2.24/32
    isis enable 100
    isis passive
 !
@@ -576,7 +576,7 @@ interface Loopback101
    description Unique Loopback for VRF PROD
    no shutdown
    vrf PROD
-   ip address 10.101.2.4/32
+   ip address 10.101.2.24/32
 ```
 
 ### VLAN Interfaces
@@ -735,9 +735,9 @@ arp aging timeout default 1500
 | Settings | Value |
 | -------- | ----- |
 | Instance | 100 |
-| Net-ID | 49.1111.0010.0100.1004.00 |
+| Net-ID | 49.1111.0010.0100.2024.00 |
 | Type | level-2 |
-| Router-ID | 1.1.1.4 |
+| Router-ID | 1.1.2.24 |
 | Log Adjacency Changes | True |
 
 #### ISIS Interfaces Summary
@@ -763,8 +763,8 @@ arp aging timeout default 1500
 ```eos
 !
 router isis 100
-   net 49.1111.0010.0100.1004.00
-   router-id ipv4 1.1.1.4
+   net 49.1111.0010.0100.2024.00
+   router-id ipv4 1.1.2.24
    is-type level-2
    log-adjacency-changes
    !
@@ -781,7 +781,7 @@ ASN Notation: asplain
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65200 | 1.1.1.4 |
+| 65200 | 1.1.2.24 |
 
 | BGP Tuning |
 | ---------- |
@@ -828,20 +828,20 @@ ASN Notation: asplain
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 10 | 1.1.1.4:10010 | 10010:10010 | - | - | learned |
+| 10 | 1.1.2.24:10010 | 10010:10010 | - | - | learned |
 
 #### Router BGP VRFs
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart | EVPN Multicast |
 | --- | ------------------- | ------------ | ---------------- | -------------- |
-| PROD | 1.1.1.4:50001 | connected | - | IPv4: True<br>Transit: False |
+| PROD | 1.1.2.24:50001 | connected | - | IPv4: True<br>Transit: False |
 
 #### Router BGP Device Configuration
 
 ```eos
 !
 router bgp 65200
-   router-id 1.1.1.4
+   router-id 1.1.2.24
    update wait-install
    no bgp default ipv4-unicast
    distance bgp 20 200 200
@@ -865,7 +865,7 @@ router bgp 65200
    neighbor 1.1.1.204 description B-SPINE4_Loopback0
    !
    vlan 10
-      rd 1.1.1.4:10010
+      rd 1.1.2.24:10010
       route-target both 10010:10010
       redistribute learned
    !
@@ -879,10 +879,10 @@ router bgp 65200
       no neighbor LOCAL-EVPN-PEERS activate
    !
    vrf PROD
-      rd 1.1.1.4:50001
+      rd 1.1.2.24:50001
       route-target import evpn 50001:50001
       route-target export evpn 50001:50001
-      router-id 1.1.1.4
+      router-id 1.1.2.24
       redistribute connected
       evpn multicast
    !
@@ -978,7 +978,7 @@ router multicast
 
 | Sequence | Type | Match | Set | Sub-Route-Map | Continue |
 | -------- | ---- | ----- | --- | ------------- | -------- |
-| 10 | permit | - | extcommunity soo 2.2.1.4:1 additive | - | - |
+| 10 | permit | - | extcommunity soo 2.2.2.24:1 additive | - | - |
 
 #### Route-maps Device Configuration
 
@@ -990,7 +990,7 @@ route-map RM-EVPN-SOO-IN deny 10
 route-map RM-EVPN-SOO-IN permit 20
 !
 route-map RM-EVPN-SOO-OUT permit 10
-   set extcommunity soo 2.2.1.4:1 additive
+   set extcommunity soo 2.2.2.24:1 additive
 ```
 
 ### IP Extended Community Lists
@@ -999,13 +999,13 @@ route-map RM-EVPN-SOO-OUT permit 10
 
 | List Name | Type | Extended Communities |
 | --------- | ---- | -------------------- |
-| ECL-EVPN-SOO | permit | soo 2.2.1.4:1 |
+| ECL-EVPN-SOO | permit | soo 2.2.2.24:1 |
 
 #### IP Extended Community Lists Device Configuration
 
 ```eos
 !
-ip extcommunity-list ECL-EVPN-SOO permit soo 2.2.1.4:1
+ip extcommunity-list ECL-EVPN-SOO permit soo 2.2.2.24:1
 ```
 
 ## VRF Instances
@@ -1032,13 +1032,13 @@ vrf instance PROD
 
 | Source NAT VRF | Source NAT IPv4 Address | Source NAT IPv6 Address |
 | -------------- | ----------------------- | ----------------------- |
-| PROD | 10.101.2.4 | - |
+| PROD | 10.101.2.24 | - |
 
 ### Virtual Source NAT Configuration
 
 ```eos
 !
-ip address virtual source-nat vrf PROD address 10.101.2.4
+ip address virtual source-nat vrf PROD address 10.101.2.24
 ```
 
 ## IP DHCP Relay

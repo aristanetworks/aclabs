@@ -519,10 +519,10 @@ interface Ethernet8
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | Globally Unique Address | default | 1.1.1.7/32 |
-| Loopback1 | VTEP IP | default | 2.2.1.7/32 |
-| Loopback101 | Unique Loopback for VRF PROD | PROD | 10.101.2.7/32 |
-| Loopback102 | Unique Loopback for VRF DEV | DEV | 10.102.2.7/32 |
+| Loopback0 | Globally Unique Address | default | 1.1.2.27/32 |
+| Loopback1 | VTEP IP | default | 2.2.2.27/32 |
+| Loopback101 | Unique Loopback for VRF PROD | PROD | 10.101.2.27/32 |
+| Loopback102 | Unique Loopback for VRF DEV | DEV | 10.102.2.27/32 |
 
 ##### IPv6
 
@@ -547,14 +547,14 @@ interface Ethernet8
 interface Loopback0
    description Globally Unique Address
    no shutdown
-   ip address 1.1.1.7/32
+   ip address 1.1.2.27/32
    isis enable 100
    isis passive
 !
 interface Loopback1
    description VTEP IP
    no shutdown
-   ip address 2.2.1.7/32
+   ip address 2.2.2.27/32
    isis enable 100
    isis passive
 !
@@ -562,13 +562,13 @@ interface Loopback101
    description Unique Loopback for VRF PROD
    no shutdown
    vrf PROD
-   ip address 10.101.2.7/32
+   ip address 10.101.2.27/32
 !
 interface Loopback102
    description Unique Loopback for VRF DEV
    no shutdown
    vrf DEV
-   ip address 10.102.2.7/32
+   ip address 10.102.2.27/32
 ```
 
 ### VLAN Interfaces
@@ -813,9 +813,9 @@ arp aging timeout default 1500
 | Settings | Value |
 | -------- | ----- |
 | Instance | 100 |
-| Net-ID | 49.1111.0010.0100.1007.00 |
+| Net-ID | 49.1111.0010.0100.2027.00 |
 | Type | level-2 |
-| Router-ID | 1.1.1.7 |
+| Router-ID | 1.1.2.27 |
 | Log Adjacency Changes | True |
 
 #### ISIS Interfaces Summary
@@ -841,8 +841,8 @@ arp aging timeout default 1500
 ```eos
 !
 router isis 100
-   net 49.1111.0010.0100.1007.00
-   router-id ipv4 1.1.1.7
+   net 49.1111.0010.0100.2027.00
+   router-id ipv4 1.1.2.27
    is-type level-2
    log-adjacency-changes
    !
@@ -859,7 +859,7 @@ ASN Notation: asplain
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65200 | 1.1.1.7 |
+| 65200 | 1.1.2.27 |
 
 | BGP Tuning |
 | ---------- |
@@ -922,26 +922,26 @@ ASN Notation: asplain
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 10 | 1.1.1.7:10010 | 10010:10010<br>remote 10010:10010 | - | - | learned |
-| 20 | 1.1.1.7:10020 | 10020:10020 | - | - | learned |
-| 40 | 1.1.1.7:10040 | 10040:10040 | - | - | learned |
-| 60 | 1.1.1.7:10060 | 10060:10060<br>remote 10060:10060 | - | - | learned |
-| 70 | 1.1.1.7:10070 | 10070:10070<br>remote 10070:10070 | - | - | learned |
-| 80 | 1.1.1.7:10080 | 10080:10080<br>remote 10080:10080 | - | - | learned |
+| 10 | 1.1.2.27:10010 | 10010:10010<br>remote 10010:10010 | - | - | learned |
+| 20 | 1.1.2.27:10020 | 10020:10020 | - | - | learned |
+| 40 | 1.1.2.27:10040 | 10040:10040 | - | - | learned |
+| 60 | 1.1.2.27:10060 | 10060:10060<br>remote 10060:10060 | - | - | learned |
+| 70 | 1.1.2.27:10070 | 10070:10070<br>remote 10070:10070 | - | - | learned |
+| 80 | 1.1.2.27:10080 | 10080:10080<br>remote 10080:10080 | - | - | learned |
 
 #### Router BGP VRFs
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart | EVPN Multicast |
 | --- | ------------------- | ------------ | ---------------- | -------------- |
-| DEV | 1.1.1.7:50002 | connected | - | IPv4: True<br>Transit: False |
-| PROD | 1.1.1.7:50001 | connected | - | IPv4: True<br>Transit: False |
+| DEV | 1.1.2.27:50002 | connected | - | IPv4: True<br>Transit: False |
+| PROD | 1.1.2.27:50001 | connected | - | IPv4: True<br>Transit: False |
 
 #### Router BGP Device Configuration
 
 ```eos
 !
 router bgp 65200
-   router-id 1.1.1.7
+   router-id 1.1.2.27
    update wait-install
    no bgp default ipv4-unicast
    distance bgp 20 200 200
@@ -977,39 +977,39 @@ router bgp 65200
    neighbor 172.16.2.4 description BB2.IPV4
    !
    vlan 10
-      rd 1.1.1.7:10010
-      rd evpn domain remote 1.1.1.7:10010
+      rd 1.1.2.27:10010
+      rd evpn domain remote 1.1.2.27:10010
       route-target both 10010:10010
       route-target import export evpn domain remote 10010:10010
       redistribute learned
    !
    vlan 20
-      rd 1.1.1.7:10020
+      rd 1.1.2.27:10020
       route-target both 10020:10020
       redistribute learned
    !
    vlan 40
-      rd 1.1.1.7:10040
+      rd 1.1.2.27:10040
       route-target both 10040:10040
       redistribute learned
    !
    vlan 60
-      rd 1.1.1.7:10060
-      rd evpn domain remote 1.1.1.7:10060
+      rd 1.1.2.27:10060
+      rd evpn domain remote 1.1.2.27:10060
       route-target both 10060:10060
       route-target import export evpn domain remote 10060:10060
       redistribute learned
    !
    vlan 70
-      rd 1.1.1.7:10070
-      rd evpn domain remote 1.1.1.7:10070
+      rd 1.1.2.27:10070
+      rd evpn domain remote 1.1.2.27:10070
       route-target both 10070:10070
       route-target import export evpn domain remote 10070:10070
       redistribute learned
    !
    vlan 80
-      rd 1.1.1.7:10080
-      rd evpn domain remote 1.1.1.7:10080
+      rd 1.1.2.27:10080
+      rd evpn domain remote 1.1.2.27:10080
       route-target both 10080:10080
       route-target import export evpn domain remote 10080:10080
       redistribute learned
@@ -1027,18 +1027,18 @@ router bgp 65200
       neighbor REMOTE-IPV4-PEERS activate
    !
    vrf DEV
-      rd 1.1.1.7:50002
+      rd 1.1.2.27:50002
       route-target import evpn 50002:50002
       route-target export evpn 50002:50002
-      router-id 1.1.1.7
+      router-id 1.1.2.27
       redistribute connected
       evpn multicast
    !
    vrf PROD
-      rd 1.1.1.7:50001
+      rd 1.1.2.27:50001
       route-target import evpn 50001:50001
       route-target export evpn 50001:50001
-      router-id 1.1.1.7
+      router-id 1.1.2.27
       redistribute connected
       evpn multicast
    !
@@ -1169,7 +1169,7 @@ ip prefix-list PL-GATEWAY-LOOP
 
 | Sequence | Type | Match | Set | Sub-Route-Map | Continue |
 | -------- | ---- | ----- | --- | ------------- | -------- |
-| 10 | permit | - | extcommunity soo 2.2.1.7:1 additive | - | - |
+| 10 | permit | - | extcommunity soo 2.2.2.27:1 additive | - | - |
 
 #### Route-maps Device Configuration
 
@@ -1184,7 +1184,7 @@ route-map RM-EVPN-SOO-IN deny 10
 route-map RM-EVPN-SOO-IN permit 20
 !
 route-map RM-EVPN-SOO-OUT permit 10
-   set extcommunity soo 2.2.1.7:1 additive
+   set extcommunity soo 2.2.2.27:1 additive
 ```
 
 ### IP Extended Community Lists
@@ -1193,13 +1193,13 @@ route-map RM-EVPN-SOO-OUT permit 10
 
 | List Name | Type | Extended Communities |
 | --------- | ---- | -------------------- |
-| ECL-EVPN-SOO | permit | soo 2.2.1.7:1 |
+| ECL-EVPN-SOO | permit | soo 2.2.2.27:1 |
 
 #### IP Extended Community Lists Device Configuration
 
 ```eos
 !
-ip extcommunity-list ECL-EVPN-SOO permit soo 2.2.1.7:1
+ip extcommunity-list ECL-EVPN-SOO permit soo 2.2.2.27:1
 ```
 
 ## VRF Instances
@@ -1229,15 +1229,15 @@ vrf instance PROD
 
 | Source NAT VRF | Source NAT IPv4 Address | Source NAT IPv6 Address |
 | -------------- | ----------------------- | ----------------------- |
-| DEV | 10.102.2.7 | - |
-| PROD | 10.101.2.7 | - |
+| DEV | 10.102.2.27 | - |
+| PROD | 10.101.2.27 | - |
 
 ### Virtual Source NAT Configuration
 
 ```eos
 !
-ip address virtual source-nat vrf DEV address 10.102.2.7
-ip address virtual source-nat vrf PROD address 10.101.2.7
+ip address virtual source-nat vrf DEV address 10.102.2.27
+ip address virtual source-nat vrf PROD address 10.101.2.27
 ```
 
 ## IP DHCP Relay
