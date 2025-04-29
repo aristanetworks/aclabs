@@ -627,7 +627,7 @@ ASN Notation: asplain
 
 | BGP AS | Cluster ID |
 | ------ | --------- |
-| 65200 | 1.1.2.201 |
+| 65200 | 1.1.2.205 |
 
 | BGP Tuning |
 | ---------- |
@@ -685,7 +685,7 @@ router bgp 65200
    distance bgp 20 200 200
    graceful-restart restart-time 300
    graceful-restart
-   bgp cluster-id 1.1.2.201
+   bgp cluster-id 1.1.2.205
    maximum-paths 4 ecmp 4
    neighbor LOCAL-EVPN-PEERS peer group
    neighbor LOCAL-EVPN-PEERS remote-as 65200

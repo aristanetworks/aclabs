@@ -133,6 +133,7 @@ b_leaf8_dci_bgp_peers:
 ###################################################
 spine:
   defaults:
+    bgp_cluster_id: 1.1.2.205
     platform: cEOS-LAB
     loopback_ipv4_pool: 1.1.2.0/24
   nodes:
