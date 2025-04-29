@@ -257,32 +257,32 @@ l3_edge:
   p2p_links:
     - nodes: [B-LEAF7, BB1]
       interfaces: [Ethernet7, Ethernet1]
-      subnet: 172.16.1.0/31
+      subnet: 172.16.2.0/31
       ip:
-        - 172.16.1.1/31
-        - 172.16.1.0/31
+        - 172.16.2.1/31
+        - 172.16.2.0/31
       include_in_underlay_protocol: false
 
     - nodes: [B-LEAF7, BB2]
       interfaces: [Ethernet8, Ethernet1]
-      subnet: 172.16.1.4/31
+      subnet: 172.16.2.4/31
       ip:
-        - 172.16.1.5/31
-        - 172.16.1.4/31
+        - 172.16.2.5/31
+        - 172.16.2.4/31
       include_in_underlay_protocol: false
 
     - nodes: [B-LEAF8, BB1]
       interfaces: [Ethernet7, Ethernet1]
-      subnet: 172.16.1.2/31
+      subnet: 172.16.2.2/31
       ip:
-        - 172.16.1.3/31
-        - 172.16.1.2/31
+        - 172.16.2.3/31
+        - 172.16.2.2/31
       include_in_underlay_protocol: false
 
     - nodes: [B-LEAF8, BB2]
       interfaces: [Ethernet8, Ethernet1]
-      subnet: 172.16.1.6/31
+      subnet: 172.16.2.6/31
       ip:
-        - 172.16.1.7/31
-        - 172.16.1.6/31
+        - 172.16.2.7/31
+        - 172.16.2.6/31
       include_in_underlay_protocol: false

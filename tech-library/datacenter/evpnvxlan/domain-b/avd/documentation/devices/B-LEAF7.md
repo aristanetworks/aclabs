@@ -432,8 +432,8 @@ switchport default mode routed
 | Ethernet2 | P2P_B-SPINE2_Ethernet7 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
 | Ethernet3 | P2P_B-SPINE3_Ethernet7 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
 | Ethernet4 | P2P_B-SPINE4_Ethernet7 | - | unnumbered Loopback0 | default | 9214 | False | - | - |
-| Ethernet7 | P2P_BB1_Ethernet1 | - | 172.16.1.1/31 | default | 9214 | False | - | - |
-| Ethernet8 | P2P_BB2_Ethernet1 | - | 172.16.1.5/31 | default | 9214 | False | - | - |
+| Ethernet7 | P2P_BB1_Ethernet1 | - | 172.16.2.1/31 | default | 9214 | False | - | - |
+| Ethernet8 | P2P_BB2_Ethernet1 | - | 172.16.2.5/31 | default | 9214 | False | - | - |
 
 ##### ISIS
 
@@ -501,14 +501,14 @@ interface Ethernet7
    no shutdown
    mtu 9214
    no switchport
-   ip address 172.16.1.1/31
+   ip address 172.16.2.1/31
 !
 interface Ethernet8
    description P2P_BB2_Ethernet1
    no shutdown
    mtu 9214
    no switchport
-   ip address 172.16.1.5/31
+   ip address 172.16.2.5/31
 ```
 
 ### Loopback Interfaces
