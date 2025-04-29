@@ -478,7 +478,7 @@ interface Ethernet8
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | Globally Unique Address | default | 1.1.1.202/32 |
+| Loopback0 | Globally Unique Address | default | 1.1.2.202/32 |
 
 ##### IPv6
 
@@ -499,7 +499,7 @@ interface Ethernet8
 interface Loopback0
    description Globally Unique Address
    no shutdown
-   ip address 1.1.1.202/32
+   ip address 1.1.2.202/32
    isis enable 100
    isis passive
 ```
@@ -574,9 +574,9 @@ arp aging timeout default 1500
 | Settings | Value |
 | -------- | ----- |
 | Instance | 100 |
-| Net-ID | 49.1111.0010.0100.1202.00 |
+| Net-ID | 49.1111.0010.0100.2202.00 |
 | Type | level-2 |
-| Router-ID | 1.1.1.202 |
+| Router-ID | 1.1.2.202 |
 | Log Adjacency Changes | True |
 
 #### ISIS Interfaces Summary
@@ -605,8 +605,8 @@ arp aging timeout default 1500
 ```eos
 !
 router isis 100
-   net 49.1111.0010.0100.1202.00
-   router-id ipv4 1.1.1.202
+   net 49.1111.0010.0100.2202.00
+   router-id ipv4 1.1.2.202
    is-type level-2
    log-adjacency-changes
    !
@@ -623,11 +623,11 @@ ASN Notation: asplain
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65200 | 1.1.1.202 |
+| 65200 | 1.1.2.202 |
 
 | BGP AS | Cluster ID |
 | ------ | --------- |
-| 65200 | 1.1.1.202 |
+| 65200 | 1.1.2.202 |
 
 | BGP Tuning |
 | ---------- |
@@ -679,13 +679,13 @@ ASN Notation: asplain
 ```eos
 !
 router bgp 65200
-   router-id 1.1.1.202
+   router-id 1.1.2.202
    update wait-install
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    graceful-restart restart-time 300
    graceful-restart
-   bgp cluster-id 1.1.1.202
+   bgp cluster-id 1.1.2.202
    maximum-paths 4 ecmp 4
    neighbor LOCAL-EVPN-PEERS peer group
    neighbor LOCAL-EVPN-PEERS remote-as 65200

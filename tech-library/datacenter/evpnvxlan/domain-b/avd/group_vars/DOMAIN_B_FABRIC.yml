@@ -134,7 +134,7 @@ b_leaf8_dci_bgp_peers:
 spine:
   defaults:
     platform: cEOS-LAB
-    loopback_ipv4_pool: 1.1.1.0/24
+    loopback_ipv4_pool: 1.1.2.0/24
   nodes:
     - name: B-SPINE1
       id: 201

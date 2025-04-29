@@ -231,19 +231,19 @@ router_bgp:
     maximum_routes: 0
     session_tracker: TRACK-LOCAL-EVPN-PEERS
   neighbors:
-  - ip_address: 1.1.1.201
+  - ip_address: 1.1.2.201
     peer_group: LOCAL-EVPN-PEERS
     peer: B-SPINE1
     description: B-SPINE1_Loopback0
-  - ip_address: 1.1.1.202
+  - ip_address: 1.1.2.202
     peer_group: LOCAL-EVPN-PEERS
     peer: B-SPINE2
     description: B-SPINE2_Loopback0
-  - ip_address: 1.1.1.203
+  - ip_address: 1.1.2.203
     peer_group: LOCAL-EVPN-PEERS
     peer: B-SPINE3
     description: B-SPINE3_Loopback0
-  - ip_address: 1.1.1.204
+  - ip_address: 1.1.2.204
     peer_group: LOCAL-EVPN-PEERS
     peer: B-SPINE4
     description: B-SPINE4_Loopback0

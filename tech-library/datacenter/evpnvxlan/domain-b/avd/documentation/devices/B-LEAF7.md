@@ -902,10 +902,10 @@ ASN Notation: asplain
 
 | Neighbor | Remote AS | VRF | Shutdown | Send-community | Maximum-routes | Allowas-in | BFD | RIB Pre-Policy Retain | Route-Reflector Client | Passive | TTL Max Hops |
 | -------- | --------- | --- | -------- | -------------- | -------------- | ---------- | --- | --------------------- | ---------------------- | ------- | ------------ |
-| 1.1.1.201 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
-| 1.1.1.202 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
-| 1.1.1.203 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
-| 1.1.1.204 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
+| 1.1.2.201 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
+| 1.1.2.202 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
+| 1.1.2.203 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
+| 1.1.2.204 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
 | 172.16.2.0 | Inherited from peer group REMOTE-IPV4-PEERS | default | - | Inherited from peer group REMOTE-IPV4-PEERS | - | - | - | - | - | - | - |
 | 172.16.2.4 | Inherited from peer group REMOTE-IPV4-PEERS | default | - | Inherited from peer group REMOTE-IPV4-PEERS | - | - | - | - | - | - | - |
 
@@ -972,14 +972,14 @@ router bgp 65200
    neighbor REMOTE-IPV4-PEERS route-map RM-AS65000-IPV4-OUT out
    neighbor REMOTE-IPV4-PEERS password 7 <removed>
    neighbor REMOTE-IPV4-PEERS send-community
-   neighbor 1.1.1.201 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.1.201 description B-SPINE1_Loopback0
-   neighbor 1.1.1.202 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.1.202 description B-SPINE2_Loopback0
-   neighbor 1.1.1.203 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.1.203 description B-SPINE3_Loopback0
-   neighbor 1.1.1.204 peer group LOCAL-EVPN-PEERS
-   neighbor 1.1.1.204 description B-SPINE4_Loopback0
+   neighbor 1.1.2.201 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.201 description B-SPINE1_Loopback0
+   neighbor 1.1.2.202 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.202 description B-SPINE2_Loopback0
+   neighbor 1.1.2.203 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.203 description B-SPINE3_Loopback0
+   neighbor 1.1.2.204 peer group LOCAL-EVPN-PEERS
+   neighbor 1.1.2.204 description B-SPINE4_Loopback0
    neighbor 172.16.2.0 peer group REMOTE-IPV4-PEERS
    neighbor 172.16.2.0 description BB1.IPV4
    neighbor 172.16.2.4 peer group REMOTE-IPV4-PEERS
