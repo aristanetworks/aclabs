@@ -212,6 +212,7 @@ router_bgp:
     password: WzKnNSduqwPYvUePYIh40g==
     send_community: all
     maximum_routes: 0
+    session_tracker: TRACK-LOCAL-EVPN-PEERS
   neighbors:
   - ip_address: 1.1.2.1
     peer_group: LOCAL-EVPN-PEERS

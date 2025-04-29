@@ -17,6 +17,8 @@ bgp_peer_groups:
   evpn_overlay_peers:
     name: LOCAL-EVPN-PEERS
     password: WzKnNSduqwPYvUePYIh40g==
+    structured_config:
+      session_tracker: TRACK-LOCAL-EVPN-PEERS
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
     password: IO6gE/ln7Sp2wt33WX/Asg==
@@ -56,6 +58,9 @@ custom_vtep_bgp_config:
     route:
       import_ethernet_segment_ip_mass_withdraw: true
       export_ethernet_segment_ip_mass_withdraw: true
+  session_trackers:
+    - name: TRACK-LOCAL-EVPN-PEERS
+      recovery_delay: 300
 
   eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
 

@@ -783,6 +783,7 @@ ASN Notation: asplain
 | Remote AS | 65200 |
 | Source | Loopback0 |
 | BFD | True |
+| Session tracker | TRACK-LOCAL-EVPN-PEERS |
 | Send community | all |
 | Maximum routes | 0 (no limit) |
 
@@ -820,6 +821,12 @@ ASN Notation: asplain
 | DEV | 1.1.2.6:50002 | connected | - | IPv4: True<br>Transit: False |
 | PROD | 1.1.2.6:50001 | connected | - | IPv4: True<br>Transit: False |
 
+#### Router BGP Session Trackers
+
+| Session Tracker Name | Recovery Delay (in seconds) |
+| -------------------- | --------------------------- |
+| TRACK-LOCAL-EVPN-PEERS | 300 |
+
 #### Router BGP Device Configuration
 
 ```eos
@@ -836,6 +843,7 @@ router bgp 65200
    neighbor LOCAL-EVPN-PEERS remote-as 65200
    neighbor LOCAL-EVPN-PEERS update-source Loopback0
    neighbor LOCAL-EVPN-PEERS bfd
+   neighbor LOCAL-EVPN-PEERS session tracker TRACK-LOCAL-EVPN-PEERS
    neighbor LOCAL-EVPN-PEERS password 7 <removed>
    neighbor LOCAL-EVPN-PEERS send-community
    neighbor LOCAL-EVPN-PEERS maximum-routes 0
@@ -885,6 +893,8 @@ router bgp 65200
       router-id 1.1.2.6
       redistribute connected
       evpn multicast
+   session tracker TRACK-LOCAL-EVPN-PEERS
+      recovery delay 300 seconds
    !
    address-family evpn
       route type ethernet-segment route-target auto

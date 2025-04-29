@@ -221,6 +221,7 @@ router_bgp:
     password: WzKnNSduqwPYvUePYIh40g==
     send_community: all
     maximum_routes: 0
+    session_tracker: TRACK-LOCAL-EVPN-PEERS
   neighbors:
   - ip_address: 1.1.1.201
     peer_group: LOCAL-EVPN-PEERS
@@ -312,6 +313,9 @@ router_bgp:
     redistribute:
       connected:
         enabled: true
+  session_trackers:
+  - name: TRACK-LOCAL-EVPN-PEERS
+    recovery_delay: 300
   eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
 router_isis:
   instance: '100'

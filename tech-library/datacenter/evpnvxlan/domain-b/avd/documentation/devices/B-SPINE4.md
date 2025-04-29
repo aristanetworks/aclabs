@@ -649,6 +649,7 @@ ASN Notation: asplain
 | Route Reflector Client | Yes |
 | Source | Loopback0 |
 | BFD | True |
+| Session tracker | TRACK-LOCAL-EVPN-PEERS |
 | Send community | all |
 | Maximum routes | 0 (no limit) |
 
@@ -691,6 +692,7 @@ router bgp 65200
    neighbor LOCAL-EVPN-PEERS update-source Loopback0
    neighbor LOCAL-EVPN-PEERS bfd
    neighbor LOCAL-EVPN-PEERS route-reflector-client
+   neighbor LOCAL-EVPN-PEERS session tracker TRACK-LOCAL-EVPN-PEERS
    neighbor LOCAL-EVPN-PEERS password 7 <removed>
    neighbor LOCAL-EVPN-PEERS send-community
    neighbor LOCAL-EVPN-PEERS maximum-routes 0
