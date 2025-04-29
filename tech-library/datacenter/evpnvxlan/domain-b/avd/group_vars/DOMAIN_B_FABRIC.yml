@@ -251,7 +251,7 @@ l3leaf:
           structured_config:
             router_bgp: "{{ b_leaf8_dci_bgp_peers }}"
 ##################################################
-# DOMAIN L2 LEAFS                                #
+# DOMAIN B L2 LEAFS                                #
 ##################################################
 l2leaf:
   defaults:
