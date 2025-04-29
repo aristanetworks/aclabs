@@ -347,14 +347,14 @@ switchport default mode routed
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_B-LEAF1_Ethernet2 | - | 192.168.0.2/31 | default | 9214 | False | - | - |
-| Ethernet2 | P2P_B-LEAF2_Ethernet2 | - | 192.168.0.10/31 | default | 9214 | False | - | - |
-| Ethernet3 | P2P_B-LEAF3_Ethernet2 | - | 192.168.0.18/31 | default | 9214 | False | - | - |
-| Ethernet4 | P2P_B-LEAF4_Ethernet2 | - | 192.168.0.26/31 | default | 9214 | False | - | - |
-| Ethernet5 | P2P_B-LEAF5_Ethernet2 | - | 192.168.0.34/31 | default | 9214 | False | - | - |
-| Ethernet6 | P2P_B-LEAF6_Ethernet2 | - | 192.168.0.42/31 | default | 9214 | False | - | - |
-| Ethernet7 | P2P_B-LEAF7_Ethernet2 | - | 192.168.0.50/31 | default | 9214 | False | - | - |
-| Ethernet8 | P2P_B-LEAF8_Ethernet2 | - | 192.168.0.58/31 | default | 9214 | False | - | - |
+| Ethernet1 | P2P_B-LEAF1_Ethernet2 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet2 | P2P_B-LEAF2_Ethernet2 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet3 | P2P_B-LEAF3_Ethernet2 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet4 | P2P_B-LEAF4_Ethernet2 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet5 | P2P_B-LEAF5_Ethernet2 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet6 | P2P_B-LEAF6_Ethernet2 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet7 | P2P_B-LEAF7_Ethernet2 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet8 | P2P_B-LEAF8_Ethernet2 | - | unnumbered loopback0 | default | 9214 | False | - | - |
 
 ##### ISIS
 
@@ -378,7 +378,7 @@ interface Ethernet1
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.2/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -390,7 +390,7 @@ interface Ethernet2
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.10/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -402,7 +402,7 @@ interface Ethernet3
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.18/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -414,7 +414,7 @@ interface Ethernet4
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.26/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -426,7 +426,7 @@ interface Ethernet5
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.34/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -438,7 +438,7 @@ interface Ethernet6
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.42/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -450,7 +450,7 @@ interface Ethernet7
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.50/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -462,7 +462,7 @@ interface Ethernet8
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.58/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2

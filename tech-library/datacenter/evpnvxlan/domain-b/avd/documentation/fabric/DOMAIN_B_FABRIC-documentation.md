@@ -81,44 +81,44 @@
 
 | Uplink IPv4 Pool | Available Addresses | Assigned addresses | Assigned Address % |
 | ---------------- | ------------------- | ------------------ | ------------------ |
-| 192.168.0.0/24 | 256 | 64 | 25.0 % |
+| 192.168.0.0/24 | 256 | 0 | 0.0 % |
 
 ### Point-To-Point Links Node Allocation
 
 | Node | Node Interface | Node IP Address | Peer Node | Peer Interface | Peer IP Address |
 | ---- | -------------- | --------------- | --------- | -------------- | --------------- |
-| B-LEAF1 | Ethernet1 | 192.168.0.1/31 | B-SPINE1 | Ethernet1 | 192.168.0.0/31 |
-| B-LEAF1 | Ethernet2 | 192.168.0.3/31 | B-SPINE2 | Ethernet1 | 192.168.0.2/31 |
-| B-LEAF1 | Ethernet3 | 192.168.0.5/31 | B-SPINE3 | Ethernet1 | 192.168.0.4/31 |
-| B-LEAF1 | Ethernet4 | 192.168.0.7/31 | B-SPINE4 | Ethernet1 | 192.168.0.6/31 |
-| B-LEAF2 | Ethernet1 | 192.168.0.9/31 | B-SPINE1 | Ethernet2 | 192.168.0.8/31 |
-| B-LEAF2 | Ethernet2 | 192.168.0.11/31 | B-SPINE2 | Ethernet2 | 192.168.0.10/31 |
-| B-LEAF2 | Ethernet3 | 192.168.0.13/31 | B-SPINE3 | Ethernet2 | 192.168.0.12/31 |
-| B-LEAF2 | Ethernet4 | 192.168.0.15/31 | B-SPINE4 | Ethernet2 | 192.168.0.14/31 |
-| B-LEAF3 | Ethernet1 | 192.168.0.17/31 | B-SPINE1 | Ethernet3 | 192.168.0.16/31 |
-| B-LEAF3 | Ethernet2 | 192.168.0.19/31 | B-SPINE2 | Ethernet3 | 192.168.0.18/31 |
-| B-LEAF3 | Ethernet3 | 192.168.0.21/31 | B-SPINE3 | Ethernet3 | 192.168.0.20/31 |
-| B-LEAF3 | Ethernet4 | 192.168.0.23/31 | B-SPINE4 | Ethernet3 | 192.168.0.22/31 |
-| B-LEAF4 | Ethernet1 | 192.168.0.25/31 | B-SPINE1 | Ethernet4 | 192.168.0.24/31 |
-| B-LEAF4 | Ethernet2 | 192.168.0.27/31 | B-SPINE2 | Ethernet4 | 192.168.0.26/31 |
-| B-LEAF4 | Ethernet3 | 192.168.0.29/31 | B-SPINE3 | Ethernet4 | 192.168.0.28/31 |
-| B-LEAF4 | Ethernet4 | 192.168.0.31/31 | B-SPINE4 | Ethernet4 | 192.168.0.30/31 |
-| B-LEAF5 | Ethernet1 | 192.168.0.33/31 | B-SPINE1 | Ethernet5 | 192.168.0.32/31 |
-| B-LEAF5 | Ethernet2 | 192.168.0.35/31 | B-SPINE2 | Ethernet5 | 192.168.0.34/31 |
-| B-LEAF5 | Ethernet3 | 192.168.0.37/31 | B-SPINE3 | Ethernet5 | 192.168.0.36/31 |
-| B-LEAF5 | Ethernet4 | 192.168.0.39/31 | B-SPINE4 | Ethernet5 | 192.168.0.38/31 |
-| B-LEAF6 | Ethernet1 | 192.168.0.41/31 | B-SPINE1 | Ethernet6 | 192.168.0.40/31 |
-| B-LEAF6 | Ethernet2 | 192.168.0.43/31 | B-SPINE2 | Ethernet6 | 192.168.0.42/31 |
-| B-LEAF6 | Ethernet3 | 192.168.0.45/31 | B-SPINE3 | Ethernet6 | 192.168.0.44/31 |
-| B-LEAF6 | Ethernet4 | 192.168.0.47/31 | B-SPINE4 | Ethernet6 | 192.168.0.46/31 |
-| B-LEAF7 | Ethernet1 | 192.168.0.49/31 | B-SPINE1 | Ethernet7 | 192.168.0.48/31 |
-| B-LEAF7 | Ethernet2 | 192.168.0.51/31 | B-SPINE2 | Ethernet7 | 192.168.0.50/31 |
-| B-LEAF7 | Ethernet3 | 192.168.0.53/31 | B-SPINE3 | Ethernet7 | 192.168.0.52/31 |
-| B-LEAF7 | Ethernet4 | 192.168.0.55/31 | B-SPINE4 | Ethernet7 | 192.168.0.54/31 |
-| B-LEAF8 | Ethernet1 | 192.168.0.57/31 | B-SPINE1 | Ethernet8 | 192.168.0.56/31 |
-| B-LEAF8 | Ethernet2 | 192.168.0.59/31 | B-SPINE2 | Ethernet8 | 192.168.0.58/31 |
-| B-LEAF8 | Ethernet3 | 192.168.0.61/31 | B-SPINE3 | Ethernet8 | 192.168.0.60/31 |
-| B-LEAF8 | Ethernet4 | 192.168.0.63/31 | B-SPINE4 | Ethernet8 | 192.168.0.62/31 |
+| B-LEAF1 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet1 | unnumbered loopback0 |
+| B-LEAF1 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet1 | unnumbered loopback0 |
+| B-LEAF1 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet1 | unnumbered loopback0 |
+| B-LEAF1 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet1 | unnumbered loopback0 |
+| B-LEAF2 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet2 | unnumbered loopback0 |
+| B-LEAF2 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet2 | unnumbered loopback0 |
+| B-LEAF2 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet2 | unnumbered loopback0 |
+| B-LEAF2 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet2 | unnumbered loopback0 |
+| B-LEAF3 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet3 | unnumbered loopback0 |
+| B-LEAF3 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet3 | unnumbered loopback0 |
+| B-LEAF3 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet3 | unnumbered loopback0 |
+| B-LEAF3 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet3 | unnumbered loopback0 |
+| B-LEAF4 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet4 | unnumbered loopback0 |
+| B-LEAF4 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet4 | unnumbered loopback0 |
+| B-LEAF4 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet4 | unnumbered loopback0 |
+| B-LEAF4 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet4 | unnumbered loopback0 |
+| B-LEAF5 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet5 | unnumbered loopback0 |
+| B-LEAF5 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet5 | unnumbered loopback0 |
+| B-LEAF5 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet5 | unnumbered loopback0 |
+| B-LEAF5 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet5 | unnumbered loopback0 |
+| B-LEAF6 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet6 | unnumbered loopback0 |
+| B-LEAF6 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet6 | unnumbered loopback0 |
+| B-LEAF6 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet6 | unnumbered loopback0 |
+| B-LEAF6 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet6 | unnumbered loopback0 |
+| B-LEAF7 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet7 | unnumbered loopback0 |
+| B-LEAF7 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet7 | unnumbered loopback0 |
+| B-LEAF7 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet7 | unnumbered loopback0 |
+| B-LEAF7 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet7 | unnumbered loopback0 |
+| B-LEAF8 | Ethernet1 | unnumbered loopback0 | B-SPINE1 | Ethernet8 | unnumbered loopback0 |
+| B-LEAF8 | Ethernet2 | unnumbered loopback0 | B-SPINE2 | Ethernet8 | unnumbered loopback0 |
+| B-LEAF8 | Ethernet3 | unnumbered loopback0 | B-SPINE3 | Ethernet8 | unnumbered loopback0 |
+| B-LEAF8 | Ethernet4 | unnumbered loopback0 | B-SPINE4 | Ethernet8 | unnumbered loopback0 |
 
 ### Loopback Interfaces (BGP EVPN Peering)
 

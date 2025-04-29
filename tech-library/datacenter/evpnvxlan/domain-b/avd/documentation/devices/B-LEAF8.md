@@ -428,10 +428,10 @@ switchport default mode routed
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_B-SPINE1_Ethernet8 | - | 192.168.0.57/31 | default | 9214 | False | - | - |
-| Ethernet2 | P2P_B-SPINE2_Ethernet8 | - | 192.168.0.59/31 | default | 9214 | False | - | - |
-| Ethernet3 | P2P_B-SPINE3_Ethernet8 | - | 192.168.0.61/31 | default | 9214 | False | - | - |
-| Ethernet4 | P2P_B-SPINE4_Ethernet8 | - | 192.168.0.63/31 | default | 9214 | False | - | - |
+| Ethernet1 | P2P_B-SPINE1_Ethernet8 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet2 | P2P_B-SPINE2_Ethernet8 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet3 | P2P_B-SPINE3_Ethernet8 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet4 | P2P_B-SPINE4_Ethernet8 | - | unnumbered loopback0 | default | 9214 | False | - | - |
 | Ethernet7 | P2P_BB1_Ethernet1 | - | 172.16.1.3/31 | default | 9214 | False | - | - |
 | Ethernet8 | P2P_BB2_Ethernet1 | - | 172.16.1.7/31 | default | 9214 | False | - | - |
 
@@ -453,7 +453,7 @@ interface Ethernet1
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.57/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -465,7 +465,7 @@ interface Ethernet2
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.59/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -477,7 +477,7 @@ interface Ethernet3
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.61/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -489,7 +489,7 @@ interface Ethernet4
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.63/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2

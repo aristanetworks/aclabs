@@ -149,6 +149,8 @@ l3leaf:
     uplink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4]
     uplink_switches: [B-SPINE1, B-SPINE2, B-SPINE3, B-SPINE4]
     uplink_ipv4_pool: 192.168.0.0/24
+    uplink_structured_config:
+      ip_address: "unnumbered loopback0"
     virtual_router_mac_address: 00:1c:73:00:00:01
     spanning_tree_mode: mstp
     spanning_tree_root_super: true

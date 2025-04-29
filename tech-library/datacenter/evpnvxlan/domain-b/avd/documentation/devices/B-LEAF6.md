@@ -407,10 +407,10 @@ switchport default mode routed
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_B-SPINE1_Ethernet6 | - | 192.168.0.41/31 | default | 9214 | False | - | - |
-| Ethernet2 | P2P_B-SPINE2_Ethernet6 | - | 192.168.0.43/31 | default | 9214 | False | - | - |
-| Ethernet3 | P2P_B-SPINE3_Ethernet6 | - | 192.168.0.45/31 | default | 9214 | False | - | - |
-| Ethernet4 | P2P_B-SPINE4_Ethernet6 | - | 192.168.0.47/31 | default | 9214 | False | - | - |
+| Ethernet1 | P2P_B-SPINE1_Ethernet6 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet2 | P2P_B-SPINE2_Ethernet6 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet3 | P2P_B-SPINE3_Ethernet6 | - | unnumbered loopback0 | default | 9214 | False | - | - |
+| Ethernet4 | P2P_B-SPINE4_Ethernet6 | - | unnumbered loopback0 | default | 9214 | False | - | - |
 
 ##### ISIS
 
@@ -430,7 +430,7 @@ interface Ethernet1
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.41/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -442,7 +442,7 @@ interface Ethernet2
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.43/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -454,7 +454,7 @@ interface Ethernet3
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.45/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
@@ -466,7 +466,7 @@ interface Ethernet4
    no shutdown
    mtu 9214
    no switchport
-   ip address 192.168.0.47/31
+   ip address unnumbered loopback0
    pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2

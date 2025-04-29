@@ -8,7 +8,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF1_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.0/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -25,7 +25,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF2_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.8/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -42,7 +42,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF3_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.16/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -59,7 +59,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF4_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.24/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -76,7 +76,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF5_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.32/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -93,7 +93,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF6_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.40/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -110,7 +110,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF7_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.48/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -127,7 +127,7 @@ ethernet_interfaces:
   description: P2P_B-LEAF8_Ethernet1
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.56/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true

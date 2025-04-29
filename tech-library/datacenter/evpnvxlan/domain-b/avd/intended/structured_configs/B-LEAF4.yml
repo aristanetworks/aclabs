@@ -10,7 +10,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE1_Ethernet4
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.25/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -27,7 +27,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE2_Ethernet4
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.27/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -44,7 +44,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE3_Ethernet4
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.29/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
@@ -61,7 +61,7 @@ ethernet_interfaces:
   description: P2P_B-SPINE4_Ethernet4
   shutdown: false
   mtu: 9214
-  ip_address: 192.168.0.31/31
+  ip_address: unnumbered loopback0
   pim:
     ipv4:
       sparse_mode: true
