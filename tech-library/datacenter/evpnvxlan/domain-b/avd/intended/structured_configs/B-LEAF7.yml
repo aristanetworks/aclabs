@@ -1,0 +1,580 @@
+aaa_root:
+  disabled: true
+config_end: true
+dhcp_relay:
+  tunnel_requests_disabled: true
+enable_password:
+  disabled: true
+ethernet_interfaces:
+- name: Ethernet1
+  description: P2P_B-SPINE1_Ethernet7
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.49/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  isis_enable: '100'
+  isis_metric: 10
+  isis_network_point_to_point: true
+  isis_circuit_type: level-2
+  peer: B-SPINE1
+  peer_interface: Ethernet7
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet2
+  description: P2P_B-SPINE2_Ethernet7
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.51/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  isis_enable: '100'
+  isis_metric: 10
+  isis_network_point_to_point: true
+  isis_circuit_type: level-2
+  peer: B-SPINE2
+  peer_interface: Ethernet7
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet3
+  description: P2P_B-SPINE3_Ethernet7
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.53/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  isis_enable: '100'
+  isis_metric: 10
+  isis_network_point_to_point: true
+  isis_circuit_type: level-2
+  peer: B-SPINE3
+  peer_interface: Ethernet7
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet4
+  description: P2P_B-SPINE4_Ethernet7
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.55/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  isis_enable: '100'
+  isis_metric: 10
+  isis_network_point_to_point: true
+  isis_circuit_type: level-2
+  peer: B-SPINE4
+  peer_interface: Ethernet7
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet7
+  description: P2P_BB1_Ethernet1
+  shutdown: false
+  mtu: 9214
+  ip_address: 172.16.1.1/31
+  peer: BB1
+  peer_interface: Ethernet1
+  peer_type: other
+  switchport:
+    enabled: false
+- name: Ethernet8
+  description: P2P_BB2_Ethernet1
+  shutdown: false
+  mtu: 9214
+  ip_address: 172.16.1.5/31
+  peer: BB2
+  peer_interface: Ethernet1
+  peer_type: other
+  switchport:
+    enabled: false
+event_monitor:
+  enabled: true
+hostname: B-LEAF7
+ip_dhcp_relay:
+  information_option: true
+ip_extcommunity_lists:
+- name: ECL-EVPN-SOO
+  entries:
+  - type: permit
+    extcommunities: soo 2.2.1.7:1
+ip_igmp_snooping:
+  globally_enabled: true
+ip_routing: true
+ip_virtual_router_mac_address: 00:1c:73:00:00:01
+is_deployed: true
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/.
+- name: arista
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$Ap6u4I1WR/jMoNKe$LPLoHgIXFg5kiGPDWGF0w5lVVuOZZ4T15cIBbNxE2ykqh98uVvsi9jPdybkbTXBTZFzi3haaPJVaGVwnpuck40
+loopback_interfaces:
+- name: Loopback0
+  description: Globally Unique Address
+  shutdown: false
+  ip_address: 1.1.1.7/32
+  isis_enable: '100'
+  isis_passive: true
+- name: Loopback1
+  description: VTEP IP
+  shutdown: false
+  ip_address: 2.2.1.7/32
+  isis_enable: '100'
+  isis_passive: true
+- name: Loopback102
+  description: Unique Loopback for VRF DEV
+  shutdown: false
+  vrf: DEV
+  ip_address: 10.102.2.7/32
+- name: Loopback101
+  description: Unique Loopback for VRF PROD
+  shutdown: false
+  vrf: PROD
+  ip_address: 10.101.2.7/32
+mac_address_table:
+  aging_time: 1800
+management_api_http:
+  enable_https: true
+  enable_vrfs:
+  - name: MGMT
+management_interfaces:
+- name: Management0
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: MGMT
+  ip_address: 172.100.100.111/24
+  type: oob
+  gateway: 172.100.100.1
+metadata:
+  platform: cEOS-LAB
+  fabric_name: DOMAIN_B_FABRIC
+prefix_lists:
+- name: PL-GATEWAY-LOOP
+  sequence_numbers:
+  - sequence: 10
+    action: permit 2.2.2.7/32
+  - sequence: 20
+    action: permit 2.2.2.8/32
+  - sequence: 30
+    action: permit 1.1.2.7/32
+  - sequence: 40
+    action: permit 1.1.2.8/32
+route_maps:
+- name: RM-EVPN-SOO-IN
+  sequence_numbers:
+  - sequence: 10
+    type: deny
+    match:
+    - extcommunity ECL-EVPN-SOO
+  - sequence: 20
+    type: permit
+- name: RM-EVPN-SOO-OUT
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    set:
+    - extcommunity soo 2.2.1.7:1 additive
+- name: RM-AS65000-IPV4-OUT
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-GATEWAY-LOOP
+router_bfd:
+  multihop:
+    interval: 300
+    min_rx: 300
+    multiplier: 3
+router_bgp:
+  as: '65200'
+  router_id: 1.1.1.7
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  graceful_restart:
+    enabled: true
+    restart_time: 300
+  maximum_paths:
+    paths: 4
+    ecmp: 4
+  updates:
+    wait_install: true
+  bgp:
+    default:
+      ipv4_unicast: false
+    bestpath:
+      d_path: true
+  peer_groups:
+  - name: LOCAL-EVPN-PEERS
+    type: evpn
+    remote_as: '65200'
+    update_source: Loopback0
+    bfd: true
+    password: WzKnNSduqwPYvUePYIh40g==
+    send_community: all
+    maximum_routes: 0
+  - name: REMOTE-IPV4-PEERS
+    remote_as: '65000'
+    password: dkvBq1jk4inJHsHfMjYRnQ==
+    send_community: all
+    route_map_out: RM-AS65000-IPV4-OUT
+  - name: REMOTE-EVPN-PEERS
+    local_as: '65000'
+  neighbors:
+  - ip_address: 1.1.1.201
+    peer_group: LOCAL-EVPN-PEERS
+    peer: B-SPINE1
+    description: B-SPINE1_Loopback0
+  - ip_address: 1.1.1.202
+    peer_group: LOCAL-EVPN-PEERS
+    peer: B-SPINE2
+    description: B-SPINE2_Loopback0
+  - ip_address: 1.1.1.203
+    peer_group: LOCAL-EVPN-PEERS
+    peer: B-SPINE3
+    description: B-SPINE3_Loopback0
+  - ip_address: 1.1.1.204
+    peer_group: LOCAL-EVPN-PEERS
+    peer: B-SPINE4
+    description: B-SPINE4_Loopback0
+  - ip_address: 172.16.2.0
+    peer_group: REMOTE-IPV4-PEERS
+    description: BB1.IPV4
+  - ip_address: 172.16.2.4
+    peer_group: REMOTE-IPV4-PEERS
+    description: BB2.IPV4
+  vlans:
+  - id: 60
+    tenant: DOMAIN_B_FABRIC
+    rd: 1.1.1.7:10060
+    rd_evpn_domain:
+      domain: remote
+      rd: 1.1.1.7:10060
+    route_targets:
+      both:
+      - 10060:10060
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10060:10060
+    redistribute_routes:
+    - learned
+  - id: 70
+    tenant: DOMAIN_B_FABRIC
+    rd: 1.1.1.7:10070
+    rd_evpn_domain:
+      domain: remote
+      rd: 1.1.1.7:10070
+    route_targets:
+      both:
+      - 10070:10070
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10070:10070
+    redistribute_routes:
+    - learned
+  - id: 80
+    tenant: DOMAIN_B_FABRIC
+    rd: 1.1.1.7:10080
+    rd_evpn_domain:
+      domain: remote
+      rd: 1.1.1.7:10080
+    route_targets:
+      both:
+      - 10080:10080
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10080:10080
+    redistribute_routes:
+    - learned
+  - id: 10
+    tenant: DOMAIN_B_FABRIC
+    rd: 1.1.1.7:10010
+    rd_evpn_domain:
+      domain: remote
+      rd: 1.1.1.7:10010
+    route_targets:
+      both:
+      - 10010:10010
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10010:10010
+    redistribute_routes:
+    - learned
+  - id: 20
+    tenant: DOMAIN_B_FABRIC
+    rd: 1.1.1.7:10020
+    route_targets:
+      both:
+      - 10020:10020
+    redistribute_routes:
+    - learned
+  - id: 40
+    tenant: DOMAIN_B_FABRIC
+    rd: 1.1.1.7:10040
+    route_targets:
+      both:
+      - 10040:10040
+    redistribute_routes:
+    - learned
+  address_family_evpn:
+    domain_identifier: '2:2'
+    domain_identifier_remote: 99:99
+    peer_groups:
+    - name: LOCAL-EVPN-PEERS
+      activate: true
+      route_map_in: RM-EVPN-SOO-IN
+      route_map_out: RM-EVPN-SOO-OUT
+    route:
+      import_match_failure_action: discard
+  address_family_ipv4:
+    peer_groups:
+    - name: LOCAL-EVPN-PEERS
+      activate: false
+    - name: REMOTE-IPV4-PEERS
+      activate: true
+  vrfs:
+  - name: DEV
+    rd: 1.1.1.7:50002
+    evpn_multicast: true
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 50002:50002
+      export:
+      - address_family: evpn
+        route_targets:
+        - 50002:50002
+    router_id: 1.1.1.7
+    redistribute:
+      connected:
+        enabled: true
+  - name: PROD
+    rd: 1.1.1.7:50001
+    evpn_multicast: true
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 50001:50001
+      export:
+      - address_family: evpn
+        route_targets:
+        - 50001:50001
+    router_id: 1.1.1.7
+    redistribute:
+      connected:
+        enabled: true
+  eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
+router_isis:
+  instance: '100'
+  net: 49.1111.0010.0100.1007.00
+  router_id: 1.1.1.7
+  is_type: level-2
+  log_adjacency_changes: true
+  address_family_ipv4:
+    enabled: true
+    maximum_paths: 4
+router_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
+  vrfs:
+  - name: DEV
+    ipv4:
+      routing: true
+  - name: PROD
+    ipv4:
+      routing: true
+service_routing_protocols_model: multi-agent
+spanning_tree:
+  root_super: true
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 0
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 172.100.100.1
+transceiver_qsfp_default_mode_4x10: true
+virtual_source_nat_vrfs:
+- name: DEV
+  ip_address: 10.102.2.7
+- name: PROD
+  ip_address: 10.101.2.7
+vlan_interfaces:
+- name: Vlan60
+  description: Red Network
+  shutdown: false
+  vrf: DEV
+  ip_address_virtual: 10.60.60.1/24
+  ip_igmp: true
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:60:60::1/64
+  pim:
+    ipv4:
+      local_interface: Loopback102
+  mtu: 9014
+  tenant: DOMAIN_B_FABRIC
+  tags:
+  - DEV
+  - RED
+- name: Vlan70
+  description: Brown Network
+  shutdown: false
+  vrf: DEV
+  ip_address_virtual: 10.70.70.1/24
+  ip_igmp: true
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:70:70::1/64
+  pim:
+    ipv4:
+      local_interface: Loopback102
+  mtu: 9014
+  tenant: DOMAIN_B_FABRIC
+  tags:
+  - DEV
+  - BROWN
+- name: Vlan80
+  description: Black Network
+  shutdown: false
+  vrf: DEV
+  ip_address_virtual: 10.80.80.1/24
+  ip_igmp: true
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:80:80::1/64
+  pim:
+    ipv4:
+      local_interface: Loopback102
+  mtu: 9014
+  tenant: DOMAIN_B_FABRIC
+  tags:
+  - DEV
+  - BLACK
+- name: Vlan10
+  description: Blue Network
+  shutdown: false
+  vrf: PROD
+  ip_address_virtual: 10.10.10.1/24
+  ip_igmp: true
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:10:10::1/64
+  pim:
+    ipv4:
+      local_interface: Loopback101
+  mtu: 9014
+  tenant: DOMAIN_B_FABRIC
+  tags:
+  - PROD
+  - BLUE
+- name: Vlan20
+  description: Green Network
+  shutdown: false
+  vrf: PROD
+  ip_address_virtual: 10.20.20.1/24
+  ip_igmp: true
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:20:20::1/64
+  pim:
+    ipv4:
+      local_interface: Loopback101
+  mtu: 9014
+  tenant: DOMAIN_B_FABRIC
+  tags:
+  - PROD
+  - GREEN
+- name: Vlan40
+  description: Purple Network
+  shutdown: false
+  vrf: PROD
+  ip_address_virtual: 10.40.40.1/24
+  ip_igmp: true
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:40:40::1/64
+  pim:
+    ipv4:
+      local_interface: Loopback101
+  mtu: 9014
+  tenant: DOMAIN_B_FABRIC
+  tags:
+  - PROD
+  - PURPLE
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+vlans:
+- id: 60
+  name: Red
+  tenant: DOMAIN_B_FABRIC
+- id: 70
+  name: Brown
+  tenant: DOMAIN_B_FABRIC
+- id: 80
+  name: Black
+  tenant: DOMAIN_B_FABRIC
+- id: 10
+  name: Blue
+  tenant: DOMAIN_B_FABRIC
+- id: 20
+  name: Green
+  tenant: DOMAIN_B_FABRIC
+- id: 40
+  name: Purple
+  tenant: DOMAIN_B_FABRIC
+vrfs:
+- name: MGMT
+  ip_routing: false
+- name: DEV
+  ip_routing: true
+  ipv6_routing: true
+  tenant: DOMAIN_B_FABRIC
+- name: PROD
+  ip_routing: true
+  ipv6_routing: true
+  tenant: DOMAIN_B_FABRIC
+vxlan_interface:
+  vxlan1:
+    description: B-LEAF7_VTEP
+    vxlan:
+      source_interface: Loopback1
+      udp_port: 4789
+      vlans:
+      - id: 60
+        vni: 10060
+      - id: 70
+        vni: 10070
+      - id: 80
+        vni: 10080
+      - id: 10
+        vni: 10010
+      - id: 20
+        vni: 10020
+      - id: 40
+        vni: 10040
+      vrfs:
+      - name: DEV
+        vni: 50002
+        multicast_group: 232.2.2.2
+      - name: PROD
+        vni: 50001
+        multicast_group: 232.1.1.1

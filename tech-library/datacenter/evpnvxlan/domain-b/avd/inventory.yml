@@ -1,31 +1,31 @@
 ---
 all:
   children:
-    DOMAIN_A_FABRIC:
+    DOMAIN_B_FABRIC:
       children:
-        DOMAIN_A_SPINES:
+        DOMAIN_B_SPINES:
           vars:
             type: spine
           hosts:
-            A-SPINE1:
-            A-SPINE2:
-            A-SPINE3:
-            A-SPINE4:
-        DOMAIN_A_LEAFS:
+            B-SPINE1:
+            B-SPINE2:
+            B-SPINE3:
+            B-SPINE4:
+        DOMAIN_B_LEAFS:
           vars:
             type: l3leaf
           hosts:
-            A-LEAF1:
-            A-LEAF2:
-            A-LEAF3:
-            A-LEAF4:
-            A-LEAF5:
-            A-LEAF6:
-            A-LEAF7:
-            A-LEAF8:
-    DOMAIN_A_ENDPOINTS:
+            B-LEAF1:
+            B-LEAF2:
+            B-LEAF3:
+            B-LEAF4:
+            B-LEAF5:
+            B-LEAF6:
+            B-LEAF7:
+            B-LEAF8:
+    DOMAIN_B_ENDPOINTS:
       children:
-        DOMAIN_A_LEAFS:
-    DOMAIN_A_SERVICES:
+        DOMAIN_B_LEAFS:
+    DOMAIN_B_SERVICES:
       children:
-        DOMAIN_A_LEAFS:
+        DOMAIN_B_LEAFS:

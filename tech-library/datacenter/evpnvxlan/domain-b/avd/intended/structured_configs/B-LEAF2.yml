@@ -1,0 +1,362 @@
+aaa_root:
+  disabled: true
+config_end: true
+dhcp_relay:
+  tunnel_requests_disabled: true
+enable_password:
+  disabled: true
+ethernet_interfaces:
+- name: Ethernet1
+  description: P2P_B-SPINE1_Ethernet2
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.9/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  isis_enable: '100'
+  isis_metric: 10
+  isis_network_point_to_point: true
+  isis_circuit_type: level-2
+  peer: B-SPINE1
+  peer_interface: Ethernet2
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet2
+  description: P2P_B-SPINE2_Ethernet2
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.11/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  isis_enable: '100'
+  isis_metric: 10
+  isis_network_point_to_point: true
+  isis_circuit_type: level-2
+  peer: B-SPINE2
+  peer_interface: Ethernet2
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet3
+  description: P2P_B-SPINE3_Ethernet2
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.13/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  isis_enable: '100'
+  isis_metric: 10
+  isis_network_point_to_point: true
+  isis_circuit_type: level-2
+  peer: B-SPINE3
+  peer_interface: Ethernet2
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet4
+  description: P2P_B-SPINE4_Ethernet2
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.15/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  isis_enable: '100'
+  isis_metric: 10
+  isis_network_point_to_point: true
+  isis_circuit_type: level-2
+  peer: B-SPINE4
+  peer_interface: Ethernet2
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet7
+  description: SERVER_HostB1_eth2
+  shutdown: false
+  channel_group:
+    id: 7
+    mode: active
+  peer: HostB1
+  peer_interface: eth2
+  peer_type: server
+  port_profile: PROF-GREEN-AA
+- name: Ethernet8
+  description: SERVER_HostB2_eth2
+  shutdown: false
+  channel_group:
+    id: 8
+    mode: active
+  peer: HostB2
+  peer_interface: eth2
+  peer_type: server
+  port_profile: PROF-PURPLE-AA
+event_monitor:
+  enabled: true
+hostname: B-LEAF2
+ip_dhcp_relay:
+  information_option: true
+ip_extcommunity_lists:
+- name: ECL-EVPN-SOO
+  entries:
+  - type: permit
+    extcommunities: soo 2.2.1.2:1
+ip_igmp_snooping:
+  globally_enabled: true
+ip_routing: true
+ip_virtual_router_mac_address: 00:1c:73:00:00:01
+is_deployed: true
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/.
+- name: arista
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$Ap6u4I1WR/jMoNKe$LPLoHgIXFg5kiGPDWGF0w5lVVuOZZ4T15cIBbNxE2ykqh98uVvsi9jPdybkbTXBTZFzi3haaPJVaGVwnpuck40
+loopback_interfaces:
+- name: Loopback0
+  description: Globally Unique Address
+  shutdown: false
+  ip_address: 1.1.1.2/32
+  isis_enable: '100'
+  isis_passive: true
+- name: Loopback1
+  description: VTEP IP
+  shutdown: false
+  ip_address: 2.2.1.2/32
+  isis_enable: '100'
+  isis_passive: true
+- name: Loopback101
+  description: Unique Loopback for VRF PROD
+  shutdown: false
+  vrf: PROD
+  ip_address: 10.101.2.2/32
+mac_address_table:
+  aging_time: 1800
+management_api_http:
+  enable_https: true
+  enable_vrfs:
+  - name: MGMT
+management_interfaces:
+- name: Management0
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: MGMT
+  ip_address: 172.100.100.106/24
+  type: oob
+  gateway: 172.100.100.1
+metadata:
+  platform: cEOS-LAB
+  fabric_name: DOMAIN_B_FABRIC
+port_channel_interfaces:
+- name: Port-Channel7
+  description: SERVER_HostB1
+  shutdown: false
+  evpn_ethernet_segment:
+    identifier: auto lacp
+  lacp_id: c0d6.8200.0000
+  spanning_tree_bpduguard: 'True'
+  spanning_tree_portfast: edge
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 20
+- name: Port-Channel8
+  description: SERVER_HostB2
+  shutdown: false
+  evpn_ethernet_segment:
+    identifier: auto lacp
+  lacp_id: c0d6.8200.0000
+  spanning_tree_bpduguard: 'True'
+  spanning_tree_portfast: edge
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 40
+route_maps:
+- name: RM-EVPN-SOO-IN
+  sequence_numbers:
+  - sequence: 10
+    type: deny
+    match:
+    - extcommunity ECL-EVPN-SOO
+  - sequence: 20
+    type: permit
+- name: RM-EVPN-SOO-OUT
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    set:
+    - extcommunity soo 2.2.1.2:1 additive
+router_bfd:
+  multihop:
+    interval: 300
+    min_rx: 300
+    multiplier: 3
+router_bgp:
+  as: '65200'
+  router_id: 1.1.1.2
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  graceful_restart:
+    enabled: true
+    restart_time: 300
+  maximum_paths:
+    paths: 4
+    ecmp: 4
+  updates:
+    wait_install: true
+  bgp:
+    default:
+      ipv4_unicast: false
+  peer_groups:
+  - name: LOCAL-EVPN-PEERS
+    type: evpn
+    remote_as: '65200'
+    update_source: Loopback0
+    bfd: true
+    password: WzKnNSduqwPYvUePYIh40g==
+    send_community: all
+    maximum_routes: 0
+  neighbors:
+  - ip_address: 1.1.1.201
+    peer_group: LOCAL-EVPN-PEERS
+    peer: B-SPINE1
+    description: B-SPINE1_Loopback0
+  - ip_address: 1.1.1.202
+    peer_group: LOCAL-EVPN-PEERS
+    peer: B-SPINE2
+    description: B-SPINE2_Loopback0
+  - ip_address: 1.1.1.203
+    peer_group: LOCAL-EVPN-PEERS
+    peer: B-SPINE3
+    description: B-SPINE3_Loopback0
+  - ip_address: 1.1.1.204
+    peer_group: LOCAL-EVPN-PEERS
+    peer: B-SPINE4
+    description: B-SPINE4_Loopback0
+  vlans:
+  - id: 10
+    tenant: DOMAIN_B_FABRIC
+    rd: 1.1.1.2:10010
+    route_targets:
+      both:
+      - 10010:10010
+    redistribute_routes:
+    - learned
+  address_family_evpn:
+    peer_groups:
+    - name: LOCAL-EVPN-PEERS
+      activate: true
+      route_map_in: RM-EVPN-SOO-IN
+      route_map_out: RM-EVPN-SOO-OUT
+    route:
+      import_match_failure_action: discard
+  address_family_ipv4:
+    peer_groups:
+    - name: LOCAL-EVPN-PEERS
+      activate: false
+  vrfs:
+  - name: PROD
+    rd: 1.1.1.2:50001
+    evpn_multicast: true
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 50001:50001
+      export:
+      - address_family: evpn
+        route_targets:
+        - 50001:50001
+    router_id: 1.1.1.2
+    redistribute:
+      connected:
+        enabled: true
+  eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
+router_isis:
+  instance: '100'
+  net: 49.1111.0010.0100.1002.00
+  router_id: 1.1.1.2
+  is_type: level-2
+  log_adjacency_changes: true
+  address_family_ipv4:
+    enabled: true
+    maximum_paths: 4
+router_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
+  vrfs:
+  - name: PROD
+    ipv4:
+      routing: true
+service_routing_protocols_model: multi-agent
+spanning_tree:
+  root_super: true
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 0
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 172.100.100.1
+transceiver_qsfp_default_mode_4x10: true
+virtual_source_nat_vrfs:
+- name: PROD
+  ip_address: 10.101.2.2
+vlan_interfaces:
+- name: Vlan10
+  description: Blue Network
+  shutdown: false
+  vrf: PROD
+  ip_address_virtual: 10.10.10.1/24
+  ip_igmp: true
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:10:10::1/64
+  pim:
+    ipv4:
+      local_interface: Loopback101
+  mtu: 9014
+  tenant: DOMAIN_B_FABRIC
+  tags:
+  - PROD
+  - BLUE
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+vlans:
+- id: 10
+  name: Blue
+  tenant: DOMAIN_B_FABRIC
+vrfs:
+- name: MGMT
+  ip_routing: false
+- name: PROD
+  ip_routing: true
+  ipv6_routing: true
+  tenant: DOMAIN_B_FABRIC
+vxlan_interface:
+  vxlan1:
+    description: B-LEAF2_VTEP
+    vxlan:
+      source_interface: Loopback1
+      udp_port: 4789
+      vlans:
+      - id: 10
+        vni: 10010
+      vrfs:
+      - name: PROD
+        vni: 50001
+        multicast_group: 232.1.1.1

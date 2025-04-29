@@ -1,0 +1,124 @@
+---
+
+########################################################
+# Port Profiles                                        #
+########################################################
+custom_evpn_aa_structured_config:
+  evpn_ethernet_segment:
+    identifier: 'auto lacp'
+
+
+port_profiles:
+  - profile: PROF-BLUE-AA
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 10
+    port_channel:
+      mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: 'auto lacp'
+        lacp_id: c0d6.8200.0000
+
+
+  - profile: PROF-GREEN-AA
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 20
+    port_channel:
+      mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: 'auto lacp'
+        lacp_id: c0d6.8200.0000
+
+  - profile: PROF-PURPLE-AA
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 40
+    port_channel:
+      mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: 'auto lacp'
+        lacp_id: c0d6.8200.0000
+
+  - profile: PROF-PURPLE-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 40
+
+  - profile: PROF-RED-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 60
+
+  - profile: PROF-BROWN-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 70
+
+  - profile: PROF-BLACK-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 80
+
+########################################################
+# End hosts                                            #
+########################################################
+servers:
+  - name: HostB1
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [B-LEAF1, B-LEAF2]
+        profile: PROF-GREEN-AA
+
+  - name: HostB2
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [B-LEAF1, B-LEAF2]
+        profile: PROF-PURPLE-AA
+
+  - name: HostB3
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [B-LEAF3]
+        profile: PROF-RED-SINGLE-HOMED
+
+  - name: HostB4
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [B-LEAF3, B-LEAF4]
+        profile: PROF-BLUE-AA
+
+  - name: HostB5
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [B-LEAF4]
+        profile: PROF-BROWN-SINGLE-HOMED
+
+  - name: HostB6
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet3]
+        switches: [B-SW1]
+        profile: PROF-PURPLE-SINGLE-HOMED
+
+  - name: HostB7
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet4]
+        switches: [B-SW1]
+        profile: PROF-BLACK-SINGLE-HOMED
