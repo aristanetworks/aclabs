@@ -1,0 +1,386 @@
+---
+# --------------------------------------------------------------
+# Arista EVPN Deployment Guide Topology
+# --------------------------------------------------------------
+
+name: arista-evpn-dg
+
+prefix: ""
+
+mgmt:
+  network: mgmt
+  ipv4-subnet: 172.100.100.0/24
+
+topology:
+
+  defaults:
+    env:
+      INTFTYPE: et
+
+  kinds:
+    ceos:
+      image: ceos:latest
+    linux:
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
+      # binds:
+      #   - /techlib-vxlan-domain-b:/workspace:ro
+
+  nodes:
+
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+#                     DOMAIN "B"                         #
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+
+
+#########################
+# DC "B" SPINE          #
+#########################
+
+    B-SPINE1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.101
+      binds:
+        - sn/b-spine1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-SPINE1.cfg
+      ports:
+        - '22001:22'
+        - '8001:80'
+        - '44301:443'
+
+    B-SPINE2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.102
+      binds:
+        - sn/b-spine2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-SPINE2.cfg
+      ports:
+        - '22002:22'
+        - '8002:80'
+        - '44302:443'
+
+    B-SPINE3:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.103
+      binds:
+        - sn/b-spine3.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-SPINE3.cfg
+      ports:
+        - '22003:22'
+        - '8003:80'
+        - '44303:443'
+
+    B-SPINE4:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.104
+      binds:
+        - sn/b-spine4.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-SPINE4.cfg
+      ports:
+        - '22004:22'
+        - '8004:80'
+        - '44304:443'
+
+#########################
+# DC "B" LEAF           #
+#########################
+
+    B-LEAF1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.105
+      binds:
+        - sn/b-leaf1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-LEAF1.cfg
+      ports:
+        - '22005:22'
+        - '8005:80'
+        - '44305:443'
+
+    B-LEAF2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.106
+      binds:
+        - sn/b-leaf2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-LEAF2.cfg
+      ports:
+        - '22006:22'
+        - '8006:80'
+        - '44306:443'
+
+    B-LEAF3:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.107
+      binds:
+        - sn/b-leaf3.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-LEAF3.cfg
+      ports:
+        - '22007:22'
+        - '8007:80'
+        - '44307:443'
+
+    B-LEAF4:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.108
+      binds:
+        - sn/b-leaf4.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-LEAF4.cfg
+      ports:
+        - '22008:22'
+        - '8008:80'
+        - '44308:443'
+
+    B-LEAF5:
+      kind: ceos
+      binds:
+        - sn/b-leaf5.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-LEAF5.cfg
+      ports:
+        - '22009:22'
+        - '8009:80'
+        - '44309:443'
+
+    B-LEAF6:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.110
+      binds:
+        - sn/b-leaf6.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-LEAF6.cfg
+      ports:
+        - '22010:22'
+        - '8010:80'
+        - '44310:443'
+
+    B-LEAF7:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.111
+      binds:
+        - sn/b-leaf7.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-LEAF7.cfg
+      ports:
+        - '22011:22'
+        - '8011:80'
+        - '44311:443'
+
+    B-LEAF8:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.112
+      binds:
+        - sn/b-leaf8.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-LEAF8.cfg
+      ports:
+        - '22012:22'
+        - '8012:80'
+        - '44312:443'
+
+    B-SW1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.113
+      binds:
+        - sn/b-sw1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/B-SW1.cfg
+      ports:
+        - '22013:22'
+        - '8013:80'
+        - '44313:443'
+
+#########################
+# DC "B" Hosts          #
+#########################
+
+    # HostB1 is connected to LEAF1 eth7 and LEAF2 eth7
+    HostB1:
+      kind: linux
+      mgmt-ipv4: 172.100.100.201
+      env:
+        TMODE: lacp
+        IPV4: 10.20.20.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.20.20.1
+        IPV6: 2001:db8:20:20::101/64
+      ports:
+        - '22201:22'
+
+    # HostB2 is connected to LEAF1 eth8 and LEAF2 eth8
+    HostB2:
+      kind: linux
+      mgmt-ipv4: 172.100.100.202
+      env:
+        TMODE: lacp
+        IPV4: 10.40.40.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.40.40.1
+        IPV6: 2001:db8:40:40::101/64
+      ports:
+        - '22202:22'
+
+    # HostB3 is connected to LEAF3 eth7
+    HostB3:
+      kind: linux
+      mgmt-ipv4: 172.100.100.203
+      env:
+        IPV4: 10.60.60.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.60.60.1
+        IPV6: 2001:db8:60:60::101/64
+      ports:
+        - '22203:22'
+
+    # HostB4 is connected to LEAF3 eth8 and LEAF4 eth8
+    HostB4:
+      kind: linux
+      mgmt-ipv4: 172.100.100.204
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.103/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        IPV6: 2001:db8:10:10::103/64
+      ports:
+        - '22204:22'
+
+    # HostB5 is connected to LEAF4 eth7
+    HostB5:
+      kind: linux
+      mgmt-ipv4: 172.100.100.205
+      env:
+        IPV4: 10.70.70.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.70.70.1
+        IPV6: 2001:db8:70:70::102/64
+      ports:
+        - '22205:22'
+
+    # HostB6 is connected to B-SW1 eth3
+    HostB6:
+      kind: linux
+      mgmt-ipv4: 172.100.100.206
+      env:
+        IPV4: 10.40.40.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.40.40.1
+        IPV6: 2001:db8:40:40::102/64
+      ports:
+        - '22206:22'
+
+    # HostB7 is connected to B-SW1 eth4
+    HostB7:
+      kind: linux
+      mgmt-ipv4: 172.100.100.207
+      env:
+        IPV4: 10.80.80.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.80.80.1
+        IPV6: 2001:db8:80:80::101/64
+      ports:
+        - '22207:22'
+
+#########################
+# Backbone              #
+#########################
+
+    BB1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.114
+      binds:
+        - sn/bb1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/BB1.cfg
+      group: 'superspine'
+      ports:
+        - '22014:22'
+        - '8014:80'
+        - '44314:443'
+
+    BB2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.115
+      binds:
+        - sn/bb2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/BB2.cfg
+      group: 'superspine'
+      ports:
+        - '22015:22'
+        - '8015:80'
+        - '44315:443'
+
+  links:
+######################
+# B-SPINE1 to LEAF   #
+######################
+    - endpoints: ["B-SPINE1:et1", "B-LEAF1:et1"]
+    - endpoints: ["B-SPINE1:et2", "B-LEAF2:et1"]
+    - endpoints: ["B-SPINE1:et3", "B-LEAF3:et1"]
+    - endpoints: ["B-SPINE1:et4", "B-LEAF4:et1"]
+    - endpoints: ["B-SPINE1:et5", "B-LEAF5:et1"]
+    - endpoints: ["B-SPINE1:et6", "B-LEAF6:et1"]
+    - endpoints: ["B-SPINE1:et7", "B-LEAF7:et1"]
+    - endpoints: ["B-SPINE1:et8", "B-LEAF8:et1"]
+######################
+# B-SPINE2 to LEAF   #
+######################
+    - endpoints: ["B-SPINE2:et1", "B-LEAF1:et2"]
+    - endpoints: ["B-SPINE2:et2", "B-LEAF2:et2"]
+    - endpoints: ["B-SPINE2:et3", "B-LEAF3:et2"]
+    - endpoints: ["B-SPINE2:et4", "B-LEAF4:et2"]
+    - endpoints: ["B-SPINE2:et5", "B-LEAF5:et2"]
+    - endpoints: ["B-SPINE2:et6", "B-LEAF6:et2"]
+    - endpoints: ["B-SPINE2:et7", "B-LEAF7:et2"]
+    - endpoints: ["B-SPINE2:et8", "B-LEAF8:et2"]
+######################
+# B-SPINE3 to LEAF   #
+######################
+    - endpoints: ["B-SPINE3:et1", "B-LEAF1:et3"]
+    - endpoints: ["B-SPINE3:et2", "B-LEAF2:et3"]
+    - endpoints: ["B-SPINE3:et3", "B-LEAF3:et3"]
+    - endpoints: ["B-SPINE3:et4", "B-LEAF4:et3"]
+    - endpoints: ["B-SPINE3:et5", "B-LEAF5:et3"]
+    - endpoints: ["B-SPINE3:et6", "B-LEAF6:et3"]
+    - endpoints: ["B-SPINE3:et7", "B-LEAF7:et3"]
+    - endpoints: ["B-SPINE3:et8", "B-LEAF8:et3"]
+######################
+# B-SPINE4 to LEAF   #
+######################
+    - endpoints: ["B-SPINE4:et1", "B-LEAF1:et4"]
+    - endpoints: ["B-SPINE4:et2", "B-LEAF2:et4"]
+    - endpoints: ["B-SPINE4:et3", "B-LEAF3:et4"]
+    - endpoints: ["B-SPINE4:et4", "B-LEAF4:et4"]
+    - endpoints: ["B-SPINE4:et5", "B-LEAF5:et4"]
+    - endpoints: ["B-SPINE4:et6", "B-LEAF6:et4"]
+    - endpoints: ["B-SPINE4:et7", "B-LEAF7:et4"]
+    - endpoints: ["B-SPINE4:et8", "B-LEAF8:et4"]
+#################################
+# B-LEAF5 and B-LEAF6  to B-SW1 #
+#################################
+    - endpoints: ["B-LEAF5:et7", "B-SW1:et1"]
+    - endpoints: ["B-LEAF6:et7", "B-SW1:et2"]
+########################
+# B-LEAF7 to B-LEAF8   #
+########################
+    - endpoints: ["B-LEAF7:et5", "B-LEAF8:et5"]
+    - endpoints: ["B-LEAF7:et6", "B-LEAF8:et6"]
+########################
+# DC "B" HostC6         #
+########################
+    - endpoints: ["HostB1:eth1", "B-LEAF1:et7"]
+    - endpoints: ["HostB1:eth2", "B-LEAF2:et7"]
+    - endpoints: ["HostB2:eth1", "B-LEAF1:et8"]
+    - endpoints: ["HostB2:eth2", "B-LEAF2:et8"]
+    - endpoints: ["HostB3:eth1", "B-LEAF3:et7"]
+    - endpoints: ["HostB4:eth1", "B-LEAF3:et8"]
+    - endpoints: ["HostB4:eth2", "B-LEAF4:et8"]
+    - endpoints: ["HostB5:eth1", "B-LEAF4:et7"]
+    - endpoints: ["HostB6:eth1", "B-SW1:et3"]
+    - endpoints: ["HostB7:eth1", "B-SW1:et4"]
+########################
+# Backbone             #
+########################
+    - endpoints: ["BB1:et3", "B-LEAF7:et7"]
+    - endpoints: ["BB1:et4", "B-LEAF8:et7"]
+    - endpoints: ["BB2:et3", "B-LEAF7:et8"]
+    - endpoints: ["BB2:et4", "B-LEAF8:et8"]

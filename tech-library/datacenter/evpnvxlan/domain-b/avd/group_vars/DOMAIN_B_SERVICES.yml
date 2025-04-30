@@ -1,0 +1,84 @@
+---
+
+###################################################
+# Tenants and Per-VRF Config                      #
+###################################################
+tenants:
+  - name: DOMAIN_B_FABRIC
+    mac_vrf_vni_base: 10000
+    evpn_l2_multi_domain: false
+    vrfs:
+      - name: PROD
+        vrf_vni: 50001
+        evpn_l3_multicast:
+          enabled: true
+          evpn_underlay_l3_multicast_group: 232.1.1.1
+        vtep_diagnostic:
+          loopback: 101
+          loopback_description: Unique Loopback for VRF PROD
+          loopback_ip_range: 10.101.2.0/24
+        svis:
+          - id: 10
+            name: Blue
+            description: Blue Network
+            tags: ['PROD', 'BLUE', 'MULTI-DOMAIN']
+            enabled: true
+            mtu: 9014
+            ip_address_virtual: 10.10.10.1/24
+            ipv6_address_virtuals: [2001:db8:10:10::1/64]
+            evpn_l2_multi_domain: true
+          - id: 20
+            name: Green
+            description: Green Network
+            tags: ['PROD', 'GREEN', 'MULTI-DOMAIN']
+            enabled: true
+            mtu: 9014
+            ip_address_virtual: 10.20.20.1/24
+            ipv6_address_virtuals: [2001:db8:20:20::1/64]
+            evpn_l2_multi_domain: true
+          - id: 40
+            name: Purple
+            description: Purple Network
+            tags: ['PROD', 'PURPLE']
+            enabled: true
+            mtu: 9014
+            ip_address_virtual: 10.40.40.1/24
+            ipv6_address_virtuals: [2001:db8:40:40::1/64]
+      - name: DEV
+        vrf_vni: 50002
+        evpn_l3_multicast:
+          enabled: true
+          evpn_underlay_l3_multicast_group: 232.2.2.2
+        mlag_ibgp_peering_vlan: 3002
+        mlag_ibgp_peering_ipv4_pool: 192.2.2.0/31
+        vtep_diagnostic:
+          loopback: 102
+          loopback_description: Unique Loopback for VRF DEV
+          loopback_ip_range: 10.102.2.0/24
+        svis:
+          - id: 60
+            name: Red
+            description: Red Network
+            tags: ['DEV', 'RED', 'MULTI-DOMAIN']
+            enabled: true
+            mtu: 9014
+            ip_address_virtual: 10.60.60.1/24
+            ipv6_address_virtuals: [2001:db8:60:60::1/64]
+            evpn_l2_multi_domain: true
+          - id: 70
+            name: Brown
+            description: Brown Network
+            tags: ['DEV', 'BROWN', 'MULTI-DOMAIN']
+            enabled: true
+            mtu: 9014
+            ip_address_virtual: 10.70.70.1/24
+            ipv6_address_virtuals: [2001:db8:70:70::1/64]
+            evpn_l2_multi_domain: true
+          - id: 80
+            name: Black
+            description: Black Network
+            tags: ['DEV', 'BLACK']
+            enabled: true
+            mtu: 9014
+            ip_address_virtual: 10.80.80.1/24
+            ipv6_address_virtuals: [2001:db8:80:80::1/64]

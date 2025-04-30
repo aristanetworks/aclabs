@@ -1,9 +1,0 @@
----
-type: spine
-
-switchport_default:
-  mode: routed
-
-evpn_multicast: false
-
-cv_tags_topology_type: spine
