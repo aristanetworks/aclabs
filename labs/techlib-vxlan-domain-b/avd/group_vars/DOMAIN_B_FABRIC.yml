@@ -1,0 +1,339 @@
+---
+
+fabric_name: DOMAIN_B_FABRIC
+
+bgp_as: 65200
+
+bgp_distance:
+  external_routes: 20
+  internal_routes: 200
+  local_routes: 200
+
+bgp_graceful_restart:
+  enabled: true
+  restart_time: 300
+
+bgp_peer_groups:
+  evpn_overlay_peers:
+    name: LOCAL-EVPN-PEERS
+    password: WzKnNSduqwPYvUePYIh40g==
+    structured_config:
+      session_tracker: TRACK-LOCAL-EVPN-PEERS
+  evpn_overlay_core:
+    name: REMOTE-EVPN-PEERS
+    password: IO6gE/ln7Sp2wt33WX/Asg==
+
+bgp_update_wait_install: true
+
+default_vrf_diag_loopback_description: "Per-VRF Unique Loopback"
+
+evpn_import_pruning: true
+
+evpn_multicast: true
+
+isis_area_id: '49.1111'
+
+isis_default_metric: 10
+
+overlay_routing_protocol: ibgp
+
+router_id_loopback_description: "Globally Unique Address"
+
+underlay_isis_instance_name: '100'
+
+underlay_multicast: true
+
+underlay_routing_protocol: isis
+
+vtep_loopback_description: "VTEP IP"
+
+###################################################
+# Customized Structured Config                    #
+###################################################
+
+csc_vtep_bgp:
+  address_family_evpn:
+    layer_2_fec_in_place_update:
+      enabled: true
+    route:
+      import_ethernet_segment_ip_mass_withdraw: true
+      export_ethernet_segment_ip_mass_withdraw: true
+  session_trackers:
+    - name: TRACK-LOCAL-EVPN-PEERS
+      recovery_delay: 300
+  eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
+
+csc_vtep_dhcp_relay:
+  tunnel_requests_disabled: true
+
+csc_vtep_ip_dhcp_relay:
+  information_option: true
+
+csc_evpn_gw_bgp:
+  address_family_ipv4:
+    peer_groups:
+      - name: REMOTE-IPV4-PEERS
+        activate: true
+  address_family_evpn:
+    domain_identifier: '2:2'
+    domain_identifier_remote: '99:99'
+    evpn_ethernet_segment:
+      - domain: all
+        identifier: '0000:bbbb:0007:0008:0000'
+        route_target_import: '00:bb:bb:07:08:00'
+  bgp:
+    bestpath:
+      d_path: true
+  peer_groups:
+    - name: REMOTE-IPV4-PEERS
+      password: dkvBq1jk4inJHsHfMjYRnQ==
+      remote_as: 65000
+      route_map_out: RM-AS65000-IPV4-OUT
+      send_community: all
+    - name: REMOTE-EVPN-PEERS
+      local_as: 65000
+
+csc_evpn_gw_prefix_lists:
+  - name: PL-GATEWAY-LOOP
+    sequence_numbers:
+      - sequence: 10
+        action: permit 2.2.2.7/32
+      - sequence: 20
+        action: permit 2.2.2.8/32
+      - sequence: 30
+        action: permit 1.1.2.7/32
+      - sequence: 40
+        action: permit 1.1.2.8/32
+
+csc_evpn_gw_route_maps:
+  - name: RM-AS65000-IPV4-OUT
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ip address prefix-list PL-GATEWAY-LOOP
+
+csc_bleaf7_bgp:
+  neighbors:
+    - ip_address: 172.16.2.0
+      peer_group: REMOTE-IPV4-PEERS
+      description: BB1.IPV4
+    - ip_address: 172.16.2.4
+      peer_group: REMOTE-IPV4-PEERS
+      description: BB2.IPV4
+  vrfs:
+    - name: PROD
+      eos_cli: |
+        rd evpn domain remote 1.1.2.7:50001
+        route-target import evpn domain remote 50001:50001
+        route-target export evpn domain remote 50001:50001
+    - name: DEV
+      eos_cli: |
+        rd evpn domain remote 1.1.2.7:50002
+        route-target import evpn domain remote 50001:50001
+        route-target export evpn domain remote 50001:50001
+
+csc_bleaf8_bgp:
+  neighbors:
+    - ip_address: 172.16.2.2
+      peer_group: REMOTE-IPV4-PEERS
+      description: BB1.IPV4
+    - ip_address: 172.16.2.6
+      peer_group: REMOTE-IPV4-PEERS
+      description: BB2.IPV4
+  vrfs:
+    - name: PROD
+      eos_cli: |
+        rd evpn domain remote 1.1.2.8:50001
+        route-target import evpn domain remote 50001:50001
+        route-target export evpn domain remote 50001:50001
+    - name: DEV
+      eos_cli: |
+        rd evpn domain remote 1.1.2.8:50002
+        route-target import evpn domain remote 50001:50001
+        route-target export evpn domain remote 50001:50001
+
+###################################################
+# DOMAIN B SPINES                                 #
+###################################################
+spine:
+  defaults:
+    bgp_cluster_id: 1.1.2.205
+    platform: cEOS-LAB
+    loopback_ipv4_pool: 1.1.2.0/24
+  nodes:
+    - name: B-SPINE1
+      id: 201
+      mgmt_ip: 172.100.100.101/24
+    - name: B-SPINE2
+      id: 202
+      mgmt_ip: 172.100.100.102/24
+    - name: B-SPINE3
+      id: 203
+      mgmt_ip: 172.100.100.103/24
+    - name: B-SPINE4
+      id: 204
+      mgmt_ip: 172.100.100.104/24
+
+##################################################
+# DOMAIN B LEAFS                                 #
+##################################################
+l3leaf:
+  defaults:
+    platform: cEOS-LAB
+    loopback_ipv4_pool: 1.1.2.0/24
+    mlag: false
+    vtep_loopback_ipv4_pool: 2.2.2.0/24
+    uplink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4]
+    uplink_switches: [B-SPINE1, B-SPINE2, B-SPINE3, B-SPINE4]
+    uplink_ipv4_pool: 192.168.0.0/24
+    uplink_structured_config:
+      ip_address: "unnumbered Loopback0"
+    virtual_router_mac_address: 00:1c:73:00:00:01
+    spanning_tree_mode: mstp
+    spanning_tree_root_super: true
+    spanning_tree_priority: 0
+    structured_config:
+      dhcp_relay: "{{ csc_vtep_dhcp_relay }}"
+      ip_dhcp_relay: "{{ csc_vtep_ip_dhcp_relay }}"
+      router_bgp: "{{ csc_vtep_bgp }}"
+  node_groups:
+########################################################
+# DOMAIN B POD 1                                       #
+########################################################
+    - group: POD1
+      filter:
+        tags: ['GREEN', 'PURPLE']
+      nodes:
+        - name: B-LEAF1
+          id: 1
+          mgmt_ip: 172.100.100.105/24
+          uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
+        - name: B-LEAF2
+          id: 2
+          mgmt_ip: 172.100.100.106/24
+          uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
+########################################################
+# DOMAIN B POD 2                                       #
+########################################################
+    - group: POD2
+      filter:
+        tags: ['BLUE', 'RED', 'BROWN']
+      nodes:
+        - name: B-LEAF3
+          id: 3
+          mgmt_ip: 172.100.100.107/24
+          uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
+        - name: B-LEAF4
+          id: 4
+          mgmt_ip: 172.100.100.108/24
+          uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
+########################################################
+# DOMAIN B POD 3                                       #
+########################################################
+    - group: POD3
+      filter:
+        tags: ['PURPLE', 'BLACK']
+      nodes:
+        - name: B-LEAF5
+          id: 5
+          mgmt_ip: 172.100.100.109/24
+          uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
+        - name: B-LEAF6
+          id: 6
+          mgmt_ip: 172.100.100.110/24
+          uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
+########################################################
+# DOMAIN B POD 4 (EVPN Gateway)                        #
+########################################################
+    - group: POD4
+      filter:
+        tags: ['MULTI-DOMAIN']
+      evpn_gateway:
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+        remote_peers:
+          - hostname: BB1
+            ip_address: 1.1.0.1
+            bgp_as: 65000
+          - hostname: BB2
+            ip_address: 1.1.0.2
+            bgp_as: 65000
+      structured_config:
+        router_bgp: "{{ csc_evpn_gw_bgp }}"
+        prefix_lists: "{{ csc_evpn_gw_prefix_lists }}"
+        route_maps: "{{ csc_evpn_gw_route_maps }}"
+      nodes:
+        - name: B-LEAF7
+          id: 7
+          mgmt_ip: 172.100.100.111/24
+          uplink_switch_interfaces: [Ethernet7, Ethernet7, Ethernet7, Ethernet7]
+          structured_config:
+            router_bgp: "{{ csc_bleaf7_bgp }}"
+        - name: B-LEAF8
+          id: 8
+          mgmt_ip: 172.100.100.112/24
+          uplink_switch_interfaces: [Ethernet8, Ethernet8, Ethernet8, Ethernet8]
+          structured_config:
+            router_bgp: "{{ csc_bleaf8_bgp }}"
+##################################################
+# DOMAIN B L2 LEAFS                                #
+##################################################
+l2leaf:
+  defaults:
+    platform: cEOS-LAB
+    spanning_tree_mode: mstp
+    filter:
+      tags: ['PURPLE', 'BLACK']
+  nodes:
+    - name: B-SW1
+      id: 9
+      mgmt_ip: 172.100.100.113/24
+      structured_config:
+        ethernet_interfaces:
+          - name: Ethernet1
+            switchport:
+              mode: trunk
+          - name: Ethernet2
+            switchport:
+              mode: trunk
+
+
+##########################################################
+# DCI Connectivity                                       #
+##########################################################
+l3_edge:
+  p2p_links:
+    - nodes: [B-LEAF7, BB1]
+      interfaces: [Ethernet7, Ethernet1]
+      subnet: 172.16.2.0/31
+      ip:
+        - 172.16.2.1/31
+        - 172.16.2.0/31
+      include_in_underlay_protocol: false
+
+    - nodes: [B-LEAF7, BB2]
+      interfaces: [Ethernet8, Ethernet1]
+      subnet: 172.16.2.4/31
+      ip:
+        - 172.16.2.5/31
+        - 172.16.2.4/31
+      include_in_underlay_protocol: false
+
+    - nodes: [B-LEAF8, BB1]
+      interfaces: [Ethernet7, Ethernet1]
+      subnet: 172.16.2.2/31
+      ip:
+        - 172.16.2.3/31
+        - 172.16.2.2/31
+      include_in_underlay_protocol: false
+
+    - nodes: [B-LEAF8, BB2]
+      interfaces: [Ethernet8, Ethernet1]
+      subnet: 172.16.2.6/31
+      ip:
+        - 172.16.2.7/31
+        - 172.16.2.6/31
+      include_in_underlay_protocol: false

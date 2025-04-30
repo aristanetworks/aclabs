@@ -1,0 +1,139 @@
+---
+
+########################################################
+# Port Profiles                                        #
+########################################################
+csc_evpn_all_active:
+  bgp:
+    session_tracker: TRACK-LOCAL-EVPN-PEERS
+  evpn_ethernet_segment:
+    identifier: 'auto lacp'
+  lacp_id: c0d6.8200.0000
+
+csc_evpn_single_active:
+  bgp:
+    session_tracker: TRACK-LOCAL-EVPN-PEERS
+
+port_profiles:
+
+  - profile: PROF-BLUE-AA
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 10
+    port_channel:
+      mode: active
+      structured_config: "{{ csc_evpn_all_active }}"
+
+  - profile: PROF-GREEN-AA
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 20
+    port_channel:
+      mode: active
+      structured_config: "{{ csc_evpn_all_active }}"
+
+  - profile: PROF-PURPLE-AA
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 40
+    port_channel:
+      mode: active
+      structured_config: "{{ csc_evpn_all_active }}"
+
+  - profile: PROF-PURPLE-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 40
+
+  - profile: PROF-RED-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 60
+
+  - profile: PROF-BROWN-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 70
+
+  - profile: PROF-BLACK-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 80
+
+########################################################
+# End hosts                                            #
+########################################################
+servers:
+  - name: HostB1
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [B-LEAF1, B-LEAF2]
+        profile: PROF-GREEN-AA
+
+  - name: HostB2
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [B-LEAF1, B-LEAF2]
+        profile: PROF-PURPLE-AA
+
+  - name: HostB3
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [B-LEAF3]
+        profile: PROF-RED-SINGLE-HOMED
+
+  - name: HostB4
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [B-LEAF3, B-LEAF4]
+        profile: PROF-BLUE-AA
+
+  - name: HostB5
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [B-LEAF4]
+        profile: PROF-BROWN-SINGLE-HOMED
+
+  - name: HostB6
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet3]
+        switches: [B-SW1]
+        profile: PROF-PURPLE-SINGLE-HOMED
+
+  - name: HostB7
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet4]
+        switches: [B-SW1]
+        profile: PROF-BLACK-SINGLE-HOMED
+
+  - name: B-SW1
+    adapters:
+    - switches: ['B-LEAF5', 'B-LEAF6']
+      switch_ports: ['Ethernet7', 'Ethernet7']
+      enabled: true
+      ethernet_segment:
+        designated_forwarder_algorithm: preference
+        designated_forwarder_preferences:
+          - 2000
+          - 1000
+        redundancy: single-active
+        short_esi: 0005:0006:0007
+      mode: trunk
+      spanning_tree_portfast: edge
+      spanning_tree_bpduguard: disabled
+      structured_config: "{{ csc_evpn_single_active }}"
+      vlans: 40,80
