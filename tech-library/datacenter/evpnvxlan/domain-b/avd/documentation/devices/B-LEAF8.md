@@ -893,7 +893,7 @@ ASN Notation: asplain
 | Local Domain | 2:2 |
 | Remote Domain | 99:99 |
 | Remote Domain Peer Groups | REMOTE-EVPN-PEERS |
-| All Domain: Ethernet-Segment Identifier | 0000:00bb:0007:0008:0000 |
+| All Domain: Ethernet-Segment Identifier | 0000:bbbb:0007:0008:0000 |
 
 #### Router BGP VLANs
 
@@ -1008,7 +1008,7 @@ router bgp 65200
       layer-2 fec in-place update
       !
       evpn ethernet-segment domain all
-         identifier 0000:00bb:0007:0008:0000
+         identifier 0000:bbbb:0007:0008:0000
    !
    address-family ipv4
       no neighbor LOCAL-EVPN-PEERS activate
