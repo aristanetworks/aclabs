@@ -374,6 +374,7 @@ vlan_interfaces:
   tags:
   - DEV
   - RED
+  - MULTI-DOMAIN
 - name: Vlan70
   description: Brown Network
   shutdown: false
@@ -391,6 +392,7 @@ vlan_interfaces:
   tags:
   - DEV
   - BROWN
+  - MULTI-DOMAIN
 - name: Vlan10
   description: Blue Network
   shutdown: false
@@ -408,6 +410,7 @@ vlan_interfaces:
   tags:
   - PROD
   - BLUE
+  - MULTI-DOMAIN
 vlan_internal_order:
   allocation: ascending
   range:

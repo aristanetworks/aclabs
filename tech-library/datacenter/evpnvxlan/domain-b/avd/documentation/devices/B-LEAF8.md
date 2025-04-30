@@ -357,10 +357,8 @@ vlan internal order ascending range 1006 1199
 | ------- | ---- | ------------ |
 | 10 | Blue | - |
 | 20 | Green | - |
-| 40 | Purple | - |
 | 60 | Red | - |
 | 70 | Brown | - |
-| 80 | Black | - |
 
 ### VLANs Device Configuration
 
@@ -372,17 +370,11 @@ vlan 10
 vlan 20
    name Green
 !
-vlan 40
-   name Purple
-!
 vlan 60
    name Red
 !
 vlan 70
    name Brown
-!
-vlan 80
-   name Black
 ```
 
 ## MAC Address Table
@@ -579,10 +571,8 @@ interface Loopback102
 | --------- | ----------- | --- | ---- | -------- |
 | Vlan10 | Blue Network | PROD | 9014 | False |
 | Vlan20 | Green Network | PROD | 9014 | False |
-| Vlan40 | Purple Network | PROD | 9014 | False |
 | Vlan60 | Red Network | DEV | 9014 | False |
 | Vlan70 | Brown Network | DEV | 9014 | False |
-| Vlan80 | Black Network | DEV | 9014 | False |
 
 ##### IPv4
 
@@ -590,10 +580,8 @@ interface Loopback102
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
 | Vlan10 |  PROD  |  -  |  10.10.10.1/24  |  -  |  -  |  -  |
 | Vlan20 |  PROD  |  -  |  10.20.20.1/24  |  -  |  -  |  -  |
-| Vlan40 |  PROD  |  -  |  10.40.40.1/24  |  -  |  -  |  -  |
 | Vlan60 |  DEV  |  -  |  10.60.60.1/24  |  -  |  -  |  -  |
 | Vlan70 |  DEV  |  -  |  10.70.70.1/24  |  -  |  -  |  -  |
-| Vlan80 |  DEV  |  -  |  10.80.80.1/24  |  -  |  -  |  -  |
 
 ##### IPv6
 
@@ -601,10 +589,8 @@ interface Loopback102
 | --------- | --- | ------------ | ---------------------- | ------------------------ | -------------- | ------------------- | ----------------- | ----------- | ------------ |
 | Vlan10 | PROD | - | 2001:db8:10:10::1/64 | - | - | - | - | - | - |
 | Vlan20 | PROD | - | 2001:db8:20:20::1/64 | - | - | - | - | - | - |
-| Vlan40 | PROD | - | 2001:db8:40:40::1/64 | - | - | - | - | - | - |
 | Vlan60 | DEV | - | 2001:db8:60:60::1/64 | - | - | - | - | - | - |
 | Vlan70 | DEV | - | 2001:db8:70:70::1/64 | - | - | - | - | - | - |
-| Vlan80 | DEV | - | 2001:db8:80:80::1/64 | - | - | - | - | - | - |
 
 #### VLAN Interfaces Device Configuration
 
@@ -632,17 +618,6 @@ interface Vlan20
    ip address virtual 10.20.20.1/24
    ipv6 address virtual 2001:db8:20:20::1/64
 !
-interface Vlan40
-   description Purple Network
-   no shutdown
-   mtu 9014
-   vrf PROD
-   ip igmp
-   ipv6 enable
-   pim ipv4 local-interface Loopback101
-   ip address virtual 10.40.40.1/24
-   ipv6 address virtual 2001:db8:40:40::1/64
-!
 interface Vlan60
    description Red Network
    no shutdown
@@ -664,17 +639,6 @@ interface Vlan70
    pim ipv4 local-interface Loopback102
    ip address virtual 10.70.70.1/24
    ipv6 address virtual 2001:db8:70:70::1/64
-!
-interface Vlan80
-   description Black Network
-   no shutdown
-   mtu 9014
-   vrf DEV
-   ip igmp
-   ipv6 enable
-   pim ipv4 local-interface Loopback102
-   ip address virtual 10.80.80.1/24
-   ipv6 address virtual 2001:db8:80:80::1/64
 ```
 
 ### VXLAN Interface
@@ -692,10 +656,8 @@ interface Vlan80
 | ---- | --- | ---------- | --------------- |
 | 10 | 10010 | - | - |
 | 20 | 10020 | - | - |
-| 40 | 10040 | - | - |
 | 60 | 10060 | - | - |
 | 70 | 10070 | - | - |
-| 80 | 10080 | - | - |
 
 ##### VRF to VNI and Multicast Group Mappings
 
@@ -714,10 +676,8 @@ interface Vxlan1
    vxlan udp-port 4789
    vxlan vlan 10 vni 10010
    vxlan vlan 20 vni 10020
-   vxlan vlan 40 vni 10040
    vxlan vlan 60 vni 10060
    vxlan vlan 70 vni 10070
-   vxlan vlan 80 vni 10080
    vxlan vrf DEV vni 50002
    vxlan vrf PROD vni 50001
    vxlan vrf DEV multicast group 232.2.2.2
@@ -925,11 +885,9 @@ ASN Notation: asplain
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
 | 10 | 1.1.2.8:10010 | 10010:10010<br>remote 10010:10010 | - | - | learned |
-| 20 | 1.1.2.8:10020 | 10020:10020 | - | - | learned |
-| 40 | 1.1.2.8:10040 | 10040:10040 | - | - | learned |
+| 20 | 1.1.2.8:10020 | 10020:10020<br>remote 10020:10020 | - | - | learned |
 | 60 | 1.1.2.8:10060 | 10060:10060<br>remote 10060:10060 | - | - | learned |
 | 70 | 1.1.2.8:10070 | 10070:10070<br>remote 10070:10070 | - | - | learned |
-| 80 | 1.1.2.8:10080 | 10080:10080<br>remote 10080:10080 | - | - | learned |
 
 #### Router BGP VRFs
 
@@ -994,12 +952,9 @@ router bgp 65200
    !
    vlan 20
       rd 1.1.2.8:10020
+      rd evpn domain remote 1.1.2.8:10020
       route-target both 10020:10020
-      redistribute learned
-   !
-   vlan 40
-      rd 1.1.2.8:10040
-      route-target both 10040:10040
+      route-target import export evpn domain remote 10020:10020
       redistribute learned
    !
    vlan 60
@@ -1014,13 +969,6 @@ router bgp 65200
       rd evpn domain remote 1.1.2.8:10070
       route-target both 10070:10070
       route-target import export evpn domain remote 10070:10070
-      redistribute learned
-   !
-   vlan 80
-      rd 1.1.2.8:10080
-      rd evpn domain remote 1.1.2.8:10080
-      route-target both 10080:10080
-      route-target import export evpn domain remote 10080:10080
       redistribute learned
    !
    address-family evpn

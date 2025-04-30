@@ -21,7 +21,7 @@ tenants:
           - id: 10
             name: Blue
             description: Blue Network
-            tags: ['PROD', 'BLUE']
+            tags: ['PROD', 'BLUE', 'MULTI-DOMAIN']
             enabled: true
             mtu: 9014
             ip_address_virtual: 10.10.10.1/24
@@ -30,11 +30,12 @@ tenants:
           - id: 20
             name: Green
             description: Green Network
-            tags: ['PROD', 'GREEN']
+            tags: ['PROD', 'GREEN', 'MULTI-DOMAIN']
             enabled: true
             mtu: 9014
             ip_address_virtual: 10.20.20.1/24
             ipv6_address_virtuals: [2001:db8:20:20::1/64]
+            evpn_l2_multi_domain: true
           - id: 40
             name: Purple
             description: Purple Network
@@ -58,7 +59,7 @@ tenants:
           - id: 60
             name: Red
             description: Red Network
-            tags: ['DEV', 'RED']
+            tags: ['DEV', 'RED', 'MULTI-DOMAIN']
             enabled: true
             mtu: 9014
             ip_address_virtual: 10.60.60.1/24
@@ -67,7 +68,7 @@ tenants:
           - id: 70
             name: Brown
             description: Brown Network
-            tags: ['DEV', 'BROWN']
+            tags: ['DEV', 'BROWN', 'MULTI-DOMAIN']
             enabled: true
             mtu: 9014
             ip_address_virtual: 10.70.70.1/24
@@ -81,4 +82,3 @@ tenants:
             mtu: 9014
             ip_address_virtual: 10.80.80.1/24
             ipv6_address_virtuals: [2001:db8:80:80::1/64]
-            evpn_l2_multi_domain: true

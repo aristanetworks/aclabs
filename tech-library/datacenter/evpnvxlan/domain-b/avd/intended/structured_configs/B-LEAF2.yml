@@ -351,6 +351,7 @@ vlan_interfaces:
   tags:
   - PROD
   - GREEN
+  - MULTI-DOMAIN
 - name: Vlan40
   description: Purple Network
   shutdown: false

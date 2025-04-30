@@ -284,20 +284,6 @@ router_bgp:
         route_target: 10070:10070
     redistribute_routes:
     - learned
-  - id: 80
-    tenant: DOMAIN_B_FABRIC
-    rd: 1.1.2.7:10080
-    rd_evpn_domain:
-      domain: remote
-      rd: 1.1.2.7:10080
-    route_targets:
-      both:
-      - 10080:10080
-      import_export_evpn_domains:
-      - domain: remote
-        route_target: 10080:10080
-    redistribute_routes:
-    - learned
   - id: 10
     tenant: DOMAIN_B_FABRIC
     rd: 1.1.2.7:10010
@@ -315,17 +301,15 @@ router_bgp:
   - id: 20
     tenant: DOMAIN_B_FABRIC
     rd: 1.1.2.7:10020
+    rd_evpn_domain:
+      domain: remote
+      rd: 1.1.2.7:10020
     route_targets:
       both:
       - 10020:10020
-    redistribute_routes:
-    - learned
-  - id: 40
-    tenant: DOMAIN_B_FABRIC
-    rd: 1.1.2.7:10040
-    route_targets:
-      both:
-      - 10040:10040
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10020:10020
     redistribute_routes:
     - learned
   address_family_evpn:
@@ -458,6 +442,7 @@ vlan_interfaces:
   tags:
   - DEV
   - RED
+  - MULTI-DOMAIN
 - name: Vlan70
   description: Brown Network
   shutdown: false
@@ -475,23 +460,7 @@ vlan_interfaces:
   tags:
   - DEV
   - BROWN
-- name: Vlan80
-  description: Black Network
-  shutdown: false
-  vrf: DEV
-  ip_address_virtual: 10.80.80.1/24
-  ip_igmp: true
-  ipv6_enable: true
-  ipv6_address_virtuals:
-  - 2001:db8:80:80::1/64
-  pim:
-    ipv4:
-      local_interface: Loopback102
-  mtu: 9014
-  tenant: DOMAIN_B_FABRIC
-  tags:
-  - DEV
-  - BLACK
+  - MULTI-DOMAIN
 - name: Vlan10
   description: Blue Network
   shutdown: false
@@ -509,6 +478,7 @@ vlan_interfaces:
   tags:
   - PROD
   - BLUE
+  - MULTI-DOMAIN
 - name: Vlan20
   description: Green Network
   shutdown: false
@@ -526,23 +496,7 @@ vlan_interfaces:
   tags:
   - PROD
   - GREEN
-- name: Vlan40
-  description: Purple Network
-  shutdown: false
-  vrf: PROD
-  ip_address_virtual: 10.40.40.1/24
-  ip_igmp: true
-  ipv6_enable: true
-  ipv6_address_virtuals:
-  - 2001:db8:40:40::1/64
-  pim:
-    ipv4:
-      local_interface: Loopback101
-  mtu: 9014
-  tenant: DOMAIN_B_FABRIC
-  tags:
-  - PROD
-  - PURPLE
+  - MULTI-DOMAIN
 vlan_internal_order:
   allocation: ascending
   range:
@@ -555,17 +509,11 @@ vlans:
 - id: 70
   name: Brown
   tenant: DOMAIN_B_FABRIC
-- id: 80
-  name: Black
-  tenant: DOMAIN_B_FABRIC
 - id: 10
   name: Blue
   tenant: DOMAIN_B_FABRIC
 - id: 20
   name: Green
-  tenant: DOMAIN_B_FABRIC
-- id: 40
-  name: Purple
   tenant: DOMAIN_B_FABRIC
 vrfs:
 - name: MGMT
@@ -589,14 +537,10 @@ vxlan_interface:
         vni: 10060
       - id: 70
         vni: 10070
-      - id: 80
-        vni: 10080
       - id: 10
         vni: 10010
       - id: 20
         vni: 10020
-      - id: 40
-        vni: 10040
       vrfs:
       - name: DEV
         vni: 50002

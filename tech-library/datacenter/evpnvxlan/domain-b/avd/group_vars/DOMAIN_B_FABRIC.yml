@@ -247,6 +247,8 @@ l3leaf:
 # DOMAIN B POD 4 (EVPN Gateway)                        #
 ########################################################
     - group: POD4
+      filter:
+        tags: ['MULTI-DOMAIN']
       evpn_gateway:
         evpn_l2:
           enabled: true
