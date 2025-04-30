@@ -74,6 +74,9 @@ csc_evpn_gw_bgp:
     peer_groups:
       - name: REMOTE-IPV4-PEERS
         activate: true
+    redistribute:
+      connected:
+        enabled: true
   address_family_evpn:
     domain_identifier: '2:2'
     domain_identifier_remote: '99:99'
