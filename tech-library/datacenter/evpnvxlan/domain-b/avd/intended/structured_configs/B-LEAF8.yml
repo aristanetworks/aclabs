@@ -342,6 +342,10 @@ router_bgp:
       export_ethernet_segment_ip_mass_withdraw: true
     layer_2_fec_in_place_update:
       enabled: true
+    evpn_ethernet_segment:
+    - domain: all
+      identifier: 0000:bbbb:0007:0008:0000
+      route_target_import: 00:bb:bb:07:08:00
   address_family_ipv4:
     peer_groups:
     - name: LOCAL-EVPN-PEERS
@@ -365,6 +369,13 @@ router_bgp:
     redistribute:
       connected:
         enabled: true
+    eos_cli: 'rd evpn domain remote 1.1.2.8:50002
+
+      route-target import evpn domain remote 50001:50001
+
+      route-target export evpn domain remote 50001:50001
+
+      '
   - name: PROD
     rd: 1.1.2.8:50001
     evpn_multicast: true
@@ -381,6 +392,13 @@ router_bgp:
     redistribute:
       connected:
         enabled: true
+    eos_cli: 'rd evpn domain remote 1.1.2.8:50001
+
+      route-target import evpn domain remote 50001:50001
+
+      route-target export evpn domain remote 50001:50001
+
+      '
   session_trackers:
   - name: TRACK-LOCAL-EVPN-PEERS
     recovery_delay: 300

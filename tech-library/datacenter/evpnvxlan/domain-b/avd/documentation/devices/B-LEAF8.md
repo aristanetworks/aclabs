@@ -1033,6 +1033,10 @@ router bgp 65200
       domain identifier 99:99 remote
       route import match-failure action discard
       layer-2 fec in-place update
+      !
+      evpn ethernet-segment domain all
+         identifier 0000:bbbb:0007:0008:0000
+         route-target import 00:bb:bb:07:08:00
    !
    address-family ipv4
       no neighbor LOCAL-EVPN-PEERS activate
@@ -1045,6 +1049,11 @@ router bgp 65200
       router-id 1.1.2.8
       redistribute connected
       evpn multicast
+      !
+      rd evpn domain remote 1.1.2.8:50002
+      route-target import evpn domain remote 50001:50001
+      route-target export evpn domain remote 50001:50001
+
    !
    vrf PROD
       rd 1.1.2.8:50001
@@ -1053,6 +1062,11 @@ router bgp 65200
       router-id 1.1.2.8
       redistribute connected
       evpn multicast
+      !
+      rd evpn domain remote 1.1.2.8:50001
+      route-target import evpn domain remote 50001:50001
+      route-target export evpn domain remote 50001:50001
+
    session tracker TRACK-LOCAL-EVPN-PEERS
       recovery delay 300 seconds
    !
