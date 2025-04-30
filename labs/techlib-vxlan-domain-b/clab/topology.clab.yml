@@ -106,6 +106,7 @@ topology:
 
     B-LEAF5:
       kind: ceos
+      mgmt-ipv4: 172.100.100.109
       binds:
         - sn/b-leaf5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF5.cfg
