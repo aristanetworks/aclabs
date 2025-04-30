@@ -299,7 +299,7 @@ router_bgp:
         enabled: true
   session_trackers:
   - name: TRACK-LOCAL-EVPN-PEERS
-    recovery_delay: 300
+    recovery_delay: 10
   eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
 router_isis:
   instance: '100'

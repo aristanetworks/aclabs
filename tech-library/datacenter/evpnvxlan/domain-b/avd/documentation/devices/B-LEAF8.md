@@ -916,7 +916,7 @@ ASN Notation: asplain
 
 | Session Tracker Name | Recovery Delay (in seconds) |
 | -------------------- | --------------------------- |
-| TRACK-LOCAL-EVPN-PEERS | 300 |
+| TRACK-LOCAL-EVPN-PEERS | 10 |
 
 #### Router BGP Device Configuration
 
@@ -1015,6 +1015,7 @@ router bgp 65200
    address-family ipv4
       no neighbor LOCAL-EVPN-PEERS activate
       neighbor REMOTE-IPV4-PEERS activate
+      redistribute connected
    !
    vrf DEV
       rd 1.1.2.8:50002
@@ -1042,7 +1043,7 @@ router bgp 65200
       route-target export evpn domain remote 50001:50001
 
    session tracker TRACK-LOCAL-EVPN-PEERS
-      recovery delay 300 seconds
+      recovery delay 10 seconds
    !
    address-family evpn
       route type ethernet-segment route-target auto

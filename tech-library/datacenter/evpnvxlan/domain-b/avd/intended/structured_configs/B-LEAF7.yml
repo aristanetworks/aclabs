@@ -349,6 +349,9 @@ router_bgp:
       activate: false
     - name: REMOTE-IPV4-PEERS
       activate: true
+    redistribute:
+      connected:
+        enabled: true
   vrfs:
   - name: DEV
     rd: 1.1.2.7:50002
@@ -398,7 +401,7 @@ router_bgp:
       '
   session_trackers:
   - name: TRACK-LOCAL-EVPN-PEERS
-    recovery_delay: 300
+    recovery_delay: 10
   eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
 router_isis:
   instance: '100'

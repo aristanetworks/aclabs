@@ -876,7 +876,7 @@ ASN Notation: asplain
 
 | Session Tracker Name | Recovery Delay (in seconds) |
 | -------------------- | --------------------------- |
-| TRACK-LOCAL-EVPN-PEERS | 300 |
+| TRACK-LOCAL-EVPN-PEERS | 10 |
 
 #### Router BGP Device Configuration
 
@@ -937,7 +937,7 @@ router bgp 65200
       redistribute connected
       evpn multicast
    session tracker TRACK-LOCAL-EVPN-PEERS
-      recovery delay 300 seconds
+      recovery delay 10 seconds
    !
    address-family evpn
       route type ethernet-segment route-target auto
