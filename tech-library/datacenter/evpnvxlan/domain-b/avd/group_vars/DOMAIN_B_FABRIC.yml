@@ -60,7 +60,7 @@ csc_vtep_bgp:
       export_ethernet_segment_ip_mass_withdraw: true
   session_trackers:
     - name: TRACK-LOCAL-EVPN-PEERS
-      recovery_delay: 300
+      recovery_delay: 10
   eos_cli: "address-family evpn\n   route type ethernet-segment route-target auto"
 
 csc_vtep_dhcp_relay:
