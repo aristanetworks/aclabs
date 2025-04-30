@@ -82,8 +82,7 @@ csc_evpn_gw_bgp:
     domain_identifier_remote: '99:99'
     evpn_ethernet_segment:
       - domain: all
-        identifier: '0000:bbbb:0007:0008:0000'
-        route_target_import: '00:bb:bb:07:08:00'
+        identifier: '0000:00bb:0007:0008:0000'
     peer_groups:
       - name: REMOTE-EVPN-PEERS
         activate: true
