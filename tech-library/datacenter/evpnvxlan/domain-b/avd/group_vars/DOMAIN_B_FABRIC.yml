@@ -19,9 +19,6 @@ bgp_peer_groups:
     password: WzKnNSduqwPYvUePYIh40g==
     structured_config:
       session_tracker: TRACK-LOCAL-EVPN-PEERS
-  # evpn_overlay_core:
-  #   name: REMOTE-EVPN-PEERS
-  #   password: IO6gE/ln7Sp2wt33WX/Asg==
 
 bgp_update_wait_install: true
 
