@@ -252,8 +252,6 @@ l3leaf:
       evpn_gateway:
         evpn_l2:
           enabled: true
-        evpn_l3:
-          enabled: true
         remote_peers:
           - hostname: BB1
             ip_address: 1.1.0.1
