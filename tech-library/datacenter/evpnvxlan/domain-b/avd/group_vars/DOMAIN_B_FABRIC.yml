@@ -19,9 +19,9 @@ bgp_peer_groups:
     password: WzKnNSduqwPYvUePYIh40g==
     structured_config:
       session_tracker: TRACK-LOCAL-EVPN-PEERS
-  evpn_overlay_core:
-    name: REMOTE-EVPN-PEERS
-    password: IO6gE/ln7Sp2wt33WX/Asg==
+  # evpn_overlay_core:
+  #   name: REMOTE-EVPN-PEERS
+  #   password: IO6gE/ln7Sp2wt33WX/Asg==
 
 bgp_update_wait_install: true
 
@@ -81,6 +81,10 @@ csc_evpn_gw_bgp:
       - domain: all
         identifier: '0000:bbbb:0007:0008:0000'
         route_target_import: '00:bb:bb:07:08:00'
+    peer_groups:
+      - name: REMOTE-EVPN-PEERS
+        activate: true
+        domain_remote: true
   bgp:
     bestpath:
       d_path: true
@@ -92,6 +96,18 @@ csc_evpn_gw_bgp:
       send_community: all
     - name: REMOTE-EVPN-PEERS
       local_as: 65000
+      remote_as: 65000
+      route_reflector_client: true
+      update_source: Loopback0
+      password: IO6gE/ln7Sp2wt33WX/Asg==
+  neighbors:
+    - ip_address: 1.1.0.1
+      description: BB1.EVPN
+      peer_group: REMOTE-EVPN-PEERS
+    - ip_address: 1.1.0.2
+      description: BB2.EVPN
+      peer_group: REMOTE-EVPN-PEERS
+
 
 csc_evpn_gw_prefix_lists:
   - name: PL-GATEWAY-LOOP
@@ -252,13 +268,6 @@ l3leaf:
       evpn_gateway:
         evpn_l2:
           enabled: true
-        remote_peers:
-          - hostname: BB1
-            ip_address: 1.1.0.1
-            bgp_as: 65000
-          - hostname: BB2
-            ip_address: 1.1.0.2
-            bgp_as: 65000
       structured_config:
         router_bgp: "{{ csc_evpn_gw_bgp }}"
         prefix_lists: "{{ csc_evpn_gw_prefix_lists }}"

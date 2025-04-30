@@ -849,7 +849,10 @@ ASN Notation: asplain
 
 | Settings | Value |
 | -------- | ----- |
+| Remote AS | 65000 |
 | Local AS | 65000 |
+| Route Reflector Client | Yes |
+| Source | Loopback0 |
 
 ##### REMOTE-IPV4-PEERS
 
@@ -862,6 +865,8 @@ ASN Notation: asplain
 
 | Neighbor | Remote AS | VRF | Shutdown | Send-community | Maximum-routes | Allowas-in | BFD | RIB Pre-Policy Retain | Route-Reflector Client | Passive | TTL Max Hops |
 | -------- | --------- | --- | -------- | -------------- | -------------- | ---------- | --- | --------------------- | ---------------------- | ------- | ------------ |
+| 1.1.0.1 | Inherited from peer group REMOTE-EVPN-PEERS | default | - | - | - | - | - | - | Inherited from peer group REMOTE-EVPN-PEERS | - | - |
+| 1.1.0.2 | Inherited from peer group REMOTE-EVPN-PEERS | default | - | - | - | - | - | - | Inherited from peer group REMOTE-EVPN-PEERS | - | - |
 | 1.1.2.201 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
 | 1.1.2.202 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
 | 1.1.2.203 | Inherited from peer group LOCAL-EVPN-PEERS | default | - | Inherited from peer group LOCAL-EVPN-PEERS | Inherited from peer group LOCAL-EVPN-PEERS | - | Inherited from peer group LOCAL-EVPN-PEERS | - | - | - | - |
@@ -879,6 +884,17 @@ ASN Notation: asplain
 | Peer Group | Activate | Route-map In | Route-map Out | Encapsulation | Next-hop-self Source Interface |
 | ---------- | -------- | ------------ | ------------- | ------------- | ------------------------------ |
 | LOCAL-EVPN-PEERS | True |  RM-EVPN-SOO-IN | RM-EVPN-SOO-OUT | default | - |
+| REMOTE-EVPN-PEERS | True |  - | - | default | - |
+
+##### EVPN DCI Gateway Summary
+
+| Settings | Value |
+| -------- | ----- |
+| Local Domain | 2:2 |
+| Remote Domain | 99:99 |
+| Remote Domain Peer Groups | REMOTE-EVPN-PEERS |
+| All Domain: Ethernet-Segment Identifier | 0000:bbbb:0007:0008:0000 |
+| All Domain: Ethernet-Segment import Route-Target | 00:bb:bb:07:08:00 |
 
 #### Router BGP VLANs
 
@@ -924,12 +940,20 @@ router bgp 65200
    neighbor LOCAL-EVPN-PEERS send-community
    neighbor LOCAL-EVPN-PEERS maximum-routes 0
    neighbor REMOTE-EVPN-PEERS peer group
+   neighbor REMOTE-EVPN-PEERS remote-as 65000
    neighbor REMOTE-EVPN-PEERS local-as 65000 no-prepend replace-as
+   neighbor REMOTE-EVPN-PEERS update-source Loopback0
+   neighbor REMOTE-EVPN-PEERS route-reflector-client
+   neighbor REMOTE-EVPN-PEERS password 7 <removed>
    neighbor REMOTE-IPV4-PEERS peer group
    neighbor REMOTE-IPV4-PEERS remote-as 65000
    neighbor REMOTE-IPV4-PEERS route-map RM-AS65000-IPV4-OUT out
    neighbor REMOTE-IPV4-PEERS password 7 <removed>
    neighbor REMOTE-IPV4-PEERS send-community
+   neighbor 1.1.0.1 peer group REMOTE-EVPN-PEERS
+   neighbor 1.1.0.1 description BB1.EVPN
+   neighbor 1.1.0.2 peer group REMOTE-EVPN-PEERS
+   neighbor 1.1.0.2 description BB2.EVPN
    neighbor 1.1.2.201 peer group LOCAL-EVPN-PEERS
    neighbor 1.1.2.201 description B-SPINE1_Loopback0
    neighbor 1.1.2.202 peer group LOCAL-EVPN-PEERS
@@ -977,6 +1001,8 @@ router bgp 65200
       neighbor LOCAL-EVPN-PEERS activate
       neighbor LOCAL-EVPN-PEERS route-map RM-EVPN-SOO-IN in
       neighbor LOCAL-EVPN-PEERS route-map RM-EVPN-SOO-OUT out
+      neighbor REMOTE-EVPN-PEERS activate
+      neighbor REMOTE-EVPN-PEERS domain remote
       domain identifier 2:2
       domain identifier 99:99 remote
       route import match-failure action discard
