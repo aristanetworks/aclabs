@@ -99,6 +99,17 @@ csc_aleaf7_bgp:
     - ip_address: 172.16.1.4
       peer_group: REMOTE-IPV4-PEERS
       description: BB2.IPV4
+  vrfs:
+    - name: PROD
+      eos_cli: |
+        rd evpn domain remote 1.1.1.7:50001
+        route-target import evpn domain remote 50001:50001
+        route-target export evpn domain remote 50001:50001
+    - name: DEV
+      eos_cli: |
+        rd evpn domain remote 1.1.1.7:50002
+        route-target import evpn domain remote 50001:50001
+        route-target export evpn domain remote 50001:50001
 
 csc_aleaf8_bgp:
   neighbors:
@@ -108,6 +119,17 @@ csc_aleaf8_bgp:
     - ip_address: 172.16.1.6
       peer_group: REMOTE-IPV4-PEERS
       description: BB2.IPV4
+  vrfs:
+    - name: PROD
+      eos_cli: |
+        rd evpn domain remote 1.1.1.8:50001
+        route-target import evpn domain remote 50001:50001
+        route-target export evpn domain remote 50001:50001
+    - name: DEV
+      eos_cli: |
+        rd evpn domain remote 1.1.1.8:50002
+        route-target import evpn domain remote 50001:50001
+        route-target export evpn domain remote 50001:50001
 
 ###################################################
 # DOMAIN A SPINES                                 #
@@ -208,8 +230,6 @@ l3leaf:
       bgp_as: 65178
       evpn_gateway:
         evpn_l2:
-          enabled: true
-        evpn_l3:
           enabled: true
         remote_peers:
           - hostname: BB1

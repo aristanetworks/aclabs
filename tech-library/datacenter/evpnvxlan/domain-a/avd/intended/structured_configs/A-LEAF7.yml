@@ -397,10 +397,6 @@ router_bgp:
   address_family_evpn:
     domain_identifier: '1:1'
     domain_identifier_remote: 99:99
-    neighbor_default:
-      next_hop_self_received_evpn_routes:
-        enable: true
-        inter_domain: true
     peer_groups:
     - name: REMOTE-EVPN-PEERS
       activate: true
@@ -445,6 +441,13 @@ router_bgp:
       connected:
         enabled: true
         route_map: RM-CONN-2-BGP-VRFS
+    eos_cli: 'rd evpn domain remote 1.1.1.7:50002
+
+      route-target import evpn domain remote 50001:50001
+
+      route-target export evpn domain remote 50001:50001
+
+      '
   - name: PROD
     rd: 1.1.1.7:50001
     evpn_multicast: true
@@ -468,6 +471,13 @@ router_bgp:
       connected:
         enabled: true
         route_map: RM-CONN-2-BGP-VRFS
+    eos_cli: 'rd evpn domain remote 1.1.1.7:50001
+
+      route-target import evpn domain remote 50001:50001
+
+      route-target export evpn domain remote 50001:50001
+
+      '
 router_multicast:
   ipv4:
     routing: true

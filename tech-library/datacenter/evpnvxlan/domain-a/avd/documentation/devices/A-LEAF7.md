@@ -960,8 +960,6 @@ ASN Notation: asplain
 | Local Domain | 1:1 |
 | Remote Domain | 99:99 |
 | Remote Domain Peer Groups | REMOTE-EVPN-PEERS |
-| L3 Gateway Configured | True |
-| L3 Gateway Inter-domain | True |
 
 #### Router BGP VLANs
 
@@ -1095,7 +1093,6 @@ router bgp 65178
       domain identifier 1:1
       domain identifier 99:99 remote
       route import match-failure action discard
-      neighbor default next-hop-self received-evpn-routes route-type ip-prefix inter-domain
    !
    address-family ipv4
       no neighbor LOCAL-EVPN-PEERS activate
@@ -1114,6 +1111,11 @@ router bgp 65178
       neighbor 192.2.2.1 description A-LEAF8_Vlan3002
       redistribute connected route-map RM-CONN-2-BGP-VRFS
       evpn multicast
+      !
+      rd evpn domain remote 1.1.1.7:50002
+      route-target import evpn domain remote 50001:50001
+      route-target export evpn domain remote 50001:50001
+
    !
    vrf PROD
       rd 1.1.1.7:50001
@@ -1125,6 +1127,11 @@ router bgp 65178
       neighbor 192.2.2.1 description A-LEAF8_Vlan3001
       redistribute connected route-map RM-CONN-2-BGP-VRFS
       evpn multicast
+      !
+      rd evpn domain remote 1.1.1.7:50001
+      route-target import evpn domain remote 50001:50001
+      route-target export evpn domain remote 50001:50001
+
 ```
 
 ## BFD
