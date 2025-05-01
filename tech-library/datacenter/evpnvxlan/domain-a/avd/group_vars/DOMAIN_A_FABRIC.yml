@@ -46,14 +46,14 @@ vtep_loopback_description: "VTEP IP"
 ###################################################
 # Customized Structured Config                    #
 ###################################################
-custom_vtep_dhcp_relay:
+csc_vtep_dhcp_relay:
   tunnel_requests_disabled: true
   mlag_peerlink_requests_disabled: true
 
-custom_vtep_ip_dhcp_relay:
+csc_vtep_ip_dhcp_relay:
   information_option: true
 
-custom_evpn_gw_bgp_config:
+csc_evpn_gw_bgp:
   address_family_ipv4:
     peer_groups:
       - name: REMOTE-IPV4-PEERS
@@ -73,7 +73,7 @@ custom_evpn_gw_bgp_config:
     - name: REMOTE-EVPN-PEERS
       local_as: 65000
 
-custom_evpn_gw_prefix_lists:
+csc_evpn_gw_prefix_lists:
   - name: PL-GATEWAY-LOOP
     sequence_numbers:
       - sequence: 10
@@ -83,7 +83,7 @@ custom_evpn_gw_prefix_lists:
       - sequence: 30
         action: permit 1.1.1.8/32
 
-custom_evpn_gw_route_maps:
+csc_evpn_gw_route_maps:
   - name: RM-AS65000-IPV4-OUT
     sequence_numbers:
       - sequence: 10
@@ -91,7 +91,7 @@ custom_evpn_gw_route_maps:
         match:
           - ip address prefix-list PL-GATEWAY-LOOP
 
-a_leaf7_dci_bgp_peers:
+csc_aleaf7_bgp:
   neighbors:
     - ip_address: 172.16.1.0
       peer_group: REMOTE-IPV4-PEERS
@@ -100,7 +100,7 @@ a_leaf7_dci_bgp_peers:
       peer_group: REMOTE-IPV4-PEERS
       description: BB2.IPV4
 
-a_leaf8_dci_bgp_peers:
+csc_aleaf8_bgp:
   neighbors:
     - ip_address: 172.16.1.2
       peer_group: REMOTE-IPV4-PEERS
@@ -150,8 +150,8 @@ l3leaf:
     spanning_tree_mode: mstp
     spanning_tree_priority: 0
     structured_config:
-      dhcp_relay: "{{ custom_vtep_dhcp_relay }}"
-      ip_dhcp_relay: "{{ custom_vtep_ip_dhcp_relay }}"
+      dhcp_relay: "{{ csc_vtep_dhcp_relay }}"
+      ip_dhcp_relay: "{{ csc_vtep_ip_dhcp_relay }}"
   node_groups:
 ########################################################
 # DOMAIN A POD 1                                       #
@@ -219,22 +219,22 @@ l3leaf:
             ip_address: 1.1.0.2
             bgp_as: 65000
       structured_config:
-        router_bgp: "{{ custom_evpn_gw_bgp_config }}"
-        prefix_lists: "{{ custom_evpn_gw_prefix_lists }}"
-        route_maps: "{{ custom_evpn_gw_route_maps }}"
+        router_bgp: "{{ csc_evpn_gw_bgp }}"
+        prefix_lists: "{{ csc_evpn_gw_prefix_lists }}"
+        route_maps: "{{ csc_evpn_gw_route_maps }}"
       nodes:
         - name: A-LEAF7
           id: 7
           mgmt_ip: 172.100.100.111/24
           uplink_switch_interfaces: [Ethernet7, Ethernet7, Ethernet7, Ethernet7]
           structured_config:
-            router_bgp: "{{ a_leaf7_dci_bgp_peers }}"
+            router_bgp: "{{ csc_aleaf7_bgp }}"
         - name: A-LEAF8
           id: 8
           mgmt_ip: 172.100.100.112/24
           uplink_switch_interfaces: [Ethernet8, Ethernet8, Ethernet8, Ethernet8]
           structured_config:
-            router_bgp: "{{ a_leaf8_dci_bgp_peers }}"
+            router_bgp: "{{ csc_aleaf8_bgp }}"
 ##########################################################
 # DCI Connectivity                                       #
 ##########################################################
