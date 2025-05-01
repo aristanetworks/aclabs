@@ -58,7 +58,6 @@
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
   - [Route-maps](#route-maps)
-  - [IP Extended Community RegExp Lists](#ip-extended-community-regexp-lists)
 - [VRF Instances](#vrf-instances)
   - [VRF Instances Summary](#vrf-instances-summary)
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
@@ -1173,8 +1172,7 @@ ip prefix-list PL-MLAG-PEER-VRFS
 
 | Sequence | Type | Match | Set | Sub-Route-Map | Continue |
 | -------- | ---- | ----- | --- | ------------- | -------- |
-| 10 | deny | extcommunity CL-EVPN-IMPORTED | origin incomplete | - | - |
-| 20 | permit | - | origin incomplete | - | - |
+| 10 | permit | - | origin incomplete | - | - |
 
 #### Route-maps Device Configuration
 
@@ -1188,29 +1186,9 @@ route-map RM-CONN-2-BGP-VRFS deny 10
 !
 route-map RM-CONN-2-BGP-VRFS permit 20
 !
-route-map RM-MLAG-PEER-IN deny 10
-   description Do not accept routes learned from MLAG peer that contain Route-Target extended communities
-   match extcommunity CL-EVPN-IMPORTED
-   set origin incomplete
-!
-route-map RM-MLAG-PEER-IN permit 20
+route-map RM-MLAG-PEER-IN permit 10
    description Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
    set origin incomplete
-```
-
-### IP Extended Community RegExp Lists
-
-#### IP Extended Community RegExp Lists Summary
-
-| List Name | Type | Regular Expression |
-| --------- | ---- | ------------------ |
-| CL-EVPN-IMPORTED | permit | `RT.*` |
-
-#### IP Extended Community RegExp Lists Device Configuration
-
-```eos
-!
-ip extcommunity-list regexp CL-EVPN-IMPORTED permit RT.*
 ```
 
 ## VRF Instances

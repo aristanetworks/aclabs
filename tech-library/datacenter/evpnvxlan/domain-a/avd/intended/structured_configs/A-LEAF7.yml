@@ -102,11 +102,6 @@ event_monitor:
 hostname: A-LEAF7
 ip_dhcp_relay:
   information_option: true
-ip_extcommunity_lists_regexp:
-- name: CL-EVPN-IMPORTED
-  entries:
-  - type: permit
-    regexp: RT.*
 ip_igmp_snooping:
   globally_enabled: true
 ip_routing: true
@@ -197,13 +192,6 @@ route_maps:
 - name: RM-MLAG-PEER-IN
   sequence_numbers:
   - sequence: 10
-    type: deny
-    description: Do not accept routes learned from MLAG peer that contain Route-Target extended communities
-    match:
-    - extcommunity CL-EVPN-IMPORTED
-    set:
-    - origin incomplete
-  - sequence: 20
     type: permit
     description: Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
     set:

@@ -84,44 +84,12 @@ custom_evpn_gw_prefix_lists:
         action: permit 1.1.1.8/32
 
 custom_evpn_gw_route_maps:
-  - name: RM-MLAG-PEER-IN
-    sequence_numbers:
-      - sequence: 10
-        type: deny
-        match:
-          - extcommunity CL-EVPN-IMPORTED
-        description: Do not accept routes learned from MLAG peer that contain Route-Target extended communities
-      - sequence: 20
-        type: permit
-        set:
-          - origin incomplete
-        description: Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
   - name: RM-AS65000-IPV4-OUT
     sequence_numbers:
       - sequence: 10
         type: permit
         match:
           - ip address prefix-list PL-GATEWAY-LOOP
-
-custom_vtep_route_maps:
-  - name: RM-MLAG-PEER-IN
-    sequence_numbers:
-      - sequence: 10
-        type: deny
-        match:
-          - extcommunity CL-EVPN-IMPORTED
-        description: Do not accept routes learned from MLAG peer that contain Route-Target extended communities
-      - sequence: 20
-        type: permit
-        set:
-          - origin incomplete
-        description: Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
-
-custom_vtep_ext_community_lists:
-  - name: CL-EVPN-IMPORTED
-    entries:
-      - type: permit
-        regexp: RT.*
 
 a_leaf7_dci_bgp_peers:
   neighbors:
@@ -184,8 +152,6 @@ l3leaf:
     structured_config:
       dhcp_relay: "{{ custom_vtep_dhcp_relay }}"
       ip_dhcp_relay: "{{ custom_vtep_ip_dhcp_relay }}"
-      ip_extcommunity_lists_regexp: "{{ custom_vtep_ext_community_lists }}"
-      route_maps: "{{ custom_vtep_route_maps }}"
   node_groups:
 ########################################################
 # DOMAIN A POD 1                                       #
