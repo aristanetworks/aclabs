@@ -1,0 +1,339 @@
+---
+# --------------------------------------------------------------
+# Arista EVPN Deployment Guide Topology
+# --------------------------------------------------------------
+
+name: arista-evpn-dg
+
+prefix: ""
+
+mgmt:
+  network: mgmt
+  ipv4-subnet: 172.100.100.0/24
+
+topology:
+
+  defaults:
+    env:
+      INTFTYPE: et
+
+  kinds:
+    ceos:
+      image: arista/ceos:latest
+    linux:
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
+      binds:
+        - /techlib-vxlan-domain-a:/workspace:ro
+
+  nodes:
+
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+#                     DOMAIN "A"                              #
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+
+
+#########################
+# Domain A SPINE        #
+#########################
+
+    A-SPINE1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.101
+      binds:
+        - sn/a-spine1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-SPINE1.cfg
+      group: 'spine'
+
+    A-SPINE2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.102
+      binds:
+        - sn/a-spine2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-SPINE2.cfg
+      group: 'spine'
+
+    A-SPINE3:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.103
+      binds:
+        - sn/a-spine3.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-SPINE3.cfg
+      group: 'spine'
+
+    A-SPINE4:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.104
+      binds:
+        - sn/a-spine4.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-SPINE4.cfg
+      group: 'spine'
+
+#########################
+# Domain A LEAF         #
+#########################
+
+    A-LEAF1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.105
+      binds:
+        - sn/a-leaf1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-LEAF1.cfg
+      startup-delay: 30
+      group: 'leaf'
+
+    A-LEAF2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.106
+      binds:
+        - sn/a-leaf2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-LEAF2.cfg
+      startup-delay: 30
+      group: 'leaf'
+
+    A-LEAF3:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.107
+      binds:
+        - sn/a-leaf3.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-LEAF3.cfg
+      startup-delay: 30
+      group: 'leaf'
+
+    A-LEAF4:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.108
+      binds:
+        - sn/a-leaf4.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-LEAF4.cfg
+      startup-delay: 30
+      group: 'leaf'
+
+    A-LEAF5:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.109
+      binds:
+        - sn/a-leaf5.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-LEAF5.cfg
+      startup-delay: 30
+      group: 'leaf'
+
+    A-LEAF6:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.110
+      binds:
+        - sn/a-leaf6.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-LEAF6.cfg
+      startup-delay: 30
+      group: 'leaf'
+
+    A-LEAF7:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.111
+      binds:
+        - sn/a-leaf7.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-LEAF7.cfg
+      startup-delay: 30
+      group: 'dc-gw'
+
+    A-LEAF8:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.112
+      binds:
+        - sn/a-leaf8.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/A-LEAF8.cfg
+      startup-delay: 30
+      group: 'dc-gw'
+
+#########################
+# Domain A Hosts        #
+#########################
+
+    # HostA1 is connected to LEAF1 eth7 and LEAF2 eth7
+    HostA1:
+      kind: linux
+      mgmt-ipv4: 172.100.100.201
+      startup-delay: 60
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        IPV6: 2001:db8:10:10::101/64
+      group: 'server'
+
+    # HostA2 is connected to LEAF1 eth8 and LEAF2 eth8
+    HostA2:
+      kind: linux
+      mgmt-ipv4: 172.100.100.202
+      startup-delay: 60
+      env:
+        TMODE: lacp
+        IPV4: 10.30.30.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.30.30.1
+        IPV6: 2001:db8:30:30::101/64
+      group: 'server'
+
+    # HostA3 is a Linux host with a single interface connected to LEAF3 eth7
+    HostA3:
+      kind: linux
+      mgmt-ipv4: 172.100.100.203
+      startup-delay: 60
+      env:
+        IPV4: 10.50.50.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.50.50.1
+        IPV6: 2001:db8:50:50::101/64
+      group: 'server'
+
+    # HostA4 is connected to LEAF3 eth8 and LEAF4 eth8
+    HostA4:
+      kind: linux
+      mgmt-ipv4: 172.100.100.204
+      startup-delay: 60
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        IPV6: 2001:db8:10:10::102/64
+      group: 'server'
+
+    # HostA5 is connected to LEAF4 eth7
+    HostA5:
+      kind: linux
+      mgmt-ipv4: 172.100.100.205
+      startup-delay: 60
+      env:
+        IPV4: 10.30.30.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.30.30.1
+        IPV6: 2001:db8:30:30::102/64
+      group: 'server'
+
+    # HostA6 is connected to LEAF5 eth7 and LEAF6 eth7
+    HostA6:
+      kind: linux
+      mgmt-ipv4: 172.100.100.206
+      startup-delay: 60
+      env:
+        TMODE: lacp
+        IPV4: 10.70.70.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.70.70.1
+        IPV6: 2001:db8:70:70::101/64
+      group: 'server'
+
+#########################
+# Backbone              #
+#########################
+
+    BB1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.113
+      binds:
+        - sn/bb1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/BB1.cfg
+      group: 'superspine'
+
+    BB2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.114
+      binds:
+        - sn/bb2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/BB2.cfg
+      group: 'superspine'
+
+  links:
+######################
+# A-SPINE1 to LEAF   #
+######################
+    - endpoints: ["A-SPINE1:et1", "A-LEAF1:et1"]
+    - endpoints: ["A-SPINE1:et2", "A-LEAF2:et1"]
+    - endpoints: ["A-SPINE1:et3", "A-LEAF3:et1"]
+    - endpoints: ["A-SPINE1:et4", "A-LEAF4:et1"]
+    - endpoints: ["A-SPINE1:et5", "A-LEAF5:et1"]
+    - endpoints: ["A-SPINE1:et6", "A-LEAF6:et1"]
+    - endpoints: ["A-SPINE1:et7", "A-LEAF7:et1"]
+    - endpoints: ["A-SPINE1:et8", "A-LEAF8:et1"]
+######################
+# A-SPINE2 to LEAF   #
+######################
+    - endpoints: ["A-SPINE2:et1", "A-LEAF1:et2"]
+    - endpoints: ["A-SPINE2:et2", "A-LEAF2:et2"]
+    - endpoints: ["A-SPINE2:et3", "A-LEAF3:et2"]
+    - endpoints: ["A-SPINE2:et4", "A-LEAF4:et2"]
+    - endpoints: ["A-SPINE2:et5", "A-LEAF5:et2"]
+    - endpoints: ["A-SPINE2:et6", "A-LEAF6:et2"]
+    - endpoints: ["A-SPINE2:et7", "A-LEAF7:et2"]
+    - endpoints: ["A-SPINE2:et8", "A-LEAF8:et2"]
+######################
+# A-SPINE3 to LEAF   #
+######################
+    - endpoints: ["A-SPINE3:et1", "A-LEAF1:et3"]
+    - endpoints: ["A-SPINE3:et2", "A-LEAF2:et3"]
+    - endpoints: ["A-SPINE3:et3", "A-LEAF3:et3"]
+    - endpoints: ["A-SPINE3:et4", "A-LEAF4:et3"]
+    - endpoints: ["A-SPINE3:et5", "A-LEAF5:et3"]
+    - endpoints: ["A-SPINE3:et6", "A-LEAF6:et3"]
+    - endpoints: ["A-SPINE3:et7", "A-LEAF7:et3"]
+    - endpoints: ["A-SPINE3:et8", "A-LEAF8:et3"]
+######################
+# A-SPINE4 to LEAF   #
+######################
+    - endpoints: ["A-SPINE4:et1", "A-LEAF1:et4"]
+    - endpoints: ["A-SPINE4:et2", "A-LEAF2:et4"]
+    - endpoints: ["A-SPINE4:et3", "A-LEAF3:et4"]
+    - endpoints: ["A-SPINE4:et4", "A-LEAF4:et4"]
+    - endpoints: ["A-SPINE4:et5", "A-LEAF5:et4"]
+    - endpoints: ["A-SPINE4:et6", "A-LEAF6:et4"]
+    - endpoints: ["A-SPINE4:et7", "A-LEAF7:et4"]
+    - endpoints: ["A-SPINE4:et8", "A-LEAF8:et4"]
+########################
+# A-LEAF1 to A-LEAF2   #
+########################
+    - endpoints: ["A-LEAF1:et5", "A-LEAF2:et5"]
+    - endpoints: ["A-LEAF1:et6", "A-LEAF2:et6"]
+########################
+# A-LEAF3 to A-LEAF4   #
+########################
+    - endpoints: ["A-LEAF3:et5", "A-LEAF4:et5"]
+    - endpoints: ["A-LEAF3:et6", "A-LEAF4:et6"]
+########################
+# A-LEAF5 to A-LEAF6   #
+########################
+    - endpoints: ["A-LEAF5:et5", "A-LEAF6:et5"]
+    - endpoints: ["A-LEAF5:et6", "A-LEAF6:et6"]
+########################
+# A-LEAF7 to A-LEAF8   #
+########################
+    - endpoints: ["A-LEAF7:et5", "A-LEAF8:et5"]
+    - endpoints: ["A-LEAF7:et6", "A-LEAF8:et6"]
+########################
+# DC "A" HostC6        #
+########################
+    - endpoints: ["HostA1:eth1", "A-LEAF1:et7"]
+    - endpoints: ["HostA1:eth2", "A-LEAF2:et7"]
+    - endpoints: ["HostA2:eth1", "A-LEAF1:et8"]
+    - endpoints: ["HostA2:eth2", "A-LEAF2:et8"]
+    - endpoints: ["HostA3:eth1", "A-LEAF3:et7"]
+    - endpoints: ["HostA4:eth1", "A-LEAF3:et8"]
+    - endpoints: ["HostA4:eth2", "A-LEAF4:et8"]
+    - endpoints: ["HostA5:eth1", "A-LEAF4:et7"]
+    - endpoints: ["HostA6:eth1", "A-LEAF5:et7"]
+    - endpoints: ["HostA6:eth2", "A-LEAF6:et7"]
+########################
+# Backbone             #
+########################
+    - endpoints: ["BB1:et1", "A-LEAF7:et7"]
+    - endpoints: ["BB1:et2", "A-LEAF8:et7"]
+    - endpoints: ["BB2:et1", "A-LEAF7:et8"]
+    - endpoints: ["BB2:et2", "A-LEAF8:et8"]
