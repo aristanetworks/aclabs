@@ -959,6 +959,7 @@ ASN Notation: asplain
 | Settings | Value |
 | -------- | ----- |
 | Local Domain | 1:1 |
+| Remote Domain | 99:99 |
 | Remote Domain Peer Groups | REMOTE-EVPN-PEERS |
 | L3 Gateway Configured | True |
 | L3 Gateway Inter-domain | True |
@@ -1093,6 +1094,7 @@ router bgp 65178
       neighbor REMOTE-EVPN-PEERS activate
       neighbor REMOTE-EVPN-PEERS domain remote
       domain identifier 1:1
+      domain identifier 99:99 remote
       route import match-failure action discard
       neighbor default next-hop-self received-evpn-routes route-type ip-prefix inter-domain
    !

@@ -408,6 +408,7 @@ router_bgp:
     - learned
   address_family_evpn:
     domain_identifier: '1:1'
+    domain_identifier_remote: 99:99
     neighbor_default:
       next_hop_self_received_evpn_routes:
         enable: true
