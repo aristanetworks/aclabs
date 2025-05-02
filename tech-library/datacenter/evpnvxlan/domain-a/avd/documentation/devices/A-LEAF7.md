@@ -53,8 +53,6 @@
   - [Router BFD](#router-bfd)
 - [Multicast](#multicast)
   - [IP IGMP Snooping](#ip-igmp-snooping)
-  - [Router Multicast](#router-multicast)
-  - [PIM Sparse Mode](#pim-sparse-mode)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
   - [Route-maps](#route-maps)
@@ -487,7 +485,6 @@ interface Ethernet1
    mtu 9214
    no switchport
    ip address 192.168.0.49/31
-   pim ipv4 sparse-mode
 !
 interface Ethernet2
    description P2P_A-SPINE2_Ethernet7
@@ -495,7 +492,6 @@ interface Ethernet2
    mtu 9214
    no switchport
    ip address 192.168.0.51/31
-   pim ipv4 sparse-mode
 !
 interface Ethernet3
    description P2P_A-SPINE3_Ethernet7
@@ -503,7 +499,6 @@ interface Ethernet3
    mtu 9214
    no switchport
    ip address 192.168.0.53/31
-   pim ipv4 sparse-mode
 !
 interface Ethernet4
    description P2P_A-SPINE4_Ethernet7
@@ -511,7 +506,6 @@ interface Ethernet4
    mtu 9214
    no switchport
    ip address 192.168.0.55/31
-   pim ipv4 sparse-mode
 !
 interface Ethernet5
    description MLAG_A-LEAF8_Ethernet5
@@ -656,8 +650,6 @@ interface Vlan10
    mtu 9014
    vrf PROD
    ipv6 enable
-   pim ipv4 sparse-mode
-   pim ipv4 local-interface Loopback101
    ip address virtual 10.10.10.1/24
    ipv6 address virtual 2001:db8:10:10::1/64
 !
@@ -667,8 +659,6 @@ interface Vlan30
    mtu 9014
    vrf PROD
    ipv6 enable
-   pim ipv4 sparse-mode
-   pim ipv4 local-interface Loopback101
    ip address virtual 10.30.30.1/24
    ipv6 address virtual 2001:db8:30:30::1/64
 !
@@ -678,8 +668,6 @@ interface Vlan50
    mtu 9014
    vrf DEV
    ipv6 enable
-   pim ipv4 sparse-mode
-   pim ipv4 local-interface Loopback102
    ip address virtual 10.50.50.1/24
    ipv6 address virtual 2001:db8:50:50::1/64
 !
@@ -689,8 +677,6 @@ interface Vlan70
    mtu 9014
    vrf DEV
    ipv6 enable
-   pim ipv4 sparse-mode
-   pim ipv4 local-interface Loopback102
    ip address virtual 10.70.70.1/24
    ipv6 address virtual 2001:db8:70:70::1/64
 !
@@ -713,7 +699,6 @@ interface Vlan4093
    no shutdown
    mtu 9214
    ip address 192.0.0.0/31
-   pim ipv4 sparse-mode
 !
 interface Vlan4094
    description MLAG
@@ -729,8 +714,7 @@ interface Vlan4094
 
 | Setting | Value |
 | ------- | ----- |
-| Source Interface | Loopback0 |
-| MLAG Source Interface | Loopback1 |
+| Source Interface | Loopback1 |
 | UDP port | 4789 |
 | EVPN MLAG Shared Router MAC | mlag-system-id |
 
@@ -747,8 +731,8 @@ interface Vlan4094
 
 | VRF | VNI | Multicast Group |
 | ---- | --- | --------------- |
-| DEV | 50002 | 232.2.2.2 |
-| PROD | 50001 | 232.1.1.1 |
+| DEV | 50002 | - |
+| PROD | 50001 | - |
 
 #### VXLAN Interface Device Configuration
 
@@ -756,7 +740,7 @@ interface Vlan4094
 !
 interface Vxlan1
    description A-LEAF7_VTEP
-   vxlan source-interface Loopback0
+   vxlan source-interface Loopback1
    vxlan virtual-router encapsulation mac-address mlag-system-id
    vxlan udp-port 4789
    vxlan vlan 10 vni 10010
@@ -765,9 +749,6 @@ interface Vxlan1
    vxlan vlan 70 vni 10070
    vxlan vrf DEV vni 50002
    vxlan vrf PROD vni 50001
-   vxlan mlag source-interface Loopback1
-   vxlan vrf DEV multicast group 232.2.2.2
-   vxlan vrf PROD multicast group 232.1.1.1
 ```
 
 ## Routing
@@ -972,10 +953,10 @@ ASN Notation: asplain
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute | Graceful Restart | EVPN Multicast |
-| --- | ------------------- | ------------ | ---------------- | -------------- |
-| DEV | 1.1.1.7:50002 | connected | - | IPv4: True<br>Transit: False |
-| PROD | 1.1.1.7:50001 | connected | - | IPv4: True<br>Transit: False |
+| VRF | Route-Distinguisher | Redistribute | Graceful Restart |
+| --- | ------------------- | ------------ | ---------------- |
+| DEV | 1.1.1.7:50002 | connected | - |
+| PROD | 1.1.1.7:50001 | connected | - |
 
 #### Router BGP Device Configuration
 
@@ -1110,7 +1091,6 @@ router bgp 65178
       neighbor 192.2.2.1 peer group MLAG-IPV4-PEER
       neighbor 192.2.2.1 description A-LEAF8_Vlan3002
       redistribute connected route-map RM-CONN-2-BGP-VRFS
-      evpn multicast
       !
       rd evpn domain remote 1.1.1.7:50002
       route-target import evpn domain remote 50001:50001
@@ -1126,7 +1106,6 @@ router bgp 65178
       neighbor 192.2.2.1 peer group MLAG-IPV4-PEER
       neighbor 192.2.2.1 description A-LEAF8_Vlan3001
       redistribute connected route-map RM-CONN-2-BGP-VRFS
-      evpn multicast
       !
       rd evpn domain remote 1.1.1.7:50001
       route-target import evpn domain remote 50001:50001
@@ -1166,54 +1145,6 @@ router bfd
 
 ```eos
 ```
-
-### Router Multicast
-
-#### IP Router Multicast Summary
-
-- Routing for IPv4 multicast is enabled.
-- Software forwarding by the Software Forwarding Engine (SFE)
-
-#### IP Router Multicast VRFs
-
-| VRF Name | Multicast Routing |
-| -------- | ----------------- |
-| DEV | enabled |
-| PROD | enabled |
-
-#### Router Multicast Device Configuration
-
-```eos
-!
-router multicast
-   ipv4
-      routing
-      software-forwarding sfe
-   !
-   vrf DEV
-      ipv4
-         routing
-   !
-   vrf PROD
-      ipv4
-         routing
-```
-
-### PIM Sparse Mode
-
-#### PIM Sparse Mode Enabled Interfaces
-
-| Interface Name | VRF Name | IP Version | Border Router | DR Priority | Local Interface |
-| -------------- | -------- | ---------- | ------------- | ----------- | --------------- |
-| Ethernet1 | - | IPv4 | - | - | - |
-| Ethernet2 | - | IPv4 | - | - | - |
-| Ethernet3 | - | IPv4 | - | - | - |
-| Ethernet4 | - | IPv4 | - | - | - |
-| Vlan10 | PROD | IPv4 | - | - | Loopback101 |
-| Vlan30 | PROD | IPv4 | - | - | Loopback101 |
-| Vlan50 | DEV | IPv4 | - | - | Loopback102 |
-| Vlan70 | DEV | IPv4 | - | - | Loopback102 |
-| Vlan4093 | - | IPv4 | - | - | - |
 
 ## Filters
 

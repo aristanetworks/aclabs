@@ -30,9 +30,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: 192.168.0.57/31
-  pim:
-    ipv4:
-      sparse_mode: true
   peer: A-SPINE1
   peer_interface: Ethernet8
   peer_type: spine
@@ -43,9 +40,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: 192.168.0.59/31
-  pim:
-    ipv4:
-      sparse_mode: true
   peer: A-SPINE2
   peer_interface: Ethernet8
   peer_type: spine
@@ -56,9 +50,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: 192.168.0.61/31
-  pim:
-    ipv4:
-      sparse_mode: true
   peer: A-SPINE3
   peer_interface: Ethernet8
   peer_type: spine
@@ -69,9 +60,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: 192.168.0.63/31
-  pim:
-    ipv4:
-      sparse_mode: true
   peer: A-SPINE4
   peer_interface: Ethernet8
   peer_type: spine
@@ -420,7 +408,6 @@ router_bgp:
   vrfs:
   - name: DEV
     rd: 1.1.1.8:50002
-    evpn_multicast: true
     route_targets:
       import:
       - address_family: evpn
@@ -450,7 +437,6 @@ router_bgp:
       '
   - name: PROD
     rd: 1.1.1.8:50001
-    evpn_multicast: true
     route_targets:
       import:
       - address_family: evpn
@@ -478,17 +464,6 @@ router_bgp:
       route-target export evpn domain remote 50001:50001
 
       '
-router_multicast:
-  ipv4:
-    routing: true
-    software_forwarding: sfe
-  vrfs:
-  - name: DEV
-    ipv4:
-      routing: true
-  - name: PROD
-    ipv4:
-      routing: true
 service_routing_protocols_model: multi-agent
 spanning_tree:
   mode: mstp
@@ -511,9 +486,6 @@ vlan_interfaces:
   description: MLAG_L3
   shutdown: false
   ip_address: 192.0.0.1/31
-  pim:
-    ipv4:
-      sparse_mode: true
   mtu: 9214
 - name: Vlan4094
   description: MLAG
@@ -529,10 +501,6 @@ vlan_interfaces:
   ipv6_enable: true
   ipv6_address_virtuals:
   - 2001:db8:50:50::1/64
-  pim:
-    ipv4:
-      sparse_mode: true
-      local_interface: Loopback102
   mtu: 9014
   tenant: DOMAIN_A_FABRIC
   tags:
@@ -546,10 +514,6 @@ vlan_interfaces:
   ipv6_enable: true
   ipv6_address_virtuals:
   - 2001:db8:70:70::1/64
-  pim:
-    ipv4:
-      sparse_mode: true
-      local_interface: Loopback102
   mtu: 9014
   tenant: DOMAIN_A_FABRIC
   tags:
@@ -571,10 +535,6 @@ vlan_interfaces:
   ipv6_enable: true
   ipv6_address_virtuals:
   - 2001:db8:10:10::1/64
-  pim:
-    ipv4:
-      sparse_mode: true
-      local_interface: Loopback101
   mtu: 9014
   tenant: DOMAIN_A_FABRIC
   tags:
@@ -588,10 +548,6 @@ vlan_interfaces:
   ipv6_enable: true
   ipv6_address_virtuals:
   - 2001:db8:30:30::1/64
-  pim:
-    ipv4:
-      sparse_mode: true
-      local_interface: Loopback101
   mtu: 9014
   tenant: DOMAIN_A_FABRIC
   tags:
@@ -658,8 +614,7 @@ vxlan_interface:
   vxlan1:
     description: A-LEAF8_VTEP
     vxlan:
-      source_interface: Loopback0
-      mlag_source_interface: Loopback1
+      source_interface: Loopback1
       udp_port: 4789
       virtual_router_encapsulation_mac_address: mlag-system-id
       vlans:
@@ -674,7 +629,5 @@ vxlan_interface:
       vrfs:
       - name: DEV
         vni: 50002
-        multicast_group: 232.2.2.2
       - name: PROD
         vni: 50001
-        multicast_group: 232.1.1.1

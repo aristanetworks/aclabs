@@ -87,9 +87,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: 192.168.0.48/31
-  pim:
-    ipv4:
-      sparse_mode: true
   peer: A-LEAF7
   peer_interface: Ethernet1
   peer_type: l3leaf
@@ -100,9 +97,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: 192.168.0.56/31
-  pim:
-    ipv4:
-      sparse_mode: true
   peer: A-LEAF8
   peer_interface: Ethernet1
   peer_type: l3leaf

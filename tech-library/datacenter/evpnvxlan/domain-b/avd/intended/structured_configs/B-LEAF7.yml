@@ -11,9 +11,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: unnumbered Loopback0
-  pim:
-    ipv4:
-      sparse_mode: true
   isis_enable: '100'
   isis_metric: 10
   isis_network_point_to_point: true
@@ -28,9 +25,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: unnumbered Loopback0
-  pim:
-    ipv4:
-      sparse_mode: true
   isis_enable: '100'
   isis_metric: 10
   isis_network_point_to_point: true
@@ -45,9 +39,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: unnumbered Loopback0
-  pim:
-    ipv4:
-      sparse_mode: true
   isis_enable: '100'
   isis_metric: 10
   isis_network_point_to_point: true
@@ -62,9 +53,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: unnumbered Loopback0
-  pim:
-    ipv4:
-      sparse_mode: true
   isis_enable: '100'
   isis_metric: 10
   isis_network_point_to_point: true
@@ -354,7 +342,6 @@ router_bgp:
   vrfs:
   - name: DEV
     rd: 1.1.2.7:50002
-    evpn_multicast: true
     route_targets:
       import:
       - address_family: evpn
@@ -377,7 +364,6 @@ router_bgp:
       '
   - name: PROD
     rd: 1.1.2.7:50001
-    evpn_multicast: true
     route_targets:
       import:
       - address_family: evpn
@@ -411,17 +397,6 @@ router_isis:
   address_family_ipv4:
     enabled: true
     maximum_paths: 4
-router_multicast:
-  ipv4:
-    routing: true
-    software_forwarding: sfe
-  vrfs:
-  - name: DEV
-    ipv4:
-      routing: true
-  - name: PROD
-    ipv4:
-      routing: true
 service_routing_protocols_model: multi-agent
 spanning_tree:
   root_super: true
@@ -445,13 +420,9 @@ vlan_interfaces:
   shutdown: false
   vrf: DEV
   ip_address_virtual: 10.60.60.1/24
-  ip_igmp: true
   ipv6_enable: true
   ipv6_address_virtuals:
   - 2001:db8:60:60::1/64
-  pim:
-    ipv4:
-      local_interface: Loopback102
   mtu: 9014
   tenant: DOMAIN_B_FABRIC
   tags:
@@ -463,13 +434,9 @@ vlan_interfaces:
   shutdown: false
   vrf: DEV
   ip_address_virtual: 10.70.70.1/24
-  ip_igmp: true
   ipv6_enable: true
   ipv6_address_virtuals:
   - 2001:db8:70:70::1/64
-  pim:
-    ipv4:
-      local_interface: Loopback102
   mtu: 9014
   tenant: DOMAIN_B_FABRIC
   tags:
@@ -481,13 +448,9 @@ vlan_interfaces:
   shutdown: false
   vrf: PROD
   ip_address_virtual: 10.10.10.1/24
-  ip_igmp: true
   ipv6_enable: true
   ipv6_address_virtuals:
   - 2001:db8:10:10::1/64
-  pim:
-    ipv4:
-      local_interface: Loopback101
   mtu: 9014
   tenant: DOMAIN_B_FABRIC
   tags:
@@ -499,13 +462,9 @@ vlan_interfaces:
   shutdown: false
   vrf: PROD
   ip_address_virtual: 10.20.20.1/24
-  ip_igmp: true
   ipv6_enable: true
   ipv6_address_virtuals:
   - 2001:db8:20:20::1/64
-  pim:
-    ipv4:
-      local_interface: Loopback101
   mtu: 9014
   tenant: DOMAIN_B_FABRIC
   tags:
@@ -559,7 +518,5 @@ vxlan_interface:
       vrfs:
       - name: DEV
         vni: 50002
-        multicast_group: 232.2.2.2
       - name: PROD
         vni: 50001
-        multicast_group: 232.1.1.1
