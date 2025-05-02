@@ -131,6 +131,11 @@ csc_aleaf8_bgp:
         route-target import evpn domain remote 50001:50001
         route-target export evpn domain remote 50001:50001
 
+csc_spine_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
+
 ###################################################
 # DOMAIN A SPINES                                 #
 ###################################################
@@ -139,6 +144,8 @@ spine:
     platform: cEOS-LAB
     bgp_as: 65100
     loopback_ipv4_pool: 1.1.1.0/24
+    structured_config:
+      router_multicast: "{{ csc_spine_multicast }}"
   nodes:
     - name: A-SPINE1
       id: 201
