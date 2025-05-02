@@ -7,6 +7,4 @@
   tasks:
     - name: Validate Fabric
       ansible.builtin.import_role:
-        name: arista.avd.eos_validate_state
-      vars:
-        save_catalog: true
+        name: arista.avd.anta_runner
