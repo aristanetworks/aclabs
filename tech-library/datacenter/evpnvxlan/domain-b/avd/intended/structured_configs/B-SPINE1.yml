@@ -260,6 +260,7 @@ router_isis:
 router_multicast:
   ipv4:
     routing: true
+    software_forwarding: sfe
 service_routing_protocols_model: multi-agent
 spanning_tree:
   mode: none
