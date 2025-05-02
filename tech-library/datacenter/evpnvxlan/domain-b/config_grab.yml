@@ -1,0 +1,19 @@
+---
+
+- name: Get configs from all switches in topology
+  connection: httpapi
+  hosts: all
+  gather_facts: false
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    config_dir: "{{ playbook_dir }}/configs/"
+
+  tasks:
+
+    - name: "Save running config to {{ config_dir }}"
+      eos_config:
+        backup: yes
+        backup_options:
+          dir_path: "{{ config_dir }}"
+          filename: "{{ inventory_hostname }}.cfg"
