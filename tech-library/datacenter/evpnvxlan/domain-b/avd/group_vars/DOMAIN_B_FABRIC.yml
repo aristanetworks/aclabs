@@ -168,6 +168,11 @@ csc_bleaf8_bgp:
         route-target import evpn domain remote 50001:50001
         route-target export evpn domain remote 50001:50001
 
+csc_spine_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
+
 ###################################################
 # DOMAIN B SPINES                                 #
 ###################################################
@@ -176,6 +181,8 @@ spine:
     bgp_cluster_id: 1.1.2.205
     platform: cEOS-LAB
     loopback_ipv4_pool: 1.1.2.0/24
+    structured_config:
+      router_multicast: "{{ csc_spine_multicast }}"
   nodes:
     - name: B-SPINE1
       id: 201

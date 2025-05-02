@@ -111,9 +111,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: unnumbered Loopback0
-  pim:
-    ipv4:
-      sparse_mode: true
   isis_enable: '100'
   isis_metric: 10
   isis_network_point_to_point: true
@@ -128,9 +125,6 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: unnumbered Loopback0
-  pim:
-    ipv4:
-      sparse_mode: true
   isis_enable: '100'
   isis_metric: 10
   isis_network_point_to_point: true
@@ -266,6 +260,7 @@ router_isis:
 router_multicast:
   ipv4:
     routing: true
+    software_forwarding: sfe
 service_routing_protocols_model: multi-agent
 spanning_tree:
   mode: none

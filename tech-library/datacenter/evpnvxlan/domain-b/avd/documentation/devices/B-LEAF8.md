@@ -50,8 +50,6 @@
   - [Router BFD](#router-bfd)
 - [Multicast](#multicast)
   - [IP IGMP Snooping](#ip-igmp-snooping)
-  - [Router Multicast](#router-multicast)
-  - [PIM Sparse Mode](#pim-sparse-mode)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
   - [Route-maps](#route-maps)
@@ -446,7 +444,6 @@ interface Ethernet1
    mtu 9214
    no switchport
    ip address unnumbered Loopback0
-   pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
    isis metric 10
@@ -458,7 +455,6 @@ interface Ethernet2
    mtu 9214
    no switchport
    ip address unnumbered Loopback0
-   pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
    isis metric 10
@@ -470,7 +466,6 @@ interface Ethernet3
    mtu 9214
    no switchport
    ip address unnumbered Loopback0
-   pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
    isis metric 10
@@ -482,7 +477,6 @@ interface Ethernet4
    mtu 9214
    no switchport
    ip address unnumbered Loopback0
-   pim ipv4 sparse-mode
    isis enable 100
    isis circuit-type level-2
    isis metric 10
@@ -601,9 +595,7 @@ interface Vlan10
    no shutdown
    mtu 9014
    vrf PROD
-   ip igmp
    ipv6 enable
-   pim ipv4 local-interface Loopback101
    ip address virtual 10.10.10.1/24
    ipv6 address virtual 2001:db8:10:10::1/64
 !
@@ -612,9 +604,7 @@ interface Vlan20
    no shutdown
    mtu 9014
    vrf PROD
-   ip igmp
    ipv6 enable
-   pim ipv4 local-interface Loopback101
    ip address virtual 10.20.20.1/24
    ipv6 address virtual 2001:db8:20:20::1/64
 !
@@ -623,9 +613,7 @@ interface Vlan60
    no shutdown
    mtu 9014
    vrf DEV
-   ip igmp
    ipv6 enable
-   pim ipv4 local-interface Loopback102
    ip address virtual 10.60.60.1/24
    ipv6 address virtual 2001:db8:60:60::1/64
 !
@@ -634,9 +622,7 @@ interface Vlan70
    no shutdown
    mtu 9014
    vrf DEV
-   ip igmp
    ipv6 enable
-   pim ipv4 local-interface Loopback102
    ip address virtual 10.70.70.1/24
    ipv6 address virtual 2001:db8:70:70::1/64
 ```
@@ -663,8 +649,8 @@ interface Vlan70
 
 | VRF | VNI | Multicast Group |
 | ---- | --- | --------------- |
-| DEV | 50002 | 232.2.2.2 |
-| PROD | 50001 | 232.1.1.1 |
+| DEV | 50002 | - |
+| PROD | 50001 | - |
 
 #### VXLAN Interface Device Configuration
 
@@ -680,8 +666,6 @@ interface Vxlan1
    vxlan vlan 70 vni 10070
    vxlan vrf DEV vni 50002
    vxlan vrf PROD vni 50001
-   vxlan vrf DEV multicast group 232.2.2.2
-   vxlan vrf PROD multicast group 232.1.1.1
 ```
 
 ## Routing
@@ -906,10 +890,10 @@ ASN Notation: asplain
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute | Graceful Restart | EVPN Multicast |
-| --- | ------------------- | ------------ | ---------------- | -------------- |
-| DEV | 1.1.2.8:50002 | connected | - | IPv4: True<br>Transit: False |
-| PROD | 1.1.2.8:50001 | connected | - | IPv4: True<br>Transit: False |
+| VRF | Route-Distinguisher | Redistribute | Graceful Restart |
+| --- | ------------------- | ------------ | ---------------- |
+| DEV | 1.1.2.8:50002 | connected | - |
+| PROD | 1.1.2.8:50001 | connected | - |
 
 #### Router BGP Session Trackers
 
@@ -1021,7 +1005,6 @@ router bgp 65200
       route-target export evpn 50002:50002
       router-id 1.1.2.8
       redistribute connected
-      evpn multicast
       !
       rd evpn domain remote 1.1.2.8:50002
       route-target import evpn domain remote 50001:50001
@@ -1034,7 +1017,6 @@ router bgp 65200
       route-target export evpn 50001:50001
       router-id 1.1.2.8
       redistribute connected
-      evpn multicast
       !
       rd evpn domain remote 1.1.2.8:50001
       route-target import evpn domain remote 50001:50001
@@ -1079,49 +1061,6 @@ router bfd
 
 ```eos
 ```
-
-### Router Multicast
-
-#### IP Router Multicast Summary
-
-- Routing for IPv4 multicast is enabled.
-- Software forwarding by the Software Forwarding Engine (SFE)
-
-#### IP Router Multicast VRFs
-
-| VRF Name | Multicast Routing |
-| -------- | ----------------- |
-| DEV | enabled |
-| PROD | enabled |
-
-#### Router Multicast Device Configuration
-
-```eos
-!
-router multicast
-   ipv4
-      routing
-      software-forwarding sfe
-   !
-   vrf DEV
-      ipv4
-         routing
-   !
-   vrf PROD
-      ipv4
-         routing
-```
-
-### PIM Sparse Mode
-
-#### PIM Sparse Mode Enabled Interfaces
-
-| Interface Name | VRF Name | IP Version | Border Router | DR Priority | Local Interface |
-| -------------- | -------- | ---------- | ------------- | ----------- | --------------- |
-| Ethernet1 | - | IPv4 | - | - | - |
-| Ethernet2 | - | IPv4 | - | - | - |
-| Ethernet3 | - | IPv4 | - | - | - |
-| Ethernet4 | - | IPv4 | - | - | - |
 
 ## Filters
 

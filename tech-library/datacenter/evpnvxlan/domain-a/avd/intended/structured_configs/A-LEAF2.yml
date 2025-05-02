@@ -1,0 +1,500 @@
+aaa_root:
+  disabled: true
+config_end: true
+dhcp_relay:
+  tunnel_requests_disabled: true
+  mlag_peerlink_requests_disabled: true
+enable_password:
+  disabled: true
+ethernet_interfaces:
+- name: Ethernet5
+  description: MLAG_A-LEAF1_Ethernet5
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+  peer: A-LEAF1
+  peer_interface: Ethernet5
+  peer_type: mlag_peer
+- name: Ethernet6
+  description: MLAG_A-LEAF1_Ethernet6
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+  peer: A-LEAF1
+  peer_interface: Ethernet6
+  peer_type: mlag_peer
+- name: Ethernet1
+  description: P2P_A-SPINE1_Ethernet2
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.9/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  peer: A-SPINE1
+  peer_interface: Ethernet2
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet2
+  description: P2P_A-SPINE2_Ethernet2
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.11/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  peer: A-SPINE2
+  peer_interface: Ethernet2
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet3
+  description: P2P_A-SPINE3_Ethernet2
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.13/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  peer: A-SPINE3
+  peer_interface: Ethernet2
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet4
+  description: P2P_A-SPINE4_Ethernet2
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.15/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  peer: A-SPINE4
+  peer_interface: Ethernet2
+  peer_type: spine
+  switchport:
+    enabled: false
+- name: Ethernet7
+  description: SERVER_HostA1_eth2
+  shutdown: false
+  channel_group:
+    id: 7
+    mode: active
+  peer: HostA1
+  peer_interface: eth2
+  peer_type: server
+  port_profile: PROF-BLUE-MLAG
+- name: Ethernet8
+  description: SERVER_HostA2_eth2
+  shutdown: false
+  channel_group:
+    id: 8
+    mode: active
+  peer: HostA2
+  peer_interface: eth2
+  peer_type: server
+  port_profile: PROF-ORANGE-MLAG
+event_monitor:
+  enabled: true
+hostname: A-LEAF2
+ip_dhcp_relay:
+  information_option: true
+ip_igmp_snooping:
+  globally_enabled: true
+ip_routing: true
+ip_virtual_router_mac_address: 00:1c:73:00:00:01
+is_deployed: true
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/.
+- name: arista
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$Ap6u4I1WR/jMoNKe$LPLoHgIXFg5kiGPDWGF0w5lVVuOZZ4T15cIBbNxE2ykqh98uVvsi9jPdybkbTXBTZFzi3haaPJVaGVwnpuck40
+loopback_interfaces:
+- name: Loopback0
+  description: Globally Unique Address
+  shutdown: false
+  ip_address: 1.1.1.2/32
+- name: Loopback1
+  description: VTEP IP
+  shutdown: false
+  ip_address: 2.2.1.1/32
+- name: Loopback101
+  description: Per-VRF Unique Loopback
+  shutdown: false
+  vrf: PROD
+  ip_address: 10.101.101.2/32
+mac_address_table:
+  aging_time: 1800
+management_api_http:
+  enable_https: true
+  enable_vrfs:
+  - name: MGMT
+management_interfaces:
+- name: Management0
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: MGMT
+  ip_address: 172.100.100.106/24
+  type: oob
+  gateway: 172.100.100.1
+metadata:
+  platform: cEOS-LAB
+  fabric_name: DOMAIN_A_FABRIC
+mlag_configuration:
+  domain_id: POD1
+  local_interface: Vlan4094
+  peer_address: 169.254.0.0
+  peer_link: Port-Channel1000
+  reload_delay_mlag: '300'
+  reload_delay_non_mlag: '330'
+port_channel_interfaces:
+- name: Port-Channel1000
+  description: MLAG_A-LEAF1_Port-Channel1000
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      groups:
+      - MLAG
+- name: Port-Channel7
+  description: SERVER_HostA1
+  shutdown: false
+  mlag: 7
+  spanning_tree_bpduguard: 'True'
+  spanning_tree_portfast: edge
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 10
+- name: Port-Channel8
+  description: SERVER_HostA2
+  shutdown: false
+  mlag: 8
+  spanning_tree_bpduguard: 'True'
+  spanning_tree_portfast: edge
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 30
+prefix_lists:
+- name: PL-LOOPBACKS-EVPN-OVERLAY
+  sequence_numbers:
+  - sequence: 10
+    action: permit 1.1.1.0/24 eq 32
+  - sequence: 20
+    action: permit 2.2.1.0/24 eq 32
+- name: PL-MLAG-PEER-VRFS
+  sequence_numbers:
+  - sequence: 10
+    action: permit 192.2.2.0/31
+route_maps:
+- name: RM-MLAG-PEER-IN
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    description: Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
+    set:
+    - origin incomplete
+- name: RM-CONN-2-BGP
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+- name: RM-CONN-2-BGP-VRFS
+  sequence_numbers:
+  - sequence: 10
+    type: deny
+    match:
+    - ip address prefix-list PL-MLAG-PEER-VRFS
+  - sequence: 20
+    type: permit
+router_bfd:
+  multihop:
+    interval: 300
+    min_rx: 300
+    multiplier: 3
+router_bgp:
+  as: '65112'
+  router_id: 1.1.1.2
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  graceful_restart:
+    enabled: true
+    restart_time: 300
+  maximum_paths:
+    paths: 4
+    ecmp: 4
+  updates:
+    wait_install: true
+  bgp:
+    default:
+      ipv4_unicast: false
+  peer_groups:
+  - name: MLAG-IPV4-PEER
+    type: ipv4
+    remote_as: '65112'
+    description: A-LEAF1
+    next_hop_self: true
+    password: CRkxra9QRmU5k9/wECPlUA==
+    send_community: all
+    maximum_routes: 12000
+    route_map_in: RM-MLAG-PEER-IN
+  - name: LOCAL-IPV4-PEERS
+    type: ipv4
+    password: DGMjRCIj8IZAFhehikpUIQ==
+    send_community: all
+    maximum_routes: 12000
+  - name: LOCAL-EVPN-PEERS
+    type: evpn
+    update_source: Loopback0
+    bfd: true
+    ebgp_multihop: 3
+    password: WzKnNSduqwPYvUePYIh40g==
+    send_community: all
+    maximum_routes: 0
+  neighbors:
+  - ip_address: 192.0.0.0
+    peer_group: MLAG-IPV4-PEER
+    peer: A-LEAF1
+    description: A-LEAF1_Vlan4093
+  - ip_address: 192.168.0.8
+    peer_group: LOCAL-IPV4-PEERS
+    remote_as: '65100'
+    peer: A-SPINE1
+    description: A-SPINE1_Ethernet2
+  - ip_address: 192.168.0.10
+    peer_group: LOCAL-IPV4-PEERS
+    remote_as: '65100'
+    peer: A-SPINE2
+    description: A-SPINE2_Ethernet2
+  - ip_address: 192.168.0.12
+    peer_group: LOCAL-IPV4-PEERS
+    remote_as: '65100'
+    peer: A-SPINE3
+    description: A-SPINE3_Ethernet2
+  - ip_address: 192.168.0.14
+    peer_group: LOCAL-IPV4-PEERS
+    remote_as: '65100'
+    peer: A-SPINE4
+    description: A-SPINE4_Ethernet2
+  - ip_address: 1.1.1.201
+    peer_group: LOCAL-EVPN-PEERS
+    remote_as: '65100'
+    peer: A-SPINE1
+    description: A-SPINE1_Loopback0
+  - ip_address: 1.1.1.202
+    peer_group: LOCAL-EVPN-PEERS
+    remote_as: '65100'
+    peer: A-SPINE2
+    description: A-SPINE2_Loopback0
+  - ip_address: 1.1.1.203
+    peer_group: LOCAL-EVPN-PEERS
+    remote_as: '65100'
+    peer: A-SPINE3
+    description: A-SPINE3_Loopback0
+  - ip_address: 1.1.1.204
+    peer_group: LOCAL-EVPN-PEERS
+    remote_as: '65100'
+    peer: A-SPINE4
+    description: A-SPINE4_Loopback0
+  redistribute:
+    connected:
+      enabled: true
+      route_map: RM-CONN-2-BGP
+  vlans:
+  - id: 10
+    tenant: DOMAIN_A_FABRIC
+    rd: 1.1.1.2:10010
+    route_targets:
+      both:
+      - 10010:10010
+    redistribute_routes:
+    - learned
+  - id: 30
+    tenant: DOMAIN_A_FABRIC
+    rd: 1.1.1.2:10030
+    route_targets:
+      both:
+      - 10030:10030
+    redistribute_routes:
+    - learned
+  address_family_evpn:
+    peer_groups:
+    - name: LOCAL-EVPN-PEERS
+      activate: true
+    route:
+      import_match_failure_action: discard
+  address_family_ipv4:
+    peer_groups:
+    - name: MLAG-IPV4-PEER
+      activate: true
+    - name: LOCAL-IPV4-PEERS
+      activate: true
+    - name: LOCAL-EVPN-PEERS
+      activate: false
+  vrfs:
+  - name: PROD
+    rd: 1.1.1.2:50001
+    evpn_multicast: true
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 50001:50001
+      export:
+      - address_family: evpn
+        route_targets:
+        - 50001:50001
+    router_id: 1.1.1.2
+    updates:
+      wait_install: true
+    neighbors:
+    - ip_address: 192.2.2.0
+      peer_group: MLAG-IPV4-PEER
+      description: A-LEAF1_Vlan3001
+    redistribute:
+      connected:
+        enabled: true
+        route_map: RM-CONN-2-BGP-VRFS
+router_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
+  vrfs:
+  - name: PROD
+    ipv4:
+      routing: true
+service_routing_protocols_model: multi-agent
+spanning_tree:
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 0
+  no_spanning_tree_vlan: 4093-4094
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 172.100.100.1
+transceiver_qsfp_default_mode_4x10: true
+virtual_source_nat_vrfs:
+- name: PROD
+  ip_address: 10.101.101.2
+vlan_interfaces:
+- name: Vlan4093
+  description: MLAG_L3
+  shutdown: false
+  ip_address: 192.0.0.1/31
+  pim:
+    ipv4:
+      sparse_mode: true
+  mtu: 9214
+- name: Vlan4094
+  description: MLAG
+  shutdown: false
+  ip_address: 169.254.0.1/31
+  mtu: 9214
+  no_autostate: true
+- name: Vlan10
+  description: Blue Network
+  shutdown: false
+  vrf: PROD
+  ip_address_virtual: 10.10.10.1/24
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:10:10::1/64
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback101
+  mtu: 9014
+  tenant: DOMAIN_A_FABRIC
+  tags:
+  - PROD
+  - BLUE
+- name: Vlan30
+  description: Orange Network
+  shutdown: false
+  vrf: PROD
+  ip_address_virtual: 10.30.30.1/24
+  ipv6_enable: true
+  ipv6_address_virtuals:
+  - 2001:db8:30:30::1/64
+  pim:
+    ipv4:
+      sparse_mode: true
+      local_interface: Loopback101
+  mtu: 9014
+  tenant: DOMAIN_A_FABRIC
+  tags:
+  - PROD
+  - ORANGE
+- name: Vlan3001
+  description: MLAG_L3_VRF_PROD
+  shutdown: false
+  vrf: PROD
+  ip_address: 192.2.2.1/31
+  mtu: 9214
+  tenant: DOMAIN_A_FABRIC
+  type: underlay_peering
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+vlans:
+- id: 4093
+  name: MLAG_L3
+  trunk_groups:
+  - MLAG
+  tenant: system
+- id: 4094
+  name: MLAG
+  trunk_groups:
+  - MLAG
+  tenant: system
+- id: 10
+  name: Blue
+  tenant: DOMAIN_A_FABRIC
+- id: 30
+  name: Orange
+  tenant: DOMAIN_A_FABRIC
+- id: 3001
+  name: MLAG_L3_VRF_PROD
+  trunk_groups:
+  - MLAG
+  tenant: DOMAIN_A_FABRIC
+vrfs:
+- name: MGMT
+  ip_routing: false
+- name: PROD
+  ip_routing: true
+  ipv6_routing: true
+  tenant: DOMAIN_A_FABRIC
+vxlan_interface:
+  vxlan1:
+    description: A-LEAF2_VTEP
+    vxlan:
+      source_interface: Loopback0
+      mlag_source_interface: Loopback1
+      udp_port: 4789
+      virtual_router_encapsulation_mac_address: mlag-system-id
+      vlans:
+      - id: 10
+        vni: 10010
+      - id: 30
+        vni: 10030
+      vrfs:
+      - name: PROD
+        vni: 50001
+        multicast_group: 232.1.1.1
