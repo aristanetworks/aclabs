@@ -140,6 +140,11 @@ a_leaf8_dci_bgp_peers:
       peer_group: REMOTE-IPV4-PEERS
       description: BB2.IPV4
 
+csc_spine_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
+
 ###################################################
 # DOMAIN A SPINES                                 #
 ###################################################
@@ -148,6 +153,8 @@ spine:
     platform: cEOS-LAB
     bgp_as: 65100
     loopback_ipv4_pool: 1.1.1.0/24
+    structured_config:
+      router_multicast: "{{ csc_spine_multicast }}"
   nodes:
     - name: A-SPINE1
       id: 201
