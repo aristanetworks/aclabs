@@ -27,22 +27,22 @@ topology:
 
   nodes:
 
-###############################################################
-###############################################################
-###############################################################
-###############################################################
-###############################################################
-#                     DOMAIN "B"                         #
-###############################################################
-###############################################################
-###############################################################
-###############################################################
-###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    #                     DOMAIN "B"                         #
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
 
 
-#########################
-# DC "B" SPINE          #
-#########################
+    #########################
+    # DC "B" SPINE          #
+    #########################
 
     B-SPINE1:
       kind: ceos
@@ -54,8 +54,8 @@ topology:
         topoViewer-role: spine
         graph-group: "Data Center Spine"
         graph-level: "3"
-        graph-posX: "-105"
-        graph-posY: "115"
+        graph-posX: "-85"
+        graph-posY: "75"
         graph-groupLabelPos: bottom-center
 
     B-SPINE2:
@@ -68,8 +68,8 @@ topology:
         topoViewer-role: spine
         graph-group: "Data Center Spine"
         graph-level: "3"
-        graph-posX: "-25"
-        graph-posY: "115"
+        graph-posX: "-35"
+        graph-posY: "75"
         graph-groupLabelPos: bottom-center
 
     B-SPINE3:
@@ -82,8 +82,8 @@ topology:
         topoViewer-role: spine
         graph-group: "Data Center Spine"
         graph-level: "3"
-        graph-posX: "35"
-        graph-posY: "115"
+        graph-posX: "25"
+        graph-posY: "75"
         graph-groupLabelPos: bottom-center
 
     B-SPINE4:
@@ -96,13 +96,13 @@ topology:
         topoViewer-role: spine
         graph-group: "Data Center Spine"
         graph-level: "3"
-        graph-posX: "95"
-        graph-posY: "115"
+        graph-posX: "75"
+        graph-posY: "75"
         graph-groupLabelPos: bottom-center
 
-#########################
-# DC "B" LEAF           #
-#########################
+    #########################
+    # DC "B" LEAF           #
+    #########################
 
     B-LEAF1:
       kind: ceos
@@ -114,8 +114,8 @@ topology:
         topoViewer-role: leaf
         graph-group: "Data Center Leaf"
         graph-level: "4"
-        graph-posX: "-155"
-        graph-posY: "185"
+        graph-posX: "-137"
+        graph-posY: "148"
         graph-groupLabelPos: bottom-center
 
     B-LEAF2:
@@ -128,8 +128,8 @@ topology:
         topoViewer-role: leaf
         graph-group: "Data Center Leaf"
         graph-level: "4"
-        graph-posX: "-105"
-        graph-posY: "185"
+        graph-posX: "-83"
+        graph-posY: "148"
         graph-groupLabelPos: bottom-center
 
     B-LEAF3:
@@ -142,8 +142,8 @@ topology:
         topoViewer-role: leaf
         graph-group: "Data Center Leaf"
         graph-level: "4"
-        graph-posX: "-25"
-        graph-posY: "185"
+        graph-posX: "-29"
+        graph-posY: "148"
         graph-groupLabelPos: bottom-center
 
     B-LEAF4:
@@ -156,8 +156,8 @@ topology:
         topoViewer-role: leaf
         graph-group: "Data Center Leaf"
         graph-level: "4"
-        graph-posX: "35"
-        graph-posY: "185"
+        graph-posX: "25"
+        graph-posY: "148"
         graph-groupLabelPos: bottom-center
 
     B-LEAF5:
@@ -170,8 +170,8 @@ topology:
         topoViewer-role: leaf
         graph-group: "Data Center Leaf"
         graph-level: "4"
-        graph-posX: "95"
-        graph-posY: "185"
+        graph-posX: "79"
+        graph-posY: "148"
         graph-groupLabelPos: bottom-center
 
     B-LEAF6:
@@ -184,8 +184,8 @@ topology:
         topoViewer-role: leaf
         graph-group: "Data Center Leaf"
         graph-level: "4"
-        graph-posX: "155"
-        graph-posY: "185"
+        graph-posX: "133"
+        graph-posY: "148"
         graph-groupLabelPos: bottom-center
 
     B-LEAF7:
@@ -198,8 +198,8 @@ topology:
         topoViewer-role: dcgw
         graph-group: "EVPN Gateway"
         graph-level: "2"
-        graph-posX: "-65"
-        graph-posY: "45"
+        graph-posX: "-25"
+        graph-posY: "5"
         graph-groupLabelPos: bottom-center
 
     B-LEAF8:
@@ -212,8 +212,8 @@ topology:
         topoViewer-role: dcgw
         graph-group: "EVPN Gateway"
         graph-level: "2"
-        graph-posX: "55"
-        graph-posY: "45"
+        graph-posX: "15"
+        graph-posY: "5"
         graph-groupLabelPos: bottom-center
 
     B-SW1:
@@ -227,10 +227,12 @@ topology:
         graph-group: "L2 Switch"
         graph-level: "5"
         graph-groupLabelPos: bottom-center
+        graph-posX: "105"
+        graph-posY: "215"
 
-#########################
-# DC "B" Hosts          #
-#########################
+    #########################
+    # DC "B" Hosts          #
+    #########################
 
     # HostB1 is connected to LEAF1 eth7 and LEAF2 eth7
     HostB1:
@@ -247,7 +249,8 @@ topology:
         graph-group: "Data Center Host"
         graph-level: "5"
         graph-groupLabelPos: bottom-center
-
+        graph-posX: "-135"
+        graph-posY: "215"
 
     # HostB2 is connected to LEAF1 eth8 and LEAF2 eth8
     HostB2:
@@ -264,6 +267,8 @@ topology:
         graph-group: "Data Center Host"
         graph-level: "5"
         graph-groupLabelPos: bottom-center
+        graph-posX: "-85"
+        graph-posY: "215"
 
     # HostB3 is connected to LEAF3 eth7
     HostB3:
@@ -279,6 +284,8 @@ topology:
         graph-group: "Data Center Host"
         graph-level: "5"
         graph-groupLabelPos: bottom-center
+        graph-posX: "-45"
+        graph-posY: "215"
 
     # HostB4 is connected to LEAF3 eth8 and LEAF4 eth8
     HostB4:
@@ -295,6 +302,8 @@ topology:
         graph-group: "Data Center Host"
         graph-level: "5"
         graph-groupLabelPos: bottom-center
+        graph-posX: "5"
+        graph-posY: "215"
 
     # HostB5 is connected to LEAF4 eth7
     HostB5:
@@ -310,6 +319,8 @@ topology:
         graph-group: "Data Center Host"
         graph-level: "5"
         graph-groupLabelPos: bottom-center
+        graph-posX: "45"
+        graph-posY: "215"
 
     # HostB6 is connected to B-SW1 eth3
     HostB6:
@@ -325,6 +336,8 @@ topology:
         graph-group: "Data Center Host 2"
         graph-level: "6"
         graph-groupLabelPos: bottom-center
+        graph-posX: "85"
+        graph-posY: "285"
 
     # HostB7 is connected to B-SW1 eth4
     HostB7:
@@ -340,10 +353,12 @@ topology:
         graph-group: "Data Center Host 2"
         graph-level: "6"
         graph-groupLabelPos: bottom-center
+        graph-posX: "125"
+        graph-posY: "285"
 
-#########################
-# Backbone              #
-#########################
+    #########################
+    # Backbone              #
+    #########################
 
     BB1:
       kind: ceos
@@ -355,8 +370,8 @@ topology:
         topoViewer-role: router
         graph-group: "Backbone IP Transport"
         graph-level: "1"
-        graph-posX: "-65"
-        graph-posY: "-35"
+        graph-posX: "-35"
+        graph-posY: "-65"
         graph-groupLabelPos: bottom-center
 
     BB2:
@@ -369,82 +384,82 @@ topology:
         topoViewer-role: router
         graph-group: "Backbone IP Transport"
         graph-level: "1"
-        graph-posX: "55"
-        graph-posY: "-35"
+        graph-posX: "25"
+        graph-posY: "-65"
         graph-groupLabelPos: bottom-center
 
   links:
-######################
-# B-SPINE1 to LEAF   #
-######################
-    - endpoints: ["B-SPINE1:et1", "B-LEAF1:et1"]
-    - endpoints: ["B-SPINE1:et2", "B-LEAF2:et1"]
-    - endpoints: ["B-SPINE1:et3", "B-LEAF3:et1"]
-    - endpoints: ["B-SPINE1:et4", "B-LEAF4:et1"]
-    - endpoints: ["B-SPINE1:et5", "B-LEAF5:et1"]
-    - endpoints: ["B-SPINE1:et6", "B-LEAF6:et1"]
-    - endpoints: ["B-SPINE1:et7", "B-LEAF7:et1"]
-    - endpoints: ["B-SPINE1:et8", "B-LEAF8:et1"]
-######################
-# B-SPINE2 to LEAF   #
-######################
-    - endpoints: ["B-SPINE2:et1", "B-LEAF1:et2"]
-    - endpoints: ["B-SPINE2:et2", "B-LEAF2:et2"]
-    - endpoints: ["B-SPINE2:et3", "B-LEAF3:et2"]
-    - endpoints: ["B-SPINE2:et4", "B-LEAF4:et2"]
-    - endpoints: ["B-SPINE2:et5", "B-LEAF5:et2"]
-    - endpoints: ["B-SPINE2:et6", "B-LEAF6:et2"]
-    - endpoints: ["B-SPINE2:et7", "B-LEAF7:et2"]
-    - endpoints: ["B-SPINE2:et8", "B-LEAF8:et2"]
-######################
-# B-SPINE3 to LEAF   #
-######################
-    - endpoints: ["B-SPINE3:et1", "B-LEAF1:et3"]
-    - endpoints: ["B-SPINE3:et2", "B-LEAF2:et3"]
-    - endpoints: ["B-SPINE3:et3", "B-LEAF3:et3"]
-    - endpoints: ["B-SPINE3:et4", "B-LEAF4:et3"]
-    - endpoints: ["B-SPINE3:et5", "B-LEAF5:et3"]
-    - endpoints: ["B-SPINE3:et6", "B-LEAF6:et3"]
-    - endpoints: ["B-SPINE3:et7", "B-LEAF7:et3"]
-    - endpoints: ["B-SPINE3:et8", "B-LEAF8:et3"]
-######################
-# B-SPINE4 to LEAF   #
-######################
-    - endpoints: ["B-SPINE4:et1", "B-LEAF1:et4"]
-    - endpoints: ["B-SPINE4:et2", "B-LEAF2:et4"]
-    - endpoints: ["B-SPINE4:et3", "B-LEAF3:et4"]
-    - endpoints: ["B-SPINE4:et4", "B-LEAF4:et4"]
-    - endpoints: ["B-SPINE4:et5", "B-LEAF5:et4"]
-    - endpoints: ["B-SPINE4:et6", "B-LEAF6:et4"]
-    - endpoints: ["B-SPINE4:et7", "B-LEAF7:et4"]
-    - endpoints: ["B-SPINE4:et8", "B-LEAF8:et4"]
-#################################
-# B-LEAF5 and B-LEAF6  to B-SW1 #
-#################################
-    - endpoints: ["B-LEAF5:et7", "B-SW1:et1"]
-    - endpoints: ["B-LEAF6:et7", "B-SW1:et2"]
-########################
-# B-LEAF7 to B-LEAF8   #
-########################
-    - endpoints: ["B-LEAF7:et5", "B-LEAF8:et5"]
-    - endpoints: ["B-LEAF7:et6", "B-LEAF8:et6"]
-########################
-# DC "B" HostC6         #
-########################
-    - endpoints: ["HostB1:eth1", "B-LEAF1:et7"]
-    - endpoints: ["HostB1:eth2", "B-LEAF2:et7"]
-    - endpoints: ["HostB2:eth1", "B-LEAF1:et8"]
-    - endpoints: ["HostB2:eth2", "B-LEAF2:et8"]
-    - endpoints: ["HostB3:eth1", "B-LEAF3:et7"]
-    - endpoints: ["HostB4:eth1", "B-LEAF3:et8"]
-    - endpoints: ["HostB4:eth2", "B-LEAF4:et8"]
-    - endpoints: ["HostB5:eth1", "B-LEAF4:et7"]
-    - endpoints: ["HostB6:eth1", "B-SW1:et3"]
-    - endpoints: ["HostB7:eth1", "B-SW1:et4"]
-########################
-# Backbone             #
-########################
-    - endpoints: ["BB1:et3", "B-LEAF7:et7"]
-    - endpoints: ["BB1:et4", "B-LEAF8:et7"]
-    - endpoints: ["BB2:et3", "B-LEAF7:et8"]
-    - endpoints: ["BB2:et4", "B-LEAF8:et8"]
+    ######################
+    # B-SPINE1 to LEAF   #
+    ######################
+    - endpoints: [ "B-SPINE1:et1", "B-LEAF1:et1" ]
+    - endpoints: [ "B-SPINE1:et2", "B-LEAF2:et1" ]
+    - endpoints: [ "B-SPINE1:et3", "B-LEAF3:et1" ]
+    - endpoints: [ "B-SPINE1:et4", "B-LEAF4:et1" ]
+    - endpoints: [ "B-SPINE1:et5", "B-LEAF5:et1" ]
+    - endpoints: [ "B-SPINE1:et6", "B-LEAF6:et1" ]
+    - endpoints: [ "B-SPINE1:et7", "B-LEAF7:et1" ]
+    - endpoints: [ "B-SPINE1:et8", "B-LEAF8:et1" ]
+    ######################
+    # B-SPINE2 to LEAF   #
+    ######################
+    - endpoints: [ "B-SPINE2:et1", "B-LEAF1:et2" ]
+    - endpoints: [ "B-SPINE2:et2", "B-LEAF2:et2" ]
+    - endpoints: [ "B-SPINE2:et3", "B-LEAF3:et2" ]
+    - endpoints: [ "B-SPINE2:et4", "B-LEAF4:et2" ]
+    - endpoints: [ "B-SPINE2:et5", "B-LEAF5:et2" ]
+    - endpoints: [ "B-SPINE2:et6", "B-LEAF6:et2" ]
+    - endpoints: [ "B-SPINE2:et7", "B-LEAF7:et2" ]
+    - endpoints: [ "B-SPINE2:et8", "B-LEAF8:et2" ]
+    ######################
+    # B-SPINE3 to LEAF   #
+    ######################
+    - endpoints: [ "B-SPINE3:et1", "B-LEAF1:et3" ]
+    - endpoints: [ "B-SPINE3:et2", "B-LEAF2:et3" ]
+    - endpoints: [ "B-SPINE3:et3", "B-LEAF3:et3" ]
+    - endpoints: [ "B-SPINE3:et4", "B-LEAF4:et3" ]
+    - endpoints: [ "B-SPINE3:et5", "B-LEAF5:et3" ]
+    - endpoints: [ "B-SPINE3:et6", "B-LEAF6:et3" ]
+    - endpoints: [ "B-SPINE3:et7", "B-LEAF7:et3" ]
+    - endpoints: [ "B-SPINE3:et8", "B-LEAF8:et3" ]
+    ######################
+    # B-SPINE4 to LEAF   #
+    ######################
+    - endpoints: [ "B-SPINE4:et1", "B-LEAF1:et4" ]
+    - endpoints: [ "B-SPINE4:et2", "B-LEAF2:et4" ]
+    - endpoints: [ "B-SPINE4:et3", "B-LEAF3:et4" ]
+    - endpoints: [ "B-SPINE4:et4", "B-LEAF4:et4" ]
+    - endpoints: [ "B-SPINE4:et5", "B-LEAF5:et4" ]
+    - endpoints: [ "B-SPINE4:et6", "B-LEAF6:et4" ]
+    - endpoints: [ "B-SPINE4:et7", "B-LEAF7:et4" ]
+    - endpoints: [ "B-SPINE4:et8", "B-LEAF8:et4" ]
+    #################################
+    # B-LEAF5 and B-LEAF6  to B-SW1 #
+    #################################
+    - endpoints: [ "B-LEAF5:et7", "B-SW1:et1" ]
+    - endpoints: [ "B-LEAF6:et7", "B-SW1:et2" ]
+    ########################
+    # B-LEAF7 to B-LEAF8   #
+    ########################
+    - endpoints: [ "B-LEAF7:et5", "B-LEAF8:et5" ]
+    - endpoints: [ "B-LEAF7:et6", "B-LEAF8:et6" ]
+    ########################
+    # DC "B" HostC6         #
+    ########################
+    - endpoints: [ "HostB1:eth1", "B-LEAF1:et7" ]
+    - endpoints: [ "HostB1:eth2", "B-LEAF2:et7" ]
+    - endpoints: [ "HostB2:eth1", "B-LEAF1:et8" ]
+    - endpoints: [ "HostB2:eth2", "B-LEAF2:et8" ]
+    - endpoints: [ "HostB3:eth1", "B-LEAF3:et7" ]
+    - endpoints: [ "HostB4:eth1", "B-LEAF3:et8" ]
+    - endpoints: [ "HostB4:eth2", "B-LEAF4:et8" ]
+    - endpoints: [ "HostB5:eth1", "B-LEAF4:et7" ]
+    - endpoints: [ "HostB6:eth1", "B-SW1:et3" ]
+    - endpoints: [ "HostB7:eth1", "B-SW1:et4" ]
+    ########################
+    # Backbone             #
+    ########################
+    - endpoints: [ "BB1:et3", "B-LEAF7:et7" ]
+    - endpoints: [ "BB1:et4", "B-LEAF8:et7" ]
+    - endpoints: [ "BB2:et3", "B-LEAF7:et8" ]
+    - endpoints: [ "BB2:et4", "B-LEAF8:et8" ]
