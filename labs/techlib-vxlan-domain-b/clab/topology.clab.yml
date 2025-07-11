@@ -170,7 +170,7 @@ topology:
       binds:
         - sn/b-leaf5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF5.cfg
-      startup-delay: 30
+      startup-delay: 60
       labels:
         topoViewer-role: leaf
         graph-group: "Data Center Leaf"
@@ -185,7 +185,7 @@ topology:
       binds:
         - sn/b-leaf6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF6.cfg
-      startup-delay: 30
+      startup-delay: 60
       labels:
         topoViewer-role: leaf
         graph-group: "Data Center Leaf"
@@ -200,7 +200,7 @@ topology:
       binds:
         - sn/b-leaf7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF7.cfg
-      startup-delay: 30
+      startup-delay: 60
       labels:
         topoViewer-role: dcgw
         graph-group: "EVPN Gateway"
@@ -215,7 +215,7 @@ topology:
       binds:
         - sn/b-leaf8.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF8.cfg
-      startup-delay: 30
+      startup-delay: 60
       labels:
         topoViewer-role: dcgw
         graph-group: "EVPN Gateway"
@@ -230,7 +230,7 @@ topology:
       binds:
         - sn/b-sw1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SW1.cfg
-      startup-delay: 60
+      startup-delay: 90
       labels:
         topoViewer-role: leaf
         graph-group: "L2 Switch"
@@ -247,7 +247,7 @@ topology:
     HostB1:
       kind: linux
       mgmt-ipv4: 172.100.100.201
-      startup-delay: 60
+      startup-delay: 90
       env:
         TMODE: lacp
         IPV4: 10.20.20.101/24
@@ -266,7 +266,7 @@ topology:
     HostB2:
       kind: linux
       mgmt-ipv4: 172.100.100.202
-      startup-delay: 60
+      startup-delay: 90
       env:
         TMODE: lacp
         IPV4: 10.40.40.101/24
@@ -285,7 +285,7 @@ topology:
     HostB3:
       kind: linux
       mgmt-ipv4: 172.100.100.203
-      startup-delay: 60
+      startup-delay: 90
       env:
         IPV4: 10.60.60.101/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -303,7 +303,7 @@ topology:
     HostB4:
       kind: linux
       mgmt-ipv4: 172.100.100.204
-      startup-delay: 60
+      startup-delay: 90
       env:
         TMODE: lacp
         IPV4: 10.10.10.103/24
@@ -322,7 +322,7 @@ topology:
     HostB5:
       kind: linux
       mgmt-ipv4: 172.100.100.205
-      startup-delay: 60
+      startup-delay: 90
       env:
         IPV4: 10.70.70.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -340,7 +340,7 @@ topology:
     HostB6:
       kind: linux
       mgmt-ipv4: 172.100.100.206
-      startup-delay: 60
+      startup-delay: 90
       env:
         IPV4: 10.40.40.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -358,7 +358,7 @@ topology:
     HostB7:
       kind: linux
       mgmt-ipv4: 172.100.100.207
-      startup-delay: 60
+      startup-delay: 90
       env:
         IPV4: 10.80.80.101/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -382,6 +382,7 @@ topology:
       binds:
         - sn/bb1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB1.cfg
+      startup-delay: 90
       labels:
         topoViewer-role: router
         graph-group: "Backbone IP Transport"
@@ -396,6 +397,7 @@ topology:
       binds:
         - sn/bb2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB2.cfg
+      startup-delay: 90
       labels:
         topoViewer-role: router
         graph-group: "Backbone IP Transport"
