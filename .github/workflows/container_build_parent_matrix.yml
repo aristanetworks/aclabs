@@ -23,8 +23,8 @@ jobs:
     strategy:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
-        from_variant: ["python3.11-avd-v5.3.0"]
-        clab_version: ["0.67.0"]
+        from_variant: ["python3.11-avd-v5.5.1"]
+        clab_version: ["0.68.0"]
     with:
       from_image: ${{ matrix.from_image }}
       from_variant: ${{ matrix.from_variant }}
@@ -43,4 +43,8 @@ jobs:
       # - Remove Terminals Manager Extension
       # 1.5:
       # - Add AVD 5.3.0
-      container_revision: "1.5"
+      #
+      # 1.6:
+      # - Add AVD 5.5.1
+      # - Add ContainerLab 0.68.0
+      container_revision: "1.6"
