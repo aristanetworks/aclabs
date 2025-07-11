@@ -223,8 +223,8 @@ topology:
         - sn/b-sw1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SW1.cfg
       labels:
-        topoViewer-role: dcgw
-        graph-group: "EVPN Gateway"
+        topoViewer-role: leaf
+        graph-group: "L2 Switch"
         graph-level: "5"
         graph-groupLabelPos: bottom-center
 
@@ -363,7 +363,13 @@ topology:
       binds:
         - sn/bb1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB1.cfg
-      group: 'superspine'
+      labels:
+        topoViewer-role: router
+        graph-group: "Backbone IP Transport"
+        graph-level: "1"
+        graph-posX: "-65"
+        graph-posY: "-35"
+        graph-groupLabelPos: bottom-center
 
     BB2:
       kind: ceos
@@ -371,7 +377,13 @@ topology:
       binds:
         - sn/bb2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB2.cfg
-      group: 'superspine'
+      labels:
+        topoViewer-role: router
+        graph-group: "Backbone IP Transport"
+        graph-level: "1"
+        graph-posX: "55"
+        graph-posY: "-35"
+        graph-groupLabelPos: bottom-center
 
   links:
 ######################
