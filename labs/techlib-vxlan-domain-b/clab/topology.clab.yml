@@ -246,8 +246,6 @@ topology:
         topoViewer-role: client
         graph-group: "Data Center Host"
         graph-level: "5"
-        graph-posX: "-155"
-        graph-posY: "255"
         graph-groupLabelPos: bottom-center
 
 
@@ -265,8 +263,6 @@ topology:
         topoViewer-role: client
         graph-group: "Data Center Host"
         graph-level: "5"
-        graph-posX: "-105"
-        graph-posY: "255"
         graph-groupLabelPos: bottom-center
 
     # HostB3 is connected to LEAF3 eth7
@@ -282,8 +278,6 @@ topology:
         topoViewer-role: client
         graph-group: "Data Center Host"
         graph-level: "5"
-        graph-posX: "-25"
-        graph-posY: "255"
         graph-groupLabelPos: bottom-center
 
     # HostB4 is connected to LEAF3 eth8 and LEAF4 eth8
@@ -300,8 +294,6 @@ topology:
         topoViewer-role: client
         graph-group: "Data Center Host"
         graph-level: "5"
-        graph-posX: "5"
-        graph-posY: "255"
         graph-groupLabelPos: bottom-center
 
     # HostB5 is connected to LEAF4 eth7
@@ -317,8 +309,6 @@ topology:
         topoViewer-role: client
         graph-group: "Data Center Host"
         graph-level: "5"
-        graph-posX: "35"
-        graph-posY: "255"
         graph-groupLabelPos: bottom-center
 
     # HostB6 is connected to B-SW1 eth3
@@ -332,10 +322,8 @@ topology:
         IPV6: 2001:db8:40:40::102/64
       labels:
         topoViewer-role: client
-        graph-group: "Data Center Host"
+        graph-group: "Data Center Host 2"
         graph-level: "6"
-        graph-posX: "125"
-        graph-posY: "255"
         graph-groupLabelPos: bottom-center
 
     # HostB7 is connected to B-SW1 eth4
@@ -349,7 +337,7 @@ topology:
         IPV6: 2001:db8:80:80::101/64
       labels:
         topoViewer-role: client
-        graph-group: "Data Center Host"
+        graph-group: "Data Center Host 2"
         graph-level: "6"
         graph-groupLabelPos: bottom-center
 
