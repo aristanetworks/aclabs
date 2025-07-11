@@ -7,9 +7,9 @@
 
 This lab has been built and validated with:
 
-- cEOS-lab: **4.34.0F**
-- AVD: **5.3.0**
-- ContainerLab: **0.67.0**
+- cEOS-lab: **4.34.1F**
+- AVD: **5.5.1**
+- ContainerLab: **0.68.0**
 - Codespace Machine Type:
   - CPUs: **16**
   - Memory: **64 GB**
