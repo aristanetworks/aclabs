@@ -382,7 +382,7 @@ topology:
       binds:
         - sn/bb1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB1.cfg
-      startup-delay: 90
+      startup-delay: 120
       labels:
         topoViewer-role: router
         graph-group: "Backbone IP Transport"
@@ -397,7 +397,7 @@ topology:
       binds:
         - sn/bb2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB2.cfg
-      startup-delay: 90
+      startup-delay: 120
       labels:
         topoViewer-role: router
         graph-group: "Backbone IP Transport"
