@@ -23,7 +23,11 @@ topology:
             binds:
             - sn/SPINE1.txt:/mnt/flash/ceos-config:ro
             startup-config: init-configs/SPINE1.cfg
-            group: 'spine'
+            labels:
+                topoViewer-role: spine
+                graph-group: "Spines"
+                graph-level: "2"
+                graph-groupLabelPos: bottom-center
 
         SPINE2:
             mgmt-ipv4: 10.0.1.2
@@ -31,6 +35,11 @@ topology:
             - sn/SPINE2.txt:/mnt/flash/ceos-config:ro
             startup-config: init-configs/SPINE2.cfg
             group: 'spine'
+            labels:
+                topoViewer-role: spine
+                graph-group: "Spines"
+                graph-level: "2"
+                graph-groupLabelPos: bottom-center
 
         LEAF1:
             mgmt-ipv4: 10.0.2.1
@@ -38,6 +47,11 @@ topology:
             - sn/LEAF1.txt:/mnt/flash/ceos-config:ro
             startup-config: init-configs/LEAF1.cfg
             group: 'leaf'
+            labels:
+                topoViewer-role: leaf
+                graph-group: "Leaf"
+                graph-level: "3"
+                graph-groupLabelPos: bottom-center
 
         Host1:
             kind: linux
@@ -47,7 +61,11 @@ topology:
                 STATIC_ROUTE: 10.0.0.0/8
                 GW: 10.10.10.1
                 IPV6: 2001:db8:10:10::101/64
-            group: 'server'
+            labels:
+                topoViewer-role: client
+                graph-group: "End Hosts"
+                graph-level: "4"
+                graph-groupLabelPos: bottom-center
 
         Host2:
             kind: linux
@@ -57,7 +75,11 @@ topology:
                 STATIC_ROUTE: 10.0.0.0/8
                 GW: 10.20.20.1
                 IPV6: 2001:db8:20:20::101/64
-            group: 'server'
+            labels:
+                topoViewer-role: client
+                graph-group: "End Hosts"
+                graph-level: "4"
+                graph-groupLabelPos: bottom-center
 
 
     links:
