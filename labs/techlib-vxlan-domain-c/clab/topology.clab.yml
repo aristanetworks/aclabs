@@ -26,22 +26,22 @@ topology:
         - /techlib-vxlan-domain-c:/workspace:ro
 
   nodes:
-###############################################################
-###############################################################
-###############################################################
-###############################################################
-###############################################################
-#                     DOMAIN "C"                         #
-###############################################################
-###############################################################
-###############################################################
-###############################################################
-###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    #                     DOMAIN "C"                         #
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
 
 
-#########################
-# DC "C" SPINE          #
-#########################
+    #########################
+    # DC "C" SPINE          #
+    #########################
 
     C-SPINE1:
       kind: ceos
@@ -49,6 +49,13 @@ topology:
       binds:
         - sn/c-spine1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/C-SPINE1.cfg
+      labels:
+        topoViewer-role: spine
+        graph-group: "Data Center Spine"
+        graph-level: "3"
+        graph-posX: "-45"
+        graph-posY: "125"
+        graph-groupLabelPos: bottom-center
 
     C-SPINE2:
       kind: ceos
@@ -56,10 +63,17 @@ topology:
       binds:
         - sn/c-spine2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/C-SPINE2.cfg
+      labels:
+        topoViewer-role: spine
+        graph-group: "Data Center Spine"
+        graph-level: "3"
+        graph-posX: "35"
+        graph-posY: "125"
+        graph-groupLabelPos: bottom-center
 
-#########################
-# DC "C" LEAF           #
-#########################
+    #########################
+    # DC "C" LEAF           #
+    #########################
 
     C-LEAF1:
       kind: ceos
@@ -67,6 +81,13 @@ topology:
       binds:
         - sn/c-leaf1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/C-LEAF1.cfg
+      labels:
+        topoViewer-role: leaf
+        graph-group: "Data Center Leaf"
+        graph-level: "4"
+        graph-posX: "-155"
+        graph-posY: "205"
+        graph-groupLabelPos: bottom-center
 
     C-LEAF2:
       kind: ceos
@@ -74,6 +95,13 @@ topology:
       binds:
         - sn/c-leaf2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/C-LEAF2.cfg
+      labels:
+        topoViewer-role: leaf
+        graph-group: "Data Center Leaf"
+        graph-level: "4"
+        graph-posX: "-105"
+        graph-posY: "205"
+        graph-groupLabelPos: bottom-center
 
     C-LEAF3:
       kind: ceos
@@ -81,6 +109,13 @@ topology:
       binds:
         - sn/c-leaf3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/C-LEAF3.cfg
+      labels:
+        topoViewer-role: leaf
+        graph-group: "Data Center Leaf"
+        graph-level: "4"
+        graph-posX: "-25"
+        graph-posY: "205"
+        graph-groupLabelPos: bottom-center
 
     C-LEAF4:
       kind: ceos
@@ -88,6 +123,13 @@ topology:
       binds:
         - sn/c-leaf4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/C-LEAF4.cfg
+      labels:
+        topoViewer-role: leaf
+        graph-group: "Data Center Leaf"
+        graph-level: "4"
+        graph-posX: "35"
+        graph-posY: "205"
+        graph-groupLabelPos: bottom-center
 
     C-LEAF5:
       kind: ceos
@@ -96,6 +138,13 @@ topology:
       binds:
         - sn/c-leaf5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/C-LEAF5.cfg
+      labels:
+        topoViewer-role: leaf
+        graph-group: "Data Center Leaf"
+        graph-level: "4"
+        graph-posX: "95"
+        graph-posY: "205"
+        graph-groupLabelPos: bottom-center
 
     C-LEAF6:
       kind: ceos
@@ -103,6 +152,13 @@ topology:
       binds:
         - sn/c-leaf6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/C-LEAF6.cfg
+      labels:
+        topoViewer-role: leaf
+        graph-group: "Data Center Leaf"
+        graph-level: "4"
+        graph-posX: "155"
+        graph-posY: "205"
+        graph-groupLabelPos: bottom-center
 
     C-LEAF7:
       kind: ceos
@@ -110,6 +166,13 @@ topology:
       binds:
         - sn/c-leaf7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/C-LEAF7.cfg
+      labels:
+        topoViewer-role: dcgw
+        graph-group: "EVPN Gateway"
+        graph-level: "2"
+        graph-posX: "-65"
+        graph-posY: "40"
+        graph-groupLabelPos: bottom-center
 
     C-LEAF8:
       kind: ceos
@@ -117,10 +180,17 @@ topology:
       binds:
         - sn/c-leaf8.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/C-LEAF8.cfg
+      labels:
+        topoViewer-role: dcgw
+        graph-group: "EVPN Gateway"
+        graph-level: "2"
+        graph-posX: "55"
+        graph-posY: "40"
+        graph-groupLabelPos: bottom-center
 
-#########################
-# DC "C" HostC6          #
-#########################
+    #########################
+    # DC "C" HostC6          #
+    #########################
 
     # HostC1 is connected to LEAF1 eth7 and LEAF2 eth7
     HostC1:
@@ -132,6 +202,13 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::104/64
+      labels:
+        topoViewer-role: client
+        graph-group: "Data Center Host"
+        graph-level: "5"
+        graph-posX: "-135"
+        graph-posY: "285"
+        graph-groupLabelPos: bottom-center
 
     # HostC2 is connected to LEAF3 eth7
     HostC2:
@@ -142,6 +219,13 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.20.20.1
         IPV6: 2001:db8:20:20::102/64
+      labels:
+        topoViewer-role: client
+        graph-group: "Data Center Host"
+        graph-level: "5"
+        graph-posX: "-25"
+        graph-posY: "285"
+        graph-groupLabelPos: bottom-center
 
     # HostC3 is connected to LEAF3 eth8 and LEAF4 eth8
     HostC3:
@@ -153,6 +237,13 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.60.60.1
         IPV6: 2001:db8:60:60::102/64
+      labels:
+        topoViewer-role: client
+        graph-group: "Data Center Host"
+        graph-level: "5"
+        graph-posX: "5"
+        graph-posY: "285"
+        graph-groupLabelPos: bottom-center
 
     # HostC4 is connected to LEAF4 eth7
     HostC4:
@@ -163,6 +254,13 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.50.50.1
         IPV6: 2001:db8:50:50::102/64
+      labels:
+        topoViewer-role: client
+        graph-group: "Data Center Host"
+        graph-level: "5"
+        graph-posX: "35"
+        graph-posY: "285"
+        graph-groupLabelPos: bottom-center
 
     # HostC5 is connected to LEAF5 eth7 and LEAF6 eth7
     HostC5:
@@ -174,6 +272,13 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.20.20.1
         IPV6: 2001:db8:20:20::103/64
+      labels:
+        topoViewer-role: client
+        graph-group: "Data Center Host"
+        graph-level: "5"
+        graph-posX: "95"
+        graph-posY: "285"
+        graph-groupLabelPos: bottom-center
 
     # HostC6 is connected to LEAF5 eth8 and LEAF6 eth8
     HostC6:
@@ -185,10 +290,17 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.60.60.1
         IPV6: 2001:db8:60:60::103/64
+      labels:
+        topoViewer-role: client
+        graph-group: "Data Center Host"
+        graph-level: "5"
+        graph-posX: "155"
+        graph-posY: "285"
+        graph-groupLabelPos: bottom-center
 
-#########################
-# Backbone              #
-#########################
+    #########################
+    # Backbone              #
+    #########################
 
     BB1:
       kind: ceos
@@ -197,6 +309,13 @@ topology:
         - sn/bb1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB1.cfg
       group: 'superspine'
+      labels:
+        topoViewer-role: router
+        graph-group: "Backbone IP Transport"
+        graph-level: "1"
+        graph-posX: "-65"
+        graph-posY: "-45"
+        graph-groupLabelPos: bottom-center
 
     BB2:
       kind: ceos
@@ -205,67 +324,74 @@ topology:
         - sn/bb2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB2.cfg
       group: 'superspine'
+      labels:
+        topoViewer-role: router
+        graph-group: "Backbone IP Transport"
+        graph-level: "1"
+        graph-posX: "55"
+        graph-posY: "-45"
+        graph-groupLabelPos: bottom-center
 
   links:
-######################
-# C-SPINE1 to LEAF   #
-######################
-    - endpoints: ["C-SPINE1:et1", "C-LEAF1:et1"]
-    - endpoints: ["C-SPINE1:et2", "C-LEAF2:et1"]
-    - endpoints: ["C-SPINE1:et3", "C-LEAF3:et1"]
-    - endpoints: ["C-SPINE1:et4", "C-LEAF4:et1"]
-    - endpoints: ["C-SPINE1:et5", "C-LEAF5:et1"]
-    - endpoints: ["C-SPINE1:et6", "C-LEAF6:et1"]
-    - endpoints: ["C-SPINE1:et7", "C-LEAF7:et1"]
-    - endpoints: ["C-SPINE1:et8", "C-LEAF8:et1"]
-######################
-# C-SPINE2 to LEAF   #
-######################
-    - endpoints: ["C-SPINE2:et1", "C-LEAF1:et2"]
-    - endpoints: ["C-SPINE2:et2", "C-LEAF2:et2"]
-    - endpoints: ["C-SPINE2:et3", "C-LEAF3:et2"]
-    - endpoints: ["C-SPINE2:et4", "C-LEAF4:et2"]
-    - endpoints: ["C-SPINE2:et5", "C-LEAF5:et2"]
-    - endpoints: ["C-SPINE2:et6", "C-LEAF6:et2"]
-    - endpoints: ["C-SPINE2:et7", "C-LEAF7:et2"]
-    - endpoints: ["C-SPINE2:et8", "C-LEAF8:et2"]
-########################
-# C-LEAF1 to C-LEAF2   #
-########################
-    - endpoints: ["C-LEAF1:et5", "C-LEAF2:et5"]
-    - endpoints: ["C-LEAF1:et6", "C-LEAF2:et6"]
-########################
-# C-LEAF3 to C-LEAF4   #
-########################
-    - endpoints: ["C-LEAF3:et5", "C-LEAF4:et5"]
-    - endpoints: ["C-LEAF3:et6", "C-LEAF4:et6"]
-########################
-# C-LEAF5 to C-LEAF6   #
-########################
-    - endpoints: ["C-LEAF5:et5", "C-LEAF6:et5"]
-    - endpoints: ["C-LEAF5:et6", "C-LEAF6:et6"]
-########################
-# C-LEAF7 to C-LEAF8   #
-########################
-    - endpoints: ["C-LEAF7:et5", "C-LEAF8:et5"]
-    - endpoints: ["C-LEAF7:et6", "C-LEAF8:et6"]
-########################
-# DC "C" HostC6         #
-########################
-    - endpoints: ["HostC1:eth1", "C-LEAF1:et7"]
-    - endpoints: ["HostC1:eth2", "C-LEAF2:et7"]
-    - endpoints: ["HostC2:eth1", "C-LEAF3:et7"]
-    - endpoints: ["HostC3:eth1", "C-LEAF3:et8"]
-    - endpoints: ["HostC3:eth2", "C-LEAF4:et8"]
-    - endpoints: ["HostC4:eth1", "C-LEAF4:et7"]
-    - endpoints: ["HostC5:eth1", "C-LEAF5:et7"]
-    - endpoints: ["HostC5:eth2", "C-LEAF6:et7"]
-    - endpoints: ["HostC6:eth1", "C-LEAF5:et8"]
-    - endpoints: ["HostC6:eth2", "C-LEAF6:et8"]
-########################
-# Backbone             #
-########################
-    - endpoints: ["BB1:et5", "C-LEAF7:et7"]
-    - endpoints: ["BB1:et6", "C-LEAF8:et7"]
-    - endpoints: ["BB2:et5", "C-LEAF7:et8"]
-    - endpoints: ["BB2:et6", "C-LEAF8:et8"]
+    ######################
+    # C-SPINE1 to LEAF   #
+    ######################
+    - endpoints: [ "C-SPINE1:et1", "C-LEAF1:et1" ]
+    - endpoints: [ "C-SPINE1:et2", "C-LEAF2:et1" ]
+    - endpoints: [ "C-SPINE1:et3", "C-LEAF3:et1" ]
+    - endpoints: [ "C-SPINE1:et4", "C-LEAF4:et1" ]
+    - endpoints: [ "C-SPINE1:et5", "C-LEAF5:et1" ]
+    - endpoints: [ "C-SPINE1:et6", "C-LEAF6:et1" ]
+    - endpoints: [ "C-SPINE1:et7", "C-LEAF7:et1" ]
+    - endpoints: [ "C-SPINE1:et8", "C-LEAF8:et1" ]
+    ######################
+    # C-SPINE2 to LEAF   #
+    ######################
+    - endpoints: [ "C-SPINE2:et1", "C-LEAF1:et2" ]
+    - endpoints: [ "C-SPINE2:et2", "C-LEAF2:et2" ]
+    - endpoints: [ "C-SPINE2:et3", "C-LEAF3:et2" ]
+    - endpoints: [ "C-SPINE2:et4", "C-LEAF4:et2" ]
+    - endpoints: [ "C-SPINE2:et5", "C-LEAF5:et2" ]
+    - endpoints: [ "C-SPINE2:et6", "C-LEAF6:et2" ]
+    - endpoints: [ "C-SPINE2:et7", "C-LEAF7:et2" ]
+    - endpoints: [ "C-SPINE2:et8", "C-LEAF8:et2" ]
+    ########################
+    # C-LEAF1 to C-LEAF2   #
+    ########################
+    - endpoints: [ "C-LEAF1:et5", "C-LEAF2:et5" ]
+    - endpoints: [ "C-LEAF1:et6", "C-LEAF2:et6" ]
+    ########################
+    # C-LEAF3 to C-LEAF4   #
+    ########################
+    - endpoints: [ "C-LEAF3:et5", "C-LEAF4:et5" ]
+    - endpoints: [ "C-LEAF3:et6", "C-LEAF4:et6" ]
+    ########################
+    # C-LEAF5 to C-LEAF6   #
+    ########################
+    - endpoints: [ "C-LEAF5:et5", "C-LEAF6:et5" ]
+    - endpoints: [ "C-LEAF5:et6", "C-LEAF6:et6" ]
+    ########################
+    # C-LEAF7 to C-LEAF8   #
+    ########################
+    - endpoints: [ "C-LEAF7:et5", "C-LEAF8:et5" ]
+    - endpoints: [ "C-LEAF7:et6", "C-LEAF8:et6" ]
+    ########################
+    # DC "C" HostC6         #
+    ########################
+    - endpoints: [ "HostC1:eth1", "C-LEAF1:et7" ]
+    - endpoints: [ "HostC1:eth2", "C-LEAF2:et7" ]
+    - endpoints: [ "HostC2:eth1", "C-LEAF3:et7" ]
+    - endpoints: [ "HostC3:eth1", "C-LEAF3:et8" ]
+    - endpoints: [ "HostC3:eth2", "C-LEAF4:et8" ]
+    - endpoints: [ "HostC4:eth1", "C-LEAF4:et7" ]
+    - endpoints: [ "HostC5:eth1", "C-LEAF5:et7" ]
+    - endpoints: [ "HostC5:eth2", "C-LEAF6:et7" ]
+    - endpoints: [ "HostC6:eth1", "C-LEAF5:et8" ]
+    - endpoints: [ "HostC6:eth2", "C-LEAF6:et8" ]
+    ########################
+    # Backbone             #
+    ########################
+    - endpoints: [ "BB1:et5", "C-LEAF7:et7" ]
+    - endpoints: [ "BB1:et6", "C-LEAF8:et7" ]
+    - endpoints: [ "BB2:et5", "C-LEAF7:et8" ]
+    - endpoints: [ "BB2:et6", "C-LEAF8:et8" ]
