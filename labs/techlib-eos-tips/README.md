@@ -7,14 +7,12 @@ This pre-configured lab is intended to be used as a sandbox companion to the [EO
 
 It has been built and validated with:
 
-- cEOS-lab: **4.34.0F**
-- Containerlab: **0.67.0**
+- cEOS-lab: **4.34.1F**
+- Containerlab: **0.68.0**
 - Codespace Machine Type:
   - CPUs: **4**
   - Memory: **16 GB**
   - Storage: **32 GB**
-
-*Last reviewed: April 7th, 2025*
 
 ## Credentials
 
@@ -36,3 +34,5 @@ Quick Links:
 - [Tips and Troubleshooting](https://aclabs.arista.com/quickstart/#tips-and-troubleshooting)
 
 Happy Labbing!
+
+Last reviewed: July 11th, 2025

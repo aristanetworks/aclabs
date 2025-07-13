@@ -3,67 +3,98 @@ name: eos-tips
 prefix: ""
 
 mgmt:
-    network: custom_mgmt
-    ipv4-subnet: 10.0.0.0/16
+  network: custom_mgmt
+  ipv4-subnet: 10.0.0.0/16
 
 topology:
-    kinds:
-        ceos:
-            enforce-startup-config: true
-            image: arista/ceos:latest
-        linux:
-            image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
+  kinds:
+    ceos:
+      enforce-startup-config: true
+      image: arista/ceos:latest
+    linux:
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
 
-    defaults:
-        kind: ceos
+  defaults:
+    kind: ceos
 
-    nodes:
-        SPINE1:
-            mgmt-ipv4: 10.0.1.1
-            binds:
-            - sn/SPINE1.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/SPINE1.cfg
-            group: 'spine'
+  nodes:
+    SPINE1:
+      mgmt-ipv4: 10.0.1.1
+      binds:
+        - sn/SPINE1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/SPINE1.cfg
+      labels:
+        topoViewer-role: spine
+        graph-group: "Spines"
+        graph-level: "2"
+        graph-groupLabelPos: bottom-center
+        graph-posX: "-34"
+        graph-posY: "-5"
 
-        SPINE2:
-            mgmt-ipv4: 10.0.1.2
-            binds:
-            - sn/SPINE2.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/SPINE2.cfg
-            group: 'spine'
+    SPINE2:
+      mgmt-ipv4: 10.0.1.2
+      binds:
+        - sn/SPINE2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/SPINE2.cfg
+      group: 'spine'
+      labels:
+        topoViewer-role: spine
+        graph-group: "Spines"
+        graph-level: "2"
+        graph-groupLabelPos: bottom-center
+        graph-posX: "30"
+        graph-posY: "-5"
 
-        LEAF1:
-            mgmt-ipv4: 10.0.2.1
-            binds:
-            - sn/LEAF1.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/LEAF1.cfg
-            group: 'leaf'
+    LEAF1:
+      mgmt-ipv4: 10.0.2.1
+      binds:
+        - sn/LEAF1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/LEAF1.cfg
+      group: 'leaf'
+      labels:
+        topoViewer-role: leaf
+        graph-group: "Leaf"
+        graph-level: "3"
+        graph-groupLabelPos: bottom-center
+        graph-posX: "-1"
+        graph-posY: "46"
 
-        Host1:
-            kind: linux
-            mgmt-ipv4: 10.0.3.1
-            env:
-                IPV4: 10.10.10.101/24
-                STATIC_ROUTE: 10.0.0.0/8
-                GW: 10.10.10.1
-                IPV6: 2001:db8:10:10::101/64
-            group: 'server'
+    Host1:
+      kind: linux
+      mgmt-ipv4: 10.0.3.1
+      env:
+        IPV4: 10.10.10.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        IPV6: 2001:db8:10:10::101/64
+      labels:
+        topoViewer-role: client
+        graph-group: "End Hosts"
+        graph-level: "4"
+        graph-groupLabelPos: bottom-center
+        graph-posX: "-21"
+        graph-posY: "97"
 
-        Host2:
-            kind: linux
-            mgmt-ipv4: 10.0.3.2
-            env:
-                IPV4: 10.20.20.101/24
-                STATIC_ROUTE: 10.0.0.0/8
-                GW: 10.20.20.1
-                IPV6: 2001:db8:20:20::101/64
-            group: 'server'
+    Host2:
+      kind: linux
+      mgmt-ipv4: 10.0.3.2
+      env:
+        IPV4: 10.20.20.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.20.20.1
+        IPV6: 2001:db8:20:20::101/64
+      labels:
+        topoViewer-role: client
+        graph-group: "End Hosts"
+        graph-level: "4"
+        graph-groupLabelPos: bottom-center
+        graph-posX: "18"
+        graph-posY: "97"
 
-
-    links:
-    - endpoints: ["LEAF1:eth1", "SPINE1:eth1"]
-    - endpoints: ["LEAF1:eth2", "SPINE2:eth1"]
-    - endpoints: ["SPINE1:eth47", "SPINE2:eth47"]
-    - endpoints: ["SPINE1:eth48", "SPINE2:eth48"]
-    - endpoints: ["Host1:eth1", "LEAF1:eth11"]
-    - endpoints: ["Host2:eth1", "LEAF1:eth12"]
+  links:
+    - endpoints: [ "LEAF1:eth1", "SPINE1:eth1" ]
+    - endpoints: [ "LEAF1:eth2", "SPINE2:eth1" ]
+    - endpoints: [ "SPINE1:eth47", "SPINE2:eth47" ]
+    - endpoints: [ "SPINE1:eth48", "SPINE2:eth48" ]
+    - endpoints: [ "Host1:eth1", "LEAF1:eth11" ]
+    - endpoints: [ "Host2:eth1", "LEAF1:eth12" ]
