@@ -47,4 +47,6 @@ jobs:
       # 1.6:
       # - Add AVD 5.5.1
       # - Add ContainerLab 0.68.0
-      container_revision: "1.6"
+      # 1.7:
+      # - add ARM support
+      container_revision: "1.7"
