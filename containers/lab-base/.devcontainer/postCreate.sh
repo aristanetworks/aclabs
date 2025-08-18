@@ -77,7 +77,14 @@ if [ "${CV_API_TOKEN}" ]; then
   else
     CVTOKEN=$(curl -H "Authorization: Bearer ${CV_API_TOKEN}" "https://www.cv-staging.corp.arista.io/api/v3/services/admin.Enrollment/AddEnrollmentToken" -d '{"enrollmentToken":{"reenrollDevices":["*"],"validFor":"24h"}}' | sed -n 's|.*"token":"\([^"]*\)".*|\1|p')
   fi
-  echo "$CVTOKEN" > ${CONTAINERWSF}/clab/cv-onboarding-token
+  if [ "${CVTOKEN}" ]; then
+    echo "$CVTOKEN" > ${CONTAINERWSF}/clab/cv-onboarding-token
+  else
+    echo "ERROR: failed to generate onboarding token!"
+  fi
+else
+  # add default to avoid clab failing due to missing file
+  echo "CAFECAFE" > ${CONTAINERWSF}/clab/cv-onboarding-token
 fi
 
 if [ -f "${CONTAINERWSF}/postCreate.sh" ]; then
