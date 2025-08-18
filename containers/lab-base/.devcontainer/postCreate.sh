@@ -44,10 +44,10 @@ if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
         # currently we check for arm64 and aarch64 and expect everything else to be an x86 machine
         echo "$(uname -m)"
         if [ "$(uname -m)" = "aarch64" ] || [ "$(uname -m)" = "arm64" ]; then
-            ardl get eos --image-type cEOSarm --version ${CEOS_LAB_VERSION} --import-docker
+            ardl get eos --format cEOSarm --version ${CEOS_LAB_VERSION} --import-docker
             ${CONTAINER_ENGINE} tag arista/ceos:${CEOS_LAB_VERSION} arista/ceos:latest
         else
-            ardl get eos --image-type cEOS --version ${CEOS_LAB_VERSION} --import-docker
+            ardl get eos --format cEOS --version ${CEOS_LAB_VERSION} --import-docker
             ${CONTAINER_ENGINE} tag arista/ceos:${CEOS_LAB_VERSION} arista/ceos:latest
         fi
     else
