@@ -7,8 +7,8 @@ This pre-configured lab is intended to be used as a sandbox companion to the [EO
 
 It has been built and validated with:
 
-- cEOS-lab: **4.34.1F**
-- Containerlab: **0.68.0**
+- cEOS-lab: **4.34.2F**
+- Containerlab: **0.69.3**
 - Codespace Machine Type:
   - CPUs: **4**
   - Memory: **16 GB**
