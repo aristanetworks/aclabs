@@ -62,15 +62,6 @@ else
     echo "WARNING: cEOS-lab image already present. Skipping the image pull/download."
 fi
 
-# check if image is still missing and print a warning
-if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
-    echo "WARNING: cEOS-lab image download failed. Try to upload and import it manually."
-    echo "         Please make sure that image is imported with a correct name - arista/ceos:latest"
-    echo "         The lab will not auto start! Run 'make start' when image is ready."
-else
-    make start
-fi
-
 if [ "${CV_API_TOKEN}" ]; then
   if [ "${CVURL}" ]; then
     CVTOKEN=$(curl -H "Authorization: Bearer ${CV_API_TOKEN}" "https://www.${CVURL}/api/v3/services/admin.Enrollment/AddEnrollmentToken" -d '{"enrollmentToken":{"reenrollDevices":["*"],"validFor":"24h"}}' | sed -n 's|.*"token":"\([^"]*\)".*|\1|p')
@@ -106,4 +97,13 @@ if ${GIT_INIT}; then
     git add .
     git commit -m "git init"
   fi
+fi
+
+# check if image is still missing and print a warning
+if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
+    echo "WARNING: cEOS-lab image download failed. Try to upload and import it manually."
+    echo "         Please make sure that image is imported with a correct name - arista/ceos:latest"
+    echo "         The lab will not auto start! Run 'make start' when image is ready."
+else
+    make start
 fi
