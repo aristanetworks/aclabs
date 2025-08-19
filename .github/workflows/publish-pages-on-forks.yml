@@ -104,12 +104,12 @@ jobs:
             mkdir temp_labs/${DEMO_NAME}/lab
             cp -r .devcontainer/${DEMO_NAME}/* temp_labs/${DEMO_NAME}/.devcontainer/
             echo "adding fixes to devcontainer for coder environment"
-            sed -e '35d;34d;32d;2d' .devcontainer/devcontainer.json > devcontainer.json
+            sed -e '35d;34d;32d;2d' temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json > devcontainer.json
             echo '    "image": "ghcr.io/ankudinov/aclabs/coder:rev1.0",' >> devcontainer.json
             echo '    "workspaceMount": "source=${localWorkspaceFolder}/lab,target=/${containerWorkspaceFolder},type=bind",' >> devcontainer.json
             echo '    "containerUser": "avd"' >> devcontainer.json
             echo '}' >> devcontainer.json
-            mv devcontainer.json .devcontainer/devcontainer.json
+            mv devcontainer.json temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json
             cp -r labs/${DEMO_NAME}/* temp_labs/${DEMO_NAME}/lab/
             tar -czvf site/coder_labs/${DEMO_NAME}-coder.tar.gz --directory temp_labs/ ${DEMO_NAME}
           done
