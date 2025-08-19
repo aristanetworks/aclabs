@@ -24,7 +24,7 @@ jobs:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
         from_variant: ["python3.11-avd-v5.5.1"]
-        clab_version: ["0.68.0"]
+        clab_version: ["0.69.3"]
     with:
       from_image: ${{ matrix.from_image }}
       from_variant: ${{ matrix.from_variant }}
@@ -47,4 +47,6 @@ jobs:
       # 1.6:
       # - Add AVD 5.5.1
       # - Add ContainerLab 0.68.0
-      container_revision: "1.6"
+      # 1.7:
+      # - Add ContainerLab 0.69.3
+      container_revision: "1.7"
