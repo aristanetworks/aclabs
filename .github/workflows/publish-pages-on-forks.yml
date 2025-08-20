@@ -104,7 +104,7 @@ jobs:
             mkdir temp_labs/${DEMO_NAME}/lab
             cp -r .devcontainer/${DEMO_NAME}/* temp_labs/${DEMO_NAME}/.devcontainer/
             echo "adding fixes to devcontainer for coder environment"
-            sed -e '35d;34d;33d;32d;29d;2d' temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json > devcontainer.json
+            sed -e '35d;34d;33d;32d;30d;2d' temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json > devcontainer.json
             echo '    "onCreateCommand": "chmod +x /lab/addAliases.sh; /lab/addAliases.sh",' >> devcontainer.json
             echo '    "image": "ghcr.io/ankudinov/aclabs/coder:rev1.0",' >> devcontainer.json
             echo '    "workspaceFolder": "/lab",' >> devcontainer.json
