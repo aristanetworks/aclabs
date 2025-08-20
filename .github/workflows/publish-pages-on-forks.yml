@@ -113,7 +113,7 @@ jobs:
             echo '}' >> devcontainer.json
             mv devcontainer.json temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json
             cat temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json
-            cp -r labs/${DEMO_NAME}/* temp_labs/${DEMO_NAME}/lab/
+            cp -r labs/${DEMO_NAME}/ temp_labs/${DEMO_NAME}/lab/
             tar -czvf site/coder_labs/${DEMO_NAME}-coder.tar.gz --directory temp_labs/ ${DEMO_NAME}
           done
           rm -rf temp_labs/
