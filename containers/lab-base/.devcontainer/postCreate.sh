@@ -109,3 +109,9 @@ if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
 else
     make start
 fi
+
+# if Coder is installed on this container - add additional preparation steps
+if [ -z "$(coder --help 2>/dev/null)" ]; then
+    code-server --install-extension srl-labs.vscode-containerlab --force
+    code-server --install-extension tuxtina.json2yaml --force
+fi
