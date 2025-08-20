@@ -50,6 +50,8 @@ if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
             ardl get eos --format cEOS --version ${CEOS_LAB_VERSION} --import-docker
             ${CONTAINER_ENGINE} tag arista/ceos:${CEOS_LAB_VERSION} arista/ceos:latest
         fi
+        # confirm that cEOS image was deleted just in case ardl failed to do that
+        rm -rf cEOS*.gz >/dev/null 2>&1
     else
         # if ARISTA_TOKEN is not defined - we'll try to pull it from a private container registry
         if docker pull arista/ceos:${CEOS_LAB_VERSION} >/dev/null 2>&1; then
