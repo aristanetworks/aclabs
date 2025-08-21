@@ -23,7 +23,7 @@
     //         "extensions": "srl-labs.vscode-containerlab,tuxtina.json2yaml"
     //     }
     // },
-    // "forwardPorts": ["localhost:8080"],
+    "forwardPorts": ["localhost:8080"],
     "overrideCommand": false,
     "containerUser": "avd"
 }
