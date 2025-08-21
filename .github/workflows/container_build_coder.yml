@@ -10,6 +10,7 @@ on:
       - containers/coder/**
   workflow_dispatch:
     branches: ['**']  # branches will be filtered in the jobs
+    # 1 - counter to trigger build until branch is merged
 
 jobs:
   build-demo-container:
