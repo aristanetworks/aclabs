@@ -1,5 +1,4 @@
 {
-    // "image": "ghcr.io/ankudinov/aclabs/lab-base:python3.11-avd-v5.5.1-clab0.68.0-rev1.7",
     "build": {
         "dockerfile": "Dockerfile",
         "args": {
@@ -11,18 +10,6 @@
             "USERNAME": "avd"
         }
     },
-    // "features": {
-    //     "ghcr.io/coder/devcontainer-features/code-server:1": {
-    //         "host": "0.0.0.0",
-    //         "port": 8080,
-    //         "welcomeText": "Welcome to acLabs!",
-    //         "workspace": "${CONTAINERWSF}",
-    //         "auth": "password",
-    //         "disableTelemetry": true,
-    //         "disableUpdateCheck": true,
-    //         "extensions": "srl-labs.vscode-containerlab,tuxtina.json2yaml"
-    //     }
-    // },
     "forwardPorts": ["localhost:8080"],
     "overrideCommand": false,
     "containerUser": "avd"
