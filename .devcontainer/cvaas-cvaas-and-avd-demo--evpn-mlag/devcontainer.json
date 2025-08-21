@@ -6,7 +6,8 @@
         "CEOS_LAB_VERSION": "4.34.2F",
         "CV_API_TOKEN": "${localEnv:CV_API_TOKEN}",
         "CONTAINERWSF": "${containerWorkspaceFolder}",
-        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}"
+        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}",
+        "PASSWORD": "${localEnv:CODER_PASSWORD}"
     },
     "secrets": {
         "CV_API_TOKEN": {
