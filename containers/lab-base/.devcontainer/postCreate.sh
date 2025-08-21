@@ -51,14 +51,20 @@ if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
             ${CONTAINER_ENGINE} tag arista/ceos:${CEOS_LAB_VERSION} arista/ceos:latest
         fi
         # confirm that cEOS image was deleted just in case ardl failed to do that
-        rm -rf cEOS*.gz >/dev/null 2>&1
+        rm -rf ${CONTAINERWSF}/cEOS*tar.xz >/dev/null 2>&1
+        rm -rf ${CONTAINERWSF}/cEOS*tar.xz.sha512sum >/dev/null 2>&1
     else
         # if ARISTA_TOKEN is not defined - we'll try find image in the workspace cEOS*.tar.xz
         if [ -e ${CONTAINERWSF}/cEOS*tar.xz ]; then
             ${CONTAINER_ENGINE} import ${CONTAINERWSF}/cEOS*tar.xz arista/ceos:latest
             rm ${CONTAINERWSF}/cEOS*tar.xz
+            # also delete SHA if it was copied, currently we do not check if archive was broken
+            rm -rf ${CONTAINERWSF}/cEOS*tar.xz.sha512sum >/dev/null 2>&1
             echo "WARNING: cEOS-lab image was successfully imported from the workspace."
         else
+            # delete any cEOS-lab files if they were copied to workspace and image was imported before
+            rm ${CONTAINERWSF}/cEOS*tar.xz 2>&1
+            rm -rf ${CONTAINERWSF}/cEOS*tar.xz.sha512sum >/dev/null 2>&1
             echo "WARNING: arista.com token was not defined and cEOS-lab image is not present in container workspace!"
         fi 2>/dev/null
     fi
