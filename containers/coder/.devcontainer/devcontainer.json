@@ -24,5 +24,6 @@
     //     }
     // },
     // "forwardPorts": ["localhost:8080"],
+    "overrideCommand": false,
     "containerUser": "avd"
 }
