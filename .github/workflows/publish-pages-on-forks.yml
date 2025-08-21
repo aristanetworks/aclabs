@@ -101,7 +101,7 @@ jobs:
             DEMO_NAME="${DEMO_DIR##*/}"
             mkdir temp_labs/${DEMO_NAME}
             mkdir temp_labs/${DEMO_NAME}/.devcontainer
-            mkdir temp_labs/${DEMO_NAME}/lab
+            mkdir temp_labs/${DEMO_NAME}/labs
             cp -r .devcontainer/${DEMO_NAME}/* temp_labs/${DEMO_NAME}/.devcontainer/
             echo "adding fixes to devcontainer for coder environment"
             sed -e '2d;$d' temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json > devcontainer.json
@@ -111,7 +111,7 @@ jobs:
             echo '}' >> devcontainer.json
             mv devcontainer.json temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json
             cat temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json
-            cp -r labs/${DEMO_NAME}/. temp_labs/${DEMO_NAME}/lab/
+            cp -r labs/${DEMO_NAME}/ temp_labs/${DEMO_NAME}/labs/
             tar -czvf site/coder_labs/${DEMO_NAME}-coder.tar.gz --directory temp_labs/ ${DEMO_NAME}
           done
           rm -rf temp_labs/
