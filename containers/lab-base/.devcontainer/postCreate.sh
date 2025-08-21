@@ -54,7 +54,7 @@ if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
         rm -rf cEOS*.gz >/dev/null 2>&1
     else
         # if ARISTA_TOKEN is not defined - we'll try find image in the workspace cEOS*.tar.xz
-        if [ -e ${CONTAINERWSF}/cEOS*tar.xz ];
+        if [ -e ${CONTAINERWSF}/cEOS*tar.xz ]; then
             ${CONTAINER_ENGINE} import ${CONTAINERWSF}/cEOS*tar.xz arista/ceos:latest
             rm ${CONTAINERWSF}/cEOS*tar.xz
             echo "WARNING: cEOS-lab image was successfully imported from the workspace."
