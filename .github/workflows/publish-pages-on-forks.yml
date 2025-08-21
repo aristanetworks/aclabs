@@ -105,8 +105,8 @@ jobs:
             cp -r .devcontainer/${DEMO_NAME}/* temp_labs/${DEMO_NAME}/.devcontainer/
             echo "adding fixes to devcontainer for coder environment"
             sed -e '2d;$d' temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json > devcontainer.json
-            truncate -s -1 devcontainer.json && printf ',' >> devcontainer.json
-            echo '    "image": "ghcr.io/ankudinov/aclabs/coder:rev1.0",' >> devcontainer.json
+            printf ',' >> devcontainer.json
+            echo '    "image": "ghcr.io/ankudinov/aclabs/coder:rev1.0"' >> devcontainer.json
             echo '}' >> devcontainer.json
             mv devcontainer.json temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json
             cat temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json
