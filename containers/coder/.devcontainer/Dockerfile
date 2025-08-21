@@ -11,6 +11,6 @@ USER root
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.103.1" \
     && code-server --install-extension srl-labs.vscode-containerlab --force \
     && code-server --install-extension tuxtina.json2yaml --force \
-    && code-server --bind-addr 0.0.0.0:8080 --auth password --disable-telemetry --disable-update-check --disable-workspace-trust "/cvaas-cvaas-and-avd-demo--evpn-mlag"
+    && code-server --bind-addr 127.0.0.1:8080 --auth password --disable-telemetry --disable-update-check --disable-workspace-trust "/cvaas-cvaas-and-avd-demo--evpn-mlag"
 
 USER ${USERNAME}
