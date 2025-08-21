@@ -53,12 +53,14 @@ if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
         # confirm that cEOS image was deleted just in case ardl failed to do that
         rm -rf cEOS*.gz >/dev/null 2>&1
     else
-        # if ARISTA_TOKEN is not defined - we'll try to pull it from a private container registry
-        if docker pull arista/ceos:${CEOS_LAB_VERSION} >/dev/null 2>&1; then
-            echo "WARNING: pulled cEOS-lab image from the private container registry successfully."
+        # if ARISTA_TOKEN is not defined - we'll try find image in the workspace cEOS*.tar.xz
+        if [ -e ${CONTAINERWSF}/cEOS*tar.xz ];
+            ${CONTAINER_ENGINE} import ${CONTAINERWSF}/cEOS*tar.xz arista/ceos:latest
+            rm ${CONTAINERWSF}/cEOS*tar.xz
+            echo "WARNING: cEOS-lab image was successfully imported from the workspace."
         else
-            echo "WARNING: arista.com token was not defined and image is not available on the private registry!"
-        fi
+            echo "WARNING: arista.com token was not defined and cEOS-lab image is not present in container workspace!"
+        fi 2>/dev/null
     fi
 else
     echo "WARNING: cEOS-lab image already present. Skipping the image pull/download."
@@ -108,10 +110,4 @@ if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
     echo "         The lab will not auto start! Run 'make start' when image is ready."
 else
     make start
-fi
-
-# if Coder is installed on this container - add additional preparation steps
-if [ -z "$(coder --help 2>/dev/null)" ]; then
-    code-server --install-extension srl-labs.vscode-containerlab --force
-    code-server --install-extension tuxtina.json2yaml --force
 fi
