@@ -10,7 +10,8 @@
             "USERNAME": "avd"
         }
     },
-    "forwardPorts": ["localhost:8080"],
+    // "forwardPorts": ["localhost:8080"],
+    "appPort": [8080],
     "overrideCommand": false,
     "containerUser": "avd"
 }
