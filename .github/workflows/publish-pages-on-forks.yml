@@ -107,6 +107,7 @@ jobs:
             sed -e '2d;$d' temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json > devcontainer.json
             truncate -s -1 devcontainer.json
             printf ',\n' >> devcontainer.json
+            echo '    "appPort": [8080],' >> devcontainer.json
             echo '    "image": "ghcr.io/ankudinov/aclabs/coder:rev1.0"' >> devcontainer.json
             echo '}' >> devcontainer.json
             mv devcontainer.json temp_labs/${DEMO_NAME}/.devcontainer/devcontainer.json
