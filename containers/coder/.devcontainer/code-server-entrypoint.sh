@@ -2,42 +2,42 @@
 
 set +e
 
-/usr/local/share/docker-init.sh
+# /usr/local/share/docker-init.sh
 
-# replace all markdown vars in demo directory
-if [ "${GITHUB_REPOSITORY}" ]; then
-    grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.repo_name}}/'"${GITHUB_REPOSITORY##*/}"'/g'
-    grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.org_name}}/'"${GITHUB_REPOSITORY%%/*}"'/g'
-    grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs sed -i 's@{{gh.repository}}@'"${GITHUB_REPOSITORY}"'@g'
-else
-    # if not running on Codespaces and GITHUB_REPOSITORY is not set - set aristanetworks/acLabs by default
-    grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.repo_name}}/'"acLabs"'/g'
-    grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.org_name}}/'"aristanetworks"'/g'
-    grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs sed -i 's@{{gh.repository}}@'"aristanetworks/acLabs"'@g'
-fi
-# update URL in clab init configs if set
-if [ "${CVURL}" ]; then
-    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL}"'@g'
-    # check for legacy labs using hardcoded URL
-    grep -rl 'cv-staging.corp.arista.io' . --exclude-dir .git | xargs sed -i 's@cv-staging.corp.arista.io@'"${CVURL}"'@g'
-else
-    # set defaul url to staging if nothing is defined
-    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"cv-staging.corp.arista.io"'@g'
-fi
+# # replace all markdown vars in demo directory
+# if [ "${GITHUB_REPOSITORY}" ]; then
+#     grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.repo_name}}/'"${GITHUB_REPOSITORY##*/}"'/g'
+#     grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.org_name}}/'"${GITHUB_REPOSITORY%%/*}"'/g'
+#     grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs sed -i 's@{{gh.repository}}@'"${GITHUB_REPOSITORY}"'@g'
+# else
+#     # if not running on Codespaces and GITHUB_REPOSITORY is not set - set aristanetworks/acLabs by default
+#     grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.repo_name}}/'"acLabs"'/g'
+#     grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.org_name}}/'"aristanetworks"'/g'
+#     grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs sed -i 's@{{gh.repository}}@'"aristanetworks/acLabs"'@g'
+# fi
+# # update URL in clab init configs if set
+# if [ "${CVURL}" ]; then
+#     grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL}"'@g'
+#     # check for legacy labs using hardcoded URL
+#     grep -rl 'cv-staging.corp.arista.io' . --exclude-dir .git | xargs sed -i 's@cv-staging.corp.arista.io@'"${CVURL}"'@g'
+# else
+#     # set defaul url to staging if nothing is defined
+#     grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"cv-staging.corp.arista.io"'@g'
+# fi
 
-# for D-in-D case container engine will be always Docker
-# however we do not want to hardcode it for future cases
-if [ "$(command -v podman)" ]; then
-    CONTAINER_ENGINE="podman"
-elif [ "$(command -v docker)" ]; then
-    CONTAINER_ENGINE="docker"
-else
-    echo "ERROR: Failed to find container engine. Please install docker or podman." >&2
-    exit 1
-fi
+# # for D-in-D case container engine will be always Docker
+# # however we do not want to hardcode it for future cases
+# if [ "$(command -v podman)" ]; then
+#     CONTAINER_ENGINE="podman"
+# elif [ "$(command -v docker)" ]; then
+#     CONTAINER_ENGINE="docker"
+# else
+#     echo "ERROR: Failed to find container engine. Please install docker or podman." >&2
+#     exit 1
+# fi
 
-# always prune old containers a clean lab on laptops
-${CONTAINER_ENGINE} container prune -f
+# # always prune old containers a clean lab on laptops
+# ${CONTAINER_ENGINE} container prune -f
 
 # # check if ceos-lab image already present
 # if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
@@ -97,10 +97,10 @@ ${CONTAINER_ENGINE} container prune -f
 #     rm ${CONTAINERWSF}/postCreate.sh
 # fi
 
-if [ -f "${CONTAINERWSF}/addAliases.sh" ]; then
-    chmod +x ${CONTAINERWSF}/addAliases.sh
-    ${CONTAINERWSF}/addAliases.sh
-fi
+# if [ -f "${CONTAINERWSF}/addAliases.sh" ]; then
+#     chmod +x ${CONTAINERWSF}/addAliases.sh
+#     ${CONTAINERWSF}/addAliases.sh
+# fi
 
 # if [ ${LAB_NAME} ]; then
 #     cd ${CONTAINERWSF}
@@ -125,7 +125,7 @@ fi
 #     fi
 # fi
 
-code-server --bind-addr 0.0.0.0:8080 --auth password --disable-telemetry --disable-update-check --disable-workspace-trust "${CONTAINERWSF}" &
+# code-server --bind-addr 0.0.0.0:8080 --auth password --disable-telemetry --disable-update-check --disable-workspace-trust "${CONTAINERWSF}" &
 
 # # check if image is still missing and print a warning
 # if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
