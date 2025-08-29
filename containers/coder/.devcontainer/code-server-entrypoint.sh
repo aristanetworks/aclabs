@@ -2,8 +2,6 @@
 
 set +e
 
-code-server --bind-addr 0.0.0.0:8080 --auth password --disable-telemetry --disable-update-check --disable-workspace-trust "${CONTAINERWSF}" &
-
 /usr/local/share/docker-init.sh
 
 # replace all markdown vars in demo directory
@@ -126,6 +124,8 @@ fi
 #         git commit -m "git init"
 #     fi
 # fi
+
+code-server --bind-addr 0.0.0.0:8080 --auth password --disable-telemetry --disable-update-check --disable-workspace-trust "${CONTAINERWSF}" &
 
 # # check if image is still missing and print a warning
 # if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
