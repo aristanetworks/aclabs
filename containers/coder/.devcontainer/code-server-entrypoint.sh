@@ -102,14 +102,14 @@ if [ -f "${CONTAINERWSF}/addAliases.sh" ]; then
     ${CONTAINERWSF}/addAliases.sh
 fi
 
-if [ ${LAB_NAME} ]; then
-    cd ${CONTAINERWSF}
-    wget "https://ankudinov.github.io/aclabs/coder_labs/${LAB_NAME}-coder.tar.gz"
-    tar -xzvf ${LAB_NAME}-coder.tar.gz
-    rm ${LAB_NAME}-coder.tar.gz
-    cp -r ${LAB_NAME}/labs/${LAB_NAME}/. .
-    rm -rf ${LAB_NAME}/
-fi
+# if [ ${LAB_NAME} ]; then
+#     cd ${CONTAINERWSF}
+#     wget "https://ankudinov.github.io/aclabs/coder_labs/${LAB_NAME}-coder.tar.gz"
+#     tar -xzvf ${LAB_NAME}-coder.tar.gz
+#     rm ${LAB_NAME}-coder.tar.gz
+#     cp -r ${LAB_NAME}/labs/${LAB_NAME}/. .
+#     rm -rf ${LAB_NAME}/
+# fi
 
 # # init demo dir as Git repo if requested for this demo env
 # if ${GIT_INIT}; then
