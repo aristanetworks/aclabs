@@ -77,6 +77,10 @@ if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
             # also delete SHA if it was copied, currently we do not check if archive was broken
             rm -rf ${CONTAINERWSF}/cEOS*tar.xz.sha512sum >/dev/null 2>&1
             echo "WARNING: cEOS-lab image was successfully imported from the workspace."
+        # also check if image was mounted to a special path
+        elif [ -e /img/cEOS-lab.tar.xz ]; then
+            ${CONTAINER_ENGINE} import /img/cEOS-lab.tar.xz arista/ceos:latest
+            echo "WARNING: cEOS-lab image was successfully imported from /img/cEOS-lab.tar.xz."
         else
             # delete any cEOS-lab files if they were copied to workspace and image was imported before
             rm ${CONTAINERWSF}/cEOS*tar.xz 2>&1
