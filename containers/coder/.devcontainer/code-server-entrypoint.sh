@@ -2,6 +2,15 @@
 
 set +e
 
+REMOTE_USER="avd"
+OLD_GID="1000"
+if [ ${NEW_UID} ]; then
+    sudo sed -i -e "s/\(${REMOTE_USER}:[^:]*:\)[^:]*:[^:]*/\1${NEW_UID}:${NEW_GID}/" /etc/passwd;
+    sudo sed -i -e "s/\([^:]*:[^:]*:\)${OLD_GID}:/\1${NEW_GID}:/" /etc/group;
+    sudo chown -R $NEW_UID:$NEW_GID $CONTAINERWSF;
+    sudo chown -R $NEW_UID:$NEW_GID $HOME;
+fi
+
 /usr/local/share/docker-init.sh
 
 if [ ${LAB_NAME} ]; then

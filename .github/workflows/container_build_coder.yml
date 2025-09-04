@@ -21,4 +21,5 @@ jobs:
     with:
       container_name: "coder"
       # the rev number will be updated with each run
-      image_tags: "latest,rev1.0"
+      # image_tags: "latest,rev1.0"
+      image_tags: "rev1.1"
