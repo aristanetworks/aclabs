@@ -1,0 +1,25 @@
+---
+name: Create arlabs container image
+
+on:
+  push:
+    branches: ['**']  # branches will be filtered in the jobs
+    paths:
+      - .github/workflows/container_build_arlabs.yml
+      - .github/workflows/container_build_child.yml
+      - containers/arlabs/**
+  workflow_dispatch:
+    branches: ['**']  # branches will be filtered in the jobs
+    # 1 - counter to trigger build until branch is merged
+
+jobs:
+  build-demo-container:
+    # fork - build container from any branch for testing
+    # parent repo - build on main branch only
+    if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/container_build_child.yml
+    with:
+      container_name: "arlabs"
+      # the rev number will be updated with each run
+      # image_tags: "latest,rev1.0"
+      image_tags: "rev0.1"

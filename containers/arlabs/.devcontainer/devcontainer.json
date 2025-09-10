@@ -1,0 +1,17 @@
+{
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            // "FROM_IMAGE": "${localEnv:FROM_IMAGE}",
+            "FROM_IMAGE": "ghcr.io/ankudinov/aclabs/lab-base",
+            // "FROM_VARIANT": "${localEnv:FROM_VARIANT}",
+            "FROM_VARIANT": "python3.11-avd-v5.5.1-clab0.68.0-rev1.7",
+            // "USERNAME": "${localEnv:USERNAME}",
+            "USERNAME": "avd"
+        }
+    },
+    // "forwardPorts": ["localhost:8080"],
+    "appPort": [8080],
+    "overrideCommand": false,
+    "containerUser": "avd"
+}
