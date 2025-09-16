@@ -25,3 +25,6 @@ USER ${USERNAME}
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.103.1" \
     && code-server --install-extension srl-labs.vscode-containerlab --force \
     && code-server --install-extension tuxtina.json2yaml --force
+
+# add global workspace settings for code-server
+COPY ./settings.json /home/${USERNAME}/.local/share/code-server/User
