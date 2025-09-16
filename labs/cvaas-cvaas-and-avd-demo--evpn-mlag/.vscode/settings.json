@@ -1,0 +1,13 @@
+{
+    "containerlab": {
+        "showWelcomePage": false,
+        "node": {
+            "sshUserMapping": {
+                "ceos": "arista"
+            },
+            "execCommandMapping": {
+                "ceos": "arista"
+            }
+        }
+    }
+}
