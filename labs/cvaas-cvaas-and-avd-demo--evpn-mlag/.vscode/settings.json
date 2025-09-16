@@ -4,9 +4,6 @@
         "node": {
             "sshUserMapping": {
                 "ceos": "arista"
-            },
-            "execCommandMapping": {
-                "ceos": "arista"
             }
         }
     }
