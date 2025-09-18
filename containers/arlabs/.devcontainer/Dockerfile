@@ -28,3 +28,4 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.103.1"
 
 # add global workspace settings for code-server
 COPY ./settings.json /home/${USERNAME}/.local/share/code-server/User
+RUN chown avd /home/${USERNAME}/.local/share/code-server/User/settings.json

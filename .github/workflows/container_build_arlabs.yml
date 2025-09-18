@@ -22,4 +22,4 @@ jobs:
       container_name: "arlabs"
       # the rev number will be updated with each run
       # image_tags: "latest,rev1.0"
-      image_tags: "rev0.1"
+      image_tags: "rev0.2"
