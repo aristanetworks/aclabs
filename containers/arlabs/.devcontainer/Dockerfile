@@ -7,12 +7,12 @@ ARG USERNAME
 
 USER root
 
-ENV NEW_UID="1009"
-ENV NEW_GID="1009"
-ENV OLD_GID="1000"
-RUN sed -i -e "s/\(${USERNAME}:[^:]*:\)[^:]*:[^:]*/\1${NEW_UID}:${NEW_GID}/" /etc/passwd; \
-    sed -i -e "s/\([^:]*:[^:]*:\)${OLD_GID}:/\1${NEW_GID}:/" /etc/group; \
-    chown -R $NEW_UID:$NEW_GID /home/$USERNAME
+# ENV NEW_UID="1009"
+# ENV NEW_GID="1009"
+# ENV OLD_GID="1000"
+# RUN sed -i -e "s/\(${USERNAME}:[^:]*:\)[^:]*:[^:]*/\1${NEW_UID}:${NEW_GID}/" /etc/passwd; \
+#     sed -i -e "s/\([^:]*:[^:]*:\)${OLD_GID}:/\1${NEW_GID}:/" /etc/group; \
+#     chown -R $NEW_UID:$NEW_GID /home/$USERNAME
 
 # copy code-server entrypoint
 COPY ./code-server-entrypoint.sh /usr/local/bin/code-server-entrypoint
