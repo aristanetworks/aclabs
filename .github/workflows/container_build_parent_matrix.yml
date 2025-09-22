@@ -49,4 +49,8 @@ jobs:
       # - Add ContainerLab 0.68.0
       # 1.7:
       # - Add ContainerLab 0.69.3
-      container_revision: "1.7"
+      # 2.0:
+      # - Add ARM support
+      # - Add code-server install for VSCode Web UI without supporting tools
+      # - Switch to unified entrypoint
+      container_revision: "2.0"

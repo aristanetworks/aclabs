@@ -103,7 +103,7 @@ ceos_lab_version:
   type: str
   help: Please select the cEOS-lab version.
   when: "{{ 'lab' | _in(templates) }}"
-  choices: ["4.32.3M"]
+  choices: ["4.34.2F"]
 
 clab_version:
   type: str
