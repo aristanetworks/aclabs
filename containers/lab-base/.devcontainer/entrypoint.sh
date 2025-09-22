@@ -112,7 +112,7 @@ if [ -f "${CONTAINERWSF}/postCreate.sh" ]; then
 fi
 
 # init demo dir as Git repo if requested for this demo env
-if ${GIT_INIT}; then
+if ${GIT_INIT:-false}; then
     cd ${CONTAINERWSF}
     # if not a git repo already - init
     if [ -z "$(git status 2>/dev/null)" ]; then
@@ -141,15 +141,16 @@ else
 fi
 
 # on Codespaces this will not work correctly
-# if ! ${CODESPACES}; then
-# Execute command from docker cli if any.
-if [ ${@+True} ]; then
-    exec "$@"
-# Otherwise just enter sh or zsh.
-else
-    if [ -f "/bin/zsh" ]; then
-        exec zsh
+if ! ${CODESPACES:-false}; then
+    # Execute command from docker cli if any.
+    if [ ${@+True} ]; then
+        exec "$@"
+    # Otherwise just enter sh or zsh.
     else
-        exec sh
+        if [ -f "/bin/zsh" ]; then
+            exec zsh
+        else
+            exec sh
+        fi
     fi
 fi
