@@ -26,7 +26,11 @@ jobs:
         from_variant: ["python3.11-avd-v5.5.1"]
         clab_version: ["0.69.3"]
         user_id: ["1000", "1009"]
-        group_id: ["1000", "1009"]
+        include:
+          - user_id: "1000"
+            group_id: "1000"
+          - user_id: "1009"
+            group_id: "1009"
     with:
       from_image: ${{ matrix.from_image }}
       from_variant: ${{ matrix.from_variant }}
