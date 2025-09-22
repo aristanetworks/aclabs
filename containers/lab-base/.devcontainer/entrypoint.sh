@@ -141,16 +141,15 @@ else
 fi
 
 # on Codespaces this will not work correctly
-if ! ${CODESPACES}; then
-    # Execute command from docker cli if any.
-    if [ ${@+True} ]; then
-        exec "$@"
-    # Otherwise just enter sh or zsh.
+# if ! ${CODESPACES}; then
+# Execute command from docker cli if any.
+if [ ${@+True} ]; then
+    exec "$@"
+# Otherwise just enter sh or zsh.
+else
+    if [ -f "/bin/zsh" ]; then
+        exec zsh
     else
-        if [ -f "/bin/zsh" ]; then
-            exec zsh
-        else
-            exec sh
-        fi
+        exec sh
     fi
 fi
