@@ -41,9 +41,10 @@ USER ${USERNAME}
 RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
     && pip3 install --user yamllint \
     && pip install --user "eos-downloader>=0.10.1" \
-    && pip install --user passlib \
-    # install coder and extensions
-    && curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.103.1" \
+    && pip install --user passlib
+
+# install coder and extensions
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.103.1" \
     && code-server --install-extension srl-labs.vscode-containerlab --force \
     && code-server --install-extension tuxtina.json2yaml --force
 
