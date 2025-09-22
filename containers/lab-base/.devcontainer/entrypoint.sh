@@ -2,6 +2,9 @@
 
 set +e
 
+# use VSCode script to start Docker
+/usr/local/share/docker-init.sh
+
 # for D-in-D case container engine will be always Docker
 # however we do not want to hardcode it for future cases
 if [ "$(command -v podman)" ]; then
@@ -9,13 +12,8 @@ if [ "$(command -v podman)" ]; then
 elif [ "$(command -v docker)" ]; then
     CONTAINER_ENGINE="docker"
 else
-    # use VSCode script to start Docker
-    /usr/local/share/docker-init.sh
-    # if docker is still not available - fail
-    if [ "$(command -v docker)" ]; then
-        echo "ERROR: Failed to find container engine. Please install docker or podman." >&2
-        exit 1
-    fi
+    echo "ERROR: Failed to find container engine. Please install docker or podman." >&2
+    exit 1
 fi
 
 # always prune old containers to clean the lab on laptops

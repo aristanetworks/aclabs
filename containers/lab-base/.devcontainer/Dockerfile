@@ -7,11 +7,18 @@ ARG USERNAME
 ARG CLAB_VERSION
 ARG CEOS_LAB_VERSION_ARG
 ARG GIT_INIT_ARG
+ARG UID
+ARG GID
 
 ENV CEOS_LAB_VERSION=${CEOS_LAB_VERSION_ARG}
 ENV GIT_INIT=${GIT_INIT_ARG}
 
 USER root
+
+ENV OLD_GID="1000"
+RUN sed -i -e "s/\(${USERNAME}:[^:]*:\)[^:]*:[^:]*/\1${UID}:${GID}/" /etc/passwd; \
+    sed -i -e "s/\([^:]*:[^:]*:\)${GID}:/\1${GID}:/" /etc/group; \
+    chown -R $UID:$GID /home/$USERNAME
 
 # install some basic tools inside the container
 RUN apt-get update \

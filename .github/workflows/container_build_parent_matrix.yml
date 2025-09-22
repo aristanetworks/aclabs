@@ -25,10 +25,14 @@ jobs:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
         from_variant: ["python3.11-avd-v5.5.1"]
         clab_version: ["0.69.3"]
+        user_id: ["1000", "1009"]
+        group_id: ["1000", "1009"]
     with:
       from_image: ${{ matrix.from_image }}
       from_variant: ${{ matrix.from_variant }}
       clab_version: ${{ matrix.clab_version }}
+      user_id: ${{ matrix.user_id }}
+      group_id: ${{ matrix.group_id }}
       # the rev number will be updated with each run
       # 1.1 - initial version
       # 1.2:
@@ -53,4 +57,5 @@ jobs:
       # - Add ARM support
       # - Add code-server install for VSCode Web UI without supporting tools
       # - Switch to unified entrypoint
+      # - Add image with UID 1009 for arista.labs
       container_revision: "2.0"
