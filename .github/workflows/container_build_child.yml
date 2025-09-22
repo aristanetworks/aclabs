@@ -68,7 +68,7 @@ jobs:
         run: |
           if [ -z "${{ inputs.image_tags }}" ]; then
             echo "No image tags provided. Building tags."
-            if [ "${{ inputs.user_id }}" != "1000" ]
+            if [ "${{ inputs.user_id }}" != "1000" ]; then
               echo "image_tags=${{ inputs.from_variant }}-clab${{ inputs.clab_version }}-rev${{ inputs.container_revision }}-uid${{ inputs.user_id }}" >> $GITHUB_OUTPUT
             else
               echo "image_tags=${{ inputs.from_variant }}-clab${{ inputs.clab_version }}-rev${{ inputs.container_revision }}" >> $GITHUB_OUTPUT
