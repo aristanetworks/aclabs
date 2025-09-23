@@ -7,11 +7,18 @@ ARG USERNAME
 ARG CLAB_VERSION
 ARG CEOS_LAB_VERSION_ARG
 ARG GIT_INIT_ARG
+ARG UID
+ARG GID
 
 ENV CEOS_LAB_VERSION=${CEOS_LAB_VERSION_ARG}
 ENV GIT_INIT=${GIT_INIT_ARG}
 
 USER root
+
+ENV OLD_GID="1000"
+RUN sed -i -e "s/\(${USERNAME}:[^:]*:\)[^:]*:[^:]*/\1${UID}:${GID}/" /etc/passwd; \
+    sed -i -e "s/\([^:]*:[^:]*:\)${GID}:/\1${GID}:/" /etc/group; \
+    chown -R $UID:$GID /home/$USERNAME
 
 # install some basic tools inside the container
 RUN apt-get update \
@@ -23,11 +30,10 @@ RUN apt-get update \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
     && apt-get clean
 
-# copy postCreate script
-COPY ./postCreate.sh /bin/postCreate.sh
-RUN chmod +x /bin/postCreate.sh
-# copy terminals script
-COPY ./terminals.sh /bin/terminals.sh
+# copy code-server entrypoint
+COPY ./entrypoint.sh /bin/entrypoint
+RUN chmod +x /bin/entrypoint
+ENTRYPOINT [ "/bin/entrypoint" ]
 
 USER ${USERNAME}
 
@@ -36,3 +42,15 @@ RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
     && pip3 install --user yamllint \
     && pip install --user "eos-downloader>=0.10.1" \
     && pip install --user passlib
+
+# install coder and extensions
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.103.1" \
+    && code-server --install-extension srl-labs.vscode-containerlab --force \
+    && code-server --install-extension tuxtina.json2yaml --force
+
+USER root
+# add global workspace settings for code-server
+COPY ./settings.json /home/${USERNAME}/.local/share/code-server/User
+RUN chown ${USERNAME} /home/${USERNAME}/.local/share/code-server/User/settings.json
+
+USER ${USERNAME}

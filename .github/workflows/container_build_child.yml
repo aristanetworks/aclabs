@@ -68,7 +68,11 @@ jobs:
         run: |
           if [ -z "${{ inputs.image_tags }}" ]; then
             echo "No image tags provided. Building tags."
-            echo "image_tags=${{ inputs.from_variant }}-clab${{ inputs.clab_version }}-rev${{ inputs.container_revision }}" >> $GITHUB_OUTPUT
+            if [ "${{ inputs.user_id }}" != "1000" ]; then
+              echo "image_tags=${{ inputs.from_variant }}-clab${{ inputs.clab_version }}-rev${{ inputs.container_revision }}-uid${{ inputs.user_id }}" >> $GITHUB_OUTPUT
+            else
+              echo "image_tags=${{ inputs.from_variant }}-clab${{ inputs.clab_version }}-rev${{ inputs.container_revision }}" >> $GITHUB_OUTPUT
+            fi
           else
             echo "Using provided image tags."
             echo "image_tags=${{ inputs.image_tags }}" >> $GITHUB_OUTPUT
@@ -111,7 +115,7 @@ jobs:
       - name: Pre-build dev container image 🔨
         uses: devcontainers/ci@v0.3
         # Only build and push the image if at least one of the image tags does not exist.
-        if: steps.check-image.outputs.exit_code != 0
+        # if: steps.check-image.outputs.exit_code != 0
         env:
           FROM_IMAGE: ${{ inputs.from_image }}
           FROM_VARIANT: ${{ inputs.from_variant }}
