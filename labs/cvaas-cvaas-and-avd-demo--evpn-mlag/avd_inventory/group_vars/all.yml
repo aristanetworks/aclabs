@@ -9,8 +9,10 @@ mgmt_interface: Management0
 #       no lldp receive
 #       no lldp transmit
 
-name_servers:
-  - 8.8.8.8
+dns_settings:
+  servers:
+    - ip_address: 8.8.8.8
+      vrf: MGMT
 
 # NTP servers
 ntp:
