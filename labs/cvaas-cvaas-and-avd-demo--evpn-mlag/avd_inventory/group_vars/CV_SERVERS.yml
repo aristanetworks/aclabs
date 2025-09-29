@@ -1,9 +1,0 @@
----
-ansible_user: "{{ lookup('ansible.builtin.env', 'CVUSER', default='cvaas') }}"
-# CV_API_TOKEN must be generated in advance, valid and set as env variable
-ansible_password: "{{ lookup('ansible.builtin.env', 'CV_API_TOKEN') }}"
-ansible_connection: httpapi
-ansible_network_os: eos
-ansible_httpapi_use_ssl: True
-ansible_httpapi_validate_certs: True
-ansible_httpapi_port: 443

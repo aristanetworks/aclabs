@@ -1,0 +1,14 @@
+---
+monitor_connectivity:
+  shutdown: false
+  vrfs:
+    - name: VRF1
+      interface_sets:
+        - name: IF_SET
+          interfaces: Loopback101
+      local_interfaces: IF_SET
+      hosts:
+        - name: h01
+          ip: 10.100.100.101
+        - name: h02
+          ip: 10.200.200.202
