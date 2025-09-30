@@ -4,11 +4,11 @@
   "cloudNodeAnnotations": [],
   "nodeAnnotations": [
     {
-      "id": "B-SPINE1",
+      "id": "C-SPINE1",
       "icon": "spine",
       "position": {
-        "x": -77,
-        "y": 77
+        "x": -63,
+        "y": 119
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -18,11 +18,11 @@
       "level": "3"
     },
     {
-      "id": "B-SPINE2",
+      "id": "C-SPINE2",
       "icon": "spine",
       "position": {
-        "x": -35,
-        "y": 77
+        "x": 21,
+        "y": 119
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -32,39 +32,11 @@
       "level": "3"
     },
     {
-      "id": "B-SPINE3",
-      "icon": "spine",
-      "position": {
-        "x": 35,
-        "y": 77
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Spine",
-      "level": "3"
-    },
-    {
-      "id": "B-SPINE4",
-      "icon": "spine",
-      "position": {
-        "x": 77,
-        "y": 77
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Spine",
-      "level": "3"
-    },
-    {
-      "id": "B-LEAF1",
+      "id": "C-LEAF1",
       "icon": "leaf",
       "position": {
-        "x": -161,
-        "y": 147
+        "x": -189,
+        "y": 203
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -74,11 +46,11 @@
       "level": "4"
     },
     {
-      "id": "B-LEAF2",
+      "id": "C-LEAF2",
       "icon": "leaf",
       "position": {
-        "x": -77,
-        "y": 147
+        "x": -105,
+        "y": 203
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -88,11 +60,11 @@
       "level": "4"
     },
     {
-      "id": "B-LEAF3",
+      "id": "C-LEAF3",
       "icon": "leaf",
       "position": {
-        "x": -35,
-        "y": 147
+        "x": -63,
+        "y": 203
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -102,11 +74,11 @@
       "level": "4"
     },
     {
-      "id": "B-LEAF4",
+      "id": "C-LEAF4",
       "icon": "leaf",
       "position": {
-        "x": 49,
-        "y": 147
+        "x": 21,
+        "y": 203
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -116,11 +88,11 @@
       "level": "4"
     },
     {
-      "id": "B-LEAF5",
+      "id": "C-LEAF5",
       "icon": "leaf",
       "position": {
-        "x": 91,
-        "y": 147
+        "x": 63,
+        "y": 203
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -130,11 +102,11 @@
       "level": "4"
     },
     {
-      "id": "B-LEAF6",
+      "id": "C-LEAF6",
       "icon": "leaf",
       "position": {
-        "x": 175,
-        "y": 147
+        "x": 147,
+        "y": 203
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -144,11 +116,11 @@
       "level": "4"
     },
     {
-      "id": "B-LEAF7",
+      "id": "C-LEAF7",
       "icon": "dcgw",
       "position": {
-        "x": -35,
-        "y": 7
+        "x": -63,
+        "y": 35
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -158,11 +130,11 @@
       "level": "2"
     },
     {
-      "id": "B-LEAF8",
+      "id": "C-LEAF8",
       "icon": "dcgw",
       "position": {
         "x": 21,
-        "y": 7
+        "y": 35
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -172,105 +144,77 @@
       "level": "2"
     },
     {
-      "id": "B-SW1",
-      "icon": "leaf",
-      "position": {
-        "x": 133,
-        "y": 217
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "L2 Switch",
-      "level": "5"
-    },
-    {
-      "id": "HostB1",
+      "id": "HostC1",
       "icon": "client",
       "position": {
-        "x": -161,
-        "y": 217
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Host",
-      "level": "5"
-    },
-    {
-      "id": "HostB2",
-      "icon": "client",
-      "position": {
-        "x": -77,
-        "y": 217
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Host",
-      "level": "5"
-    },
-    {
-      "id": "HostB3",
-      "icon": "client",
-      "position": {
-        "x": -35,
-        "y": 217
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Host",
-      "level": "5"
-    },
-    {
-      "id": "HostB4",
-      "icon": "client",
-      "position": {
-        "x": 7,
-        "y": 217
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Host",
-      "level": "5"
-    },
-    {
-      "id": "HostB5",
-      "icon": "client",
-      "position": {
-        "x": 49,
-        "y": 217
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Host",
-      "level": "5"
-    },
-    {
-      "id": "HostB6",
-      "icon": "client",
-      "position": {
-        "x": 119,
+        "x": -147,
         "y": 273
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "Data Center Host 2",
-      "level": "6"
+      "group": "Data Center Host",
+      "level": "5"
     },
     {
-      "id": "HostB7",
+      "id": "HostC2",
+      "icon": "client",
+      "position": {
+        "x": -63,
+        "y": 273
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "group": "Data Center Host",
+      "level": "5"
+    },
+    {
+      "id": "HostC3",
+      "icon": "client",
+      "position": {
+        "x": -21,
+        "y": 273
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "group": "Data Center Host",
+      "level": "5"
+    },
+    {
+      "id": "HostC4",
+      "icon": "client",
+      "position": {
+        "x": 21,
+        "y": 273
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "group": "Data Center Host",
+      "level": "5"
+    },
+    {
+      "id": "HostC5",
+      "icon": "client",
+      "position": {
+        "x": 63,
+        "y": 273
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "group": "Data Center Host",
+      "level": "5"
+    },
+    {
+      "id": "HostC6",
       "icon": "client",
       "position": {
         "x": 147,
@@ -280,15 +224,15 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "Data Center Host 2",
-      "level": "6"
+      "group": "Data Center Host",
+      "level": "5"
     },
     {
       "id": "BB1",
       "icon": "router",
       "position": {
-        "x": -35,
-        "y": -63
+        "x": -63,
+        "y": -49
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -302,7 +246,7 @@
       "icon": "router",
       "position": {
         "x": 21,
-        "y": -63
+        "y": -49
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
