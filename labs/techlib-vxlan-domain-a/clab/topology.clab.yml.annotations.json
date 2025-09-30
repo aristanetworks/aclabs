@@ -21,7 +21,7 @@
       "id": "A-SPINE2",
       "icon": "spine",
       "position": {
-        "x": -49,
+        "x": -63,
         "y": 119
       },
       "geoCoordinates": {
@@ -35,7 +35,7 @@
       "id": "A-SPINE3",
       "icon": "spine",
       "position": {
-        "x": 35,
+        "x": 21,
         "y": 119
       },
       "geoCoordinates": {
@@ -49,7 +49,7 @@
       "id": "A-SPINE4",
       "icon": "spine",
       "position": {
-        "x": 91,
+        "x": 63,
         "y": 119
       },
       "geoCoordinates": {
@@ -91,7 +91,7 @@
       "id": "A-LEAF3",
       "icon": "leaf",
       "position": {
-        "x": -49,
+        "x": -63,
         "y": 189
       },
       "geoCoordinates": {
@@ -105,7 +105,7 @@
       "id": "A-LEAF4",
       "icon": "leaf",
       "position": {
-        "x": 35,
+        "x": 21,
         "y": 189
       },
       "geoCoordinates": {
@@ -119,7 +119,7 @@
       "id": "A-LEAF5",
       "icon": "leaf",
       "position": {
-        "x": 91,
+        "x": 63,
         "y": 189
       },
       "geoCoordinates": {
@@ -133,7 +133,7 @@
       "id": "A-LEAF6",
       "icon": "leaf",
       "position": {
-        "x": 175,
+        "x": 147,
         "y": 189
       },
       "geoCoordinates": {
@@ -161,7 +161,7 @@
       "id": "A-LEAF8",
       "icon": "dcgw",
       "position": {
-        "x": 49,
+        "x": 21,
         "y": 49
       },
       "geoCoordinates": {
@@ -203,7 +203,7 @@
       "id": "HostA3",
       "icon": "client",
       "position": {
-        "x": -49,
+        "x": -63,
         "y": 259
       },
       "geoCoordinates": {
@@ -217,7 +217,7 @@
       "id": "HostA4",
       "icon": "client",
       "position": {
-        "x": -7,
+        "x": -21,
         "y": 259
       },
       "geoCoordinates": {
@@ -231,7 +231,7 @@
       "id": "HostA5",
       "icon": "client",
       "position": {
-        "x": 35,
+        "x": 21,
         "y": 259
       },
       "geoCoordinates": {
@@ -245,7 +245,7 @@
       "id": "HostA6",
       "icon": "client",
       "position": {
-        "x": 133,
+        "x": 105,
         "y": 259
       },
       "geoCoordinates": {
@@ -260,7 +260,7 @@
       "icon": "router",
       "position": {
         "x": -63,
-        "y": -35
+        "y": -21
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -273,8 +273,8 @@
       "id": "BB2",
       "icon": "router",
       "position": {
-        "x": 49,
-        "y": -35
+        "x": 21,
+        "y": -21
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
