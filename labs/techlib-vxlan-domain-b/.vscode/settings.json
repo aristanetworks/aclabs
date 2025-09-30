@@ -1,0 +1,11 @@
+{
+    "containerlab": {
+        "showWelcomePage": false,
+    },
+    "workbench": {
+        "startupEditor": "readme",
+        "editorAssociations": {
+                    "*.md": "vscode.markdown.preview.editor"
+        }
+    }
+}

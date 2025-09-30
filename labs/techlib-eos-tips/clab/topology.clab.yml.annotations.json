@@ -1,0 +1,77 @@
+{
+  "freeTextAnnotations": [],
+  "groupStyleAnnotations": [],
+  "cloudNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "SPINE1",
+      "icon": "spine",
+      "position": {
+        "x": -49,
+        "y": -7
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "group": "Spines",
+      "level": "2"
+    },
+    {
+      "id": "SPINE2",
+      "icon": "spine",
+      "position": {
+        "x": 63,
+        "y": -7
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "group": "Spines",
+      "level": "2"
+    },
+    {
+      "id": "LEAF1",
+      "icon": "leaf",
+      "position": {
+        "x": 7,
+        "y": 49
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "group": "Leaf",
+      "level": "3"
+    },
+    {
+      "id": "Host1",
+      "icon": "client",
+      "position": {
+        "x": -49,
+        "y": 105
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "group": "End Hosts",
+      "level": "4"
+    },
+    {
+      "id": "Host2",
+      "icon": "client",
+      "position": {
+        "x": 63,
+        "y": 105
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "group": "End Hosts",
+      "level": "4"
+    }
+  ]
+}
