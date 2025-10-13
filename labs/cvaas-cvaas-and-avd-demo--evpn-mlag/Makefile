@@ -38,7 +38,3 @@ diff: ## Show the diff between running config and designed config
 .PHONY: test
 test: ## validate the network state
 	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_validate.yml
-
-.PHONY: tags
-tags: ## add tags for topology view
-	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_create_tags.yml

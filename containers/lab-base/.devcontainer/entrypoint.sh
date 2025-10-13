@@ -80,9 +80,18 @@ fi
 
 # update URL in clab init configs if set
 if [ "${CVURL}" ]; then
+    # check if CVURL starts with www.
+    if [[ "${CVURL}" == www* ]]; then
+        # set URL without prefix. It will be used in the initial configs for onboarding
+        CVURL_NO_PREFIX="${CVURL#www.}"
+    else
+        echo "ERROR: CVURL must start with www."
+        exit 1
+    fi
     grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL}"'@g'
-    # check for legacy labs using hardcoded URL
-    grep -rl 'www.cv-staging.corp.arista.io' . --exclude-dir .git | xargs sed -i 's@www.cv-staging.corp.arista.io@'"${CVURL}"'@g'
+    grep -rl '{{cv_url_no_prefix}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL_NO_PREFIX}"'@g'
+    # replace all lines where cv-staging is hardcoded
+    grep -rl 'cv-staging.corp.arista.io' . --exclude-dir .git | xargs sed -i 's@cv-staging.corp.arista.io@'"${CVURL_NO_PREFIX}"'@g'
 else
     # set defaul url to staging if nothing is defined
     grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"cv-staging.corp.arista.io"'@g'
