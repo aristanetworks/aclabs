@@ -62,4 +62,6 @@ jobs:
       # - Add code-server install for VSCode Web UI without supporting tools
       # - Switch to unified entrypoint
       # - Add image with UID 1009 for arista.labs
-      container_revision: "2.0"
+      # 2.1:
+      # - Make CVURL format consistent with cv_deploy playbook. Now it requires www. to be part of CVURL.
+      container_revision: "2.1"
