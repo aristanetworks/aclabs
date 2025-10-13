@@ -1,6 +1,6 @@
 ---
 # --------------------------------------------------------------
-# Arista EVPN Deployment Guide Topology
+# Arista EVPN Deployment Guide Topology - Domain A
 # --------------------------------------------------------------
 
 name: arista-evpn-dg
@@ -50,13 +50,6 @@ topology:
       binds:
         - sn/a-spine1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE1.cfg
-      labels:
-        topoViewer-role: spine
-        graph-group: "Data Center Spine"
-        graph-level: "3"
-        graph-posX: "-105"
-        graph-posY: "115"
-        graph-groupLabelPos: bottom-center
 
     A-SPINE2:
       kind: ceos
@@ -64,13 +57,6 @@ topology:
       binds:
         - sn/a-spine2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE2.cfg
-      labels:
-        topoViewer-role: spine
-        graph-group: "Data Center Spine"
-        graph-level: "3"
-        graph-posX: "-25"
-        graph-posY: "115"
-        graph-groupLabelPos: bottom-center
 
     A-SPINE3:
       kind: ceos
@@ -78,13 +64,6 @@ topology:
       binds:
         - sn/a-spine3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE3.cfg
-      labels:
-        topoViewer-role: spine
-        graph-group: "Data Center Spine"
-        graph-level: "3"
-        graph-posX: "35"
-        graph-posY: "115"
-        graph-groupLabelPos: bottom-center
 
     A-SPINE4:
       kind: ceos
@@ -92,13 +71,6 @@ topology:
       binds:
         - sn/a-spine4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE4.cfg
-      labels:
-        topoViewer-role: spine
-        graph-group: "Data Center Spine"
-        graph-level: "3"
-        graph-posX: "95"
-        graph-posY: "115"
-        graph-groupLabelPos: bottom-center
 
     #########################
     # Domain A LEAF         #
@@ -110,14 +82,6 @@ topology:
       binds:
         - sn/a-leaf1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF1.cfg
-      startup-delay: 30
-      labels:
-        topoViewer-role: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: "4"
-        graph-posX: "-155"
-        graph-posY: "185"
-        graph-groupLabelPos: bottom-center
 
     A-LEAF2:
       kind: ceos
@@ -125,14 +89,6 @@ topology:
       binds:
         - sn/a-leaf2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF2.cfg
-      startup-delay: 30
-      labels:
-        topoViewer-role: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: "4"
-        graph-posX: "-105"
-        graph-posY: "185"
-        graph-groupLabelPos: bottom-center
 
     A-LEAF3:
       kind: ceos
@@ -140,14 +96,6 @@ topology:
       binds:
         - sn/a-leaf3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF3.cfg
-      startup-delay: 30
-      labels:
-        topoViewer-role: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: "4"
-        graph-posX: "-25"
-        graph-posY: "185"
-        graph-groupLabelPos: bottom-center
 
     A-LEAF4:
       kind: ceos
@@ -155,14 +103,6 @@ topology:
       binds:
         - sn/a-leaf4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF4.cfg
-      startup-delay: 30
-      labels:
-        topoViewer-role: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: "4"
-        graph-posX: "35"
-        graph-posY: "185"
-        graph-groupLabelPos: bottom-center
 
     A-LEAF5:
       kind: ceos
@@ -170,14 +110,6 @@ topology:
       binds:
         - sn/a-leaf5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF5.cfg
-      startup-delay: 30
-      labels:
-        topoViewer-role: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: "4"
-        graph-posX: "95"
-        graph-posY: "185"
-        graph-groupLabelPos: bottom-center
 
     A-LEAF6:
       kind: ceos
@@ -185,14 +117,6 @@ topology:
       binds:
         - sn/a-leaf6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF6.cfg
-      startup-delay: 30
-      labels:
-        topoViewer-role: leaf
-        graph-group: "Data Center Leaf"
-        graph-level: "4"
-        graph-posX: "155"
-        graph-posY: "185"
-        graph-groupLabelPos: bottom-center
 
     A-LEAF7:
       kind: ceos
@@ -200,14 +124,6 @@ topology:
       binds:
         - sn/a-leaf7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF7.cfg
-      startup-delay: 30
-      labels:
-        topoViewer-role: dcgw
-        graph-group: "EVPN Gateway"
-        graph-level: "2"
-        graph-posX: "-65"
-        graph-posY: "45"
-        graph-groupLabelPos: bottom-center
 
     A-LEAF8:
       kind: ceos
@@ -215,14 +131,6 @@ topology:
       binds:
         - sn/a-leaf8.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF8.cfg
-      startup-delay: 30
-      labels:
-        topoViewer-role: dcgw
-        graph-group: "EVPN Gateway"
-        graph-level: "2"
-        graph-posX: "55"
-        graph-posY: "45"
-        graph-groupLabelPos: bottom-center
 
     #########################
     # Domain A Hosts        #
@@ -232,113 +140,65 @@ topology:
     HostA1:
       kind: linux
       mgmt-ipv4: 172.100.100.201
-      startup-delay: 60
       env:
         TMODE: lacp
         IPV4: 10.10.10.101/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::101/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "-155"
-        graph-posY: "255"
-        graph-groupLabelPos: bottom-center
 
     # HostA2 is connected to LEAF1 eth8 and LEAF2 eth8
     HostA2:
       kind: linux
       mgmt-ipv4: 172.100.100.202
-      startup-delay: 60
       env:
         TMODE: lacp
         IPV4: 10.30.30.101/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.30.30.1
         IPV6: 2001:db8:30:30::101/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "-105"
-        graph-posY: "255"
-        graph-groupLabelPos: bottom-center
 
     # HostA3 is a Linux host with a single interface connected to LEAF3 eth7
     HostA3:
       kind: linux
       mgmt-ipv4: 172.100.100.203
-      startup-delay: 60
       env:
         IPV4: 10.50.50.101/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.50.50.1
         IPV6: 2001:db8:50:50::101/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "-25"
-        graph-posY: "255"
-        graph-groupLabelPos: bottom-center
 
     # HostA4 is connected to LEAF3 eth8 and LEAF4 eth8
     HostA4:
       kind: linux
       mgmt-ipv4: 172.100.100.204
-      startup-delay: 60
       env:
         TMODE: lacp
         IPV4: 10.10.10.102/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::102/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "5"
-        graph-posY: "255"
-        graph-groupLabelPos: bottom-center
 
     # HostA5 is connected to LEAF4 eth7
     HostA5:
       kind: linux
       mgmt-ipv4: 172.100.100.205
-      startup-delay: 60
       env:
         IPV4: 10.30.30.102/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.30.30.1
         IPV6: 2001:db8:30:30::102/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "35"
-        graph-posY: "255"
-        graph-groupLabelPos: bottom-center
 
     # HostA6 is connected to LEAF5 eth7 and LEAF6 eth7
     HostA6:
       kind: linux
       mgmt-ipv4: 172.100.100.206
-      startup-delay: 60
       env:
         TMODE: lacp
         IPV4: 10.70.70.101/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.70.70.1
         IPV6: 2001:db8:70:70::101/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "125"
-        graph-posY: "255"
-        graph-groupLabelPos: bottom-center
 
     #########################
     # Backbone              #
@@ -350,13 +210,6 @@ topology:
       binds:
         - sn/bb1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB1.cfg
-      labels:
-        topoViewer-role: router
-        graph-group: "Backbone IP Transport"
-        graph-level: "1"
-        graph-posX: "-65"
-        graph-posY: "-35"
-        graph-groupLabelPos: bottom-center
 
     BB2:
       kind: ceos
@@ -364,13 +217,6 @@ topology:
       binds:
         - sn/bb2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB2.cfg
-      labels:
-        topoViewer-role: router
-        graph-group: "Backbone IP Transport"
-        graph-level: "1"
-        graph-posX: "55"
-        graph-posY: "-35"
-        graph-groupLabelPos: bottom-center
 
   links:
     ######################

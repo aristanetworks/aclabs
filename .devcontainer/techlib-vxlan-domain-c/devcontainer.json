@@ -1,11 +1,13 @@
 {
-    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.5.1-clab0.69.3-rev1.7",
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.5.1-clab0.69.3-rev2.0",
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
+        "CEOS_LAB_VERSION": "4.34.2F",
+        "CV_API_TOKEN": "${localEnv:CV_API_TOKEN}",
         "CONTAINERWSF": "${containerWorkspaceFolder}",
         "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}",
-        "CEOS_LAB_VERSION": "4.34.2F"
+        "PASSWORD": "${localEnv:CODER_PASSWORD}"
     },
     "secrets": {
         "ARTOKEN": {
@@ -16,21 +18,11 @@
     "hostRequirements": {
         "cpus": 16,
         "memory": "64gb",
-        "storage": "128gb"
+        "storage": "64gb"
     },
-    "postCreateCommand": "postCreate.sh; make start; make inspect",
+    "onCreateCommand": "chmod +x /techlib-vxlan-domain-c/addAliases.sh; /techlib-vxlan-domain-c/addAliases.sh",
+    "postCreateCommand": "/bin/entrypoint",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/techlib-vxlan-domain-c",
-    "containerUser": "avd",
-    "customizations": {
-        "vscode": {
-            "settings": {
-                "containerlab.showWelcomePage": false,
-                "workbench.startupEditor": "readme",
-                "workbench.editorAssociations": {
-                    "*.md": "vscode.markdown.preview.editor"
-                }
-            }
-        }
-    }
+    "containerUser": "avd"
 }
