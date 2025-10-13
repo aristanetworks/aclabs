@@ -82,7 +82,7 @@ fi
 if [ "${CVURL}" ]; then
     grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL}"'@g'
     # check for legacy labs using hardcoded URL
-    grep -rl 'cv-staging.corp.arista.io' . --exclude-dir .git | xargs sed -i 's@cv-staging.corp.arista.io@'"${CVURL}"'@g'
+    grep -rl 'www.cv-staging.corp.arista.io' . --exclude-dir .git | xargs sed -i 's@www.cv-staging.corp.arista.io@'"${CVURL}"'@g'
 else
     # set defaul url to staging if nothing is defined
     grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"cv-staging.corp.arista.io"'@g'
@@ -90,7 +90,7 @@ fi
 
 if [ "${CV_API_TOKEN}" ]; then
     if [ "${CVURL}" ]; then
-        CVTOKEN=$(curl -H "Authorization: Bearer ${CV_API_TOKEN}" "https://www.${CVURL}/api/v3/services/admin.Enrollment/AddEnrollmentToken" -d '{"enrollmentToken":{"reenrollDevices":["*"],"validFor":"24h"}}' | sed -n 's|.*"token":"\([^"]*\)".*|\1|p')
+        CVTOKEN=$(curl -H "Authorization: Bearer ${CV_API_TOKEN}" "https://${CVURL}/api/v3/services/admin.Enrollment/AddEnrollmentToken" -d '{"enrollmentToken":{"reenrollDevices":["*"],"validFor":"24h"}}' | sed -n 's|.*"token":"\([^"]*\)".*|\1|p')
     else
         CVTOKEN=$(curl -H "Authorization: Bearer ${CV_API_TOKEN}" "https://www.cv-staging.corp.arista.io/api/v3/services/admin.Enrollment/AddEnrollmentToken" -d '{"enrollmentToken":{"reenrollDevices":["*"],"validFor":"24h"}}' | sed -n 's|.*"token":"\([^"]*\)".*|\1|p')
     fi
