@@ -64,4 +64,6 @@ jobs:
       # - Add image with UID 1009 for arista.labs
       # 2.1:
       # - Make CVURL format consistent with cv_deploy playbook. Now it requires www. to be part of CVURL.
+      # - Entrypoint now builds CVURL_NO_PREFIX to account for apiserver. case
+      # - remove playbook to set tags as it's using legacy role
       container_revision: "2.1"
