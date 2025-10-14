@@ -1,6 +1,9 @@
 ---
 fabric_name: AVD_FABRIC
 
+generate_cv_tags:
+  topology_hints: true
+
 # Spine Switches
 spine:
   defaults:
