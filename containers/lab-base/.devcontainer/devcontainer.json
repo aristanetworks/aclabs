@@ -37,7 +37,8 @@
                 "srl-labs.vscode-containerlab",
                 // various tools
                 "tuxtina.json2yaml",
-                "mutantdino.resourcemonitor"
+                "mutantdino.resourcemonitor",
+                "Catppuccin.catppuccin-vsc"
             ]
         }
     }

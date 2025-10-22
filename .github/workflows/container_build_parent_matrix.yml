@@ -66,4 +66,16 @@ jobs:
       # - Make CVURL format consistent with cv_deploy playbook. Now it requires www. to be part of CVURL.
       # - Entrypoint now builds CVURL_NO_PREFIX to account for apiserver. case
       # - remove playbook to set tags as it's using legacy role
-      container_revision: "2.1"
+      # 2.2:
+      # - Add ContainerLab 0.71.0
+      # - Add AVD 5.7.0
+      # - Add extensions to code server (labs.arista.com)
+      #   - samuelcolvin.jinjahtml
+      #   - Catppuccin.catppuccin-vsc
+      #   - yzhang.markdown-all-in-one
+      #   - DavidAnson.vscode-markdownlint
+      # - Add extension to Codespaces lab
+      #   - Catppuccin.catppuccin-vsc
+      # - Entrypoint now builds CVURL_NO_PREFIX to account for apiserver. case
+      # - remove playbook to set tags as it's using legacy role
+      container_revision: "2.2"
