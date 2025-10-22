@@ -1,0 +1,79 @@
+{
+  "freeTextAnnotations": [],
+  "groupStyleAnnotations": [],
+  "cloudNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "EOS1",
+      "icon": "router",
+      "position": {
+        "x": 91,
+        "y": 105
+      },
+      "geoCoordinates": {
+        "lat": 48.95546844144507,
+        "lng": 9.906746836683288
+      }
+    },
+    {
+      "id": "EOS2",
+      "icon": "router",
+      "position": {
+        "x": 203,
+        "y": 105
+      },
+      "geoCoordinates": {
+        "lat": 48.834114200236066,
+        "lng": 9.711241202557709
+      }
+    },
+    {
+      "id": "EOS3",
+      "icon": "router",
+      "position": {
+        "x": 203,
+        "y": 203
+      },
+      "geoCoordinates": {
+        "lat": 48.721051076756375,
+        "lng": 9.700559027532613
+      }
+    },
+    {
+      "id": "EOS4",
+      "icon": "router",
+      "position": {
+        "x": 91,
+        "y": 203
+      },
+      "geoCoordinates": {
+        "lat": 49.18949956207221,
+        "lng": 9.794579310642213
+      }
+    },
+    {
+      "id": "EOS5",
+      "icon": "router",
+      "position": {
+        "x": 91,
+        "y": 35
+      },
+      "geoCoordinates": {
+        "lat": 49.35786919065505,
+        "lng": 9.303405001444052
+      }
+    },
+    {
+      "id": "EOS6",
+      "icon": "router",
+      "position": {
+        "x": 147,
+        "y": 35
+      },
+      "geoCoordinates": {
+        "lat": 49.30730476768171,
+        "lng": 9.546957442052083
+      }
+    }
+  ]
+}
