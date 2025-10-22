@@ -46,7 +46,13 @@ RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
 # install coder and extensions
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.103.1" \
     && code-server --install-extension srl-labs.vscode-containerlab --force \
-    && code-server --install-extension tuxtina.json2yaml --force
+    && code-server --install-extension tuxtina.json2yaml --force \
+    && code-server --install-extension samuelcolvin.jinjahtml --force \
+    && code-server --install-extension Catppuccin.catppuccin-vsc --force \
+    && code-server --install-extension yzhang.markdown-all-in-one --force \
+    && code-server --install-extension DavidAnson.vscode-markdownlint --force
+
+
 
 USER root
 # add global workspace settings for code-server
