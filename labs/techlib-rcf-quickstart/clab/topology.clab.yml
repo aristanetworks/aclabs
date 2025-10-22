@@ -19,11 +19,11 @@ topology:
 
   kinds:
     ceos:
-      image: ceos:latest
-      env:
-        CLAB_MGMT_VRF: MGMT
+      image: arista/ceos:latest
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
+      binds:
+        - /techlib-rcf-quickstart:/workspace:ro
 
   nodes:
 
