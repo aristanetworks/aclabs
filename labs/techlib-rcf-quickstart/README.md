@@ -10,8 +10,8 @@ It has been built and validated with:
 - cEOS-lab: **4.35.0F**
 - Containerlab: **0.71.0**
 - Codespace Machine Type:
-  - CPUs: **18**
-  - Memory: **64 GB**
+  - CPUs: **16**
+  - Memory: **32 GB**
   - Storage: **64 GB**
 
 ## Credentials
