@@ -76,6 +76,4 @@ jobs:
       #   - DavidAnson.vscode-markdownlint
       # - Add extension to Codespaces lab
       #   - Catppuccin.catppuccin-vsc
-      # - Entrypoint now builds CVURL_NO_PREFIX to account for apiserver. case
-      # - remove playbook to set tags as it's using legacy role
       container_revision: "2.2"
