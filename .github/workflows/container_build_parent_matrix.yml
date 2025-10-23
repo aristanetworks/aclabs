@@ -69,11 +69,4 @@ jobs:
       # 2.2:
       # - Add ContainerLab 0.71.0
       # - Add AVD 5.7.0
-      # - Add extensions to code server (labs.arista.com)
-      #   - samuelcolvin.jinjahtml
-      #   - Catppuccin.catppuccin-vsc
-      #   - yzhang.markdown-all-in-one
-      #   - DavidAnson.vscode-markdownlint
-      # - Add extension to Codespaces lab
-      #   - Catppuccin.catppuccin-vsc
       container_revision: "2.2"
