@@ -1,0 +1,78 @@
+---
+# --------------------------------------------------------------
+# RCF Sandbox Topology
+# --------------------------------------------------------------
+
+name: rcf-sandbox
+
+prefix: ""
+
+mgmt:
+  network: mgmt
+  ipv4-subnet: 172.100.100.0/24
+
+topology:
+
+  defaults:
+    env:
+      INTFTYPE: et
+
+  kinds:
+    ceos:
+      image: arista/ceos:latest
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
+      binds:
+        - /techlib-rcf-quickstart:/workspace:ro
+
+  nodes:
+
+    EOS1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.101
+      binds:
+        - sn/eos1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/EOS1.cfg
+
+    EOS2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.102
+      binds:
+        - sn/eos2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/EOS2.cfg
+
+    EOS3:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.103
+      binds:
+        - sn/eos3.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/EOS3.cfg
+
+    EOS4:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.104
+      binds:
+        - sn/eos4.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/EOS4.cfg
+
+    EOS5:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.105
+      binds:
+        - sn/eos5.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/EOS5.cfg
+
+    EOS6:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.106
+      binds:
+        - sn/eos6.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/EOS6.cfg
+
+  links:
+    - endpoints: [ EOS1:et1, EOS2:et1 ]
+    - endpoints: [ EOS1:et2, EOS4:et2 ]
+    - endpoints: [ EOS1:et3, EOS6:et1 ]
+    - endpoints: [ EOS1:et4, EOS5:et1 ]
+    - endpoints: [ EOS2:et2, EOS3:et2 ]
+    - endpoints: [ EOS2:et3, EOS6:et2 ]
+    - endpoints: [ EOS3:et1, EOS4:et1 ]
