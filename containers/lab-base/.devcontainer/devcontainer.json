@@ -38,7 +38,6 @@
                 // various tools
                 "tuxtina.json2yaml",
                 "mutantdino.resourcemonitor",
-                "Catppuccin.catppuccin-vsc"
             ]
         }
     }

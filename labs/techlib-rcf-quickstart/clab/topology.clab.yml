@@ -20,7 +20,6 @@ topology:
   kinds:
     ceos:
       image: arista/ceos:latest
-    linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
       binds:
         - /techlib-rcf-quickstart:/workspace:ro
