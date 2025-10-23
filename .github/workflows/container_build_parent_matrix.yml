@@ -24,6 +24,7 @@ jobs:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
         from_variant: ["python3.12-avd-v5.7.0"]
+        from_variant: ["python3.11-avd-v5.7.0"]
         clab_version: ["0.71.0"]
         user_id: ["1000", "1009"]
         include:
