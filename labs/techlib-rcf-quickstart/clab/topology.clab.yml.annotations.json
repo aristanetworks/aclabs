@@ -43,7 +43,7 @@
       },
       "fontSize": 8,
       "fontColor": "#ffffff",
-      "backgroundColor": "transparent",
+      "backgroundColor": "#16325b",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -77,15 +77,15 @@
       },
       "fontSize": 8,
       "fontColor": "#ffffff",
-      "backgroundColor": "transparent",
+      "backgroundColor": "#16325b",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
       "fontFamily": "monospace",
       "textAlign": "left",
       "roundedBackground": true,
-      "width": 42,
-      "height": 20
+      "width": 54,
+      "height": 26
     },
     {
       "id": "freeText_1763596315759_7",
@@ -96,7 +96,7 @@
       },
       "fontSize": 8,
       "fontColor": "#ffffff",
-      "backgroundColor": "transparent",
+      "backgroundColor": "#16325b",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -110,6 +110,23 @@
       "position": {
         "x": -133,
         "y": 105
+      },
+      "fontSize": 8,
+      "fontColor": "#ffffff",
+      "backgroundColor": "#16325b",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "fontFamily": "monospace",
+      "textAlign": "left",
+      "roundedBackground": true
+    },
+    {
+      "id": "freeText_1763598427154_1",
+      "text": "All example RCF policy examples are configured on EOS1.\n\nFeel free to explore these policies, or delete them and craft your own!\n\nHappy labbing 🥳🧪",
+      "position": {
+        "x": 399,
+        "y": 7
       },
       "fontSize": 8,
       "fontColor": "#ffffff",
@@ -253,7 +270,7 @@
       "icon": "router",
       "position": {
         "x": 91,
-        "y": 35
+        "y": 31
       },
       "geoCoordinates": {
         "lat": 49.35786919065505,
@@ -267,7 +284,7 @@
       "icon": "router",
       "position": {
         "x": 147,
-        "y": 35
+        "y": 31
       },
       "geoCoordinates": {
         "lat": 49.30730476768171,
