@@ -5,7 +5,7 @@
       "text": "5.0.0.0/8",
       "position": {
         "x": 91,
-        "y": -7
+        "y": -21
       },
       "fontSize": 8,
       "fontColor": "#ffffff",
@@ -22,11 +22,11 @@
       "text": "6.0.0.0/8",
       "position": {
         "x": 147,
-        "y": -7
+        "y": -21
       },
       "fontSize": 8,
       "fontColor": "#ffffff",
-      "backgroundColor": "transparent",
+      "backgroundColor": "#16325b",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -208,7 +208,7 @@
       "icon": "router",
       "position": {
         "x": 203,
-        "y": 203
+        "y": 199
       },
       "geoCoordinates": {
         "lat": 48.721051076756375,
@@ -222,7 +222,7 @@
       "icon": "router",
       "position": {
         "x": 91,
-        "y": 203
+        "y": 199
       },
       "geoCoordinates": {
         "lat": 49.18949956207221,
@@ -236,7 +236,7 @@
       "icon": "router",
       "position": {
         "x": 91,
-        "y": 35
+        "y": 31
       },
       "geoCoordinates": {
         "lat": 49.35786919065505,
@@ -250,7 +250,7 @@
       "icon": "router",
       "position": {
         "x": 147,
-        "y": 35
+        "y": 31
       },
       "geoCoordinates": {
         "lat": 49.30730476768171,
