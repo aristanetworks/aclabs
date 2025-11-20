@@ -2,7 +2,7 @@
 
 # Arista RCF QuickStart Guide Lab
 
-Welcome! This pre-configured lab is based on the scenarios defined in the [RCF QuickStart Solution Guide](https://tech-library.arista.com/solution_guides/rcf_quickstart/) in [Arista's Tech Library](https://tech-library.arista.com/).
+Welcome! This pre-configured lab is based on the scenarios defined in the [RCF QuickStart Solution Guide](https://tech-library.arista.com/solution_guides/rcf_quickstart/) found in [Arista's Tech Library](https://tech-library.arista.com/).
 
 This lab has been validated with:
 

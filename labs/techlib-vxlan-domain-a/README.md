@@ -1,69 +1,101 @@
-# Arista's Tech Library EVPN/VXLAN Domain A Lab
+# Arista's Tech Library EVPN-VXLAN Domain A Lab
 
-> [!IMPORTANT]
-> The average deployment time for this lab is ~8 minutes. Please wait until the `postCreateCommand` process has finished before interacting with the lab.
+Welcome! This pre-configured lab matches the [Domain A topology in the EVPN-VXLAN Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domain_a/) on [Arista's Tech Library](https://arista.com/en/tech-library).
 
 ## Overview
 
-This lab has been built and validated with:
+This lab has been validated with:
 
-- cEOS-lab: **4.34.2F**
-- AVD: **5.5.1**
-- ContainerLab: **0.69.3**
-- Codespace Machine Type:
+- cEOS-lab: **4.35.0F**
+- Containerlab: **0.71.1**
+- AVD: **5.7.0**
+- Resources:
   - CPUs: **16**
   - Memory: **64 GB**
-  - Storage: **128 GB**
+  - Storage: **64 GB**
 
-## Credentials
+> [!IMPORTANT]
+> The average deployment time for this lab is ten minutes.
+>
+> Issue the `make inspect` command at the terminal to check on the deployment status of the lab.
+>
+> Please wait until all nodes are in a `running` state prior to interacting with the lab.
 
-Username: `admin`
+## Interacting with the Lab
 
-Password: `admin`
+### Credentials
 
-## Navigating the Lab
+#### Username
+```bash
+admin
+```
 
-Please refer to the [Arista Community Labs QuickStart Guide](https://aclabs.arista.com/quickstart/) for a step-by-step guide on how to navigate the lab.
+#### Password
 
-Quick Links:
+```bash
+admin
+```
 
-- [Interacting with the Lab](https://aclabs.arista.com/quickstart/#interacting-with-the-lab)
-- [Tips and Troubleshooting](https://aclabs.arista.com/quickstart/#tips-and-troubleshooting)
+> [!TIP]
+> The [ContainerLab VS Code Extension](https://containerlab.dev/manual/vsc-extension/) is pre-installed in the lab. For the best experience, it's recommended to use the [Topology Viewer](https://containerlab.dev/manual/vsc-extension/#topoviewer) to interact with the lab.
+>
+> Topology Viewer can be opened by selecting the ContainerLab extension icon and then the lab.
 
-## Building Configurations with AVD
+<figure>
+    <img src="assets/images/clab-extension.png"
+         alt="Topology Viewer"
+         width="250">
+</figure>
 
-Pre-built AVD data models are located in the `avd/group_vars` directory. These data models will render configurations for the nodes in Domain A as shown in the EVPN/VXLAN Deployment Guide.
+### SSH
 
-Issuing the below command at the terminal will render all configuration and documentation based on the pre-built data models.
+Once in the Topology viewer, SSH to a node by right-clicking it and selecting `SSH`. This will open up a new terminal window containing the SSH session to the node.
+
+<figure>
+    <img src="assets/images/topo-ssh.png"
+         alt="Topology Viewer"
+         width="250">
+</figure>
+
+### Packet Capture
+
+Start a data-plane packet capture by right-clicking on a link and selecting the Wireshark icon associated with the link you'd like to capture
+
+<figure>
+    <img src="assets/images/topo-pcap.png"
+         alt="Topology Viewer"
+         width="250">
+</figure>
+
+Additional information related to navigating the Topology Viewer UI can be found by selecting the `Shortcuts` icon from within the UI
+
+<figure>
+    <img src="assets/images/topo-shortcuts.png"
+         alt="Topology Viewer"
+         width="250">
+</figure>
+
+### AVD
+
+The [AVD](https://avd.arista.com) data models used to render the configuration in the lab are included within the `avd` directory. The [AVD ansible galaxy collection](https://galaxy.ansible.com/ui/repo/published/arista/avd/) is pre-installed in the lab environment, and can be used to initiate a build, deploy, or validation of the topology.
+
+#### Build
 
 ```bash
 make build
 ```
-
-> [!TIP]
-> Be sure to explore and experiment with the data models! More information on AVD can be found at https://avd.arista.com.
-
-## Deploying Configurations with AVD
-
-Once rendered, the AVD-generated configurations can be deployed to the nodes by issuing the below command at the terminal
+#### Deploy
 
 ```bash
 make deploy
 ```
 
-## Validating the Environment with AVD
-
-The [Arista Network Test Automation (ANTA)](https://anta.arista.com/) framework can be used to validate that the topology is built and operational as defined in the AVD data models.
-
-Issue the below command at the terminal will initiate the validation testing.
+#### Validate
 
 ```bash
 make validate
 ```
 
-> [!TIP]
-> ANTA has an extensive and continually growing [test catalog](https://anta.arista.com/stable/api/tests/). Be sure to explore and test with the available options!
+Happy Labbing! 🥳🧪
 
-Happy Labbing!
-
-Last reviewed: August 19th, 2025
+Last reviewed: November 19th, 2025
