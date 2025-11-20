@@ -2,7 +2,7 @@
 
 # Arista RCF QuickStart Guide Lab
 
-Welcome! This pre-configured lab matches the scenarios defined in the [RCF QuickStart Solution Guide](https://tech-library.arista.com/solution_guides/rcf_quickstart/) in [Arista's Tech Library](https://tech-library.arista.com/).
+Welcome! This pre-configured lab is based on the scenarios defined in the [RCF QuickStart Solution Guide](https://tech-library.arista.com/solution_guides/rcf_quickstart/) in [Arista's Tech Library](https://tech-library.arista.com/).
 
 This lab has been validated with:
 
@@ -66,5 +66,7 @@ Additional information related to navigating the Topology Viewer UI can be found
          alt="Topology Viewer"
          width="250">
 </figure>
+
+Happy Labbing! 🥳🧪
 
 Last reviewed: November 19th, 2025
