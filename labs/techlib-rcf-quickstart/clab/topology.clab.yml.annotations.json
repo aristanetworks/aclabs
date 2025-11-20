@@ -197,7 +197,7 @@
       "icon": "router",
       "position": {
         "x": 91,
-        "y": 105
+        "y": 101
       },
       "geoCoordinates": {
         "lat": 48.95546844144507,
@@ -211,7 +211,7 @@
       "icon": "router",
       "position": {
         "x": 203,
-        "y": 105
+        "y": 101
       },
       "geoCoordinates": {
         "lat": 48.834114200236066,
@@ -253,7 +253,7 @@
       "icon": "router",
       "position": {
         "x": 91,
-        "y": 31
+        "y": 35
       },
       "geoCoordinates": {
         "lat": 49.35786919065505,
@@ -267,7 +267,7 @@
       "icon": "router",
       "position": {
         "x": 147,
-        "y": 31
+        "y": 35
       },
       "geoCoordinates": {
         "lat": 49.30730476768171,
