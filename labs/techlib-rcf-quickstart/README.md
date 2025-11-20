@@ -1,15 +1,24 @@
-# Arista RCF QuickStart Solution Guide Companion Lab
+# Arista RCF QuickStart Guide Lab
 
 > [!IMPORTANT]
-> The average deployment time for this lab is ~5 minutes.
+> The average deployment time for this lab is five minutes.
+>
+> Use `make inspect` at the terminal to check on the deployment status of the lab.
+>
+> Please wait until all nodes are in a `running` state prior to interacting with the lab.
 
-This pre-configured lab is intended to be used as a sandbox companion to the [RCF QuickStart Solution Guide](https://tech-library.arista.com/solution_guides/rcf_quickstart/) in [Arista's Tech Library](https://tech-library.arista.com/).
+> [!TIP]
+> For the best experience, use the ContainerLab Topology Viewer to interact with the lab.
+>
+> The Topology Viewer can be opened via: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>G</kbd>
+
+This pre-configured lab matches the scenarios defined in the [RCF QuickStart Solution Guide](https://tech-library.arista.com/solution_guides/rcf_quickstart/) in [Arista's Tech Library](https://tech-library.arista.com/).
 
 It has been built and validated with:
 
 - cEOS-lab: **4.35.0F**
 - Containerlab: **0.71.0**
-- Codespace Machine Type:
+- Resources:
   - CPUs: **8**
   - Memory: **32 GB**
   - Storage: **64 GB**
@@ -20,4 +29,4 @@ Username: `admin`
 
 Password: `admin`
 
-Last reviewed: October 22nd, 2025
+Last reviewed: November 19th, 2025
