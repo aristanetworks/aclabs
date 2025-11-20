@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > The average deployment time for this lab is five minutes.
 >
-> Use `make inspect` at the terminal to check on the deployment status of the lab.
+> Issue the `make inspect` command at the terminal to check on the deployment status of the lab.
 >
 > Please wait until all nodes are in a `running` state prior to interacting with the lab.
 
