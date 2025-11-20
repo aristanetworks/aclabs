@@ -71,7 +71,6 @@ jobs:
       # - Add AVD 5.7.0
       # 2.3:
       # - Add ContainerLab 0.71.1
-      # - Add AVD 5.7.2
       # - Add yzhang.markdown-all-in-one extension to lab-base code server
       # - Update code server to 4.106.2 on lab-base
       container_revision: "2.3"
