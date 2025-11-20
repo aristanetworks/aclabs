@@ -106,7 +106,7 @@
     },
     {
       "id": "freeText_1763598236900_1",
-      "text": "**IP Schema**\n\n**Point-to-Point Links**\n- 20.`[Low Node ID]`.`[High Node ID]`.`[Node ID]`/24\n  - Example: EOS1 to EOS5\n    - EOS1, Eth4: 20.1.5.1/24\n    - EOS5, Eth1: 20.1.5.5/24\n\n\n**Loopbacks**\n- `[Node ID]`.`[Loopback ID]`.`[Loopback ID]`.1/24\n  - Examples\n    - EOS1 Loopback0: 1.0.0.1/24\n    - EOS2 Loopback1: 2.1.1.1/24\n- Each node has the following Loopbacks\n  - Loopback0\n  - Loopback1\n  - Loopback2\n  - Loopback3",
+      "text": "**IP Schema**\n\n**Point-to-Point Links**\n- 20.*[Low Node ID]*.*[High Node ID]*.*[Node ID]*/24\n  - Example: EOS1 to EOS5\n    - EOS1, Eth4: 20.1.5.1/24\n    - EOS5, Eth1: 20.1.5.5/24\n\n\n**Loopbacks**\n- *[Node ID]*.*[Loopback ID]*.*[Loopback ID]*.1/24\n  - Examples\n    - EOS1 Loopback0: 1.0.0.1/24\n    - EOS2 Loopback1: 2.1.1.1/24\n- Each node has the following Loopbacks\n  - Loopback0\n  - Loopback1\n  - Loopback2\n  - Loopback3",
       "position": {
         "x": -133,
         "y": 105
