@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD028 -->
+
 # Arista RCF QuickStart Guide Lab
 
 > [!IMPORTANT]
@@ -17,7 +19,7 @@ Welcome! This pre-configured lab matches the scenarios defined in the [RCF Quick
 It has been built and validated with:
 
 - cEOS-lab: **4.35.0F**
-- Containerlab: **0.71.0**
+- Containerlab: **0.71.1**
 - Resources:
   - CPUs: **8**
   - Memory: **32 GB**
