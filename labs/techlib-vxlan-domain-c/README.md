@@ -71,7 +71,7 @@ Additional information related to navigating the Topology Viewer UI can be found
 <figure>
     <img src="assets/images/topo-shortcuts.png"
          alt="Topology Viewer"
-         width="250">
+         width="300">
 </figure>
 
 <!-- ### AVD
