@@ -5,7 +5,7 @@
       "text": "5.0.0.0/8",
       "position": {
         "x": 91,
-        "y": -21
+        "y": -35
       },
       "fontSize": 8,
       "fontColor": "#ffffff",
@@ -22,7 +22,7 @@
       "text": "6.0.0.0/8",
       "position": {
         "x": 147,
-        "y": -21
+        "y": -35
       },
       "fontSize": 8,
       "fontColor": "#ffffff",
