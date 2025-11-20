@@ -1,38 +1,70 @@
-# Arista EOS Tips for Network Operators
+# Arista EOS Tips for Network Operators Lab
+
+Welcome! This pre-configured lab is a sandbox companion to the [EOS Tips for Network Operators Guide](https://tech-library.arista.com/eos/eos_ops/) found in [Arista's Tech Library](https://tech-library.arista.com/).
+
+This lab has been validated with:
+
+- cEOS-lab: **4.35.0F**
+- Containerlab: **0.71.1**
+- Resources:
+  - CPUs: **8**
+  - Memory: **32 GB**
+  - Storage: **64 GB**
 
 > [!IMPORTANT]
-> The average deployment time for this lab is ~5 minutes. Please wait until the `postCreateCommand` process has finished before interacting with the lab.
+> The average deployment time for this lab is five minutes.
+>
+> Issue the `make inspect` command at the terminal to check on the deployment status of the lab.
+>
+> Please wait until all nodes are in a `running` state prior to interacting with the lab.
 
-This pre-configured lab is intended to be used as a sandbox companion to the [EOS Tips for Network Operators Guide](https://tech-library.arista.com/eos/eos_ops/) in [Arista's Tech Library](https://tech-library.arista.com/).
+## Interacting with the Lab
 
-It has been built and validated with:
-
-- cEOS-lab: **4.34.2F**
-- Containerlab: **0.69.3**
-- Codespace Machine Type:
-  - CPUs: **4**
-  - Memory: **16 GB**
-  - Storage: **32 GB**
-
-## Credentials
+### Credentials
 
 Username: `admin`
 
 Password: `admin`
 
-## Topology
+> [!TIP]
+> The [ContainerLab VS Code Extension](https://containerlab.dev/manual/vsc-extension/) is pre-installed in the lab. For the best experience, it's recommended to use the [Topology Viewer](https://containerlab.dev/manual/vsc-extension/#topoviewer) to interact with the lab.
+>
+> Topology Viewer can be opened by selecting the ContainerLab extension icon and then the lab.
 
-<img src="images/eos-tips-topo.png" width="1080"/>
+<figure>
+    <img src="assets/images/clab-extension.png"
+         alt="Topology Viewer"
+         width="250">
+</figure>
 
-## Navigating the Lab
+### SSH
 
-Please refer to the [Arista Community Labs QuickStart Guide](https://aclabs.arista.com/quickstart/) for a step-by-step guide on how to navigate the lab.
+Once in the Topology viewer, SSH to a node by right-clicking it and selecting `SSH`. This will open up a new terminal window containing the SSH session to the node.
 
-Quick Links:
+<figure>
+    <img src="assets/images/topo-ssh.png"
+         alt="Topology Viewer"
+         width="250">
+</figure>
 
-- [Interacting with the Lab](https://aclabs.arista.com/quickstart/#interacting-with-the-lab)
-- [Tips and Troubleshooting](https://aclabs.arista.com/quickstart/#tips-and-troubleshooting)
+### Packet Capture
 
-Happy Labbing!
+Start a data-plane packet capture by right-clicking on a link and selecting the Wireshark icon associated with the link you'd like to capture
 
-Last reviewed: August 19th, 2025
+<figure>
+    <img src="assets/images/topo-pcap.png"
+         alt="Topology Viewer"
+         width="250">
+</figure>
+
+Additional information related to navigating the Topology Viewer UI can be found by selecting the `Shortcuts` icon from within the UI
+
+<figure>
+    <img src="assets/images/topo-shortcuts.png"
+         alt="Topology Viewer"
+         width="250">
+</figure>
+
+Happy Labbing! 🥳🧪
+
+Last reviewed: November 19th, 2025
