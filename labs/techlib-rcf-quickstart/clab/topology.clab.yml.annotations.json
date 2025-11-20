@@ -5,7 +5,7 @@
       "text": "5.0.0.0/8",
       "position": {
         "x": 91,
-        "y": -21
+        "y": -35
       },
       "fontSize": 8,
       "fontColor": "#ffffff",
@@ -22,7 +22,7 @@
       "text": "6.0.0.0/8",
       "position": {
         "x": 147,
-        "y": -21
+        "y": -35
       },
       "fontSize": 8,
       "fontColor": "#ffffff",
@@ -106,7 +106,7 @@
     },
     {
       "id": "freeText_1763598236900_1",
-      "text": "**IP Schema**\n\n**Point-to-Point Links**\n- 20.`[Low Node ID]`.`[High Node ID]`.`[Node ID]`/24\n  - Example: EOS1 to EOS5\n    - EOS1, Eth4: 20.1.5.1/24\n    - EOS5, Eth1: 20.1.5.5/24\n\n\n**Loopbacks**\n- `[Node ID]`.`[Loopback ID]`.`[Loopback ID]`.1/24\n  - Examples\n    - EOS1 Loopback0: 1.0.0.1/24\n    - EOS2 Loopback1: 2.1.1.1/24\n- Each node has the following Loopbacks\n  - Loopback0\n  - Loopback1\n  - Loopback2\n  - Loopback3",
+      "text": "**IP Schema**\n\n**Point-to-Point Links**\n- 20.*[Low Node ID]*.*[High Node ID]*.*[Node ID]*/24\n  - Example: EOS1 to EOS5\n    - EOS1, Eth4: 20.1.5.1/24\n    - EOS5, Eth1: 20.1.5.5/24\n\n\n**Loopbacks**\n- *[Node ID]*.*[Loopback ID]*.*[Loopback ID]*.1/24\n  - Examples\n    - EOS1 Loopback0: 1.0.0.1/24\n    - EOS2 Loopback1: 2.1.1.1/24\n- Each node has the following Loopbacks\n  - Loopback0\n  - Loopback1\n  - Loopback2\n  - Loopback3",
       "position": {
         "x": -133,
         "y": 105
@@ -214,7 +214,7 @@
       "icon": "router",
       "position": {
         "x": 91,
-        "y": 101
+        "y": 105
       },
       "geoCoordinates": {
         "lat": 48.95546844144507,
@@ -228,7 +228,7 @@
       "icon": "router",
       "position": {
         "x": 203,
-        "y": 101
+        "y": 105
       },
       "geoCoordinates": {
         "lat": 48.834114200236066,
@@ -242,7 +242,7 @@
       "icon": "router",
       "position": {
         "x": 203,
-        "y": 199
+        "y": 203
       },
       "geoCoordinates": {
         "lat": 48.721051076756375,
@@ -256,7 +256,7 @@
       "icon": "router",
       "position": {
         "x": 91,
-        "y": 199
+        "y": 203
       },
       "geoCoordinates": {
         "lat": 49.18949956207221,
@@ -270,7 +270,7 @@
       "icon": "router",
       "position": {
         "x": 91,
-        "y": 31
+        "y": 21
       },
       "geoCoordinates": {
         "lat": 49.35786919065505,
@@ -284,7 +284,7 @@
       "icon": "router",
       "position": {
         "x": 147,
-        "y": 31
+        "y": 21
       },
       "geoCoordinates": {
         "lat": 49.30730476768171,

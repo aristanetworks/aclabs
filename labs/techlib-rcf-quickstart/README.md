@@ -3,16 +3,16 @@
 > [!IMPORTANT]
 > The average deployment time for this lab is five minutes.
 >
-> Use `make inspect` at the terminal to check on the deployment status of the lab.
+> Issue the `make inspect` command at the terminal to check on the deployment status of the lab.
 >
 > Please wait until all nodes are in a `running` state prior to interacting with the lab.
 
 > [!TIP]
-> For the best experience, use the ContainerLab Topology Viewer to interact with the lab.
+> For the best experience, ***use the ContainerLab Topology Viewer to interact with the lab***.
 >
 > The Topology Viewer can be opened via: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>G</kbd>
 
-This pre-configured lab matches the scenarios defined in the [RCF QuickStart Solution Guide](https://tech-library.arista.com/solution_guides/rcf_quickstart/) in [Arista's Tech Library](https://tech-library.arista.com/).
+Welcome! This pre-configured lab matches the scenarios defined in the [RCF QuickStart Solution Guide](https://tech-library.arista.com/solution_guides/rcf_quickstart/) in [Arista's Tech Library](https://tech-library.arista.com/).
 
 It has been built and validated with:
 
