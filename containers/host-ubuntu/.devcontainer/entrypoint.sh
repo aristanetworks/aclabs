@@ -23,15 +23,6 @@ if [ -z "$TMODE" ]; then
   TMODE='none'
 fi
 
-if [ "$TMODE" =='none' ]; then
-  if [ -z "$UPLINK_MAC" ]; then
-    UPLINK_MAC="c0:d6:82:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
-  fi
-  sudo ip link set ${UPLINK} down
-  sudo ip link set dev ${UPLINK} address "${UPLINK_MAC}"
-  sudo ip link set ${UPLINK} up
-fi
-
 # TACTIVE and TBACKUP to be set via the containerlab topology file for active-backup runner
 # expected values are "eth1" or "eth2" default is "eth1" active and "eth2" backup
 if [ -z "$TACTIVE" ]; then
@@ -55,10 +46,6 @@ if [ "$TMODE" == 'lacp' ]; then
     sudo ip link set eth1 master ${UPLINK}
     sudo ip link set eth2 master ${UPLINK}
 
-    if [ -z "$UPLINK_MAC" ]; then
-      UPLINK_MAC="c0:d6:82:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
-    fi
-    sudo ip link set dev ${UPLINK} address "${UPLINK_MAC}"
     sudo ip link set ${UPLINK} up
 
 elif ! [ -z "${PHONE}" ] ; then
@@ -67,11 +54,6 @@ elif ! [ -z "${PHONE}" ] ; then
 
     # Create br0
     sudo ip link add name br0 type bridge
-
-    if [ -z "$UPLINK_MAC" ]; then
-      UPLINK_MAC="30:86:2d:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
-    fi
-    sudo ip link set dev ${UPLINK} address "${UPLINK_MAC}"
 
     # Disable STP, provide add'l visibility
     sudo ip link set ${UPLINK} type bridge stp_state 0
@@ -91,7 +73,14 @@ elif ! [ -z "${PHONE}" ] ; then
     # lldpcli configure ports eth1,eth2,br0 lldp status rx-only
 fi
 
-# configure IP addresses and routes
+# configure MAC address, IP addresses and routes
+if [ -z "$UPLINK_MAC" ]; then
+  UPLINK_MAC="30:86:2d:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
+fi
+sudo ip link set ${UPLINK} down
+sudo ip link set dev ${UPLINK} address "${UPLINK_MAC}"
+sudo ip link set ${UPLINK} up
+
 if ! [ -z "${IPV4}" ]; then
     sudo ip addr add ${IPV4} dev ${UPLINK}
 fi
