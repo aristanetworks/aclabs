@@ -2,7 +2,7 @@
 
 # preserve environment variables
 if [ "$(id -u)" != "0" ]; then
-  exec sudo --preserve-env=TMODE,TACTIVE,TBACKUP,SSH_PASSWORD,IPV4,IPV6,GW,STATIC_ROUTE "$0" "$@"
+  exec sudo --preserve-env=TMODE,TACTIVE,TBACKUP,SSH_PASSWORD,UPLINK_MAC,IPV4,IPV6,GW,STATIC_ROUTE "$0" "$@"
 fi
 
 # set admin password for SSH access
