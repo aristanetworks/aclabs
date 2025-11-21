@@ -10,6 +10,7 @@ mgmt_interface: Management0
 #       no lldp transmit
 
 dns_settings:
+  domain: avd.lab
   servers:
     - ip_address: 8.8.8.8
       vrf: MGMT
@@ -27,14 +28,17 @@ ntp:
     - name: time.apple.com
       vrf: MGMT
 
-dns_domain: avd.lab
-
-# Local Users
-local_users:
-  - name: arista
-    privilege: 15
-    role: network-admin
-    sha512_password: "{{ ansible_password | password_hash(rounds=5000, salt=1) }}"
+aaa_settings:
+  # Local Users
+  local_users:
+    - name: arista
+      privilege: 15
+      role: network-admin
+      sha512_password: "{{ ansible_password | password_hash(rounds=5000, salt=1) }}"
+  # AAA Authorization Settings
+  authorization:
+    exec:
+      default: local
 
 # AAA Authorization Settings
 aaa_authorization:
@@ -55,13 +59,12 @@ ansible_httpapi_validate_certs: false
 ansible_python_interpreter: $(which python3)
 avd_data_validation_mode: error
 
-daemon_terminattr:
-  cvaddrs:
-    - "apiserver.cv-staging.corp.arista.io:443"
-  cvauth:
-    method: token-secure
-    token_file: "/mnt/flash/cv-onboarding-token"
-  cvvrf: MGMT
-  smashexcludes: "ale,flexCounter,hardware,kni,pulse,strata"
-  ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
-  disable_aaa: True
+cv_settings:
+  cvaas:
+    enabled: true
+    clusters:
+      - name: cvaas
+        region: staging
+        token_file: "/mnt/flash/cv-onboarding-token"
+  terminattr:
+    disable_aaa: true

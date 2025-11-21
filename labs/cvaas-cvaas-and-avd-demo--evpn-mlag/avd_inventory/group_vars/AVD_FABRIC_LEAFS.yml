@@ -1,5 +1,5 @@
 ---
-monitor_connectivity:
+custom_structured_configuration_monitor_connectivity:
   shutdown: false
   vrfs:
     - name: VRF1
