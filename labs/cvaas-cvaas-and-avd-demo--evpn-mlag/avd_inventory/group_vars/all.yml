@@ -16,17 +16,12 @@ dns_settings:
       vrf: MGMT
 
 # NTP servers
-ntp:
-  local_interface:
-    name: Management0
-    vrf: MGMT
+ntp_settings:
+  server_vrf: use_mgmt_interface_vrf
   servers:
     - name: time.google.com
-      vrf: MGMT
     - name: time.windows.com
-      vrf: MGMT
     - name: time.apple.com
-      vrf: MGMT
 
 aaa_settings:
   # Local Users
@@ -39,11 +34,6 @@ aaa_settings:
   authorization:
     exec:
       default: local
-
-# AAA Authorization Settings
-aaa_authorization:
-  exec:
-    default: local
 
 ansible_user: arista
 ansible_password: arista
