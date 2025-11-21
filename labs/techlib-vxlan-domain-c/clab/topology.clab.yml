@@ -21,7 +21,7 @@ topology:
     ceos:
       image: arista/ceos:latest
     linux:
-      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1
       binds:
         - /techlib-vxlan-domain-c:/workspace:ro
 
@@ -202,13 +202,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::104/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "-135"
-        graph-posY: "285"
-        graph-groupLabelPos: bottom-center
+        UPLINK_MAC: 00:01:01:00:00:C1
 
     # HostC2 is connected to LEAF3 eth7
     HostC2:
@@ -219,13 +213,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.20.20.1
         IPV6: 2001:db8:20:20::102/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "-25"
-        graph-posY: "285"
-        graph-groupLabelPos: bottom-center
+        UPLINK_MAC: 00:01:01:00:00:C2
 
     # HostC3 is connected to LEAF3 eth8 and LEAF4 eth8
     HostC3:
@@ -237,13 +225,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.60.60.1
         IPV6: 2001:db8:60:60::102/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "5"
-        graph-posY: "285"
-        graph-groupLabelPos: bottom-center
+        UPLINK_MAC: 00:01:01:00:00:C3
 
     # HostC4 is connected to LEAF4 eth7
     HostC4:
@@ -254,13 +236,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.50.50.1
         IPV6: 2001:db8:50:50::102/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "35"
-        graph-posY: "285"
-        graph-groupLabelPos: bottom-center
+        UPLINK_MAC: 00:01:01:00:00:C4
 
     # HostC5 is connected to LEAF5 eth7 and LEAF6 eth7
     HostC5:
@@ -272,13 +248,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.20.20.1
         IPV6: 2001:db8:20:20::103/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "95"
-        graph-posY: "285"
-        graph-groupLabelPos: bottom-center
+        UPLINK_MAC: 00:01:01:00:00:C5
 
     # HostC6 is connected to LEAF5 eth8 and LEAF6 eth8
     HostC6:
@@ -290,13 +260,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.60.60.1
         IPV6: 2001:db8:60:60::103/64
-      labels:
-        topoViewer-role: client
-        graph-group: "Data Center Host"
-        graph-level: "5"
-        graph-posX: "155"
-        graph-posY: "285"
-        graph-groupLabelPos: bottom-center
+        UPLINK_MAC: 00:01:01:00:00:C6
 
     #########################
     # Backbone              #

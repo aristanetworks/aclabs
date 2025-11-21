@@ -12,7 +12,7 @@ topology:
       enforce-startup-config: true
       image: arista/ceos:latest
     linux:
-      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1
 
   defaults:
     kind: ceos
@@ -67,6 +67,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::101/64
+        UPLINK_MAC: 00:01:01:01:01:01
       labels:
         topoViewer-role: client
         graph-group: "End Hosts"
@@ -83,6 +84,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.20.20.1
         IPV6: 2001:db8:20:20::101/64
+        UPLINK_MAC: 00:02:02:02:02:02
       labels:
         topoViewer-role: client
         graph-group: "End Hosts"
