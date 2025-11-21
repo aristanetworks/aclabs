@@ -23,6 +23,15 @@ if [ -z "$TMODE" ]; then
   TMODE='none'
 fi
 
+if [ "$TMODE" =='none' ]; then
+  if [ -z "$UPLINK_MAC" ]; then
+    UPLINK_MAC="c0:d6:82:00:$(openssl rand -hex 1):$(openssl rand -hex 1)"
+  fi
+  sudo ip link set ${UPLINK} down
+  sudo ip link set dev ${UPLINK} address "${UPLINK_MAC}"
+  sudo ip link set ${UPLINK} up
+fi
+
 # TACTIVE and TBACKUP to be set via the containerlab topology file for active-backup runner
 # expected values are "eth1" or "eth2" default is "eth1" active and "eth2" backup
 if [ -z "$TACTIVE" ]; then
