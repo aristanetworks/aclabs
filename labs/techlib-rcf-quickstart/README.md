@@ -34,7 +34,7 @@ Password: `admin`
 > Topology Viewer can be opened by selecting the ContainerLab extension icon and then the lab.
 
 <figure>
-    <img src="assets/images/clab-extension.png"
+    <img src="assets/images/topo-extension.png"
          alt="Topology Viewer"
          width="250">
 </figure>
