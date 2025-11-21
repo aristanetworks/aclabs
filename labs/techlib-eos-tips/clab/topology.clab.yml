@@ -23,13 +23,6 @@ topology:
       binds:
         - sn/SPINE1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/SPINE1.cfg
-      labels:
-        topoViewer-role: spine
-        graph-group: "Spines"
-        graph-level: "2"
-        graph-groupLabelPos: bottom-center
-        graph-posX: "-34"
-        graph-posY: "-5"
 
     SPINE2:
       mgmt-ipv4: 10.0.1.2
@@ -37,13 +30,6 @@ topology:
         - sn/SPINE2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/SPINE2.cfg
       group: 'spine'
-      labels:
-        topoViewer-role: spine
-        graph-group: "Spines"
-        graph-level: "2"
-        graph-groupLabelPos: bottom-center
-        graph-posX: "30"
-        graph-posY: "-5"
 
     LEAF1:
       mgmt-ipv4: 10.0.2.1
@@ -51,13 +37,6 @@ topology:
         - sn/LEAF1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/LEAF1.cfg
       group: 'leaf'
-      labels:
-        topoViewer-role: leaf
-        graph-group: "Leaf"
-        graph-level: "3"
-        graph-groupLabelPos: bottom-center
-        graph-posX: "-1"
-        graph-posY: "46"
 
     Host1:
       kind: linux
@@ -68,13 +47,6 @@ topology:
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::101/64
         UPLINK_MAC: 00:01:01:01:01:01
-      labels:
-        topoViewer-role: client
-        graph-group: "End Hosts"
-        graph-level: "4"
-        graph-groupLabelPos: bottom-center
-        graph-posX: "-21"
-        graph-posY: "97"
 
     Host2:
       kind: linux
@@ -85,13 +57,6 @@ topology:
         GW: 10.20.20.1
         IPV6: 2001:db8:20:20::101/64
         UPLINK_MAC: 00:02:02:02:02:02
-      labels:
-        topoViewer-role: client
-        graph-group: "End Hosts"
-        graph-level: "4"
-        graph-groupLabelPos: bottom-center
-        graph-posX: "18"
-        graph-posY: "97"
 
   links:
     - endpoints: [ "LEAF1:eth1", "SPINE1:eth1" ]
