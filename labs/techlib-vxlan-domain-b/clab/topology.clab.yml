@@ -21,7 +21,7 @@ topology:
     ceos:
       image: arista/ceos:latest
     linux:
-      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1
       binds:
         - /techlib-vxlan-domain-b:/workspace:ro
 
@@ -162,6 +162,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.20.20.1
         IPV6: 2001:db8:20:20::101/64
+        UPLINK_MAC: 00:01:01:00:00:B1
 
     # HostB2 is connected to LEAF1 eth8 and LEAF2 eth8
     HostB2:
@@ -173,6 +174,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.40.40.1
         IPV6: 2001:db8:40:40::101/64
+        UPLINK_MAC: 00:01:01:00:00:B2
 
     # HostB3 is connected to LEAF3 eth7
     HostB3:
@@ -183,6 +185,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.60.60.1
         IPV6: 2001:db8:60:60::101/64
+        UPLINK_MAC: 00:01:01:00:00:B3
 
     # HostB4 is connected to LEAF3 eth8 and LEAF4 eth8
     HostB4:
@@ -194,6 +197,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
         IPV6: 2001:db8:10:10::103/64
+        UPLINK_MAC: 00:01:01:00:00:B4
 
     # HostB5 is connected to LEAF4 eth7
     HostB5:
@@ -204,6 +208,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.70.70.1
         IPV6: 2001:db8:70:70::102/64
+        UPLINK_MAC: 00:01:01:00:00:B5
 
     # HostB6 is connected to B-SW1 eth3
     HostB6:
@@ -214,6 +219,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.40.40.1
         IPV6: 2001:db8:40:40::102/64
+        UPLINK_MAC: 00:01:01:00:00:B6
 
     # HostB7 is connected to B-SW1 eth4
     HostB7:
@@ -224,6 +230,7 @@ topology:
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.80.80.1
         IPV6: 2001:db8:80:80::101/64
+        UPLINK_MAC: 00:01:01:00:00:B7
 
     #########################
     # Backbone              #

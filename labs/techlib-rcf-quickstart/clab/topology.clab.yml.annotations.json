@@ -1,0 +1,297 @@
+{
+  "freeTextAnnotations": [
+    {
+      "id": "freeText_1763596212135_2",
+      "text": "5.0.0.0/8",
+      "position": {
+        "x": 91,
+        "y": -35
+      },
+      "fontSize": 8,
+      "fontColor": "#ffffff",
+      "backgroundColor": "#16325b",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "fontFamily": "monospace",
+      "textAlign": "left",
+      "roundedBackground": true
+    },
+    {
+      "id": "freeText_1763596251174_3",
+      "text": "6.0.0.0/8",
+      "position": {
+        "x": 147,
+        "y": -35
+      },
+      "fontSize": 8,
+      "fontColor": "#ffffff",
+      "backgroundColor": "#16325b",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "fontFamily": "monospace",
+      "textAlign": "left",
+      "roundedBackground": true
+    },
+    {
+      "id": "freeText_1763596263995_4",
+      "text": "2.0.0.0/8",
+      "position": {
+        "x": 259,
+        "y": 105
+      },
+      "fontSize": 8,
+      "fontColor": "#ffffff",
+      "backgroundColor": "#16325b",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "fontFamily": "monospace",
+      "textAlign": "left",
+      "roundedBackground": true
+    },
+    {
+      "id": "freeText_1763596284344_5",
+      "text": "1.0.0.0/8",
+      "position": {
+        "x": 35,
+        "y": 105
+      },
+      "fontSize": 8,
+      "fontColor": "#ffffff",
+      "backgroundColor": "#16325b",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "fontFamily": "monospace",
+      "textAlign": "left",
+      "roundedBackground": true
+    },
+    {
+      "id": "freeText_1763596301398_6",
+      "text": "3.0.0.0/8",
+      "position": {
+        "x": 259,
+        "y": 203
+      },
+      "fontSize": 8,
+      "fontColor": "#ffffff",
+      "backgroundColor": "#16325b",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "fontFamily": "monospace",
+      "textAlign": "left",
+      "roundedBackground": true,
+      "width": 54,
+      "height": 26
+    },
+    {
+      "id": "freeText_1763596315759_7",
+      "text": "4.0.0.0/8",
+      "position": {
+        "x": 35,
+        "y": 203
+      },
+      "fontSize": 8,
+      "fontColor": "#ffffff",
+      "backgroundColor": "#16325b",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "fontFamily": "monospace",
+      "textAlign": "left",
+      "roundedBackground": true
+    },
+    {
+      "id": "freeText_1763598236900_1",
+      "text": "**IP Schema**\n\n**Point-to-Point Links**\n- 20.*[Low Node ID]*.*[High Node ID]*.*[Node ID]*/24\n  - Example: EOS1 to EOS5\n    - EOS1, Eth4: 20.1.5.1/24\n    - EOS5, Eth1: 20.1.5.5/24\n\n\n**Loopbacks**\n- *[Node ID]*.*[Loopback ID]*.*[Loopback ID]*.1/24\n  - Examples\n    - EOS1 Loopback0: 1.0.0.1/24\n    - EOS2 Loopback1: 2.1.1.1/24\n- Each node has the following Loopbacks\n  - Loopback0\n  - Loopback1\n  - Loopback2\n  - Loopback3",
+      "position": {
+        "x": -133,
+        "y": 105
+      },
+      "fontSize": 8,
+      "fontColor": "#ffffff",
+      "backgroundColor": "#16325b",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "fontFamily": "monospace",
+      "textAlign": "left",
+      "roundedBackground": true
+    },
+    {
+      "id": "freeText_1763598427154_1",
+      "text": "All example RCF policy examples are configured on EOS1.\n\nFeel free to explore these policies, or delete them and craft your own!\n\nHappy labbing 🥳🧪",
+      "position": {
+        "x": 399,
+        "y": 7
+      },
+      "fontSize": 8,
+      "fontColor": "#ffffff",
+      "backgroundColor": "#16325b",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "fontFamily": "monospace",
+      "textAlign": "left",
+      "roundedBackground": true
+    }
+  ],
+  "groupStyleAnnotations": [
+    {
+      "id": "ASN 100:1",
+      "backgroundColor": "#16325b",
+      "backgroundOpacity": 20,
+      "borderColor": "#dddddd",
+      "borderWidth": 0.5,
+      "borderStyle": "solid",
+      "borderRadius": 0,
+      "color": "#ebecf0",
+      "labelPosition": "top-left"
+    },
+    {
+      "id": "ASN 400:1",
+      "backgroundColor": "#16325b",
+      "backgroundOpacity": 20,
+      "borderColor": "#dddddd",
+      "borderWidth": 0.5,
+      "borderStyle": "solid",
+      "borderRadius": 0,
+      "color": "#ebecf0",
+      "labelPosition": "top-left"
+    },
+    {
+      "id": "ASN 200:1",
+      "backgroundColor": "#16325b",
+      "backgroundOpacity": 20,
+      "borderColor": "#dddddd",
+      "borderWidth": 0.5,
+      "borderStyle": "solid",
+      "borderRadius": 0,
+      "color": "#ebecf0",
+      "labelPosition": "top-right"
+    },
+    {
+      "id": "ASN 300:1",
+      "backgroundColor": "#16325b",
+      "backgroundOpacity": 20,
+      "borderColor": "#dddddd",
+      "borderWidth": 0.5,
+      "borderStyle": "solid",
+      "borderRadius": 0,
+      "color": "#ebecf0",
+      "labelPosition": "top-right"
+    },
+    {
+      "id": "ASN 500:1",
+      "backgroundColor": "#16325b",
+      "backgroundOpacity": 20,
+      "borderColor": "#dddddd",
+      "borderWidth": 0.5,
+      "borderStyle": "solid",
+      "borderRadius": 0,
+      "color": "#ebecf0",
+      "labelPosition": "top-center"
+    },
+    {
+      "id": "ASN 600:1",
+      "backgroundColor": "#16325b",
+      "backgroundOpacity": 20,
+      "borderColor": "#dddddd",
+      "borderWidth": 0.5,
+      "borderStyle": "solid",
+      "borderRadius": 0,
+      "color": "#ebecf0",
+      "labelPosition": "top-center"
+    }
+  ],
+  "cloudNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "EOS1",
+      "icon": "router",
+      "position": {
+        "x": 91,
+        "y": 105
+      },
+      "geoCoordinates": {
+        "lat": 48.95546844144507,
+        "lng": 9.906746836683288
+      },
+      "group": "ASN 100",
+      "level": "1"
+    },
+    {
+      "id": "EOS2",
+      "icon": "router",
+      "position": {
+        "x": 203,
+        "y": 105
+      },
+      "geoCoordinates": {
+        "lat": 48.834114200236066,
+        "lng": 9.711241202557709
+      },
+      "group": "ASN 200",
+      "level": "1"
+    },
+    {
+      "id": "EOS3",
+      "icon": "router",
+      "position": {
+        "x": 203,
+        "y": 203
+      },
+      "geoCoordinates": {
+        "lat": 48.721051076756375,
+        "lng": 9.700559027532613
+      },
+      "group": "ASN 300",
+      "level": "1"
+    },
+    {
+      "id": "EOS4",
+      "icon": "router",
+      "position": {
+        "x": 91,
+        "y": 203
+      },
+      "geoCoordinates": {
+        "lat": 49.18949956207221,
+        "lng": 9.794579310642213
+      },
+      "group": "ASN 400",
+      "level": "1"
+    },
+    {
+      "id": "EOS5",
+      "icon": "router",
+      "position": {
+        "x": 91,
+        "y": 21
+      },
+      "geoCoordinates": {
+        "lat": 49.35786919065505,
+        "lng": 9.303405001444052
+      },
+      "group": "ASN 500",
+      "level": "1"
+    },
+    {
+      "id": "EOS6",
+      "icon": "router",
+      "position": {
+        "x": 147,
+        "y": 21
+      },
+      "geoCoordinates": {
+        "lat": 49.30730476768171,
+        "lng": 9.546957442052083
+      },
+      "group": "ASN 600",
+      "level": "1"
+    }
+  ]
+}

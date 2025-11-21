@@ -23,8 +23,8 @@ jobs:
     strategy:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
-        from_variant: ["python3.11-avd-v5.5.1"]
-        clab_version: ["0.69.3"]
+        from_variant: ["python3.11-avd-v5.7.0", "python3.12-avd-v5.7.0"]
+        clab_version: ["0.71.1"]
         user_id: ["1000", "1009"]
         include:
           - user_id: "1000"
@@ -66,4 +66,11 @@ jobs:
       # - Make CVURL format consistent with cv_deploy playbook. Now it requires www. to be part of CVURL.
       # - Entrypoint now builds CVURL_NO_PREFIX to account for apiserver. case
       # - remove playbook to set tags as it's using legacy role
-      container_revision: "2.1"
+      # 2.2:
+      # - Add ContainerLab 0.71.0
+      # - Add AVD 5.7.0
+      # 2.3:
+      # - Add ContainerLab 0.71.1
+      # - Add yzhang.markdown-all-in-one extension to lab-base code server
+      # - Update code server to 4.106.2 on lab-base
+      container_revision: "2.3"
