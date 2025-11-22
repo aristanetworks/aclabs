@@ -106,6 +106,18 @@ topology:
         s2-host2:
             mgmt-ipv4: 192.168.0.27
             startup-config: init-configs/s2-host2.cfg
+        s1-core1:
+            mgmt-ipv4: 192.168.0.102
+            startup-config: init-configs/s1-core1.cfg
+        s1-core2:
+            mgmt-ipv4: 192.168.0.103
+            startup-config: init-configs/s1-core2.cfg
+        s2-core1:
+            mgmt-ipv4: 192.168.0.202
+            startup-config: init-configs/s2-core1.cfg
+        s2-core2:
+            mgmt-ipv4: 192.168.0.203
+            startup-config: init-configs/s2-core2.cfg
 
     links:
     - endpoints: ["s1-leaf1:eth2", "s1-spine1:eth2"]
