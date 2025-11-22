@@ -1,0 +1,172 @@
+---
+name: ATD Dual DC
+prefix: ""
+
+mgmt:
+    network: custom_mgmt
+    ipv4-subnet: 192.168.0.0/24
+
+topology:
+    kinds:
+        ceos:
+            enforce-startup-config: true
+            image: arista/ceos:latest
+    defaults:
+        kind: ceos
+    nodes:
+        s1-spine1:
+            mgmt-ipv4: 192.168.0.10
+            binds:
+            - sn/s1-spine1.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s1-spine1.cfg
+        s1-spine2:
+            mgmt-ipv4: 192.168.0.11
+            binds:
+            - sn/s1-spine2.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s1-spine2.cfg
+        s1-leaf1:
+            mgmt-ipv4: 192.168.0.12
+            binds:
+            - sn/s1-leaf1.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s1-leaf1.cfg
+        s1-leaf2:
+            mgmt-ipv4: 192.168.0.13
+            binds:
+            - sn/s1-leaf2.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s1-leaf2.cfg
+        s1-leaf3:
+            mgmt-ipv4: 192.168.0.14
+            binds:
+            - sn/s1-leaf3.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s1-leaf3.cfg
+        s1-leaf4:
+            mgmt-ipv4: 192.168.0.15
+            binds:
+            - sn/s1-leaf4.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s1-leaf4.cfg
+        s1-brdr1:
+            mgmt-ipv4: 192.168.0.100
+            binds:
+            - sn/s1-brdr1.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s1-brdr1.cfg
+        s1-brdr2:
+            mgmt-ipv4: 192.168.0.101
+            binds:
+            - sn/s1-brdr2.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s1-brdr2.cfg
+        s2-spine1:
+            mgmt-ipv4: 192.168.0.20
+            binds:
+            - sn/s2-spine1.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s2-spine1.cfg
+        s2-spine2:
+            mgmt-ipv4: 192.168.0.21
+            binds:
+            - sn/s2-spine2.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s2-spine2.cfg
+        s2-leaf1:
+            mgmt-ipv4: 192.168.0.22
+            binds:
+            - sn/s2-leaf1.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s2-leaf1.cfg
+        s2-leaf2:
+            mgmt-ipv4: 192.168.0.23
+            binds:
+            - sn/s2-leaf2.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s2-leaf2.cfg
+        s2-leaf3:
+            mgmt-ipv4: 192.168.0.24
+            binds:
+            - sn/s2-leaf3.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s2-leaf3.cfg
+        s2-leaf4:
+            mgmt-ipv4: 192.168.0.25
+            binds:
+            - sn/s2-leaf4.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s2-leaf4.cfg
+        s2-brdr1:
+            mgmt-ipv4: 192.168.0.200
+            binds:
+            - sn/s2-brdr1.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s2-brdr1.cfg
+        s2-brdr2:
+            mgmt-ipv4: 192.168.0.201
+            binds:
+            - sn/s2-brdr2.txt:/mnt/flash/ceos-config:ro
+            startup-config: init-configs/s2-brdr2.cfg
+        s1-host1:
+            mgmt-ipv4: 192.168.0.16
+            startup-config: init-configs/s1-host1.cfg
+        s1-host2:
+            mgmt-ipv4: 192.168.0.17
+            startup-config: init-configs/s1-host2.cfg
+        s2-host1:
+            mgmt-ipv4: 192.168.0.26
+            startup-config: init-configs/s2-host1.cfg
+        s2-host2:
+            mgmt-ipv4: 192.168.0.27
+            startup-config: init-configs/s2-host2.cfg
+
+    links:
+    - endpoints: ["s1-leaf1:eth2", "s1-spine1:eth2"]
+    - endpoints: ["s1-leaf1:eth3", "s1-spine2:eth2"]
+    - endpoints: ["s1-leaf2:eth2", "s1-spine1:eth3"]
+    - endpoints: ["s1-leaf2:eth3", "s1-spine2:eth3"]
+    - endpoints: ["s1-leaf3:eth2", "s1-spine1:eth4"]
+    - endpoints: ["s1-leaf3:eth3", "s1-spine2:eth4"]
+    - endpoints: ["s1-leaf4:eth2", "s1-spine1:eth5"]
+    - endpoints: ["s1-leaf4:eth3", "s1-spine2:eth5"]
+    - endpoints: ["s1-brdr1:eth2", "s1-spine1:eth7"]
+    - endpoints: ["s1-brdr1:eth3", "s1-spine2:eth7"]
+    - endpoints: ["s1-brdr2:eth2", "s1-spine1:eth8"]
+    - endpoints: ["s1-brdr2:eth3", "s1-spine2:eth8"]
+    - endpoints: ["s1-spine1:eth1", "s1-spine2:eth1"]
+    - endpoints: ["s1-spine1:eth6", "s1-spine2:eth6"]
+    - endpoints: ["s1-leaf1:eth1", "s1-leaf2:eth1"]
+    - endpoints: ["s1-leaf1:eth6", "s1-leaf2:eth6"]
+    - endpoints: ["s1-leaf3:eth1", "s1-leaf4:eth1"]
+    - endpoints: ["s1-leaf3:eth6", "s1-leaf4:eth6"]
+    - endpoints: ["s1-brdr1:eth1", "s1-brdr2:eth1"]
+    - endpoints: ["s1-brdr1:eth6", "s1-brdr2:eth6"]
+    - endpoints: ["s1-host1:eth1", "s1-leaf1:eth4"]
+    - endpoints: ["s1-host1:eth2", "s1-leaf2:eth4"]
+    - endpoints: ["s1-host2:eth1", "s1-leaf3:eth4"]
+    - endpoints: ["s1-host2:eth2", "s1-leaf4:eth4"]
+    - endpoints: ["s2-leaf1:eth2", "s2-spine1:eth2"]
+    - endpoints: ["s2-leaf1:eth3", "s2-spine2:eth2"]
+    - endpoints: ["s2-leaf2:eth2", "s2-spine1:eth3"]
+    - endpoints: ["s2-leaf2:eth3", "s2-spine2:eth3"]
+    - endpoints: ["s2-leaf3:eth2", "s2-spine1:eth4"]
+    - endpoints: ["s2-leaf3:eth3", "s2-spine2:eth4"]
+    - endpoints: ["s2-leaf4:eth2", "s2-spine1:eth5"]
+    - endpoints: ["s2-leaf4:eth3", "s2-spine2:eth5"]
+    - endpoints: ["s2-brdr1:eth2", "s2-spine1:eth7"]
+    - endpoints: ["s2-brdr1:eth3", "s2-spine2:eth7"]
+    - endpoints: ["s2-brdr2:eth2", "s2-spine1:eth8"]
+    - endpoints: ["s2-brdr2:eth3", "s2-spine2:eth8"]
+    - endpoints: ["s2-spine1:eth1", "s2-spine2:eth1"]
+    - endpoints: ["s2-spine1:eth6", "s2-spine2:eth6"]
+    - endpoints: ["s2-leaf1:eth1", "s2-leaf2:eth1"]
+    - endpoints: ["s2-leaf1:eth6", "s2-leaf2:eth6"]
+    - endpoints: ["s2-leaf3:eth1", "s2-leaf4:eth1"]
+    - endpoints: ["s2-leaf3:eth6", "s2-leaf4:eth6"]
+    - endpoints: ["s2-brdr1:eth1", "s2-brdr2:eth1"]
+    - endpoints: ["s2-brdr1:eth6", "s2-brdr2:eth6"]
+    - endpoints: ["s2-host1:eth1", "s2-leaf1:eth4"]
+    - endpoints: ["s2-host1:eth2", "s2-leaf2:eth4"]
+    - endpoints: ["s2-host2:eth1", "s2-leaf3:eth4"]
+    - endpoints: ["s2-host2:eth2", "s2-leaf4:eth4"]
+    - endpoints: ["s1-core1:eth2", "s1-brdr1:eth4"]
+    - endpoints: ["s1-core1:eth3", "s1-brdr2:eth4"]
+    - endpoints: ["s1-core2:eth2", "s1-brdr1:eth5"]
+    - endpoints: ["s1-core2:eth3", "s1-brdr2:eth5"]
+    - endpoints: ["s1-core1:eth1", "s1-core2:eth1"]
+    - endpoints: ["s1-core1:eth6", "s1-core2:eth6"]
+    - endpoints: ["s2-core1:eth2", "s2-brdr1:eth4"]
+    - endpoints: ["s2-core1:eth3", "s2-brdr2:eth4"]
+    - endpoints: ["s2-core2:eth2", "s2-brdr1:eth5"]
+    - endpoints: ["s2-core2:eth3", "s2-brdr2:eth5"]
+    - endpoints: ["s2-core1:eth1", "s2-core2:eth1"]
+    - endpoints: ["s2-core1:eth6", "s2-core2:eth6"]
+    - endpoints: ["s1-core1:eth4", "s2-core1:eth4"]
+    - endpoints: ["s1-core2:eth4", "s2-core2:eth4"]
