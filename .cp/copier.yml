@@ -77,13 +77,13 @@ avd_version:
   type: str
   help: Pick required AVD version.
   when: "{{ 'lab' | _in(templates) }}"
-  choices: ["5.0.0", "4.10.2", "5.1.0"]
+  choices: ["5.7.2"]
 
 lab_container_revision:
   type: str
   help: Please select lab container revision.
-  choices: ["1.1", "1.2"]
-  default: "1.2"
+  choices: ["2.4"]
+  default: "2.4"
   when: false  # no need to display this question due to a single choice
 
 container_size:
@@ -109,7 +109,7 @@ clab_version:
   type: str
   help: Please select the Containerlab version.
   when: "{{ 'lab' | _in(templates) }}"
-  choices: ["0.59.0", "0.60.1", "0.61.0"]
+  choices: ["0.71.1"]
 
 clab_user:
   type: str

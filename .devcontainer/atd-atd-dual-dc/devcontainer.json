@@ -1,0 +1,28 @@
+{
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.7.2-clab0.71.1-rev2.4",
+    // containerEnv set the variables applied to entire container
+    "containerEnv": {
+        "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
+        "CEOS_LAB_VERSION": "4.34.2F",
+        "CONTAINERWSF": "${containerWorkspaceFolder}",
+        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}",
+        "LABPASSPHRASE": "arista",
+        "GIT_INIT": false
+    },
+    "secrets": {
+        "ARTOKEN": {
+            "description": "token to auto-download EOS images from arista.com."
+            // "documentationUrl": "https://example.com/link/to/info"
+        }
+    },
+    "hostRequirements": {
+        "cpus": 16,
+        "memory": "64gb",
+        "storage": "128gb"
+    },
+    "onCreateCommand": "chmod +x /atd-atd-dual-dc/addAliases.sh; /atd-atd-dual-dc/addAliases.sh; ssh-keygen -N \"\" -f /home/avd/.ssh/id_rsa",
+    "postCreateCommand": "/bin/entrypoint",
+    "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
+    "workspaceFolder": "/atd-atd-dual-dc",
+    "containerUser": "avd"
+}

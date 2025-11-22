@@ -137,5 +137,7 @@ nav:
       - Tech Library Labs: tech-library-labs.md
   - CVaaS:
       - CVaaS and AVD Demo, EVPN MLAG: cvaas-cvaas-and-avd-demo--evpn-mlag.md
+  - ATD Labs:
+      - ATD Dual DC: atd-atd-dual-dc.md
   - Telemetry:
       gNMIc Prometheus Grafana Lab: telemetry.md
