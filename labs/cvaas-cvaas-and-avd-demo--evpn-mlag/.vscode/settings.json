@@ -11,5 +11,6 @@
     "chat.commandCenter.enabled": false,
     "chat.agentSessionsViewLocation": "disabled",
     "chat.agent.enabled": false,
-    "chat.disableAIFeatures": true
+    "chat.disableAIFeatures": true,
+    "terminal.integrated.suggest.enabled": true
 }
