@@ -2,8 +2,11 @@
 
 set +e
 
-# use VSCode script to start Docker
-/usr/local/share/docker-init.sh
+# do not use moby script when docker is already available
+# calling moby script on top of working docker deployment can break it in some cases (for ex.: Codespaces)
+if [ -z "$(command -v podman)" ] && [ -z "$(command -v docker)" ]; then
+    /usr/local/share/docker-init.sh
+fi
 
 # for D-in-D case container engine will be always Docker
 # however we do not want to hardcode it for future cases

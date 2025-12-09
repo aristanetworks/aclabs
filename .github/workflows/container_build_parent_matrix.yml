@@ -24,7 +24,7 @@ jobs:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
         from_variant: ["python3.11-avd-v5.7.2", "python3.12-avd-v5.7.2"]
-        clab_version: ["0.71.1"]
+        clab_version: ["0.72.0"]
         user_id: ["1000", "1009"]
         include:
           - user_id: "1000"
@@ -75,4 +75,9 @@ jobs:
       # - Update code server to 4.106.2 on lab-base
       # 2.4:
       # - Add AVD 5.7.2
-      container_revision: "2.4"
+      # 2.5:
+      # - conditional moby for docker init
+      # - Containerlab 0.72.0
+      # - Code server 4.106.3
+      # - disable Copilot chat
+      container_revision: "2.5"
