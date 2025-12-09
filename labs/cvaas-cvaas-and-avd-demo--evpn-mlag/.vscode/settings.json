@@ -1,6 +1,7 @@
 {
     "containerlab": {
         "showWelcomePage": false,
+        "skipUpdateCheck": true,
         "node": {
             "sshUserMapping": {
                 "ceos": "arista"
