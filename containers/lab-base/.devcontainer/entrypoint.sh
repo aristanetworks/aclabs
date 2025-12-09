@@ -4,7 +4,7 @@ set +e
 
 # do not use moby script when docker is already available
 # calling moby script on top of working docker deployment can break it in some cases (for ex.: Codespaces)
-if [ -z "$(command -v podman)" ] && [ -z "$(command -v docker)" ]; then
+if ! ${CODESPACES:-false} && ! ${REMOTE_CONTAINERS:-false}; then
     /usr/local/share/docker-init.sh
 fi
 
