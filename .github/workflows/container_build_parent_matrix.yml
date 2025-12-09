@@ -80,4 +80,6 @@ jobs:
       # - Containerlab 0.72.0
       # - Code server 4.106.3
       # - disable Copilot chat
-      container_revision: "2.5"
+      # 2.5.1:
+      # - bugfix: moby if condition must only ignore DinD script on Codespaces and VSCode
+      container_revision: "2.5.1"
