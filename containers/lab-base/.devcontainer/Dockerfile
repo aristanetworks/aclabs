@@ -44,7 +44,7 @@ RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
     && pip install --user passlib
 
 # install coder and extensions
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.106.2" \
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.106.3" \
     && code-server --install-extension srl-labs.vscode-containerlab --force \
     && code-server --install-extension tuxtina.json2yaml --force \
     && code-server --install-extension yzhang.markdown-all-in-one --force
