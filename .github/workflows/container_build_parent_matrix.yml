@@ -79,4 +79,5 @@ jobs:
       # - conditional moby for docker init
       # - Containerlab 0.72.0
       # - Code server 4.106.3
-      container_revision: "2.4"
+      # - disable Copilot chat
+      container_revision: "2.5"
