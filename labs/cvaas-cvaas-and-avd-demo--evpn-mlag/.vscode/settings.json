@@ -6,5 +6,7 @@
                 "ceos": "arista"
             }
         }
-    }
+    },
+    "chat.commandCenter.enabled": false,
+    "chat.agentSessionsViewLocation": "disabled"
 }
