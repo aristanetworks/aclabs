@@ -2,9 +2,9 @@
 
 !!! Warning "Container Requirements"
 
-    :fontawesome-solid-microchip: CPUs: 8  
-    :fontawesome-solid-memory: Memory: 32 GB  
-    :fontawesome-solid-hard-drive: Storage: 64 GB  
+    :fontawesome-solid-microchip: CPUs: 16  
+    :fontawesome-solid-memory: Memory: 64 GB  
+    :fontawesome-solid-hard-drive: Storage: 128 GB  
 
     :material-alert-circle-outline:{ .heartbeat } Please request high spec Codespace machines from [Github support](https://support.github.com/) first!
 
