@@ -38,7 +38,7 @@ router_id_loopback_description: "Globally Unique Address"
 
 underlay_isis_instance_name: '100'
 
-underlay_multicast: true
+underlay_multicast_pim_sm: true
 
 underlay_routing_protocol: isis
 
