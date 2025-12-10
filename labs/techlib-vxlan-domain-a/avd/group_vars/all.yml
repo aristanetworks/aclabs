@@ -1,107 +1,89 @@
 ---
 
-# AAA Authorization Settings
-aaa_authorization:
-  exec:
-    default: local
+# AAA settings
+aaa_settings:
+  authorization:
+    exec:
+      default: local
+  local_users:
+    - name: arista
+      privilege: 15
+      role: network-admin
+      sha512_password: $6$Ap6u4I1WR/jMoNKe$LPLoHgIXFg5kiGPDWGF0w5lVVuOZZ4T15cIBbNxE2ykqh98uVvsi9jPdybkbTXBTZFzi3haaPJVaGVwnpuck40
+    - name: admin
+      privilege: 15
+      role: network-admin
+      sha512_password: $6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/.
 
 # Global ARP Timer
-arp:
+custom_structured_configuration_arp:
   aging:
     timeout_default: 1500
 
+# Stop build if validation error is encountered
 avd_data_validation_mode: error
 
-# Clock Timezone
-clock:
-  timezone: America/Detroit
+# DNS Settings
+dns_settings:
+  domain: aclabs.lab
+  servers:
+    - vrf: use_mgmt_interface_vrf
+      ip_address: 8.8.8.8
 
-dns_domain: aclabs.lab
+# Enable eAPI
+management_eapi:
+  enabled: true
+  enable_http: true
+  enable_https: true
+  vrfs:
+    - enabled: true
+      name: use_mgmt_interface_vrf
 
 # Event Monitor in EOS
 event_monitor:
   enabled: true
 
-# Source interface and VRF for DNS
-ip_domain_lookup:
-  source_interfaces:
-    - name: Management0
-      vrf: MGMT
-
-# Source interface and VRF for HTTP(S)
-ip_http_client_source_interfaces:
-  - name: Management0
-    vrf: MGMT
-
-# DNS Servers
-ip_name_servers:
-  - ip_address: 8.8.8.8
-    vrf: MGMT
-
-# Source interface and VRF for SSH
-ip_ssh_client_source_interfaces:
-  - name: Management0
-    vrf: MGMT
-
-# Local Users
-local_users:
-  - name: arista
-    privilege: 15
-    role: network-admin
-    sha512_password: $6$Ap6u4I1WR/jMoNKe$LPLoHgIXFg5kiGPDWGF0w5lVVuOZZ4T15cIBbNxE2ykqh98uVvsi9jPdybkbTXBTZFzi3haaPJVaGVwnpuck40
-  - name: admin
-    privilege: 15
-    role: network-admin
-    sha512_password: $6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/.
-
 # Global MAC Aging Timer
 mac_address_table:
   aging_time: 1800
-
-# Enable eAPI
-management_api_http:
-  enable_http: false
-  enable_https: true
-  enable_vrfs:
-    - name: VRF
-
-# Enable SSH
-management_ssh:
-  vrfs:
-    - name: default
-      enable: true
-    - name: MGMT
-      enable: true
 
 # Out of Band Management
 mgmt_gateway: 172.100.100.1
 mgmt_interface: Management0
 mgmt_interface_vrf: MGMT
+default_mgmt_method: oob
+
+# Enable SSH for MGMT VRF
+ssh_settings:
+    vrfs:
+      - name: use_mgmt_interface_vrf
+        enabled: true
+
+# Set source interfaces
+source_interfaces:
+  http_client:
+    mgmt_interface: true
+  ssh_client:
+    mgmt_interface: true
 
 # NTP Servers
-ntp:
-  local_interface:
-    name: Management0
-    vrf: MGMT
+ntp_settings:
+  server_vrf: use_mgmt_interface_vrf
   servers:
     - name: time.google.com
       iburst: true
-      preferred: true
-      vrf: MGMT
     - name: time.windows.com
-      vrf: MGMT
       iburst: true
-      preferred: false
     - name: time.apple.com
       iburst: true
-      preferred: false
-      vrf: MGMT
+
+timezone: America/Detroit
 
 # Global IP MTU for Point-to-Point links
 p2p_uplinks_mtu: 9214
 
 # Default mode of "routed" interfaces
-switchport_default:
+custom_structured_configuration_switchport_default:
   mode: routed
 
 ansible_user: admin
@@ -116,4 +98,3 @@ ansible_httpapi_port: 443
 ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
 ansible_python_interpreter: $(which python3)
-avd_data_validation_mode: warning

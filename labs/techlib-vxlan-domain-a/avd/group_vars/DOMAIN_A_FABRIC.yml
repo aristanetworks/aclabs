@@ -39,7 +39,7 @@ router_id_loopback_description: "Globally Unique Address"
 
 default_vrf_diag_loopback_description: "Per-VRF Unique Loopback"
 
-underlay_multicast: true
+underlay_multicast_pim_sm: true
 
 vtep_loopback_description: "VTEP IP"
 
