@@ -82,4 +82,6 @@ jobs:
       # - disable Copilot chat
       # 2.5.1:
       # - bugfix: moby if condition must only ignore DinD script on Codespaces and VSCode
-      container_revision: "2.5.1"
+      # 2.5.2:
+      # - bugfix: fix GID remapping
+      container_revision: "2.5.2"

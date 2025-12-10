@@ -17,7 +17,7 @@ USER root
 
 ENV OLD_GID="1000"
 RUN sed -i -e "s/\(${USERNAME}:[^:]*:\)[^:]*:[^:]*/\1${UID}:${GID}/" /etc/passwd; \
-    sed -i -e "s/\([^:]*:[^:]*:\)${GID}:/\1${GID}:/" /etc/group; \
+    sed -i -e "s/\([^:]*:[^:]*:\)${OLD_GID}:/\1${GID}:/" /etc/group; \
     chown -R $UID:$GID /home/$USERNAME
 
 # install some basic tools inside the container
