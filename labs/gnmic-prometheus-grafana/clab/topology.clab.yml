@@ -62,7 +62,7 @@ topology:
     gnmic:
       kind: linux
       mgmt-ipv4: 172.144.100.200
-      image: ghcr.io/openconfig/gnmic:0.38.2
+      image: ghcr.io/openconfig/gnmic:latest
       binds:
         - ./gnmic.yml:/gnmic.yml:ro
       cmd: --config gnmic.yml --log subscribe
