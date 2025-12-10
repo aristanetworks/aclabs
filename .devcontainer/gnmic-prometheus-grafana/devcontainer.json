@@ -1,11 +1,11 @@
 {
-    "image": "ghcr.io/aristanetworks/aclabs/lab-base:python3.11-avd-v4.10.2-clab0.57.5-rev1.0",
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.7.2-clab0.72.0-rev2.5.2",
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
         "CONTAINERWSF": "${containerWorkspaceFolder}",
         "GITHUB_REPOSITORY": "aristanetworks/aclabs",
-        "CEOS_LAB_VERSION": "4.32.2.1F"
+        "CEOS_LAB_VERSION": "4.34.2F"
     },
     "secrets": {
         "ARTOKEN": {
@@ -14,12 +14,14 @@
         }
     },
     "hostRequirements": {
-        "cpus": 8,
-        "memory": "32gb",
+        "cpus": 4,
+        "memory": "16gb",
         "storage": "48gb"
     },
-    "postCreateCommand": "postCreate.sh; make start; make inspect",
+    "onCreateCommand": "chmod +x /gnmic-prometheus-grafana/addAliases.sh; /gnmic-prometheus-grafana/addAliases.sh",
+    "postCreateCommand": "/bin/entrypoint",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/gnmic-prometheus-grafana",
-    "forwardPorts": [3001, 9090]
+    "forwardPorts": [3001, 9090],
+    "containerUser": "avd"
 }

@@ -1,10 +1,8 @@
 # Telemetry labs
 
-
 ???+ info "How to run this lab?"
 
     Please read the [Quickstart guide](https://aclabs.arista.com/quickstart/)!
-
 
 ## gNMIc Prometheus Grafana Lab
 
@@ -16,13 +14,17 @@
 
 !!! Warning "Container Requirements"
 
-    CPUs: 8
-    Memory: 32 GB
+    CPUs: 4
+    Memory: 16 GB
     Storage: 48 GB
 
 ### Run it in Codespaces
 
 [Start :octicons-play-16: gNMIc-Prometheus-Grafana Lab :octicons-mark-github-24:](https://codespaces.new/aristanetworks/aclabs/tree/main?quickstart=1&devcontainer_path=.devcontainer%2Fgnmic-prometheus-grafana%2Fdevcontainer.json){ .md-button .md-button--primary target=_blank}
+
+To run the lab on your own machine, you can download all required files using the button below.
+
+[Download all required lab files](https://{{gh.org_name}}.github.io/aclabs/lab_archives/gnmic-prometheus-grafana.tar.gz){ .md-button .md-button--primary target=_blank}
 
 !!! Note
 
