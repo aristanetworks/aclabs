@@ -35,6 +35,7 @@
                 }
             }
         ],
+        "localLabByDefault": false,
         "node" :{
             "sshUserMapping": {
                 "ceos": "arista"
