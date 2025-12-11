@@ -11,6 +11,7 @@ topology:
   defaults:
     env:
       INTFTYPE: et
+    kind: ceos
 
   kinds:
     ceos:
