@@ -22,7 +22,7 @@ topology:
     ceos1:
       mgmt-ipv4: 172.100.100.101
 
-    Host1:
+    host1:
       kind: linux
       mgmt-ipv4: 172.100.100.201
       env:
