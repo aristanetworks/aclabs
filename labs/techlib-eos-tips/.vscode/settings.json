@@ -34,8 +34,13 @@
                     "INTFTYPE": "et"
                 }
             }
-        ]
-        ,}   
+        ],
+        "node" :{
+            "sshUserMapping": {
+                "ceos": "arista"
+                }
+            },
+        },
     },
     "workbench": {
         "startupEditor": "readme",
