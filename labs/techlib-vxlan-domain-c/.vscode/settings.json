@@ -1,6 +1,7 @@
 {
     "containerlab": {
         "showWelcomePage": false,
+        "defaultSshUser": "admin",
     },
     "workbench": {
         "startupEditor": "readme",
