@@ -29,7 +29,7 @@
                 "icon": "switch",
                 "baseName": "ceos",
                 "setDefault": true,
-                "interfacePattern": "e1-{n}",
+                "interfacePattern": "et{n}",
                 "env": {
                     "INTFTYPE": "et"
                 }
