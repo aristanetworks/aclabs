@@ -7,7 +7,8 @@
         "CV_API_TOKEN": "${localEnv:CV_API_TOKEN}",
         "CONTAINERWSF": "${containerWorkspaceFolder}",
         "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}",
-        "PASSWORD": "${localEnv:CODER_PASSWORD}"
+        "PASSWORD": "${localEnv:CODER_PASSWORD}",
+        "GIT_INIT": "false"
     },
     "secrets": {
         "ARTOKEN": {
