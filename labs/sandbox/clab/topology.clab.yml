@@ -1,46 +1,30 @@
 ---
-name: eos-tips
+name: sandbox-template
 prefix: ""
 
 mgmt:
   network: custom_mgmt
-  ipv4-subnet: 10.0.0.0/16
+  ipv4-subnet: 172.100.100.0/24
 
 topology:
+
+  defaults:
+    env:
+      INTFTYPE: et
+
   kinds:
     ceos:
-      enforce-startup-config: true
       image: arista/ceos:latest
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1
 
-  defaults:
-    kind: ceos
-
   nodes:
-    SPINE1:
-      mgmt-ipv4: 10.0.1.1
-      binds:
-        - sn/SPINE1.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/SPINE1.cfg
-
-    SPINE2:
-      mgmt-ipv4: 10.0.1.2
-      binds:
-        - sn/SPINE2.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/SPINE2.cfg
-      group: 'spine'
-
-    LEAF1:
-      mgmt-ipv4: 10.0.2.1
-      binds:
-        - sn/LEAF1.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/LEAF1.cfg
-      group: 'leaf'
+    ceos1:
+      mgmt-ipv4: 172.100.100.101
 
     Host1:
       kind: linux
-      mgmt-ipv4: 10.0.3.1
+      mgmt-ipv4: 172.100.100.201
       env:
         IPV4: 10.10.10.101/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -48,20 +32,5 @@ topology:
         IPV6: 2001:db8:10:10::101/64
         UPLINK_MAC: 00:01:01:01:01:01
 
-    Host2:
-      kind: linux
-      mgmt-ipv4: 10.0.3.2
-      env:
-        IPV4: 10.20.20.101/24
-        STATIC_ROUTE: 10.0.0.0/8
-        GW: 10.20.20.1
-        IPV6: 2001:db8:20:20::101/64
-        UPLINK_MAC: 00:02:02:02:02:02
-
   links:
-    - endpoints: [ "LEAF1:eth1", "SPINE1:eth1" ]
-    - endpoints: [ "LEAF1:eth2", "SPINE2:eth1" ]
-    - endpoints: [ "SPINE1:eth47", "SPINE2:eth47" ]
-    - endpoints: [ "SPINE1:eth48", "SPINE2:eth48" ]
-    - endpoints: [ "Host1:eth1", "LEAF1:eth11" ]
-    - endpoints: [ "Host2:eth1", "LEAF1:eth12" ]
+    - endpoints: [ "ceos1:et1", "host1:eth1" ]
