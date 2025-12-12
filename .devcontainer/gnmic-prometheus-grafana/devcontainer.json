@@ -15,7 +15,7 @@
     },
     "hostRequirements": {
         "cpus": 16,
-        "memory": "16gb",
+        "memory": "64gb",
         "storage": "48gb"
     },
     "onCreateCommand": "chmod +x /gnmic-prometheus-grafana/addAliases.sh; /gnmic-prometheus-grafana/addAliases.sh",
