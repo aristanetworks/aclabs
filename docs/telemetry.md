@@ -14,9 +14,9 @@
 
 !!! Warning "Container Requirements"
 
-    CPUs: 4
-    Memory: 16 GB
-    Storage: 48 GB
+    CPUs: 16
+    Memory: 64 GB
+    Storage: 64 GB
 
 ### Run it in Codespaces
 
