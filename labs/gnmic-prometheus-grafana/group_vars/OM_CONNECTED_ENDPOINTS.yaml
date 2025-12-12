@@ -25,6 +25,7 @@ servers:
         port_channel:
           description: PortChannel3
           mode: active
+        ethernet_segment:
           short_esi: 0101:0102:0033
   - name: server02
     rack: rack01
@@ -43,6 +44,7 @@ servers:
         port_channel:
           description: PortChannel4
           mode: active
+        ethernet_segment:
           short_esi: 0101:0102:0044
   - name: server03
     rack: rack02
@@ -61,6 +63,7 @@ servers:
         port_channel:
           description: PortChannel3
           mode: active
+        ethernet_segment:
           short_esi: 0201:0202:0033
   - name: server04
     rack: rack02
@@ -79,4 +82,5 @@ servers:
         port_channel:
           description: PortChannel4
           mode: active
+        ethernet_segment:
           short_esi: 0201:0202:0044
