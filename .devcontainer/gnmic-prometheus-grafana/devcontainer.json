@@ -16,7 +16,7 @@
     "hostRequirements": {
         "cpus": 16,
         "memory": "64gb",
-        "storage": "48gb"
+        "storage": "64gb"
     },
     "onCreateCommand": "chmod +x /gnmic-prometheus-grafana/addAliases.sh; /gnmic-prometheus-grafana/addAliases.sh",
     "postCreateCommand": "/bin/entrypoint",
