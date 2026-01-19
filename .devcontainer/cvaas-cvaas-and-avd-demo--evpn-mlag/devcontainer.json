@@ -31,7 +31,7 @@
     "onCreateCommand": "chmod +x /cvaas-cvaas-and-avd-demo--evpn-mlag/addAliases.sh; /cvaas-cvaas-and-avd-demo--evpn-mlag/addAliases.sh",
     "postCreateCommand": "/bin/entrypoint",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/cvaas-cvaas-and-avd-demo--evpn-mlag",
+    "workspaceFolder": "cvaas-cvaas-and-avd-demo--evpn-mlag",
     "containerUser": "avd",
     "runArgs": ["--env-file","${localWorkspaceFolder}/labs/${containerWorkspaceFolder}/.vscode/lab_vars.public.env"]
 }
