@@ -84,4 +84,6 @@ jobs:
       # - bugfix: moby if condition must only ignore DinD script on Codespaces and VSCode
       # 2.5.2:
       # - bugfix: fix GID remapping
-      container_revision: "2.5.2"
+      # 2.6
+      # - add lab status check on start
+      container_revision: "2.6"
