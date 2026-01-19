@@ -60,6 +60,7 @@ Temporary Items
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+!.vscode/*.public.env
 
 # Local History for Visual Studio Code
 .history/
