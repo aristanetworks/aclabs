@@ -1,5 +1,5 @@
 {
-    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.7.2-clab0.72.0-rev2.5.2",
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.7.2-clab0.72.0-rev2.6",
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
@@ -32,5 +32,6 @@
     "postCreateCommand": "/bin/entrypoint",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/cvaas-cvaas-and-avd-demo--evpn-mlag",
-    "containerUser": "avd"
+    "containerUser": "avd",
+    "runArgs": ["--env-file","${localWorkspaceFolder}/labs/${containerWorkspaceFolder}/.vscode/lab_vars.public.env"]
 }
