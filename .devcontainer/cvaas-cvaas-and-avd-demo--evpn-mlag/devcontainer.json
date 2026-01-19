@@ -32,5 +32,6 @@
     "postCreateCommand": "/bin/entrypoint",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/cvaas-cvaas-and-avd-demo--evpn-mlag",
-    "containerUser": "avd"
+    "containerUser": "avd",
+    "runArgs": ["--env-file",".vscode/lab_vars.env"]
 }

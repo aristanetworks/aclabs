@@ -35,12 +35,17 @@ COPY ./entrypoint.sh /bin/entrypoint
 RUN chmod +x /bin/entrypoint
 ENTRYPOINT [ "/bin/entrypoint" ]
 
+# copy tasks.json scripts
+COPY ./lab_start_task.py /bin/lab_start_task.py
+RUN chmod +x /bin/lab_start_task.py
+
 USER ${USERNAME}
 
 # install the latest containerlab, yamllint, cook-and-cut and eos-downloader
 RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
     && pip3 install --user yamllint \
     && pip install --user "eos-downloader>=0.10.1" \
+    && pip install --user rich \
     && pip install --user passlib
 
 # install coder and extensions

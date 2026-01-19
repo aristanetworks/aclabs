@@ -288,3 +288,6 @@ avd_inventory/config_backup/
 
 clab-*/
 *.bak
+
+# do NOT ignore public lab env variables
+!.vscode/*.public.env
