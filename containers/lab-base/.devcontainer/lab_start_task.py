@@ -14,7 +14,7 @@ import sys
 import time
 
 custom_theme = Theme({"info": "bold cyan", "warning": "magenta", "critical": "bold red"})
-console = Console(theme=custom_theme)
+console = Console(theme=custom_theme, log_path=False)
 
 console.clear()
 
