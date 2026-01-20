@@ -23,7 +23,7 @@
             },
             {
                 "name": "Arista cEOS Latest",
-                "kind": "arista_ceos",
+                "kind": "ceos",
                 "type": "",
                 "image": "arista/ceos:latest",
                 "icon": "switch",
