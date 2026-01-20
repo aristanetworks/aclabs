@@ -1,5 +1,9 @@
 # Arista Sandbox Lab
 
+> [!WARNING]
+> This lab is in preview. It's fully functional, but breaking changes can happen.
+> We are working hard on building the best lab collection and your feedback is always  appreciated.
+
 Welcome to the Sandbox!
 
 This lab is pre-packaged with:

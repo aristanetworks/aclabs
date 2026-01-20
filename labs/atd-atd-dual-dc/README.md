@@ -1,5 +1,9 @@
 # ATD Dual DC
 
+> [!WARNING]
+> This lab is in preview. It's fully functional, but breaking changes can happen.
+> We are working hard on building the best lab collection and your feedback is always  appreciated.
+
 This lab is tested for:  
 
   cEOS-lab version: 4.34.2F  
