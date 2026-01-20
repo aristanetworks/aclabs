@@ -1,5 +1,9 @@
 # CVaaS and AVD Demo, EVPN MLAG
 
+> [!WARNING]
+> This lab is in preview. It's fully functional, but breaking changes can happen.
+> We are working hard on building the best lab collection and your feedback is always  appreciated.
+
 > [!IMPORTANT]
 > The average deployment time for this lab is five minutes.
 > Issue the `make inspect` command at the terminal to check on the deployment status of the lab.

@@ -1,5 +1,9 @@
 # Arista EOS Tips for Network Operators Lab
 
+> [!WARNING]
+> This lab is in preview. It's fully functional, but breaking changes can happen.
+> We are working hard on building the best lab collection and your feedback is always  appreciated.
+
 Welcome! This pre-configured lab is a sandbox companion to the [EOS Tips for Network Operators Guide](https://tech-library.arista.com/eos/eos_ops/) found in [Arista's Tech Library](https://tech-library.arista.com/).
 
 This lab has been validated with:

@@ -86,4 +86,6 @@ jobs:
       # - bugfix: fix GID remapping
       # 2.6
       # - add lab status check on start
-      container_revision: "2.6"
+      # 2.6.1
+      # - add timeout and panel to lab status check
+      container_revision: "2.6.1"

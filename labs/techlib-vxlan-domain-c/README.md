@@ -1,5 +1,9 @@
 # Arista's Tech Library EVPN-VXLAN Domain C Lab
 
+> [!WARNING]
+> This lab is in preview. It's fully functional, but breaking changes can happen.
+> We are working hard on building the best lab collection and your feedback is always  appreciated.
+
 Welcome! This pre-configured lab matches the [Domain C topology in the EVPN-VXLAN Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domain_c/) on [Arista's Tech Library](https://arista.com/en/tech-library).
 
 ## Overview

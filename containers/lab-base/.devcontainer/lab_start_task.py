@@ -5,20 +5,54 @@
 
 from rich.theme import Theme
 from rich.console import Console
-from rich.progress import Progress
+from rich.panel import Panel
+from rich.text import Text
 import paramiko
 import yaml
 import os
+import sys
 import time
 
 custom_theme = Theme({"info": "bold cyan", "warning": "magenta", "critical": "bold red"})
-console = Console(theme=custom_theme)
+console = Console(theme=custom_theme, log_path=False)
 
 console.clear()
+
+# Two blank lines before
+console.print("\n\n", end="")
+
+title = Text()
+title.append("c", style="grey")
+title.append("A", style="red")
+title.append("r", style="green")
+title.append("L", style="bold cyan")
+title.append("\n", style="")
+
+subtitle = Text("   Containerized Arista Labs", style="white")
+
+banner = Text()
+banner.append("   ")
+banner.append(title)
+banner.append(subtitle)
+
+panel = Panel(
+    banner,
+    border_style="cyan",
+    padding=(1, 4),
+    expand=False
+)
+
+console.print(panel)
+
+# Two blank lines after
+console.print("\n\n", end="")
 
 console.print("READ THIS FIRST!", style="critical")
 console.print("- check README.md", style="critical")
 console.print("- wait until the lab will be ready", style="critical")
+
+# Two blank lines after
+console.print("\n\n", end="")
 
 time.sleep(5)  # give some time for user to read the message =)
 
@@ -38,6 +72,10 @@ with console.status(
 
     lab_node_list = [ node_name for node_name in d['topology']['nodes'].keys() ]
 
+    # set the timer to exit after 5 min if some lab devices are still not reachable
+    lab_timeout = 300
+    timer = time.time() + lab_timeout
+
     for node_name in lab_node_list:
         node_not_reachable = True
         while node_not_reachable:
@@ -56,6 +94,9 @@ with console.status(
                 ssh.close()
             except Exception as _:
                 pass  # ignore if node is down
+            if (time.time() > timer) and node_not_reachable:
+                console.log(f"ERROR: can not reach some lab nodes. Something is wrong. Breaking after {lab_timeout} seconds. Last node not reachable: {node_name}", style="critical")
+                sys.exit(1)
 
 console.log("Lab is ready!")
 
