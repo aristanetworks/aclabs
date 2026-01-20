@@ -23,7 +23,7 @@
             },
             {
                 "name": "Arista cEOS Latest",
-                "kind": "arista_ceos",
+                "kind": "ceos",
                 "type": "",
                 "image": "arista/ceos:latest",
                 "icon": "switch",
@@ -48,5 +48,10 @@
         "editorAssociations": {
                     "*.md": "vscode.markdown.preview.editor"
         }
-    }
+    },
+    "chat.commandCenter.enabled": false,
+    "chat.agentSessionsViewLocation": "disabled",
+    "chat.agent.enabled": false,
+    "chat.disableAIFeatures": true,
+    "terminal.integrated.suggest.enabled": true
 }

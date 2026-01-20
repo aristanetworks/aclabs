@@ -27,4 +27,4 @@ topology:
       image: arista/ceos:latest
 
   links:
-    - endpoints: [ "ceos1:et1", "ceos2:eth1" ]
+    - endpoints: [ "ceos1:et1", "ceos2:et1" ]
