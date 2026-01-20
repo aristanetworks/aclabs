@@ -4,11 +4,12 @@
 > This lab is in preview. It's fully functional, but breaking changes can happen.
 > We are working hard on building the best lab collection and your feedback is always appreciated.
 
-Welcome to the Sandbox!
+Welcome to the UCN Sandbox Lab!
 
 This lab is pre-packaged with:
 
 - cEOS-lab: **4.35.1F**
+- AVD: **5.7.2**
 - Containerlab: **0.72.0**
 - Resources:
   - CPUs: **16**
