@@ -5,7 +5,7 @@
 > We are working hard on building the best lab collection and your feedback is always appreciated.
 
 > [!TIP]
-> First time here, or just need a refresher?
+> First time here or just need a refresher?
 > Check out the [UCN Sandbox Lab overview video!](https://drive.google.com/file/d/1G5IlljssaN3cKptO2Ka1OufjsLP4bKDN/view?usp=sharing)
 
 This lab is pre-packaged with:
