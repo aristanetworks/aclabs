@@ -1,10 +1,12 @@
-# Arista Sandbox Lab
+# Welcome to the UCN Sandbox Lab!
 
 > [!WARNING]
 > This lab is in preview. It's fully functional, but breaking changes can happen.
 > We are working hard on building the best lab collection and your feedback is always appreciated.
 
-Welcome to the UCN Sandbox Lab!
+> [!TIP]
+> First time here, or just need a refresher?
+> Check out the [UCN Sandbox Lab overview video!](https://drive.google.com/file/d/1G5IlljssaN3cKptO2Ka1OufjsLP4bKDN/view?usp=sharing)
 
 This lab is pre-packaged with:
 
