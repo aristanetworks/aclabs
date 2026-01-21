@@ -6,7 +6,7 @@
 
 > [!TIP]
 > First time here or just need a refresher?
-> Check out the [UCN Sandbox Lab overview video!](https://drive.google.com/file/d/1G5IlljssaN3cKptO2Ka1OufjsLP4bKDN/view?usp=sharing)
+> Check out the [UCN Sandbox Lab overview video!](https://youtu.be/_YxHMcES0o4)
 
 This lab is pre-packaged with:
 
