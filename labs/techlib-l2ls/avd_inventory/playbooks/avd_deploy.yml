@@ -1,9 +1,0 @@
----
-- name: Deploy Configs
-  hosts: AVD_FABRIC
-  gather_facts: false
-  tasks:
-
-    - name: Deploy Configurations to Devices
-      import_role:
-        name: arista.avd.eos_config_deploy_eapi

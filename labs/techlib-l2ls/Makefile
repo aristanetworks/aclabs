@@ -20,16 +20,16 @@ inspect: ## Inspect the lab
 	@echo "To connect to a lab device use \`ssh arista@<hostname>\` and password \`arista\`."
 
 .PHONY: build
-build: ## Generate AVD configs
-	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_build.yml
+build: ## Build Configs
+	ansible-playbook avd/playbooks/build.yml -i avd/inventory.yml
 
 .PHONY: deploy
-deploy: ## Deploy AVD configs using eAPI
-	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_deploy.yml
+deploy: ## Deploy Configs via eAPI
+	ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml
 
-.PHONY: deploy_cvp
-deploy_cvp: ## Deploy AVD configs using eAPI
-	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_deploy_cvp.yml
+.PHONY: validate
+validate: ## Validate Fabric
+	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml
 
 .PHONY: diff
 diff: ## Show the diff between running config and designed config

@@ -1,0 +1,46 @@
+---
+type: l3spine
+
+l3spine:
+  defaults:
+    platform: "veos"
+    spanning_tree_mode: mstp
+    spanning_tree_priority: 4096
+    loopback_ipv4_pool: 10.254.2.0/24
+    mlag_peer_ipv4_pool: 10.253.2.0/31
+    mlag_peer_l3_ipv4_pool: 10.253.2.2/31
+    virtual_router_mac_address: 00:1c:73:00:dc:01
+    mlag_interfaces: [ Ethernet7, Ethernet8 ]
+    structured_config:
+      vxlan_interface:
+        vxlan1:
+          vxlan:
+            source_interface: Loopback1
+            udp_port: 4789
+            vlans:
+              - id: 10
+                vni: 10010
+              - id: 20
+                vni: 10020
+              - id: 30
+                vni: 10030
+              - id: 40
+                vni: 10040
+            flood_vteps:
+              - 10.255.1.1
+      loopback_interfaces:
+        - name: Loopback1
+          description: "Shared VTEP IP"
+          shutdown: false
+          ip_address: "10.255.2.1/32"
+          ospf_area: "0.0.0.0"
+
+  node_groups:
+    - group: B-SPINES
+      nodes:
+        - name: b-spine1
+          id: 1
+          mgmt_ip: 192.168.0.111/24
+        - name: b-spine2
+          id: 2
+          mgmt_ip: 192.168.0.112/24

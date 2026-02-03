@@ -1,0 +1,55 @@
+---
+ansible_user: admin
+ansible_password: admin
+ansible_network_os: arista.eos.eos
+# Configure privilege escalation
+ansible_become: true
+ansible_become_method: enable
+# HTTPAPI configuration
+ansible_connection: httpapi
+ansible_httpapi_port: 443
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: false
+ansible_python_interpreter: $(which python3)
+avd_data_validation_mode: error
+
+# Local Users
+local_users:
+  - name: cvpadmin
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$agajkWf58GmMqH2V$wWi9BgwfiksbpvTKMI59w7C9dYxUA7DjspaEGrCngEyJz4q/jcZ04bejWv9ksq0N85oaUChwR1zdpL1VyTOu4."
+  - name: service # used for auto_config_cvp
+    privilege: 15
+    role: network-admin
+    shell: "/bin/bash"
+    sha512_password: "$6$4Ey4qpC8elLHIA2a$GRrcdzVU1anXhn5FrAAEtsPg0zdnEHCza4tHVqTCGFV4XFme7Tl8SRGy.Xe0NA7A8XktXr1ZtNzAoBwzm18Nb0"
+
+aaa_authorization:
+  exec:
+    default: local
+
+# OOB Management network default gateway.
+# Comment out the mgmt_gateway for ACT.  Default route will be 10.18.x.x for access
+# out of ACT environment.
+# mgmt_gateway: 192.168.0.1
+# mgmt_interface: "Management1"
+# mgmt_interface_vrf: default
+
+fabric_ip_addressing:
+  mlag:
+    algorithm: "same_subnet"
+
+p2p_uplinks_mtu: 1500
+
+cv_settings:
+      onprem_clusters:
+        - name: ACT_CV
+          servers:
+            - name: 192.168.0.5
+      terminattr:
+        ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
+        disable_aaa: true
+
+generate_cv_tags:
+  topology_hints: true

@@ -1,0 +1,106 @@
+---
+########################################################
+# Port Profiles                                        #
+########################################################
+port_profiles:
+  - profile: PP-BLUE-MLAG
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 10
+    port_channel:
+      mode: active
+
+  - profile: PP-ORANGE-MLAG
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 30
+    port_channel:
+      mode: active
+
+  - profile: PP-ORANGE-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 30
+
+  - profile: PP-GREEN-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 20
+
+########################################################
+# End hosts                                            #
+########################################################
+servers:
+  - name: HostA1
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [a-leaf1, a-leaf2]
+        profile: PP-BLUE-MLAG
+
+  - name: HostA2
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [a-leaf1, a-leaf2]
+        profile: PP-ORANGE-MLAG
+
+  - name: HostA3
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [a-leaf3]
+        profile: PP-GREEN-SINGLE-HOMED
+
+  - name: HostA4
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [a-leaf3, a-leaf4]
+        profile: PP-BLUE-MLAG
+
+  - name: HostA5
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [a-leaf4]
+        profile: PP-ORANGE-SINGLE-HOMED
+
+  - name: HostB1
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [b-leaf1, b-leaf2]
+        profile: PP-BLUE-MLAG
+
+  - name: HostB2
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [b-leaf1, b-leaf2]
+        profile: PP-ORANGE-MLAG
+
+  - name: HostB3
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [b-leaf3]
+        profile: PP-GREEN-SINGLE-HOMED
+
+  - name: HostB4
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [b-leaf3, b-leaf4]
+        profile: PP-BLUE-MLAG
+
+  - name: HostB5
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [b-leaf4]
+        profile: PP-ORANGE-SINGLE-HOMED

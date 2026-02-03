@@ -1,0 +1,10 @@
+---
+
+- name: Validate Fabric
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Validate Fabric
+      ansible.builtin.import_role:
+        name: arista.avd.anta_runner
