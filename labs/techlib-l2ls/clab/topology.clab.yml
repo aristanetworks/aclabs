@@ -34,15 +34,15 @@ topology:
     A-SPINE1:
       kind: ceos
       mgmt-ipv4: 172.100.100.10
-      binds:
-        - sn/a-spine1.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/a-spine1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/a-spine1.cfg
 
     A-SPINE2:
       kind: ceos
       mgmt-ipv4: 172.100.100.11
-      binds:
-        - sn/a-spine2.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/a-spine2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/a-spine2.cfg
 
     #########################
@@ -52,15 +52,15 @@ topology:
     B-SPINE1:
       kind: ceos
       mgmt-ipv4: 172.100.100.20
-      binds:
-        - sn/b-spine1.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/b-spine1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/b-spine1.cfg
 
     B-SPINE2:
       kind: ceos
       mgmt-ipv4: 172.100.100.21
-      binds:
-        - sn/b-spine2.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/b-spine2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/b-spine2.cfg
 
     #########################
@@ -70,29 +70,29 @@ topology:
     A-LEAF1:
       kind: ceos
       mgmt-ipv4: 172.100.100.13
-      binds:
-        - sn/a-leaf1.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/a-leaf1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/a-leaf1.cfg
 
     A-LEAF2:
       kind: ceos
       mgmt-ipv4: 172.100.100.14
-      binds:
-        - sn/a-leaf2.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/a-leaf2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/a-leaf2.cfg
 
     A-LEAF3:
       kind: ceos
       mgmt-ipv4: 172.100.100.15
-      binds:
-        - sn/a-leaf3.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/a-leaf3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/a-leaf3.cfg
 
     A-LEAF4:
       kind: ceos
       mgmt-ipv4: 172.100.100.16
-      binds:
-        - sn/a-leaf4.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/a-leaf4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/a-leaf4.cfg
 
     #########################
@@ -102,29 +102,29 @@ topology:
     B-LEAF1:
       kind: ceos
       mgmt-ipv4: 172.100.100.23
-      binds:
-        - sn/b-leaf1.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/b-leaf1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/b-leaf1.cfg
 
     B-LEAF2:
       kind: ceos
       mgmt-ipv4: 172.100.100.24
-      binds:
-        - sn/b-leaf2.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/b-leaf2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/b-leaf2.cfg
 
     B-LEAF3:
       kind: ceos
       mgmt-ipv4: 172.100.100.25
-      binds:
-        - sn/b-leaf3.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/b-leaf3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/b-leaf3.cfg
 
     B-LEAF4:
       kind: ceos
       mgmt-ipv4: 172.100.100.26
-      binds:
-        - sn/b-leaf4.txt:/mnt/flash/ceos-config:ro
+      # binds:
+        # -sn/b-leaf4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/b-leaf4.cfg
 
     #########################
