@@ -1,66 +1,331 @@
 ---
-name: l2ls
+# --------------------------------------------------------------
+# Arista EVPN Deployment Guide Topology - Domain A
+# --------------------------------------------------------------
+
+name: arista-l2ls-dg
+
 prefix: ""
 
 mgmt:
-    network: custom_mgmt
-    ipv4-subnet: 10.0.0.0/16
+  network: mgmt
+  ipv4-subnet: 172.100.100.0/24
 
 topology:
-    kinds:
-        ceos:
-            enforce-startup-config: true
-            image: arista/ceos:latest
-    defaults:
-        kind: ceos
-    nodes:
-        s01:
-            mgmt-ipv4: 10.0.1.1
-            binds:
-            - sn/s01.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/s01.cfg
-        s02:
-            mgmt-ipv4: 10.0.1.2
-            binds:
-            - sn/s02.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/s02.cfg
-        l01:
-            mgmt-ipv4: 10.0.2.1
-            binds:
-            - sn/l01.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/l01.cfg
-        l02:
-            mgmt-ipv4: 10.0.2.2
-            binds:
-            - sn/l02.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/l02.cfg
-        l03:
-            mgmt-ipv4: 10.0.2.3
-            binds:
-            - sn/l03.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/l03.cfg
-        l04:
-            mgmt-ipv4: 10.0.2.4
-            binds:
-            - sn/l04.txt:/mnt/flash/ceos-config:ro
-            startup-config: init-configs/l04.cfg
-        h01:
-            mgmt-ipv4: 10.0.3.1
-            startup-config: init-configs/h01.cfg
-        h02:
-            mgmt-ipv4: 10.0.3.2
-            startup-config: init-configs/h02.cfg
 
-    links:
-    - endpoints: ["l01:eth1", "s01:eth1"]
-    - endpoints: ["l01:eth2", "s02:eth1"]
-    - endpoints: ["l02:eth1", "s01:eth2"]
-    - endpoints: ["l02:eth2", "s02:eth2"]
-    - endpoints: ["l03:eth1", "s01:eth3"]
-    - endpoints: ["l03:eth2", "s02:eth3"]
-    - endpoints: ["l04:eth1", "s01:eth4"]
-    - endpoints: ["l04:eth2", "s02:eth4"]
-    - endpoints: ["h01:eth1", "l01:eth10"]
-    - endpoints: ["h01:eth2", "l02:eth10"]
-    - endpoints: ["h02:eth1", "l03:eth20"]
-    - endpoints: ["h02:eth2", "l04:eth20"]
+  defaults:
+    env:
+      INTFTYPE: et
+
+  kinds:
+    ceos:
+      image: arista/ceos:latest
+    linux:
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1
+      binds:
+        - /techlib-l2ls:/workspace:ro
+
+  nodes:
+
+    #########################
+    #     DC A SPINE        #
+    #########################
+
+    A-SPINE1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.10
+      binds:
+        - sn/a-spine1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/a-spine1.cfg
+
+    A-SPINE2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.11
+      binds:
+        - sn/a-spine2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/a-spine2.cfg
+
+    #########################
+    #     DC B SPINE        #
+    #########################
+
+    B-SPINE1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.20
+      binds:
+        - sn/b-spine1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/b-spine1.cfg
+
+    B-SPINE2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.21
+      binds:
+        - sn/b-spine2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/b-spine2.cfg
+
+    #########################
+    #     DC A LEAF         #
+    #########################
+
+    A-LEAF1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.13
+      binds:
+        - sn/a-leaf1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/a-leaf1.cfg
+
+    A-LEAF2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.14
+      binds:
+        - sn/a-leaf2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/a-leaf2.cfg
+
+    A-LEAF3:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.15
+      binds:
+        - sn/a-leaf3.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/a-leaf3.cfg
+
+    A-LEAF4:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.16
+      binds:
+        - sn/a-leaf4.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/a-leaf4.cfg
+
+    #########################
+    #     DC B LEAF         #
+    #########################
+
+    B-LEAF1:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.23
+      binds:
+        - sn/b-leaf1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/b-leaf1.cfg
+
+    B-LEAF2:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.24
+      binds:
+        - sn/b-leaf2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/b-leaf2.cfg
+
+    B-LEAF3:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.25
+      binds:
+        - sn/b-leaf3.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/b-leaf3.cfg
+
+    B-LEAF4:
+      kind: ceos
+      mgmt-ipv4: 172.100.100.26
+      binds:
+        - sn/b-leaf4.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/b-leaf4.cfg
+
+    #########################
+    #     DC A Hosts        #
+    #########################
+
+    # HostA1 is connected to LEAF1 eth7 and LEAF2 eth7
+    HostA1:
+      kind: linux
+      mgmt-ipv4: 172.100.100.111
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:A1
+
+    # HostA2 is connected to LEAF1 eth8 and LEAF2 eth8
+    HostA2:
+      kind: linux
+      mgmt-ipv4: 172.100.100.112
+      env:
+        TMODE: lacp
+        IPV4: 10.30.30.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.30.30.1
+        UPLINK_MAC: 00:01:01:00:00:A2
+
+    # HostA3 is a Linux host with a single interface connected to LEAF3 eth7
+    HostA3:
+      kind: linux
+      mgmt-ipv4: 172.100.100.113
+      env:
+        IPV4: 10.20.20.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.20.20.1
+        UPLINK_MAC: 00:01:01:00:00:A3
+
+    # HostA4 is connected to LEAF3 eth8 and LEAF4 eth8
+    HostA4:
+      kind: linux
+      mgmt-ipv4: 172.100.100.114
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:A4
+
+    # HostA5 is connected to LEAF4 eth7
+    HostA5:
+      kind: linux
+      mgmt-ipv4: 172.100.100.115
+      env:
+        IPV4: 10.30.30.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.30.30.1
+        UPLINK_MAC: 00:01:01:00:00:A5
+
+    #########################
+    #     DC B Hosts        #
+    #########################
+
+    # HostB1 is connected to LEAF1 eth7 and LEAF2 eth7
+    HostB1:
+      kind: linux
+      mgmt-ipv4: 172.100.100.121
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.103/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:A1
+
+    # HostB2 is connected to LEAF1 eth8 and LEAF2 eth8
+    HostB2:
+      kind: linux
+      mgmt-ipv4: 172.100.100.122
+      env:
+        TMODE: lacp
+        IPV4: 10.30.30.103/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.30.30.1
+        UPLINK_MAC: 00:01:01:00:00:A2
+
+    # HostB3 is a Linux host with a single interface connected to LEAF3 eth7
+    HostB3:
+      kind: linux
+      mgmt-ipv4: 172.100.100.123
+      env:
+        IPV4: 10.20.20.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.20.20.1
+        UPLINK_MAC: 00:01:01:00:00:A3
+
+    # HostB4 is connected to LEAF3 eth8 and LEAF4 eth8
+    HostB4:
+      kind: linux
+      mgmt-ipv4: 172.100.100.124
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.104/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:A4
+
+    # HostB5 is connected to LEAF4 eth7
+    HostB5:
+      kind: linux
+      mgmt-ipv4: 172.100.100.125
+      env:
+        IPV4: 10.30.30.104/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.30.30.1
+        UPLINK_MAC: 00:01:01:00:00:A5
+
+  links:
+    ######################
+    # A-SPINE1 to LEAF   #
+    ######################
+    - endpoints: [ "A-SPINE1:et1", "A-LEAF1:et1" ]
+    - endpoints: [ "A-SPINE1:et2", "A-LEAF2:et1" ]
+    - endpoints: [ "A-SPINE1:et3", "A-LEAF3:et1" ]
+    - endpoints: [ "A-SPINE1:et4", "A-LEAF4:et1" ]
+    ######################
+    # A-SPINE2 to LEAF   #
+    ######################
+    - endpoints: [ "A-SPINE2:et1", "A-LEAF1:et2" ]
+    - endpoints: [ "A-SPINE2:et2", "A-LEAF2:et2" ]
+    - endpoints: [ "A-SPINE2:et3", "A-LEAF3:et2" ]
+    - endpoints: [ "A-SPINE2:et4", "A-LEAF4:et2" ]
+    ########################
+    # A-SPINE1 to A-SPINE2 #
+    ########################
+    - endpoints: [ "A-SPINE1:et7", "A-SPINE2:et7" ]
+    - endpoints: [ "A-SPINE1:et8", "A-SPINE2:et8" ]
+    ######################
+    # B-SPINE1 to LEAF   #
+    ######################
+    - endpoints: [ "B-SPINE1:et1", "B-LEAF1:et1" ]
+    - endpoints: [ "B-SPINE1:et2", "B-LEAF2:et1" ]
+    - endpoints: [ "B-SPINE1:et1", "B-LEAF3:et1" ]
+    - endpoints: [ "B-SPINE1:et4", "B-LEAF4:et1" ]
+    ######################
+    # B-SPINE2 to LEAF   #
+    ######################
+    - endpoints: [ "B-SPINE2:et1", "B-LEAF1:et2" ]
+    - endpoints: [ "B-SPINE2:et2", "B-LEAF2:et2" ]
+    - endpoints: [ "B-SPINE2:et3", "B-LEAF3:et2" ]
+    - endpoints: [ "B-SPINE2:et2", "B-LEAF4:et2" ]
+    ########################
+    # B-SPINE1 to B-SPINE2 #
+    ########################
+    - endpoints: [ "B-SPINE1:et7", "B-SPINE2:et7" ]
+    - endpoints: [ "B-SPINE1:et8", "B-SPINE2:et8" ]
+    ########################
+    # A-LEAF1 to A-LEAF2   #
+    ########################
+    - endpoints: [ "A-LEAF1:et5", "A-LEAF2:et5" ]
+    - endpoints: [ "A-LEAF1:et6", "A-LEAF2:et6" ]
+    ########################
+    # A-LEAF3 to A-LEAF4   #
+    ########################
+    - endpoints: [ "A-LEAF3:et5", "A-LEAF4:et5" ]
+    - endpoints: [ "A-LEAF3:et6", "A-LEAF4:et6" ]
+    ########################
+    # B-LEAF1 to B-LEAF2   #
+    ########################
+    - endpoints: [ "B-LEAF1:et5", "B-LEAF2:et5" ]
+    - endpoints: [ "B-LEAF1:et6", "B-LEAF2:et6" ]
+    ########################
+    # B-LEAF3 to B-LEAF4   #
+    ########################
+    - endpoints: [ "B-LEAF3:et5", "B-LEAF4:et5" ]
+    - endpoints: [ "B-LEAF3:et6", "B-LEAF4:et6" ]
+    ########################
+    # A-SPINES to B-SPINES #
+    ########################
+    - endpoints: [ "A-SPINE1:et5", "B-SPINE1:et5" ]
+    - endpoints: [ "A-SPINE1:et6", "B-SPINE2:et5" ]
+    - endpoints: [ "A-SPINE2:et5", "B-SPINE1:et6" ]
+    - endpoints: [ "A-SPINE2:et6", "B-SPINE2:et6" ]
+    ########################
+    # DC "A" HostC6        #
+    ########################
+    - endpoints: [ "HostA1:eth1", "A-LEAF1:et7" ]
+    - endpoints: [ "HostA1:eth2", "A-LEAF2:et7" ]
+    - endpoints: [ "HostA2:eth1", "A-LEAF1:et8" ]
+    - endpoints: [ "HostA2:eth2", "A-LEAF2:et8" ]
+    - endpoints: [ "HostA3:eth1", "A-LEAF3:et7" ]
+    - endpoints: [ "HostA4:eth1", "A-LEAF3:et8" ]
+    - endpoints: [ "HostA4:eth2", "A-LEAF4:et8" ]
+    - endpoints: [ "HostA5:eth1", "A-LEAF4:et7" ]
+    ########################
+    # DC "B" HostC6        #
+    ########################
+    - endpoints: [ "HostB1:eth1", "B-LEAF1:et7" ]
+    - endpoints: [ "HostB1:eth2", "B-LEAF2:et7" ]
+    - endpoints: [ "HostB2:eth1", "B-LEAF1:et8" ]
+    - endpoints: [ "HostB2:eth2", "B-LEAF2:et8" ]
+    - endpoints: [ "HostB3:eth1", "B-LEAF3:et7" ]
+    - endpoints: [ "HostB4:eth1", "B-LEAF3:et8" ]
+    - endpoints: [ "HostB4:eth2", "B-LEAF4:et8" ]
+    - endpoints: [ "HostB5:eth1", "B-LEAF4:et7" ]
