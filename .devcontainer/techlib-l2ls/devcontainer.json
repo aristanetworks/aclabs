@@ -1,0 +1,26 @@
+{
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.13-avd-v5.7.2-clab0.71.1-rev2.4",
+    // containerEnv set the variables applied to entire container
+    "containerEnv": {
+        "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
+        "CEOS_LAB_VERSION": "4.34.2F",
+        "CONTAINERWSF": "${containerWorkspaceFolder}",
+        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}"
+    },
+    "secrets": {
+        "ARTOKEN": {
+            "description": "token to auto-download EOS images from arista.com."
+            // "documentationUrl": "https://example.com/link/to/info"
+        }
+    },
+    "hostRequirements": {
+        "cpus": 8,
+        "memory": "32gb",
+        "storage": "64gb"
+    },
+    "onCreateCommand": "chmod +x /techlib-l2ls/addAliases.sh; /techlib-l2ls/addAliases.sh",
+    "postCreateCommand": "postCreate.sh; make start",
+    "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
+    "workspaceFolder": "/techlib-l2ls",
+    "containerUser": "avd"
+}
