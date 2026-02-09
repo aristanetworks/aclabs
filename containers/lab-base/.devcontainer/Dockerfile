@@ -46,6 +46,7 @@ RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
     && pip3 install --user yamllint \
     && pip install --user "eos-downloader>=0.10.1" \
     && pip install --user rich \
+    && pip install --user textual \
     && pip install --user passlib
 
 # install coder and extensions

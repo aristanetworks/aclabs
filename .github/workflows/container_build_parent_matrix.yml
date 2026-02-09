@@ -88,4 +88,7 @@ jobs:
       # - add lab status check on start
       # 2.6.1
       # - add timeout and panel to lab status check
-      container_revision: "2.6.1"
+      # 2.6.2
+      # - add textual to lab-base to support interactive user input
+      # - add avd-playground lab with lab_selector.py
+      container_revision: "2.6.2"
