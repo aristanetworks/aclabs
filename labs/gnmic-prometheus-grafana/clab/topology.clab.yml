@@ -83,6 +83,10 @@ topology:
       env:
         GF_SECURITY_ADMIN_USER: arista
         GF_SECURITY_ADMIN_PASSWORD: arista
+        GF_SERVER_ROOT_URL: "/proxy/3001/"
+        GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+        GF_AUTH_ANONYMOUS_ENABLED: "true"
+        GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
       ports:
       - '3001:3000'
       image: grafana/grafana:11.2.0
