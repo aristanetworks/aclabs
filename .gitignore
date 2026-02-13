@@ -291,3 +291,6 @@ clab-*/
 
 # do NOT ignore public lab env variables
 !.vscode/*.public.env
+
+# ignore temp testing folders
+temp/

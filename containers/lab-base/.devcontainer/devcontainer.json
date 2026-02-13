@@ -1,15 +1,19 @@
 {
+    "name": "AVD ACLABS Build",
     "build": {
         "dockerfile": "Dockerfile",
+        "options": [
+            "--network=host"
+        ],
         "args": {
-            "FROM_IMAGE": "${localEnv:FROM_IMAGE}",
-            "FROM_VARIANT": "${localEnv:FROM_VARIANT}",
-            "USERNAME": "${localEnv:USERNAME}",
-            "CLAB_VERSION": "${localEnv:CLAB_VERSION}",
-            "CEOS_LAB_VERSION_ARG": "${localEnv:CEOS_LAB_VERSION_ARG}",
+            "FROM_IMAGE": "${localEnv:FROM_IMAGE:ghcr.io/aristanetworks/avd/universal}",
+            "FROM_VARIANT": "${localEnv:FROM_VARIANT:python3.12-avd-v5.7.2}",
+            "USERNAME": "${localEnv:USERNAME:avd}",
+            "CLAB_VERSION": "${localEnv:CLAB_VERSION:0.73.0}",
+            "CEOS_LAB_VERSION_ARG": "${localEnv:CEOS_LAB_VERSION_ARG:4.35.1F}",
             "GIT_INIT_ARG": "${localEnv:GIT_INIT_ARG}",
-            "UID": "${localEnv:UID}",
-            "GID": "${localEnv:GID}"
+            "UID": "${localEnv:UID:1000}",
+            "GID": "${localEnv:GID:1000}"
         }
     },
     "customizations": {
@@ -40,5 +44,13 @@
                 "mutantdino.resourcemonitor"
             ]
         }
-    }
+    },
+    "runArgs": [
+        "--network=host",
+        "--pid=host",
+        "--privileged",
+        "--dns=8.8.8.8",
+        "--dns=1.1.1.1"
+        // "--env-file", "${localWorkspaceFolder}/.env_GH"
+    ]   
 }

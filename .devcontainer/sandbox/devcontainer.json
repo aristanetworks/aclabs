@@ -1,12 +1,12 @@
 {
-    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.12-avd-v5.7.2-clab0.72.0-rev2.5.2",
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY:aristanetworks/aclabs}/lab-base:${localEnv:GITHUB_CONATINER_IMAGE:python3.12-avd-v5.7.2-clab0.72.0-rev2.5.2}",
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
-        "CEOS_LAB_VERSION": "4.35.1F",
+        "CEOS_LAB_VERSION": "${localEnv:CEOS_IMAGE_VERSION:4.35.1F}",
         "CV_API_TOKEN": "${localEnv:CV_API_TOKEN}",
         "CONTAINERWSF": "${containerWorkspaceFolder}",
-        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}",
+        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY:aristanetworks/aclabs}",
         "PASSWORD": "${localEnv:CODER_PASSWORD}",
         "GIT_INIT": "false"
     },
@@ -24,5 +24,11 @@
     "postCreateCommand": "/bin/entrypoint",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/sandbox",
+    "runArgs": [
+        "--network=host",
+        "--pid=host",
+        "--privileged",
+        //"--env-file", "${localWorkspaceFolder}/.env_GH"
+    ],        
     "containerUser": "avd"
 }

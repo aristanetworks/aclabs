@@ -1,11 +1,12 @@
 {
-    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.7.2-clab0.72.0-rev2.5.2",
+    // "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.11-avd-v5.7.2-clab0.72.0-rev2.5.2",
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY:aristanetworks/aclabs}/lab-base:${localEnv:GITHUB_CONATINER_IMAGE:python3.12-avd-v5.7.2-clab0.72.0-rev2.5.2}",
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
         "CONTAINERWSF": "${containerWorkspaceFolder}",
-        "GITHUB_REPOSITORY": "aristanetworks/aclabs",
-        "CEOS_LAB_VERSION": "4.34.2F"
+        "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY:aristanetworks/aclabs}",
+        "CEOS_LAB_VERSION": "${localEnv:CEOS_IMAGE_VERSION:4.35.1F}",
     },
     "secrets": {
         "ARTOKEN": {
@@ -23,5 +24,12 @@
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/gnmic-prometheus-grafana",
     "forwardPorts": [3001, 9090],
+    "runArgs": [
+        // "--network=bridge"
+        "--network=host"
+        // "--pid=host",
+        // "--privileged",
+        //"--env-file", "${localWorkspaceFolder}/.env_GH"
+    ],         
     "containerUser": "avd"
 }
