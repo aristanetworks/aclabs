@@ -18,6 +18,7 @@ jobs:
   build-lab-containers:
     # fork - build container from any branch for testing
     # parent repo - build on main branch only
+    name: Build (${{ matrix.variant }}, UID ${{ matrix.uid }})
     if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
     uses: ./.github/workflows/container_build_child.yml
     strategy:
