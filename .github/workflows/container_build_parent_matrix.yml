@@ -18,7 +18,6 @@ jobs:
   build-lab-containers:
     # fork - build container from any branch for testing
     # parent repo - build on main branch only
-    name: Build (${{ matrix.variant }}, UID ${{ matrix.uid }})
     if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
     uses: ./.github/workflows/container_build_child.yml
     strategy:
@@ -32,6 +31,11 @@ jobs:
             group_id: "1000"
           - user_id: "1009"
             group_id: "1009"
+          - from_variant: "python3.11-avd-v5.7.2"
+            short_name: "Py3.11"
+          - from_variant: "python3.12-avd-v5.7.2"
+            short_name: "Py3.12"
+    name: Build (${{ matrix.short_name }}, UID ${{ matrix.user_id }})
     with:
       from_image: ${{ matrix.from_image }}
       from_variant: ${{ matrix.from_variant }}
