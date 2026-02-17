@@ -70,14 +70,14 @@ fi
 if ${CODESPACES}; then
     # replace all markdown vars in demo directory
     if [ "${GITHUB_REPOSITORY}" ]; then
-        grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.repo_name}}/'"${GITHUB_REPOSITORY##*/}"'/g'
-        grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.org_name}}/'"${GITHUB_REPOSITORY%%/*}"'/g'
-        grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs sed -i 's@{{gh.repository}}@'"${GITHUB_REPOSITORY}"'@g'
+        grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs -0 -r sed -i 's/{{gh.repo_name}}/'"${GITHUB_REPOSITORY##*/}"'/g'
+        grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs -0 -r sed -i 's/{{gh.org_name}}/'"${GITHUB_REPOSITORY%%/*}"'/g'
+        grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs -0 -r sed -i 's@{{gh.repository}}@'"${GITHUB_REPOSITORY}"'@g'
     else
         # if not running on Codespaces and GITHUB_REPOSITORY is not set - set aristanetworks/acLabs by default
-        grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.repo_name}}/'"acLabs"'/g'
-        grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.org_name}}/'"aristanetworks"'/g'
-        grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs sed -i 's@{{gh.repository}}@'"aristanetworks/acLabs"'@g'
+        grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs -0 -r sed -i 's/{{gh.repo_name}}/'"acLabs"'/g'
+        grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs -0 -r sed -i 's/{{gh.org_name}}/'"aristanetworks"'/g'
+        grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs -0 -r sed -i 's@{{gh.repository}}@'"aristanetworks/acLabs"'@g'
     fi
 fi
 
@@ -91,13 +91,13 @@ if [ "${CVURL}" ]; then
         echo "ERROR: CVURL must start with www."
         exit 1
     fi
-    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL}"'@g'
-    grep -rl '{{cv_url_no_prefix}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL_NO_PREFIX}"'@g'
+    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs -0 -r sed -i 's@{{cv_url}}@'"${CVURL}"'@g'
+    grep -rl '{{cv_url_no_prefix}}' . --exclude-dir .git | xargs -0 -r sed -i 's@{{cv_url}}@'"${CVURL_NO_PREFIX}"'@g'
     # replace all lines where cv-staging is hardcoded
-    grep -rl 'cv-staging.corp.arista.io' . --exclude-dir .git | xargs sed -i 's@cv-staging.corp.arista.io@'"${CVURL_NO_PREFIX}"'@g'
+    grep -rl 'cv-staging.corp.arista.io' . --exclude-dir .git | xargs -0 -r sed -i 's@cv-staging.corp.arista.io@'"${CVURL_NO_PREFIX}"'@g'
 else
     # set defaul url to staging if nothing is defined
-    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"cv-staging.corp.arista.io"'@g'
+    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs -0 -r sed -i 's@{{cv_url}}@'"cv-staging.corp.arista.io"'@g'
 fi
 
 if [ "${CV_API_TOKEN}" ]; then

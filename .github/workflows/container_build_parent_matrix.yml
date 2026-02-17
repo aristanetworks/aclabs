@@ -93,4 +93,4 @@ jobs:
       # - add lab status check on start
       # 2.6.1
       # - add timeout and panel to lab status check
-      container_revision: "2.100.0"
+      container_revision: "2.100.1"

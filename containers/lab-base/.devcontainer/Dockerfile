@@ -22,6 +22,11 @@ RUN sed -i -e "s/\(${USERNAME}:[^:]*:\)[^:]*:[^:]*/\1${UID}:${GID}/" /etc/passwd
     sed -i -e "s/\([^:]*:[^:]*:\)${OLD_GID}:/\1${GID}:/" /etc/group; \
     chown -R $UID:$GID /home/$USERNAME
 
+# Create the groups with specific IDs to match your OrbStack host
+RUN groupadd -g 2020 docker_host || true && \
+    groupadd -r clab_admins || true && \
+    usermod -aG 2020,clab_admins ${USERNAME}
+
 # install some basic tools inside the container
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
