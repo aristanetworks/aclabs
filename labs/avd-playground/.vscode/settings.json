@@ -12,5 +12,6 @@
     "chat.agentSessionsViewLocation": "disabled",
     "chat.agent.enabled": false,
     "chat.disableAIFeatures": true,
-    "terminal.integrated.suggest.enabled": true
+    "terminal.integrated.suggest.enabled": true,
+    "workbench.colorTheme": "Default Dark Modern"
 }
