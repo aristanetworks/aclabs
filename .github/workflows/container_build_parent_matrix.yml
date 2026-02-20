@@ -23,8 +23,8 @@ jobs:
     strategy:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
-        from_variant: ["python3.11-avd-v5.7.2", "python3.12-avd-v5.7.2"]
-        clab_version: ["0.72.0"]
+        from_variant: ["python3.11-avd-v5.7.3", "python3.12-avd-v5.7.3"]
+        clab_version: ["0.73.0"]
         user_id: ["1000", "1009"]
         include:
           - user_id: "1000"
@@ -91,4 +91,7 @@ jobs:
       # 2.6.2
       # - add textual to lab-base to support interactive user input
       # - add avd-playground lab with lab_selector.py
-      container_revision: "2.6.2"
+      # 2.6.3
+      # - ContainerLab 0.73.0
+      # - AVD 5.7.3
+      container_revision: "2.6.3"
