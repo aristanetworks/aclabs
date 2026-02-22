@@ -1,9 +1,9 @@
 ---
 # --------------------------------------------------------------
-# Routing Topo 1
+# Tech Library MPLS Services Deployment Guide
 # --------------------------------------------------------------
 
-name: routing-topo-1
+name: techlib-mpls-services
 
 prefix: ""
 
@@ -26,10 +26,6 @@ topology:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1
 
   nodes:
-
-    #########################
-    # DC "B" SPINE          #
-    #########################
 
     EOS1:
       kind: ceos

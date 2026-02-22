@@ -48,7 +48,6 @@ interface Ethernet1
    isis network point-to-point
 !
 interface Ethernet2
-   shutdown
    no switchport
    ip address unnumbered Loopback0
    isis enable 100
@@ -56,7 +55,6 @@ interface Ethernet2
    isis network point-to-point
 !
 interface Ethernet3
-   shutdown
    no switchport
    ip address unnumbered Loopback0
    isis enable 100
