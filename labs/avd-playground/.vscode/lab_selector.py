@@ -260,7 +260,10 @@ if __name__ == "__main__":
                 archive_name = tar.getmembers()[0].name
                 print(archive_name)
                 tar.extractall(path="/tmp")
-                example_list = os.listdir(f"/tmp/{archive_name}/ansible_collections/arista/avd/examples")
+                example_list = [ fd for fd in os.listdir(f"/tmp/{archive_name}/ansible_collections/arista/avd/examples") if fd not in [
+                        'README.md', 'campus-fabric', 'common', 'cv-pathfinder'
+                    ]
+                ]
 
         # ask user to select AVD example
         avd_example_choice_app = SingleChoiceUI(
