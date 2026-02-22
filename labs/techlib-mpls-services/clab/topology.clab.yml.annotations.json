@@ -1,0 +1,121 @@
+{
+  "freeTextAnnotations": [],
+  "freeShapeAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "EOS1",
+      "position": {
+        "x": 280,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.775846,
+        "lng": 9.182932
+      }
+    },
+    {
+      "id": "EOS2",
+      "position": {
+        "x": 280,
+        "y": 240
+      },
+      "geoCoordinates": {
+        "lat": 50.110924,
+        "lng": 8.682127
+      }
+    },
+    {
+      "id": "EOS3",
+      "position": {
+        "x": 440,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.856613,
+        "lng": 2.352222
+      }
+    },
+    {
+      "id": "EOS4",
+      "position": {
+        "x": 440,
+        "y": 240
+      },
+      "geoCoordinates": {
+        "lat": 51.507351,
+        "lng": -0.127758
+      }
+    },
+    {
+      "id": "EOS5",
+      "position": {
+        "x": 600,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.775846,
+        "lng": 11.982932
+      }
+    },
+    {
+      "id": "EOS6",
+      "position": {
+        "x": 600,
+        "y": 240
+      },
+      "geoCoordinates": {
+        "lat": 50.110924,
+        "lng": 11.482127
+      }
+    },
+    {
+      "id": "EOS7",
+      "position": {
+        "x": 120,
+        "y": 360
+      },
+      "geoCoordinates": {
+        "lat": 48.856613,
+        "lng": 5.152222
+      }
+    },
+    {
+      "id": "EOS8",
+      "position": {
+        "x": 760,
+        "y": 360
+      },
+      "geoCoordinates": {
+        "lat": 51.507351,
+        "lng": 2.672242
+      }
+    },
+    {
+      "id": "Host1",
+      "position": {
+        "x": -40,
+        "y": 360
+      },
+      "geoCoordinates": {
+        "lat": 50.755745,
+        "lng": 11.162831
+      }
+    },
+    {
+      "id": "Host2",
+      "position": {
+        "x": 920,
+        "y": 360
+      },
+      "geoCoordinates": {
+        "lat": 52.090823,
+        "lng": 10.662026
+      }
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {}
+}
