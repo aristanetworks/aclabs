@@ -38,12 +38,13 @@
             }
             ],
             "lockLabByDefault": false,
-        },
-        "node": {
-            "sshUserMapping": {
-                "ceos": "arista"
+            "node": {
+                "sshUserMapping": {
+                    "ceos": "admin"
+                },
             },
         },
+    },
     "workbench": {
         "startupEditor": "readme",
         "editorAssociations": {
