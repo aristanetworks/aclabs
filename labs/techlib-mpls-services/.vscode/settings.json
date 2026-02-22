@@ -1,0 +1,22 @@
+{
+    "containerlab": {
+        "showWelcomePage": false,
+        "skipUpdateCheck": true,
+        "node": {
+            "sshUserMapping": {
+                "ceos": "arista"
+            },
+        "defaultSshUser": "admin",
+    },
+    "workbench": {
+        "startupEditor": "readme",
+        "editorAssociations": {
+                    "*.md": "vscode.markdown.preview.editor"
+        }
+    },
+    "chat.commandCenter.enabled": false,
+    "chat.agentSessionsViewLocation": "disabled",
+    "chat.agent.enabled": false,
+    "chat.disableAIFeatures": true,
+    "terminal.integrated.suggest.enabled": true
+}
