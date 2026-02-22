@@ -28,8 +28,6 @@ system l1
    unsupported speed action error
    unsupported error-correction action error
 !
-vlan 2000
-!
 vrf instance MGMT
 !
 management api gnmi
@@ -43,7 +41,6 @@ management api netconf
 aaa authorization exec default local
 !
 interface Ethernet1
-   shutdown
    no switchport
    ip address unnumbered Loopback0
    isis enable 100
@@ -51,7 +48,6 @@ interface Ethernet1
    isis network point-to-point
 !
 interface Ethernet2
-   shutdown
    no switchport
    ip address unnumbered Loopback0
    isis enable 100
@@ -81,9 +77,6 @@ interface Loopback0
 interface Management0
    vrf MGMT
    ip address 172.100.100.101/24
-!
-interface Vlan2000
-   ip address 20.0.0.2/24
 !
 ip routing
 no ip routing vrf MGMT

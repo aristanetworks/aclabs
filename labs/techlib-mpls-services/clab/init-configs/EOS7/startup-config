@@ -28,8 +28,6 @@ system l1
    unsupported speed action error
    unsupported error-correction action error
 !
-vlan 100,501,2000
-!
 vrf instance MGMT
 !
 management api gnmi
@@ -49,12 +47,10 @@ interface Ethernet1
    ipv6 address 2001:db8:1:7::7/64
 !
 interface Ethernet2
-   shutdown
-   switchport trunk allowed vlan 2000
-   switchport mode trunk
+   no switchport
 !
 interface Ethernet3
-   switchport access vlan 501
+   no switchport
 !
 interface Loopback0
    ip address 7.7.7.7/32
@@ -64,14 +60,6 @@ interface Loopback0
 interface Management0
    vrf MGMT
    ip address 172.100.100.107/24
-!
-interface Vlan501
-   no autostate
-   ip address 50.0.0.1/24
-!
-interface Vlan2000
-   no autostate
-   ip address 20.0.0.4/29
 !
 ip routing
 no ip routing vrf MGMT

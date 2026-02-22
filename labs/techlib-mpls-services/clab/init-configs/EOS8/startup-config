@@ -41,7 +41,7 @@ management api netconf
 aaa authorization exec default local
 !
 interface Ethernet1
-   shutdown
+   no switchport
 !
 interface Ethernet2
    mtu 9214
@@ -49,15 +49,8 @@ interface Ethernet2
    ipv6 enable
    ipv6 address 2001:db8:6:8::8/64
 !
-interface Ethernet2.101
-   encapsulation dot1q vlan 101
-   ip address 80.0.0.2/24
-!
-interface Ethernet2.102
-   encapsulation dot1q vlan 102
-   ip address 70.0.0.2/24
-!
 interface Ethernet3
+   no switchport
 !
 interface Loopback0
    ip address 8.8.8.8/32

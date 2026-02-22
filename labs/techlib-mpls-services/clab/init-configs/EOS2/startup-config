@@ -28,8 +28,6 @@ system l1
    unsupported speed action error
    unsupported error-correction action error
 !
-vlan 2000
-!
 vrf instance MGMT
 !
 management api gnmi
@@ -64,18 +62,7 @@ interface Ethernet3
    isis network point-to-point
 !
 interface Ethernet4
-   description EOS7
-   bgp session tracker TRACK-LOCAL-EVPN-PEERS
-   switchport trunk allowed vlan 2000
-   switchport mode trunk
-   !
-   evpn ethernet-segment
-      identifier 0000:0001:0002:0000:0004
-      redundancy single-active
-      designated-forwarder election algorithm preference 1000
-      route-target import 00:00:01:02:00:04
-   spanning-tree portfast edge
-   spanning-tree bpduguard disable
+   no switchport
 !
 interface Loopback0
    ip address 100.0.0.2/32
