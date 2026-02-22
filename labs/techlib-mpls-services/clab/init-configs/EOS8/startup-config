@@ -1,0 +1,94 @@
+! Startup-config last modified at Fri Feb 20 14:00:53 2026 by root
+! device: EOS8 (cEOSLab, EOS-4.35.1F-45295350.4351F.1 (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$slWEDSl6ZLZ4F/G6$IJTvr6R8SILyndEibZF26kbUsKK525x9Xh2XlU.eB/5i9S4ShxTm4gQrEyEMDMUma1bgFqUummBeOw31SbQ5m1
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+interface defaults
+   mtu 9214
+!
+service routing protocols model multi-agent
+!
+hostname EOS8
+!
+spanning-tree mode none
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vrf instance MGMT
+!
+management api gnmi
+   transport grpc default
+      vrf MGMT
+!
+management api netconf
+   transport ssh default
+      vrf MGMT
+!
+aaa authorization exec default local
+!
+interface Ethernet1
+   shutdown
+!
+interface Ethernet2
+   mtu 9214
+   no switchport
+   ipv6 enable
+   ipv6 address 2001:db8:6:8::8/64
+!
+interface Ethernet2.101
+   encapsulation dot1q vlan 101
+   ip address 80.0.0.2/24
+!
+interface Ethernet2.102
+   encapsulation dot1q vlan 102
+   ip address 70.0.0.2/24
+!
+interface Ethernet3
+!
+interface Loopback0
+   ip address 8.8.8.8/32
+   ipv6 address 2000::8/128
+!
+interface Management0
+   vrf MGMT
+   ip address 172.100.100.108/24
+!
+ip routing
+no ip routing vrf MGMT
+!
+ipv6 unicast-routing
+!
+ip route vrf MGMT 0.0.0.0/0 172.100.100.1
+!
+router bgp 502
+   router-id 8.8.8.8
+   no bgp default ipv4-unicast
+   distance bgp 20 200 200
+   neighbor 2001:db8:6:8::6 remote-as 100
+   !
+   address-family ipv6
+      neighbor 2001:db8:6:8::6 activate
+      network 2000::8/128
+!
+router multicast
+   ipv4
+      software-forwarding kernel
+   !
+   ipv6
+      software-forwarding kernel
+!
+end

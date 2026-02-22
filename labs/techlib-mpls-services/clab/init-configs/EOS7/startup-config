@@ -1,0 +1,103 @@
+! Startup-config last modified at Fri Feb 20 14:00:54 2026 by root
+! device: EOS7 (cEOSLab, EOS-4.35.1F-45295350.4351F.1 (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$HEcQcRlnVLSed4Is$dhjSkw68kXRNI2WhBqr7P9a1di9SK/kORTbXt/S7EA6GNVTsHIDo00i5qt2z80bO61STbL0k433Az0LcjLbFA.
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+interface defaults
+   mtu 9214
+!
+service routing protocols model multi-agent
+!
+hostname EOS7
+!
+spanning-tree mode none
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vlan 100,501,2000
+!
+vrf instance MGMT
+!
+management api gnmi
+   transport grpc default
+      vrf MGMT
+!
+management api netconf
+   transport ssh default
+      vrf MGMT
+!
+aaa authorization exec default local
+!
+interface Ethernet1
+   mtu 9214
+   no switchport
+   ipv6 enable
+   ipv6 address 2001:db8:1:7::7/64
+!
+interface Ethernet2
+   shutdown
+   switchport trunk allowed vlan 2000
+   switchport mode trunk
+!
+interface Ethernet3
+   switchport access vlan 501
+!
+interface Loopback0
+   ip address 7.7.7.7/32
+   ipv6 enable
+   ipv6 address 2000::7/128
+!
+interface Management0
+   vrf MGMT
+   ip address 172.100.100.107/24
+!
+interface Vlan501
+   no autostate
+   ip address 50.0.0.1/24
+!
+interface Vlan2000
+   no autostate
+   ip address 20.0.0.4/29
+!
+ip routing
+no ip routing vrf MGMT
+!
+ipv6 unicast-routing
+!
+ip route vrf MGMT 0.0.0.0/0 172.100.100.1
+!
+router bfd
+   interval 500 min-rx 500 multiplier 3 default
+!
+router bgp 501
+   router-id 7.7.7.7
+   no bgp default ipv4-unicast
+   distance bgp 20 200 200
+   neighbor 2001:db8:1:7::1 remote-as 100
+   !
+   address-family ipv6
+      neighbor 2001:db8:1:7::1 activate
+      network 2000::7/128
+!
+router multicast
+   ipv4
+      software-forwarding kernel
+   !
+   ipv6
+      software-forwarding kernel
+!
+end
