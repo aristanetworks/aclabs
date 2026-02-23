@@ -8,7 +8,7 @@
         "y": 188.709575216523
       },
       "fontSize": 36,
-      "fontColor": "#d4d4d4",
+      "fontColor": "#02d437",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -25,7 +25,7 @@
         "y": -274.993484505048
       },
       "fontSize": 30,
-      "fontColor": "#d4d4d4",
+      "fontColor": "#02d437",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -36,11 +36,11 @@
       "id": "freeText_1771855473362",
       "text": "East POP",
       "position": {
-        "x": 950.9292833387929,
-        "y": -36.82445063428342
+        "x": 949.1397322173239,
+        "y": -35.92967507354889
       },
       "fontSize": 30,
-      "fontColor": "#d4d4d4",
+      "fontColor": "#02d437",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -55,7 +55,7 @@
         "y": -35.18680973434709
       },
       "fontSize": 30,
-      "fontColor": "#d4d4d4",
+      "fontColor": "#02d437",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -70,7 +70,7 @@
         "y": 916.6492913694
       },
       "fontSize": 30,
-      "fontColor": "#d4d4d4",
+      "fontColor": "#02d437",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
