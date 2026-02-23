@@ -196,7 +196,8 @@
         "lat": 48.775846,
         "lng": 9.182932
       },
-      "icon": "pe"
+      "icon": "pe",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-1",
@@ -208,7 +209,8 @@
         "lat": 50.110924,
         "lng": 8.682127
       },
-      "icon": "pe"
+      "icon": "pe",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-6",
@@ -220,7 +222,8 @@
         "lat": 48.856613,
         "lng": 2.352222
       },
-      "icon": "pe"
+      "icon": "pe",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-2",
@@ -232,7 +235,8 @@
         "lat": 51.507351,
         "lng": -0.127758
       },
-      "icon": "pe"
+      "icon": "pe",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-5",
@@ -244,7 +248,8 @@
         "lat": 48.775846,
         "lng": 11.982932
       },
-      "icon": "pe"
+      "icon": "pe",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-3",
@@ -256,7 +261,8 @@
         "lat": 50.110924,
         "lng": 11.482127
       },
-      "icon": "pe"
+      "icon": "pe",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-10",
@@ -268,7 +274,8 @@
         "lat": 48.856613,
         "lng": 5.152222
       },
-      "icon": "pe"
+      "icon": "pe",
+      "iconCornerRadius": 40
     },
     {
       "id": "CE-8",
@@ -288,8 +295,9 @@
         "x": 280,
         "y": -120
       },
-      "icon": "switch",
-      "interfacePattern": "et{n}"
+      "icon": "pe",
+      "interfacePattern": "et{n}",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-16",
@@ -297,8 +305,9 @@
         "x": 280,
         "y": 840
       },
-      "icon": "switch",
-      "interfacePattern": "et{n}"
+      "icon": "pe",
+      "interfacePattern": "et{n}",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-12",
@@ -306,8 +315,9 @@
         "x": 760,
         "y": -120
       },
-      "icon": "switch",
-      "interfacePattern": "et{n}"
+      "icon": "pe",
+      "interfacePattern": "et{n}",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-15",
@@ -315,8 +325,9 @@
         "x": 760,
         "y": 840
       },
-      "icon": "switch",
-      "interfacePattern": "et{n}"
+      "icon": "pe",
+      "interfacePattern": "et{n}",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-17",
@@ -324,8 +335,9 @@
         "x": 40,
         "y": 600
       },
-      "icon": "switch",
-      "interfacePattern": "et{n}"
+      "icon": "pe",
+      "interfacePattern": "et{n}",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-14",
@@ -333,8 +345,9 @@
         "x": 1000,
         "y": 600
       },
-      "icon": "switch",
-      "interfacePattern": "et{n}"
+      "icon": "pe",
+      "interfacePattern": "et{n}",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-13",
@@ -342,8 +355,9 @@
         "x": 1000,
         "y": 120
       },
-      "icon": "switch",
-      "interfacePattern": "et{n}"
+      "icon": "pe",
+      "interfacePattern": "et{n}",
+      "iconCornerRadius": 40
     },
     {
       "id": "CE-5",
@@ -351,7 +365,7 @@
         "x": 520,
         "y": -360
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -360,7 +374,7 @@
         "x": 520,
         "y": 1080
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -369,7 +383,7 @@
         "x": 280,
         "y": -360
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -378,7 +392,7 @@
         "x": 760,
         "y": -360
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -387,7 +401,7 @@
         "x": -200,
         "y": 360
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -396,7 +410,7 @@
         "x": -200,
         "y": 600
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -405,7 +419,7 @@
         "x": 1240,
         "y": 120
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -414,7 +428,7 @@
         "x": 1240,
         "y": 600
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -423,7 +437,7 @@
         "x": 280,
         "y": 1080
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -432,7 +446,7 @@
         "x": 760,
         "y": 1080
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -441,7 +455,7 @@
         "x": -200,
         "y": 120
       },
-      "icon": "switch",
+      "icon": "pe",
       "interfacePattern": "et{n}"
     },
     {
@@ -451,7 +465,8 @@
         "y": 360
       },
       "icon": "switch",
-      "interfacePattern": "et{n}"
+      "interfacePattern": "et{n}",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-4",
@@ -460,7 +475,8 @@
         "y": 360
       },
       "icon": "switch",
-      "interfacePattern": "et{n}"
+      "interfacePattern": "et{n}",
+      "iconCornerRadius": 40
     },
     {
       "id": "PE-9",
@@ -469,7 +485,8 @@
         "y": 360
       },
       "icon": "switch",
-      "interfacePattern": "et{n}"
+      "interfacePattern": "et{n}",
+      "iconCornerRadius": 40
     }
   ],
   "edgeAnnotations": [],
