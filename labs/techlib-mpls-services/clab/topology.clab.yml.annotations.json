@@ -8,7 +8,7 @@
         "y": 188.709575216523
       },
       "fontSize": 36,
-      "fontColor": "#d4d4d4",
+      "fontColor": "#02d437",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -25,7 +25,7 @@
         "y": -274.993484505048
       },
       "fontSize": 30,
-      "fontColor": "#d4d4d4",
+      "fontColor": "#02d437",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -36,11 +36,11 @@
       "id": "freeText_1771855473362",
       "text": "East POP",
       "position": {
-        "x": 950.9292833387929,
-        "y": -36.82445063428342
+        "x": 949.1397322173239,
+        "y": -35.92967507354889
       },
       "fontSize": 30,
-      "fontColor": "#d4d4d4",
+      "fontColor": "#02d437",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -55,7 +55,7 @@
         "y": -35.18680973434709
       },
       "fontSize": 30,
-      "fontColor": "#d4d4d4",
+      "fontColor": "#02d437",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
@@ -70,12 +70,30 @@
         "y": 916.6492913694
       },
       "fontSize": 30,
-      "fontColor": "#d4d4d4",
+      "fontColor": "#02d437",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
       "textAlign": "center",
       "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771868317726",
+      "text": "### Schema\n- Transport: ISIS-SR\n  - SRGB: 900000 - 965535\n  - Node SID: 900000 + NodeID\n- BGP ASN: 100\n- Loopback0: 100.0.0.X\n- Point-to-Point: 20.X.Y.Z/24\n  - X: Low Node ID\n  - Y: High Node ID\n  - Z: Node ID\n",
+      "position": {
+        "x": 1428.5561510602563,
+        "y": 194.00626014602094
+      },
+      "fontSize": 20,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial",
+      "width": 420,
+      "height": 377
     }
   ],
   "freeShapeAnnotations": [
@@ -100,11 +118,11 @@
       "id": "freeShape_1771854883444",
       "shapeType": "rectangle",
       "position": {
-        "x": 960.6501438569372,
-        "y": 76.79937416603345
+        "x": 957.6677021123116,
+        "y": 74.81107966961633
       },
       "width": 117,
-      "height": 601,
+      "height": 605,
       "fillColor": "#595ef3",
       "fillOpacity": 0.2,
       "borderColor": "#d4d4d4",
@@ -135,10 +153,10 @@
       "shapeType": "rectangle",
       "position": {
         "x": -1.2477897208969537,
-        "y": 78.8317014563735
+        "y": 75.8317014563735
       },
       "width": 120,
-      "height": 597,
+      "height": 606,
       "fillColor": "#595ef3",
       "fillOpacity": 0.2,
       "borderColor": "#d4d4d4",

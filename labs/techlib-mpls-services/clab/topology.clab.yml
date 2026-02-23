@@ -13,164 +13,161 @@ mgmt:
 
 topology:
 
-  defaults:
-    env:
-      INTFTYPE: et
-
   kinds:
-    ceos:
+    arista_ceos:
       image: arista/ceos:latest
       env:
         CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1
 
   nodes:
 
     PE-1:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-1/startup-config
     PE-2:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-2/startup-config
     PE-3:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-3/startup-config
     PE-4:
-      kind: ceos
+      kind: arista_ceos
       env:
         INTFTYPE: et
       binds:
         - sn/pe-4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-4/startup-config
     PE-5:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-5/startup-config
     PE-6:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-6/startup-config
     PE-7:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-7/startup-config
     PE-8:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-8.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-8/startup-config
     PE-9:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-9.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-9/startup-config
     PE-10:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-10.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-10/startup-config
     PE-11:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-11.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-11/startup-config
     PE-12:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-12.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-12/startup-config
     PE-13:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-13.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-13/startup-config
     PE-14:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-14.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-14/startup-config
     PE-15:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-15.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-15/startup-config
     PE-16:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-16.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-16/startup-config
     PE-17:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/pe-17.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-17/startup-config
     CE-1:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-1/startup-config
     CE-2:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-2/startup-config
     CE-3:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-3/startup-config
     CE-4:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-4/startup-config
     CE-5:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-5/startup-config
     CE-6:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-6/startup-config
     CE-7:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-7/startup-config
     CE-8:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-8.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-8/startup-config
     CE-9:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-9.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-9/startup-config
     CE-10:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-10.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-10/startup-config
     CE-11:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-11.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-11/startup-config
     CE-12:
-      kind: ceos
+      kind: arista_ceos
       binds:
         - sn/ce-12.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-12/startup-config
@@ -178,44 +175,44 @@ topology:
   links:
     - endpoints: [ "PE-11:et2", "PE-12:et2" ]
     - endpoints: [ "PE-16:et2", "PE-15:et2" ]
-    - endpoints: [ "PE-1:eth1", "PE-2:eth1" ]
-    - endpoints: [ "PE-2:eth2", "PE-3:eth1" ]
-    - endpoints: [ "PE-3:eth2", "PE-4:et1" ]
-    - endpoints: [ "PE-4:et2", "PE-5:eth1" ]
-    - endpoints: [ "PE-5:eth2", "PE-6:eth1" ]
-    - endpoints: [ "PE-6:eth2", "PE-7:eth1" ]
-    - endpoints: [ "PE-8:et1", "PE-1:eth2" ]
-    - endpoints: [ "PE-7:eth2", "PE-8:et2" ]
+    - endpoints: [ "PE-1:et1", "PE-2:et1" ]
+    - endpoints: [ "PE-2:et2", "PE-3:et1" ]
+    - endpoints: [ "PE-3:et2", "PE-4:et1" ]
+    - endpoints: [ "PE-4:et2", "PE-5:et1" ]
+    - endpoints: [ "PE-5:et2", "PE-6:et1" ]
+    - endpoints: [ "PE-6:et2", "PE-7:et1" ]
+    - endpoints: [ "PE-8:et1", "PE-1:et2" ]
+    - endpoints: [ "PE-7:et2", "PE-8:et2" ]
     - endpoints: [ "PE-13:et1", "PE-14:et1" ]
-    - endpoints: [ "PE-10:eth1", "PE-17:et1" ]
-    - endpoints: [ "PE-1:eth3", "PE-9:et1" ]
-    - endpoints: [ "PE-3:eth3", "PE-9:et2" ]
-    - endpoints: [ "PE-5:eth3", "PE-9:et3" ]
-    - endpoints: [ "PE-7:eth3", "PE-9:et4" ]
-    - endpoints: [ "PE-10:eth2", "PE-1:eth4" ]
-    - endpoints: [ "PE-17:et2", "PE-7:eth4" ]
-    - endpoints: [ "PE-13:et2", "PE-3:eth4" ]
-    - endpoints: [ "PE-14:et2", "PE-5:eth4" ]
+    - endpoints: [ "PE-10:et1", "PE-17:et1" ]
+    - endpoints: [ "PE-1:et3", "PE-9:et1" ]
+    - endpoints: [ "PE-3:et3", "PE-9:et2" ]
+    - endpoints: [ "PE-5:et3", "PE-9:et3" ]
+    - endpoints: [ "PE-7:et3", "PE-9:et4" ]
+    - endpoints: [ "PE-10:et2", "PE-1:et4" ]
+    - endpoints: [ "PE-17:et2", "PE-7:et4" ]
+    - endpoints: [ "PE-13:et2", "PE-3:et4" ]
+    - endpoints: [ "PE-14:et2", "PE-5:et4" ]
     - endpoints: [ "PE-13:et3", "PE-4:et3" ]
     - endpoints: [ "PE-14:et3", "PE-4:et4" ]
-    - endpoints: [ "PE-10:eth3", "PE-8:et3" ]
+    - endpoints: [ "PE-10:et3", "PE-8:et3" ]
     - endpoints: [ "PE-17:et3", "PE-8:et4" ]
-    - endpoints: [ "PE-10:eth4", "CE-3:et1" ]
+    - endpoints: [ "PE-10:et4", "CE-3:et1" ]
     - endpoints: [ "PE-17:et4", "CE-1:et1" ]
     - endpoints: [ "PE-17:et5", "CE-2:et1" ]
-    - endpoints: [ "PE-10:eth5", "CE-2:et2" ]
+    - endpoints: [ "PE-10:et5", "CE-2:et2" ]
     - endpoints: [ "PE-13:et4", "CE-7:et1" ]
     - endpoints: [ "PE-14:et4", "CE-9:et1" ]
-    - endpoints: [ "PE-13:et5", "CE-8:eth1" ]
-    - endpoints: [ "PE-14:et5", "CE-8:eth2" ]
-    - endpoints: [ "PE-7:eth5", "PE-16:et1" ]
-    - endpoints: [ "PE-5:eth5", "PE-15:et1" ]
-    - endpoints: [ "PE-11:et1", "PE-1:eth5" ]
-    - endpoints: [ "PE-12:et1", "PE-3:eth5" ]
-    - endpoints: [ "PE-6:eth3", "PE-16:et3" ]
-    - endpoints: [ "PE-6:eth4", "PE-15:et3" ]
-    - endpoints: [ "PE-11:et3", "PE-2:eth3" ]
-    - endpoints: [ "PE-12:et3", "PE-2:eth4" ]
+    - endpoints: [ "PE-13:et5", "CE-8:et1" ]
+    - endpoints: [ "PE-14:et5", "CE-8:et2" ]
+    - endpoints: [ "PE-7:et5", "PE-16:et1" ]
+    - endpoints: [ "PE-5:et5", "PE-15:et1" ]
+    - endpoints: [ "PE-11:et1", "PE-1:et5" ]
+    - endpoints: [ "PE-12:et1", "PE-3:et5" ]
+    - endpoints: [ "PE-6:et3", "PE-16:et3" ]
+    - endpoints: [ "PE-6:et4", "PE-15:et3" ]
+    - endpoints: [ "PE-11:et3", "PE-2:et3" ]
+    - endpoints: [ "PE-12:et3", "PE-2:et4" ]
     - endpoints: [ "PE-11:et4", "CE-4:et1" ]
     - endpoints: [ "PE-12:et4", "CE-6:et1" ]
     - endpoints: [ "CE-5:et1", "PE-11:et5" ]

@@ -1,9 +1,9 @@
-! Startup-config last modified at Mon Feb 23 13:39:05 2026 by root
-! device: EOS6 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+! Startup-config last modified at Mon Feb 23 19:19:45 2026 by root
+! device: EOS4 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret sha512 $6$lRsbEoMV4JAEf3F5$wIkTyJZO/S1VYNBR6g7ObgD/iS1VvOBHSuGBCv/CI07xs5t0nlCJYDqkjoBUwlE9utHyJ.xWbBK2LCA/am3EV.
+username admin privilege 15 role network-admin secret sha512 $6$Nn1sia0NpLQPW9FB$q/PgN/1A3zEaUnOddk3T9ucpVXt1l4Askdj2N3xYV.kSJk7hiDIYVkltWnGJ2tfD1t4.OLn7c0wzjQr0bAhJK.
 !
 management api http-commands
    no shutdown
@@ -20,7 +20,7 @@ interface defaults
 !
 service routing protocols model multi-agent
 !
-hostname EOS6
+hostname EOS4
 !
 spanning-tree mode mstp
 !
@@ -62,21 +62,25 @@ interface Ethernet3
    isis network point-to-point
 !
 interface Ethernet4
-   mtu 9214
    no switchport
-   ipv6 enable
-   ipv6 address 2001:db8:6:8::6/64
+   ip address unnumbered Loopback0
+   isis enable 100
+   isis circuit-type level-2
+   isis network point-to-point
 !
 interface Loopback0
-   ip address 100.0.0.6/32
-   node-segment ipv4 index 6
+   ip address 100.0.0.4/32
+   node-segment ipv4 index 4
    isis enable 100
    isis circuit-type level-2
    isis passive
 !
+interface Loopback99
+   ip address 99.0.0.1/32
+!
 interface Management0
    vrf MGMT
-   ip address 172.100.100.106/24
+   ip address 172.100.100.7/24
 !
 ip routing
 no ip routing vrf MGMT
@@ -88,28 +92,36 @@ ip route vrf MGMT 0.0.0.0/0 172.100.100.1
 mpls ip
 !
 router bgp 100
-   router-id 100.0.0.6
+   router-id 100.0.0.4
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    neighbor default send-community
-   neighbor RR peer group
-   neighbor RR remote-as 100
-   neighbor RR update-source Loopback0
-   neighbor 100.0.0.4 peer group RR
-   neighbor 100.0.0.4 description EOS4
-   neighbor 2001:db8:6:8::8 remote-as 502
+   neighbor RR-CLIENTS peer group
+   neighbor RR-CLIENTS remote-as 100
+   neighbor RR-CLIENTS update-source Loopback0
+   neighbor RR-CLIENTS route-reflector-client
+   neighbor 100.0.0.1 peer group RR-CLIENTS
+   neighbor 100.0.0.1 description EOS1
+   neighbor 100.0.0.2 peer group RR-CLIENTS
+   neighbor 100.0.0.2 description EOS2
+   neighbor 100.0.0.3 peer group RR-CLIENTS
+   neighbor 100.0.0.3 description EOS3
+   neighbor 100.0.0.5 peer group RR-CLIENTS
+   neighbor 100.0.0.5 description EOS5
+   neighbor 100.0.0.6 peer group RR-CLIENTS
+   neighbor 100.0.0.6 description EOS6
    !
    address-family evpn
       neighbor default encapsulation mpls next-hop-self source-interface Loopback0
-      neighbor RR activate
+      neighbor RR-CLIENTS activate
    !
-   address-family ipv6
-      neighbor RR activate 6pe
-      neighbor 2001:db8:6:8::8 activate
+   address-family ipv6 labeled-unicast
+      next-hop resolution disabled
+      neighbor RR-CLIENTS activate
 !
 router isis 100
-   net 49.1111.0000.0000.0006.00
-   router-id ipv4 100.0.0.6
+   net 49.1111.0000.0000.0004.00
+   router-id ipv4 100.0.0.4
    is-type level-2
    !
    address-family ipv4 unicast
