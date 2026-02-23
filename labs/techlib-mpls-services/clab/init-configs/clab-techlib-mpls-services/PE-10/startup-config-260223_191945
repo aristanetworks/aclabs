@@ -1,5 +1,5 @@
-! Startup-config last modified at Mon Feb 23 13:39:05 2026 by root
-! device: EOS4 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+! Startup-config last modified at Mon Feb 23 19:19:45 2026 by root
+! device: PE10 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
 !
@@ -20,7 +20,7 @@ interface defaults
 !
 service routing protocols model multi-agent
 !
-hostname EOS4
+hostname PE10
 !
 spanning-tree mode mstp
 !
@@ -82,7 +82,7 @@ interface Loopback99
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.8/24
+   ip address 172.100.100.15/24
 !
 ip routing
 no ip routing vrf MGMT
@@ -123,7 +123,7 @@ router bgp 100
 !
 router isis 100
    net 49.1111.0000.0000.0004.00
-   router-id ipv4 100.0.0.4
+   router-id ipv4 100.0.0.217
    is-type level-2
    !
    address-family ipv4 unicast

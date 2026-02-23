@@ -1,4 +1,4 @@
-! Startup-config last modified at Mon Feb 23 13:39:05 2026 by root
+! Startup-config last modified at Mon Feb 23 19:53:26 2026 by root
 ! device: EOS4 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
@@ -68,8 +68,6 @@ interface Ethernet4
    isis circuit-type level-2
    isis network point-to-point
 !
-interface Ethernet5
-!
 interface Loopback0
    ip address 100.0.0.4/32
    node-segment ipv4 index 4
@@ -82,7 +80,7 @@ interface Loopback99
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.10/24
+   ip address 172.100.100.27/24
 !
 ip routing
 no ip routing vrf MGMT

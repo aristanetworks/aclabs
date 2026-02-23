@@ -1,4 +1,4 @@
-! Startup-config last modified at Mon Feb 23 13:39:05 2026 by root
+! Startup-config last modified at Mon Feb 23 19:53:26 2026 by root
 ! device: EOS4 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
@@ -67,8 +67,6 @@ interface Ethernet4
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
-!
-interface Ethernet5
 !
 interface Loopback0
    ip address 100.0.0.4/32
