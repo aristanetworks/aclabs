@@ -1,0 +1,119 @@
+! Startup-config last modified at Mon Feb 23 13:39:05 2026 by root
+! device: EOS5 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$0sqDLKGb/GFfYO19$00fM3L0Pnc3N2mm6l4sniL7CFxoM5hmw7tDcoGCMu9Gyk5cPdXCMdLO4JopkuIl8TG10N9.EpKOCfTvmwubHJ0
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+interface defaults
+   mtu 9214
+!
+service routing protocols model multi-agent
+!
+hostname EOS5
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vrf instance MGMT
+!
+management api gnmi
+   transport grpc default
+      vrf MGMT
+!
+management api netconf
+   transport ssh default
+      vrf MGMT
+!
+aaa authorization exec default local
+!
+interface Ethernet1
+   no switchport
+   ip address unnumbered Loopback0
+   isis enable 100
+   isis circuit-type level-2
+   isis network point-to-point
+!
+interface Ethernet2
+   no switchport
+   ip address unnumbered Loopback0
+   isis enable 100
+   isis circuit-type level-2
+   isis network point-to-point
+!
+interface Ethernet3
+   no switchport
+   ip address unnumbered Loopback0
+   isis enable 100
+   isis circuit-type level-2
+   isis network point-to-point
+!
+interface Ethernet4
+   no switchport
+   ip address unnumbered Loopback0
+   isis enable 100
+   isis circuit-type level-2
+   isis network point-to-point
+!
+interface Loopback0
+   ip address 100.0.0.5/32
+   node-segment ipv4 index 5
+   isis enable 100
+   isis circuit-type level-2
+   isis passive
+!
+interface Management0
+   vrf MGMT
+   ip address 172.100.100.105/24
+!
+ip routing
+no ip routing vrf MGMT
+!
+ipv6 unicast-routing
+!
+ip route vrf MGMT 0.0.0.0/0 172.100.100.1
+!
+mpls ip
+!
+router bgp 100
+   router-id 100.0.0.5
+   no bgp default ipv4-unicast
+   distance bgp 20 200 200
+   neighbor default send-community
+   neighbor RR peer group
+   neighbor RR remote-as 100
+   neighbor RR update-source Loopback0
+   neighbor 100.0.0.4 peer group RR
+   neighbor 100.0.0.4 description EOS4
+   !
+   address-family evpn
+      neighbor default encapsulation mpls next-hop-self source-interface Loopback0
+      neighbor RR activate
+   !
+   address-family ipv6
+      neighbor RR activate 6pe
+!
+router isis 100
+   net 49.1111.0000.0000.0005.00
+   router-id ipv4 100.0.0.5
+   is-type level-2
+   !
+   address-family ipv4 unicast
+   !
+   segment-routing mpls
+      no shutdown
+!
+end

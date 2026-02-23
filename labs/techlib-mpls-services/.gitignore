@@ -103,9 +103,10 @@ $RECYCLE.BIN/
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
-# ignore clab files
+# Ignore clab files, but do not ignore the startup configurations created by the `clab save` command
 clab-*
 *.bak
+!clab/init-configs/clab-*/
 
 # ignore cv onboarding token
 clab/cv-onboarding-token
