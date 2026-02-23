@@ -118,11 +118,11 @@
       "id": "freeShape_1771854883444",
       "shapeType": "rectangle",
       "position": {
-        "x": 960.6501438569372,
-        "y": 76.79937416603345
+        "x": 957.6677021123116,
+        "y": 74.81107966961633
       },
       "width": 117,
-      "height": 601,
+      "height": 605,
       "fillColor": "#595ef3",
       "fillOpacity": 0.2,
       "borderColor": "#d4d4d4",
@@ -153,10 +153,10 @@
       "shapeType": "rectangle",
       "position": {
         "x": -1.2477897208969537,
-        "y": 78.8317014563735
+        "y": 75.8317014563735
       },
       "width": 120,
-      "height": 597,
+      "height": 606,
       "fillColor": "#595ef3",
       "fillOpacity": 0.2,
       "borderColor": "#d4d4d4",
