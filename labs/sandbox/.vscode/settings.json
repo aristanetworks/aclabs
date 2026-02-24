@@ -1,6 +1,7 @@
 {
     "containerlab": {
         "showWelcomePage": false,
+        "skipUpdateCheck": true,
         "defaultSshUser": "admin",
         "editor": {
             "defaultKind": "ceos",
@@ -35,12 +36,12 @@
                     "INTFTYPE": "et"
                 }
             }
-        ],
-        "lockLabByDefault": false,
-        "node" :{
-            "sshUserMapping": {
-                "ceos": "arista"
-                }
+            ],
+            "lockLabByDefault": false,
+            "node": {
+                "sshUserMapping": {
+                    "ceos": "admin"
+                },
             },
         },
     },

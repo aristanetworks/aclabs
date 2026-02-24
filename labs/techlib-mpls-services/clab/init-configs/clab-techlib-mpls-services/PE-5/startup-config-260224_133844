@@ -1,0 +1,112 @@
+! Startup-config last modified at Tue Feb 24 13:38:44 2026 by root
+! device: PE-5 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$0sqDLKGb/GFfYO19$00fM3L0Pnc3N2mm6l4sniL7CFxoM5hmw7tDcoGCMu9Gyk5cPdXCMdLO4JopkuIl8TG10N9.EpKOCfTvmwubHJ0
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+switchport default mode routed
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname PE-5
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vrf instance MGMT
+!
+management api gnmi
+   transport grpc default
+      vrf MGMT
+!
+management api netconf
+   transport ssh default
+      vrf MGMT
+!
+aaa authorization exec default local
+!
+interface Ethernet1
+   mtu 9214
+   no switchport
+   ip address 20.4.5.5/24
+   isis enable 100
+   isis circuit-type level-2
+   isis network point-to-point
+!
+interface Ethernet2
+   mtu 9214
+   no switchport
+   ip address 20.5.6.5/24
+   isis enable 100
+   isis circuit-type level-2
+   isis network point-to-point
+!
+interface Ethernet3
+   mtu 9214
+   no switchport
+   ip address 20.5.9.5/24
+   isis enable 100
+   isis circuit-type level-2
+   isis network point-to-point
+!
+interface Ethernet4
+   mtu 9214
+   no switchport
+   ip address 20.5.13.5/24
+   isis enable 100
+   isis circuit-type level-2
+   isis network point-to-point
+!
+interface Ethernet5
+   mtu 9214
+   no switchport
+   ip address 20.5.14.5/24
+   isis enable 100
+   isis circuit-type level-2
+   isis network point-to-point
+!
+interface Loopback0
+   ip address 100.0.0.5/32
+   node-segment ipv4 index 5
+   isis enable 100
+   isis circuit-type level-2
+   isis passive
+!
+interface Management0
+   vrf MGMT
+   ip address 172.100.100.5/24
+!
+ip routing
+no ip routing vrf MGMT
+!
+ipv6 unicast-routing
+!
+ip route vrf MGMT 0.0.0.0/0 172.100.100.1
+!
+mpls ip
+!
+router isis 100
+   net 49.1111.0000.0000.0005.00
+   router-id ipv4 100.0.0.5
+   is-type level-2
+   !
+   address-family ipv4 unicast
+   !
+   segment-routing mpls
+      no shutdown
+!
+end

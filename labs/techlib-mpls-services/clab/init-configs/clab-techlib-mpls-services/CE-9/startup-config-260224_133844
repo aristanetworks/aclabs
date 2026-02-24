@@ -1,0 +1,56 @@
+! Startup-config last modified at Tue Feb 24 13:38:44 2026 by root
+! device: CE-9 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$Nn1sia0NpLQPW9FB$q/PgN/1A3zEaUnOddk3T9ucpVXt1l4Askdj2N3xYV.kSJk7hiDIYVkltWnGJ2tfD1t4.OLn7c0wzjQr0bAhJK.
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+interface defaults
+   mtu 9214
+!
+service routing protocols model multi-agent
+!
+hostname CE-9
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vrf instance MGMT
+!
+management api gnmi
+   transport grpc default
+      vrf MGMT
+!
+management api netconf
+   transport ssh default
+      vrf MGMT
+!
+aaa authorization exec default local
+!
+interface Ethernet1
+!
+interface Management0
+   vrf MGMT
+   ip address 172.100.100.3/24
+!
+ip routing
+no ip routing vrf MGMT
+!
+ipv6 unicast-routing
+!
+ip route vrf MGMT 0.0.0.0/0 172.100.100.1
+!
+end
