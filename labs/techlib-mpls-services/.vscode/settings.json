@@ -46,6 +46,7 @@
         },
     },
     "workbench": {
+        "colorTheme": "Abyss",
         "startupEditor": "readme",
         "editorAssociations": {
                     "*.md": "vscode.markdown.preview.editor"
