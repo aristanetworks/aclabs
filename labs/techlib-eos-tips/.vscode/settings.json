@@ -1,7 +1,49 @@
 {
     "containerlab": {
         "showWelcomePage": false,
+        "skipUpdateCheck": true,
         "defaultSshUser": "admin",
+        "editor": {
+            "defaultKind": "ceos",
+            "customNodes": [
+            {
+                "name": "Linux Host",
+                "kind": "linux",
+                "image": "ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1",
+                "icon": "client",
+                "baseName": "host",
+                "setDefault": false,
+                "interfacePattern": "eth{n}",
+                "env": {
+                    "IPV4": "10.10.10.101/24",
+                    "IPV6": "2001:db8:10:10::101/64",
+                    "STATIC_ROUTE": "10.0.0.0/8",
+                    "GW": "10.10.10.1",
+                    "UPLINK_MAC": "00:01:01:00:00:01",
+                    "TMODE": "lacp or none"
+                }
+            },
+            {
+                "name": "Arista cEOS Latest",
+                "kind": "ceos",
+                "type": "",
+                "image": "arista/ceos:latest",
+                "icon": "switch",
+                "baseName": "ceos",
+                "setDefault": true,
+                "interfacePattern": "et{n}",
+                "env": {
+                    "INTFTYPE": "et"
+                }
+            }
+            ],
+            "lockLabByDefault": false,
+            "node": {
+                "sshUserMapping": {
+                    "ceos": "admin"
+                },
+            },
+        },
     },
     "workbench": {
         "startupEditor": "readme",
