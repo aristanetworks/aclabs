@@ -3,7 +3,7 @@
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
-        "CEOS_LAB_VERSION": "4.35.1F",
+        "CEOS_LAB_VERSION": "4.35.2F",
         "CV_API_TOKEN": "${localEnv:CV_API_TOKEN}",
         "CONTAINERWSF": "${containerWorkspaceFolder}",
         "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}",
