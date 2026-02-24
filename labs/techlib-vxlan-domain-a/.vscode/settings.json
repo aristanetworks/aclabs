@@ -47,6 +47,7 @@
     },
     "workbench": {
         "startupEditor": "readme",
+        "colorTheme": "Default Dark Modern",
         "editorAssociations": {
                     "*.md": "vscode.markdown.preview.editor"
         }
