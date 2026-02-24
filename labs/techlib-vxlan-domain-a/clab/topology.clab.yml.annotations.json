@@ -1,514 +1,401 @@
 {
   "freeTextAnnotations": [
     {
-      "id": "freeText_1763743735388_2",
-      "text": "IP: 10.10.10.101\nMAC: 00:01:01:00:00:A1\nVRF: PROD",
+      "id": "freeText_1771952460918",
+      "text": "- IP: 10.10.10.101\n- MAC: 00:01:01:00:00:A1\n- VLAN: 10\n- VRF: Prod",
       "position": {
-        "x": -189,
-        "y": 357
+        "x": -502.1191597475817,
+        "y": 749.0207170322884
       },
-      "fontSize": 4,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial",
+      "width": 166,
+      "height": 74
     },
     {
-      "id": "freeText_1763743779547_3",
-      "text": "IP: 10.30.30.101\nMAC: 00:01:01:00:00:A2\nVRF: PROD",
+      "id": "freeText_1771952889853",
+      "text": "- IP: 10.30.30.101\n- MAC: 00:01:01:00:00:A2\n- VLAN: 30\n- VRF: Prod",
       "position": {
-        "x": -105,
-        "y": 357
+        "x": -251.79789473683812,
+        "y": 751.2589473684205
       },
-      "fontSize": 4,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763743861443_6",
-      "text": "IP: 10.50.50.101\nMAC: 00:01:01:00:00:A3\nVRF: DEV",
+      "id": "freeText_1771952926123",
+      "text": "- IP: 10.50.50.101\n- MAC: 00:01:01:00:00:A3\n- VLAN: 50\n- VRF: DEV",
       "position": {
-        "x": -21,
-        "y": 357
+        "x": -12.058947368417279,
+        "y": 747.3052631578944
       },
-      "fontSize": 4,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763743883547_7",
-      "text": "IP:  10.10.10.102\nMAC: 00:01:01:00:00:A4\nVRF: PROD",
+      "id": "freeText_1771952988027",
+      "text": "- IP: 10.10.10.102\n- MAC: 00:01:01:00:00:A4\n- VLAN: 10\n- VRF: PROD",
       "position": {
-        "x": 21,
-        "y": 301
+        "x": 107.04442328673105,
+        "y": 666.6690815304438
       },
-      "fontSize": 4,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763743922868_8",
-      "text": "IP:  10.30.30.102\nMAC: 00:01:01:00:00:A5\nVRF: PROD",
+      "id": "freeText_1771953033477",
+      "text": "- IP: 10.30.30.102\n- MAC: 00:01:01:00:00:A5\n- VLAN: 30\n- VRF: PROD",
       "position": {
-        "x": 63,
-        "y": 357
+        "x": 231.1139918715618,
+        "y": 750.2827793639535
       },
-      "fontSize": 4,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763743943588_9",
-      "text": "IP: 10.70.70.101\nMAC: 00:01:01:00:00:A6\nVRF: DEV",
+      "id": "freeText_1771953480823",
+      "text": "- IP: 10.70.70.101\n- MAC: 00:01:01:00:00:A6\n- VLAN: 70\n- VRF: DEV",
       "position": {
-        "x": 189,
-        "y": 357
+        "x": 586.3183824026646,
+        "y": 751.3233836666997
       },
-      "fontSize": 4,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763744022437_11",
-      "text": "MLAG Po7",
+      "id": "freeText_1771954147411",
+      "text": "## EVPN-VXLAN Domain A\n\n- Loopback0: 1.1.1.`NodeID`\n- Loopback1: 2.2.1.`NodeID`\n- Local P2P Underlay: **192.168.0.0/24**\n- WAN P2P Underlay: **172.16.1.0/24**\n- Underlay Routing: **eBGP**\n- Overlay Peering: **eBGP**\n- Multihoming: **MLAG**\n- IRB Model: **Symmetric IRB**\n- Overlay Multicast (OISM): **Yes**",
       "position": {
-        "x": -175,
-        "y": 287
+        "x": -521.0755388450608,
+        "y": -122.55827070878146
       },
-      "fontSize": 5,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 12,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
-      "textAlign": "center",
-      "roundedBackground": true
+      "textAlign": "left",
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763744100460_12",
-      "text": "MLAG Po7",
+      "id": "freeText_1771955912860",
+      "text": "## Node IDs:\n\n- A-SPINE1: **201**\n- A-SPINE2: **202**\n- A-SPINE3: **203**\n- A-SPINE4: **204**\n- A-LEAF1: **1**\n- A-LEAF2: **2**\n- A-LEAF3: **3**\n- A-LEAF4: **4**\n- A-LEAF5: **5**\n- A-LEAF6: **6**\n- A-LEAF7: **7**\n- A-LEAF8: **8**",
       "position": {
-        "x": 189,
-        "y": 287
+        "x": -519.6419653169285,
+        "y": 130.46669218148298
       },
-      "fontSize": 5,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 12,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
-      "textAlign": "center",
-      "roundedBackground": true
-    },
-    {
-      "id": "freeText_1763744116501_13",
-      "text": "MLAG Po8",
-      "position": {
-        "x": -119,
-        "y": 287
-      },
-      "fontSize": 5,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
-      "fontWeight": "normal",
-      "fontStyle": "normal",
-      "textDecoration": "none",
-      "fontFamily": "monospace",
-      "textAlign": "center",
-      "roundedBackground": true
-    },
-    {
-      "id": "freeText_1763744140997_14",
-      "text": "MLAG Po8",
-      "position": {
-        "x": 21,
-        "y": 245
-      },
-      "fontSize": 5,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
-      "fontWeight": "normal",
-      "fontStyle": "normal",
-      "textDecoration": "none",
-      "fontFamily": "monospace",
-      "textAlign": "center",
-      "roundedBackground": true
+      "textAlign": "left",
+      "fontFamily": "Arial"
     }
   ],
-  "groupStyleAnnotations": [
-    {
-      "id": "Data Center Host:5",
-      "backgroundColor": "#d9d9d9",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-left"
-    },
-    {
-      "id": "Data Center Leaf:4",
-      "backgroundColor": "#d9d9d9",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-left"
-    },
-    {
-      "id": "Data Center Spine:3",
-      "backgroundColor": "#d9d9d9",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-left"
-    },
-    {
-      "id": "EVPN Gateway:2",
-      "backgroundColor": "#d9d9d9",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-left"
-    },
-    {
-      "id": "Backbone IP Transport:1",
-      "backgroundColor": "#d9d9d9",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-left"
-    }
-  ],
+  "groupStyleAnnotations": [],
   "cloudNodeAnnotations": [],
   "nodeAnnotations": [
-    {
-      "id": "A-SPINE1",
-      "icon": "spine",
-      "position": {
-        "x": -189,
-        "y": 105
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Spine",
-      "level": "3"
-    },
-    {
-      "id": "A-SPINE2",
-      "icon": "spine",
-      "position": {
-        "x": -63,
-        "y": 105
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Spine",
-      "level": "3"
-    },
-    {
-      "id": "A-SPINE3",
-      "icon": "spine",
-      "position": {
-        "x": 105,
-        "y": 105
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Spine",
-      "level": "3"
-    },
-    {
-      "id": "A-SPINE4",
-      "icon": "spine",
-      "position": {
-        "x": 231,
-        "y": 105
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Spine",
-      "level": "3"
-    },
-    {
-      "id": "A-LEAF1",
-      "icon": "leaf",
-      "position": {
-        "x": -189,
-        "y": 189
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Leaf",
-      "level": "4"
-    },
-    {
-      "id": "A-LEAF2",
-      "icon": "leaf",
-      "position": {
-        "x": -105,
-        "y": 189
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Leaf",
-      "level": "4"
-    },
-    {
-      "id": "A-LEAF3",
-      "icon": "leaf",
-      "position": {
-        "x": -21,
-        "y": 189
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Leaf",
-      "level": "4"
-    },
-    {
-      "id": "A-LEAF4",
-      "icon": "leaf",
-      "position": {
-        "x": 63,
-        "y": 189
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Leaf",
-      "level": "4"
-    },
-    {
-      "id": "A-LEAF5",
-      "icon": "leaf",
-      "position": {
-        "x": 147,
-        "y": 189
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Leaf",
-      "level": "4"
-    },
-    {
-      "id": "A-LEAF6",
-      "icon": "leaf",
-      "position": {
-        "x": 231,
-        "y": 189
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Data Center Leaf",
-      "level": "4"
-    },
-    {
-      "id": "A-LEAF7",
-      "icon": "dcgw",
-      "position": {
-        "x": -63,
-        "y": 21
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "EVPN Gateway",
-      "level": "2"
-    },
-    {
-      "id": "A-LEAF8",
-      "icon": "dcgw",
-      "position": {
-        "x": 105,
-        "y": 21
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "EVPN Gateway",
-      "level": "2"
-    },
     {
       "id": "HostA1",
       "icon": "client",
       "position": {
-        "x": -189,
-        "y": 329
+        "x": -440,
+        "y": 680
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "Data Center Host",
       "level": "5"
     },
     {
       "id": "HostA2",
       "icon": "client",
       "position": {
-        "x": -105,
-        "y": 329
+        "x": -200,
+        "y": 680
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "Data Center Host",
       "level": "5"
     },
     {
       "id": "HostA3",
       "icon": "client",
       "position": {
-        "x": -21,
-        "y": 329
+        "x": 40,
+        "y": 680
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "Data Center Host",
       "level": "5"
     },
     {
       "id": "HostA4",
       "icon": "client",
       "position": {
-        "x": 21,
-        "y": 273
+        "x": 160,
+        "y": 600
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "Data Center Host",
       "level": "5"
     },
     {
       "id": "HostA5",
       "icon": "client",
       "position": {
-        "x": 63,
-        "y": 329
+        "x": 280,
+        "y": 680
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "Data Center Host",
       "level": "5"
     },
     {
       "id": "HostA6",
       "icon": "client",
       "position": {
-        "x": 189,
-        "y": 329
+        "x": 640,
+        "y": 680
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "Data Center Host",
       "level": "5"
     },
     {
-      "id": "BB1",
-      "icon": "router",
+      "id": "A-LEAF1",
+      "icon": "leaf",
       "position": {
-        "x": -63,
-        "y": -63
+        "x": -440,
+        "y": 480
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "Backbone IP Transport",
-      "level": "1"
+      "level": "4"
+    },
+    {
+      "id": "A-LEAF2",
+      "icon": "leaf",
+      "position": {
+        "x": -200,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4"
+    },
+    {
+      "id": "A-LEAF3",
+      "icon": "leaf",
+      "position": {
+        "x": 40,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4"
+    },
+    {
+      "id": "A-LEAF4",
+      "icon": "leaf",
+      "position": {
+        "x": 280,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4"
+    },
+    {
+      "id": "A-LEAF5",
+      "icon": "leaf",
+      "position": {
+        "x": 520,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4"
+    },
+    {
+      "id": "A-LEAF6",
+      "icon": "leaf",
+      "position": {
+        "x": 760,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4"
+    },
+    {
+      "id": "A-SPINE1",
+      "icon": "spine",
+      "position": {
+        "x": -200,
+        "y": 200
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "3"
+    },
+    {
+      "id": "A-SPINE2",
+      "icon": "spine",
+      "position": {
+        "x": 40,
+        "y": 200
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "3"
+    },
+    {
+      "id": "A-SPINE3",
+      "icon": "spine",
+      "position": {
+        "x": 280,
+        "y": 200
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "3"
+    },
+    {
+      "id": "A-SPINE4",
+      "icon": "spine",
+      "position": {
+        "x": 520,
+        "y": 200
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "3"
+    },
+    {
+      "id": "A-LEAF7",
+      "icon": "dcgw",
+      "position": {
+        "x": -80,
+        "y": 40
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "2"
+    },
+    {
+      "id": "A-LEAF8",
+      "icon": "dcgw",
+      "position": {
+        "x": 400,
+        "y": 40
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "2"
     },
     {
       "id": "BB2",
       "icon": "router",
       "position": {
-        "x": 105,
-        "y": -63
+        "x": 280,
+        "y": -120
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "Backbone IP Transport",
-      "level": "1"
+      "level": "1",
+      "iconCornerRadius": 40
+    },
+    {
+      "id": "BB1",
+      "icon": "router",
+      "position": {
+        "x": 40,
+        "y": -120
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "1",
+      "iconCornerRadius": 40
     }
-  ]
+  ],
+  "freeShapeAnnotations": []
 }
