@@ -41,8 +41,6 @@ topology:
       startup-config: init-configs/clab-techlib-mpls-services/PE-3/startup-config
     PE-4:
       kind: arista_ceos
-      env:
-        INTFTYPE: et
       binds:
         - sn/pe-4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-4/startup-config
@@ -71,6 +69,46 @@ topology:
       binds:
         - sn/pe-9.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-9/startup-config
+    PE-10:
+      kind: arista_ceos
+      binds:
+        - sn/pe-10.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-10/startup-config
+    PE-11:
+      kind: arista_ceos
+      binds:
+        - sn/pe-11.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-11/startup-config
+    PE-12:
+      kind: arista_ceos
+      binds:
+        - sn/pe-12.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-12/startup-config
+    PE-13:
+      kind: arista_ceos
+      binds:
+        - sn/pe-13.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-13/startup-config
+    PE-14:
+      kind: arista_ceos
+      binds:
+        - sn/pe-14.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-14/startup-config
+    PE-15:
+      kind: arista_ceos
+      binds:
+        - sn/pe-15.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-15/startup-config
+    PE-16:
+      kind: arista_ceos
+      binds:
+        - sn/pe-16.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-16/startup-config
+    PE-17:
+      kind: arista_ceos
+      binds:
+        - sn/pe-17.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-17/startup-config
     CE-1:
       kind: arista_ceos
       binds:
@@ -131,46 +169,6 @@ topology:
       binds:
         - sn/ce-12.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-12/startup-config
-    PE-10:
-      kind: arista_ceos
-      binds:
-        - sn/pe-11.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-11/startup-config
-    PE-11:
-      kind: arista_ceos
-      binds:
-        - sn/pe-12.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-12/startup-config
-    PE-12:
-      kind: arista_ceos
-      binds:
-        - sn/pe-13.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-13/startup-config
-    PE-13:
-      kind: arista_ceos
-      binds:
-        - sn/pe-14.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-14/startup-config
-    PE-14:
-      kind: arista_ceos
-      binds:
-        - sn/pe-15.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-15/startup-config
-    PE-15:
-      kind: arista_ceos
-      binds:
-        - sn/pe-16.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-16/startup-config
-    PE-16:
-      kind: arista_ceos
-      binds:
-        - sn/pe-17.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-17/startup-config
-    PE-17:
-      kind: arista_ceos
-      binds:
-        - sn/pe-10.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-10/startup-config
 
   links:
     - endpoints: [ "PE-10:et2", "PE-11:et2" ]
