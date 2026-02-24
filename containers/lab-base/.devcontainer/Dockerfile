@@ -129,6 +129,10 @@ bindkey -M menuselect "^[[D" backward-char\n\
 zstyle ":completion:*" menu select=1\n\
 zstyle ":completion:*" matcher-list "m:{a-zA-Z}={A-Za-z}" # Case insensitive\n\
 \n\
+# Force zsh to look at the Makefile for targets\n\
+zstyle ":completion:*:*:make:*:targets" call-command yes\n\
+zstyle ":completion:*:*:make:*" tag-order "targets"\n\
+\n\
 # App Inits\n\
 eval "$(register-python-argcomplete --shell zsh ce_act)"\n\
 eval "$(starship init zsh)"\n\
