@@ -479,5 +479,394 @@
       "iconColor": "#16325b"
     }
   ],
-  "freeShapeAnnotations": []
+  "freeShapeAnnotations": [],
+  "edgeAnnotations": [
+    {
+      "id": "Clab-Link29",
+      "source": "B-SPINE4",
+      "target": "B-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link28",
+      "source": "B-SPINE4",
+      "target": "B-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link27",
+      "source": "B-SPINE4",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link26",
+      "source": "B-SPINE4",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link25",
+      "source": "B-SPINE4",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link24",
+      "source": "B-SPINE4",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link36",
+      "source": "HostB1",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link37",
+      "source": "HostB1",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link38",
+      "source": "HostB2",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link39",
+      "source": "HostB2",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link40",
+      "source": "HostB3",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link41",
+      "source": "HostB4",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link42",
+      "source": "HostB4",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link43",
+      "source": "HostB5",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link32",
+      "source": "B-LEAF5",
+      "target": "B-SW1",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link33",
+      "source": "B-LEAF6",
+      "target": "B-SW1",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link44",
+      "source": "HostB6",
+      "target": "B-SW1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link45",
+      "source": "HostB7",
+      "target": "B-SW1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link21",
+      "source": "B-SPINE3",
+      "target": "B-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link20",
+      "source": "B-SPINE3",
+      "target": "B-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link19",
+      "source": "B-SPINE3",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link18",
+      "source": "B-SPINE3",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link17",
+      "source": "B-SPINE3",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link16",
+      "source": "B-SPINE3",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link13",
+      "source": "B-SPINE2",
+      "target": "B-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link12",
+      "source": "B-SPINE2",
+      "target": "B-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link11",
+      "source": "B-SPINE2",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link10",
+      "source": "B-SPINE2",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link9",
+      "source": "B-SPINE2",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link8",
+      "source": "B-SPINE2",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link5",
+      "source": "B-SPINE1",
+      "target": "B-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link4",
+      "source": "B-SPINE1",
+      "target": "B-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link3",
+      "source": "B-SPINE1",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link2",
+      "source": "B-SPINE1",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link1",
+      "source": "B-SPINE1",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link0",
+      "source": "B-SPINE1",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link7",
+      "source": "B-SPINE1",
+      "target": "B-LEAF8",
+      "sourceEndpoint": "et8",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link6",
+      "source": "B-SPINE1",
+      "target": "B-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link14",
+      "source": "B-SPINE2",
+      "target": "B-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link15",
+      "source": "B-SPINE2",
+      "target": "B-LEAF8",
+      "sourceEndpoint": "et8",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link22",
+      "source": "B-SPINE3",
+      "target": "B-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link23",
+      "source": "B-SPINE3",
+      "target": "B-LEAF8",
+      "sourceEndpoint": "et8",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link30",
+      "source": "B-SPINE4",
+      "target": "B-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    }
+  ]
 }
