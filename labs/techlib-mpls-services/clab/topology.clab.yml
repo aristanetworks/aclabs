@@ -71,46 +71,6 @@ topology:
       binds:
         - sn/pe-9.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-9/startup-config
-    PE-10:
-      kind: arista_ceos
-      binds:
-        - sn/pe-10.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-10/startup-config
-    PE-11:
-      kind: arista_ceos
-      binds:
-        - sn/pe-11.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-11/startup-config
-    PE-12:
-      kind: arista_ceos
-      binds:
-        - sn/pe-12.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-12/startup-config
-    PE-13:
-      kind: arista_ceos
-      binds:
-        - sn/pe-13.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-13/startup-config
-    PE-14:
-      kind: arista_ceos
-      binds:
-        - sn/pe-14.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-14/startup-config
-    PE-15:
-      kind: arista_ceos
-      binds:
-        - sn/pe-15.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-15/startup-config
-    PE-16:
-      kind: arista_ceos
-      binds:
-        - sn/pe-16.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-16/startup-config
-    PE-17:
-      kind: arista_ceos
-      binds:
-        - sn/pe-17.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-techlib-mpls-services/PE-17/startup-config
     CE-1:
       kind: arista_ceos
       binds:
@@ -171,10 +131,50 @@ topology:
       binds:
         - sn/ce-12.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-12/startup-config
+    PE-10:
+      kind: arista_ceos
+      binds:
+        - sn/pe-11.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-11/startup-config
+    PE-11:
+      kind: arista_ceos
+      binds:
+        - sn/pe-12.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-12/startup-config
+    PE-12:
+      kind: arista_ceos
+      binds:
+        - sn/pe-13.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-13/startup-config
+    PE-13:
+      kind: arista_ceos
+      binds:
+        - sn/pe-14.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-14/startup-config
+    PE-14:
+      kind: arista_ceos
+      binds:
+        - sn/pe-15.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-15/startup-config
+    PE-15:
+      kind: arista_ceos
+      binds:
+        - sn/pe-16.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-16/startup-config
+    PE-16:
+      kind: arista_ceos
+      binds:
+        - sn/pe-17.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-17/startup-config
+    PE-17:
+      kind: arista_ceos
+      binds:
+        - sn/pe-10.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-techlib-mpls-services/PE-10/startup-config
 
   links:
-    - endpoints: [ "PE-11:et2", "PE-12:et2" ]
-    - endpoints: [ "PE-16:et2", "PE-15:et2" ]
+    - endpoints: [ "PE-10:et2", "PE-11:et2" ]
+    - endpoints: [ "PE-15:et2", "PE-14:et2" ]
     - endpoints: [ "PE-1:et1", "PE-2:et1" ]
     - endpoints: [ "PE-2:et2", "PE-3:et1" ]
     - endpoints: [ "PE-3:et2", "PE-4:et1" ]
@@ -183,41 +183,41 @@ topology:
     - endpoints: [ "PE-6:et2", "PE-7:et1" ]
     - endpoints: [ "PE-8:et1", "PE-1:et2" ]
     - endpoints: [ "PE-7:et2", "PE-8:et2" ]
-    - endpoints: [ "PE-13:et1", "PE-14:et1" ]
-    - endpoints: [ "PE-10:et1", "PE-17:et1" ]
+    - endpoints: [ "PE-12:et1", "PE-13:et1" ]
+    - endpoints: [ "PE-17:et1", "PE-16:et1" ]
     - endpoints: [ "PE-1:et3", "PE-9:et1" ]
     - endpoints: [ "PE-3:et3", "PE-9:et2" ]
     - endpoints: [ "PE-5:et3", "PE-9:et3" ]
     - endpoints: [ "PE-7:et3", "PE-9:et4" ]
-    - endpoints: [ "PE-10:et2", "PE-1:et4" ]
-    - endpoints: [ "PE-17:et2", "PE-7:et4" ]
-    - endpoints: [ "PE-13:et2", "PE-3:et4" ]
-    - endpoints: [ "PE-14:et2", "PE-5:et4" ]
-    - endpoints: [ "PE-13:et3", "PE-4:et3" ]
-    - endpoints: [ "PE-14:et3", "PE-4:et4" ]
-    - endpoints: [ "PE-10:et3", "PE-8:et3" ]
-    - endpoints: [ "PE-17:et3", "PE-8:et4" ]
-    - endpoints: [ "PE-10:et4", "CE-3:et1" ]
-    - endpoints: [ "PE-17:et4", "CE-1:et1" ]
-    - endpoints: [ "PE-17:et5", "CE-2:et1" ]
-    - endpoints: [ "PE-10:et5", "CE-2:et2" ]
-    - endpoints: [ "PE-13:et4", "CE-7:et1" ]
-    - endpoints: [ "PE-14:et4", "CE-9:et1" ]
-    - endpoints: [ "PE-13:et5", "CE-8:et1" ]
-    - endpoints: [ "PE-14:et5", "CE-8:et2" ]
-    - endpoints: [ "PE-7:et5", "PE-16:et1" ]
-    - endpoints: [ "PE-5:et5", "PE-15:et1" ]
-    - endpoints: [ "PE-11:et1", "PE-1:et5" ]
-    - endpoints: [ "PE-12:et1", "PE-3:et5" ]
-    - endpoints: [ "PE-6:et3", "PE-16:et3" ]
-    - endpoints: [ "PE-6:et4", "PE-15:et3" ]
-    - endpoints: [ "PE-11:et3", "PE-2:et3" ]
-    - endpoints: [ "PE-12:et3", "PE-2:et4" ]
-    - endpoints: [ "PE-11:et4", "CE-4:et1" ]
-    - endpoints: [ "PE-12:et4", "CE-6:et1" ]
-    - endpoints: [ "CE-5:et1", "PE-11:et5" ]
-    - endpoints: [ "CE-5:et2", "PE-12:et5" ]
-    - endpoints: [ "PE-16:et4", "CE-12:et1" ]
-    - endpoints: [ "PE-15:et4", "CE-10:et1" ]
-    - endpoints: [ "PE-16:et5", "CE-11:et1" ]
-    - endpoints: [ "PE-15:et5", "CE-11:et2" ]
+    - endpoints: [ "PE-17:et2", "PE-1:et4" ]
+    - endpoints: [ "PE-16:et2", "PE-7:et4" ]
+    - endpoints: [ "PE-12:et2", "PE-3:et4" ]
+    - endpoints: [ "PE-13:et2", "PE-5:et4" ]
+    - endpoints: [ "PE-12:et3", "PE-4:et3" ]
+    - endpoints: [ "PE-13:et3", "PE-4:et4" ]
+    - endpoints: [ "PE-17:et3", "PE-8:et3" ]
+    - endpoints: [ "PE-16:et3", "PE-8:et4" ]
+    - endpoints: [ "PE-17:et4", "CE-3:et1" ]
+    - endpoints: [ "PE-16:et4", "CE-1:et1" ]
+    - endpoints: [ "PE-16:et5", "CE-2:et1" ]
+    - endpoints: [ "PE-17:et5", "CE-2:et2" ]
+    - endpoints: [ "PE-12:et4", "CE-7:et1" ]
+    - endpoints: [ "PE-13:et4", "CE-9:et1" ]
+    - endpoints: [ "PE-12:et5", "CE-8:et1" ]
+    - endpoints: [ "PE-13:et5", "CE-8:et2" ]
+    - endpoints: [ "PE-7:et5", "PE-15:et1" ]
+    - endpoints: [ "PE-5:et5", "PE-14:et1" ]
+    - endpoints: [ "PE-10:et1", "PE-1:et5" ]
+    - endpoints: [ "PE-11:et1", "PE-3:et5" ]
+    - endpoints: [ "PE-6:et3", "PE-15:et3" ]
+    - endpoints: [ "PE-6:et4", "PE-14:et3" ]
+    - endpoints: [ "PE-10:et3", "PE-2:et3" ]
+    - endpoints: [ "PE-11:et3", "PE-2:et4" ]
+    - endpoints: [ "PE-10:et4", "CE-4:et1" ]
+    - endpoints: [ "PE-11:et4", "CE-6:et1" ]
+    - endpoints: [ "CE-5:et1", "PE-10:et5" ]
+    - endpoints: [ "CE-5:et2", "PE-11:et5" ]
+    - endpoints: [ "PE-15:et4", "CE-12:et1" ]
+    - endpoints: [ "PE-14:et4", "CE-10:et1" ]
+    - endpoints: [ "PE-15:et5", "CE-11:et1" ]
+    - endpoints: [ "PE-14:et5", "CE-11:et2" ]
