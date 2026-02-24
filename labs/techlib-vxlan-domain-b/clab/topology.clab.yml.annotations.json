@@ -2,12 +2,12 @@
   "freeTextAnnotations": [
     {
       "id": "freeText_1771958371454",
-      "text": "- IP: 10.20.20.101\n- MAC: 00:01:01:00:00:B1\n- VLAN: 20\n- VRF: PrROD",
+      "text": "- IP: **10.20.20.101**\n- MAC: **00:01:01:00:00:B1**\n- VLAN: **20**\n- VRF: **PROD**",
       "position": {
         "x": -529.8691597985465,
         "y": 720.8029059693704
       },
-      "fontSize": 8,
+      "fontSize": 9,
       "fontColor": "#000000",
       "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
@@ -18,12 +18,12 @@
     },
     {
       "id": "freeText_1771958499158",
-      "text": "- IP: 10.40.40.101\n- MAC: 00:01:01:00:00:B2\n- VLAN: 40\n- VRF: PROD",
+      "text": "- IP: **10.40.40.101**\n- MAC: **00:01:01:00:00:B2**\n- VLAN: **40**\n- VRF: **PROD**",
       "position": {
         "x": -290.3196444492571,
         "y": 719.5976229591207
       },
-      "fontSize": 8,
+      "fontSize": 9,
       "fontColor": "#000000",
       "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
@@ -34,12 +34,12 @@
     },
     {
       "id": "freeText_1771958538917",
-      "text": "- IP: 10.60.60.101\n- MAC: 00:01:01:00:00:B3\n- VLAN: 60\n- VRF: DEV",
+      "text": "- IP: **10.60.60.101**\n- MAC: **00:01:01:00:00:B3**\n- VLAN: **60**\n- VRF: **DEV**",
       "position": {
         "x": -52.85811212529824,
         "y": 719.8750890233471
       },
-      "fontSize": 8,
+      "fontSize": 9,
       "fontColor": "#000000",
       "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
@@ -50,12 +50,12 @@
     },
     {
       "id": "freeText_1771958694197",
-      "text": "- IP: 10.10.10.103\n- MAC: 00:01:01:00:00:B4\n- VLAN: 10\n- VRF: PROD",
+      "text": "- IP: **10.10.10.103**\n- MAC: **00:01:01:00:00:B4**\n- VLAN: **10**\n- VRF: **PROD**",
       "position": {
         "x": 65.76046133644113,
         "y": 627.8040463222413
       },
-      "fontSize": 8,
+      "fontSize": 9,
       "fontColor": "#000000",
       "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
@@ -66,12 +66,12 @@
     },
     {
       "id": "freeText_1771958785910",
-      "text": "- IP: 10.70.70.102\n- MAC: 00:01:01:00:00:B5\n- VLAN: 70\n- VRF: DEV",
+      "text": "- IP: **10.70.70.102**\n- MAC: **00:01:01:00:00:B5**\n- VLAN: **70**\n- VRF: **DEV**",
       "position": {
         "x": 187.55235560184326,
         "y": 718.7411475321993
       },
-      "fontSize": 8,
+      "fontSize": 9,
       "fontColor": "#000000",
       "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
@@ -82,12 +82,12 @@
     },
     {
       "id": "freeText_1771958898069",
-      "text": "- IP: 10.40.40.102\n- MAC: 00:01:01:00:00:B6\n- VLAN: 40\n- VRF: PROD",
+      "text": "- IP: **10.40.40.102**\n- MAC: **00:01:01:00:00:B6**\n- VLAN: **40**\n- VRF: **PROD**",
       "position": {
         "x": 426.285914587109,
         "y": 718.1531696492833
       },
-      "fontSize": 8,
+      "fontSize": 9,
       "fontColor": "#000000",
       "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
@@ -98,12 +98,12 @@
     },
     {
       "id": "freeText_1771958935640",
-      "text": "- IP: 10.80.80.101\n- MAC: 00:01:01:00:00:B7\n- VLAN: 80\n- VRF: DEV",
+      "text": "- IP: **10.80.80.101**\n- MAC: **00:01:01:00:00:B7**\n- VLAN: **80**\n- VRF: **DEV**",
       "position": {
         "x": 670.7231507111129,
         "y": 719.5939267343438
       },
-      "fontSize": 8,
+      "fontSize": 9,
       "fontColor": "#000000",
       "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
@@ -114,7 +114,7 @@
     },
     {
       "id": "freeText_1771958992195",
-      "text": "## EVPN-VXLAN Domain B\n\n- Loopback0: 1.1.2.`NodeID`\n- Loopback1: 2.2.2.`NodeID`\n- Local P2P Underlay: **Unnumbered**\n- WAN P2P Underlay: **172.16.1.0/24**\n- Underlay Routing: **IS-IS**\n- Overlay Peering: **iBGP**\n- Multihoming: **All-Active**\n- IRB Model: **Symmetric IRB**\n- Overlay Multicast (OISM): **Yes**",
+      "text": "## EVPN-VXLAN Domain B\n\n- Loopback0: 1.1.2.**<NodeID>**\n- Loopback1: 2.2.2.**<NodeID>**\n- Local P2P Underlay: **Unnumbered**\n- WAN P2P Underlay: **172.16.1.0/24**\n- Underlay Routing: **IS-IS**\n- Overlay Peering: **iBGP**\n- Multihoming: **All-Active**\n- IRB Model: **Symmetric IRB**\n- Overlay Multicast (OISM): **Yes**",
       "position": {
         "x": -561.2335893099025,
         "y": -160.93923207028172
@@ -159,7 +159,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "5"
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "HostB1",
@@ -172,7 +174,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "5"
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "HostB2",
@@ -185,7 +189,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "5"
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "HostB3",
@@ -198,7 +204,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "5"
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "HostB4",
@@ -211,7 +219,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "5"
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "HostB5",
@@ -224,7 +234,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "5"
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "HostB6",
@@ -237,7 +249,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "5"
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "HostB7",
@@ -250,7 +264,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "5"
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-LEAF1",
@@ -263,7 +279,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "4"
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-LEAF2",
@@ -276,7 +294,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "4"
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-LEAF3",
@@ -289,7 +309,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "4"
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-LEAF4",
@@ -302,7 +324,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "4"
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-LEAF5",
@@ -315,7 +339,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "4"
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-LEAF6",
@@ -328,7 +354,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "4"
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-SPINE1",
@@ -341,7 +369,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "3"
+      "level": "3",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-SPINE2",
@@ -354,7 +384,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "3"
+      "level": "3",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-SPINE3",
@@ -367,7 +399,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "3"
+      "level": "3",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-SPINE4",
@@ -380,7 +414,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "3"
+      "level": "3",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-LEAF7",
@@ -393,7 +429,9 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "2"
+      "level": "2",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "B-LEAF8",
@@ -406,11 +444,13 @@
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "level": "2"
+      "level": "2",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "BB1",
-      "icon": "router",
+      "icon": "pe",
       "position": {
         "x": 0,
         "y": -160
@@ -420,11 +460,12 @@
         "lng": 9.007895390625677
       },
       "level": "1",
-      "iconCornerRadius": 40
+      "iconCornerRadius": 40,
+      "iconColor": "#16325b"
     },
     {
       "id": "BB2",
-      "icon": "router",
+      "icon": "pe",
       "position": {
         "x": 240,
         "y": -160
@@ -434,8 +475,398 @@
         "lng": 9.007895390625677
       },
       "level": "1",
-      "iconCornerRadius": 40
+      "iconCornerRadius": 40,
+      "iconColor": "#16325b"
     }
   ],
-  "freeShapeAnnotations": []
+  "freeShapeAnnotations": [],
+  "edgeAnnotations": [
+    {
+      "id": "Clab-Link29",
+      "source": "B-SPINE4",
+      "target": "B-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link28",
+      "source": "B-SPINE4",
+      "target": "B-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link27",
+      "source": "B-SPINE4",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link26",
+      "source": "B-SPINE4",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link25",
+      "source": "B-SPINE4",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link24",
+      "source": "B-SPINE4",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link36",
+      "source": "HostB1",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link37",
+      "source": "HostB1",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link38",
+      "source": "HostB2",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link39",
+      "source": "HostB2",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link40",
+      "source": "HostB3",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link41",
+      "source": "HostB4",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link42",
+      "source": "HostB4",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link43",
+      "source": "HostB5",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link32",
+      "source": "B-LEAF5",
+      "target": "B-SW1",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link33",
+      "source": "B-LEAF6",
+      "target": "B-SW1",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link44",
+      "source": "HostB6",
+      "target": "B-SW1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link45",
+      "source": "HostB7",
+      "target": "B-SW1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link21",
+      "source": "B-SPINE3",
+      "target": "B-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link20",
+      "source": "B-SPINE3",
+      "target": "B-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link19",
+      "source": "B-SPINE3",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link18",
+      "source": "B-SPINE3",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link17",
+      "source": "B-SPINE3",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link16",
+      "source": "B-SPINE3",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link13",
+      "source": "B-SPINE2",
+      "target": "B-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link12",
+      "source": "B-SPINE2",
+      "target": "B-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link11",
+      "source": "B-SPINE2",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link10",
+      "source": "B-SPINE2",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link9",
+      "source": "B-SPINE2",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link8",
+      "source": "B-SPINE2",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link5",
+      "source": "B-SPINE1",
+      "target": "B-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link4",
+      "source": "B-SPINE1",
+      "target": "B-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link3",
+      "source": "B-SPINE1",
+      "target": "B-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link2",
+      "source": "B-SPINE1",
+      "target": "B-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link1",
+      "source": "B-SPINE1",
+      "target": "B-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link0",
+      "source": "B-SPINE1",
+      "target": "B-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link7",
+      "source": "B-SPINE1",
+      "target": "B-LEAF8",
+      "sourceEndpoint": "et8",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link6",
+      "source": "B-SPINE1",
+      "target": "B-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link14",
+      "source": "B-SPINE2",
+      "target": "B-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link15",
+      "source": "B-SPINE2",
+      "target": "B-LEAF8",
+      "sourceEndpoint": "et8",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link22",
+      "source": "B-SPINE3",
+      "target": "B-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link23",
+      "source": "B-SPINE3",
+      "target": "B-LEAF8",
+      "sourceEndpoint": "et8",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link30",
+      "source": "B-SPINE4",
+      "target": "B-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    }
+  ]
 }
