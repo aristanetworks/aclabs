@@ -7,7 +7,7 @@ eos-downloader>=0.10.1
 passlib
 yamllint
 rich
-git+https://github.com/wdion-arista/ce_act_cli.git@v1.0.6-python3.12-avd-v5.5.0
+git+https://github.com/wdion-arista/ce_act_cli.git@v1.0.7-python3.12-avd-v5.5.0
 
 # anta[cli]==1.4.0
 # protobuf>=5.28.3,<6.0dev
