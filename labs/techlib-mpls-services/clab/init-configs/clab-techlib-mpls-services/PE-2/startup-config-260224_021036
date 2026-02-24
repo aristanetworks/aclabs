@@ -1,5 +1,5 @@
-! Startup-config last modified at Mon Feb 23 19:53:26 2026 by root
-! device: EOS4 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+! Startup-config last modified at Tue Feb 24 02:10:36 2026 by root
+! device: PE-2 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
 !
@@ -11,16 +11,15 @@ management api http-commands
    vrf MGMT
       no shutdown
 !
+switchport default mode routed
+!
 no service interface inactive port-id allocation disabled
 !
 transceiver qsfp default-mode 4x10G
 !
-interface defaults
-   mtu 9214
-!
 service routing protocols model multi-agent
 !
-hostname EOS4
+hostname PE-2
 !
 spanning-tree mode mstp
 !
@@ -41,48 +40,49 @@ management api netconf
 aaa authorization exec default local
 !
 interface Ethernet1
+   mtu 9214
    no switchport
-   ip address unnumbered Loopback0
+   ip address 20.1.2.2/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
 !
 interface Ethernet2
+   mtu 9214
    no switchport
-   ip address unnumbered Loopback0
+   ip address 20.2.3.2/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
 !
 interface Ethernet3
+   mtu 9214
    no switchport
-   ip address unnumbered Loopback0
+   ip address 20.2.10.2/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
 !
 interface Ethernet4
+   mtu 9214
    no switchport
-   ip address unnumbered Loopback0
+   ip address 20.2.11.2/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
 !
-interface Ethernet5
-!
 interface Loopback0
-   ip address 100.0.0.4/32
-   node-segment ipv4 index 4
+   mtu 9214
+   ip address 100.0.0.2/32
+   node-segment ipv4 index 2
    isis enable 100
    isis circuit-type level-2
    isis passive
-!
-interface Loopback99
-   ip address 99.0.0.1/32
+   isis network point-to-point
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.24/24
+   ip address 172.100.100.22/24
 !
 ip routing
 no ip routing vrf MGMT
@@ -94,36 +94,23 @@ ip route vrf MGMT 0.0.0.0/0 172.100.100.1
 mpls ip
 !
 router bgp 100
-   router-id 100.0.0.4
+   router-id 100.0.0.2
    no bgp default ipv4-unicast
    distance bgp 20 200 200
-   neighbor default send-community
-   neighbor RR-CLIENTS peer group
-   neighbor RR-CLIENTS remote-as 100
-   neighbor RR-CLIENTS update-source Loopback0
-   neighbor RR-CLIENTS route-reflector-client
-   neighbor 100.0.0.1 peer group RR-CLIENTS
-   neighbor 100.0.0.1 description EOS1
-   neighbor 100.0.0.2 peer group RR-CLIENTS
-   neighbor 100.0.0.2 description EOS2
-   neighbor 100.0.0.3 peer group RR-CLIENTS
-   neighbor 100.0.0.3 description EOS3
-   neighbor 100.0.0.5 peer group RR-CLIENTS
-   neighbor 100.0.0.5 description EOS5
-   neighbor 100.0.0.6 peer group RR-CLIENTS
-   neighbor 100.0.0.6 description EOS6
+   neighbor RR peer group
+   neighbor RR remote-as 100
+   neighbor RR update-source Loopback0
+   neighbor RR send-community
+   neighbor 100.0.0.9 peer group RR
+   neighbor 100.0.0.9 description PE-9.RR
    !
    address-family evpn
       neighbor default encapsulation mpls next-hop-self source-interface Loopback0
-      neighbor RR-CLIENTS activate
-   !
-   address-family ipv6 labeled-unicast
-      next-hop resolution disabled
-      neighbor RR-CLIENTS activate
+      neighbor RR activate
 !
 router isis 100
-   net 49.1111.0000.0000.0004.00
-   router-id ipv4 100.0.0.4
+   net 49.1111.0000.0000.0002.00
+   router-id ipv4 100.0.0.2
    is-type level-2
    !
    address-family ipv4 unicast
