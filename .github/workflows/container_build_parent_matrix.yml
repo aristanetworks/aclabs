@@ -24,13 +24,18 @@ jobs:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
         from_variant: ["python3.11-avd-v5.7.2", "python3.12-avd-v5.7.2"]
-        clab_version: ["0.72.0"]
+        clab_version: ["0.73.0"]
         user_id: ["1000", "1009"]
         include:
           - user_id: "1000"
             group_id: "1000"
           - user_id: "1009"
             group_id: "1009"
+          - from_variant: "python3.11-avd-v5.7.2"
+            short_name: "Py3.11"
+          - from_variant: "python3.12-avd-v5.7.2"
+            short_name: "Py3.12"
+    name: Build (${{ matrix.short_name }}, UID ${{ matrix.user_id }})
     with:
       from_image: ${{ matrix.from_image }}
       from_variant: ${{ matrix.from_variant }}
@@ -88,4 +93,4 @@ jobs:
       # - add lab status check on start
       # 2.6.1
       # - add timeout and panel to lab status check
-      container_revision: "2.6.1"
+      container_revision: "2.100.2"

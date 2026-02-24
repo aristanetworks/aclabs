@@ -2,6 +2,24 @@
 
 set +e
 
+# Debugging
+: "${DEBUG_CODE:=0}"
+
+# Check if DEBUG_CODE is set to 1, "true", or "yes"
+if [[ "${DEBUG_CODE}" == "1" || "${DEBUG_CODE}" == "true" ]]; then
+    echo "Debug ON"
+    set -x  # Print each command before executing it
+else
+    echo "Debug OFF"
+    set +x  # Ensure command echoing is off
+fi
+
+debug_log() {
+    if [ "${DEBUG_CODE}" = "1" ]; then
+        echo "DEBUG: $1"
+    fi
+}
+
 # do not use moby script when docker is already available
 # calling moby script on top of working docker deployment can break it in some cases (for ex.: Codespaces)
 if ! ${CODESPACES:-false} && ! ${REMOTE_CONTAINERS:-false}; then
@@ -18,6 +36,7 @@ else
     echo "ERROR: Failed to find container engine. Please install docker or podman." >&2
     exit 1
 fi
+debug_log "Container Engine: ${CONTAINERWSF}"
 
 # always prune old containers to clean the lab on laptops
 ${CONTAINER_ENGINE} container prune -f
@@ -29,7 +48,8 @@ if [ -z "${CEOS_MD5_FULLPATH}" ]; then
     CEOS_MD5_FULLPATH="${CONTAINERWSF}/cEOS*tar.xz.sha512sum"
 fi
 # check if ceos-lab image already present
-if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
+debug_log "Checking ceos version: ${CEOS_LAB_VERSION}"
+if [ -z "$(${CONTAINER_ENGINE} images arista/ceos:${CEOS_LAB_VERSION})" ]; then
     if [ "${ARISTA_TOKEN}" ]; then
         # `uname -m` is used to find platform architecture
         # currently we check for arm64 and aarch64 and expect everything else to be an x86 machine
@@ -60,27 +80,28 @@ else
     echo "WARNING: cEOS-lab image already present. Skipping the image pull/download."
 fi
 
+debug_log "Aliases:"
 # add aliases if any were defined
 if [ -f "${CONTAINERWSF}/addAliases.sh" ]; then
     chmod +x ${CONTAINERWSF}/addAliases.sh
     ${CONTAINERWSF}/addAliases.sh
 fi
-
+debug_log "Codespaces Bool: ${CODESPACES}"
 # when running on Codespaces, replace any Github variables in lab files
 if ${CODESPACES}; then
     # replace all markdown vars in demo directory
     if [ "${GITHUB_REPOSITORY}" ]; then
-        grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.repo_name}}/'"${GITHUB_REPOSITORY##*/}"'/g'
-        grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.org_name}}/'"${GITHUB_REPOSITORY%%/*}"'/g'
-        grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs sed -i 's@{{gh.repository}}@'"${GITHUB_REPOSITORY}"'@g'
+        grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs -0 -r sed -i 's/{{gh.repo_name}}/'"${GITHUB_REPOSITORY##*/}"'/g'
+        grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs -0 -r sed -i 's/{{gh.org_name}}/'"${GITHUB_REPOSITORY%%/*}"'/g'
+        grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs -0 -r sed -i 's@{{gh.repository}}@'"${GITHUB_REPOSITORY}"'@g'
     else
         # if not running on Codespaces and GITHUB_REPOSITORY is not set - set aristanetworks/acLabs by default
-        grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.repo_name}}/'"acLabs"'/g'
-        grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs sed -i 's/{{gh.org_name}}/'"aristanetworks"'/g'
-        grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs sed -i 's@{{gh.repository}}@'"aristanetworks/acLabs"'@g'
+        grep -rl '{{gh.repo_name}}' . --exclude-dir .git | xargs -0 -r sed -i 's/{{gh.repo_name}}/'"acLabs"'/g'
+        grep -rl '{{gh.org_name}}' . --exclude-dir .git | xargs -0 -r sed -i 's/{{gh.org_name}}/'"aristanetworks"'/g'
+        grep -rl '{{gh.repository}}' . --exclude-dir .git | xargs -0 -r sed -i 's@{{gh.repository}}@'"aristanetworks/acLabs"'@g'
     fi
 fi
-
+debug_log "CloudVision URL: ${CVURL}"
 # update URL in clab init configs if set
 if [ "${CVURL}" ]; then
     # check if CVURL starts with www.
@@ -91,15 +112,15 @@ if [ "${CVURL}" ]; then
         echo "ERROR: CVURL must start with www."
         exit 1
     fi
-    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL}"'@g'
-    grep -rl '{{cv_url_no_prefix}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL_NO_PREFIX}"'@g'
+    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs -0 -r sed -i 's@{{cv_url}}@'"${CVURL}"'@g'
+    grep -rl '{{cv_url_no_prefix}}' . --exclude-dir .git | xargs -0 -r sed -i 's@{{cv_url}}@'"${CVURL_NO_PREFIX}"'@g'
     # replace all lines where cv-staging is hardcoded
-    grep -rl 'cv-staging.corp.arista.io' . --exclude-dir .git | xargs sed -i 's@cv-staging.corp.arista.io@'"${CVURL_NO_PREFIX}"'@g'
+    grep -rl 'cv-staging.corp.arista.io' . --exclude-dir .git | xargs -0 -r sed -i 's@cv-staging.corp.arista.io@'"${CVURL_NO_PREFIX}"'@g'
 else
     # set defaul url to staging if nothing is defined
-    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"cv-staging.corp.arista.io"'@g'
+    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs -0 -r sed -i 's@{{cv_url}}@'"cv-staging.corp.arista.io"'@g'
 fi
-
+debug_log "API Token:"
 if [ "${CV_API_TOKEN}" ]; then
     if [ "${CVURL}" ]; then
         CVTOKEN=$(curl -H "Authorization: Bearer ${CV_API_TOKEN}" "https://${CVURL}/api/v3/services/admin.Enrollment/AddEnrollmentToken" -d '{"enrollmentToken":{"reenrollDevices":["*"],"validFor":"24h"}}' | sed -n 's|.*"token":"\([^"]*\)".*|\1|p')
@@ -115,7 +136,7 @@ else
     # add default to avoid clab failing due to missing file
     echo "CAFECAFE" > ${CONTAINERWSF}/clab/cv-onboarding-token
 fi
-
+debug_log "Post create:"
 if [ -f "${CONTAINERWSF}/postCreate.sh" ]; then
     chmod +x ${CONTAINERWSF}/postCreate.sh
     ${CONTAINERWSF}/postCreate.sh
@@ -123,6 +144,7 @@ if [ -f "${CONTAINERWSF}/postCreate.sh" ]; then
     rm ${CONTAINERWSF}/postCreate.sh
 fi
 
+debug_log "Git init bool: ${GIT_INIT}"
 # init demo dir as Git repo if requested for this demo env
 if ${GIT_INIT:-false}; then
     cd ${CONTAINERWSF}
@@ -141,6 +163,9 @@ if [ -z "${CODE_SERVER_BIND_ADDR}" ]; then
     CODE_SERVER_BIND_ADDR="0.0.0.0:8080"
 fi
 code-server --bind-addr ${CODE_SERVER_BIND_ADDR} --auth password --disable-telemetry --disable-update-check --disable-workspace-trust "${CONTAINERWSF}" &
+
+VSCODE_PASSWORD=$(awk '/^password:/ {print $2}' /home/avd/.config/code-server/config.yaml)
+echo "The vscode WebGUI password is: $VSCODE_PASSWORD"
 
 # check if image is still missing and print a warning
 if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then

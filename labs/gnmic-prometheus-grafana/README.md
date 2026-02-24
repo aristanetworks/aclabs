@@ -26,7 +26,7 @@ Last reviewed: 10/12/2025
 
 Please check the lab materials:
 
-- [Lab Documentation](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/telemetry)
+- [Lab Documentation](https://wdion-arista.github.io/aclabs/telemetry)
 
 ## Lab Inventory
 

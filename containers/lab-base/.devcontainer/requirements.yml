@@ -1,0 +1,28 @@
+---
+roles:
+  - name: act-topgen
+    src: https://github.com/wdion-arista/act_topgen.git
+    scm: git
+    version: v1.0.8
+    #version: main
+  - name: act-connections
+    src: https://github.com/wdion-arista/act_connections.git
+    scm: git
+    version: v1.0.3
+    #version: main    
+  - name: agni-certificates
+    src: https://github.com/wdion-arista/agni_certificates.git
+    scm: git
+    version: v1.0.1
+    #version: main
+  - name: tls-certificates
+    src: https://github.com/wdion-arista/tls_certificates.git
+    scm: git
+    version: v1.0.0
+    #version: main
+collections:
+  - name: community.general
+  - name: community.docker
+  - name: ansible.posix
+  - name: community.crypto
+
