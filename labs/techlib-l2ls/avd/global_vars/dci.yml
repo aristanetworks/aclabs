@@ -1,0 +1,28 @@
+---
+l3_edge:
+  p2p_links_ip_pools:
+    - name: DCI_POOL
+      ipv4_pool: 172.16.255.0/24
+
+  p2p_links_profiles:
+    - name: ALL_DCI_PROFILE
+      ip_pool: DCI_POOL
+      include_in_underlay_protocol: true
+
+  p2p_links:
+    - id: 1
+      nodes: [ a-spine1, b-spine1 ]
+      interfaces: [ Ethernet5, Ethernet5 ]
+      profile: ALL_DCI_PROFILE
+    - id: 2
+      nodes: [ a-spine1, b-spine2 ]
+      interfaces: [ Ethernet6, Ethernet5 ]
+      profile: ALL_DCI_PROFILE
+    - id: 3
+      nodes: [ a-spine2, b-spine1 ]
+      interfaces: [ Ethernet5, Ethernet6 ]
+      profile: ALL_DCI_PROFILE
+    - id: 4
+      nodes: [ a-spine2, b-spine2 ]
+      interfaces: [ Ethernet6, Ethernet6 ]
+      profile: ALL_DCI_PROFILE

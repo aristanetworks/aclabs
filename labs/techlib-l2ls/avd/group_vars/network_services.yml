@@ -1,0 +1,49 @@
+---
+tenants:
+  - name: fabric
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: default
+        svis:
+          - id: 10
+            name: 'TEN'
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.10.10.1
+            nodes:
+              - node: a-spine1
+                ip_address: 10.10.10.2/24
+              - node: a-spine2
+                ip_address: 10.10.10.3/24
+              - node: b-spine1
+                ip_address: 10.10.10.4/24
+              - node: b-spine2
+                ip_address: 10.10.10.5/24
+          - id: 20
+            name: 'TWENTY'
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.20.20.1
+            nodes:
+              - node: a-spine1
+                ip_address: 10.20.20.2/24
+              - node: a-spine2
+                ip_address: 10.20.20.3/24
+              - node: b-spine1
+                ip_address: 10.20.20.4/24
+              - node: b-spine2
+                ip_address: 10.20.20.5/24
+          - id: 30
+            name: 'THIRTY'
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.30.30.1
+            nodes:
+              - node: a-spine1
+                ip_address: 10.30.30.2/24
+              - node: a-spine2
+                ip_address: 10.30.30.3/24
+              - node: b-spine1
+                ip_address: 10.30.30.4/24
+              - node: b-spine2
+                ip_address: 10.30.30.5/24
