@@ -1,5 +1,5 @@
-! Startup-config last modified at Tue Feb 24 02:10:36 2026 by root
-! device: PE-11 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+! Startup-config last modified at Tue Feb 24 13:38:44 2026 by root
+! device: PE-13 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
 !
@@ -20,7 +20,7 @@ interface defaults
 !
 service routing protocols model multi-agent
 !
-hostname PE-11
+hostname PE-13
 !
 spanning-tree mode mstp
 !
@@ -43,7 +43,7 @@ aaa authorization exec default local
 interface Ethernet1
    mtu 9214
    no switchport
-   ip address 20.3.11.11/24
+   ip address 20.12.13.13/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
@@ -51,7 +51,7 @@ interface Ethernet1
 interface Ethernet2
    mtu 9214
    no switchport
-   ip address 20.10.11.11/24
+   ip address 20.5.13.13/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
@@ -59,23 +59,18 @@ interface Ethernet2
 interface Ethernet3
    mtu 9214
    no switchport
-   ip address 20.2.11.11/24
+   ip address 20.4.13.13/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
 !
 interface Ethernet4
-   no switchport
-   ip address unnumbered Loopback0
-   isis enable 100
-   isis circuit-type level-2
-   isis network point-to-point
 !
 interface Ethernet5
 !
 interface Loopback0
-   ip address 100.0.0.11/32
-   node-segment ipv4 index 11
+   ip address 100.0.0.13/32
+   node-segment ipv4 index 13
    isis enable 100
    isis circuit-type level-2
    isis passive
@@ -94,7 +89,7 @@ ip route vrf MGMT 0.0.0.0/0 172.100.100.1
 mpls ip
 !
 router bgp 100
-   router-id 100.0.0.11
+   router-id 100.0.0.13
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    neighbor RR peer group
@@ -109,8 +104,8 @@ router bgp 100
       neighbor RR activate
 !
 router isis 100
-   net 49.1111.0000.0000.0011.00
-   router-id ipv4 100.0.0.11
+   net 49.1111.0000.0000.0013.00
+   router-id ipv4 100.0.0.13
    is-type level-2
    !
    address-family ipv4 unicast

@@ -1,9 +1,9 @@
-! Startup-config last modified at Tue Feb 24 02:10:35 2026 by root
-! device: PE-3 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+! Startup-config last modified at Tue Feb 24 13:38:44 2026 by root
+! device: PE-12 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret sha512 $6$lRsbEoMV4JAEf3F5$wIkTyJZO/S1VYNBR6g7ObgD/iS1VvOBHSuGBCv/CI07xs5t0nlCJYDqkjoBUwlE9utHyJ.xWbBK2LCA/am3EV.
+username admin privilege 15 role network-admin secret sha512 $6$Nn1sia0NpLQPW9FB$q/PgN/1A3zEaUnOddk3T9ucpVXt1l4Askdj2N3xYV.kSJk7hiDIYVkltWnGJ2tfD1t4.OLn7c0wzjQr0bAhJK.
 !
 management api http-commands
    no shutdown
@@ -11,15 +11,16 @@ management api http-commands
    vrf MGMT
       no shutdown
 !
-switchport default mode routed
-!
 no service interface inactive port-id allocation disabled
 !
 transceiver qsfp default-mode 4x10G
 !
+interface defaults
+   mtu 9214
+!
 service routing protocols model multi-agent
 !
-hostname PE-3
+hostname PE-12
 !
 spanning-tree mode mstp
 !
@@ -42,7 +43,7 @@ aaa authorization exec default local
 interface Ethernet1
    mtu 9214
    no switchport
-   ip address 20.2.3.3/24
+   ip address 20.12.13.12/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
@@ -50,7 +51,7 @@ interface Ethernet1
 interface Ethernet2
    mtu 9214
    no switchport
-   ip address 20.3.4.3/24
+   ip address 20.3.12.12/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
@@ -58,39 +59,25 @@ interface Ethernet2
 interface Ethernet3
    mtu 9214
    no switchport
-   ip address 20.3.9.3/24
+   ip address 20.4.12.12/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
 !
 interface Ethernet4
-   mtu 9214
-   no switchport
-   ip address 20.3.12.3/24
-   ipv6 enable
-   ipv6 address 2001:db8:6:8::6/64
-   isis enable 100
-   isis circuit-type level-2
-   isis network point-to-point
 !
 interface Ethernet5
-   mtu 9214
-   no switchport
-   ip address 20.3.11.3/24
-   isis enable 100
-   isis circuit-type level-2
-   isis network point-to-point
 !
 interface Loopback0
-   ip address 100.0.0.3/32
-   node-segment ipv4 index 3
+   ip address 100.0.0.12/32
+   node-segment ipv4 index 12
    isis enable 100
    isis circuit-type level-2
    isis passive
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.7/24
+   ip address 172.100.100.10/24
 !
 ip routing
 no ip routing vrf MGMT
@@ -102,7 +89,7 @@ ip route vrf MGMT 0.0.0.0/0 172.100.100.1
 mpls ip
 !
 router bgp 100
-   router-id 100.0.0.3
+   router-id 100.0.0.12
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    neighbor RR peer group
@@ -117,8 +104,8 @@ router bgp 100
       neighbor RR activate
 !
 router isis 100
-   net 49.1111.0000.0000.0003.00
-   router-id ipv4 100.0.0.3
+   net 49.1111.0000.0000.0012.00
+   router-id ipv4 100.0.0.12
    is-type level-2
    !
    address-family ipv4 unicast

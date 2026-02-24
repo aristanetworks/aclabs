@@ -1,4 +1,4 @@
-! Startup-config last modified at Tue Feb 24 02:10:35 2026 by root
+! Startup-config last modified at Tue Feb 24 13:38:44 2026 by root
 ! device: PE-9 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
@@ -83,7 +83,7 @@ interface Loopback99
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.23/24
+   ip address 172.100.100.19/24
 !
 ip routing
 no ip routing vrf MGMT
@@ -103,22 +103,6 @@ router bgp 100
    neighbor RR-CLIENTS remote-as 100
    neighbor RR-CLIENTS update-source Loopback0
    neighbor RR-CLIENTS send-community
-   neighbor 100.0.0.1 peer group RR-CLIENTS
-   neighbor 100.0.0.1 description PE-1
-   neighbor 100.0.0.2 peer group RR-CLIENTS
-   neighbor 100.0.0.2 description PE-2
-   neighbor 100.0.0.3 peer group RR-CLIENTS
-   neighbor 100.0.0.3 description PE-3
-   neighbor 100.0.0.4 peer group RR-CLIENTS
-   neighbor 100.0.0.4 description PE-4
-   neighbor 100.0.0.5 peer group RR-CLIENTS
-   neighbor 100.0.0.5 description PE-5
-   neighbor 100.0.0.6 peer group RR-CLIENTS
-   neighbor 100.0.0.6 description PE-6
-   neighbor 100.0.0.7 peer group RR-CLIENTS
-   neighbor 100.0.0.7 description PE-7
-   neighbor 100.0.0.8 peer group RR-CLIENTS
-   neighbor 100.0.0.8 description PE-8
    neighbor 100.0.0.10 peer group RR-CLIENTS
    neighbor 100.0.0.10 description PE-10
    neighbor 100.0.0.11 peer group RR-CLIENTS
