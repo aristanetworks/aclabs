@@ -81,6 +81,22 @@
       "textDecoration": "none",
       "textAlign": "left",
       "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1772035111864",
+      "text": "This sandbox lab environment is intended to be paired with the [EOS Tips for Network Operators Guide](https://tech-library.arista.com/eos/eos_ops/) found on [Arista's Tech Library](https://tech-library.arista.com/).\n\nAll nodes, including Linux hosts, have been pre-configured.",
+      "position": {
+        "x": -600.9129108886156,
+        "y": -334.67977230891097
+      },
+      "fontSize": 14,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
     }
   ],
   "groupStyleAnnotations": [],
