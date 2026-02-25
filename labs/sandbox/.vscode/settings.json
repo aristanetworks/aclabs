@@ -11,6 +11,7 @@
                 "kind": "linux",
                 "image": "ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1",
                 "icon": "client",
+                "iconColor": "#16325b",
                 "baseName": "host",
                 "setDefault": false,
                 "interfacePattern": "eth{n}",
@@ -29,6 +30,7 @@
                 "type": "",
                 "image": "arista/ceos:latest",
                 "icon": "switch",
+                "iconColor": "#16325b",
                 "baseName": "ceos",
                 "setDefault": true,
                 "interfacePattern": "et{n}",
@@ -47,6 +49,7 @@
     },
     "workbench": {
         "startupEditor": "readme",
+        "colorTheme": "Default Light Modern",
         "editorAssociations": {
                     "*.md": "vscode.markdown.preview.editor"
         }
