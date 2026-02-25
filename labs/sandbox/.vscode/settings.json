@@ -5,6 +5,7 @@
         "defaultSshUser": "admin",
         "editor": {
             "defaultKind": "ceos",
+            "lockLabByDefault": false,
             "customNodes": [
             {
                 "name": "Linux Host",
@@ -39,7 +40,6 @@
                 }
             }
             ],
-            "lockLabByDefault": false,
             "node": {
                 "sshUserMapping": {
                     "ceos": "admin"

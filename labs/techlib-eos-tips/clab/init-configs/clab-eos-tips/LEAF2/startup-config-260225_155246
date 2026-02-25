@@ -1,0 +1,115 @@
+! Startup-config last modified at Wed Feb 25 15:52:46 2026 by root
+! device: LEAF2 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret sha512 $6$UyG7gO7F9cLeDxAm$v.L.xilcg404oaYUQ5nVzTdiIo7N2Bm9i0gKREmhGQ12I2dkl22kpllXVAKoyRtYCON/2F6PL5N/iqwFisGQs0
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+event-monitor
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname LEAF2
+ip name-server vrf MGMT 8.8.8.8
+dns domain avd.lab
+!
+platform tfa
+   personality arfa
+!
+spanning-tree mode mstp
+no spanning-tree vlan-id 4094
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vlan 10
+   name Ten
+!
+vlan 20
+   name Twenty
+!
+vlan 4094
+   name MLAG_PEER_SYNC
+   trunk group MLAG_PEER
+!
+vrf instance MGMT
+!
+aaa authorization exec default local
+!
+interface Port-Channel12
+   description MLAG-Host2
+   switchport access vlan 20
+   mlag 12
+   spanning-tree portfast edge
+!
+interface Port-Channel101
+   description MLAG-SPINES
+   switchport mode trunk
+   mlag 101
+!
+interface Port-Channel1000
+   description MLAG PEER LINK
+   switchport mode trunk
+   switchport trunk group MLAG_PEER
+!
+interface Ethernet1
+   channel-group 101 mode active
+!
+interface Ethernet2
+   channel-group 101 mode active
+!
+interface Ethernet11
+   description Host1
+   switchport access vlan 10
+   spanning-tree portfast edge
+!
+interface Ethernet12
+   description Host2
+   switchport access vlan 20
+   channel-group 12 mode active
+   spanning-tree portfast edge
+!
+interface Ethernet47
+   channel-group 1000 mode active
+!
+interface Ethernet48
+   channel-group 1000 mode active
+!
+interface Management0
+   vrf MGMT
+   ip address 10.0.2.2/16
+!
+interface Vlan4094
+   description MLAG PEER SYNC
+   mtu 9214
+   no autostate
+   ip address 169.254.0.2/30
+!
+ip routing
+no ip routing vrf MGMT
+!
+mlag configuration
+   domain-id 100
+   local-interface Vlan4094
+   peer-address 169.254.0.1
+   peer-link Port-Channel1000
+!
+ip route vrf MGMT 0.0.0.0/0 10.0.0.1
+!
+ntp local-interface vrf MGMT Management0
+ntp server vrf MGMT time.apple.com
+ntp server vrf MGMT time.google.com
+ntp server vrf MGMT time.windows.com
+!
+end
