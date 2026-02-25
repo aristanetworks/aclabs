@@ -10,8 +10,8 @@ Welcome! This pre-configured lab is based on the scenarios defined in the [RCF Q
 
 This lab has been validated with:
 
-- cEOS-lab: **4.35.0F**
-- Containerlab: **0.72.0**
+- cEOS-lab: **4.35.2F**
+- Containerlab: **0.73.0**
 - Resources:
   - CPUs: **8**
   - Memory: **32 GB**
