@@ -1,297 +1,475 @@
 {
   "freeTextAnnotations": [
     {
-      "id": "freeText_1763596212135_2",
-      "text": "5.0.0.0/8",
+      "id": "freeText_1771978404711",
+      "text": "## Overview\n\nThis lab is based on the scenarios in the [RCF QuickStart Guide](https://tech-library.arista.com/solution_guides/rcf_quickstart/) found on [Arista's Tech Library](https://tech-library.arista.com).\n\nAll example RCF policy examples are configured on **EOS1**.\n\nFeel free to explore these policies, or delete them and craft your own!\n\n## IP Schema\n\n**Point-to-Point Links**\n- 20.*[Low Node ID]*.*[High Node ID]*.*[Node ID]*/24\n\n**Loopbacks**\n- *[Node ID]*.*[Loopback ID]*.*[Loopback ID]*.1/24\n\n- Each node has the following Loopbacks\n  - Loopback0\n  - Loopback1\n  - Loopback2\n  - Loopback3",
       "position": {
-        "x": 91,
-        "y": -35
+        "x": -607.7977734871847,
+        "y": -212.63531715105063
       },
-      "fontSize": 8,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 12,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763596251174_3",
-      "text": "6.0.0.0/8",
+      "id": "freeText_1771978911607",
+      "text": "**ASN 600**",
       "position": {
-        "x": 147,
-        "y": -35
+        "x": 228.5000000000008,
+        "y": -207.99999999999997
       },
       "fontSize": 8,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763596263995_4",
-      "text": "2.0.0.0/8",
+      "id": "freeText_1771978972535",
+      "text": "**6.0.0.0/8**",
       "position": {
-        "x": 259,
-        "y": 105
+        "x": 323.53360319831745,
+        "y": -208.04088848497923
       },
       "fontSize": 8,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763596284344_5",
-      "text": "1.0.0.0/8",
+      "id": "freeText_1771979005105",
+      "text": "**ASN 500**",
       "position": {
-        "x": 35,
-        "y": 105
+        "x": 29.72732280967014,
+        "y": -208.22490443969153
       },
       "fontSize": 8,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763596301398_6",
-      "text": "3.0.0.0/8",
+      "id": "freeText_1771979017330",
+      "text": "**5.0.0.0/8**",
       "position": {
-        "x": 259,
-        "y": 203
+        "x": 124.74183452444655,
+        "y": -208.0768037467927
       },
       "fontSize": 8,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true,
-      "width": 54,
-      "height": 26
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763596315759_7",
-      "text": "4.0.0.0/8",
+      "id": "freeText_1771979048131",
+      "text": "**ASN 200**",
       "position": {
-        "x": 35,
-        "y": 203
+        "x": 523.7875023212945,
+        "y": 27.51350784291469
       },
       "fontSize": 8,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763598236900_1",
-      "text": "**IP Schema**\n\n**Point-to-Point Links**\n- 20.*[Low Node ID]*.*[High Node ID]*.*[Node ID]*/24\n  - Example: EOS1 to EOS5\n    - EOS1, Eth4: 20.1.5.1/24\n    - EOS5, Eth1: 20.1.5.5/24\n\n\n**Loopbacks**\n- *[Node ID]*.*[Loopback ID]*.*[Loopback ID]*.1/24\n  - Examples\n    - EOS1 Loopback0: 1.0.0.1/24\n    - EOS2 Loopback1: 2.1.1.1/24\n- Each node has the following Loopbacks\n  - Loopback0\n  - Loopback1\n  - Loopback2\n  - Loopback3",
+      "id": "freeText_1771979061026",
+      "text": "**2.0.0.0/8**",
       "position": {
-        "x": -133,
-        "y": 105
+        "x": 524.7523036056018,
+        "y": 134.54844989094622
       },
       "fontSize": 8,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
     },
     {
-      "id": "freeText_1763598427154_1",
-      "text": "All example RCF policy examples are configured on EOS1.\n\nFeel free to explore these policies, or delete them and craft your own!\n\nHappy labbing 🥳🧪",
+      "id": "freeText_1771979166482",
+      "text": "**ASN 100**",
       "position": {
-        "x": 399,
-        "y": 7
+        "x": 29.000000000001442,
+        "y": 28.49999999999961
       },
       "fontSize": 8,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771979182446",
+      "text": "**1.0.0.0/8**",
+      "position": {
+        "x": 29.500000000001577,
+        "y": 134.49999999999932
+      },
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771979228555",
+      "text": "**ASN 400**",
+      "position": {
+        "x": 29.619739617310913,
+        "y": 351.32192313225124
+      },
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771979243034",
+      "text": "**4.0.0.0/8**",
+      "position": {
+        "x": 27.974827427961046,
+        "y": 457.4220827879788
+      },
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771979277989",
+      "text": "**ASN 300**",
+      "position": {
+        "x": 522.9096022557255,
+        "y": 354.3694552571368
+      },
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771979290491",
+      "text": "**3.0.0.0/8**",
+      "position": {
+        "x": 523.6314601306414,
+        "y": 458.8446041399892
+      },
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
     }
   ],
-  "groupStyleAnnotations": [
-    {
-      "id": "ASN 100:1",
-      "backgroundColor": "#16325b",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-left"
-    },
-    {
-      "id": "ASN 400:1",
-      "backgroundColor": "#16325b",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-left"
-    },
-    {
-      "id": "ASN 200:1",
-      "backgroundColor": "#16325b",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-right"
-    },
-    {
-      "id": "ASN 300:1",
-      "backgroundColor": "#16325b",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-right"
-    },
-    {
-      "id": "ASN 500:1",
-      "backgroundColor": "#16325b",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-center"
-    },
-    {
-      "id": "ASN 600:1",
-      "backgroundColor": "#16325b",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-center"
-    }
-  ],
+  "groupStyleAnnotations": [],
   "cloudNodeAnnotations": [],
   "nodeAnnotations": [
     {
       "id": "EOS1",
-      "icon": "router",
+      "icon": "pe",
       "position": {
-        "x": 91,
-        "y": 105
+        "x": 80,
+        "y": 80
       },
       "geoCoordinates": {
         "lat": 48.95546844144507,
         "lng": 9.906746836683288
       },
-      "group": "ASN 100",
-      "level": "1"
-    },
-    {
-      "id": "EOS2",
-      "icon": "router",
-      "position": {
-        "x": 203,
-        "y": 105
-      },
-      "geoCoordinates": {
-        "lat": 48.834114200236066,
-        "lng": 9.711241202557709
-      },
-      "group": "ASN 200",
-      "level": "1"
-    },
-    {
-      "id": "EOS3",
-      "icon": "router",
-      "position": {
-        "x": 203,
-        "y": 203
-      },
-      "geoCoordinates": {
-        "lat": 48.721051076756375,
-        "lng": 9.700559027532613
-      },
-      "group": "ASN 300",
-      "level": "1"
+      "level": "1",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 40
     },
     {
       "id": "EOS4",
-      "icon": "router",
+      "icon": "pe",
       "position": {
-        "x": 91,
-        "y": 203
+        "x": 80,
+        "y": 400
       },
       "geoCoordinates": {
         "lat": 49.18949956207221,
         "lng": 9.794579310642213
       },
-      "group": "ASN 400",
-      "level": "1"
+      "level": "1",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 40
+    },
+    {
+      "id": "EOS3",
+      "icon": "pe",
+      "position": {
+        "x": 480,
+        "y": 400
+      },
+      "geoCoordinates": {
+        "lat": 48.721051076756375,
+        "lng": 9.700559027532613
+      },
+      "level": "1",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 40
+    },
+    {
+      "id": "EOS2",
+      "icon": "pe",
+      "position": {
+        "x": 480,
+        "y": 80
+      },
+      "geoCoordinates": {
+        "lat": 48.834114200236066,
+        "lng": 9.711241202557709
+      },
+      "level": "1",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 40
     },
     {
       "id": "EOS5",
-      "icon": "router",
+      "icon": "pe",
       "position": {
-        "x": 91,
-        "y": 21
+        "x": 80,
+        "y": -160
       },
       "geoCoordinates": {
         "lat": 49.35786919065505,
         "lng": 9.303405001444052
       },
-      "group": "ASN 500",
-      "level": "1"
+      "level": "1",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 40
     },
     {
       "id": "EOS6",
-      "icon": "router",
+      "icon": "pe",
       "position": {
-        "x": 147,
-        "y": 21
+        "x": 280,
+        "y": -160
       },
       "geoCoordinates": {
         "lat": 49.30730476768171,
         "lng": 9.546957442052083
       },
-      "group": "ASN 600",
-      "level": "1"
+      "level": "1",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 40
+    }
+  ],
+  "freeShapeAnnotations": [
+    {
+      "id": "freeShape_1771978544416",
+      "shapeType": "rectangle",
+      "position": {
+        "x": 26.183192264757167,
+        "y": -212.7247474146471
+      },
+      "width": 150,
+      "height": 150,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    },
+    {
+      "id": "freeShape_1771978554122",
+      "shapeType": "rectangle",
+      "position": {
+        "x": 225.1263696062402,
+        "y": -212.552556257813
+      },
+      "width": 150,
+      "height": 150,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    },
+    {
+      "id": "freeShape_1771978577235",
+      "shapeType": "rectangle",
+      "position": {
+        "x": 425.6947520632426,
+        "y": 23.675417392741252
+      },
+      "width": 150,
+      "height": 150,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    },
+    {
+      "id": "freeShape_1771978625545",
+      "shapeType": "rectangle",
+      "position": {
+        "x": 26.338095160243753,
+        "y": 25.292769248622093
+      },
+      "width": 150,
+      "height": 150,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    },
+    {
+      "id": "freeShape_1771978642914",
+      "shapeType": "rectangle",
+      "position": {
+        "x": 25.37406306004307,
+        "y": 347.7732179152879
+      },
+      "width": 150,
+      "height": 150,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    },
+    {
+      "id": "freeShape_1771978655779",
+      "shapeType": "rectangle",
+      "position": {
+        "x": 426.6065613916964,
+        "y": 348.6414314380711
+      },
+      "width": 150,
+      "height": 150,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    }
+  ],
+  "edgeAnnotations": [
+    {
+      "id": "Clab-Link4",
+      "source": "EOS2",
+      "target": "EOS3",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link6",
+      "source": "EOS3",
+      "target": "EOS4",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link1",
+      "source": "EOS1",
+      "target": "EOS4",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link0",
+      "source": "EOS1",
+      "target": "EOS2",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link2",
+      "source": "EOS1",
+      "target": "EOS6",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link5",
+      "source": "EOS2",
+      "target": "EOS6",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link3",
+      "source": "EOS1",
+      "target": "EOS5",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
     }
   ]
 }
