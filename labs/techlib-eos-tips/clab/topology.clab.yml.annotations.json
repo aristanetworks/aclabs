@@ -2,162 +2,287 @@
   "freeTextAnnotations": [
     {
       "id": "freeText_1763744891076_2",
-      "text": "IPv4: 10.10.10.101/24\nIPv6: 2001:db8:10:10::101/64\nMAC: 00:01:01:01:01:01\nVLAN: 10",
+      "text": "- IPv4: **10.10.10.101/24**\n- IPv6: **2001:db8:10:10::101/64**\n- MAC: **00:01:01:01:01:01**\n- VLAN: **10**",
       "position": {
-        "x": -49,
-        "y": 203
+        "x": -433.8853943072858,
+        "y": 423.1732363176617
       },
-      "fontSize": 4,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 10,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
-      "fontFamily": "monospace",
       "textAlign": "left",
-      "roundedBackground": true
-    },
-    {
-      "id": "freeText_1763744960741_3",
-      "text": "IPv4: 10.20.20.101/24\nIPv6: 2001:db8:20:20::101/64\nMAC: 00:02:02:02:02:02\nVLAN: 20",
-      "position": {
-        "x": 35,
-        "y": 203
-      },
-      "fontSize": 4,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
-      "fontWeight": "normal",
-      "fontStyle": "normal",
-      "textDecoration": "none",
-      "fontFamily": "monospace",
-      "textAlign": "left",
+      "fontFamily": "Arial",
       "roundedBackground": true
     },
     {
       "id": "freeText_1763745020139_4",
-      "text": "MLAG Port-Channel 101",
+      "text": "**MLAG Port-Channel 101**",
       "position": {
-        "x": -7,
-        "y": 35
+        "x": -235.13783705976493,
+        "y": -39.016588285779235
       },
-      "fontSize": 4,
-      "fontColor": "#ffffff",
-      "backgroundColor": "#16325b",
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
       "textDecoration": "none",
+      "textAlign": "center",
       "fontFamily": "monospace",
-      "textAlign": "left",
       "roundedBackground": true
-    }
-  ],
-  "groupStyleAnnotations": [
-    {
-      "id": "End Hosts:4",
-      "backgroundColor": "#d9d9d9",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-left"
     },
     {
-      "id": "Leaf:3",
-      "backgroundColor": "#d9d9d9",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-left"
+      "id": "freeText_1772032770257",
+      "text": "**MLAG Port-Channel 12**",
+      "position": {
+        "x": -231.4209575669801,
+        "y": 165.42299647119935
+      },
+      "fontSize": 8,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "center",
+      "fontFamily": "monospace"
     },
     {
-      "id": "Spines:2",
-      "backgroundColor": "#d9d9d9",
-      "backgroundOpacity": 20,
-      "borderColor": "#dddddd",
-      "borderWidth": 0.5,
-      "borderStyle": "solid",
-      "borderRadius": 0,
-      "color": "#ebecf0",
-      "labelPosition": "top-left"
+      "id": "freeText_1772032962543",
+      "text": "- IPv4: **10.20.20.101/24**\n- IPv6: **2001:db8:20:20::101/64**\n- MAC: **00:01:02:02:02:02**\n- VLAN: **20**",
+      "position": {
+        "x": -273.992118758928,
+        "y": 304.0534552696975
+      },
+      "fontSize": 10,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1772033015572",
+      "text": "- IPv4: **10.10.10.102/24**\n- IPv6: **2001:db8:10:10::102/64**\n- MAC: **00:03:03:03:03:03**\n- VLAN: **10**",
+      "position": {
+        "x": -114.08149195836236,
+        "y": 425.0816344641604
+      },
+      "fontSize": 10,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
     }
   ],
+  "groupStyleAnnotations": [],
   "cloudNodeAnnotations": [],
   "nodeAnnotations": [
-    {
-      "id": "SPINE1",
-      "icon": "spine",
-      "position": {
-        "x": -49,
-        "y": -7
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Spines",
-      "level": "2"
-    },
-    {
-      "id": "SPINE2",
-      "icon": "spine",
-      "position": {
-        "x": 35,
-        "y": -7
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Spines",
-      "level": "2"
-    },
-    {
-      "id": "LEAF1",
-      "icon": "leaf",
-      "position": {
-        "x": -7,
-        "y": 77
-      },
-      "geoCoordinates": {
-        "lat": 48.684826888402256,
-        "lng": 9.007895390625677
-      },
-      "group": "Leaf",
-      "level": "3"
-    },
     {
       "id": "Host1",
       "icon": "client",
       "position": {
-        "x": -49,
-        "y": 161
+        "x": -360,
+        "y": 360
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "End Hosts",
-      "level": "4"
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
     },
     {
       "id": "Host2",
       "icon": "client",
       "position": {
-        "x": 35,
-        "y": 161
+        "x": -200,
+        "y": 240
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
         "lng": 9.007895390625677
       },
-      "group": "End Hosts",
-      "level": "4"
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "LEAF1",
+      "icon": "leaf",
+      "position": {
+        "x": -360,
+        "y": 80
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "3",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "SPINE1",
+      "icon": "spine",
+      "position": {
+        "x": -360,
+        "y": -160
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "2",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "SPINE2",
+      "icon": "spine",
+      "position": {
+        "x": -40,
+        "y": -160
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "2",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "LEAF2",
+      "position": {
+        "x": -40,
+        "y": 80
+      },
+      "icon": "switch",
+      "iconColor": "#16325b",
+      "interfacePattern": "et{n}"
+    },
+    {
+      "id": "Host3",
+      "position": {
+        "x": -40,
+        "y": 360
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "interfacePattern": "eth{n}"
+    }
+  ],
+  "freeShapeAnnotations": [
+    {
+      "id": "freeShape_1772032561710",
+      "shapeType": "rectangle",
+      "position": {
+        "x": -401.09065182324343,
+        "y": -46.281561829218596
+      },
+      "width": 438,
+      "height": 50,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 0,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "cornerRadius": 40,
+      "zIndex": -1
+    },
+    {
+      "id": "freeShape_1772032647708",
+      "shapeType": "rectangle",
+      "position": {
+        "x": -278.0157165665104,
+        "y": 159.08497605164087
+      },
+      "width": 195,
+      "height": 50,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 0,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "cornerRadius": 40,
+      "zIndex": -1
+    }
+  ],
+  "edgeAnnotations": [
+    {
+      "id": "Clab-Link4",
+      "source": "Host1",
+      "target": "LEAF1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "eth11",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link5",
+      "source": "Host2",
+      "target": "LEAF1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "eth12",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link0",
+      "source": "LEAF1",
+      "target": "SPINE1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "eth1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link1",
+      "source": "LEAF1",
+      "target": "SPINE2",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "eth1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link2",
+      "source": "SPINE1",
+      "target": "SPINE2",
+      "sourceEndpoint": "eth47",
+      "targetEndpoint": "eth47",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link3",
+      "source": "SPINE1",
+      "target": "SPINE2",
+      "sourceEndpoint": "eth48",
+      "targetEndpoint": "eth48",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link6",
+      "source": "Host2",
+      "target": "LEAF2",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et12",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
     }
   ]
 }

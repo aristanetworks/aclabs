@@ -8,35 +8,43 @@ mgmt:
 
 topology:
   kinds:
-    ceos:
+    arista_ceos:
       enforce-startup-config: true
       image: arista/ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1
 
-  defaults:
-    kind: ceos
-
   nodes:
     SPINE1:
+      kind: arista_ceos
       mgmt-ipv4: 10.0.1.1
       binds:
         - sn/SPINE1.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/SPINE1.cfg
+      startup-config: init-configs/clab-eos-tips/SPINE1/startup-config
 
     SPINE2:
+      kind: arista_ceos
       mgmt-ipv4: 10.0.1.2
       binds:
         - sn/SPINE2.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/SPINE2.cfg
-      group: 'spine'
+      startup-config: init-configs/clab-eos-tips/SPINE2/startup-config
 
     LEAF1:
+      kind: arista_ceos
       mgmt-ipv4: 10.0.2.1
       binds:
         - sn/LEAF1.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/LEAF1.cfg
-      group: 'leaf'
+      startup-config: init-configs/clab-eos-tips/LEAF1/startup-config
+
+    LEAF2:
+      kind: arista_ceos
+      mgmt-ipv4: 10.0.2.2
+      binds:
+        - sn/LEAF2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/clab-eos-tips/LEAF2/startup-config
 
     Host1:
       kind: linux
@@ -57,11 +65,26 @@ topology:
         GW: 10.20.20.1
         IPV6: 2001:db8:20:20::101/64
         UPLINK_MAC: 00:02:02:02:02:02
+        TMODE: lacp
+    Host3:
+      kind: linux
+      env:
+        IPV4: 10.10.10.102/24
+        IPV6: 2001:db8:10:10::102/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:03:03:03:03:03
 
   links:
-    - endpoints: [ "LEAF1:eth1", "SPINE1:eth1" ]
-    - endpoints: [ "LEAF1:eth2", "SPINE2:eth1" ]
-    - endpoints: [ "SPINE1:eth47", "SPINE2:eth47" ]
-    - endpoints: [ "SPINE1:eth48", "SPINE2:eth48" ]
-    - endpoints: [ "Host1:eth1", "LEAF1:eth11" ]
-    - endpoints: [ "Host2:eth1", "LEAF1:eth12" ]
+    - endpoints: [ "LEAF1:et1", "SPINE1:et1" ]
+    - endpoints: [ "LEAF1:et2", "SPINE2:et1" ]
+    - endpoints: [ "SPINE1:et47", "SPINE2:et47" ]
+    - endpoints: [ "SPINE1:et48", "SPINE2:et48" ]
+    - endpoints: [ "Host1:eth1", "LEAF1:et11" ]
+    - endpoints: [ "Host2:eth1", "LEAF1:et12" ]
+    - endpoints: [ "Host2:eth2", "LEAF2:et12" ]
+    - endpoints: [ "SPINE2:et2", "LEAF2:et1" ]
+    - endpoints: [ "LEAF2:et2", "SPINE1:et2" ]
+    - endpoints: [ "LEAF2:et11", "Host3:eth1" ]
+    - endpoints: [ "LEAF1:et48", "LEAF2:et48" ]
+    - endpoints: [ "LEAF1:et47", "LEAF2:et47" ]
