@@ -10,9 +10,9 @@ Welcome! This pre-configured lab matches the [Domain B topology in the EVPN-VXLA
 
 This lab has been validated with:
 
-- cEOS-lab: **4.35.0F**
-- Containerlab: **0.72.0**
-- AVD: **5.7.2**
+- cEOS-lab: **4.35.2F**
+- AVD: **5.7.3**
+- Containerlab: **0.73.0**
 - Resources:
   - CPUs: **16**
   - Memory: **64 GB**
