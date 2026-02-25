@@ -26,149 +26,298 @@ topology:
 
     PE-1:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.101
       binds:
         - sn/pe-1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-1/startup-config
     PE-2:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.102
       binds:
         - sn/pe-2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-2/startup-config
     PE-3:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.103
       binds:
         - sn/pe-3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-3/startup-config
     PE-4:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.104
       binds:
         - sn/pe-4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-4/startup-config
     PE-5:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.105
       binds:
         - sn/pe-5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-5/startup-config
     PE-6:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.106
       binds:
         - sn/pe-6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-6/startup-config
     PE-7:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.107
       binds:
         - sn/pe-7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-7/startup-config
     PE-8:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.108
       binds:
         - sn/pe-8.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-8/startup-config
     PE-9:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.109
       binds:
         - sn/pe-9.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-9/startup-config
     PE-10:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.110
       binds:
         - sn/pe-10.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-10/startup-config
     PE-11:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.111
       binds:
         - sn/pe-11.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-11/startup-config
     PE-12:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.112
       binds:
         - sn/pe-12.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-12/startup-config
     PE-13:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.113
       binds:
         - sn/pe-13.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-13/startup-config
     PE-14:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.114
       binds:
         - sn/pe-14.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-14/startup-config
     PE-15:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.115
       binds:
         - sn/pe-15.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-15/startup-config
     PE-16:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.116
       binds:
         - sn/pe-16.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-16/startup-config
     PE-17:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.117
       binds:
         - sn/pe-17.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/PE-17/startup-config
     CE-1:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.151
       binds:
         - sn/ce-1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-1/startup-config
     CE-2:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.152
       binds:
         - sn/ce-2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-2/startup-config
     CE-3:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.153
       binds:
         - sn/ce-3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-3/startup-config
     CE-4:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.154
       binds:
         - sn/ce-4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-4/startup-config
     CE-5:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.155
       binds:
         - sn/ce-5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-5/startup-config
     CE-6:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.156
       binds:
         - sn/ce-6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-6/startup-config
     CE-7:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.157
       binds:
         - sn/ce-7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-7/startup-config
     CE-8:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.158
       binds:
         - sn/ce-8.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-8/startup-config
     CE-9:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.159
       binds:
         - sn/ce-9.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-9/startup-config
     CE-10:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.160
       binds:
         - sn/ce-10.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-10/startup-config
     CE-11:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.161
       binds:
         - sn/ce-11.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-11/startup-config
     CE-12:
       kind: arista_ceos
+      mgmt-ipv4: 172.100.100.162
       binds:
         - sn/ce-12.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/clab-techlib-mpls-services/CE-12/startup-config
+    Host1:
+      kind: linux
+      mgmt-ipv4: 172.100.100.201
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host2:
+      kind: linux
+      mgmt-ipv4: 172.100.100.202
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host3:
+      kind: linux
+      mgmt-ipv4: 172.100.100.203
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host4:
+      kind: linux
+      mgmt-ipv4: 172.100.100.204
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host5:
+      kind: linux
+      mgmt-ipv4: 172.100.100.205
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host6:
+      kind: linux
+      mgmt-ipv4: 172.100.100.206
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host7:
+      kind: linux
+      mgmt-ipv4: 172.100.100.207
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host8:
+      kind: linux
+      mgmt-ipv4: 172.100.100.208
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host9:
+      kind: linux
+      mgmt-ipv4: 172.100.100.209
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host10:
+      kind: linux
+      mgmt-ipv4: 172.100.100.210
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host11:
+      kind: linux
+      mgmt-ipv4: 172.100.100.211
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
+    Host12:
+      kind: linux
+      mgmt-ipv4: 172.100.100.212
+      env:
+        IPV4: 10.10.10.101/24
+        IPV6: 2001:db8:10:10::101/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        UPLINK_MAC: 00:01:01:00:00:01
+        TMODE: lacp or none
 
   links:
     - endpoints: [ "PE-10:et2", "PE-11:et2" ]
@@ -219,3 +368,15 @@ topology:
     - endpoints: [ "PE-14:et4", "CE-10:et1" ]
     - endpoints: [ "PE-15:et5", "CE-11:et1" ]
     - endpoints: [ "PE-14:et5", "CE-11:et2" ]
+    - endpoints: [ "CE-4:et2", "Host4:eth1" ]
+    - endpoints: [ "Host9:eth1", "CE-9:et2" ]
+    - endpoints: [ "Host5:eth1", "CE-5:et3" ]
+    - endpoints: [ "Host6:eth1", "CE-6:et2" ]
+    - endpoints: [ "Host7:eth1", "CE-7:et2" ]
+    - endpoints: [ "Host8:eth1", "CE-8:eth1" ]
+    - endpoints: [ "Host10:eth1", "CE-10:et2" ]
+    - endpoints: [ "Host11:eth1", "CE-11:et3" ]
+    - endpoints: [ "Host12:eth1", "CE-12:et2" ]
+    - endpoints: [ "Host1:eth1", "CE-1:et2" ]
+    - endpoints: [ "Host2:eth1", "CE-2:et3" ]
+    - endpoints: [ "Host3:eth1", "CE-3:et2" ]
