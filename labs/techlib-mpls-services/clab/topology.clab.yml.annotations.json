@@ -81,8 +81,8 @@
       "id": "freeText_1772043594855",
       "text": "IP: **10.20.20.102/24**",
       "position": {
-        "x": 1498.2375058398081,
-        "y": 595.4911645163423
+        "x": 1387.8415481437794,
+        "y": 667.3150406077347
       },
       "fontSize": 14,
       "fontColor": "#000000",
@@ -111,7 +111,7 @@
     },
     {
       "id": "freeText_1772044272364",
-      "text": "- Service: **E-LAN (EVPN)**\n- EVI: **VLAN 10**\n- RT: **10010:10010**",
+      "text": "- Service: **E-LAN (EVPN)**\n- EVI: **VLAN 10**\n- RT: **10:10**",
       "position": {
         "x": -1129.1038600243403,
         "y": -648.0079130219682
@@ -143,7 +143,7 @@
     },
     {
       "id": "freeText_1772047166126",
-      "text": "- Service: **E-LINE (VPWS)**\n- EVI: **ORANGE**\n- IPVRF RT: **8001:8001**",
+      "text": "- Service: **E-LINE (VPWS)**\n- EVI: **ORANGE**\n- RT: **8001:8001**",
       "position": {
         "x": -1134.761969333374,
         "y": -406.06743962787357
@@ -159,7 +159,7 @@
     },
     {
       "id": "freeText_1772047341537",
-      "text": "## Overview\n- Transport: ISIS-SR\n  - SRGB: 900000 - 965535\n  - Node SID: 900000 + NodeID\n- BGP ASN: 100\n- Loopback0: 100.0.0.X\n- Point-to-Point: 20.X.Y.Z/24\n  - X: Low Node ID\n  - Y: High Node ID\n  - Z: Node ID\n",
+      "text": "## Overview\n- Transport: ISIS-SR\n  - SRGB: 900000 - 965535\n  - Node SID: 900000 + NodeID\n- BGP ASN: 100\n- Loopback0: 100.0.0.X\n- Point-to-Point: 20.X.Y.Z/24\n  - X: Low Node ID\n  - Y: High Node ID\n  - Z: Node ID\n\n## Schema\n\n- MAC-VRF RD: **<Loopback0>:<VLAN ID>**\n- MAC-VRF RT: **<VLAN ID>:<VLAN ID>**\n- ESI: **0000:<Low PE ID>:<High PE ID>:<Int ID>:0000**\n- Virtual GW MAC: **001c.7300.0001**",
       "position": {
         "x": -795.6270072695233,
         "y": -678.5641829564833
@@ -175,10 +175,10 @@
     },
     {
       "id": "freeText_1772050363923",
-      "text": "- Multihoming: **All-Active**\n- EVI: **ORANGE (VPWS)**\n- ESI: **0000:0010:0011:0500:0000**\n- RT: **00:00:10:00:11:05**",
+      "text": "- Multihoming: **All-Active**\n- EVIs: **VLAN 21, 22, 23**\n- IRB: **Yes**",
       "position": {
-        "x": 438.3745291404514,
-        "y": -467.28048513691317
+        "x": 456.9890948207859,
+        "y": -477.6014198923047
       },
       "fontSize": 10,
       "fontColor": "#3b3b3b",
@@ -192,10 +192,10 @@
     },
     {
       "id": "freeText_1772050945209",
-      "text": "- Multihoming: **All-Active**\n- EVI: **VLAN 20**\n- MAC-VRF RT: **10020:10020**\n- ESI: **0000:0012:0013:0500:0000**\n- ES RT: **00:00:12:00:13:05**\n- IRB: **Yes**",
+      "text": "- Multihoming: **All-Active**\n- EVIs: **VLAN 21, 22, 23**\n- IRB: **Yes**",
       "position": {
-        "x": 1182.2709399653145,
-        "y": 320.45016471156333
+        "x": 1235.2446241758398,
+        "y": 342.450164711563
       },
       "fontSize": 10,
       "fontColor": "#3b3b3b",
@@ -208,10 +208,10 @@
     },
     {
       "id": "freeText_1772051028886",
-      "text": "- Multihoming: **All-Active**\n- EVI: **VLAN 10**\n- MAC-VRF RT: **10010:10010**\n- ESI: **0000:0016:0017:0500:0000**\n- ES RT: **00:00:16:00:17:05**\n- IRB: **No**",
+      "text": "- Multihoming: **All-Active**\n- EVI: **VLAN 10**\n- IRB: **No**",
       "position": {
-        "x": -306.76533802818903,
-        "y": 320.7143087980439
+        "x": -320.72753202227943,
+        "y": 344.3171994404321
       },
       "fontSize": 10,
       "fontColor": "#3b3b3b",
@@ -370,7 +370,7 @@
       },
       "width": 200,
       "height": 200,
-      "fillColor": "#AEAEC0",
+      "fillColor": "#f4a261",
       "fillOpacity": 0.75,
       "borderColor": "#3b3b3b",
       "borderWidth": 0,
@@ -532,7 +532,7 @@
       },
       "width": 200,
       "height": 200,
-      "fillColor": "#F4A261",
+      "fillColor": "#635dff",
       "fillOpacity": 0.75,
       "borderColor": "#3b3b3b",
       "borderWidth": 0,
@@ -725,7 +725,7 @@
         "lat": 52.090823,
         "lng": 10.662026
       },
-      "icon": "pe",
+      "icon": "switch",
       "iconColor": "#16325b",
       "iconCornerRadius": 0
     },
@@ -812,7 +812,7 @@
         "x": 520,
         "y": -560
       },
-      "icon": "pe",
+      "icon": "switch",
       "iconColor": "#16325b",
       "interfacePattern": "et{n}"
     },
@@ -953,7 +953,7 @@
       "id": "Host4",
       "position": {
         "x": 280,
-        "y": -520
+        "y": -560
       },
       "icon": "client",
       "iconColor": "#16325b",
@@ -971,10 +971,10 @@
       "interfacePattern": "eth{n}"
     },
     {
-      "id": "Host5",
+      "id": "Host5-21",
       "position": {
-        "x": 520,
-        "y": -720
+        "x": 280,
+        "y": -760
       },
       "icon": "client",
       "iconColor": "#16325b",
@@ -984,7 +984,7 @@
       "id": "Host6",
       "position": {
         "x": 760,
-        "y": -520
+        "y": -560
       },
       "icon": "client",
       "iconColor": "#16325b",
@@ -1041,19 +1041,9 @@
       "interfacePattern": "eth{n}"
     },
     {
-      "id": "host1",
+      "id": "Host8-22",
       "position": {
-        "x": -360,
-        "y": 600
-      },
-      "icon": "client",
-      "iconColor": "#16325b",
-      "interfacePattern": "eth{n}"
-    },
-    {
-      "id": "host2",
-      "position": {
-        "x": -360,
+        "x": 1680,
         "y": 360
       },
       "icon": "client",
@@ -1061,10 +1051,20 @@
       "interfacePattern": "eth{n}"
     },
     {
-      "id": "host3",
+      "id": "Host8-23",
       "position": {
-        "x": -360,
-        "y": 120
+        "x": 1680,
+        "y": 600
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "interfacePattern": "eth{n}"
+    },
+    {
+      "id": "Host5-22",
+      "position": {
+        "x": 520,
+        "y": -760
       },
       "icon": "client",
       "iconColor": "#16325b",
@@ -1111,10 +1111,10 @@
       "iconCornerRadius": 0
     },
     {
-      "id": "Host8",
+      "id": "Host8-21",
       "position": {
-        "x": 1600,
-        "y": 360
+        "x": 1680,
+        "y": 120
       },
       "icon": "client",
       "iconColor": "#16325b",
@@ -1149,6 +1149,16 @@
       "icon": "client",
       "iconColor": "#16325b",
       "iconCornerRadius": 0
+    },
+    {
+      "id": "Host5-23",
+      "position": {
+        "x": 760,
+        "y": -760
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "interfacePattern": "eth{n}"
     }
   ],
   "edgeAnnotations": [
@@ -1198,69 +1208,6 @@
       "endpointLabelOffset": 40
     },
     {
-      "id": "Clab-Link49",
-      "source": "host9",
-      "target": "CE-9",
-      "sourceEndpoint": "eth1",
-      "targetEndpoint": "et2",
-      "endpointLabelOffsetEnabled": true,
-      "endpointLabelOffset": 40
-    },
-    {
-      "id": "Clab-Link53",
-      "source": "host8",
-      "target": "CE-8",
-      "sourceEndpoint": "eth1",
-      "targetEndpoint": "eth1",
-      "endpointLabelOffsetEnabled": true,
-      "endpointLabelOffset": 40
-    },
-    {
-      "id": "Clab-Link52",
-      "source": "host7",
-      "target": "CE-7",
-      "sourceEndpoint": "eth1",
-      "targetEndpoint": "et2",
-      "endpointLabelOffsetEnabled": true,
-      "endpointLabelOffset": 40
-    },
-    {
-      "id": "Clab-Link50",
-      "source": "Host5",
-      "target": "CE-5",
-      "sourceEndpoint": "eth1",
-      "targetEndpoint": "et3",
-      "endpointLabelOffsetEnabled": true,
-      "endpointLabelOffset": 40
-    },
-    {
-      "id": "Clab-Link54",
-      "source": "host10",
-      "target": "CE-10",
-      "sourceEndpoint": "eth1",
-      "targetEndpoint": "et2",
-      "endpointLabelOffsetEnabled": true,
-      "endpointLabelOffset": 40
-    },
-    {
-      "id": "Clab-Link55",
-      "source": "host11",
-      "target": "CE-11",
-      "sourceEndpoint": "eth1",
-      "targetEndpoint": "et3",
-      "endpointLabelOffsetEnabled": true,
-      "endpointLabelOffset": 40
-    },
-    {
-      "id": "Clab-Link56",
-      "source": "host12",
-      "target": "CE-12",
-      "sourceEndpoint": "eth1",
-      "targetEndpoint": "et2",
-      "endpointLabelOffsetEnabled": true,
-      "endpointLabelOffset": 40
-    },
-    {
       "id": "Clab-Link44",
       "source": "PE-15",
       "target": "CE-12",
@@ -1295,6 +1242,42 @@
       "targetEndpoint": "et2",
       "endpointLabelOffsetEnabled": true,
       "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link55",
+      "source": "Host11",
+      "target": "CE-11",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link50",
+      "source": "Host5-21",
+      "target": "CE-5",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link62",
+      "source": "Host5-22",
+      "target": "CE-5",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link63",
+      "source": "Host5-23",
+      "target": "CE-5",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et5",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
     }
   ],
   "aliasEndpointAnnotations": [],
