@@ -1,6 +1,6 @@
 {
     // "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY:aristanetworks/aclabs}/lab-base:${localEnv:GITHUB_CONATINER_IMAGE:python3.12-avd-v5.7.2-clab0.72.0-rev2.5.2}",
-    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY:aristanetworks/aclabs}/lab-base:python3.12-avd-v5.7.2-clab0.73.0-rev2.100.3",
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY:aristanetworks/aclabs}/lab-base:python3.12-avd-v5.7.2-clab0.73.0-rev2.100.4",
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
