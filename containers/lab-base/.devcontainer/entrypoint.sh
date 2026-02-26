@@ -49,7 +49,7 @@ if [ -z "${CEOS_MD5_FULLPATH}" ]; then
 fi
 # check if ceos-lab image already present
 debug_log "Checking ceos version: ${CEOS_LAB_VERSION}"
-if [ -z "$(${CONTAINER_ENGINE} images arista/ceos:${CEOS_LAB_VERSION})" ]; then
+if [ -z "$(${CONTAINER_ENGINE} images -q arista/ceos:${CEOS_LAB_VERSION})" ]; then
     if [ "${ARISTA_TOKEN}" ]; then
         # `uname -m` is used to find platform architecture
         # currently we check for arm64 and aarch64 and expect everything else to be an x86 machine
