@@ -295,7 +295,7 @@ if __name__ == "__main__":
     with open(f'{workspace_dir}/.vscode/tasks.json', 'w') as tasks_json:
         json.dump(lab_tasks, tasks_json, indent=4)
 
-    shutil.copytree(f"/tmp/{archive_name}/ansible_collections/arista/avd/examples/{example_selected}", f"{workspace_dir}", dirs_exist_ok=True)
+    shutil.copytree(f"/tmp/{archive_name}/ansible_collections/arista/avd/examples/{example_selected}", f"{workspace_dir}", ignore=shutil.ignore_patterns("README.md"), dirs_exist_ok=True)
 
     subprocess.run([
         'pip', 'install',
