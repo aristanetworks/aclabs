@@ -95,7 +95,7 @@
     },
     {
       "id": "freeText_1772044216677",
-      "text": "- Service: **L3VPN (IPVPN)**\n- Service: **MVPN  (Profile 12)**\n- VRF: **RED**\n- RT: **1:1**",
+      "text": "- Service: **L3VPN (IPVPN)**\n- Service: **MVPN  (Profile 12)**\n- VRF: **RED**\n- RT: **50001:50001**",
       "position": {
         "x": -1135.3374909819622,
         "y": -176.32537319213066
@@ -127,7 +127,7 @@
     },
     {
       "id": "freeText_1772044515114",
-      "text": "- Service: **L3VPN (EVPN)**\n- VRF: **BLUE**\n- IPVRF **RT: 2:2**",
+      "text": "- Service: **L3VPN (EVPN)**\n- VRF: **BLUE**\n- IPVRF **RT: 50002:50002**",
       "position": {
         "x": -1124.5866893280456,
         "y": 73.88481554485313
@@ -1071,7 +1071,7 @@
       "interfacePattern": "eth{n}"
     },
     {
-      "id": "Host12",
+      "id": "Host12-21",
       "position": {
         "x": 280,
         "y": 1280
@@ -1131,7 +1131,7 @@
       "iconCornerRadius": 0
     },
     {
-      "id": "Host3",
+      "id": "Host3-21",
       "position": {
         "x": -400,
         "y": 120

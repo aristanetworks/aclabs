@@ -1,5 +1,5 @@
-! Startup-config last modified at Tue Feb 24 13:38:44 2026 by root
-! device: PE10 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+! Startup-config last modified at Mon Mar  2 16:20:44 2026 by root
+! device: PE-15 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
 !
@@ -11,6 +11,8 @@ management api http-commands
    vrf MGMT
       no shutdown
 !
+switchport default mode routed
+!
 no service interface inactive port-id allocation disabled
 !
 transceiver qsfp default-mode 4x10G
@@ -20,13 +22,17 @@ interface defaults
 !
 service routing protocols model multi-agent
 !
-hostname PE10
+hostname PE-15
 !
 spanning-tree mode mstp
 !
 system l1
    unsupported speed action error
    unsupported error-correction action error
+!
+vlan 21-23
+!
+vrf instance BLUE
 !
 vrf instance MGMT
 !
@@ -43,7 +49,7 @@ aaa authorization exec default local
 interface Ethernet1
    mtu 9214
    no switchport
-   ip address 20.1.10.10/24
+   ip address 20.7.15.15/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
@@ -51,7 +57,7 @@ interface Ethernet1
 interface Ethernet2
    mtu 9214
    no switchport
-   ip address 20.10.11.10/24
+   ip address 20.14.15.15/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
@@ -59,32 +65,45 @@ interface Ethernet2
 interface Ethernet3
    mtu 9214
    no switchport
-   ip address 20.2.10.10/24
+   ip address 20.6.15.15/24
    isis enable 100
    isis circuit-type level-2
    isis network point-to-point
 !
 interface Ethernet4
    no switchport
-   ip address unnumbered Loopback0
-   isis enable 100
-   isis circuit-type level-2
-   isis network point-to-point
 !
 interface Ethernet5
+   no switchport
 !
 interface Loopback0
-   ip address 100.0.0.10/32
-   node-segment ipv4 index 10
+   ip address 100.0.0.15/32
+   node-segment ipv4 index 15
    isis enable 100
    isis circuit-type level-2
    isis passive
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.27/24
+   ip address 172.100.100.115/24
+!
+interface Vlan21
+   mtu 9014
+   vrf BLUE
+   ip address virtual 10.21.21.1/24
+!
+interface Vlan22
+   mtu 9014
+   vrf BLUE
+   ip address virtual 10.22.22.1/24
+!
+interface Vlan23
+   mtu 9014
+   vrf BLUE
+   ip address virtual 10.23.23.1/24
 !
 ip routing
+ip routing vrf BLUE
 no ip routing vrf MGMT
 !
 ipv6 unicast-routing
@@ -94,7 +113,7 @@ ip route vrf MGMT 0.0.0.0/0 172.100.100.1
 mpls ip
 !
 router bgp 100
-   router-id 100.0.0.10
+   router-id 100.0.0.15
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    neighbor RR peer group
@@ -104,13 +123,34 @@ router bgp 100
    neighbor 100.0.0.9 peer group RR
    neighbor 100.0.0.9 description PE-9.RR
    !
+   vlan 21
+      rd 100.0.0.15:21
+      route-target both 21:21
+      redistribute learned
+   !
+   vlan 22
+      rd 100.0.0.15:22
+      route-target both 21:21
+      redistribute learned
+   !
+   vlan 23
+      rd 100.0.0.15:23
+      route-target both 21:21
+      redistribute learned
+   !
    address-family evpn
       neighbor default encapsulation mpls next-hop-self source-interface Loopback0
       neighbor RR activate
+   !
+   vrf BLUE
+      rd 100.0.0.15:50002
+      route-target import evpn 50002:50002
+      route-target export evpn 50002:50002
+      redistribute connected
 !
 router isis 100
-   net 49.1111.0000.0000.0010.00
-   router-id ipv4 100.0.0.10
+   net 49.1111.0000.0000.0015.00
+   router-id ipv4 100.0.0.15
    is-type level-2
    !
    address-family ipv4 unicast

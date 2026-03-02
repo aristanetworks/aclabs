@@ -1,5 +1,5 @@
-! Startup-config last modified at Tue Feb 24 13:38:44 2026 by root
-! device: CE-7 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+! Startup-config last modified at Mon Mar  2 16:20:44 2026 by root
+! device: CE-5 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
 !
@@ -20,13 +20,15 @@ interface defaults
 !
 service routing protocols model multi-agent
 !
-hostname CE-7
+hostname CE-5
 !
 spanning-tree mode mstp
 !
 system l1
    unsupported speed action error
    unsupported error-correction action error
+!
+vlan 21-23
 !
 vrf instance MGMT
 !
@@ -40,11 +42,30 @@ management api netconf
 !
 aaa authorization exec default local
 !
+interface Port-Channel5
+   switchport mode trunk
+!
 interface Ethernet1
+   channel-group 5 mode active
+!
+interface Ethernet2
+   channel-group 5 mode active
+!
+interface Ethernet3
+   switchport access vlan 21
+   spanning-tree portfast edge
+!
+interface Ethernet4
+   switchport access vlan 22
+   spanning-tree portfast edge
+!
+interface Ethernet5
+   switchport access vlan 23
+   spanning-tree portfast edge
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.9/24
+   ip address 172.100.100.155/24
 !
 ip routing
 no ip routing vrf MGMT

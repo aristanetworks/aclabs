@@ -1,5 +1,5 @@
-! Startup-config last modified at Tue Feb 24 13:38:44 2026 by root
-! device: CE-11 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+! Startup-config last modified at Mon Mar  2 16:20:45 2026 by root
+! device: CE-10 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
 !
@@ -20,7 +20,7 @@ interface defaults
 !
 service routing protocols model multi-agent
 !
-hostname CE-11
+hostname CE-10
 !
 spanning-tree mode mstp
 !
@@ -46,7 +46,7 @@ interface Ethernet2
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.25/24
+   ip address 172.100.100.160/24
 !
 ip routing
 no ip routing vrf MGMT
