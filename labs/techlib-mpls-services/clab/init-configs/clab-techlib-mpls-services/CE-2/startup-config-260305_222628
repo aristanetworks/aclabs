@@ -1,5 +1,5 @@
-! Startup-config last modified at Mon Mar  2 16:20:44 2026 by root
-! device: CE-12 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+! Startup-config last modified at Thu Mar  5 22:26:28 2026 by root
+! device: CE-2 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
 !
 no aaa root
 !
@@ -20,15 +20,13 @@ interface defaults
 !
 service routing protocols model multi-agent
 !
-hostname CE-12
+hostname CE-2
 !
 spanning-tree mode mstp
 !
 system l1
    unsupported speed action error
    unsupported error-correction action error
-!
-vlan 21
 !
 vrf instance MGMT
 !
@@ -43,15 +41,14 @@ management api netconf
 aaa authorization exec default local
 !
 interface Ethernet1
-   switchport mode trunk
 !
 interface Ethernet2
-   switchport access vlan 21
-   spanning-tree portfast edge
+!
+interface Ethernet3
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.162/24
+   ip address 172.100.100.152/24
 !
 ip routing
 no ip routing vrf MGMT
