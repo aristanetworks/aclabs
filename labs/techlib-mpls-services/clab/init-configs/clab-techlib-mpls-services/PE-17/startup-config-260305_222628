@@ -91,7 +91,6 @@ interface Management0
    ip address 172.100.100.117/24
 !
 interface Vlan21
-   shutdown
    mtu 9014
    vrf BLUE
    ip address virtual 10.21.21.1/24
@@ -125,7 +124,7 @@ router bgp 100
    neighbor RR peer group
    neighbor RR remote-as 100
    neighbor RR update-source Loopback0
-   neighbor RR send-community
+   neighbor RR send-community standard extended large
    neighbor 100.0.0.9 peer group RR
    neighbor 100.0.0.9 description PE-9.RR
    !

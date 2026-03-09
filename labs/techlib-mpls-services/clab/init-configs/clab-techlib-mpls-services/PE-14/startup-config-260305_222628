@@ -102,7 +102,7 @@ router bgp 100
    neighbor RR peer group
    neighbor RR remote-as 100
    neighbor RR update-source Loopback0
-   neighbor RR send-community
+   neighbor RR send-community standard extended large
    neighbor 100.0.0.9 peer group RR
    neighbor 100.0.0.9 description PE-9.RR
    !
