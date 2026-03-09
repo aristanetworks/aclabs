@@ -278,78 +278,75 @@ topology:
         GW: 10.10.10.1
         UPLINK_MAC: 00:01:01:00:00:01
         TMODE: lacp or none
-    Host5-21:
-      kind: linux
-      mgmt-ipv4: 172.100.100.205
-      env:
-        IPV4: 10.21.21.51/24
-        IPV6: 2001:db8:21:21::51/64
-        STATIC_ROUTE: 10.0.0.0/8
-        GW: 10.21.21.1
-        UPLINK_MAC: 00:01:01:00:00:51
-    Host5-22:
-      kind: linux
-      env:
-        IPV4: 10.22.22.52/24
-        IPV6: 2001:db8:22:22::52/64
-        STATIC_ROUTE: 10.0.0.0/8
-        GW: 10.22.22.1
-        UPLINK_MAC: 00:01:01:00:00:52
-    Host5-23:
-      kind: linux
-      env:
-        IPV4: 10.23.23.53/24
-        IPV6: 2001:db8:23:23::53/64
-        STATIC_ROUTE: 10.0.0.0/8
-        GW: 10.23.23.1
-        UPLINK_MAC: 00:01:01:00:00:53
-    Host8-21:
-      kind: linux
-      mgmt-ipv4: 172.100.100.208
-      env:
-        IPV4: 10.21.21.81/24
-        IPV6: 2001:db8:21:21::81/64
-        STATIC_ROUTE: 10.0.0.0/8
-        GW: 10.21.21.1
-        UPLINK_MAC: 00:01:01:00:00:81
-        TMODE: lacp or none
-    Host8-22:
-      kind: linux
-      env:
-        IPV4: 10.22.22.82/24
-        IPV6: 2001:db8:22:22::82/64
-        STATIC_ROUTE: 10.0.0.0/8
-        GW: 10.22.22.1
-        UPLINK_MAC: 00:01:01:00:00:82
-    Host8-23:
-      kind: linux
-      env:
-        IPV4: 10.23.23.83/24
-        IPV6: 2001:db8:23:23::83/64
-        STATIC_ROUTE: 10.0.0.0/8
-        GW: 10.23.23.1
-        UPLINK_MAC: 00:01:01:00:00:83
-        TMODE: lacp or none
-    Host12-21:
-      kind: linux
-      mgmt-ipv4: 172.100.100.212
-      env:
-        IPV4: 10.10.10.101/24
-        IPV6: 2001:db8:10:10::101/64
-        STATIC_ROUTE: 10.0.0.0/8
-        GW: 10.10.10.1
-        UPLINK_MAC: 00:01:01:00:00:01
-        TMODE: lacp or none
-    Host3-21:
+    Host21-3:
       kind: linux
       mgmt-ipv4: 172.100.100.203
       env:
-        IPV4: 10.21.21.31/24
-        IPV6: 2001:db8:21:21::31/64
+        IPV4: 10.21.21.3/24
+        IPV6: 2001:db8:21:21::3/64
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.21.21.1
-        UPLINK_MAC: 00:01:01:00:00:31
+        UPLINK_MAC: 00:01:01:00:21:03
+    Host21-5:
+      kind: linux
+      mgmt-ipv4: 172.100.100.205
+      env:
+        IPV4: 10.21.21.5/24
+        IPV6: 2001:db8:21:21::5/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.21.21.1
+        UPLINK_MAC: 00:01:01:00:21:05
+    Host22-5:
+      kind: linux
+      env:
+        IPV4: 10.22.22.5/24
+        IPV6: 2001:db8:22:22::5/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.22.22.1
+        UPLINK_MAC: 00:01:01:00:22:05
+    Host23-5:
+      kind: linux
+      env:
+        IPV4: 10.23.23.5/24
+        IPV6: 2001:db8:23:23::5/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.23.23.1
+        UPLINK_MAC: 00:01:01:00:23:05
+    Host21-8:
+      kind: linux
+      mgmt-ipv4: 172.100.100.208
+      env:
+        IPV4: 10.21.21.8/24
+        IPV6: 2001:db8:21:21::8/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.21.21.1
+        UPLINK_MAC: 00:01:01:00:21:08
+    Host22-8:
+      kind: linux
+      env:
+        IPV4: 10.22.22.8/24
+        IPV6: 2001:db8:22:22::8/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.22.22.1
+        UPLINK_MAC: 00:01:01:00:22:08
+    Host23-8:
+      kind: linux
+      env:
+        IPV4: 10.23.23.8/24
+        IPV6: 2001:db8:23:23::8/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.23.23.1
+        UPLINK_MAC: 00:01:01:00:23:08
         TMODE: lacp or none
+    Host21-12:
+      kind: linux
+      mgmt-ipv4: 172.100.100.212
+      env:
+        IPV4: 10.21.21.12/24
+        IPV6: 2001:db8:21:21::12/64
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.21.21.1
+        UPLINK_MAC: 00:01:01:00:21:12
 
   links:
     - endpoints: [ "PE-10:et2", "PE-11:et2" ]
@@ -402,17 +399,17 @@ topology:
     - endpoints: [ "PE-14:et5", "CE-11:et2" ]
     - endpoints: [ "CE-4:et2", "Host4:eth1" ]
     - endpoints: [ "Host9:eth1", "CE-9:et2" ]
-    - endpoints: [ "Host5-21:eth1", "CE-5:et3" ]
+    - endpoints: [ "Host21-5:eth1", "CE-5:et3" ]
     - endpoints: [ "Host6:eth1", "CE-6:et2" ]
     - endpoints: [ "Host7:eth1", "CE-7:et2" ]
-    - endpoints: [ "Host8-21:eth1", "CE-8:et3" ]
+    - endpoints: [ "Host21-8:eth1", "CE-8:et3" ]
     - endpoints: [ "Host10:eth1", "CE-10:et2" ]
     - endpoints: [ "Host11:eth1", "CE-11:et3" ]
-    - endpoints: [ "Host12-21:eth1", "CE-12:et2" ]
+    - endpoints: [ "Host21-12:eth1", "CE-12:et2" ]
     - endpoints: [ "Host1:eth1", "CE-1:et2" ]
     - endpoints: [ "Host2:eth1", "CE-2:et3" ]
-    - endpoints: [ "Host3-21:eth1", "CE-3:et2" ]
-    - endpoints: [ "Host8-22:eth1", "CE-8:et4" ]
-    - endpoints: [ "Host8-23:eth1", "CE-8:et5" ]
-    - endpoints: [ "Host5-22:eth1", "CE-5:et4" ]
-    - endpoints: [ "Host5-23:eth1", "CE-5:et5" ]
+    - endpoints: [ "Host21-3:eth1", "CE-3:et2" ]
+    - endpoints: [ "Host22-8:eth1", "CE-8:et4" ]
+    - endpoints: [ "Host23-8:eth1", "CE-8:et5" ]
+    - endpoints: [ "Host22-5:eth1", "CE-5:et4" ]
+    - endpoints: [ "Host23-5:eth1", "CE-5:et5" ]

@@ -971,7 +971,7 @@
       "interfacePattern": "eth{n}"
     },
     {
-      "id": "Host5-21",
+      "id": "Host21-5",
       "position": {
         "x": 280,
         "y": -760
@@ -1041,7 +1041,7 @@
       "interfacePattern": "eth{n}"
     },
     {
-      "id": "Host8-22",
+      "id": "Host22-8",
       "position": {
         "x": 1680,
         "y": 360
@@ -1051,7 +1051,7 @@
       "interfacePattern": "eth{n}"
     },
     {
-      "id": "Host8-23",
+      "id": "Host23-8",
       "position": {
         "x": 1680,
         "y": 600
@@ -1061,7 +1061,7 @@
       "interfacePattern": "eth{n}"
     },
     {
-      "id": "Host5-22",
+      "id": "Host22-5",
       "position": {
         "x": 520,
         "y": -760
@@ -1071,7 +1071,7 @@
       "interfacePattern": "eth{n}"
     },
     {
-      "id": "Host12-21",
+      "id": "Host21-12",
       "position": {
         "x": 280,
         "y": 1280
@@ -1111,7 +1111,7 @@
       "iconCornerRadius": 0
     },
     {
-      "id": "Host8-21",
+      "id": "Host21-8",
       "position": {
         "x": 1680,
         "y": 120
@@ -1131,7 +1131,7 @@
       "iconCornerRadius": 0
     },
     {
-      "id": "Host3-21",
+      "id": "Host21-3",
       "position": {
         "x": -400,
         "y": 120
@@ -1151,7 +1151,7 @@
       "iconCornerRadius": 0
     },
     {
-      "id": "Host5-23",
+      "id": "Host23-5",
       "position": {
         "x": 760,
         "y": -760
