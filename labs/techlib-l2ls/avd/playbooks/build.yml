@@ -1,7 +1,7 @@
 ---
 
 - name: Build Switch configuration
-  hosts: all
+  hosts: "{{ target_hosts }}"
   gather_facts: false
 
   tasks:

@@ -1,39 +1,34 @@
-# l2ls
+# Arista's Tech Library MLAG Fabric Deployment Guide Lab
 
-This lab is tested for:  
+> [!WARNING]
+> This lab is in preview. It's fully functional, but breaking changes can happen.
+> We are working hard on building the best lab collection and your feedback is always  appreciated.
 
-  cEOS-lab version: 4.34.2F  
-  Containerlab Version: 0.71.1  
-  Codespace Container Size  
-    CPUs: 8  
-    memory: 32 GB  
-    storage: 64 GB  
+Welcome! This pre-configured lab matches the [MLAG Fabric Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domain_a/) on [Arista's Tech Library](https://arista.com/en/tech-library).
 
-Last reviewed: 03/02/2026  
+## Overview
 
-> Lab Credentials  
-&nbsp;&nbsp;&nbsp;&nbsp;Username: arista  
-&nbsp;&nbsp;&nbsp;&nbsp;Password: arista  
+This lab has been validated with:
 
-Please check the lab materials:
+- cEOS-lab: **4.35.2F**
+- AVD: **5.7.3**
+- Containerlab: **0.73.0**
+- Resources:
+  - CPUs: **16**
+  - Memory: **64 GB**
+  - Storage: **64 GB**
 
-- [Lab Documentation](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/techlib-l2ls/)
-- [HTML Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/slides/techlib-l2ls.html)
-- [PDF Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/pdfs/techlib-l2ls.pdf)
+## Interacting with the Lab
 
-## Lab Inventory
+### Credentials
 
-This lab has following devices:
+#### Username
+```bash
+admin
+```
 
-| Hostname | Type | OS | Management Address | Username | Password |
-| -------- | ---- | -- | ------------------ | -------- | -------- |
-| s01 | switch | cEOS-lab, 4.34.2F | 10.0.1.1 | arista | arista |
-| s02 | switch | cEOS-lab, 4.34.2F | 10.0.1.2 | arista | arista |
-| l01 | switch | cEOS-lab, 4.34.2F | 10.0.2.1 | arista | arista |
-| l02 | switch | cEOS-lab, 4.34.2F | 10.0.2.2 | arista | arista |
-| l03 | switch | cEOS-lab, 4.34.2F | 10.0.2.3 | arista | arista |
-| l04 | switch | cEOS-lab, 4.34.2F | 10.0.2.4 | arista | arista |
-| h01 | host | cEOS-lab, 4.34.2F | 10.0.3.1 | arista | arista |
-| h02 | host | cEOS-lab, 4.34.2F | 10.0.3.2 | arista | arista |
+#### Password
 
-> To access any device, use `ssh <username>@<hostname>` or simply type `<hostname>` to use the SSH alias.
+```bash
+admin
+```
