@@ -21,10 +21,6 @@ csc_vxlan_int:
           vni: 10010
         - id: 20
           vni: 10020
-        - id: 30
-          vni: 10030
-        - id: 40
-          vni: 10040
       flood_vteps:
         - 10.255.2.1
 
