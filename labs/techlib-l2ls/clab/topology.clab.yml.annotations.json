@@ -1,0 +1,315 @@
+{
+  "freeTextAnnotations": [
+    {
+      "id": "freeText_1773167436838",
+      "text": "Fabric A",
+      "position": {
+        "x": 12.985690165382302,
+        "y": 401.0755156831668
+      },
+      "fontSize": 20,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "bold",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1773167485511",
+      "text": "Fabric B",
+      "position": {
+        "x": 12.622316897775882,
+        "y": 192.36500091807417
+      },
+      "fontSize": 20,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "bold",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1773167504282",
+      "text": "# Schema\n\n### Loopbacks\n- **Loopback0**\n  - Fabric A: 10.254.1.**<NodeID>/32**\n  - Fabric B: 10.254.2.**<NodeID>/32**\n- **Loopback1**\n  - Fabric A: 10.255.1.**<NodeID>/32**\n  - Fabric B: 10.255.2.**<NodeID>/32**\n\n### MLAG\n- Domain ID: **100**\n- Peer-Link: **Port-Channel1000**\n- Peer Sync Interface: **Vlan4094**\n- Peer Sync Prefix: **169.254.0.0/30**\n- Peer OSPF Peering Interface: **Vlan4093**\n- Peer OSPF Peering Prefix: **192.0.0.0/30**\n\n### Inter-Fabric IP Transport\n  - Point-to-Point IP Block: **172.16.255.0/24**\n  - Routing Protocol: **OSPF (Area 0)**\n\n",
+      "position": {
+        "x": -507.0889276531935,
+        "y": -297.5604900174958
+      },
+      "fontSize": 20,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    }
+  ],
+  "freeShapeAnnotations": [
+    {
+      "id": "freeShape_1773167362737",
+      "shapeType": "rectangle",
+      "position": {
+        "x": 7.063456429879125,
+        "y": -299.2090777989905
+      },
+      "width": 900,
+      "height": 580,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    },
+    {
+      "id": "freeShape_1773167398896",
+      "shapeType": "rectangle",
+      "position": {
+        "x": 5.813051793200998,
+        "y": 394.2018347743659
+      },
+      "width": 900,
+      "height": 580,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    }
+  ],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "A-SPINE1",
+      "position": {
+        "x": 320,
+        "y": 440
+      },
+      "icon": "spine",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "A-SPINE2",
+      "position": {
+        "x": 560,
+        "y": 440
+      },
+      "icon": "spine",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "B-SPINE1",
+      "position": {
+        "x": 320,
+        "y": 200
+      },
+      "icon": "spine",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "B-SPINE2",
+      "position": {
+        "x": 560,
+        "y": 200
+      },
+      "icon": "spine",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "A-LEAF1",
+      "position": {
+        "x": 80,
+        "y": 640
+      },
+      "icon": "switch",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "A-LEAF2",
+      "position": {
+        "x": 320,
+        "y": 640
+      },
+      "icon": "switch",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "A-LEAF3",
+      "position": {
+        "x": 560,
+        "y": 640
+      },
+      "icon": "switch",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "A-LEAF4",
+      "position": {
+        "x": 800,
+        "y": 640
+      },
+      "icon": "switch",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "B-LEAF1",
+      "position": {
+        "x": 80,
+        "y": 0
+      },
+      "icon": "switch",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "B-LEAF2",
+      "position": {
+        "x": 320,
+        "y": 0
+      },
+      "icon": "switch",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "B-LEAF3",
+      "position": {
+        "x": 560,
+        "y": 0
+      },
+      "icon": "switch",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "B-LEAF4",
+      "position": {
+        "x": 800,
+        "y": 0
+      },
+      "icon": "switch",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostA1",
+      "position": {
+        "x": 80,
+        "y": 880
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostA2",
+      "position": {
+        "x": 320,
+        "y": 880
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostA3",
+      "position": {
+        "x": 560,
+        "y": 880
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostA4",
+      "position": {
+        "x": 680,
+        "y": 760
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostA5",
+      "position": {
+        "x": 800,
+        "y": 880
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostB1",
+      "position": {
+        "x": 320,
+        "y": -240
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostB2",
+      "position": {
+        "x": 80,
+        "y": -240
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostB3",
+      "position": {
+        "x": 560,
+        "y": -240
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostB4",
+      "position": {
+        "x": 680,
+        "y": -120
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostB5",
+      "position": {
+        "x": 800,
+        "y": -240
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {}
+}
