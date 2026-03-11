@@ -1,7 +1,7 @@
 ---
-# --------------------------------------------------------------
-# Arista EVPN Deployment Guide Topology - Domain A
-# --------------------------------------------------------------
+# ------------------------------------------------------------------
+# Arista MLAG Fabric with VXLAN Flood and Learn Deployment Guide
+# ------------------------------------------------------------------
 
 name: aristA-l2ls-dg
 
@@ -18,12 +18,16 @@ topology:
       INTFTYPE: et
 
   kinds:
-    ceos:
+    arista_ceos:
+      enforce-startup-config: true
       image: arista/ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et     
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.1
       binds:
-        - /techliB-l2ls:/workspace:ro
+        - /techlib-l2ls:/workspace:ro
 
   nodes:
 
@@ -32,14 +36,14 @@ topology:
     #########################
 
     A-SPINE1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.10
       # binds:
       # -sn/A-SPINE1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE1.cfg
 
     A-SPINE2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.11
       # binds:
       # -sn/A-SPINE2.txt:/mnt/flash/ceos-config:ro
@@ -50,14 +54,14 @@ topology:
     #########################
 
     B-SPINE1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.20
       # binds:
       # -sn/B-SPINE1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE1.cfg
 
     B-SPINE2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.21
       # binds:
       # -sn/B-SPINE2.txt:/mnt/flash/ceos-config:ro
@@ -68,28 +72,28 @@ topology:
     #########################
 
     A-LEAF1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.13
       # binds:
       # -sn/A-LEAF1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF1.cfg
 
     A-LEAF2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.14
       # binds:
       # -sn/A-LEAF2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF2.cfg
 
     A-LEAF3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.15
       # binds:
       # -sn/A-LEAF3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF3.cfg
 
     A-LEAF4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.16
       # binds:
       # -sn/A-LEAF4.txt:/mnt/flash/ceos-config:ro
@@ -100,28 +104,28 @@ topology:
     #########################
 
     B-LEAF1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.23
       # binds:
       # -sn/B-LEAF1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF1.cfg
 
     B-LEAF2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.24
       # binds:
       # -sn/B-LEAF2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF2.cfg
 
     B-LEAF3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.25
       # binds:
       # -sn/B-LEAF3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF3.cfg
 
     B-LEAF4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.26
       # binds:
       # -sn/B-LEAF4.txt:/mnt/flash/ceos-config:ro
