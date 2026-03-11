@@ -201,7 +201,7 @@ topology:
         IPV4: 10.10.10.103/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
-        UPLINK_MAC: 00:01:01:00:00:A1
+        UPLINK_MAC: 00:01:01:00:00:B1
 
     # HostB2 is connected to LEAF1 eth8 and LEAF2 eth8
     HostB2:
@@ -212,7 +212,7 @@ topology:
         IPV4: 10.30.30.103/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.30.30.1
-        UPLINK_MAC: 00:01:01:00:00:A2
+        UPLINK_MAC: 00:01:01:00:00:B2
 
     # HostB3 is a Linux host with a single interface connected to LEAF3 eth7
     HostB3:
@@ -222,7 +222,7 @@ topology:
         IPV4: 10.20.20.102/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.20.20.1
-        UPLINK_MAC: 00:01:01:00:00:A3
+        UPLINK_MAC: 00:01:01:00:00:B3
 
     # HostB4 is connected to LEAF3 eth8 and LEAF4 eth8
     HostB4:
@@ -233,7 +233,7 @@ topology:
         IPV4: 10.10.10.104/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.10.10.1
-        UPLINK_MAC: 00:01:01:00:00:A4
+        UPLINK_MAC: 00:01:01:00:00:B4
 
     # HostB5 is connected to LEAF4 eth7
     HostB5:
@@ -243,7 +243,7 @@ topology:
         IPV4: 10.30.30.104/24
         STATIC_ROUTE: 10.0.0.0/8
         GW: 10.30.30.1
-        UPLINK_MAC: 00:01:01:00:00:A5
+        UPLINK_MAC: 00:01:01:00:00:B5
 
   links:
     ######################
