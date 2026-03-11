@@ -1,0 +1,104 @@
+---
+
+fabric_name: FABRIC_B
+
+underlay_routing_protocol: ospf
+
+fabric_ip_addressing:
+  mlag:
+    algorithm: same_subnet
+
+#################################
+# CUSTOM STRUCTURED CONFIG
+#################################
+
+csc_vxlan_int:
+  vxlan1:
+    vxlan:
+      source_interface: Loopback1
+      vlans:
+        - id: 10
+          vni: 10010
+        - id: 20
+          vni: 10020
+        - id: 30
+          vni: 10030
+        - id: 40
+          vni: 10040
+      flood_vteps:
+        - 10.255.1.1
+
+csc_loopbacks:
+  - name: Loopback1
+    description: "Shared VTEP IP"
+    shutdown: false
+    ip_address: "10.255.2.1/32"
+    ospf_area: "0.0.0.0"
+
+###################################################
+# FABRIC A SPINES                                 #
+###################################################
+
+l3spine:
+  defaults:
+    platform: cEOS-LAB
+    spanning_tree_mode: mstp
+    spanning_tree_priority: 0
+    loopback_ipv4_pool: 10.254.2.0/24
+    mlag_domain_id: '1000'
+    mlag_peer_ipv4_pool: 169.254.0.0/30
+    mlag_peer_l3_ipv4_pool: 192.0.0.0/31
+    mlag_port_channel_id: '1000'
+    virtual_router_mac_address: 00:1c:73:00:dc:01
+    mlag_interfaces: [ Ethernet7, Ethernet8 ]
+    structured_config:
+      vxlan_interface: "{{ csc_vxlan_int }}"
+      loopback_interfaces: "{{ csc_loopbacks }}"
+
+  node_groups:
+    - group: B-SPINES
+      nodes:
+        - name: B-SPINE1
+          id: 1
+          mgmt_ip: 192.168.0.111/24
+        - name: B-SPINE2
+          id: 2
+          mgmt_ip: 192.168.0.112/24
+
+###################################################
+# FABRIC A LEAFS                                  #
+###################################################
+
+l2leaf:
+  defaults:
+    platform: cEOS-LAB
+    mlag_domain_id: '1000'
+    mlag_peer_ipv4_pool: 169.254.0.0/30
+    mlag_port_channel_id: '1000'
+    spanning_tree_mode: mstp
+    spanning_tree_priority: 16384
+    uplink_switches: [ B-SPINE1, B-SPINE2 ]
+    uplink_interfaces: [ Ethernet1, Ethernet2 ]
+    mlag_interfaces: [ Ethernet5, Ethernet6 ]
+    vtep: false
+  node_groups:
+    - group: B-POD1
+      nodes:
+        - name: B-LEAF1
+          id: 1
+          mgmt_ip: 192.168.0.113/24
+          uplink_switch_interfaces: [ Ethernet1, Ethernet1 ]
+        - name: B-LEAF2
+          id: 2
+          mgmt_ip: 192.168.0.114/24
+          uplink_switch_interfaces: [ Ethernet2, Ethernet2 ]
+    - group: B-POD2
+      nodes:
+        - name: B-LEAF3
+          id: 3
+          mgmt_ip: 192.168.0.115/24
+          uplink_switch_interfaces: [ Ethernet3, Ethernet3 ]
+        - name: B-LEAF4
+          id: 4
+          mgmt_ip: 192.168.0.116/24
+          uplink_switch_interfaces: [ Ethernet4, Ethernet4 ]

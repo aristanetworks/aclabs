@@ -1,36 +1,57 @@
+---
 all:
   children:
-    fabric:
+######################
+# FABRIC A
+######################
+    FABRIC_A:
       children:
-        a_spines:
+        FABRIC_A_SPINES:
+          vars:
+            type: l3spine
           hosts:
-            a-spine1:
-            a-spine2:
-        a_leafs:
+            A-SPINE1:
+            A-SPINE2:
+        FABRIC_A_LEAFS:
+          vars:
+            type: l2leaf
           hosts:
-            a-leaf1:
-            a-leaf2:
-            a-leaf3:
-            a-leaf4:
-        b_spines:
-          hosts:
-            b-spine1:
-            b-spine2:
-        b_leafs:
-          hosts:
-            b-leaf1:
-            b-leaf2:
-            b-leaf3:
-            b-leaf4:
-    network_services:
+            A-LEAF1:
+            A-LEAF2:
+            A-LEAF3:
+            A-LEAF4:
+    FABRIC_A_ENDPOINTS:
       children:
-        a_spines:
-        a_leafs:
-        b_spines:
-        b_leafs:
-    endpoints:
+        FABRIC_A_LEAFS:
+        FABRIC_A_SPINES:
+    FABRIC_A_SERVICES:
       children:
-        a_spines:
-        a_leafs:
-        b_spines:
-        b_leafs:
+        FABRIC_A_LEAFS:
+        FABRIC_A_SPINES:
+######################
+# FABRIC B
+######################
+    FABRIC_B:
+      children:
+        FABRIC_B_SPINES:
+          vars:
+            type: l3spine
+          hosts:
+            B-SPINE1:
+            B-SPINE2:
+        FABRIC_B_LEAFS:
+          vars:
+            type: l2leaf
+          hosts:
+            B-LEAF1:
+            B-LEAF2:
+            B-LEAF3:
+            B-LEAF4:
+        FABRIC_B_ENDPOINTS:
+          children:
+            FABRIC_B_LEAFS:
+            FABRIC_B_SPINES:
+        FABRIC_B_SERVICES:
+          children:
+            FABRIC_B_LEAFS:
+            FABRIC_B_SPINES:

@@ -1,4 +1,0 @@
----
-fabric_name: "fabric"
-
-underlay_routing_protocol: ospf

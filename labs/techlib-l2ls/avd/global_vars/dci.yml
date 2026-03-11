@@ -1,4 +1,5 @@
 ---
+
 l3_edge:
   p2p_links_ip_pools:
     - name: DCI_POOL
@@ -11,18 +12,18 @@ l3_edge:
 
   p2p_links:
     - id: 1
-      nodes: [ a-spine1, b-spine1 ]
+      nodes: [ A-SPINE1, B-SPINE1 ]
       interfaces: [ Ethernet5, Ethernet5 ]
       profile: ALL_DCI_PROFILE
     - id: 2
-      nodes: [ a-spine1, b-spine2 ]
+      nodes: [ A-SPINE1, B-SPINE2 ]
       interfaces: [ Ethernet6, Ethernet5 ]
       profile: ALL_DCI_PROFILE
     - id: 3
-      nodes: [ a-spine2, b-spine1 ]
+      nodes: [ A-SPINE2, B-SPINE1 ]
       interfaces: [ Ethernet5, Ethernet6 ]
       profile: ALL_DCI_PROFILE
     - id: 4
-      nodes: [ a-spine2, b-spine2 ]
+      nodes: [ A-SPINE2, B-SPINE2 ]
       interfaces: [ Ethernet6, Ethernet6 ]
       profile: ALL_DCI_PROFILE
