@@ -1,7 +1,7 @@
 ---
 
 - name: Deploy Switch Configurations
-  hosts: all
+  hosts: "{{ target_hosts }}"
   gather_facts: false
 
   tasks:
