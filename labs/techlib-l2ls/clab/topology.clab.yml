@@ -3,7 +3,7 @@
 # Arista MLAG Fabric with VXLAN Flood and Learn Deployment Guide
 # ------------------------------------------------------------------
 
-name: aristA-l2ls-dg
+name: arista-mlag-fabric-dg
 
 prefix: ""
 
