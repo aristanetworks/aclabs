@@ -1,5 +1,5 @@
 {
-    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.12-avd-v5.7.3-clab0.73.0-rev2.6.3",
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.12-avd-v5.7.3-clab0.74.0-rev2.6.4",
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
@@ -20,9 +20,9 @@
         "memory": "64gb",
         "storage": "64gb"
     },
-    "onCreateCommand": "chmod +x /techlib-l2ls/addAliases.sh; /techlib-l2ls/addAliases.sh",
+    "onCreateCommand": "chmod +x /techlib-mlag-fabric/addAliases.sh; /techlib-mlag-fabric/addAliases.sh",
     "postCreateCommand": "/bin/entrypoint",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/techlib-l2ls",
+    "workspaceFolder": "/techlib-mlag-fabric",
     "containerUser": "avd"
 }
