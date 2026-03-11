@@ -48,7 +48,7 @@ RUN apt-get update \
 
 COPY ./entrypoint.sh /bin/entrypoint.sh
 RUN chmod +x /bin/entrypoint.sh
-COPY ./pingcheck /bin/pingcheck
+COPY ./pingcheck.sh /bin/pingcheck.sh
 RUN chmod +x /bin/pingcheck
 
 USER ${USERNAME}
