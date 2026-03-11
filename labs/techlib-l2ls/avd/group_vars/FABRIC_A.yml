@@ -60,10 +60,10 @@ l3spine:
       nodes:
         - name: A-SPINE1
           id: 1
-          mgmt_ip: 192.168.0.11/24
+          mgmt_ip: 172.100.100.10/24
         - name: A-SPINE2
           id: 2
-          mgmt_ip: 192.168.0.12/24
+          mgmt_ip: 172.100.100.11/24
 
 ###################################################
 # FABRIC A LEAFS                                  #
@@ -86,19 +86,19 @@ l2leaf:
       nodes:
         - name: A-LEAF1
           id: 1
-          mgmt_ip: 192.168.0.13/24
+          mgmt_ip: 172.100.100.13/24
           uplink_switch_interfaces: [ Ethernet1, Ethernet1 ]
         - name: A-LEAF2
           id: 2
-          mgmt_ip: 192.168.0.14/24
+          mgmt_ip: 172.100.100.14/24
           uplink_switch_interfaces: [ Ethernet2, Ethernet2 ]
     - group: A-POD2
       nodes:
         - name: A-LEAF3
           id: 3
-          mgmt_ip: 192.168.0.15/24
+          mgmt_ip: 172.100.100.15/24
           uplink_switch_interfaces: [ Ethernet3, Ethernet3 ]
         - name: A-LEAF4
           id: 4
-          mgmt_ip: 192.168.0.16/24
+          mgmt_ip: 172.100.100.16/24
           uplink_switch_interfaces: [ Ethernet4, Ethernet4 ]

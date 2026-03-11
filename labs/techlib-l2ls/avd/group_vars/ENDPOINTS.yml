@@ -39,68 +39,68 @@ servers:
     adapters:
       - endpoint_ports: [eth1, eth2]
         switch_ports: [Ethernet7, Ethernet7]
-        switches: [a-leaf1, a-leaf2]
+        switches: [A-LEAF1, A-LEAF2]
         profile: PP-BLUE-MLAG
 
   - name: HostA2
     adapters:
       - endpoint_ports: [eth1, eth2]
         switch_ports: [Ethernet8, Ethernet8]
-        switches: [a-leaf1, a-leaf2]
+        switches: [A-LEAF1, A-LEAF2]
         profile: PP-ORANGE-MLAG
 
   - name: HostA3
     adapters:
       - endpoint_ports: [eth1]
         switch_ports: [Ethernet7]
-        switches: [a-leaf3]
+        switches: [A-LEAF3]
         profile: PP-GREEN-SINGLE-HOMED
 
   - name: HostA4
     adapters:
       - endpoint_ports: [eth1, eth2]
         switch_ports: [Ethernet8, Ethernet8]
-        switches: [a-leaf3, a-leaf4]
+        switches: [A-LEAF3, A-LEAF4]
         profile: PP-BLUE-MLAG
 
   - name: HostA5
     adapters:
       - endpoint_ports: [eth1]
         switch_ports: [Ethernet7]
-        switches: [a-leaf4]
+        switches: [A-LEAF4]
         profile: PP-ORANGE-SINGLE-HOMED
 
   - name: HostB1
     adapters:
       - endpoint_ports: [eth1, eth2]
         switch_ports: [Ethernet7, Ethernet7]
-        switches: [b-leaf1, b-leaf2]
+        switches: [B-LEAF1, B-LEAF2]
         profile: PP-BLUE-MLAG
 
   - name: HostB2
     adapters:
       - endpoint_ports: [eth1, eth2]
         switch_ports: [Ethernet8, Ethernet8]
-        switches: [b-leaf1, b-leaf2]
+        switches: [B-LEAF1, B-LEAF2]
         profile: PP-ORANGE-MLAG
 
   - name: HostB3
     adapters:
       - endpoint_ports: [eth1]
         switch_ports: [Ethernet7]
-        switches: [b-leaf3]
+        switches: [B-LEAF3]
         profile: PP-GREEN-SINGLE-HOMED
 
   - name: HostB4
     adapters:
       - endpoint_ports: [eth1, eth2]
         switch_ports: [Ethernet8, Ethernet8]
-        switches: [b-leaf3, b-leaf4]
+        switches: [B-LEAF3, B-LEAF4]
         profile: PP-BLUE-MLAG
 
   - name: HostB5
     adapters:
       - endpoint_ports: [eth1]
         switch_ports: [Ethernet7]
-        switches: [b-leaf4]
+        switches: [B-LEAF4]
         profile: PP-ORANGE-SINGLE-HOMED
