@@ -21,11 +21,11 @@ inspect: ## Inspect the lab
 
 .PHONY: build
 build: ## Build Configs
-	ansible-playbook avd/playbooks/build.yml -i avd/inventory.yml
+	ansible-playbook avd/playbooks/build.yml -i avd/inventory.yml -e 'target_hosts=FABRIC_A' && ansible-playbook avd/playbooks/build.yml -i avd/inventory.yml -e 'target_hosts=FABRIC_B'
 
 .PHONY: deploy
 deploy: ## Deploy Configs via eAPI
-	ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml
+	ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml -e 'target_hosts=FABRIC_A' && ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml -e 'target_hosts=FABRIC_B'
 
 .PHONY: validate
 validate: ## Validate Fabric
