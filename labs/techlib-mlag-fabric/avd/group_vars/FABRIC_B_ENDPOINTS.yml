@@ -11,6 +11,12 @@ port_profiles:
     port_channel:
       mode: active
 
+  - profile: PP-GREEN-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 20
+
   - profile: PP-ORANGE-MLAG
     mode: access
     spanning_tree_portfast: edge
@@ -25,11 +31,19 @@ port_profiles:
     spanning_tree_bpduguard: true
     vlans: 30
 
-  - profile: PP-GREEN-SINGLE-HOMED
+  - profile: PP-PURPLE-MLAG
     mode: access
     spanning_tree_portfast: edge
     spanning_tree_bpduguard: true
-    vlans: 20
+    vlans: 40
+    port_channel:
+      mode: active
+
+  - profile: PP-PURPLE-SINGLE-HOMED
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: 40
 
 ########################################################
 # End hosts                                            #
@@ -47,7 +61,7 @@ servers:
       - endpoint_ports: [eth1, eth2]
         switch_ports: [Ethernet8, Ethernet8]
         switches: [B-LEAF1, B-LEAF2]
-        profile: PP-ORANGE-MLAG
+        profile: PP-PURPLE-MLAG
 
   - name: HostB3
     adapters:
@@ -68,4 +82,4 @@ servers:
       - endpoint_ports: [eth1]
         switch_ports: [Ethernet7]
         switches: [B-LEAF4]
-        profile: PP-ORANGE-SINGLE-HOMED
+        profile: PP-PURPLE-SINGLE-HOMED
