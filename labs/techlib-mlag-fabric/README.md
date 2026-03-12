@@ -1,4 +1,4 @@
-# Arista's Tech Library MLAG Fabric Deployment Guide Lab
+# Arista's Tech Library MLAG Fabric with VXLAN Flood and Learn Deployment Guide Lab
 
 > [!WARNING]
 > This lab is in preview. It's fully functional, but breaking changes can happen.
@@ -22,6 +22,8 @@ This lab has been validated with:
 
 ### Credentials
 
+The credentials below can be used to access any node in the topology.
+
 #### Username
 ```bash
 admin
@@ -34,9 +36,17 @@ admin
 ```
 
 > [!TIP]
-> The [ContainerLab VS Code Extension](https://containerlab.dev/manual/vsc-extension/) is pre-installed in the lab. For the best experience, it's recommended to use the [Topology Viewer](https://containerlab.dev/manual/vsc-extension/#topoviewer) to interact with the lab.
+> Quickly validate reachability between hosts in the lab by opening an SSH session to any Linux end host in the topology and running the following the command in the terminal window:
 >
-> Topology Viewer can be opened by selecting the ContainerLab extension icon and then the lab.
+> ```bash
+>pingcheck.sh
+>```
+
+### Topology Viewer
+
+The [ContainerLab VS Code Extension](https://containerlab.dev/manual/vsc-extension/) is pre-installed in the lab. For the best experience, it's recommended to use the [Topology Viewer](https://containerlab.dev/manual/vsc-extension/#topoviewer) to interact with the lab.
+
+Topology Viewer can be opened by selecting the ContainerLab extension icon and then the lab.
 
 <figure>
     <img src="assets/images/topo-extension.png"
