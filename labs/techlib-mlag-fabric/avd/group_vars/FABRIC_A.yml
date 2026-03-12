@@ -31,6 +31,13 @@ csc_loopbacks:
     ip_address: "10.255.1.1/32"
     ospf_area: "0.0.0.0"
 
+csc_router_ospf:
+  process_ids:
+    - id: 100
+      redistribute:
+        connected:
+          enabled: false
+
 ###################################################
 # FABRIC A SPINES                                 #
 ###################################################
@@ -50,6 +57,7 @@ l3spine:
     structured_config:
       vxlan_interface: "{{ csc_vxlan_int }}"
       loopback_interfaces: "{{ csc_loopbacks }}"
+      router_ospf: "{{ csc_router_ospf }}"
 
   node_groups:
     - group: A-SPINES
