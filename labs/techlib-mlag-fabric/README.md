@@ -33,6 +33,17 @@ admin
 admin
 ```
 
+> [!TIP]
+> The [ContainerLab VS Code Extension](https://containerlab.dev/manual/vsc-extension/) is pre-installed in the lab. For the best experience, it's recommended to use the [Topology Viewer](https://containerlab.dev/manual/vsc-extension/#topoviewer) to interact with the lab.
+>
+> Topology Viewer can be opened by selecting the ContainerLab extension icon and then the lab.
+
+<figure>
+    <img src="assets/images/topo-extension.png"
+         alt="Topology Viewer"
+         width="325">
+</figure>
+
 ### SSH
 
 Once in the Topology viewer, SSH to a node by right-clicking it and selecting `SSH`. This will open up a new terminal window containing the SSH session to the node.

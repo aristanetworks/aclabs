@@ -28,9 +28,17 @@ This lab has been validated with:
 
 ### Credentials
 
-Username: `admin`
+#### Username
 
-Password: `admin`
+```bash
+admin
+```
+
+#### Password
+
+```bash
+admin
+```
 
 > [!TIP]
 > The [ContainerLab VS Code Extension](https://containerlab.dev/manual/vsc-extension/) is pre-installed in the lab. For the best experience, it's recommended to use the [Topology Viewer](https://containerlab.dev/manual/vsc-extension/#topoviewer) to interact with the lab.
