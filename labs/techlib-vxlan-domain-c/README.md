@@ -11,7 +11,7 @@ Welcome! This pre-configured lab matches the [Domain C topology in the EVPN-VXLA
 This lab has been validated with:
 
 - cEOS-lab: **4.35.2F**
-- Containerlab: **0.73.0**
+- Containerlab: **0.74.0**
 - Resources:
   - CPUs: **16**
   - Memory: **64 GB**
@@ -57,7 +57,7 @@ Once in the Topology viewer, SSH to a node by right-clicking it and selecting `S
 <figure>
     <img src="assets/images/topo-ssh.png"
          alt="Topology Viewer"
-         width="325">
+         width="250">
 </figure>
 
 ### Packet Capture
@@ -67,7 +67,7 @@ Start a data-plane packet capture by right-clicking on a link and selecting the 
 <figure>
     <img src="assets/images/topo-pcap.png"
          alt="Topology Viewer"
-         width="325">
+         width="450">
 </figure>
 
 Additional information related to navigating the Topology Viewer UI can be found by selecting the `Shortcuts` icon from within the UI
@@ -75,7 +75,7 @@ Additional information related to navigating the Topology Viewer UI can be found
 <figure>
     <img src="assets/images/topo-shortcuts.png"
          alt="Topology Viewer"
-         width="300">
+         width="350">
 </figure>
 
 <!-- ### AVD
