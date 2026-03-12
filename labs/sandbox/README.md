@@ -12,7 +12,7 @@ This lab is pre-packaged with:
 
 - cEOS-lab: **4.35.2F**
 - AVD: **5.7.3**
-- Containerlab: **0.73.0**
+- Containerlab: **0.74.0**
 - Resources:
   - CPUs: **16**
   - Memory: **64 GB**
