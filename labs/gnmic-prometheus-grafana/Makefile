@@ -18,3 +18,7 @@ inspect: ## Inspect ceos lab
 	@echo ""
 	@echo "You can check the lab status, hostnames and management addresses above."
 	@echo "To connect to a lab device use \`ssh admin@<hostname>\` and password \`admin\`."
+
+.PHONY: deploy
+deploy: ## Deploy the configuration for the Network
+	ansible-playbook playbooks/fabric-deploy-config.yaml -i inventory.yaml

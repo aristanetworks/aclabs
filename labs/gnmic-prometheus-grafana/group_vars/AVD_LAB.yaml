@@ -1,12 +1,19 @@
 ---
 custom_structured_configuration_prefix:
- - om_
+  - om_
 aaa_settings:
   local_users:
+    - name: admin
+      privilege: 15
+      role: network-admin
+      no_password: true
     - name: arista
       privilege: 15
       role: network-admin
       sha512_password: "$6$7t1sx38LSYabjfkz$TNsa1HyVX4kehVvqFvJVF1omlYKxUkeAV4AfDlJ3tQnSoR1GfaaaicGyKjVJG/s63wxiTW1zgbchOH2dZ38lH."
+om_aaa_authorization:
+    exec:
+      default: local
 
 dns_settings:
   servers:
@@ -51,3 +58,29 @@ om_management_api_gnmi:
       notification_timestamp: "send-time"
     - name: default
       notification_timestamp: "send-time"
+
+
+om_monitor_connectivity:
+  shutdown: false
+  interval: 5
+  vrfs:
+    - name: MGMT
+      interface_sets:
+        - name: MyIntfSet
+          interfaces: Management0
+      local_interfaces: MyIntfSet
+      hosts:
+        - name: google
+          ip: 8.8.8.8
+          local_interfaces: MyIntfSet
+          url: https://www.google.com
+        - name: cloudflare
+          ip: 1.1.1.1
+          local_interfaces: MyIntfSet
+          url: https://cloudflare.com
+        - name: bbc
+          ip: 151.101.128.81
+          url: https://bbc.co.uk
+        - name: paypal
+          ip: 199.232.25.21
+          url: https://www.paypal.com

@@ -26,7 +26,7 @@ Last reviewed: 10/12/2025
 
 Please check the lab materials:
 
-- [Lab Documentation](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/telemetry)
+- [Lab Documentation](https://aristanetworks.github.io/aclabs/telemetry)
 
 ## Lab Inventory
 
@@ -34,15 +34,15 @@ This lab has following devices:
 
 | Hostname | Type | OS | Management Address | Username | Password |
 | -------- | ---- | -- | ------------------ | -------- | -------- |
-| spine1 | switch | cEOS-lab, 4.34.2F | 172.144.100.2 | arista | arista |
-| spine2 | switch | cEOS-lab, 4.34.2F | 172.144.100.3 | arista | arista |
-| pe11 | switch | cEOS-lab, 4.34.2F | 172.144.100.4 | arista | arista |
-| pe12 | switch | cEOS-lab, 4.34.2F | 172.144.100.5 | arista | arista |
-| pe21 | switch | cEOS-lab, 4.34.2F | 172.144.100.6 | arista | arista |
-| pe22 | switch | cEOS-lab, 4.34.2F | 172.144.100.7 | arista | arista |
-| client1 | host | cEOS-lab, 4.34.2F | 172.144.100.8 | arista | arista |
-| client2 | host | cEOS-lab, 4.34.2F | 172.144.100.9 | arista | arista |
-| client3 | host | cEOS-lab, 4.34.2F | 172.144.100.10 | arista | arista |
-| client4 | host | cEOS-lab, 4.34.2F | 172.144.100.11 | arista | arista |
+| clab-om-om-spine1 | switch | cEOS-lab, 4.34.2F | 172.144.100.2 | arista | arista |
+| clab-om-om-spine2 | switch | cEOS-lab, 4.34.2F | 172.144.100.3 | arista | arista |
+| clab-om-om-pe11 | switch | cEOS-lab, 4.34.2F | 172.144.100.4 | arista | arista |
+| clab-om-om-pe12 | switch | cEOS-lab, 4.34.2F | 172.144.100.5 | arista | arista |
+| clab-om-om-pe21 | switch | cEOS-lab, 4.34.2F | 172.144.100.6 | arista | arista |
+| clab-om-om-pe22 | switch | cEOS-lab, 4.34.2F | 172.144.100.7 | arista | arista |
+| clab-om-om-client1 | host | cEOS-lab, 4.34.2F | 172.144.100.8 | arista | arista |
+| clab-om-om-client2 | host | cEOS-lab, 4.34.2F | 172.144.100.9 | arista | arista |
+| clab-om-om-client3 | host | cEOS-lab, 4.34.2F | 172.144.100.10 | arista | arista |
+| clab-om-om-client4 | host | cEOS-lab, 4.34.2F | 172.144.100.11 | arista | arista |
 
 > To access any device, use `ssh <username>@<hostname>` or simply type `<hostname>` to use the SSH alias.
