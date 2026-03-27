@@ -29,10 +29,10 @@ spine:
     bgp_as: '65001'
     loopback_ipv4_pool: 192.168.255.0/24
   nodes:
-    - name: om-spine1
+    - name: spine1
       id: 1
       mgmt_ip: 172.144.100.2/24
-    - name: om-spine2
+    - name: spine2
       id: 2
       mgmt_ip: 172.144.100.3/24
 
@@ -40,8 +40,8 @@ l3leaf:
   defaults:
     platform: cEOS-LAB
     uplink_switches:
-      - om-spine1
-      - om-spine2
+      - spine1
+      - spine2
     uplink_interfaces:
       - Ethernet1
       - Ethernet2
@@ -56,14 +56,14 @@ l3leaf:
     - group: POD_1
       mlag: false
       nodes:
-        - name: om-pe11
+        - name: pe11
           id: 1
           bgp_as: '65101'
           mgmt_ip: 172.144.100.4/24
           uplink_switch_interfaces:
             - Ethernet1
             - Ethernet1
-        - name: om-pe12
+        - name: pe12
           id: 2
           bgp_as: '65102'
           mgmt_ip: 172.144.100.5/24
@@ -73,14 +73,14 @@ l3leaf:
     - group: POD_2
       mlag: false
       nodes:
-        - name: om-pe21
+        - name: pe21
           id: 3
           bgp_as: '65103'
           mgmt_ip: 172.144.100.6/24
           uplink_switch_interfaces:
             - Ethernet3
             - Ethernet3
-        - name: om-pe22
+        - name: pe22
           id: 4
           bgp_as: '65104'
           mgmt_ip: 172.144.100.7/24

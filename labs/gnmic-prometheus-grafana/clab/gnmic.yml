@@ -7,17 +7,17 @@ encoding: json_ietf
 #debug: true
 
 targets:
-  om-spine1:
+  spine1:
     insecure: true
-  om-spine2:
+  spine2:
     insecure: true
-  om-pe11:
+  pe11:
     insecure: true
-  om-pe12:
+  pe12:
     insecure: true
-  om-pe21:
+  pe21:
     insecure: true
-  om-pe22:
+  pe22:
     insecure: true
 subscriptions:
   bgp_neighbors:

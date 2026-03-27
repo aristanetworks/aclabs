@@ -767,8 +767,8 @@
       {
         "current": {
           "selected": false,
-          "text": "om-pe11",
-          "value": "om-pe11"
+          "text": "pe11",
+          "value": "pe11"
         },
         "datasource": {
           "type": "prometheus",

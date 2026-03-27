@@ -90,19 +90,19 @@ However you must take care of you VSCode setup and setting up environment variab
   +----+--------------------+--------------+--------------------------------------------------+-------+---------+--------------------+--------------+
   | #  |        Name        | Container ID |                      Image                       | Kind  |  State  |    IPv4 Address    | IPv6 Address |
   +----+--------------------+--------------+--------------------------------------------------+-------+---------+--------------------+--------------+
-  |  1 | clab-om-client1    | 9e0305c8a828 | ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0 | linux | running | 172.144.100.8/24   | N/A          |
-  |  2 | clab-om-client2    | 52cf2aef8ebe | ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0 | linux | running | 172.144.100.9/24   | N/A          |
-  |  3 | clab-om-client3    | c0b50717f247 | ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0 | linux | running | 172.144.100.10/24  | N/A          |
-  |  4 | clab-om-client4    | 14e93f835555 | ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0 | linux | running | 172.144.100.11/24  | N/A          |
-  |  5 | clab-om-gnmic      | b61e380ef683 | ghcr.io/openconfig/gnmic:0.38.2                  | linux | running | 172.144.100.200/24 | N/A          |
-  |  6 | clab-om-grafana    | c63aa0b25582 | grafana/grafana:11.2.0                           | linux | running | 172.144.100.220/24 | N/A          |
-  |  7 | clab-om-om-pe11    | 5140b4c79e6d | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.4/24   | N/A          |
-  |  8 | clab-om-om-pe12    | 0457268e8a1b | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.5/24   | N/A          |
-  |  9 | clab-om-om-pe21    | e4ddbd8f052c | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.6/24   | N/A          |
-  | 10 | clab-om-om-pe22    | db67714e6e6c | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.7/24   | N/A          |
-  | 11 | clab-om-om-spine1  | fbe81fcf3207 | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.2/24   | N/A          |
-  | 12 | clab-om-om-spine2  | 4880915b2d8c | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.3/24   | N/A          |
-  | 13 | clab-om-prometheus | 6b205dbcdfcb | prom/prometheus:v2.54.1                          | linux | running | 172.144.100.210/24 | N/A          |
+  |  1 | client1    | 9e0305c8a828 | ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0 | linux | running | 172.144.100.8/24   | N/A          |
+  |  2 | client2    | 52cf2aef8ebe | ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0 | linux | running | 172.144.100.9/24   | N/A          |
+  |  3 | client3    | c0b50717f247 | ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0 | linux | running | 172.144.100.10/24  | N/A          |
+  |  4 | client4    | 14e93f835555 | ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.0 | linux | running | 172.144.100.11/24  | N/A          |
+  |  5 | gnmic      | b61e380ef683 | ghcr.io/openconfig/gnmic:0.38.2                  | linux | running | 172.144.100.200/24 | N/A          |
+  |  6 | grafana    | c63aa0b25582 | grafana/grafana:11.2.0                           | linux | running | 172.144.100.220/24 | N/A          |
+  |  7 | pe11    | 5140b4c79e6d | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.4/24   | N/A          |
+  |  8 | pe12    | 0457268e8a1b | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.5/24   | N/A          |
+  |  9 | pe21    | e4ddbd8f052c | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.6/24   | N/A          |
+  | 10 | pe22    | db67714e6e6c | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.7/24   | N/A          |
+  | 11 | spine1  | fbe81fcf3207 | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.2/24   | N/A          |
+  | 12 | spine2  | 4880915b2d8c | arista/ceos:4.32.2.1F                            | ceos  | running | 172.144.100.3/24   | N/A          |
+  | 13 | prometheus | 6b205dbcdfcb | prom/prometheus:v2.54.1                          | linux | running | 172.144.100.210/24 | N/A          |
   +----+--------------------+--------------+--------------------------------------------------+-------+---------+--------------------+--------------+
   ```
 

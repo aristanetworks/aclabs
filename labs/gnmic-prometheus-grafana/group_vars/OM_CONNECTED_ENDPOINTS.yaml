@@ -18,8 +18,8 @@ servers:
           - Ethernet3
           - Ethernet3
         switches:
-          - om-pe11
-          - om-pe12
+          - pe11
+          - pe12
         profile: Tenant_A_pod1_clientA
         spanning_tree_portfast: edge
         port_channel:
@@ -37,8 +37,8 @@ servers:
           - Ethernet4
           - Ethernet4
         switches:
-          - om-pe11
-          - om-pe12
+          - pe11
+          - pe12
         profile: Tenant_A_pod1_clientB
         spanning_tree_portfast: edge
         port_channel:
@@ -56,8 +56,8 @@ servers:
           - Ethernet3
           - Ethernet3
         switches:
-          - om-pe21
-          - om-pe22
+          - pe21
+          - pe22
         profile: Tenant_A_pod1_clientA
         spanning_tree_portfast: edge
         port_channel:
@@ -75,8 +75,8 @@ servers:
           - Ethernet4
           - Ethernet4
         switches:
-          - om-pe21
-          - om-pe22
+          - pe21
+          - pe22
         profile: Tenant_A_pod1_clientB
         spanning_tree_portfast: edge
         port_channel:
