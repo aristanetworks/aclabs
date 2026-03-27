@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
   "links": [],
   "panels": [
     {
@@ -54,36 +53,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Device"
+              "options": "Connection"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 120
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Host"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 120
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "VRF"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 80
+                "value": 350
               }
             ]
           },
@@ -205,7 +180,7 @@
         "sortBy": [
           {
             "desc": false,
-            "displayName": "Device"
+            "displayName": "Connection"
           }
         ]
       },
@@ -218,7 +193,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "gnmic_conn_mon_packet_loss",
+          "expr": "label_replace(label_join(gnmic_conn_mon_packet_loss, \"description\", \"~\", \"source\", \"host_status_vrf_name\", \"icmp_stats_interface_name\", \"host_status_host_name\"), \"description\", \"$1 ($2 / $3) to $4\", \"description\", \"([^~]+)~([^~]+)~([^~]+)~([^~]+)\")",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -232,7 +207,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "gnmic_conn_mon_url",
+          "expr": "label_replace(label_join(gnmic_conn_mon_url, \"description\", \"~\", \"source\", \"host_status_vrf_name\", \"http_stats_interface_name\", \"host_status_host_name\"), \"description\", \"$1 ($2 / $3) to $4\", \"description\", \"([^~]+)~([^~]+)~([^~]+)~([^~]+)\")",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -246,7 +221,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "gnmic_conn_mon_latency",
+          "expr": "label_replace(label_join(gnmic_conn_mon_latency, \"description\", \"~\", \"source\", \"host_status_vrf_name\", \"icmp_stats_interface_name\", \"host_status_host_name\"), \"description\", \"$1 ($2 / $3) to $4\", \"description\", \"([^~]+)~([^~]+)~([^~]+)~([^~]+)\")",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -260,7 +235,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "gnmic_conn_mon_jitter",
+          "expr": "label_replace(label_join(gnmic_conn_mon_jitter, \"description\", \"~\", \"source\", \"host_status_vrf_name\", \"icmp_stats_interface_name\", \"host_status_host_name\"), \"description\", \"$1 ($2 / $3) to $4\", \"description\", \"([^~]+)~([^~]+)~([^~]+)~([^~]+)\")",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -274,7 +249,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "gnmic_conn_mon_http_response_time",
+          "expr": "label_replace(label_join(gnmic_conn_mon_http_response_time, \"description\", \"~\", \"source\", \"host_status_vrf_name\", \"http_stats_interface_name\", \"host_status_host_name\"), \"description\", \"$1 ($2 / $3) to $4\", \"description\", \"([^~]+)~([^~]+)~([^~]+)~([^~]+)\")",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -287,7 +262,7 @@
         {
           "id": "joinByField",
           "options": {
-            "byField": "host_status_host_name",
+            "byField": "description",
             "mode": "outer"
           }
         },
@@ -300,6 +275,7 @@
               "Time 3": true,
               "Time 4": true,
               "Time 5": true,
+              "Value #B": true,
               "__name__": true,
               "client_name": true,
               "client_name 2": true,
@@ -307,21 +283,30 @@
               "client_name 4": true,
               "client_name 5": true,
               "host_name": true,
+              "host_status_host_name": true,
+              "host_status_host_name 2": true,
+              "host_status_host_name 3": true,
+              "host_status_host_name 4": true,
+              "host_status_host_name 5": true,
+              "host_status_vrf_name": true,
               "host_status_vrf_name 2": true,
               "host_status_vrf_name 3": true,
               "host_status_vrf_name 4": true,
               "host_status_vrf_name 5": true,
+              "http_stats_interface_name": true,
+              "http_stats_interface_name 2": true,
+              "http_stats_url": true,
+              "http_stats_url 2": true,
               "icmp_stats_interface_name": true,
               "icmp_stats_interface_name 2": true,
               "icmp_stats_interface_name 3": true,
               "icmp_stats_ip_addr 2": true,
               "icmp_stats_ip_addr 3": true,
-              "http_stats_interface_name": true,
-              "http_stats_interface_name 2": true,
-              "http_stats_url": true,
-              "http_stats_url 2": true,
               "instance": true,
+              "interface_name": true,
+              "ip_addr": true,
               "job": true,
+              "source": true,
               "source 2": true,
               "source 3": true,
               "source 4": true,
@@ -331,32 +316,26 @@
               "subscription_name 3": true,
               "subscription_name 4": true,
               "subscription_name 5": true,
-              "Value #B": true,
-              "interface_name": true,
-              "ip_addr": true,
               "vrf_name": true
             },
+            "includeByName": {},
             "indexByName": {
-              "source 1": 0,
-              "host_status_host_name": 1,
-              "icmp_stats_ip_addr": 2,
-              "url": 3,
-              "host_status_vrf_name": 4,
-              "Value #A": 5,
-              "Value #C": 6,
-              "Value #D": 7,
-              "Value #E": 8
+              "Value #A": 3,
+              "Value #C": 4,
+              "Value #D": 5,
+              "Value #E": 6,
+              "description": 0,
+              "icmp_stats_ip_addr": 1,
+              "url": 2
             },
             "renameByName": {
-              "source 1": "Device",
-              "host_status_host_name": "Host",
-              "icmp_stats_ip_addr": "IP Address",
-              "url": "URL",
-              "host_status_vrf_name": "VRF",
               "Value #A": "Packet Loss %",
               "Value #C": "Latency",
               "Value #D": "Jitter",
-              "Value #E": "HTTP Response"
+              "Value #E": "HTTP Response",
+              "description": "Connection",
+              "icmp_stats_ip_addr": "IP Address",
+              "url": "URL"
             }
           }
         }
@@ -381,6 +360,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -483,6 +463,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -585,6 +566,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -688,6 +670,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
@@ -786,6 +769,6 @@
   "timezone": "browser",
   "title": "Connectivity Monitor - Global",
   "uid": "connectivity-monitor-global-dashboard",
-  "version": 1,
+  "version": 3,
   "weekStart": ""
 }
