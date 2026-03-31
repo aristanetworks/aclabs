@@ -83,7 +83,7 @@
   "cloudNodeAnnotations": [],
   "nodeAnnotations": [
     {
-      "id": "om-spine1",
+      "id": "spine1",
       "icon": "router",
       "position": {
         "x": -7,
@@ -95,7 +95,7 @@
       }
     },
     {
-      "id": "om-spine2",
+      "id": "spine2",
       "icon": "router",
       "position": {
         "x": 147,
@@ -107,7 +107,7 @@
       }
     },
     {
-      "id": "om-pe11",
+      "id": "pe11",
       "icon": "router",
       "position": {
         "x": -49,
@@ -119,7 +119,7 @@
       }
     },
     {
-      "id": "om-pe12",
+      "id": "pe12",
       "icon": "router",
       "position": {
         "x": 35,
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": "om-pe21",
+      "id": "pe21",
       "icon": "router",
       "position": {
         "x": 105,
@@ -143,7 +143,7 @@
       }
     },
     {
-      "id": "om-pe22",
+      "id": "pe22",
       "icon": "router",
       "position": {
         "x": 189,

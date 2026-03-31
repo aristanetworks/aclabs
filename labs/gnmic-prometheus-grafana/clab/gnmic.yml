@@ -1,5 +1,5 @@
-username: admin
-password: admin
+username: arista
+password: arista
 port: 6030
 timeout: 10s
 skip-verify: true
@@ -7,17 +7,17 @@ encoding: json_ietf
 #debug: true
 
 targets:
-  om-spine1:
+  spine1:
     insecure: true
-  om-spine2:
+  spine2:
     insecure: true
-  om-pe11:
+  pe11:
     insecure: true
-  om-pe12:
+  pe12:
     insecure: true
-  om-pe21:
+  pe21:
     insecure: true
-  om-pe22:
+  pe22:
     insecure: true
 subscriptions:
   bgp_neighbors:
@@ -41,6 +41,13 @@ subscriptions:
     stream-mode: sample
     sample-interval: 5s
 
+
+  processes:
+    paths:
+      - system/processes/process/state
+    mode: stream
+    stream-mode: sample
+    sample-interval: 15s
 
   memory:
     paths:
@@ -102,6 +109,34 @@ subscriptions:
     stream-mode: sample
     sample-interval: 60s
 
+  mac_table:
+    paths:
+      - network-instances/network-instance[name=default]/fdb/mac-table/entries/entry
+    mode: stream
+    stream-mode: sample
+    sample-interval: 30s
+
+  arp:
+    paths:
+      - /interfaces/interface/subinterfaces/subinterface/ipv4/neighbors/neighbor
+    mode: stream
+    stream-mode: sample
+    sample-interval: 30s
+
+  vlan_internal:
+    paths:
+      - eos_native:/Sysdb/bridging/config/vlanConfig
+    mode: stream
+    stream-mode: sample
+    sample-interval: 30s
+
+  conn_mon:
+    paths:
+      - arista/connectivity-monitor/clients/client
+    mode: stream
+    stream-mode: sample
+    sample-interval: 10s
+
 outputs:
   prom:
     type: prometheus
@@ -113,6 +148,7 @@ outputs:
     export-timestamps: true
     debug: false
     event-processors:
+      - extract-vlan-id
       - trim-prefixes
       - bounce-map
       - eos-version
@@ -126,6 +162,10 @@ outputs:
   #     - trim-prefixes
 
 processors:
+  extract-vlan-id:
+    event-extract-tags:
+      value-names:
+        - ".*vlanConfig/(?P<vlan_id>\\d+)/.*"
   eos-version:
     event-strings:
       value-names:

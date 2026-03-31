@@ -1,5 +1,5 @@
 name: om
-
+prefix: ""
 topology:
   kinds:
     ceos:
@@ -14,27 +14,27 @@ topology:
   defaults:
     kind: ceos
   nodes:
-    om-spine1:
+    spine1:
       mgmt-ipv4: 172.144.100.2
       binds:
        - ./sn/spine1.txt:/mnt/flash/ceos-config:ro
-    om-spine2:
+    spine2:
       mgmt-ipv4: 172.144.100.3
       binds:
        - ./sn/spine2.txt:/mnt/flash/ceos-config:ro
-    om-pe11:
+    pe11:
       mgmt-ipv4: 172.144.100.4
       binds:
       - ./sn/pe11.txt:/mnt/flash/ceos-config:ro
-    om-pe12:
+    pe12:
       mgmt-ipv4: 172.144.100.5
       binds:
       - ./sn/pe12.txt:/mnt/flash/ceos-config:ro
-    om-pe21:
+    pe21:
       mgmt-ipv4: 172.144.100.6
       binds:
       - ./sn/pe21.txt:/mnt/flash/ceos-config:ro
-    om-pe22:
+    pe22:
       mgmt-ipv4: 172.144.100.7
       binds:
       - ./sn/pe22.txt:/mnt/flash/ceos-config:ro
@@ -95,22 +95,22 @@ topology:
       group: gpromg
 
   links:
-    - endpoints: ["om-pe11:eth1", "om-spine1:eth1"]
-    - endpoints: ["om-pe12:eth1", "om-spine1:eth2"]
-    - endpoints: ["om-pe21:eth1", "om-spine1:eth3"]
-    - endpoints: ["om-pe22:eth1", "om-spine1:eth4"]
-    - endpoints: ["om-pe11:eth2", "om-spine2:eth1"]
-    - endpoints: ["om-pe12:eth2", "om-spine2:eth2"]
-    - endpoints: ["om-pe21:eth2", "om-spine2:eth3"]
-    - endpoints: ["om-pe22:eth2", "om-spine2:eth4"]
-    - endpoints: ["om-pe11:eth3", "client1:eth1"]
-    - endpoints: ["om-pe12:eth3", "client1:eth2"]
-    - endpoints: ["om-pe11:eth4", "client2:eth1"]
-    - endpoints: ["om-pe12:eth4", "client2:eth2"]
-    - endpoints: ["om-pe21:eth3", "client3:eth1"]
-    - endpoints: ["om-pe22:eth3", "client3:eth2"]
-    - endpoints: ["om-pe21:eth4", "client4:eth1"]
-    - endpoints: ["om-pe22:eth4", "client4:eth2"]
+    - endpoints: ["pe11:eth1", "spine1:eth1"]
+    - endpoints: ["pe12:eth1", "spine1:eth2"]
+    - endpoints: ["pe21:eth1", "spine1:eth3"]
+    - endpoints: ["pe22:eth1", "spine1:eth4"]
+    - endpoints: ["pe11:eth2", "spine2:eth1"]
+    - endpoints: ["pe12:eth2", "spine2:eth2"]
+    - endpoints: ["pe21:eth2", "spine2:eth3"]
+    - endpoints: ["pe22:eth2", "spine2:eth4"]
+    - endpoints: ["pe11:eth3", "client1:eth1"]
+    - endpoints: ["pe12:eth3", "client1:eth2"]
+    - endpoints: ["pe11:eth4", "client2:eth1"]
+    - endpoints: ["pe12:eth4", "client2:eth2"]
+    - endpoints: ["pe21:eth3", "client3:eth1"]
+    - endpoints: ["pe22:eth3", "client3:eth2"]
+    - endpoints: ["pe21:eth4", "client4:eth1"]
+    - endpoints: ["pe22:eth4", "client4:eth2"]
 
 mgmt:
   network: om_clab

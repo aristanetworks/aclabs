@@ -6,27 +6,27 @@ all:
           children:
             OM_SPINES:
               hosts:
-                om-spine1:
+                spine1:
                   ansible_host: 172.144.100.2
-                om-spine2:
+                spine2:
                   ansible_host: 172.144.100.3
             OM_PES:
               hosts:
-                om-pe11:
+                pe11:
                   ansible_host: 172.144.100.4
-                om-pe12:
+                pe12:
                   ansible_host: 172.144.100.5
-                om-pe21:
+                pe21:
                   ansible_host: 172.144.100.6
-                om-pe22:
+                pe22:
                   ansible_host: 172.144.100.7
 
           vars:
             ansible_connection: httpapi
             ansible_httpapi_use_ssl: true
             ansible_httpapi_validate_certs: false
-            ansible_user: admin
-            ansible_password: admin
+            ansible_user: arista
+            ansible_password: arista
             ansible_become: true
             ansible_become_method: enable
             ansible_network_os: eos

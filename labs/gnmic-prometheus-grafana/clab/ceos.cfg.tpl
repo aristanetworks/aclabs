@@ -1,5 +1,7 @@
 hostname {{ .ShortName }}
-username admin privilege 15 secret admin
+username admin role network-admin privilege 15 nopassword
+username arista role network-admin privilege 15 secret arista
+aaa authorization exec default local
 !
 service routing protocols model multi-agent
 !
