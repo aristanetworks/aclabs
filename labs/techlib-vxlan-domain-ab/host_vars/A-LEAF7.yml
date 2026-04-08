@@ -1,0 +1,4 @@
+---
+
+evpn_multicast: false
+underlay_multicast: false

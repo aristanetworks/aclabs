@@ -1,0 +1,602 @@
+---
+# --------------------------------------------------------------
+# Arista EVPN Deployment Guide Topology - Domain A
+# --------------------------------------------------------------
+
+name: arista-evpn-dg
+
+prefix: ""
+
+mgmt:
+  network: mgmt
+  ipv4-subnet: 172.100.100.0/22
+
+topology:
+
+  kinds:
+    arista_ceos:
+      enforce-startup-config: true
+      image: arista/ceos:latest
+      env:
+        INTFTYPE: et
+        CLAB_MGMT_VRF: MGMT
+    linux:
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
+      # binds:
+      #   - /techlib-vxlan-domain-a:/workspace:ro
+
+  nodes:
+
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    #                     DOMAIN "A"                              #
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+
+
+    #########################
+    # Domain A SPINE        #
+    #########################
+
+    A-SPINE1:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.101
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    A-SPINE2:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.102
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    A-SPINE3:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.103
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    A-SPINE4:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.104
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    #########################
+    # Domain A LEAF         #
+    #########################
+
+    A-LEAF1:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.105
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    A-LEAF2:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.106
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    A-LEAF3:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.107
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    A-LEAF4:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.108
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    A-LEAF5:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.109
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    A-LEAF6:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.110
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    A-LEAF7:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.111
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    A-LEAF8:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.101.112
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    #########################
+    # Domain A Hosts        #
+    #########################
+
+    # HostA1 is connected to LEAF1 eth7 and LEAF2 eth7
+    HostA1:
+      kind: linux
+      mgmt-ipv4: 172.100.101.201
+      binds:
+        - sn/prod_hosts.txt:/home/admin/hosts.txt
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        IPV6: 2001:db8:10:10::101/64
+        UPLINK_MAC: 00:01:01:00:00:A1
+
+    # HostA2 is connected to LEAF1 eth8 and LEAF2 eth8
+    HostA2:
+      kind: linux
+      mgmt-ipv4: 172.100.101.202
+      binds:
+        - sn/prod_hosts.txt:/home/admin/hosts.txt
+      env:
+        TMODE: lacp
+        IPV4: 10.30.30.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.30.30.1
+        IPV6: 2001:db8:30:30::101/64
+        UPLINK_MAC: 00:01:01:00:00:A2
+
+    # HostA3 is a Linux host with a single interface connected to LEAF3 eth7
+    HostA3:
+      kind: linux
+      mgmt-ipv4: 172.100.101.203
+      binds:
+        - sn/dev_hosts.txt:/home/admin/hosts.txt
+      env:
+        IPV4: 10.50.50.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.50.50.1
+        IPV6: 2001:db8:50:50::101/64
+        UPLINK_MAC: 00:01:01:00:00:A3
+
+    # HostA4 is connected to LEAF3 eth8 and LEAF4 eth8
+    HostA4:
+      kind: linux
+      mgmt-ipv4: 172.100.101.204
+      binds:
+        - sn/prod_hosts.txt:/home/admin/hosts.txt
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        IPV6: 2001:db8:10:10::102/64
+        UPLINK_MAC: 00:01:01:00:00:A4
+
+    # HostA5 is connected to LEAF4 eth7
+    HostA5:
+      kind: linux
+      mgmt-ipv4: 172.100.101.205
+      binds:
+        - sn/prod_hosts.txt:/home/admin/hosts.txt
+      env:
+        IPV4: 10.30.30.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.30.30.1
+        IPV6: 2001:db8:30:30::102/64
+        UPLINK_MAC: 00:01:01:00:00:A5
+
+    # HostA6 is connected to LEAF5 eth7 and LEAF6 eth7
+    HostA6:
+      kind: linux
+      mgmt-ipv4: 172.100.101.206
+      binds:
+        - sn/dev_hosts.txt:/home/admin/hosts.txt
+      env:
+        TMODE: lacp
+        IPV4: 10.70.70.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.70.70.1
+        IPV6: 2001:db8:70:70::101/64
+        UPLINK_MAC: 00:01:01:00:00:A6
+
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    #                     DOMAIN "B"                         #
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+    ###############################################################
+
+    #########################
+    # DC "B" SPINE          #
+    #########################
+
+    B-SPINE1:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.101
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    B-SPINE2:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.102
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    B-SPINE3:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.103
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    B-SPINE4:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.104
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+
+    #########################
+    # DC "B" LEAF           #
+    #########################
+
+    B-LEAF1:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.105
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+      startup-delay: 30
+
+    B-LEAF2:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.106
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+      startup-delay: 30
+
+    B-LEAF3:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.107
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+      startup-delay: 30
+
+    B-LEAF4:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.108
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+      startup-delay: 30
+
+    B-LEAF5:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.109
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+      startup-delay: 60
+
+    B-LEAF6:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.110
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+      startup-delay: 60
+
+    B-LEAF7:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.111
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+      startup-delay: 60
+
+    B-LEAF8:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.112
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+      startup-delay: 90
+
+    B-SW1:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.102.113
+      binds:
+        - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/__clabNodeName__.cfg
+      startup-delay: 90
+
+    #########################
+    # DC "B" Hosts          #
+    #########################
+
+    # HostB1 is connected to LEAF1 eth7 and LEAF2 eth7
+    HostB1:
+      kind: linux
+      mgmt-ipv4: 172.100.102.201
+      binds:
+        - sn/prod_hosts.txt:/home/admin/hosts.txt
+      env:
+        TMODE: lacp
+        IPV4: 10.20.20.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.20.20.1
+        IPV6: 2001:db8:20:20::101/64
+        UPLINK_MAC: 00:01:01:00:00:B1
+
+    # HostB2 is connected to LEAF1 eth8 and LEAF2 eth8
+    HostB2:
+      kind: linux
+      mgmt-ipv4: 172.100.102.202
+      binds:
+        - sn/prod_hosts.txt:/home/admin/hosts.txt
+      env:
+        TMODE: lacp
+        IPV4: 10.40.40.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.40.40.1
+        IPV6: 2001:db8:40:40::101/64
+        UPLINK_MAC: 00:01:01:00:00:B2
+
+    # HostB3 is connected to LEAF3 eth7
+    HostB3:
+      kind: linux
+      mgmt-ipv4: 172.100.102.203
+      binds:
+        - sn/dev_hosts.txt:/home/admin/hosts.txt
+      env:
+        IPV4: 10.60.60.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.60.60.1
+        IPV6: 2001:db8:60:60::101/64
+        UPLINK_MAC: 00:01:01:00:00:B3
+
+    # HostB4 is connected to LEAF3 eth8 and LEAF4 eth8
+    HostB4:
+      kind: linux
+      mgmt-ipv4: 172.100.102.204
+      binds:
+        - sn/prod_hosts.txt:/home/admin/hosts.txt
+      env:
+        TMODE: lacp
+        IPV4: 10.10.10.103/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.10.10.1
+        IPV6: 2001:db8:10:10::103/64
+        UPLINK_MAC: 00:01:01:00:00:B4
+
+    # HostB5 is connected to LEAF4 eth7
+    HostB5:
+      kind: linux
+      mgmt-ipv4: 172.100.102.205
+      binds:
+        - sn/dev_hosts.txt:/home/admin/hosts.txt
+      env:
+        IPV4: 10.70.70.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.70.70.1
+        IPV6: 2001:db8:70:70::102/64
+        UPLINK_MAC: 00:01:01:00:00:B5
+
+    # HostB6 is connected to B-SW1 eth3
+    HostB6:
+      kind: linux
+      mgmt-ipv4: 172.100.102.206
+      binds:
+        - sn/prod_hosts.txt:/home/admin/hosts.txt
+      env:
+        IPV4: 10.40.40.102/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.40.40.1
+        IPV6: 2001:db8:40:40::102/64
+        UPLINK_MAC: 00:01:01:00:00:B6
+
+    # HostB7 is connected to B-SW1 eth4
+    HostB7:
+      kind: linux
+      mgmt-ipv4: 172.100.102.207
+      binds:
+        - sn/dev_hosts.txt:/home/admin/hosts.txt
+      env:
+        IPV4: 10.80.80.101/24
+        STATIC_ROUTE: 10.0.0.0/8
+        GW: 10.80.80.1
+        IPV6: 2001:db8:80:80::101/64
+        UPLINK_MAC: 00:01:01:00:00:B7
+
+    #########################
+    # Backbone              #
+    #########################
+
+    BB1:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.100.101
+      binds:
+        - sn/BB1.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/BB1.cfg
+
+    BB2:
+      kind: arista_ceos
+      mgmt-ipv4: 172.100.100.102
+      binds:
+        - sn/BB2.txt:/mnt/flash/ceos-config:ro
+      startup-config: init-configs/BB2.cfg
+
+  links:
+    ######################
+    # A-SPINE1 to LEAF   #
+    ######################
+    - endpoints: [ "A-SPINE1:et1", "A-LEAF1:et1" ]
+    - endpoints: [ "A-SPINE1:et2", "A-LEAF2:et1" ]
+    - endpoints: [ "A-SPINE1:et3", "A-LEAF3:et1" ]
+    - endpoints: [ "A-SPINE1:et4", "A-LEAF4:et1" ]
+    - endpoints: [ "A-SPINE1:et5", "A-LEAF5:et1" ]
+    - endpoints: [ "A-SPINE1:et6", "A-LEAF6:et1" ]
+    - endpoints: [ "A-SPINE1:et7", "A-LEAF7:et1" ]
+    - endpoints: [ "A-SPINE1:et8", "A-LEAF8:et1" ]
+    ######################
+    # A-SPINE2 to LEAF   #
+    ######################
+    - endpoints: [ "A-SPINE2:et1", "A-LEAF1:et2" ]
+    - endpoints: [ "A-SPINE2:et2", "A-LEAF2:et2" ]
+    - endpoints: [ "A-SPINE2:et3", "A-LEAF3:et2" ]
+    - endpoints: [ "A-SPINE2:et4", "A-LEAF4:et2" ]
+    - endpoints: [ "A-SPINE2:et5", "A-LEAF5:et2" ]
+    - endpoints: [ "A-SPINE2:et6", "A-LEAF6:et2" ]
+    - endpoints: [ "A-SPINE2:et7", "A-LEAF7:et2" ]
+    - endpoints: [ "A-SPINE2:et8", "A-LEAF8:et2" ]
+    ######################
+    # A-SPINE3 to LEAF   #
+    ######################
+    - endpoints: [ "A-SPINE3:et1", "A-LEAF1:et3" ]
+    - endpoints: [ "A-SPINE3:et2", "A-LEAF2:et3" ]
+    - endpoints: [ "A-SPINE3:et3", "A-LEAF3:et3" ]
+    - endpoints: [ "A-SPINE3:et4", "A-LEAF4:et3" ]
+    - endpoints: [ "A-SPINE3:et5", "A-LEAF5:et3" ]
+    - endpoints: [ "A-SPINE3:et6", "A-LEAF6:et3" ]
+    - endpoints: [ "A-SPINE3:et7", "A-LEAF7:et3" ]
+    - endpoints: [ "A-SPINE3:et8", "A-LEAF8:et3" ]
+    ######################
+    # A-SPINE4 to LEAF   #
+    ######################
+    - endpoints: [ "A-SPINE4:et1", "A-LEAF1:et4" ]
+    - endpoints: [ "A-SPINE4:et2", "A-LEAF2:et4" ]
+    - endpoints: [ "A-SPINE4:et3", "A-LEAF3:et4" ]
+    - endpoints: [ "A-SPINE4:et4", "A-LEAF4:et4" ]
+    - endpoints: [ "A-SPINE4:et5", "A-LEAF5:et4" ]
+    - endpoints: [ "A-SPINE4:et6", "A-LEAF6:et4" ]
+    - endpoints: [ "A-SPINE4:et7", "A-LEAF7:et4" ]
+    - endpoints: [ "A-SPINE4:et8", "A-LEAF8:et4" ]
+    ########################
+    # A-LEAF1 to A-LEAF2   #
+    ########################
+    - endpoints: [ "A-LEAF1:et5", "A-LEAF2:et5" ]
+    - endpoints: [ "A-LEAF1:et6", "A-LEAF2:et6" ]
+    ########################
+    # A-LEAF3 to A-LEAF4   #
+    ########################
+    - endpoints: [ "A-LEAF3:et5", "A-LEAF4:et5" ]
+    - endpoints: [ "A-LEAF3:et6", "A-LEAF4:et6" ]
+    ########################
+    # A-LEAF5 to A-LEAF6   #
+    ########################
+    - endpoints: [ "A-LEAF5:et5", "A-LEAF6:et5" ]
+    - endpoints: [ "A-LEAF5:et6", "A-LEAF6:et6" ]
+    ########################
+    # DC "A" HostC6        #
+    ########################
+    - endpoints: [ "HostA1:eth1", "A-LEAF1:et7" ]
+    - endpoints: [ "HostA1:eth2", "A-LEAF2:et7" ]
+    - endpoints: [ "HostA2:eth1", "A-LEAF1:et8" ]
+    - endpoints: [ "HostA2:eth2", "A-LEAF2:et8" ]
+    - endpoints: [ "HostA3:eth1", "A-LEAF3:et7" ]
+    - endpoints: [ "HostA4:eth1", "A-LEAF3:et8" ]
+    - endpoints: [ "HostA4:eth2", "A-LEAF4:et8" ]
+    - endpoints: [ "HostA5:eth1", "A-LEAF4:et7" ]
+    - endpoints: [ "HostA6:eth1", "A-LEAF5:et7" ]
+    - endpoints: [ "HostA6:eth2", "A-LEAF6:et7" ]
+    ######################
+    # B-SPINE1 to LEAF   #
+    ######################
+    - endpoints: [ "B-SPINE1:et1", "B-LEAF1:et1" ]
+    - endpoints: [ "B-SPINE1:et2", "B-LEAF2:et1" ]
+    - endpoints: [ "B-SPINE1:et3", "B-LEAF3:et1" ]
+    - endpoints: [ "B-SPINE1:et4", "B-LEAF4:et1" ]
+    - endpoints: [ "B-SPINE1:et5", "B-LEAF5:et1" ]
+    - endpoints: [ "B-SPINE1:et6", "B-LEAF6:et1" ]
+    - endpoints: [ "B-SPINE1:et7", "B-LEAF7:et1" ]
+    - endpoints: [ "B-SPINE1:et8", "B-LEAF8:et1" ]
+    ######################
+    # B-SPINE2 to LEAF   #
+    ######################
+    - endpoints: [ "B-SPINE2:et1", "B-LEAF1:et2" ]
+    - endpoints: [ "B-SPINE2:et2", "B-LEAF2:et2" ]
+    - endpoints: [ "B-SPINE2:et3", "B-LEAF3:et2" ]
+    - endpoints: [ "B-SPINE2:et4", "B-LEAF4:et2" ]
+    - endpoints: [ "B-SPINE2:et5", "B-LEAF5:et2" ]
+    - endpoints: [ "B-SPINE2:et6", "B-LEAF6:et2" ]
+    - endpoints: [ "B-SPINE2:et7", "B-LEAF7:et2" ]
+    - endpoints: [ "B-SPINE2:et8", "B-LEAF8:et2" ]
+    ######################
+    # B-SPINE3 to LEAF   #
+    ######################
+    - endpoints: [ "B-SPINE3:et1", "B-LEAF1:et3" ]
+    - endpoints: [ "B-SPINE3:et2", "B-LEAF2:et3" ]
+    - endpoints: [ "B-SPINE3:et3", "B-LEAF3:et3" ]
+    - endpoints: [ "B-SPINE3:et4", "B-LEAF4:et3" ]
+    - endpoints: [ "B-SPINE3:et5", "B-LEAF5:et3" ]
+    - endpoints: [ "B-SPINE3:et6", "B-LEAF6:et3" ]
+    - endpoints: [ "B-SPINE3:et7", "B-LEAF7:et3" ]
+    - endpoints: [ "B-SPINE3:et8", "B-LEAF8:et3" ]
+    ######################
+    # B-SPINE4 to LEAF   #
+    ######################
+    - endpoints: [ "B-SPINE4:et1", "B-LEAF1:et4" ]
+    - endpoints: [ "B-SPINE4:et2", "B-LEAF2:et4" ]
+    - endpoints: [ "B-SPINE4:et3", "B-LEAF3:et4" ]
+    - endpoints: [ "B-SPINE4:et4", "B-LEAF4:et4" ]
+    - endpoints: [ "B-SPINE4:et5", "B-LEAF5:et4" ]
+    - endpoints: [ "B-SPINE4:et6", "B-LEAF6:et4" ]
+    - endpoints: [ "B-SPINE4:et7", "B-LEAF7:et4" ]
+    - endpoints: [ "B-SPINE4:et8", "B-LEAF8:et4" ]
+    #################################
+    # B-LEAF5 and B-LEAF6  to B-SW1 #
+    #################################
+    - endpoints: [ "B-LEAF5:et7", "B-SW1:et1" ]
+    - endpoints: [ "B-LEAF6:et7", "B-SW1:et2" ]
+    ########################
+    # DC "B" Hosts         #
+    ########################
+    - endpoints: [ "HostB1:eth1", "B-LEAF1:et7" ]
+    - endpoints: [ "HostB1:eth2", "B-LEAF2:et7" ]
+    - endpoints: [ "HostB2:eth1", "B-LEAF1:et8" ]
+    - endpoints: [ "HostB2:eth2", "B-LEAF2:et8" ]
+    - endpoints: [ "HostB3:eth1", "B-LEAF3:et7" ]
+    - endpoints: [ "HostB4:eth1", "B-LEAF3:et8" ]
+    - endpoints: [ "HostB4:eth2", "B-LEAF4:et8" ]
+    - endpoints: [ "HostB5:eth1", "B-LEAF4:et7" ]
+    - endpoints: [ "HostB6:eth1", "B-SW1:et3" ]
+    - endpoints: [ "HostB7:eth1", "B-SW1:et4" ]
+    ########################
+    # Backbone             #
+    ########################
+    - endpoints: [ "BB1:et1", "A-LEAF7:et7" ]
+    - endpoints: [ "BB1:et2", "A-LEAF8:et7" ]
+    - endpoints: [ "BB2:et1", "A-LEAF7:et8" ]
+    - endpoints: [ "BB2:et2", "A-LEAF8:et8" ]
+    - endpoints: [ "BB1:et3", "B-LEAF7:et7" ]
+    - endpoints: [ "BB1:et4", "B-LEAF8:et7" ]
+    - endpoints: [ "BB2:et3", "B-LEAF7:et8" ]
+    - endpoints: [ "BB2:et4", "B-LEAF8:et8" ]
