@@ -295,15 +295,36 @@ if __name__ == "__main__":
     with open(f'{workspace_dir}/.vscode/tasks.json', 'w') as tasks_json:
         json.dump(lab_tasks, tasks_json, indent=4)
 
-    shutil.copytree(f"/tmp/{archive_name}/ansible_collections/arista/avd/examples/{example_selected}", f"{workspace_dir}", dirs_exist_ok=True)
+    shutil.copytree(f"/tmp/{archive_name}/ansible_collections/arista/avd/examples/{example_selected}", f"{workspace_dir}", ignore=shutil.ignore_patterns("README.md"), dirs_exist_ok=True)
 
-    subprocess.run([
-        'pip', 'install',
-        f'/tmp/{archive_name}/python-avd[ansible]'
-    ], check=True)
+    console.clear()
+    console.print("\n\n", end="")
 
-    subprocess.run([
-        'ansible-galaxy',
-        'collection', 'install', '--force',
-        f'/tmp/{archive_name}/ansible_collections/arista/avd'
-    ])
+    console.log("Installing python-avd and requirements.")
+    with console.status("Installing python-avd and requirements... Please wait.", spinner="earth"):
+        subprocess.run([
+            'pip', 'install',
+            f'/tmp/{archive_name}/python-avd[ansible]', '--disable-pip-version-check'
+        ], check=True, stdout=subprocess.DEVNULL)
+    console.log("Done.")
+
+    console.log("Installing Arista AVD Ansible collection and requirements.")
+    with console.status("Installing Arista AVD Ansible collection and requirements... Please wait.", spinner="earth"):
+        subprocess.run([
+            'ansible-galaxy',
+            'collection', 'install', '--force',
+            f'/tmp/{archive_name}/ansible_collections/arista/avd'
+        ], check=True, stdout=subprocess.DEVNULL)
+    console.log("Done.")
+
+    console.log("Running post_selector.sh to finish the lab setup.")
+    # run post-selectory shell script to git init the repo, etc.
+    with console.status("Running post_selector.sh to finish the lab setup.... Please wait.", spinner="earth"):
+        subprocess.run([
+            f'{workspace_dir}/.vscode/post_selector.sh'
+        ], check=True, stdout=subprocess.DEVNULL)
+    console.log("Done.")
+
+    console.log("Lab is ready!")
+    console.print("Please close any open terminals and init a new one before you start working with the lab!", style="warning")
+    console.print("\n\n", end="")

@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "init_lab",
+            "label": "Init the Lab",
             "command": "/avd-playground/.vscode/lab_selector.py",
             "type": "shell",
             "presentation": {
