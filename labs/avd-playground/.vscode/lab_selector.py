@@ -303,7 +303,7 @@ if __name__ == "__main__":
     with console.status("Installing python-avd and requirements... Please wait.", spinner="earth"):
         subprocess.run([
             'pip', 'install',
-            f'/tmp/{archive_name}/python-avd[ansible]'
+            f'/tmp/{archive_name}/python-avd[ansible]', '--disable-pip-version-check'
         ], check=True, stdout=subprocess.DEVNULL)
 
     with console.status("Installing Arista AVD Ansible collection and requirements... Please wait.", spinner="earth"):
