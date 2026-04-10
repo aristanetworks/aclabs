@@ -7,7 +7,6 @@
             "type": "shell",
             "presentation": {
                 "reveal": "always"
-                // "close": true
             },
             "runOptions": {
                 "runOn": "folderOpen"

@@ -319,7 +319,7 @@ if __name__ == "__main__":
             f'{workspace_dir}/.vscode/post_selector.sh'
         ], check=True, stdout=subprocess.DEVNULL)
 
-    console.clear()
     console.print("\n\n", end="")
     console.log("Lab is ready!")
     console.print("Please close any open terminals and init a new one before you start working with the lab!", style="warning")
+    console.print("\n\n", end="")

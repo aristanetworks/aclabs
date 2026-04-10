@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+exec > /dev/null 2>&1
+
 set +e
 
 cd ${CONTAINERWSF}
