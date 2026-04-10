@@ -297,21 +297,28 @@ if __name__ == "__main__":
 
     shutil.copytree(f"/tmp/{archive_name}/ansible_collections/arista/avd/examples/{example_selected}", f"{workspace_dir}", ignore=shutil.ignore_patterns("README.md"), dirs_exist_ok=True)
 
-    subprocess.run([
-        'pip', 'install',
-        f'/tmp/{archive_name}/python-avd[ansible]'
-    ], check=True)
+    console.clear()
+    console.print("\n\n", end="")
 
-    subprocess.run([
-        'ansible-galaxy',
-        'collection', 'install', '--force',
-        f'/tmp/{archive_name}/ansible_collections/arista/avd'
-    ], check=True)
+    with console.status("Installing python-avd and requirements... Please wait.", spinner="earth"):
+        subprocess.run([
+            'pip', 'install',
+            f'/tmp/{archive_name}/python-avd[ansible]'
+        ], check=True)
+
+    with console.status("Installing Arista AVD Ansible collection and requirements... Please wait.", spinner="earth"):
+        subprocess.run([
+            'ansible-galaxy',
+            'collection', 'install', '--force',
+            f'/tmp/{archive_name}/ansible_collections/arista/avd'
+        ], check=True)
 
     # run post-selectory shell script to git init the repo, etc.
-    subprocess.run([
-        f'{workspace_dir}/.vscode/post_selector.sh'
-    ], check=True)
+    with console.status("Finishing... Please wait.", spinner="earth"):
+        subprocess.run([
+            f'{workspace_dir}/.vscode/post_selector.sh'
+        ], check=True)
 
-    # exit the terminal
-    sys.exit()
+    console.log("Lab is ready!")
+
+    console.print("Please close any open terminals and init a new one before you start working with the lab!", style="warning")
