@@ -120,6 +120,9 @@ cEOS-lab-*
 .gitignored/*
 !.gitignored/.gitkeep
 
+# gitignore config_backups
+config_backup/
+
 # do NOT ignore public lab env variables
 !.vscode/*.public.env
 !.vscode/*.py
