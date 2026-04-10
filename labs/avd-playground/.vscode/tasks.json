@@ -6,8 +6,8 @@
             "command": "/avd-playground/.vscode/lab_selector.py",
             "type": "shell",
             "presentation": {
-                "reveal": "always",
-                "close": true
+                "reveal": "always"
+                // "close": true
             },
             "runOptions": {
                 "runOn": "folderOpen"

@@ -304,21 +304,22 @@ if __name__ == "__main__":
         subprocess.run([
             'pip', 'install',
             f'/tmp/{archive_name}/python-avd[ansible]'
-        ], check=True)
+        ], check=True, stdout=subprocess.DEVNULL)
 
     with console.status("Installing Arista AVD Ansible collection and requirements... Please wait.", spinner="earth"):
         subprocess.run([
             'ansible-galaxy',
             'collection', 'install', '--force',
             f'/tmp/{archive_name}/ansible_collections/arista/avd'
-        ], check=True)
+        ], check=True, stdout=subprocess.DEVNULL)
 
     # run post-selectory shell script to git init the repo, etc.
     with console.status("Finishing... Please wait.", spinner="earth"):
         subprocess.run([
             f'{workspace_dir}/.vscode/post_selector.sh'
-        ], check=True)
+        ], check=True, stdout=subprocess.DEVNULL)
 
+    console.clear()
+    console.print("\n\n", end="")
     console.log("Lab is ready!")
-
     console.print("Please close any open terminals and init a new one before you start working with the lab!", style="warning")
