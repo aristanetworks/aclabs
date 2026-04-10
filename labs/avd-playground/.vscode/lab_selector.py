@@ -312,3 +312,6 @@ if __name__ == "__main__":
     subprocess.run([
         f'{workspace_dir}/.vscode/post_selector.sh'
     ], check=True)
+
+    # exit the terminal
+    sys.exit()
