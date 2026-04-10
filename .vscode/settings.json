@@ -18,5 +18,5 @@
         // allow fenced blocks in Markdown
         "MD046": false,
     },
-    "markdown.marp.enableHtml": true
+    "markdown.marp.html": "all"
 }
