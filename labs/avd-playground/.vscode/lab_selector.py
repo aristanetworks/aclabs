@@ -306,4 +306,9 @@ if __name__ == "__main__":
         'ansible-galaxy',
         'collection', 'install', '--force',
         f'/tmp/{archive_name}/ansible_collections/arista/avd'
-    ])
+    ], check=True)
+
+    # run post-selectory shell script to git init the repo, etc.
+    subprocess.run([
+        f'{workspace_dir}/.vscode/post_selector.sh'
+    ], check=True)

@@ -123,3 +123,4 @@ cEOS-lab-*
 # do NOT ignore public lab env variables
 !.vscode/*.public.env
 !.vscode/*.py
+!.vscode/*.sh
