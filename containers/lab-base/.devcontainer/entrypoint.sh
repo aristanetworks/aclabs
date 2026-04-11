@@ -2,6 +2,17 @@
 
 set +e
 
+# Load per-lab variables if present. This sources a KEY=value file from the
+# lab's .vscode directory into entrypoint.sh's environment, so every downstream
+# process (code-server, its tasks, its terminals, and `make start`) inherits it.
+# Gated on file existence — labs without this file are unaffected.
+LAB_VARS_FILE="${CONTAINERWSF}/.vscode/lab_vars.public.env"
+if [ -f "${LAB_VARS_FILE}" ]; then
+    set -a           # auto-export everything sourced
+    . "${LAB_VARS_FILE}"
+    set +a
+fi
+
 # do not use moby script when docker is already available
 # calling moby script on top of working docker deployment can break it in some cases (for ex.: Codespaces)
 if ! ${CODESPACES:-false} && ! ${REMOTE_CONTAINERS:-false}; then
