@@ -98,6 +98,5 @@ jobs:
       # - ContainerLab 0.74.0
       # 2.6.5
       # - ContainerLab 0.74.3
-      # - entrypoint.sh updated to load env variables from lab_vars.public.env when lab starts
       # - code-server v4.115.0
       container_revision: "2.6.5"
