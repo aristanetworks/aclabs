@@ -24,7 +24,7 @@ jobs:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
         from_variant: ["python3.11-avd-v5.7.3", "python3.12-avd-v5.7.3"]
-        clab_version: ["0.74.0"]
+        clab_version: ["0.74.3"]
         user_id: ["1000", "1009"]
         include:
           - user_id: "1000"
@@ -96,4 +96,7 @@ jobs:
       # - AVD 5.7.3
       # 2.6.4
       # - ContainerLab 0.74.0
-      container_revision: "2.6.4"
+      # 2.6.5
+      # - ContainerLab 0.74.3
+      # - code-server v4.115.0
+      container_revision: "2.6.5"
