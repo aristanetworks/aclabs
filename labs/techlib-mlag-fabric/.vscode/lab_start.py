@@ -16,8 +16,6 @@ Intentional design choices:
     credentials, validated-with versions, tips). See `LabConfig` for the
     full schema.
   * Stdlib + rich + pyyaml only. No extra deps to pull into the base image.
-
-Author: Mitch & Claude, morning coffee edition ☕
 """
 
 from __future__ import annotations
