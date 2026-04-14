@@ -313,7 +313,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     if args.check:
         print(
             f"error: {readme_path.name} is out of sync with {lab_yml_path.name}.\n"
-            f"       Run `python3 .vscode/docs_generate.py` to regenerate.",
+            f"       Run `python3 docs_generate.py` to regenerate.",
             file=sys.stderr,
         )
         return 1
