@@ -8,8 +8,6 @@ username admin privilege 15 role network-admin nopassword
 !
 aaa authentication policy local allow-nopassword-remote-login
 !
- privilege 15 role network-admin secret sha512 $6$UyG7gO7F9cLeDxAm$v.L.xilcg404oaYUQ5nVzTdiIo7N2Bm9i0gKREmhGQ12I2dkl22kpllXVAKoyRtYCON/2F6PL5N/iqwFisGQs0
-!
 management api http-commands
    no shutdown
    !
