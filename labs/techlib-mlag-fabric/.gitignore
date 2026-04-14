@@ -63,6 +63,7 @@ Temporary Items
 !.vscode/terminals.json
 !.vscode/lab_start.py
 !.vscode/lab.yml
+!.vscode/docs_generate.py
 
 # Local History for Visual Studio Code
 .history/

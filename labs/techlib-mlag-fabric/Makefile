@@ -31,6 +31,18 @@ deploy: ## Deploy Configs via eAPI
 validate: ## Validate Fabric
 	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml
 
+.PHONY: docs
+docs: ## Regenerate README.md from lab.yml and shared snippets
+	python3 $(CURRENT_DIR)/.vscode/docs_generate.py --lab-dir $(CURRENT_DIR)
+
+.PHONY: docs-check
+docs-check: ## Verify README.md is in sync with lab.yml (CI-friendly, exits non-zero on drift)
+	python3 $(CURRENT_DIR)/.vscode/docs_generate.py --lab-dir $(CURRENT_DIR) --check
+
+.PHONY: docs-diff
+docs-diff: ## Show what `make docs` would change without writing
+	python3 $(CURRENT_DIR)/.vscode/docs_generate.py --lab-dir $(CURRENT_DIR) --diff
+
 .PHONY: diff
 diff: ## Show the diff between running config and designed config
 	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook --diff --check playbooks/avd_deploy.yml
