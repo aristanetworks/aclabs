@@ -3,7 +3,12 @@
 !
 no aaa root
 !
-username admin privilege 15 role network-admin secret sha512 $6$0sqDLKGb/GFfYO19$00fM3L0Pnc3N2mm6l4sniL7CFxoM5hmw7tDcoGCMu9Gyk5cPdXCMdLO4JopkuIl8TG10N9.EpKOCfTvmwubHJ0
+!
+username admin privilege 15 role network-admin nopassword
+!
+aaa authentication policy local allow-nopassword-remote-login
+!
+ privilege 15 role network-admin secret sha512 $6$0sqDLKGb/GFfYO19$00fM3L0Pnc3N2mm6l4sniL7CFxoM5hmw7tDcoGCMu9Gyk5cPdXCMdLO4JopkuIl8TG10N9.EpKOCfTvmwubHJ0
 !
 management api http-commands
    no shutdown
