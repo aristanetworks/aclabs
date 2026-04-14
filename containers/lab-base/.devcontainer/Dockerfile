@@ -53,7 +53,8 @@ RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.115.0" \
     && code-server --install-extension srl-labs.vscode-containerlab --force \
     && code-server --install-extension tuxtina.json2yaml --force \
-    && code-server --install-extension yzhang.markdown-all-in-one --force
+    && code-server --install-extension yzhang.markdown-all-in-one --force \
+    && code-server --install-extension packetanglers.lab-dashboard --force
 
 USER root
 # add global workspace settings for code-server
