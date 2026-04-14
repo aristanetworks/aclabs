@@ -1,5 +1,6 @@
 # Canonical metadata for this lab. Consumed by:
 #   * .vscode/lab_start.py            — boot TUI + LAB-READY.md generation
+#   * .vscode/docs_generate.py        — README.md regeneration
 #   * PacketAnglers/lab-dashboard ext — LAB-READY.md rendering
 #
 # Schema is nested by concern (display / credentials / boot / dashboard).
@@ -8,7 +9,13 @@
 # ── Lab identity ─────────────────────────────────────────────────────────
 display:
   name: "Arista MLAG Fabric with VXLAN Flood and Learn"
-  subtitle: "Tech Library Deployment Guide"
+  subtitle: "Welcome! This pre-configured lab matches the [MLAG Fabric Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domain_a/) on [Arista's Tech Library](https://arista.com/en/tech-library)."
+  # Optional banner rendered as a GitHub alert at the top of the README.
+  # Type must be one of: note, tip, important, warning, caution.
+  # Omit the `banner:` field entirely for no banner (e.g., GA labs).
+  banner:
+    type: warning
+    message: "This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated."
   # Optional external documentation link. Rendered as the first Quick Action button.
   documentation_url: "https://tech-library.arista.com/data_center/mlag-fabric/deployment_guide/"
   # Software versions this lab was validated against. Rendered as a badge row

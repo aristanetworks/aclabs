@@ -16,6 +16,8 @@ Intentional design choices:
     credentials, validated-with versions, tips). See `LabConfig` for the
     full schema.
   * Stdlib + rich + pyyaml only. No extra deps to pull into the base image.
+
+Author: Mitch & Claude, morning coffee edition ☕
 """
 
 from __future__ import annotations
@@ -52,6 +54,9 @@ DEFAULT_PER_NODE_TIMEOUT = 420      # 7 min — generous for cold cEOS + startup
 DEFAULT_PROBE_PORT = 22
 DEFAULT_PROBE_INTERVAL = 2.0        # seconds between probe attempts
 DEFAULT_CONNECT_TIMEOUT = 2.0       # seconds per TCP connect attempt
+DEFAULT_SSH_TIMEOUT = 5.0           # seconds for an SSH handshake+auth probe; slightly
+                                    # generous because cold cEOS takes longer for sshd
+                                    # to respond once it first accepts a connection
 DEFAULT_REFRESH_HZ = 8              # Rich Live refresh rate
 
 
@@ -79,11 +84,13 @@ THEME = Theme({
 # ─────────────────────────────────────────────────────────────────────────────
 
 class NodeStatus(str, Enum):
-    PENDING = "pending"     # not yet probed
-    PROBING = "probing"     # in-flight
-    READY = "ready"         # TCP:22 accepted
-    TIMEOUT = "timeout"     # exceeded per-node budget
-    ERROR = "error"         # unexpected exception
+    PENDING = "pending"                        # not yet probed
+    PROBING_TCP = "probing_tcp"                # waiting for port 22 to accept connections
+    PROBING_SSH = "probing_ssh"                # port open; waiting for SSH handshake + auth offer
+    READY = "ready"                            # SSH reaches auth stage via hostname — node truly ready
+    FAILED_HOSTNAME = "failed_hostname"        # reachable by IP, but hostname doesn't resolve
+    TIMEOUT = "timeout"                        # exceeded per-node budget
+    ERROR = "error"                            # unexpected exception
 
 
 @dataclass
@@ -289,26 +296,203 @@ async def tcp_probe(host: str, port: int, timeout: float) -> Optional[str]:
         return f"{type(exc).__name__}: {exc}"
 
 
+async def ssh_probe(host: str, username: str, timeout: float) -> Optional[str]:
+    """
+    Run a one-shot non-interactive SSH probe to verify the server has progressed
+    past early init into a state where it can actually accept authentication.
+
+    TCP-accept on port 22 happens as soon as sshd is listening, which can be
+    well before userspace (PAM, AAA, /etc/hosts, VRF config) is ready to
+    actually authenticate anyone. So after TCP succeeds, we run a real SSH
+    invocation with BatchMode to detect the auth-offered phase.
+
+    Returns None (success) when the server has progressed far enough to have
+    offered authentication methods and rejected our probe — which is the
+    correct "node is ready" signal. The probe itself will always fail auth
+    (no credentials supplied) but the failure mode tells us everything:
+
+      * "Permission denied" stderr → server is alive, protocol exchange
+        completed, auth methods were offered. READY.
+      * "Connection refused" / "Could not resolve" / "Connection timed out"
+        → server isn't reachable yet. Not ready.
+
+    We specifically cannot rely on the ssh exit code alone — "Permission
+    denied" exits 255 (same as transport failures), so we parse stderr to
+    distinguish the two cases.
+
+    Returns None on ready, or a short error string on failure. The error
+    string surfaces the last meaningful stderr line so operators can see
+    *why* a node is stuck (e.g., "Could not resolve hostname B-LEAF1" is
+    a dead giveaway that /etc/hosts wasn't populated).
+    """
+    # Hard-code a per-call timeout slightly below the outer asyncio timeout so
+    # ssh bails before asyncio rips the subprocess away — gives us the exit
+    # code and stderr rather than a kill-9.
+    ssh_connect_timeout = max(1, int(timeout) - 1)
+
+    cmd = [
+        "ssh",
+        "-o", "BatchMode=yes",                       # never prompt; fail fast on password-required
+        "-o", "StrictHostKeyChecking=no",            # first-boot host keys are new every time
+        "-o", "UserKnownHostsFile=/dev/null",        # don't pollute ~/.ssh/known_hosts
+        "-o", "LogLevel=ERROR",                      # suppress the "Warning: Permanently added" noise
+        "-o", f"ConnectTimeout={ssh_connect_timeout}",
+        f"{username}@{host}",
+        "true",                                      # command to run if we ever got in — we won't
+    ]
+
+    try:
+        proc = await asyncio.create_subprocess_exec(
+            *cmd,
+            stdin=asyncio.subprocess.DEVNULL,
+            stdout=asyncio.subprocess.DEVNULL,
+            stderr=asyncio.subprocess.PIPE,
+        )
+        try:
+            _, stderr = await asyncio.wait_for(proc.communicate(), timeout=timeout)
+        except asyncio.TimeoutError:
+            proc.kill()
+            try:
+                await proc.wait()
+            except Exception:
+                pass
+            return "ssh probe timeout"
+
+        stderr_text = (stderr or b"").decode("utf-8", errors="replace")
+
+        # Success case 1: exit 0 means the probe somehow got in and ran `true`.
+        # Extraordinarily unlikely with BatchMode + no key, but treat as ready.
+        if proc.returncode == 0:
+            return None
+
+        # Success case 2: the server reached the "offering auth methods" stage
+        # and rejected our attempt. This is what we actually want to detect —
+        # it proves sshd/PAM/AAA/hostname-resolution all made it through init.
+        #
+        # The exact stderr text varies slightly by OpenSSH version but always
+        # contains "Permission denied" when auth was offered and rejected.
+        # cEOS typically returns: "Permission denied (publickey,keyboard-interactive)."
+        if "Permission denied" in stderr_text:
+            return None
+
+        # Failure cases. Surface the most useful line of stderr so the TUI's
+        # diagnostic can show the operator exactly why.
+        meaningful = [ln.strip() for ln in stderr_text.splitlines() if ln.strip()]
+        if meaningful:
+            return meaningful[-1]
+        return f"ssh exit {proc.returncode}"
+    except FileNotFoundError:
+        # ssh binary not on PATH — shouldn't happen in the lab-base container,
+        # but we want a clear error if it ever does rather than a cryptic traceback.
+        return "ssh client not found on PATH"
+    except Exception as exc:
+        return f"{type(exc).__name__}: {exc}"
+
+
 async def watch_node(node: Node, cfg: LabConfig) -> None:
-    """Retry TCP probes until the node accepts a connection or per-node budget expires."""
-    node.status = NodeStatus.PROBING
+    """
+    Two-phase readiness watcher.
+
+    Phase 1 (PROBING_TCP): cheap TCP-accept probe on port 22 every interval.
+    Phase 2 (PROBING_SSH): once TCP is open, spawn real ssh invocations to
+    verify the server has progressed past early init to where it can actually
+    serve the user's connection attempt.
+
+    Both phases share the single per-node timeout budget. If the whole thing
+    takes longer than cfg.per_node_timeout, the node is marked TIMEOUT.
+
+    We probe by hostname (how the user will connect) and fall back to mgmt IP
+    — this matches the user's likely invocation pattern and catches DNS /
+    /etc/hosts population issues that would otherwise leave a node looking
+    "ready" when it's actually unreachable by name.
+    """
+    node.status = NodeStatus.PROBING_TCP
     node.started_at = time.monotonic()
     deadline = node.started_at + cfg.per_node_timeout
 
-    # Prefer container-hostname resolution (clab wires up DNS); fall back to mgmt IP.
+    # Prefer container-hostname resolution (clab normally wires up /etc/hosts);
+    # fall back to mgmt IP. The hostname is tried first because that's what
+    # the user will use — if it doesn't resolve, we want to find out NOW, not
+    # when the user copies a hostname from the dashboard and gets "no route".
     targets: list[str] = [node.name]
     if node.mgmt_ip and node.mgmt_ip not in targets:
         targets.append(node.mgmt_ip)
 
-    while True:
+    # ── Phase 1: TCP accept ────────────────────────────────────────────────
+    tcp_ready_target: Optional[str] = None
+    while tcp_ready_target is None:
         node.attempts += 1
         for target in targets:
             err = await tcp_probe(target, cfg.probe_port, DEFAULT_CONNECT_TIMEOUT)
             if err is None:
-                node.status = NodeStatus.READY
-                node.ready_at = time.monotonic()
-                return
+                tcp_ready_target = target
+                break
             node.last_error = f"{target}: {err}"
+
+        if tcp_ready_target is not None:
+            break
+
+        if time.monotonic() >= deadline:
+            node.status = NodeStatus.TIMEOUT
+            node.ready_at = time.monotonic()
+            return
+
+        await asyncio.sleep(DEFAULT_PROBE_INTERVAL)
+
+    # ── Phase 2: SSH handshake ─────────────────────────────────────────────
+    #
+    # "Ready" in the user-facing sense means "the user can `ssh admin@<name>`
+    # and get a prompt". TCP being open is necessary but not sufficient. We
+    # probe the hostname first (what the user will type) and fall back to the
+    # mgmt IP. The failure modes are meaningfully different:
+    #
+    #   * Hostname fails with "Could not resolve" but IP succeeds → FAILED_HOSTNAME.
+    #     The node is alive and reachable, but /etc/hosts is missing the entry
+    #     (or has it case-mismatched). User must fix /etc/hosts to SSH by name.
+    #
+    #   * Hostname fails for a non-resolution reason (Connection refused,
+    #     timeout, etc.) and IP also fails → keep retrying until TIMEOUT.
+    #     The node is genuinely not ready yet.
+    #
+    #   * Hostname succeeds → READY, full stop. We don't need to also probe IP.
+    node.status = NodeStatus.PROBING_SSH
+    node.last_error = None  # clear TCP-phase errors; we're past that
+
+    hostname_target = node.name
+    ip_target = node.mgmt_ip if node.mgmt_ip and node.mgmt_ip != hostname_target else None
+
+    while True:
+        node.attempts += 1
+
+        # Try hostname first — that's the "fully ready" path.
+        hostname_err = await ssh_probe(hostname_target, cfg.username, DEFAULT_SSH_TIMEOUT)
+        if hostname_err is None:
+            node.status = NodeStatus.READY
+            node.ready_at = time.monotonic()
+            return
+
+        # Hostname failed. What kind of failure?
+        hostname_unresolvable = "Could not resolve" in hostname_err
+
+        # If we have an IP fallback, test that. Being reachable by IP but not
+        # by name is the exact signature of an /etc/hosts issue — we flag it
+        # distinctly so the user knows to fix DNS, not wait longer.
+        if ip_target:
+            ip_err = await ssh_probe(ip_target, cfg.username, DEFAULT_SSH_TIMEOUT)
+            if ip_err is None and hostname_unresolvable:
+                node.status = NodeStatus.FAILED_HOSTNAME
+                node.ready_at = time.monotonic()
+                node.last_error = (
+                    f"{hostname_target} does not resolve, but {ip_target} is reachable. "
+                    f"Check /etc/hosts for an entry mapping {hostname_target} → {ip_target}."
+                )
+                return
+            # Record whichever error is more diagnostic. If hostname was
+            # unresolvable but IP is also unreachable, the node genuinely
+            # isn't up yet — keep the IP error which is the actionable one.
+            node.last_error = f"{ip_target}: {ip_err}" if ip_err else node.last_error
+        else:
+            node.last_error = f"{hostname_target}: {hostname_err}"
 
         if time.monotonic() >= deadline:
             node.status = NodeStatus.TIMEOUT
@@ -376,26 +560,32 @@ def build_preflight_panel(cfg: LabConfig) -> RenderableType:
 # Spinner pre-built once; Rich handles frame advancement per-render.
 _PROBING_SPINNER = Spinner("dots", style="status.probing")
 _STATUS_GLYPH = {
-    NodeStatus.PENDING: Text("○", style="status.pending"),
-    NodeStatus.READY:   Text("●", style="status.ready"),
-    NodeStatus.TIMEOUT: Text("✗", style="status.timeout"),
-    NodeStatus.ERROR:   Text("!", style="status.error"),
+    NodeStatus.PENDING:          Text("○", style="status.pending"),
+    NodeStatus.READY:            Text("●", style="status.ready"),
+    NodeStatus.FAILED_HOSTNAME:  Text("⚠", style="status.timeout"),
+    NodeStatus.TIMEOUT:          Text("✗", style="status.timeout"),
+    NodeStatus.ERROR:            Text("!", style="status.error"),
 }
 
 
 def _status_cell(node: Node) -> RenderableType:
-    if node.status == NodeStatus.PROBING:
+    if node.status in (NodeStatus.PROBING_TCP, NodeStatus.PROBING_SSH):
         return _PROBING_SPINNER
     return _STATUS_GLYPH[node.status]
 
 
 def _status_label(node: Node) -> Text:
+    # Phase-aware labels: operators should be able to tell at a glance whether
+    # a slow node is stuck at "can't even open a socket" vs "TCP is fine but
+    # sshd isn't letting me in yet" — different root causes, different fixes.
     label_map = {
-        NodeStatus.PENDING: ("pending", "status.pending"),
-        NodeStatus.PROBING: ("pending", "status.probing"),
-        NodeStatus.READY:   ("ready",   "status.ready"),
-        NodeStatus.TIMEOUT: ("timeout", "status.timeout"),
-        NodeStatus.ERROR:   ("error",   "status.error"),
+        NodeStatus.PENDING:         ("pending",          "status.pending"),
+        NodeStatus.PROBING_TCP:     ("PROBING TCP 22",   "status.probing"),
+        NodeStatus.PROBING_SSH:     ("CHECK SSH PROMPT", "status.probing"),
+        NodeStatus.READY:           ("ready",            "status.ready"),
+        NodeStatus.FAILED_HOSTNAME: ("hostname?",        "status.timeout"),
+        NodeStatus.TIMEOUT:         ("timeout",          "status.timeout"),
+        NodeStatus.ERROR:           ("error",            "status.error"),
     }
     text, style = label_map[node.status]
     return Text(text, style=style)
@@ -455,6 +645,7 @@ def build_status_table(cfg: LabConfig) -> RenderableType:
 
 def build_footer(cfg: LabConfig, started_at: float) -> RenderableType:
     ready = sum(1 for n in cfg.nodes if n.status == NodeStatus.READY)
+    hostname_fail = sum(1 for n in cfg.nodes if n.status == NodeStatus.FAILED_HOSTNAME)
     timeout = sum(1 for n in cfg.nodes if n.status == NodeStatus.TIMEOUT)
     total = len(cfg.nodes)
     elapsed = time.monotonic() - started_at
@@ -462,11 +653,54 @@ def build_footer(cfg: LabConfig, started_at: float) -> RenderableType:
     t = Text()
     t.append("  Ready ", style="muted")
     t.append(f"{ready}/{total}", style="status.ready" if ready == total else "info")
+    if hostname_fail:
+        t.append("   Hostname ", style="muted")
+        t.append(str(hostname_fail), style="status.timeout")
     if timeout:
         t.append("   Timeout ", style="muted")
         t.append(str(timeout), style="status.timeout")
     t.append("   Elapsed ", style="muted")
     t.append(_fmt_elapsed(elapsed), style="bold")
+
+    # If nodes have been stuck in SSH phase for a noticeable while, surface the
+    # most common error so the operator can see *why* without digging into the
+    # failure panel (which only renders after timeout). This is the "why isn't
+    # it working" question answered in-flight rather than post-mortem.
+    stuck_ssh = [
+        n for n in cfg.nodes
+        if n.status == NodeStatus.PROBING_SSH and n.last_error and n.elapsed > 20
+    ]
+    if stuck_ssh and ready < total:
+        # Normalize per-node specifics so errors of the same CLASS cluster
+        # together when tallying. Hostnames and IPs vary per node but the
+        # underlying failure is often identical across the fleet (e.g.,
+        # "Could not resolve hostname" affecting every node), and we want
+        # that to show as "22 nodes stuck", not "1 node stuck" × 22 times.
+        def error_class(node: Node) -> str:
+            raw = node.last_error or ""
+            # Strip the "<target>: " prefix we add when storing
+            msg = raw.split(": ", 1)[-1] if ": " in raw else raw
+            # Mask the node's own name/IP from the message so similar errors
+            # collapse. The node's hostname and mgmt_ip are likely mentioned.
+            for needle in (node.name, node.mgmt_ip or ""):
+                if needle:
+                    msg = msg.replace(needle, "<host>")
+            return msg
+
+        error_counts: dict[str, int] = {}
+        for n in stuck_ssh:
+            ec = error_class(n)
+            error_counts[ec] = error_counts.get(ec, 0) + 1
+        top_err, top_count = max(error_counts.items(), key=lambda kv: kv[1])
+        # Truncate aggressively — footer should stay one line.
+        if len(top_err) > 90:
+            top_err = top_err[:87] + "…"
+        diag = Text()
+        diag.append("\n  ⚠ ", style="warning")
+        diag.append(f"{top_count} node(s) stuck at SSH: ", style="muted")
+        diag.append(top_err, style="status.timeout")
+        t.append_text(diag)
+
     return t
 
 
@@ -694,38 +928,68 @@ def build_ready_panel(cfg: LabConfig, total_elapsed: float, dashboard_path: Opti
 
 
 def build_failure_panel(cfg: LabConfig, total_elapsed: float) -> RenderableType:
-    failed = [n for n in cfg.nodes if n.status != NodeStatus.READY]
+    not_ready = [n for n in cfg.nodes if n.status != NodeStatus.READY]
+    hostname_issues = [n for n in not_ready if n.status == NodeStatus.FAILED_HOSTNAME]
+    other_failures = [n for n in not_ready if n.status != NodeStatus.FAILED_HOSTNAME]
+
     body: list[RenderableType] = []
 
     summary = Text()
     summary.append("⚠  ", style="")
-    summary.append(f"{len(failed)} of {len(cfg.nodes)} nodes did not come up", style="critical")
+    summary.append(f"{len(not_ready)} of {len(cfg.nodes)} nodes not fully ready", style="critical")
     summary.append(f"   (after {_fmt_elapsed(total_elapsed)})", style="muted")
     body.append(summary)
     body.append(Text(""))
 
-    body.append(Text("Failing nodes:", style="warning"))
-    for n in failed:
-        line = Text()
-        line.append(f"  • {n.name}", style="bold")
-        line.append(f" ({n.role}, {n.kind})", style="muted")
-        if n.last_error:
-            line.append(f" — last error: {n.last_error}", style="muted")
-        body.append(line)
+    # Hostname-resolution issues are *different* from genuine failures. The
+    # nodes are alive and reachable by IP, so the lab may still be usable —
+    # the user just can't SSH by hostname until /etc/hosts is fixed.
+    if hostname_issues:
+        body.append(Text("Hostname resolution issue — reachable by IP, not by name:", style="warning"))
+        for n in hostname_issues:
+            line = Text()
+            line.append(f"  • {n.name}", style="bold")
+            line.append(f" → ", style="muted")
+            line.append(f"{n.mgmt_ip}", style="info")
+            line.append(f" ({n.role}, {n.kind})", style="muted")
+            body.append(line)
+        body.append(Text(""))
+        body.append(Text("  Fix: add entries to /etc/hosts so hostnames resolve to mgmt IPs.", style="muted"))
+        body.append(Text(f"       You can still SSH to these nodes by IP in the meantime.", style="muted"))
+        body.append(Text(""))
 
-    body.append(Text(""))
-    body.append(Text("Remediation:", style="info"))
-    body.append(Text("  → sudo containerlab inspect --topo clab/topology.clab.yml", style=""))
-    for n in failed[:3]:  # cap the per-node suggestions to keep the panel tight
-        body.append(Text(f"  → docker logs clab-{cfg.name}-{n.name}", style=""))
-    if len(failed) > 3:
-        body.append(Text(f"  → …and similar for the other {len(failed) - 3} failing node(s)", style="muted"))
-    body.append(Text("  → make stop && make start    # nuke and pave", style=""))
+    if other_failures:
+        body.append(Text("Unreachable nodes:", style="warning"))
+        for n in other_failures:
+            line = Text()
+            line.append(f"  • {n.name}", style="bold")
+            line.append(f" ({n.role}, {n.kind})", style="muted")
+            if n.last_error:
+                line.append(f" — last error: {n.last_error}", style="muted")
+            body.append(line)
+
+        body.append(Text(""))
+        body.append(Text("Remediation:", style="info"))
+        body.append(Text("  → sudo containerlab inspect --topo clab/topology.clab.yml", style=""))
+        for n in other_failures[:3]:  # cap the per-node suggestions to keep the panel tight
+            body.append(Text(f"  → docker logs clab-{cfg.name}-{n.name}", style=""))
+        if len(other_failures) > 3:
+            body.append(Text(f"  → …and similar for the other {len(other_failures) - 3} failing node(s)", style="muted"))
+        body.append(Text("  → make stop && make start    # nuke and pave", style=""))
+
+    # Choose panel tone: if ONLY hostname issues, it's a warning (not a critical
+    # failure); if any node is genuinely unreachable, it's a hard failure.
+    if other_failures:
+        title = "[critical]Lab Incomplete[/critical]"
+        border = "red"
+    else:
+        title = "[warning]Lab Ready with Warnings[/warning]"
+        border = "yellow"
 
     return Panel(
         Group(*body),
-        title="[critical]Lab Incomplete[/critical]",
-        border_style="red",
+        title=title,
+        border_style=border,
         padding=(1, 2),
         expand=True,
     )
@@ -779,7 +1043,16 @@ async def run(cfg: LabConfig, console: Console) -> int:
                     break
 
     total_elapsed = time.monotonic() - started_at
+
+    # Categorize node outcomes. FAILED_HOSTNAME is a "soft failure" — the node
+    # is reachable by IP, so the lab is usable; we still open the dashboard
+    # and return success, but also surface the hostname warning so the user
+    # knows what to fix.
     all_ready = all(n.status == NodeStatus.READY for n in cfg.nodes)
+    all_usable = all(
+        n.status in (NodeStatus.READY, NodeStatus.FAILED_HOSTNAME)
+        for n in cfg.nodes
+    )
 
     console.print()
     if all_ready:
@@ -787,6 +1060,18 @@ async def run(cfg: LabConfig, console: Console) -> int:
         if cfg.auto_open_dashboard:
             dashboard_path = write_and_open_dashboard(cfg, total_elapsed, console)
         console.print(build_ready_panel(cfg, total_elapsed, dashboard_path=dashboard_path))
+        return 0
+    if all_usable:
+        # Partial success: all nodes are reachable by IP, but some have
+        # hostname resolution issues. Open the dashboard (lab works) AND
+        # print the failure panel (so the user sees what to fix).
+        dashboard_path = None
+        if cfg.auto_open_dashboard:
+            dashboard_path = write_and_open_dashboard(cfg, total_elapsed, console)
+        console.print(build_failure_panel(cfg, total_elapsed))
+        if dashboard_path:
+            console.print()
+            console.print(f"[info]Dashboard opened:[/info] {dashboard_path}")
         return 0
     console.print(build_failure_panel(cfg, total_elapsed))
     return 1

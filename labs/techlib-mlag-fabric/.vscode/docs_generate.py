@@ -70,6 +70,51 @@ SNIPPET_BLOCK_RE = re.compile(
 # Metadata block rendering
 # ─────────────────────────────────────────────────────────────────────────────
 
+# Valid GitHub alert types. See:
+# https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/basic-writing-and-formatting-syntax#alerts
+VALID_BANNER_TYPES = {"note", "tip", "important", "warning", "caution"}
+
+
+def render_banner(banner: Optional[dict]) -> list[str]:
+    """
+    Render a banner block from the `display.banner` section of lab.yml.
+
+    Returns lines to emit (without a trailing blank), or an empty list when
+    the banner is omitted. Raises ValueError for malformed banner configs —
+    those are authoring mistakes that should fail loudly, not silently.
+    """
+    if not banner:
+        return []
+
+    if not isinstance(banner, dict):
+        raise ValueError(
+            f"display.banner must be a mapping with 'type' and 'message' keys, "
+            f"got {type(banner).__name__}"
+        )
+
+    banner_type = str(banner.get("type", "")).strip().lower()
+    message = banner.get("message", "").strip()
+
+    if banner_type not in VALID_BANNER_TYPES:
+        raise ValueError(
+            f"display.banner.type must be one of "
+            f"{sorted(VALID_BANNER_TYPES)}, got '{banner_type}'"
+        )
+    if not message:
+        raise ValueError("display.banner.message must be a non-empty string")
+
+    # GitHub alert syntax: > [!TYPE] on its own line, then > message lines.
+    # Preserve author line breaks in the message by prefixing each with '> '.
+    lines = [f"> [!{banner_type.upper()}]"]
+    for msg_line in message.splitlines() or [message]:
+        lines.append(f"> {msg_line}".rstrip())
+    return lines
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Metadata block rendering
+# ─────────────────────────────────────────────────────────────────────────────
+
 def render_metadata_block(lab_yml: dict) -> str:
     """
     Build the metadata block that sits at the top of every lab README.
@@ -77,6 +122,7 @@ def render_metadata_block(lab_yml: dict) -> str:
     Contains the lab-identifying facts that are canonical in lab.yml:
       - Lab title
       - Subtitle (italicized)
+      - Optional banner (WARNING / NOTE / etc. — omit for none)
       - Documentation URL
       - Credentials
 
@@ -102,16 +148,10 @@ def render_metadata_block(lab_yml: dict) -> str:
         lines.append(f"_{subtitle}_")
         lines.append("")
 
-    lines.append(
-        "> [!WARNING]"
-    )
-    lines.append(
-        "> This lab is in preview. It's fully functional, but breaking changes can happen."
-    )
-    lines.append(
-        "> We are working hard on building the best lab collection and your feedback is always appreciated."
-    )
-    lines.append("")
+    banner_lines = render_banner(display.get("banner"))
+    if banner_lines:
+        lines.extend(banner_lines)
+        lines.append("")
 
     if doc_url:
         lines.append(

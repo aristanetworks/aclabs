@@ -1,39 +1,23 @@
-# Arista's Tech Library MLAG Fabric with VXLAN Flood and Learn Deployment Guide Lab
+<!-- lab-dashboard:metadata-start -->
+
+# Arista MLAG Fabric with VXLAN Flood and Learn
+
+_Welcome! This pre-configured lab matches the [MLAG Fabric Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domain_a/) on [Arista's Tech Library](https://arista.com/en/tech-library)._
 
 > [!WARNING]
-> This lab is in preview. It's fully functional, but breaking changes can happen.
-> We are working hard on building the best lab collection and your feedback is always  appreciated.
+> This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated.
 
-Welcome! This pre-configured lab matches the [MLAG Fabric Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domain_a/) on [Arista's Tech Library](https://arista.com/en/tech-library).
+📖 **Deployment Guide:** [Tech Library](https://tech-library.arista.com/data_center/mlag-fabric/deployment_guide/)
 
-## Overview
+🔐 **Credentials**
 
-This lab has been validated with:
+| Username | Password |
+|----------|----------|
+| `admin` | `admin` |
 
-- cEOS-lab: **4.35.2F**
-- AVD: **5.7.3**
-- Containerlab: **0.74.0**
-- Resources:
-  - CPUs: **16**
-  - Memory: **64 GB**
-  - Storage: **64 GB**
+<!-- lab-dashboard:metadata-end -->
 
 ## Interacting with the Lab
-
-### Credentials
-
-The credentials below can be used to access any node in the topology.
-
-#### Username
-```bash
-admin
-```
-
-#### Password
-
-```bash
-admin
-```
 
 > [!TIP]
 > Quickly validate reachability between hosts in the lab by opening an SSH session to any Linux end host in the topology and running the following the command in the terminal window:
