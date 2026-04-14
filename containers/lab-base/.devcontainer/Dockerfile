@@ -39,6 +39,12 @@ ENTRYPOINT [ "/bin/entrypoint" ]
 COPY ./lab_start_task.py /bin/lab_start_task.py
 RUN chmod +x /bin/lab_start_task.py
 
+COPY ./init_lab.py /bin/init_lab.py
+RUN chmod +x /bin/init_lab.py
+
+COPY ./docs_generate.py /bin/docs_generate.py
+RUN chmod +x /bin/docs_generate.py
+
 USER ${USERNAME}
 
 # install the latest containerlab, yamllint, cook-and-cut and eos-downloader

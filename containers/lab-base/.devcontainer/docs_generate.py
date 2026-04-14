@@ -17,9 +17,9 @@ Two marker styles are supported:
   <!-- lab-dashboard:snippet-end -->
 
 Usage:
-  python3 .vscode/docs_generate.py           # Rewrite README.md in place
-  python3 .vscode/docs_generate.py --check   # Exit non-zero if README would change
-  python3 .vscode/docs_generate.py --diff    # Show what would change without writing
+  python3 docs_generate.py           # Rewrite README.md in place
+  python3 docs_generate.py --check   # Exit non-zero if README would change
+  python3 docs_generate.py --diff    # Show what would change without writing
 
 Exit codes:
   0 — README is (now) up to date

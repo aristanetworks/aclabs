@@ -33,15 +33,15 @@ validate: ## Validate Fabric
 
 .PHONY: docs
 docs: ## Regenerate README.md from lab.yml and shared snippets
-	python3 $(CURRENT_DIR)/.vscode/docs_generate.py --lab-dir $(CURRENT_DIR)
+	python3 docs_generate.py --lab-dir $(CURRENT_DIR)
 
 .PHONY: docs-check
 docs-check: ## Verify README.md is in sync with lab.yml (CI-friendly, exits non-zero on drift)
-	python3 $(CURRENT_DIR)/.vscode/docs_generate.py --lab-dir $(CURRENT_DIR) --check
+	python3 docs_generate.py --lab-dir $(CURRENT_DIR) --check
 
 .PHONY: docs-diff
 docs-diff: ## Show what `make docs` would change without writing
-	python3 $(CURRENT_DIR)/.vscode/docs_generate.py --lab-dir $(CURRENT_DIR) --diff
+	python3 docs_generate.py --lab-dir $(CURRENT_DIR) --diff
 
 .PHONY: diff
 diff: ## Show the diff between running config and designed config

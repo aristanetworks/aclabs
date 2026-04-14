@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-lab_start.py — Next-gen lab readiness TUI for Arista Containerized Labs.
+init_lab.py — Initialize and configure Arista Containerized Labs.
 
 Invoked by VS Code tasks.json on folderOpen. Parses the clab topology,
 watches every node in parallel for TCP:22 reachability, and renders a live,
@@ -16,8 +16,6 @@ Intentional design choices:
     credentials, validated-with versions, tips). See `LabConfig` for the
     full schema.
   * Stdlib + rich + pyyaml only. No extra deps to pull into the base image.
-
-Author: Mitch & Claude, morning coffee edition ☕
 """
 
 from __future__ import annotations
