@@ -99,4 +99,6 @@ jobs:
       # 2.6.5
       # - ContainerLab 0.74.3
       # - code-server v4.115.0
-      container_revision: "2.6.5"
+      # - 2.6.6
+      # - Add `lab-dashboard` VS Code extension for use with techlib labs
+      container_revision: "2.6.6"
