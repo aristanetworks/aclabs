@@ -977,10 +977,17 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
     lines.append("Inspect or edit the `topology.clab.yml` source.")
     lines.append("")
 
-    # ── Node inventory ──
+    # ── Node inventory (collapsible) ──
+    # The init_lab TUI shows this same data live during boot, so it's not
+    # the user's primary view. But after they've moved on from the boot
+    # terminal it can still be useful as a hour-2 reference ("what's
+    # B-LEAF3's mgmt IP?"). We collapse it by default to keep the
+    # dashboard's primary view focused on Quick Actions / Lab Operations,
+    # and let the user expand it on demand.
     lines.append("---")
     lines.append("")
-    lines.append("## 🔌 Node Inventory")
+    lines.append("<details>")
+    lines.append("<summary><strong>🔌 &nbsp; Node Inventory</strong> &nbsp; <sub>(click to expand)</sub></summary>")
     lines.append("")
     lines.append("| Role | Node | Kind | Mgmt IP |")
     lines.append("|------|------|------|---------|")
@@ -991,6 +998,8 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
 
     for n in sorted(cfg.nodes, key=role_sort_key):
         lines.append(f"| {n.role} | `{n.name}` | {n.kind} | `{n.mgmt_ip or '—'}` |")
+    lines.append("")
+    lines.append("</details>")
     lines.append("")
 
     # ── Tips ──
