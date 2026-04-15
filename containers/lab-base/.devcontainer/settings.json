@@ -1,3 +1,5 @@
 {
-    "workbench.startupEditor": "readme"
+    "workbench.startupEditor": "readme",
+    "task.allowAutomaticTasks": "on",
+    "security.workspace.trust.enabled": false
 }
