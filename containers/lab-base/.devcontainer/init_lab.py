@@ -467,16 +467,20 @@ async def ssh_probe(
     kind_lc = (kind or "").lower()
 
     # Both arista_ceos and linux nodes use sshpass — the difference is which
-    # password we feed it.
+    # password we feed it AND which test command we run.
     #
     #   arista_ceos: cEOS's admin login uses keyboard-interactive auth even
     #                when no password is required. A pure-ssh probe with
     #                BatchMode can't satisfy keyboard-interactive, so we feed
     #                an empty password via sshpass — that's what cEOS accepts
-    #                for the passwordless admin account.
+    #                for the passwordless admin account. The test command is
+    #                `!` (EOS comment) — the EOS-CLI equivalent of /bin/true.
+    #                We can't run `true` here because cEOS hands the command
+    #                to its CLI parser, not a Unix shell, and the parser
+    #                doesn't know `true` (returns "% Invalid input", exit 1).
     #
     #   linux:       Standard password auth (admin/admin in our labs). We feed
-    #                cfg.password through sshpass.
+    #                cfg.password through sshpass and run /bin/true.
     #
     # Hardcoding empty string for cEOS (rather than honoring cfg.password) is
     # deliberate: it matches the actual cEOS behavior, and if a future lab
@@ -485,16 +489,18 @@ async def ssh_probe(
     # also break.
     if kind_lc == "linux":
         ssh_password = password
+        test_command = "true"
     else:
-        # arista_ceos and any unknown kind — empty password (cEOS-style)
+        # arista_ceos and any unknown kind — empty password + EOS no-op
         ssh_password = ""
+        test_command = "!"
 
     cmd = [
         "sshpass", "-p", ssh_password,
         "ssh",
         *common_opts,
         f"{username}@{host}",
-        "true",
+        test_command,
     ]
 
     try:
