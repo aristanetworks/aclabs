@@ -74,17 +74,6 @@ DEFAULT_SSH_TIMEOUT = 5.0           # seconds for an SSH handshake+auth probe; s
                                     # to respond once it first accepts a connection
 DEFAULT_REFRESH_HZ = 8              # Rich Live refresh rate
 
-# Hostname-failure debounce: declaring FAILED_HOSTNAME is a terminal
-# state, so we have to be sure. During cold boot, transient races between
-# hostname and IP probes can show "hostname fails, IP works" patterns
-# that resolve themselves once sshd fully comes up. We require BOTH:
-#   (a) at least HOSTNAME_FAILURE_GRACE_SEC of probing has elapsed, AND
-#   (b) HOSTNAME_FAILURE_THRESHOLD consecutive cycles all show the same
-#       "hostname unresolvable, IP reachable" pattern
-# before declaring the hostname permanently broken.
-HOSTNAME_FAILURE_GRACE_SEC = 30.0
-HOSTNAME_FAILURE_THRESHOLD = 3
-
 
 THEME = Theme({
     "brand.c": "grey70",
@@ -113,8 +102,7 @@ class NodeStatus(str, Enum):
     PENDING = "pending"                        # not yet probed
     PROBING_TCP = "probing_tcp"                # waiting for port 22 to accept connections
     PROBING_SSH = "probing_ssh"                # port open; waiting for SSH handshake + auth offer
-    READY = "ready"                            # SSH reaches auth stage via hostname — node truly ready
-    FAILED_HOSTNAME = "failed_hostname"        # reachable by IP, but hostname doesn't resolve
+    READY = "ready"                            # SSH login succeeded — node truly ready for the user
     TIMEOUT = "timeout"                        # exceeded per-node budget
     ERROR = "error"                            # unexpected exception
 
@@ -323,84 +311,103 @@ def load_lab_config(lab_dir: Optional[Path] = None) -> LabConfig:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# /etc/hosts pre-flight
+# SSH config pre-flight
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Sentinel comments delimit the block we manage. We only ever rewrite content
-# between these markers — anything else in /etc/hosts is left untouched.
-HOSTS_BEGIN_MARK = "# >>> aclabs init_lab.py — managed block (do not edit) >>>"
-HOSTS_END_MARK   = "# <<< aclabs init_lab.py — managed block <<<"
-ETC_HOSTS = Path("/etc/hosts")
+# Sentinel comments delimit the block we manage. Any content outside the
+# markers is preserved verbatim — we never touch user-authored ssh config.
+SSH_CONFIG_BEGIN_MARK = "# >>> aclabs init_lab.py — managed block (do not edit) >>>"
+SSH_CONFIG_END_MARK   = "# <<< aclabs init_lab.py — managed block <<<"
 
 
-def populate_etc_hosts(cfg: LabConfig, console: Console) -> bool:
+def populate_ssh_config(cfg: LabConfig, console: Console) -> bool:
     """
-    Write /etc/hosts entries for every node in the topology BEFORE we start
-    probing. Containerlab populates entries late in its boot sequence (and
-    not always reliably for the lab-base container itself), so we don't wait
-    on it — we own this responsibility.
+    Write per-node Host entries to ~/.ssh/config so the user can SSH to nodes
+    by hostname (in any case) regardless of /etc/hosts state.
 
-    Each node gets two entries pointing at its mgmt IP: the canonical-case
-    name from the topology AND a lowercase alias. This sidesteps the case-
-    sensitivity gotcha where users habitually type `ssh b-leaf1` even though
-    the topology defines `B-LEAF1`. Both forms now resolve.
+    Why not /etc/hosts? In Docker containers, /etc/hosts is bind-mounted from
+    the runtime layer and managed by Docker itself — our writes get silently
+    reverted. ssh config is a normal file in the user's home directory that
+    Docker doesn't touch.
+
+    The tradeoff: only `ssh` honors this file. `ping`, `curl`, etc. still go
+    through /etc/hosts. For a lab environment where ssh is the dominant use
+    case, that's an acceptable scope.
+
+    For each node we write a stanza like:
+
+        Host A-SPINE1 a-spine1
+            HostName 172.100.100.10
+            User admin
+
+    Both canonical and lowercase forms appear as `Host` aliases, so
+    `ssh A-SPINE1` and `ssh a-spine1` both find the entry and ssh substitutes
+    the IP at connect time. Doesn't depend on hostname resolution at all.
 
     Idempotent: a managed block (delimited by sentinel comments) is rewritten
-    each call. Anything outside the markers is preserved verbatim — we play
-    nicely with anything else that might also touch /etc/hosts.
+    each call. Anything outside the markers is preserved.
 
-    Returns True on success, False on any failure (which we treat as
-    non-fatal — the probes can still run, they'll just have to fall back to
-    IP, and the FAILED_HOSTNAME path will surface the issue).
+    Returns True on success, False on any failure (non-fatal — probes can
+    still proceed by IP).
     """
+    ssh_config_path = Path.home() / ".ssh" / "config"
+
     # Build the managed block contents.
-    lines: list[str] = [HOSTS_BEGIN_MARK]
+    block_lines: list[str] = [SSH_CONFIG_BEGIN_MARK]
     for n in cfg.nodes:
         if not n.mgmt_ip:
             continue
         canonical = n.name
         lowered = n.name.lower()
-        # Same IP, both case variants. Listing the canonical form first means
-        # reverse lookups (gethostbyaddr) return the canonical name, which is
-        # what shows in tools like `ssh -v` output.
-        if canonical != lowered:
-            lines.append(f"{n.mgmt_ip}\t{canonical} {lowered}")
-        else:
-            lines.append(f"{n.mgmt_ip}\t{canonical}")
-    lines.append(HOSTS_END_MARK)
-    new_block = "\n".join(lines) + "\n"
+        # Both case variants as Host aliases — ssh treats them as
+        # alternate names for the same target.
+        aliases = canonical if canonical == lowered else f"{canonical} {lowered}"
+        block_lines.append(f"Host {aliases}")
+        block_lines.append(f"    HostName {n.mgmt_ip}")
+        block_lines.append(f"    User {cfg.username}")
+        block_lines.append(f"    StrictHostKeyChecking no")
+        block_lines.append(f"    UserKnownHostsFile /dev/null")
+        block_lines.append("")
+    block_lines.append(SSH_CONFIG_END_MARK)
+    new_block = "\n".join(block_lines) + "\n"
 
+    # Ensure the .ssh directory exists with correct permissions.
     try:
-        existing = ETC_HOSTS.read_text() if ETC_HOSTS.is_file() else ""
+        ssh_config_path.parent.mkdir(mode=0o700, exist_ok=True)
     except Exception as exc:
-        console.print(f"[warning]Could not read {ETC_HOSTS}: {exc}[/warning]")
+        console.print(
+            f"[warning]Could not create {ssh_config_path.parent}: {exc}[/warning]"
+        )
         return False
 
-    # Replace existing managed block in place, or append if no block exists yet.
+    try:
+        existing = ssh_config_path.read_text() if ssh_config_path.is_file() else ""
+    except Exception as exc:
+        console.print(f"[warning]Could not read {ssh_config_path}: {exc}[/warning]")
+        return False
+
+    # Replace existing managed block in place, or append if no block yet.
     block_re = re.compile(
-        re.escape(HOSTS_BEGIN_MARK) + r".*?" + re.escape(HOSTS_END_MARK) + r"\n?",
+        re.escape(SSH_CONFIG_BEGIN_MARK) + r".*?" + re.escape(SSH_CONFIG_END_MARK) + r"\n?",
         re.DOTALL,
     )
     if block_re.search(existing):
         updated = block_re.sub(new_block, existing)
     else:
-        # Ensure there's a clean newline boundary before our block.
         sep = "" if existing.endswith("\n") or existing == "" else "\n"
         updated = existing + sep + new_block
 
     if updated == existing:
-        return True  # nothing to do; already in sync
+        return True
 
     try:
-        ETC_HOSTS.write_text(updated)
-    except PermissionError:
-        console.print(
-            f"[warning]Could not write {ETC_HOSTS} (need root).[/warning] "
-            f"Hostname-based SSH may fail until /etc/hosts is populated."
-        )
-        return False
+        ssh_config_path.write_text(updated)
+        ssh_config_path.chmod(0o600)  # ssh requires restrictive perms on config
     except Exception as exc:
-        console.print(f"[warning]Could not update {ETC_HOSTS}: {exc}[/warning]")
+        console.print(
+            f"[warning]Could not write {ssh_config_path}: {exc}[/warning] "
+            f"Hostname-based SSH may not work in all cases."
+        )
         return False
 
     return True
@@ -600,101 +607,38 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
 
         await asyncio.sleep(DEFAULT_PROBE_INTERVAL)
 
-    # ── Phase 2: SSH handshake ─────────────────────────────────────────────
+    # ── Phase 2: SSH login ───────────────────────────────────────────────────────
     #
-    # "Ready" in the user-facing sense means "the user can `ssh admin@<name>`
-    # and get a prompt". TCP being open is necessary but not sufficient. We
-    # probe the hostname first (what the user will type) and fall back to the
-    # mgmt IP. The failure modes are meaningfully different:
+    # We probe by management IP — not hostname. In Docker containers,
+    # /etc/hosts is bind-mounted from the runtime layer and managed by Docker
+    # itself; we can't reliably populate hostname entries early in the boot
+    # sequence. Containerlab eventually writes correct entries, but timing
+    # varies and can race the probes.
     #
-    #   * Hostname fails with "Could not resolve" but IP succeeds → FAILED_HOSTNAME.
-    #     The node is alive and reachable, but /etc/hosts is missing the entry
-    #     (or has it case-mismatched). User must fix /etc/hosts to SSH by name.
+    # User-facing hostname ergonomics are handled separately by writing
+    # ~/.ssh/config aliases in the pre-flight (see populate_ssh_config). That
+    # makes `ssh admin@B-LEAF1` and `ssh admin@b-leaf1` both work for the
+    # human user without depending on /etc/hosts at all.
     #
-    #   * Hostname fails for a non-resolution reason (Connection refused,
-    #     timeout, etc.) and IP also fails → keep retrying until TIMEOUT.
-    #     The node is genuinely not ready yet.
-    #
-    #   * Hostname succeeds → READY, full stop. We don't need to also probe IP.
+    # The probe just answers "is this node ready to accept a login?" — IP
+    # is the most reliable target for that question.
     node.status = NodeStatus.PROBING_SSH
     node.last_error = None  # clear TCP-phase errors; we're past that
 
-    hostname_target = node.name
-    ip_target = node.mgmt_ip if node.mgmt_ip and node.mgmt_ip != hostname_target else None
-
-    # Hostname-failure debounce state. We only declare FAILED_HOSTNAME after
-    # the same "hostname unresolvable, IP reachable" pattern has held for
-    # several consecutive probe cycles AND we're past the early-boot grace
-    # window. Single-cycle observations during cold boot can show this
-    # pattern transiently as sshd warms up — we don't want to latch into a
-    # terminal failure state on noise.
-    consecutive_hostname_fails = 0
-    ssh_phase_started_at = time.monotonic()
+    target = node.mgmt_ip or node.name  # prefer IP; fall back to name if no IP
 
     while True:
         node.attempts += 1
 
-        # Try hostname first — that's the "fully ready" path.
-        hostname_err = await ssh_probe(
-            hostname_target, cfg.username, cfg.password, node.kind, DEFAULT_SSH_TIMEOUT
+        err = await ssh_probe(
+            target, cfg.username, cfg.password, node.kind, DEFAULT_SSH_TIMEOUT
         )
-        if hostname_err is None:
+        if err is None:
             node.status = NodeStatus.READY
             node.ready_at = time.monotonic()
             return
 
-        # Hostname failed. What kind of failure?
-        hostname_unresolvable = "Could not resolve" in hostname_err
-
-        # If we have an IP fallback, test that. Being reachable by IP but not
-        # by name is the signature of an /etc/hosts issue — but only if it
-        # holds across multiple cycles. A single-cycle observation isn't
-        # enough; cold boot can produce transient versions of the pattern.
-        if ip_target:
-            ip_err = await ssh_probe(
-                ip_target, cfg.username, cfg.password, node.kind, DEFAULT_SSH_TIMEOUT
-            )
-
-            if ip_err is None and hostname_unresolvable:
-                # Pattern matches: hostname unresolvable, IP works.
-                consecutive_hostname_fails += 1
-                phase_elapsed = time.monotonic() - ssh_phase_started_at
-
-                if (
-                    consecutive_hostname_fails >= HOSTNAME_FAILURE_THRESHOLD
-                    and phase_elapsed >= HOSTNAME_FAILURE_GRACE_SEC
-                ):
-                    # Both conditions met — this isn't transient. Declare it.
-                    node.status = NodeStatus.FAILED_HOSTNAME
-                    node.ready_at = time.monotonic()
-                    node.last_error = (
-                        f"{hostname_target} does not resolve, but {ip_target} is reachable. "
-                        f"Check /etc/hosts for an entry mapping {hostname_target} → {ip_target}."
-                    )
-                    return
-
-                # Pattern matched but we're still within grace window or
-                # below consecutive-failure threshold — record the diagnostic
-                # so the operator can see what we're tracking but keep going.
-                node.last_error = (
-                    f"{hostname_target} not resolving yet "
-                    f"({consecutive_hostname_fails}/{HOSTNAME_FAILURE_THRESHOLD} consecutive); "
-                    f"will keep trying"
-                )
-            else:
-                # Pattern broke — reset the consecutive counter. Could be:
-                #  - IP also failed (genuine boot-in-progress) — keep retrying
-                #  - hostname failed for a non-resolution reason
-                #  - hostname now resolves (race) and only IP failed this round
-                consecutive_hostname_fails = 0
-                # Surface whichever error is more diagnostic. If IP is the one
-                # failing now, that's the actionable info.
-                node.last_error = (
-                    f"{ip_target}: {ip_err}" if ip_err
-                    else f"{hostname_target}: {hostname_err}"
-                )
-        else:
-            node.last_error = f"{hostname_target}: {hostname_err}"
+        node.last_error = f"{target}: {err}"
 
         if time.monotonic() >= deadline:
             node.status = NodeStatus.TIMEOUT
@@ -764,7 +708,6 @@ _PROBING_SPINNER = Spinner("dots", style="status.probing")
 _STATUS_GLYPH = {
     NodeStatus.PENDING:          Text("○", style="status.pending"),
     NodeStatus.READY:            Text("●", style="status.ready"),
-    NodeStatus.FAILED_HOSTNAME:  Text("⚠", style="status.timeout"),
     NodeStatus.TIMEOUT:          Text("✗", style="status.timeout"),
     NodeStatus.ERROR:            Text("!", style="status.error"),
 }
@@ -785,7 +728,6 @@ def _status_label(node: Node) -> Text:
         NodeStatus.PROBING_TCP:     ("PROBING TCP 22",   "status.probing"),
         NodeStatus.PROBING_SSH:     ("VERIFY SSH LOGIN", "status.probing"),
         NodeStatus.READY:           ("ready",            "status.ready"),
-        NodeStatus.FAILED_HOSTNAME: ("hostname?",        "status.timeout"),
         NodeStatus.TIMEOUT:         ("timeout",          "status.timeout"),
         NodeStatus.ERROR:           ("error",            "status.error"),
     }
@@ -847,7 +789,6 @@ def build_status_table(cfg: LabConfig) -> RenderableType:
 
 def build_footer(cfg: LabConfig, started_at: float) -> RenderableType:
     ready = sum(1 for n in cfg.nodes if n.status == NodeStatus.READY)
-    hostname_fail = sum(1 for n in cfg.nodes if n.status == NodeStatus.FAILED_HOSTNAME)
     timeout = sum(1 for n in cfg.nodes if n.status == NodeStatus.TIMEOUT)
     total = len(cfg.nodes)
     elapsed = time.monotonic() - started_at
@@ -855,9 +796,6 @@ def build_footer(cfg: LabConfig, started_at: float) -> RenderableType:
     t = Text()
     t.append("  Ready ", style="muted")
     t.append(f"{ready}/{total}", style="status.ready" if ready == total else "info")
-    if hostname_fail:
-        t.append("   Hostname ", style="muted")
-        t.append(str(hostname_fail), style="status.timeout")
     if timeout:
         t.append("   Timeout ", style="muted")
         t.append(str(timeout), style="status.timeout")
@@ -1130,68 +1068,39 @@ def build_ready_panel(cfg: LabConfig, total_elapsed: float, dashboard_path: Opti
 
 
 def build_failure_panel(cfg: LabConfig, total_elapsed: float) -> RenderableType:
-    not_ready = [n for n in cfg.nodes if n.status != NodeStatus.READY]
-    hostname_issues = [n for n in not_ready if n.status == NodeStatus.FAILED_HOSTNAME]
-    other_failures = [n for n in not_ready if n.status != NodeStatus.FAILED_HOSTNAME]
+    failed = [n for n in cfg.nodes if n.status != NodeStatus.READY]
 
     body: list[RenderableType] = []
 
     summary = Text()
     summary.append("⚠  ", style="")
-    summary.append(f"{len(not_ready)} of {len(cfg.nodes)} nodes not fully ready", style="critical")
+    summary.append(f"{len(failed)} of {len(cfg.nodes)} nodes did not come up", style="critical")
     summary.append(f"   (after {_fmt_elapsed(total_elapsed)})", style="muted")
     body.append(summary)
     body.append(Text(""))
 
-    # Hostname-resolution issues are *different* from genuine failures. The
-    # nodes are alive and reachable by IP, so the lab may still be usable —
-    # the user just can't SSH by hostname until /etc/hosts is fixed.
-    if hostname_issues:
-        body.append(Text("Hostname resolution issue — reachable by IP, not by name:", style="warning"))
-        for n in hostname_issues:
-            line = Text()
-            line.append(f"  • {n.name}", style="bold")
-            line.append(f" → ", style="muted")
-            line.append(f"{n.mgmt_ip}", style="info")
-            line.append(f" ({n.role}, {n.kind})", style="muted")
-            body.append(line)
-        body.append(Text(""))
-        body.append(Text("  Fix: add entries to /etc/hosts so hostnames resolve to mgmt IPs.", style="muted"))
-        body.append(Text(f"       You can still SSH to these nodes by IP in the meantime.", style="muted"))
-        body.append(Text(""))
+    body.append(Text("Failing nodes:", style="warning"))
+    for n in failed:
+        line = Text()
+        line.append(f"  • {n.name}", style="bold")
+        line.append(f" ({n.role}, {n.kind})", style="muted")
+        if n.last_error:
+            line.append(f" — last error: {n.last_error}", style="muted")
+        body.append(line)
 
-    if other_failures:
-        body.append(Text("Unreachable nodes:", style="warning"))
-        for n in other_failures:
-            line = Text()
-            line.append(f"  • {n.name}", style="bold")
-            line.append(f" ({n.role}, {n.kind})", style="muted")
-            if n.last_error:
-                line.append(f" — last error: {n.last_error}", style="muted")
-            body.append(line)
-
-        body.append(Text(""))
-        body.append(Text("Remediation:", style="info"))
-        body.append(Text("  → sudo containerlab inspect --topo clab/topology.clab.yml", style=""))
-        for n in other_failures[:3]:  # cap the per-node suggestions to keep the panel tight
-            body.append(Text(f"  → docker logs clab-{cfg.name}-{n.name}", style=""))
-        if len(other_failures) > 3:
-            body.append(Text(f"  → …and similar for the other {len(other_failures) - 3} failing node(s)", style="muted"))
-        body.append(Text("  → make stop && make start    # nuke and pave", style=""))
-
-    # Choose panel tone: if ONLY hostname issues, it's a warning (not a critical
-    # failure); if any node is genuinely unreachable, it's a hard failure.
-    if other_failures:
-        title = "[critical]Lab Incomplete[/critical]"
-        border = "red"
-    else:
-        title = "[warning]Lab Ready with Warnings[/warning]"
-        border = "yellow"
+    body.append(Text(""))
+    body.append(Text("Remediation:", style="info"))
+    body.append(Text("  → sudo containerlab inspect --topo clab/topology.clab.yml", style=""))
+    for n in failed[:3]:  # cap the per-node suggestions to keep the panel tight
+        body.append(Text(f"  → docker logs clab-{cfg.name}-{n.name}", style=""))
+    if len(failed) > 3:
+        body.append(Text(f"  → …and similar for the other {len(failed) - 3} failing node(s)", style="muted"))
+    body.append(Text("  → make stop && make start    # nuke and pave", style=""))
 
     return Panel(
         Group(*body),
-        title=title,
-        border_style=border,
+        title="[critical]Lab Incomplete[/critical]",
+        border_style="red",
         padding=(1, 2),
         expand=True,
     )
@@ -1214,11 +1123,12 @@ async def run(cfg: LabConfig, console: Console) -> int:
         except Exception as exc:
             console.print(f"[muted]Could not remove stale {DASHBOARD_FILENAME}: {exc}[/muted]")
 
-    # Pre-flight: populate /etc/hosts ourselves rather than waiting on clab,
-    # which writes entries late in its boot sequence (and not always to the
-    # lab-base container's hosts file). We own this so probes can use the
-    # actual hostnames the user will type.
-    populate_etc_hosts(cfg, console)
+    # Pre-flight: write SSH config aliases so the user can `ssh admin@<node>`
+    # in either case (canonical or lowercase). We can't reliably populate
+    # /etc/hosts in a Docker container — it's bind-mounted from the runtime
+    # layer — but ~/.ssh/config is a normal file that ssh honors at the
+    # application layer.
+    populate_ssh_config(cfg, console)
 
     # Launch one watcher per node.
     tasks = [asyncio.create_task(watch_node(n, cfg), name=f"watch:{n.name}") for n in cfg.nodes]
@@ -1251,16 +1161,7 @@ async def run(cfg: LabConfig, console: Console) -> int:
                     break
 
     total_elapsed = time.monotonic() - started_at
-
-    # Categorize node outcomes. FAILED_HOSTNAME is a "soft failure" — the node
-    # is reachable by IP, so the lab is usable; we still open the dashboard
-    # and return success, but also surface the hostname warning so the user
-    # knows what to fix.
     all_ready = all(n.status == NodeStatus.READY for n in cfg.nodes)
-    all_usable = all(
-        n.status in (NodeStatus.READY, NodeStatus.FAILED_HOSTNAME)
-        for n in cfg.nodes
-    )
 
     console.print()
     if all_ready:
@@ -1268,18 +1169,6 @@ async def run(cfg: LabConfig, console: Console) -> int:
         if cfg.auto_open_dashboard:
             dashboard_path = write_and_open_dashboard(cfg, total_elapsed, console)
         console.print(build_ready_panel(cfg, total_elapsed, dashboard_path=dashboard_path))
-        return 0
-    if all_usable:
-        # Partial success: all nodes are reachable by IP, but some have
-        # hostname resolution issues. Open the dashboard (lab works) AND
-        # print the failure panel (so the user sees what to fix).
-        dashboard_path = None
-        if cfg.auto_open_dashboard:
-            dashboard_path = write_and_open_dashboard(cfg, total_elapsed, console)
-        console.print(build_failure_panel(cfg, total_elapsed))
-        if dashboard_path:
-            console.print()
-            console.print(f"[info]Dashboard opened:[/info] {dashboard_path}")
         return 0
     console.print(build_failure_panel(cfg, total_elapsed))
     return 1
