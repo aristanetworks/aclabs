@@ -74,6 +74,17 @@ DEFAULT_SSH_TIMEOUT = 5.0           # seconds for an SSH handshake+auth probe; s
                                     # to respond once it first accepts a connection
 DEFAULT_REFRESH_HZ = 8              # Rich Live refresh rate
 
+# Hostname-failure debounce: declaring FAILED_HOSTNAME is a terminal
+# state, so we have to be sure. During cold boot, transient races between
+# hostname and IP probes can show "hostname fails, IP works" patterns
+# that resolve themselves once sshd fully comes up. We require BOTH:
+#   (a) at least HOSTNAME_FAILURE_GRACE_SEC of probing has elapsed, AND
+#   (b) HOSTNAME_FAILURE_THRESHOLD consecutive cycles all show the same
+#       "hostname unresolvable, IP reachable" pattern
+# before declaring the hostname permanently broken.
+HOSTNAME_FAILURE_GRACE_SEC = 30.0
+HOSTNAME_FAILURE_THRESHOLD = 3
+
 
 THEME = Theme({
     "brand.c": "grey70",
@@ -611,6 +622,15 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
     hostname_target = node.name
     ip_target = node.mgmt_ip if node.mgmt_ip and node.mgmt_ip != hostname_target else None
 
+    # Hostname-failure debounce state. We only declare FAILED_HOSTNAME after
+    # the same "hostname unresolvable, IP reachable" pattern has held for
+    # several consecutive probe cycles AND we're past the early-boot grace
+    # window. Single-cycle observations during cold boot can show this
+    # pattern transiently as sshd warms up — we don't want to latch into a
+    # terminal failure state on noise.
+    consecutive_hostname_fails = 0
+    ssh_phase_started_at = time.monotonic()
+
     while True:
         node.attempts += 1
 
@@ -627,24 +647,52 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
         hostname_unresolvable = "Could not resolve" in hostname_err
 
         # If we have an IP fallback, test that. Being reachable by IP but not
-        # by name is the exact signature of an /etc/hosts issue — we flag it
-        # distinctly so the user knows to fix DNS, not wait longer.
+        # by name is the signature of an /etc/hosts issue — but only if it
+        # holds across multiple cycles. A single-cycle observation isn't
+        # enough; cold boot can produce transient versions of the pattern.
         if ip_target:
             ip_err = await ssh_probe(
                 ip_target, cfg.username, cfg.password, node.kind, DEFAULT_SSH_TIMEOUT
             )
+
             if ip_err is None and hostname_unresolvable:
-                node.status = NodeStatus.FAILED_HOSTNAME
-                node.ready_at = time.monotonic()
+                # Pattern matches: hostname unresolvable, IP works.
+                consecutive_hostname_fails += 1
+                phase_elapsed = time.monotonic() - ssh_phase_started_at
+
+                if (
+                    consecutive_hostname_fails >= HOSTNAME_FAILURE_THRESHOLD
+                    and phase_elapsed >= HOSTNAME_FAILURE_GRACE_SEC
+                ):
+                    # Both conditions met — this isn't transient. Declare it.
+                    node.status = NodeStatus.FAILED_HOSTNAME
+                    node.ready_at = time.monotonic()
+                    node.last_error = (
+                        f"{hostname_target} does not resolve, but {ip_target} is reachable. "
+                        f"Check /etc/hosts for an entry mapping {hostname_target} → {ip_target}."
+                    )
+                    return
+
+                # Pattern matched but we're still within grace window or
+                # below consecutive-failure threshold — record the diagnostic
+                # so the operator can see what we're tracking but keep going.
                 node.last_error = (
-                    f"{hostname_target} does not resolve, but {ip_target} is reachable. "
-                    f"Check /etc/hosts for an entry mapping {hostname_target} → {ip_target}."
+                    f"{hostname_target} not resolving yet "
+                    f"({consecutive_hostname_fails}/{HOSTNAME_FAILURE_THRESHOLD} consecutive); "
+                    f"will keep trying"
                 )
-                return
-            # Record whichever error is more diagnostic. If hostname was
-            # unresolvable but IP is also unreachable, the node genuinely
-            # isn't up yet — keep the IP error which is the actionable one.
-            node.last_error = f"{ip_target}: {ip_err}" if ip_err else node.last_error
+            else:
+                # Pattern broke — reset the consecutive counter. Could be:
+                #  - IP also failed (genuine boot-in-progress) — keep retrying
+                #  - hostname failed for a non-resolution reason
+                #  - hostname now resolves (race) and only IP failed this round
+                consecutive_hostname_fails = 0
+                # Surface whichever error is more diagnostic. If IP is the one
+                # failing now, that's the actionable info.
+                node.last_error = (
+                    f"{ip_target}: {ip_err}" if ip_err
+                    else f"{hostname_target}: {hostname_err}"
+                )
         else:
             node.last_error = f"{hostname_target}: {hostname_err}"
 
