@@ -61,6 +61,7 @@ Temporary Items
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 !.vscode/terminals.json
+!.vscode/lab.yml
 
 # Local History for Visual Studio Code
 .history/

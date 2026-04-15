@@ -1,49 +1,21 @@
-# Arista's Tech Library EVPN-VXLAN Domain A Lab
+<!-- lab-dashboard:metadata-start -->
 
-> [!WARNING]
-> This lab is in preview. It's fully functional, but breaking changes can happen.
-> We are working hard on building the best lab collection and your feedback is always  appreciated.
-
-Welcome! This pre-configured lab matches the [Domain A topology in the EVPN-VXLAN Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domain_a/) on [Arista's Tech Library](https://arista.com/en/tech-library).
-
-## Overview
-
-This lab has been validated with:
-
-- cEOS-lab: **4.35.2F**
-- AVD: **5.7.3**
-- Containerlab: **0.74.0**
-- Resources:
-  - CPUs: **16**
-  - Memory: **64 GB**
-  - Storage: **64 GB**
-
-> [!IMPORTANT]
-> The average deployment time for this lab is ten minutes.
->
-> Issue the `make inspect` command at the terminal to check on the deployment status of the lab.
->
-> Please wait until all nodes are in a `running` state prior to interacting with the lab.
+<!-- lab-dashboard:metadata-end -->
 
 ## Interacting with the Lab
 
-### Credentials
-
-#### Username
-```bash
-admin
-```
-
-#### Password
-
-```bash
-admin
-```
-
 > [!TIP]
-> The [ContainerLab VS Code Extension](https://containerlab.dev/manual/vsc-extension/) is pre-installed in the lab. For the best experience, it's recommended to use the [Topology Viewer](https://containerlab.dev/manual/vsc-extension/#topoviewer) to interact with the lab.
+> Quickly validate reachability between hosts in the lab by opening an SSH session to any Linux end host in the topology and running the following the command in the terminal window:
 >
-> Topology Viewer can be opened by selecting the ContainerLab extension icon and then the lab.
+> ```bash
+>pingcheck.sh
+>```
+
+### Topology Viewer
+
+The [ContainerLab VS Code Extension](https://containerlab.dev/manual/vsc-extension/) is pre-installed in the lab. For the best experience, it's recommended to use the [Topology Viewer](https://containerlab.dev/manual/vsc-extension/#topoviewer) to interact with the lab.
+
+Topology Viewer can be opened by selecting the ContainerLab extension icon and then the lab.
 
 <figure>
     <img src="assets/images/topo-extension.png"
@@ -102,4 +74,4 @@ make validate
 
 Happy Labbing! 🥳🧪
 
-Last reviewed: November 19th, 2025
+Last reviewed: April 14th, 2026

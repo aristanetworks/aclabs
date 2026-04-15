@@ -59,5 +59,6 @@
     "chat.agent.enabled": false,
     "chat.disableAIFeatures": true,
     "terminal.integrated.suggest.enabled": true,
-    "terminal.integrated.defaultLocation": "editor"
+    "terminal.integrated.defaultLocation": "editor",
+    "workbench.colorTheme": "Light Modern"
 }
