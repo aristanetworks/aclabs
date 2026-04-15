@@ -429,32 +429,33 @@ async def ssh_probe(
     Run a real SSH login probe to verify a node is genuinely ready for the
     user — not just "TCP open" but "I can authenticate and run a command."
 
-    The probe is *kind-aware* because different node types use different
-    authentication models in our lab environment:
+    The probe uses sshpass for ALL kinds, with kind-specific passwords:
 
-      * arista_ceos: passwordless admin (no key, no password). We `ssh ... true`
-        with BatchMode and treat exit 0 as success — meaning we got in and
-        ran a command. Anything else is a failure.
+      * arista_ceos: passwordless admin. cEOS's sshd offers keyboard-
+                     interactive auth even when the account requires no
+                     password — so we can't satisfy it with BatchMode and
+                     pure ssh. sshpass with an empty password responds to
+                     the prompt and lets us in.
 
-      * linux:       admin/admin password auth. We use sshpass to pipe the
-        password in and `ssh ... true`. Exit 0 = ran the command on the host.
+      * linux:       Standard password auth (admin/admin in our labs).
+                     sshpass feeds cfg.password.
 
-      * unknown:     fall back to the permissive "Permission denied means
-                     auth was offered" check so unfamiliar node kinds don't
-                     get stuck forever in PROBING_SSH.
+      * unknown:     Same as cEOS — empty password. Errs on the side of
+                     "try the most permissive auth first."
 
-    Returns None on success (we logged in and ran a command), or a short
-    diagnostic string on failure. Failure strings are pulled from ssh's
-    stderr so operators can see *why* — "Could not resolve hostname" is a
-    dead giveaway for a /etc/hosts issue, "Connection refused" means sshd
-    isn't up yet, etc.
+    Returns None on success (we logged in and ran `true`), or a short
+    diagnostic string on failure. Failure strings come from ssh's stderr
+    so operators can see *why* — "Could not resolve hostname" indicates
+    a /etc/hosts issue, "Connection refused" means sshd isn't up yet, etc.
     """
     # Hard-code a per-call connect timeout slightly below the asyncio outer
     # timeout so ssh exits cleanly with stderr instead of getting kill -9'd.
     ssh_connect_timeout = max(1, int(timeout) - 1)
 
     common_opts = [
-        "-o", "BatchMode=yes",                       # no prompts; fail fast on missing creds
+        # Note: NO BatchMode=yes here — sshpass needs ssh to actually accept
+        # a password (or empty string for cEOS), which requires interactive
+        # auth flow. sshpass replaces the human at the keyboard.
         "-o", "StrictHostKeyChecking=no",            # first-boot host keys vary every clab cycle
         "-o", "UserKnownHostsFile=/dev/null",        # don't pollute ~/.ssh/known_hosts
         "-o", "LogLevel=ERROR",                      # mute "Warning: Permanently added" noise
@@ -464,26 +465,37 @@ async def ssh_probe(
     ]
 
     kind_lc = (kind or "").lower()
-    if kind_lc in ("linux",):
-        # Linux hosts authenticate by password. Pipe via sshpass so BatchMode
-        # remains in effect (no interactive prompts).
-        cmd = [
-            "sshpass", "-p", password,
-            "ssh",
-            *common_opts,
-            "-o", "BatchMode=no",   # sshpass needs to feed password; disable BatchMode
-            f"{username}@{host}",
-            "true",
-        ]
+
+    # Both arista_ceos and linux nodes use sshpass — the difference is which
+    # password we feed it.
+    #
+    #   arista_ceos: cEOS's admin login uses keyboard-interactive auth even
+    #                when no password is required. A pure-ssh probe with
+    #                BatchMode can't satisfy keyboard-interactive, so we feed
+    #                an empty password via sshpass — that's what cEOS accepts
+    #                for the passwordless admin account.
+    #
+    #   linux:       Standard password auth (admin/admin in our labs). We feed
+    #                cfg.password through sshpass.
+    #
+    # Hardcoding empty string for cEOS (rather than honoring cfg.password) is
+    # deliberate: it matches the actual cEOS behavior, and if a future lab
+    # re-enables admin password auth on cEOS the probe will fail loudly —
+    # which is the right outcome since the user-facing SSH workflow would
+    # also break.
+    if kind_lc == "linux":
+        ssh_password = password
     else:
-        # cEOS (and anything else by default) — passwordless admin. ssh exit 0
-        # only happens if we genuinely got a session and ran the command.
-        cmd = [
-            "ssh",
-            *common_opts,
-            f"{username}@{host}",
-            "true",
-        ]
+        # arista_ceos and any unknown kind — empty password (cEOS-style)
+        ssh_password = ""
+
+    cmd = [
+        "sshpass", "-p", ssh_password,
+        "ssh",
+        *common_opts,
+        f"{username}@{host}",
+        "true",
+    ]
 
     try:
         proc = await asyncio.create_subprocess_exec(
@@ -514,10 +526,9 @@ async def ssh_probe(
         meaningful = [ln.strip() for ln in stderr_text.splitlines() if ln.strip()]
         return meaningful[-1] if meaningful else f"ssh exit {proc.returncode}"
     except FileNotFoundError as exc:
-        # ssh or sshpass missing from the container. The probe can't proceed;
+        # sshpass or ssh missing from the container. The probe can't proceed;
         # surface a clear message rather than a cryptic traceback.
-        missing = "sshpass" if kind_lc == "linux" else "ssh"
-        return f"{missing} not found on PATH ({exc.filename or 'unknown'})"
+        return f"required binary missing: {exc.filename or 'sshpass/ssh'}"
     except Exception as exc:
         return f"{type(exc).__name__}: {exc}"
 
