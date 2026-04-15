@@ -4,10 +4,10 @@
         {
             "label": "init_lab",
             "type": "shell",
-            "command": "python3",
-            "args": [
-                "/bin/init_lab.py"
-            ],
+            "command": "init_lab.py",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated",

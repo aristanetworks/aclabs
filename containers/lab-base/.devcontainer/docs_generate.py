@@ -17,9 +17,9 @@ Two marker styles are supported:
   <!-- lab-dashboard:snippet-end -->
 
 Usage:
-  python3 docs_generate.py           # Rewrite README.md in place
-  python3 docs_generate.py --check   # Exit non-zero if README would change
-  python3 docs_generate.py --diff    # Show what would change without writing
+  python3 .vscode/docs_generate.py           # Rewrite README.md in place
+  python3 .vscode/docs_generate.py --check   # Exit non-zero if README would change
+  python3 .vscode/docs_generate.py --diff    # Show what would change without writing
 
 Exit codes:
   0 — README is (now) up to date
@@ -273,11 +273,31 @@ def main(argv: Optional[list[str]] = None) -> int:
     readme_path = lab_dir / README_PATH
 
     # ── Validate inputs ──
+    # docs_generate.py lives in /bin and operates on whatever lab dir it was
+    # pointed at. Give a clear message if the dir doesn't look right rather
+    # than a one-line "file not found" that leaves the user guessing.
+    missing = []
     if not lab_yml_path.is_file():
-        print(f"error: {lab_yml_path} not found", file=sys.stderr)
-        return 2
+        missing.append(f".vscode/lab.yml (expected at {lab_yml_path})")
     if not readme_path.is_file():
-        print(f"error: {readme_path} not found", file=sys.stderr)
+        missing.append(f"README.md (expected at {readme_path})")
+    if missing:
+        source = (
+            "(from --lab-dir)"
+            if args.lab_dir != Path.cwd()
+            else f"(from current working directory: {Path.cwd()})"
+        )
+        print(
+            f"error: not a valid lab directory: {lab_dir} {source}",
+            file=sys.stderr,
+        )
+        for m in missing:
+            print(f"  - missing: {m}", file=sys.stderr)
+        print(
+            "tip: cd into a lab directory and re-run, or use:\n"
+            "  docs_generate.py --lab-dir /path/to/lab",
+            file=sys.stderr,
+        )
         return 2
 
     try:
@@ -313,7 +333,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     if args.check:
         print(
             f"error: {readme_path.name} is out of sync with {lab_yml_path.name}.\n"
-            f"       Run `python3 docs_generate.py` to regenerate.",
+            f"       Run `python3 .vscode/docs_generate.py` to regenerate.",
             file=sys.stderr,
         )
         return 1

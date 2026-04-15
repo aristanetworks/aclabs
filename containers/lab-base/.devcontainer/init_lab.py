@@ -1,25 +1,42 @@
 #!/usr/bin/env python3
 """
-init_lab.py — Initialize and configure Arista Containerized Labs.
+init_lab.py — Lab readiness TUI for Arista Containerized Labs (cArL).
 
-Invoked by VS Code tasks.json on folderOpen. Parses the clab topology,
-watches every node in parallel for TCP:22 reachability, and renders a live,
-role-grouped status table. On success, writes a LAB-READY.md dashboard that
-the PacketAnglers/lab-dashboard extension auto-opens in a clickable webview.
+Lives at /bin/init_lab.py in the lab-base container — a shared utility
+that operates on whatever lab directory it's invoked from. Invoked by
+VS Code tasks.json on folderOpen, or manually from the shell:
 
-Intentional design choices:
-  * asyncio + raw TCP probes (no paramiko): fast, cheap, no credential handling.
-    "Port 22 accepts a connection" is a better 'lab is up' signal than SSH auth
-    (which can succeed before startup-config finishes applying).
-  * Per-node timeout, not a shared budget. Slow nodes can't starve fast ones.
-  * Optional .vscode/lab.yml provides canonical lab metadata (display name,
-    credentials, validated-with versions, tips). See `LabConfig` for the
-    full schema.
-  * Stdlib + rich + pyyaml only. No extra deps to pull into the base image.
+    init_lab.py                 # use current working directory
+    init_lab.py --lab-dir PATH  # explicit lab directory
+
+Discovery: a lab directory must contain BOTH:
+  * clab/topology.clab.yml   — the containerlab topology
+  * .vscode/lab.yml          — the dashboard/init metadata
+
+Behavior:
+  1. Pre-flight: populate /etc/hosts with both canonical and lowercase
+     hostname aliases pointing to mgmt IPs (don't wait on clab to do this).
+  2. For each node, run a two-phase probe:
+       PROBING_TCP  — wait for port 22 to accept connections
+       PROBING_SSH  — actually log in and run `true` to verify auth works
+                      (kind-aware: cEOS passwordless, Linux via sshpass)
+  3. On success: render a LAB-READY.md dashboard that the PacketAnglers
+     lab-dashboard extension auto-opens in a webview.
+
+Design choices:
+  * asyncio + subprocess(ssh): no paramiko dependency, kind-aware probes,
+    real login test — the strongest possible "ready" signal.
+  * Per-node timeout, not a shared budget — slow nodes can't starve fast ones.
+  * /etc/hosts pre-flight — we own hostname resolution rather than waiting
+    on clab, eliminating a class of "node ready by IP, not by name" bugs.
+  * Stdlib + rich + pyyaml + system ssh/sshpass — all present in lab-base.
+
+Author: Mitch & Claude, morning coffee edition ☕
 """
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 import json
 import os
@@ -177,28 +194,51 @@ def infer_role(name: str, kind: str) -> str:
 # Loading
 # ─────────────────────────────────────────────────────────────────────────────
 
-def find_topology_path() -> Path:
-    """Locate topology.clab.yml — env var first, then lab-root fallback."""
-    # env var set by the base container
-    env_ws = os.getenv("CONTAINERWSF")
-    candidates: list[Path] = []
-    if env_ws:
-        candidates.append(Path(env_ws) / "clab" / "topology.clab.yml")
+def resolve_lab_dir(explicit: Optional[Path] = None) -> Path:
+    """
+    Determine which lab directory to operate on.
 
-    # fallback: walk up from script location looking for clab/topology.clab.yml
-    here = Path(__file__).resolve()
-    for parent in [here.parent, *here.parents]:
-        candidates.append(parent / "clab" / "topology.clab.yml")
+    `init_lab.py` lives at /bin/init_lab.py in the lab-base container — it's a
+    shared utility, not a per-lab artifact. So unlike older versions, the
+    script's own location tells us nothing about which lab is being booted.
+    Discovery is now explicit:
 
-    # also try cwd — tasks.json defaults cwd to ${workspaceFolder}
-    candidates.append(Path.cwd() / "clab" / "topology.clab.yml")
+      1. If --lab-dir was passed on the command line, use that.
+      2. Otherwise, use the current working directory.
 
-    for c in candidates:
-        if c.is_file():
-            return c
+    A lab directory is identified by the presence of BOTH:
+      * clab/topology.clab.yml  — the containerlab topology
+      * .vscode/lab.yml         — the dashboard/init metadata
+
+    If those files aren't present at the resolved location, we fail loud
+    with an explicit message naming what's expected and where we looked,
+    so the user knows whether they're in the wrong directory or whether
+    something's actually missing.
+    """
+    lab_dir = (explicit if explicit else Path.cwd()).resolve()
+    topology = lab_dir / "clab" / "topology.clab.yml"
+    lab_yml = lab_dir / ".vscode" / "lab.yml"
+
+    if topology.is_file() and lab_yml.is_file():
+        return lab_dir
+
+    # Build a clear, actionable error. Distinguish "wrong dir entirely" from
+    # "right dir, missing one file" so the user knows what to fix.
+    missing = []
+    if not topology.is_file():
+        missing.append(f"clab/topology.clab.yml (expected at {topology})")
+    if not lab_yml.is_file():
+        missing.append(f".vscode/lab.yml (expected at {lab_yml})")
+
+    source = (
+        "(from --lab-dir)" if explicit
+        else f"(from current working directory: {Path.cwd()})"
+    )
     raise FileNotFoundError(
-        "Could not locate clab/topology.clab.yml. Checked:\n  "
-        + "\n  ".join(str(c) for c in candidates)
+        f"Not a valid lab directory: {lab_dir} {source}\n"
+        f"Missing:\n  - " + "\n  - ".join(missing) + "\n\n"
+        f"Tip: cd into a lab directory and re-run, or use:\n"
+        f"  init_lab.py --lab-dir /path/to/lab"
     )
 
 
@@ -216,9 +256,9 @@ def load_lab_overrides(lab_root: Path) -> dict:
         return {}
 
 
-def load_lab_config() -> LabConfig:
-    topology_path = find_topology_path()
-    lab_root = topology_path.parent.parent
+def load_lab_config(lab_dir: Optional[Path] = None) -> LabConfig:
+    lab_root = resolve_lab_dir(lab_dir)
+    topology_path = lab_root / "clab" / "topology.clab.yml"
 
     with topology_path.open() as f:
         topo = yaml.safe_load(f)
@@ -272,6 +312,90 @@ def load_lab_config() -> LabConfig:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# /etc/hosts pre-flight
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Sentinel comments delimit the block we manage. We only ever rewrite content
+# between these markers — anything else in /etc/hosts is left untouched.
+HOSTS_BEGIN_MARK = "# >>> aclabs init_lab.py — managed block (do not edit) >>>"
+HOSTS_END_MARK   = "# <<< aclabs init_lab.py — managed block <<<"
+ETC_HOSTS = Path("/etc/hosts")
+
+
+def populate_etc_hosts(cfg: LabConfig, console: Console) -> bool:
+    """
+    Write /etc/hosts entries for every node in the topology BEFORE we start
+    probing. Containerlab populates entries late in its boot sequence (and
+    not always reliably for the lab-base container itself), so we don't wait
+    on it — we own this responsibility.
+
+    Each node gets two entries pointing at its mgmt IP: the canonical-case
+    name from the topology AND a lowercase alias. This sidesteps the case-
+    sensitivity gotcha where users habitually type `ssh b-leaf1` even though
+    the topology defines `B-LEAF1`. Both forms now resolve.
+
+    Idempotent: a managed block (delimited by sentinel comments) is rewritten
+    each call. Anything outside the markers is preserved verbatim — we play
+    nicely with anything else that might also touch /etc/hosts.
+
+    Returns True on success, False on any failure (which we treat as
+    non-fatal — the probes can still run, they'll just have to fall back to
+    IP, and the FAILED_HOSTNAME path will surface the issue).
+    """
+    # Build the managed block contents.
+    lines: list[str] = [HOSTS_BEGIN_MARK]
+    for n in cfg.nodes:
+        if not n.mgmt_ip:
+            continue
+        canonical = n.name
+        lowered = n.name.lower()
+        # Same IP, both case variants. Listing the canonical form first means
+        # reverse lookups (gethostbyaddr) return the canonical name, which is
+        # what shows in tools like `ssh -v` output.
+        if canonical != lowered:
+            lines.append(f"{n.mgmt_ip}\t{canonical} {lowered}")
+        else:
+            lines.append(f"{n.mgmt_ip}\t{canonical}")
+    lines.append(HOSTS_END_MARK)
+    new_block = "\n".join(lines) + "\n"
+
+    try:
+        existing = ETC_HOSTS.read_text() if ETC_HOSTS.is_file() else ""
+    except Exception as exc:
+        console.print(f"[warning]Could not read {ETC_HOSTS}: {exc}[/warning]")
+        return False
+
+    # Replace existing managed block in place, or append if no block exists yet.
+    block_re = re.compile(
+        re.escape(HOSTS_BEGIN_MARK) + r".*?" + re.escape(HOSTS_END_MARK) + r"\n?",
+        re.DOTALL,
+    )
+    if block_re.search(existing):
+        updated = block_re.sub(new_block, existing)
+    else:
+        # Ensure there's a clean newline boundary before our block.
+        sep = "" if existing.endswith("\n") or existing == "" else "\n"
+        updated = existing + sep + new_block
+
+    if updated == existing:
+        return True  # nothing to do; already in sync
+
+    try:
+        ETC_HOSTS.write_text(updated)
+    except PermissionError:
+        console.print(
+            f"[warning]Could not write {ETC_HOSTS} (need root).[/warning] "
+            f"Hostname-based SSH may fail until /etc/hosts is populated."
+        )
+        return False
+    except Exception as exc:
+        console.print(f"[warning]Could not update {ETC_HOSTS}: {exc}[/warning]")
+        return False
+
+    return True
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Probing
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -294,50 +418,72 @@ async def tcp_probe(host: str, port: int, timeout: float) -> Optional[str]:
         return f"{type(exc).__name__}: {exc}"
 
 
-async def ssh_probe(host: str, username: str, timeout: float) -> Optional[str]:
+async def ssh_probe(
+    host: str,
+    username: str,
+    password: str,
+    kind: str,
+    timeout: float,
+) -> Optional[str]:
     """
-    Run a one-shot non-interactive SSH probe to verify the server has progressed
-    past early init into a state where it can actually accept authentication.
+    Run a real SSH login probe to verify a node is genuinely ready for the
+    user — not just "TCP open" but "I can authenticate and run a command."
 
-    TCP-accept on port 22 happens as soon as sshd is listening, which can be
-    well before userspace (PAM, AAA, /etc/hosts, VRF config) is ready to
-    actually authenticate anyone. So after TCP succeeds, we run a real SSH
-    invocation with BatchMode to detect the auth-offered phase.
+    The probe is *kind-aware* because different node types use different
+    authentication models in our lab environment:
 
-    Returns None (success) when the server has progressed far enough to have
-    offered authentication methods and rejected our probe — which is the
-    correct "node is ready" signal. The probe itself will always fail auth
-    (no credentials supplied) but the failure mode tells us everything:
+      * arista_ceos: passwordless admin (no key, no password). We `ssh ... true`
+        with BatchMode and treat exit 0 as success — meaning we got in and
+        ran a command. Anything else is a failure.
 
-      * "Permission denied" stderr → server is alive, protocol exchange
-        completed, auth methods were offered. READY.
-      * "Connection refused" / "Could not resolve" / "Connection timed out"
-        → server isn't reachable yet. Not ready.
+      * linux:       admin/admin password auth. We use sshpass to pipe the
+        password in and `ssh ... true`. Exit 0 = ran the command on the host.
 
-    We specifically cannot rely on the ssh exit code alone — "Permission
-    denied" exits 255 (same as transport failures), so we parse stderr to
-    distinguish the two cases.
+      * unknown:     fall back to the permissive "Permission denied means
+                     auth was offered" check so unfamiliar node kinds don't
+                     get stuck forever in PROBING_SSH.
 
-    Returns None on ready, or a short error string on failure. The error
-    string surfaces the last meaningful stderr line so operators can see
-    *why* a node is stuck (e.g., "Could not resolve hostname B-LEAF1" is
-    a dead giveaway that /etc/hosts wasn't populated).
+    Returns None on success (we logged in and ran a command), or a short
+    diagnostic string on failure. Failure strings are pulled from ssh's
+    stderr so operators can see *why* — "Could not resolve hostname" is a
+    dead giveaway for a /etc/hosts issue, "Connection refused" means sshd
+    isn't up yet, etc.
     """
-    # Hard-code a per-call timeout slightly below the outer asyncio timeout so
-    # ssh bails before asyncio rips the subprocess away — gives us the exit
-    # code and stderr rather than a kill-9.
+    # Hard-code a per-call connect timeout slightly below the asyncio outer
+    # timeout so ssh exits cleanly with stderr instead of getting kill -9'd.
     ssh_connect_timeout = max(1, int(timeout) - 1)
 
-    cmd = [
-        "ssh",
-        "-o", "BatchMode=yes",                       # never prompt; fail fast on password-required
-        "-o", "StrictHostKeyChecking=no",            # first-boot host keys are new every time
+    common_opts = [
+        "-o", "BatchMode=yes",                       # no prompts; fail fast on missing creds
+        "-o", "StrictHostKeyChecking=no",            # first-boot host keys vary every clab cycle
         "-o", "UserKnownHostsFile=/dev/null",        # don't pollute ~/.ssh/known_hosts
-        "-o", "LogLevel=ERROR",                      # suppress the "Warning: Permanently added" noise
+        "-o", "LogLevel=ERROR",                      # mute "Warning: Permanently added" noise
+        "-o", "PreferredAuthentications=password,keyboard-interactive,none",
+        "-o", "PubkeyAuthentication=no",             # skip key probing — we don't have one
         "-o", f"ConnectTimeout={ssh_connect_timeout}",
-        f"{username}@{host}",
-        "true",                                      # command to run if we ever got in — we won't
     ]
+
+    kind_lc = (kind or "").lower()
+    if kind_lc in ("linux",):
+        # Linux hosts authenticate by password. Pipe via sshpass so BatchMode
+        # remains in effect (no interactive prompts).
+        cmd = [
+            "sshpass", "-p", password,
+            "ssh",
+            *common_opts,
+            "-o", "BatchMode=no",   # sshpass needs to feed password; disable BatchMode
+            f"{username}@{host}",
+            "true",
+        ]
+    else:
+        # cEOS (and anything else by default) — passwordless admin. ssh exit 0
+        # only happens if we genuinely got a session and ran the command.
+        cmd = [
+            "ssh",
+            *common_opts,
+            f"{username}@{host}",
+            "true",
+        ]
 
     try:
         proc = await asyncio.create_subprocess_exec(
@@ -358,31 +504,20 @@ async def ssh_probe(host: str, username: str, timeout: float) -> Optional[str]:
 
         stderr_text = (stderr or b"").decode("utf-8", errors="replace")
 
-        # Success case 1: exit 0 means the probe somehow got in and ran `true`.
-        # Extraordinarily unlikely with BatchMode + no key, but treat as ready.
+        # Exit 0 = we ran the command on the device. This is the real "ready"
+        # signal we want, regardless of node kind.
         if proc.returncode == 0:
             return None
 
-        # Success case 2: the server reached the "offering auth methods" stage
-        # and rejected our attempt. This is what we actually want to detect —
-        # it proves sshd/PAM/AAA/hostname-resolution all made it through init.
-        #
-        # The exact stderr text varies slightly by OpenSSH version but always
-        # contains "Permission denied" when auth was offered and rejected.
-        # cEOS typically returns: "Permission denied (publickey,keyboard-interactive)."
-        if "Permission denied" in stderr_text:
-            return None
-
-        # Failure cases. Surface the most useful line of stderr so the TUI's
-        # diagnostic can show the operator exactly why.
+        # Build the failure string from the most useful stderr line — operators
+        # need to see WHY the probe failed (resolution issue, refused, etc.).
         meaningful = [ln.strip() for ln in stderr_text.splitlines() if ln.strip()]
-        if meaningful:
-            return meaningful[-1]
-        return f"ssh exit {proc.returncode}"
-    except FileNotFoundError:
-        # ssh binary not on PATH — shouldn't happen in the lab-base container,
-        # but we want a clear error if it ever does rather than a cryptic traceback.
-        return "ssh client not found on PATH"
+        return meaningful[-1] if meaningful else f"ssh exit {proc.returncode}"
+    except FileNotFoundError as exc:
+        # ssh or sshpass missing from the container. The probe can't proceed;
+        # surface a clear message rather than a cryptic traceback.
+        missing = "sshpass" if kind_lc == "linux" else "ssh"
+        return f"{missing} not found on PATH ({exc.filename or 'unknown'})"
     except Exception as exc:
         return f"{type(exc).__name__}: {exc}"
 
@@ -463,7 +598,9 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
         node.attempts += 1
 
         # Try hostname first — that's the "fully ready" path.
-        hostname_err = await ssh_probe(hostname_target, cfg.username, DEFAULT_SSH_TIMEOUT)
+        hostname_err = await ssh_probe(
+            hostname_target, cfg.username, cfg.password, node.kind, DEFAULT_SSH_TIMEOUT
+        )
         if hostname_err is None:
             node.status = NodeStatus.READY
             node.ready_at = time.monotonic()
@@ -476,7 +613,9 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
         # by name is the exact signature of an /etc/hosts issue — we flag it
         # distinctly so the user knows to fix DNS, not wait longer.
         if ip_target:
-            ip_err = await ssh_probe(ip_target, cfg.username, DEFAULT_SSH_TIMEOUT)
+            ip_err = await ssh_probe(
+                ip_target, cfg.username, cfg.password, node.kind, DEFAULT_SSH_TIMEOUT
+            )
             if ip_err is None and hostname_unresolvable:
                 node.status = NodeStatus.FAILED_HOSTNAME
                 node.ready_at = time.monotonic()
@@ -579,7 +718,7 @@ def _status_label(node: Node) -> Text:
     label_map = {
         NodeStatus.PENDING:         ("pending",          "status.pending"),
         NodeStatus.PROBING_TCP:     ("PROBING TCP 22",   "status.probing"),
-        NodeStatus.PROBING_SSH:     ("CHECK SSH PROMPT", "status.probing"),
+        NodeStatus.PROBING_SSH:     ("VERIFY SSH LOGIN", "status.probing"),
         NodeStatus.READY:           ("ready",            "status.ready"),
         NodeStatus.FAILED_HOSTNAME: ("hostname?",        "status.timeout"),
         NodeStatus.TIMEOUT:         ("timeout",          "status.timeout"),
@@ -865,7 +1004,7 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
     lines.append("---")
     lines.append("")
     lines.append(
-        "<sub>Auto-generated by <code>lab_start.py</code> on lab readiness. "
+        "<sub>Auto-generated by <code>init_lab.py</code> on lab readiness. "
         "Close this tab with <kbd>Ctrl</kbd>+<kbd>W</kbd>.</sub>"
     )
     lines.append("")
@@ -1010,6 +1149,12 @@ async def run(cfg: LabConfig, console: Console) -> int:
         except Exception as exc:
             console.print(f"[muted]Could not remove stale {DASHBOARD_FILENAME}: {exc}[/muted]")
 
+    # Pre-flight: populate /etc/hosts ourselves rather than waiting on clab,
+    # which writes entries late in its boot sequence (and not always to the
+    # lab-base container's hosts file). We own this so probes can use the
+    # actual hostnames the user will type.
+    populate_etc_hosts(cfg, console)
+
     # Launch one watcher per node.
     tasks = [asyncio.create_task(watch_node(n, cfg), name=f"watch:{n.name}") for n in cfg.nodes]
 
@@ -1075,10 +1220,34 @@ async def run(cfg: LabConfig, console: Console) -> int:
     return 1
 
 
-def main() -> int:
+def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
+    """Parse command-line arguments for init_lab."""
+    parser = argparse.ArgumentParser(
+        prog="init_lab.py",
+        description=(
+            "Lab readiness TUI for Arista Containerized Labs (cArL). "
+            "Probes every node in the topology and waits for SSH to be "
+            "fully ready before declaring the lab usable. Run from a lab "
+            "directory, or use --lab-dir to point at one explicitly."
+        ),
+    )
+    parser.add_argument(
+        "--lab-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Path to the lab directory (must contain clab/topology.clab.yml "
+            "and .vscode/lab.yml). Defaults to the current working directory."
+        ),
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: Optional[list[str]] = None) -> int:
+    args = parse_args(argv)
     console = Console(theme=THEME, log_path=False)
     try:
-        cfg = load_lab_config()
+        cfg = load_lab_config(args.lab_dir)
     except Exception as exc:
         console.print(f"[critical]Failed to load lab config:[/critical] {exc}")
         return 2

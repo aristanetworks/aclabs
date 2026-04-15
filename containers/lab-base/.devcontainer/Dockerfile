@@ -47,13 +47,14 @@ RUN chmod +x /bin/docs_generate.py
 
 USER ${USERNAME}
 
-# install the latest containerlab, yamllint, cook-and-cut and eos-downloader
+# install containerlab + python deps: yamllint, eos-downloader, rich, textual, passlib
 RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
-    && pip3 install --user yamllint \
-    && pip install --user "eos-downloader>=0.10.1" \
-    && pip install --user rich \
-    && pip install --user textual \
-    && pip install --user passlib
+    && pip install --user \
+        yamllint \
+        "eos-downloader>=0.10.1" \
+        rich \
+        textual \
+        passlib
 
 # install coder and extensions
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.115.0" \
