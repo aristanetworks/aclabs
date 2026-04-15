@@ -6,7 +6,7 @@
             "type": "shell",
             "command": "python3",
             "args": [
-                "lab_start.py"
+                "/bin/init_lab.py"
             ],
             "presentation": {
                 "reveal": "always",
