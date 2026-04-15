@@ -1,20 +1,5 @@
 <!-- lab-dashboard:metadata-start -->
 
-# Arista MLAG Fabric with VXLAN Flood and Learn
-
-_Welcome! This pre-configured lab matches the [MLAG Fabric Deployment Guide](https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domain_a/) on [Arista's Tech Library](https://arista.com/en/tech-library)._
-
-> [!WARNING]
-> This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated.
-
-📖 **Deployment Guide:** [Tech Library](https://tech-library.arista.com/data_center/mlag-fabric/deployment_guide/)
-
-🔐 **Credentials**
-
-| Username | Password |
-|----------|----------|
-| `admin` | `admin` |
-
 <!-- lab-dashboard:metadata-end -->
 
 ## Interacting with the Lab
