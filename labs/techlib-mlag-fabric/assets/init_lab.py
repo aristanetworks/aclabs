@@ -46,6 +46,7 @@ import html
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 import urllib.parse
@@ -1129,6 +1130,25 @@ async def run(cfg: LabConfig, console: Console) -> int:
     # layer — but ~/.ssh/config is a normal file that ssh honors at the
     # application layer.
     populate_ssh_config(cfg, console)
+
+    # Pre-flight: regenerate README.md managed blocks from lab.yml so the
+    # README is always fresh when the user opens it. This is idempotent —
+    # if nothing changed, it's a no-op. We run it at boot (not just at
+    # commit time) because in the per-lab assets/ model the user shouldn't
+    # have to remember `make docs` for the README to be correct.
+    docs_script = cfg.lab_root / "assets" / "docs_generate.py"
+    if docs_script.is_file():
+        try:
+            result = subprocess.run(
+                [sys.executable, str(docs_script), "--lab-dir", str(cfg.lab_root)],
+                capture_output=True,
+                text=True,
+                timeout=15,
+            )
+            if result.returncode != 0 and result.stderr.strip():
+                console.print(f"[warning]docs_generate: {result.stderr.strip()}[/warning]")
+        except Exception as exc:
+            console.print(f"[warning]Could not regenerate README: {exc}[/warning]")
 
     # Launch one watcher per node.
     tasks = [asyncio.create_task(watch_node(n, cfg), name=f"watch:{n.name}") for n in cfg.nodes]
