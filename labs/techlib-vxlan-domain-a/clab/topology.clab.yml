@@ -3,7 +3,7 @@
 # Arista EVPN Deployment Guide Topology - Domain A
 # --------------------------------------------------------------
 
-name: arista-evpn-vxlan-domain-a
+name: evpn-vxlan-domain-a
 
 prefix: ""
 
