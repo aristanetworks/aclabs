@@ -3,7 +3,7 @@
 # Arista EVPN Deployment Guide Topology - Domain C
 # --------------------------------------------------------------
 
-name: arista-evpn-dg
+name: arista-evpn-vxlan-domain-c
 
 prefix: ""
 
