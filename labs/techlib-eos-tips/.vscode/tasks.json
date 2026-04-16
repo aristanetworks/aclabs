@@ -4,7 +4,10 @@
         {
             "label": "init_lab",
             "type": "shell",
-            "command": "init_lab.py",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/assets/init_lab.py"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },

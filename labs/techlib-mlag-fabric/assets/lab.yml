@@ -1,6 +1,6 @@
 # Canonical metadata for this lab. Consumed by:
-#   * .vscode/init_lab.py            — boot TUI + LAB-READY.md generation
-#   * .vscode/docs_generate.py        — README.md regeneration
+#   * assets/init_lab.py              — boot TUI + LAB-READY.md generation
+#   * assets/docs_generate.py         — README.md regeneration
 #   * PacketAnglers/lab-dashboard ext — LAB-READY.md rendering
 #
 # Schema is nested by concern (display / credentials / boot / dashboard).
@@ -23,7 +23,7 @@ display:
   validated_with:
     cEOS: "4.35.2F"
     AVD: "5.7.3"
-    Containerlab: "0.74.3"
+    Containerlab: "0.74.0"
   # Recommended host resources. Rendered as a badge row in the dashboard header.
   resources:
     CPUs: 16
