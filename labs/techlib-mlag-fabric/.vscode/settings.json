@@ -48,7 +48,7 @@
         },
     },
     "workbench": {
-        "startupEditor": "readme",
+        "startupEditor": "none",
         "colorTheme": "Default Light Modern",
         "editorAssociations": {
                     "*.md": "vscode.markdown.preview.editor"
@@ -60,5 +60,4 @@
     "chat.disableAIFeatures": true,
     "terminal.integrated.suggest.enabled": true,
     "terminal.integrated.defaultLocation": "editor",
-    "workbench.colorTheme": "Light Modern"
 }
