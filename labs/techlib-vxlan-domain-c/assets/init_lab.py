@@ -865,6 +865,11 @@ def _build_open_file_uri(path: Path) -> str:
     return _build_command_uri("labDashboard.openFile", str(path))
 
 
+def _build_open_terminal_uri() -> str:
+    """Open a fresh terminal in the bottom panel via the lab-dashboard extension."""
+    return _build_command_uri("labDashboard.openTerminal")
+
+
 def _render_badge_row(label: str, items: dict) -> list[str]:
     """
     Render a labeled row of pill-shaped key/value badges.
@@ -967,6 +972,11 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
     lines.append(f"### [📂 &nbsp; Open Topology File]({_build_open_file_uri(cfg.topology_path)})")
     lines.append("")
     lines.append("Inspect or edit the `topology.clab.yml` source.")
+    lines.append("")
+
+    lines.append(f"### [🖥️ &nbsp; Open a Terminal]({_build_open_terminal_uri()})")
+    lines.append("")
+    lines.append("Open a shell terminal in the bottom panel for running commands like `make build`, `make deploy`, etc.")
     lines.append("")
 
     # ── Node inventory (collapsible) ──
