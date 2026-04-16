@@ -14,21 +14,25 @@ Discovery: a lab directory must contain BOTH:
   * .vscode/lab.yml          — the dashboard/init metadata
 
 Behavior:
-  1. Pre-flight: populate /etc/hosts with both canonical and lowercase
-     hostname aliases pointing to mgmt IPs (don't wait on clab to do this).
+  1. Pre-flight: write per-node Host aliases to ~/.ssh/config so the user
+     can `ssh admin@<node>` in either case (canonical or lowercase). We
+     can't reliably populate /etc/hosts in a Docker container — it's
+     bind-mounted from the runtime layer — but ~/.ssh/config is a normal
+     file that ssh honors at the application layer.
   2. For each node, run a two-phase probe:
        PROBING_TCP  — wait for port 22 to accept connections
-       PROBING_SSH  — actually log in and run `true` to verify auth works
-                      (kind-aware: cEOS passwordless, Linux via sshpass)
+       PROBING_SSH  — actually log in and run a no-op command to verify
+                      auth works (kind-aware: cEOS gets `!`, Linux gets
+                      `true`; both authenticated via sshpass).
   3. On success: render a LAB-READY.md dashboard that the PacketAnglers
      lab-dashboard extension auto-opens in a webview.
 
 Design choices:
-  * asyncio + subprocess(ssh): no paramiko dependency, kind-aware probes,
-    real login test — the strongest possible "ready" signal.
+  * asyncio + sshpass/ssh subprocesses: no paramiko, kind-aware login
+    test — the strongest possible "ready" signal.
   * Per-node timeout, not a shared budget — slow nodes can't starve fast ones.
-  * /etc/hosts pre-flight — we own hostname resolution rather than waiting
-    on clab, eliminating a class of "node ready by IP, not by name" bugs.
+  * ~/.ssh/config for user-facing hostname ergonomics; probes use IP for
+    reliability. Two layers, neither fighting Docker's /etc/hosts.
   * Stdlib + rich + pyyaml + system ssh/sshpass — all present in lab-base.
 
 Author: Mitch & Claude, morning coffee edition ☕
@@ -38,10 +42,10 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import html
 import json
 import os
 import re
-import subprocess
 import sys
 import time
 import urllib.parse
@@ -73,6 +77,15 @@ DEFAULT_SSH_TIMEOUT = 5.0           # seconds for an SSH handshake+auth probe; s
                                     # generous because cold cEOS takes longer for sshd
                                     # to respond once it first accepts a connection
 DEFAULT_REFRESH_HZ = 8              # Rich Live refresh rate
+
+# Footer-diagnostic tunables. The diagnostic is the "why is my node stuck?"
+# message we surface in real-time during boot to save the operator from
+# having to wait for the failure panel.
+STUCK_SSH_AGE_SEC = 20              # node must be in PROBING_SSH this long
+                                    # before its error is considered worth surfacing
+DIAG_MSG_MAX_LEN = 90               # absolute max chars in the surfaced diagnostic;
+                                    # footer is meant to stay one line
+DIAG_MSG_TRUNCATE_AT = DIAG_MSG_MAX_LEN - 3  # leave room for the trailing ellipsis
 
 
 THEME = Theme({
@@ -250,7 +263,9 @@ def load_lab_overrides(lab_root: Path) -> dict:
         with override_path.open() as f:
             return yaml.safe_load(f) or {}
     except Exception as exc:
-        # Don't die on a broken override — just warn and continue with defaults
+        # Don't die on a broken override — just warn and continue with defaults.
+        # Plain print here (not console.print) because this runs during config
+        # load, before the Rich Console is constructed in main().
         print(f"[warn] failed to parse {override_path}: {exc}", file=sys.stderr)
         return {}
 
@@ -320,7 +335,7 @@ SSH_CONFIG_BEGIN_MARK = "# >>> aclabs init_lab.py — managed block (do not edit
 SSH_CONFIG_END_MARK   = "# <<< aclabs init_lab.py — managed block <<<"
 
 
-def populate_ssh_config(cfg: LabConfig, console: Console) -> bool:
+def populate_ssh_config(cfg: LabConfig, console: Console) -> None:
     """
     Write per-node Host entries to ~/.ssh/config so the user can SSH to nodes
     by hostname (in any case) regardless of /etc/hosts state.
@@ -347,8 +362,9 @@ def populate_ssh_config(cfg: LabConfig, console: Console) -> bool:
     Idempotent: a managed block (delimited by sentinel comments) is rewritten
     each call. Anything outside the markers is preserved.
 
-    Returns True on success, False on any failure (non-fatal — probes can
-    still proceed by IP).
+    Best-effort: failures are logged to the console and swallowed. Probes can
+    still proceed by IP if this fails, so a non-writable ~/.ssh just means
+    degraded user-facing ergonomics, not a broken boot.
     """
     ssh_config_path = Path.home() / ".ssh" / "config"
 
@@ -365,8 +381,8 @@ def populate_ssh_config(cfg: LabConfig, console: Console) -> bool:
         block_lines.append(f"Host {aliases}")
         block_lines.append(f"    HostName {n.mgmt_ip}")
         block_lines.append(f"    User {cfg.username}")
-        block_lines.append(f"    StrictHostKeyChecking no")
-        block_lines.append(f"    UserKnownHostsFile /dev/null")
+        block_lines.append("    StrictHostKeyChecking no")
+        block_lines.append("    UserKnownHostsFile /dev/null")
         block_lines.append("")
     block_lines.append(SSH_CONFIG_END_MARK)
     new_block = "\n".join(block_lines) + "\n"
@@ -378,13 +394,13 @@ def populate_ssh_config(cfg: LabConfig, console: Console) -> bool:
         console.print(
             f"[warning]Could not create {ssh_config_path.parent}: {exc}[/warning]"
         )
-        return False
+        return
 
     try:
         existing = ssh_config_path.read_text() if ssh_config_path.is_file() else ""
     except Exception as exc:
         console.print(f"[warning]Could not read {ssh_config_path}: {exc}[/warning]")
-        return False
+        return
 
     # Replace existing managed block in place, or append if no block yet.
     block_re = re.compile(
@@ -397,8 +413,9 @@ def populate_ssh_config(cfg: LabConfig, console: Console) -> bool:
         sep = "" if existing.endswith("\n") or existing == "" else "\n"
         updated = existing + sep + new_block
 
+    # Skip the write if our block is already in sync with the file content.
     if updated == existing:
-        return True
+        return
 
     try:
         ssh_config_path.write_text(updated)
@@ -408,9 +425,6 @@ def populate_ssh_config(cfg: LabConfig, console: Console) -> bool:
             f"[warning]Could not write {ssh_config_path}: {exc}[/warning] "
             f"Hostname-based SSH may not work in all cases."
         )
-        return False
-
-    return True
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -461,19 +475,19 @@ async def ssh_probe(
       * unknown:     Same as cEOS — empty password. Errs on the side of
                      "try the most permissive auth first."
 
-    Returns None on success (we logged in and ran `true`), or a short
+    Returns None on success (we logged in and ran a no-op), or a short
     diagnostic string on failure. Failure strings come from ssh's stderr
     so operators can see *why* — "Could not resolve hostname" indicates
-    a /etc/hosts issue, "Connection refused" means sshd isn't up yet, etc.
+    name resolution is failing, "Connection refused" means sshd isn't
+    up yet, etc.
     """
     # Hard-code a per-call connect timeout slightly below the asyncio outer
     # timeout so ssh exits cleanly with stderr instead of getting kill -9'd.
     ssh_connect_timeout = max(1, int(timeout) - 1)
 
+    # All probes run via sshpass → ssh. No BatchMode: sshpass needs to feed
+    # a password (or empty string) via the interactive auth flow.
     common_opts = [
-        # Note: NO BatchMode=yes here — sshpass needs ssh to actually accept
-        # a password (or empty string for cEOS), which requires interactive
-        # auth flow. sshpass replaces the human at the keyboard.
         "-o", "StrictHostKeyChecking=no",            # first-boot host keys vary every clab cycle
         "-o", "UserKnownHostsFile=/dev/null",        # don't pollute ~/.ssh/known_hosts
         "-o", "LogLevel=ERROR",                      # mute "Warning: Permanently added" noise
@@ -484,35 +498,30 @@ async def ssh_probe(
 
     kind_lc = (kind or "").lower()
 
-    # Both arista_ceos and linux nodes use sshpass — the difference is which
-    # password we feed it AND which test command we run.
+    # Kind-specific password and test command:
     #
-    #   arista_ceos: cEOS's admin login uses keyboard-interactive auth even
-    #                when no password is required. A pure-ssh probe with
-    #                BatchMode can't satisfy keyboard-interactive, so we feed
-    #                an empty password via sshpass — that's what cEOS accepts
-    #                for the passwordless admin account. The test command is
-    #                `!` (EOS comment) — the EOS-CLI equivalent of /bin/true.
-    #                We can't run `true` here because cEOS hands the command
-    #                to its CLI parser, not a Unix shell, and the parser
-    #                doesn't know `true` (returns "% Invalid input", exit 1).
+    #   arista_ceos — empty password + `!` (EOS comment = no-op, exits 0).
+    #     cEOS's sshd offers keyboard-interactive even for passwordless admin,
+    #     so sshpass feeds an empty string. We can't run `true` because cEOS
+    #     hands the command to its CLI parser, not a Unix shell — the parser
+    #     rejects it as "% Invalid input" (exit 1).
     #
-    #   linux:       Standard password auth (admin/admin in our labs). We feed
-    #                cfg.password through sshpass and run /bin/true.
+    #   linux — cfg.password + `true` (standard Unix no-op).
     #
-    # Hardcoding empty string for cEOS (rather than honoring cfg.password) is
-    # deliberate: it matches the actual cEOS behavior, and if a future lab
-    # re-enables admin password auth on cEOS the probe will fail loudly —
-    # which is the right outcome since the user-facing SSH workflow would
-    # also break.
+    # Empty password for cEOS is hardcoded (not from cfg.password) because it
+    # matches actual cEOS behavior. If a future lab re-enables admin password,
+    # the probe fails loudly — which is correct since user SSH would also break.
     if kind_lc == "linux":
         ssh_password = password
         test_command = "true"
     else:
-        # arista_ceos and any unknown kind — empty password + EOS no-op
         ssh_password = ""
         test_command = "!"
 
+    # Note: sshpass -p exposes the password in `ps` output. Acceptable here
+    # because these are lab-only credentials (admin/admin or empty), not
+    # production secrets. For non-lab use, prefer sshpass -e (environment
+    # variable) or sshpass -f (file descriptor).
     cmd = [
         "sshpass", "-p", ssh_password,
         "ssh",
@@ -569,36 +578,28 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
     Both phases share the single per-node timeout budget. If the whole thing
     takes longer than cfg.per_node_timeout, the node is marked TIMEOUT.
 
-    We probe by hostname (how the user will connect) and fall back to mgmt IP
-    — this matches the user's likely invocation pattern and catches DNS /
-    /etc/hosts population issues that would otherwise leave a node looking
-    "ready" when it's actually unreachable by name.
+    Both phases probe by management IP. Hostname-based reachability is a
+    user-facing concern handled separately by populate_ssh_config writing
+    aliases to ~/.ssh/config.
     """
     node.status = NodeStatus.PROBING_TCP
     node.started_at = time.monotonic()
     deadline = node.started_at + cfg.per_node_timeout
 
-    # Prefer container-hostname resolution (clab normally wires up /etc/hosts);
-    # fall back to mgmt IP. The hostname is tried first because that's what
-    # the user will use — if it doesn't resolve, we want to find out NOW, not
-    # when the user copies a hostname from the dashboard and gets "no route".
-    targets: list[str] = [node.name]
-    if node.mgmt_ip and node.mgmt_ip not in targets:
-        targets.append(node.mgmt_ip)
+    # We probe by management IP — not hostname — for both phases. In Docker
+    # containers, /etc/hosts is bind-mounted and populated late by clab (or
+    # not at all for the lab-base container). User-facing hostname ergonomics
+    # are handled separately by populate_ssh_config writing aliases to
+    # ~/.ssh/config. The probe just answers "is this node's IP reachable?"
+    probe_target = node.mgmt_ip or node.name  # prefer IP; fall back to name
 
     # ── Phase 1: TCP accept ────────────────────────────────────────────────
-    tcp_ready_target: Optional[str] = None
-    while tcp_ready_target is None:
+    while True:
         node.attempts += 1
-        for target in targets:
-            err = await tcp_probe(target, cfg.probe_port, DEFAULT_CONNECT_TIMEOUT)
-            if err is None:
-                tcp_ready_target = target
-                break
-            node.last_error = f"{target}: {err}"
-
-        if tcp_ready_target is not None:
-            break
+        err = await tcp_probe(probe_target, cfg.probe_port, DEFAULT_CONNECT_TIMEOUT)
+        if err is None:
+            break  # port is open — advance to Phase 2
+        node.last_error = f"{probe_target}: {err}"
 
         if time.monotonic() >= deadline:
             node.status = NodeStatus.TIMEOUT
@@ -607,38 +608,23 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
 
         await asyncio.sleep(DEFAULT_PROBE_INTERVAL)
 
-    # ── Phase 2: SSH login ───────────────────────────────────────────────────────
-    #
-    # We probe by management IP — not hostname. In Docker containers,
-    # /etc/hosts is bind-mounted from the runtime layer and managed by Docker
-    # itself; we can't reliably populate hostname entries early in the boot
-    # sequence. Containerlab eventually writes correct entries, but timing
-    # varies and can race the probes.
-    #
-    # User-facing hostname ergonomics are handled separately by writing
-    # ~/.ssh/config aliases in the pre-flight (see populate_ssh_config). That
-    # makes `ssh admin@B-LEAF1` and `ssh admin@b-leaf1` both work for the
-    # human user without depending on /etc/hosts at all.
-    #
-    # The probe just answers "is this node ready to accept a login?" — IP
-    # is the most reliable target for that question.
+    # ── Phase 2: SSH login ────────────────────────────────────────────────
+    # TCP is open; now verify we can actually authenticate and run a command.
     node.status = NodeStatus.PROBING_SSH
     node.last_error = None  # clear TCP-phase errors; we're past that
-
-    target = node.mgmt_ip or node.name  # prefer IP; fall back to name if no IP
 
     while True:
         node.attempts += 1
 
         err = await ssh_probe(
-            target, cfg.username, cfg.password, node.kind, DEFAULT_SSH_TIMEOUT
+            probe_target, cfg.username, cfg.password, node.kind, DEFAULT_SSH_TIMEOUT
         )
         if err is None:
             node.status = NodeStatus.READY
             node.ready_at = time.monotonic()
             return
 
-        node.last_error = f"{target}: {err}"
+        node.last_error = f"{probe_target}: {err}"
 
         if time.monotonic() >= deadline:
             node.status = NodeStatus.TIMEOUT
@@ -683,7 +669,7 @@ def build_preflight_panel(cfg: LabConfig) -> RenderableType:
     creds.append(f"{cfg.username} / {cfg.password}", style="bold")
     lines.append(creds)
 
-    readme = cfg.topology_path.parent.parent / "README.md"
+    readme = cfg.lab_root / "README.md"
     if readme.is_file():
         rline = Text()
         rline.append("Docs: ", style="info")
@@ -808,7 +794,7 @@ def build_footer(cfg: LabConfig, started_at: float) -> RenderableType:
     # it working" question answered in-flight rather than post-mortem.
     stuck_ssh = [
         n for n in cfg.nodes
-        if n.status == NodeStatus.PROBING_SSH and n.last_error and n.elapsed > 20
+        if n.status == NodeStatus.PROBING_SSH and n.last_error and n.elapsed > STUCK_SSH_AGE_SEC
     ]
     if stuck_ssh and ready < total:
         # Normalize per-node specifics so errors of the same CLASS cluster
@@ -833,8 +819,8 @@ def build_footer(cfg: LabConfig, started_at: float) -> RenderableType:
             error_counts[ec] = error_counts.get(ec, 0) + 1
         top_err, top_count = max(error_counts.items(), key=lambda kv: kv[1])
         # Truncate aggressively — footer should stay one line.
-        if len(top_err) > 90:
-            top_err = top_err[:87] + "…"
+        if len(top_err) > DIAG_MSG_MAX_LEN:
+            top_err = top_err[:DIAG_MSG_TRUNCATE_AT] + "…"
         diag = Text()
         diag.append("\n  ⚠ ", style="warning")
         diag.append(f"{top_count} node(s) stuck at SSH: ", style="muted")
@@ -878,6 +864,29 @@ def _build_open_file_uri(path: Path) -> str:
     return _build_command_uri("labDashboard.openFile", str(path))
 
 
+def _render_badge_row(label: str, items: dict) -> list[str]:
+    """
+    Render a labeled row of pill-shaped key/value badges.
+
+    Used for both the "Validated with" and "Resources" sections of the
+    dashboard — same HTML structure, different data. All values pass through
+    html.escape so a stray `<` or `&` in lab.yml can't break rendering.
+    Returns the lines to append (including the trailing blank line).
+    """
+    out: list[str] = ['<div class="lab-validated-with">']
+    out.append(f'<span class="lab-validated-label">{html.escape(label)}</span>')
+    for k, v in items.items():
+        out.append(
+            f'<span class="lab-badge">'
+            f'<span class="lab-badge-key">{html.escape(str(k))}</span>'
+            f'<span class="lab-badge-val">{html.escape(str(v))}</span>'
+            f'</span>'
+        )
+    out.append("</div>")
+    out.append("")
+    return out
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Dashboard (auto-opened LAB-READY.md)
 # ─────────────────────────────────────────────────────────────────────────────
@@ -910,43 +919,25 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
 
     # Credentials — own block, prominent. Wrapper class lets the extension's
     # CSS style the <code> values as chip/pill badges instead of inline code.
+    # Values pass through html.escape so a malicious lab.yml can't inject
+    # markup; not a real concern in the lab use case but cheap defense.
     lines.append('<div class="lab-credentials">')
     lines.append(
         f'<span class="lab-credentials-label">Credentials</span>'
-        f'<code class="lab-cred">{cfg.username}</code>'
+        f'<code class="lab-cred">{html.escape(cfg.username)}</code>'
         f'<span class="lab-cred-sep">/</span>'
-        f'<code class="lab-cred">{cfg.password}</code>'
+        f'<code class="lab-cred">{html.escape(cfg.password)}</code>'
     )
     lines.append("</div>")
     lines.append("")
 
     # Validated-with badge row — each entry becomes a styled pill.
     if cfg.validated_with:
-        lines.append('<div class="lab-validated-with">')
-        lines.append('<span class="lab-validated-label">Validated with</span>')
-        for k, v in cfg.validated_with.items():
-            lines.append(
-                f'<span class="lab-badge">'
-                f'<span class="lab-badge-key">{k}</span>'
-                f'<span class="lab-badge-val">{v}</span>'
-                f'</span>'
-            )
-        lines.append("</div>")
-        lines.append("")
+        lines.extend(_render_badge_row("Validated with", cfg.validated_with))
 
     # Resources row — same badge styling, different label.
     if cfg.resources:
-        lines.append('<div class="lab-validated-with">')
-        lines.append('<span class="lab-validated-label">Resources</span>')
-        for k, v in cfg.resources.items():
-            lines.append(
-                f'<span class="lab-badge">'
-                f'<span class="lab-badge-key">{k}</span>'
-                f'<span class="lab-badge-val">{v}</span>'
-                f'</span>'
-            )
-        lines.append("</div>")
-        lines.append("")
+        lines.extend(_render_badge_row("Resources", cfg.resources))
 
     lines.append("---")
     lines.append("")
@@ -1028,7 +1019,7 @@ def write_and_open_dashboard(cfg: LabConfig, total_elapsed: float, console: Cons
     """
     Write the dashboard to <lab_root>/LAB-READY.md.
 
-    The Arista Labs Dashboard extension (packetanglers.aristalabs-dashboard)
+    The PacketAnglers lab-dashboard extension (packetanglers.lab-dashboard)
     watches for this file and auto-opens it in its custom webview, which
     renders the markdown with clickable command: URIs.
 
@@ -1063,7 +1054,7 @@ def build_ready_panel(cfg: LabConfig, total_elapsed: float, dashboard_path: Opti
         body.append(Text(""))
         dash = Text()
         dash.append("📋 Dashboard: ", style="info")
-        dash.append(str(dashboard_path.name), style="bold")
+        dash.append(dashboard_path.name, style="bold")
         dash.append(" opened — click the buttons to go.", style="muted")
         body.append(dash)
 
