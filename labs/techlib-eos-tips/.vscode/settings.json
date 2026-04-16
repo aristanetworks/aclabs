@@ -47,17 +47,16 @@
             },
         },
     },
-    "workbench": {
-        "startupEditor": "none",
-        "colorTheme": "Default Light Modern",
-        "editorAssociations": {
-                    "*.md": "vscode.markdown.preview.editor"
-        }
-    },
     "chat.commandCenter.enabled": false,
     "chat.agentSessionsViewLocation": "disabled",
     "chat.agent.enabled": false,
     "chat.disableAIFeatures": true,
     "terminal.integrated.suggest.enabled": true,
     "terminal.integrated.defaultLocation": "editor",
+    "workbench.startupEditor": "none",
+    "workbench.colorTheme": "Light Modern",
+    "workbench.editorAssociations": {
+        "*.copilotmd": "vscode.markdown.preview.editor",
+        "*.md": "vscode.markdown.preview.editor"
+    }
 }
