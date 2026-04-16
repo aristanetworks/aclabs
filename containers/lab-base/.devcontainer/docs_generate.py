@@ -2,6 +2,10 @@
 """
 docs_generate.py — Regenerate README.md managed blocks from lab.yml + shared snippets.
 
+Lives at /bin/docs_generate.py in the lab-base container. Operates on
+whatever lab directory it's invoked from, or use --lab-dir to point at
+one explicitly.
+
 Treats the README as a hybrid document: human-authored prose PLUS blocks of content
 that are generated from canonical sources. The managed blocks are delimited by HTML
 comment markers; everything outside them is preserved verbatim.
@@ -17,9 +21,10 @@ Two marker styles are supported:
   <!-- lab-dashboard:snippet-end -->
 
 Usage:
-  python3 .vscode/docs_generate.py           # Rewrite README.md in place
-  python3 .vscode/docs_generate.py --check   # Exit non-zero if README would change
-  python3 .vscode/docs_generate.py --diff    # Show what would change without writing
+  docs_generate.py                              # rewrite README.md in place
+  docs_generate.py --check                      # exit non-zero if README would change (CI)
+  docs_generate.py --diff                       # show what would change without writing
+  docs_generate.py --lab-dir /path/to/lab       # operate on a specific lab
 
 Exit codes:
   0 — README is (now) up to date
@@ -67,12 +72,12 @@ SNIPPET_BLOCK_RE = re.compile(
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Metadata block rendering
+# Banner rendering
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Valid GitHub alert types. See:
 # https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/basic-writing-and-formatting-syntax#alerts
-VALID_BANNER_TYPES = {"note", "tip", "important", "warning", "caution"}
+VALID_BANNER_TYPES = frozenset({"note", "tip", "important", "warning", "caution"})
 
 
 def render_banner(banner: Optional[dict]) -> list[str]:
@@ -106,7 +111,7 @@ def render_banner(banner: Optional[dict]) -> list[str]:
     # GitHub alert syntax: > [!TYPE] on its own line, then > message lines.
     # Preserve author line breaks in the message by prefixing each with '> '.
     lines = [f"> [!{banner_type.upper()}]"]
-    for msg_line in message.splitlines() or [message]:
+    for msg_line in message.splitlines():
         lines.append(f"> {msg_line}".rstrip())
     return lines
 
@@ -161,8 +166,8 @@ def render_metadata_block(lab_yml: dict) -> str:
 
     lines.append("🔐 **Credentials**")
     lines.append("")
-    lines.append(f"| Username | Password |")
-    lines.append(f"|----------|----------|")
+    lines.append("| Username | Password |")
+    lines.append("|----------|----------|")
     lines.append(f"| `{username}` | `{password}` |")
     lines.append("")
 
@@ -246,6 +251,7 @@ def regenerate_readme(readme_content: str, lab_yml: dict, lab_dir: Path) -> str:
 
 def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(
+        prog="docs_generate.py",
         description="Regenerate README.md managed blocks from lab.yml + shared snippets.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
@@ -333,7 +339,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     if args.check:
         print(
             f"error: {readme_path.name} is out of sync with {lab_yml_path.name}.\n"
-            f"       Run `python3 .vscode/docs_generate.py` to regenerate.",
+            f"       Run `docs_generate.py` (or `make docs`) to regenerate.",
             file=sys.stderr,
         )
         return 1
