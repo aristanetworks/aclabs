@@ -35,7 +35,7 @@ Design choices:
     reliability. Two layers, neither fighting Docker's /etc/hosts.
   * Stdlib + rich + pyyaml + system ssh/sshpass — all present in lab-base.
 
-Author: Mitch & Claude, morning coffee edition ☕
+Author: Mitch & Claude
 """
 
 from __future__ import annotations
