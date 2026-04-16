@@ -13,9 +13,9 @@ display:
   # Optional banner rendered as a GitHub alert at the top of the README.
   # Type must be one of: note, tip, important, warning, caution.
   # Omit the `banner:` field entirely for no banner (e.g., GA labs).
-  banner:
-    type: warning
-    message: "This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated."
+  # banner:
+  #   type: warning
+  #   message: "This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated."
   # Optional external documentation link. Rendered as the first Quick Action button.
   documentation_url: "https://tech-library.arista.com/data_center/mlag-fabric/deployment_guide/"
   # Software versions this lab was validated against. Rendered as a badge row
@@ -23,7 +23,7 @@ display:
   validated_with:
     cEOS: "4.35.2F"
     AVD: "5.7.3"
-    Containerlab: "0.74.0"
+    Containerlab: "0.74.3"
   # Recommended host resources. Rendered as a badge row in the dashboard header.
   resources:
     CPUs: 16
@@ -40,7 +40,7 @@ boot:
   per_node_timeout: 420
   probe_port: 22
   preflight_notes:
-    - "First boot: cEOS + startup-config typically takes 3–5 minutes for a fabric this size"
+    - "First boot: cEOS + startup-config typically takes 5 minutes for a fabric this size"
   # skip_nodes: []
   # roles:
   #   SomeNode: BorderLeaf

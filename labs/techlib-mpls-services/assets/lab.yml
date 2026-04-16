@@ -1,6 +1,6 @@
 # Canonical metadata for this lab. Consumed by:
-#   * .vscode/init_lab.py            — boot TUI + LAB-READY.md generation
-#   * .vscode/docs_generate.py        — README.md regeneration
+#   * assets/init_lab.py              — boot TUI + LAB-READY.md generation
+#   * assets/docs_generate.py         — README.md regeneration
 #   * PacketAnglers/lab-dashboard ext — LAB-READY.md rendering
 #
 # Schema is nested by concern (display / credentials / boot / dashboard).
@@ -8,16 +8,16 @@
 
 # ── Lab identity ─────────────────────────────────────────────────────────
 display:
-  name: "Arista MPLS Services Deployment Guide Lab"
+  name: "Arista MPLS Services Deployment Guide"
   subtitle: "Tech Library Deployment Guide"
   # Optional banner rendered as a GitHub alert at the top of the README.
   # Type must be one of: note, tip, important, warning, caution.
   # Omit the `banner:` field entirely for no banner (e.g., GA labs).
-  banner:
-    type: warning
-    message: "This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated."
+  # banner:
+  #   type: warning
+  #   message: "This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated."
   # Optional external documentation link. Rendered as the first Quick Action button.
-  documentation_url: "https://tech-library.arista.com/data_center/mlag-fabric/deployment_guide/"
+  documentation_url: "https://tech-library.arista.com/"
   # Software versions this lab was validated against. Rendered as a badge row
   # in the dashboard header.
   validated_with:
@@ -40,7 +40,7 @@ boot:
   per_node_timeout: 420
   probe_port: 22
   preflight_notes:
-    - "First boot: cEOS + startup-config typically takes 7–10 minutes for a fabric this size"
+    - "First boot: cEOS + startup-config typically takes 5 minutes for a fabric this size"
   # skip_nodes: []
   # roles:
   #   SomeNode: BorderLeaf
@@ -50,4 +50,4 @@ dashboard:
   auto_open: true
   tips:
     - "Run `pingcheck.sh` on any Linux host to validate reachability across the fabric."
-    - "Refer to `README.md` additional details"
+    - "Refer to `README.md` for lab operations (build / deploy / validate)."

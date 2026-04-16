@@ -8,8 +8,8 @@
 
 # ── Lab identity ─────────────────────────────────────────────────────────
 display:
-  name: "Arista EOS Tips for Network Operators"
-  subtitle: "Tech Library Solution Guide"
+  name: "Arista EVPN-VXLAN Domain C Deployment Guide"
+  subtitle: "Tech Library Deployment Guide"
   # Optional banner rendered as a GitHub alert at the top of the README.
   # Type must be one of: note, tip, important, warning, caution.
   # Omit the `banner:` field entirely for no banner (e.g., GA labs).
@@ -17,7 +17,7 @@ display:
   #   type: warning
   #   message: "This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated."
   # Optional external documentation link. Rendered as the first Quick Action button.
-  documentation_url: "https://tech-library.arista.com/eos/eos_ops/"
+  documentation_url: "https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domain_c/"
   # Software versions this lab was validated against. Rendered as a badge row
   # in the dashboard header.
   validated_with:
