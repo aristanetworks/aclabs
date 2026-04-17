@@ -1,26 +1,14 @@
-// {
-//     "version": "2.0.0",
-//     "tasks": [
-//         {
-//             "label": "init_lab",
-//             "type": "shell",
-//             "command": "python3",
-//             "args": [
-//                 "${workspaceFolder}/assets/init_lab.py"
-//             ],
-//             "options": {
-//                 "cwd": "${workspaceFolder}"
-//             },
-//             "presentation": {
-//                 "reveal": "always",
-//                 "panel": "dedicated",
-//                 "clear": true,
-//                 "focus": true
-//             },
-//             "runOptions": {
-//                 "runOn": "folderOpen"
-//             },
-//             "problemMatcher": []
-//         }
-//     ]
-// }
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "install-dashboard",
+            "type": "shell",
+            "command": "code-server --install-extension packetanglers.lab-dashboard --force",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "problemMatcher": []
+        }
+    ]
+}
