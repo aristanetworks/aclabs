@@ -18,7 +18,7 @@ console = Console(theme=custom_theme, log_path=False)
 
 console.clear()
 
-# Two Blank lines before
+# Two blank lines before
 console.print("\n\n", end="")
 
 title = Text()
