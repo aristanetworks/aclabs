@@ -100,5 +100,5 @@ jobs:
       # - ContainerLab 0.74.3
       # - code-server v4.115.0
       # - 2.6.6
-      # - Add `lab-dashboard` VS Code extension for use with techlib labs
+      # - Moved code-server back to v4.106.3 - Need to add "task.allowAutomaticTasks": "on" to settings.json before upgrading to 4.115.0+
       container_revision: "2.6.6"
