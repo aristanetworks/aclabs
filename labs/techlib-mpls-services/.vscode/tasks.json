@@ -9,10 +9,8 @@
                 "${workspaceFolder}/assets/bootstrap.sh"
             ],
             "presentation": {
-                "reveal": "always",
-                "panel": "dedicated",
-                "clear": true,
-                "focus": true
+                "reveal": "never",
+                "focus": false
             },
             "runOptions": {
                 "runOn": "folderOpen"
