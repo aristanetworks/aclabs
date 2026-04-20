@@ -1,13 +1,6 @@
 ---
 mgmt_gateway: 10.0.0.1
-mgmt_interface: Management0
-
-## disabled due to a bug
-## try if you need a challenge =)
-# eos_cli: |
-#   interface Management0
-#       no lldp receive
-#       no lldp transmit
+mgmt_interface: Management1
 
 dns_settings:
   domain: avd.lab
