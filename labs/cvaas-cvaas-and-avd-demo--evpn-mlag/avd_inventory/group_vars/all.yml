@@ -8,6 +8,14 @@ dns_settings:
     - ip_address: 8.8.8.8
       vrf: MGMT
 
+management_eapi:
+  enabled: true
+  enable_http: false
+  enable_https: true
+  vrfs:
+    - name: MGMT
+      enabled: true
+
 # NTP servers
 ntp_settings:
   server_vrf: use_mgmt_interface_vrf
