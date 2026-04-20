@@ -43,7 +43,7 @@ _paginate: false
 ```text
 Provisioning Workflow Demo
 Petr Ankudinov
-                                    13/01/2025
+                                    20/04/2026
 ```
 
 ![bg right fit](assets/img/avd-logo.webp)
@@ -132,7 +132,7 @@ Tool | Purpose
 [Pexels](https://www.pexels.com/) and [Unsplash](https://unsplash.com/) | Excellent free stock photos resources. It's not possible to reference every author individually, but their work is highly appreciated.
 [excalidraw](https://github.com/excalidraw/excalidraw), [drawio](https://github.com/jgraph/drawio), [tldraw](https://github.com/tldraw/tldraw) | VSCode plugins to create drawings
 [Containerlab](https://containerlab.dev) | Orchestration tool for container based networking labs
-[Arista AVD Ansible Collection](https://avd.arista.com/4.3/index.html) | Ansible collection used to build EVPN network
+[Arista AVD Ansible Collection](https://avd.arista.com/6.1/index.html) | Ansible collection used to build EVPN network
 [Ansible](https://www.ansible.com) | Automation for everyone.
 
 ---

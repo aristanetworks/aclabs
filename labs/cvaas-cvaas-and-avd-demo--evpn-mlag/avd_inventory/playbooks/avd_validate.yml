@@ -1,12 +1,10 @@
 ---
-- name: "Run Fabric states validation"
+- name: Run ANTA validation
   hosts: AVD_FABRIC
   connection: local
   gather_facts: false
-  collections:
-    - arista.avd
   tasks:
 
-    - name: Deploy configuration to device
-      import_role:
-        name: eos_validate_state
+    - name: Run ANTA on EOS devices
+      ansible.builtin.import_role:
+        name: arista.avd.anta_runner
