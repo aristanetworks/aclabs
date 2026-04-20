@@ -1,5 +1,4 @@
 {
-    "task.allowAutomaticTasks": "on",
     "containerlab": {
         "showWelcomePage": false,
         "skipUpdateCheck": true,
