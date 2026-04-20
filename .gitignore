@@ -291,3 +291,9 @@ clab-*/
 
 # do NOT ignore public lab env variables
 !.vscode/*.public.env
+
+# AI configs, skills, etc.
+.codex/*
+.claude/*
+!.claude/skills
+!.agents/skills
