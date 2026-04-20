@@ -1,4 +1,4 @@
 {
     "workbench.startupEditor": "readme",
-    "tasks.allowAutomaticTasks": "on"
+    "task.allowAutomaticTasks": "on"
 }
