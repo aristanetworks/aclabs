@@ -1,4 +1,14 @@
 {
     "image": "ghcr.io/aristanetworks/aclabs/dev:latest",
-    "containerUser": "vscode"
+    "containerUser": "vscode",
+    // use .env file to setup dev environment
+    "runArgs": ["--env-file", ".vscode/dev_vars.env"],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "anthropic.claude-code",
+                "openai.chatgpt"
+            ]
+        }
+    }
 }
