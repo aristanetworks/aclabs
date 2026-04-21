@@ -41,17 +41,16 @@ RUN chmod +x /bin/lab_start_task.py
 
 USER ${USERNAME}
 
-# install containerlab + python deps: yamllint, eos-downloader, rich, textual, passlib
+# install the latest containerlab, yamllint, cook-and-cut and eos-downloader
 RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
-    && pip install --user \
-        yamllint \
-        "eos-downloader>=0.10.1" \
-        rich \
-        textual \
-        passlib
+    && pip3 install --user yamllint \
+    && pip install --user "eos-downloader>=0.10.1" \
+    && pip install --user rich \
+    && pip install --user textual \
+    && pip install --user passlib
 
-# install coder and vs code extensions: containerlab, json2yaml, markdown-all-in-one, lab-dashboard
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.106.3" \
+# install coder and extensions
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.115.0" \
     && code-server --install-extension srl-labs.vscode-containerlab --force \
     && code-server --install-extension tuxtina.json2yaml --force \
     && code-server --install-extension yzhang.markdown-all-in-one --force
