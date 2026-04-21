@@ -4,7 +4,7 @@
 
     :fontawesome-solid-microchip: CPUs: 16  
     :fontawesome-solid-memory: Memory: 64 GB  
-    :fontawesome-solid-hard-drive: Storage: 128 GB  
+    :fontawesome-solid-hard-drive: Storage: 64 GB  
 
     :material-alert-circle-outline:{ .heartbeat } Please request high spec Codespace machines from [Github support](https://support.github.com/) first!
 
@@ -42,26 +42,28 @@ To run the lab on your own machine, you can download all required files using th
     Sometimes cEOS-lab image download may fail. For example, due to incorrect token. In that case `postCreate.sh` script will fail and the lab will not be started.  
     You can confirm if image was imported correctly with `docker image ls`.  
 
+This lab targets `arista.avd` 6.1.0.
+
 ## Lab Inventory
 
 This lab has following devices:
 
 | Hostname | Type | OS | Management Address | Username | Password |
 | -------- | ---- | -- | ------------------ | -------- | -------- |
-| s01 | switch | cEOS-lab, 4.32.3M | 10.0.1.1 | arista | arista |
-| s02 | switch | cEOS-lab, 4.32.3M | 10.0.1.2 | arista | arista |
-| l01 | switch | cEOS-lab, 4.32.3M | 10.0.2.1 | arista | arista |
-| l02 | switch | cEOS-lab, 4.32.3M | 10.0.2.2 | arista | arista |
-| l03 | switch | cEOS-lab, 4.32.3M | 10.0.2.3 | arista | arista |
-| l04 | switch | cEOS-lab, 4.32.3M | 10.0.2.4 | arista | arista |
-| h01 | host | cEOS-lab, 4.32.3M | 10.0.3.1 | arista | arista |
-| h02 | host | cEOS-lab, 4.32.3M | 10.0.3.2 | arista | arista |
+| s01 | switch | cEOS-lab, 4.34.2F | 10.0.1.1 | arista | arista |
+| s02 | switch | cEOS-lab, 4.34.2F | 10.0.1.2 | arista | arista |
+| l01 | switch | cEOS-lab, 4.34.2F | 10.0.2.1 | arista | arista |
+| l02 | switch | cEOS-lab, 4.34.2F | 10.0.2.2 | arista | arista |
+| l03 | switch | cEOS-lab, 4.34.2F | 10.0.2.3 | arista | arista |
+| l04 | switch | cEOS-lab, 4.34.2F | 10.0.2.4 | arista | arista |
+| h01 | host | cEOS-lab, 4.34.2F | 10.0.3.1 | arista | arista |
+| h02 | host | cEOS-lab, 4.34.2F | 10.0.3.2 | arista | arista |
 
 > To access any device, use `ssh <username>@<hostname>` or simply type `<hostname>` to use the SSH alias.
 
 ## Last Updated
 
-!!! Info "Last reviewed: 13/01/2025"
+!!! Info "Last reviewed: 20/04/2026"
 
     Demos and labs reviewed over 6 month age may be outdated.
 
@@ -80,14 +82,11 @@ This lab has following devices:
 make build
 # 2. create CVP change control (1)
 make deploy_cvp
-# 3. assign tags for CVP topology view (2)
-make tags
-# 4. validate the deployment with ANTA preview
+# 3. validate the deployment with ANTA
 make test
 ```
 
 1. !!! Tip "Review and execute the change control on CVP when all tasks will be created. If you don't have CVaaS available and prefer to deploy the configuration via eAPI, you can use `make deploy` shortcut instead."
-2. !!! Bug "Currently there is a bug with disabling LLDP on Ma0, which prevents topology view from functioning correctly."
 
 Connect to a host (h01 or h02) and execute `test` alias to confirm connectivity.  
 Execute following commands to verify EVPN control plane:
