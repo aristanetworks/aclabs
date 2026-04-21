@@ -1,19 +1,20 @@
 ---
 mgmt_gateway: 10.0.0.1
-mgmt_interface: Management0
-
-## disabled due to a bug
-## try if you need a challenge =)
-# eos_cli: |
-#   interface Management0
-#       no lldp receive
-#       no lldp transmit
+mgmt_interface: Management1
 
 dns_settings:
   domain: avd.lab
   servers:
     - ip_address: 8.8.8.8
       vrf: MGMT
+
+management_eapi:
+  enabled: true
+  enable_http: false
+  enable_https: true
+  vrfs:
+    - name: MGMT
+      enabled: true
 
 # NTP servers
 ntp_settings:
@@ -47,7 +48,6 @@ ansible_httpapi_port: 443
 ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
 ansible_python_interpreter: $(which python3)
-avd_data_validation_mode: error
 
 cv_settings:
   cvaas:

@@ -11,6 +11,8 @@ topology:
         ceos:
             enforce-startup-config: true
             image: arista/ceos:latest
+            binds:
+            - interface_mapping.json:/mnt/flash/EosIntfMapping.json:ro
     defaults:
         kind: ceos
         extras:

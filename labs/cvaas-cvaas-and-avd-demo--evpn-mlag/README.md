@@ -11,14 +11,15 @@
 
 This lab is tested for:  
 
+  AVD version: 6.1.0  
   cEOS-lab version: 4.34.2F  
-  Containerlab Version: 0.71.1  
+  Containerlab Version: 0.74.3  
   Codespace Container Size  
     CPUs: 16  
     memory: 64 GB  
     storage: 64 GB  
 
-Last reviewed: 21/11/2025
+Last reviewed: 20/04/2026
 
 > Lab Credentials  
 &nbsp;&nbsp;&nbsp;&nbsp;Username: arista  
