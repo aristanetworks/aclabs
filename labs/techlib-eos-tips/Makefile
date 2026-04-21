@@ -18,23 +18,3 @@ inspect: ## Inspect the lab
 	@echo ""
 	@echo "You can check the lab status, hostnames and management addresses above."
 	@echo "To connect to a lab device use \`ssh arista@<hostname>\` and password \`arista\`."
-
-.PHONY: build
-build: ## Build Configs
-	ansible-playbook avd/playbooks/build.yml -i avd/inventory.yml -e 'target_hosts=FABRIC_A' && ansible-playbook avd/playbooks/build.yml -i avd/inventory.yml -e 'target_hosts=FABRIC_B'
-
-.PHONY: deploy
-deploy: ## Deploy Configs via eAPI
-	ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml -e 'target_hosts=FABRIC_A' && ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml -e 'target_hosts=FABRIC_B'
-
-.PHONY: validate
-validate: ## Validate Fabric
-	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml
-
-.PHONY: diff
-diff: ## Show the diff between running config and designed config
-	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook --diff --check playbooks/avd_deploy.yml
-
-.PHONY: test
-test: ## validate the network state
-	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_validate.yml
