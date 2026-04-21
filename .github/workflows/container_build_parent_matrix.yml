@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
-        from_variant: ["python3.11-avd-v5.7.3", "python3.12-avd-v5.7.3"]
+        from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.1.0"]
         clab_version: ["0.74.3"]
         user_id: ["1000", "1009"]
         include:
@@ -99,6 +99,6 @@ jobs:
       # 2.6.5
       # - ContainerLab 0.74.3
       # - code-server v4.115.0
-      # - 2.6.6
-      # - Added `"task.allowAutomaticTasks": "on" to `lab-base/.devcontainer/settings.json`
+      # 2.6.6
+      # - Add AVD 6.1.0 lab-base variant
       container_revision: "2.6.6"
