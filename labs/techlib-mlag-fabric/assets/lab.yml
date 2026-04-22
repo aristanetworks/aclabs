@@ -1,0 +1,53 @@
+# Canonical metadata for this lab. Consumed by:
+#   * assets/init_lab.py              — boot TUI + LAB-READY.md generation
+#   * assets/docs_generate.py         — README.md regeneration
+#   * PacketAnglers/lab-dashboard ext — LAB-READY.md rendering
+#
+# Schema is nested by concern (display / credentials / boot / dashboard).
+# Everything is optional — sensible defaults apply when absent.
+
+# ── Lab identity ─────────────────────────────────────────────────────────
+display:
+  name: "Arista MLAG Fabric with VXLAN Flood and Learn"
+  subtitle: "Tech Library Deployment Guide"
+  # Optional banner rendered as a GitHub alert at the top of the README.
+  # Type must be one of: note, tip, important, warning, caution.
+  # Omit the `banner:` field entirely for no banner (e.g., GA labs).
+  # banner:
+  #   type: warning
+  #   message: "This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated."
+  # Optional external documentation link. Rendered as the first Quick Action button.
+  documentation_url: "https://tech-library.arista.com/data_center/mlag-fabric/deployment_guide/"
+  # Software versions this lab was validated against. Rendered as a badge row
+  # in the dashboard header.
+  validated_with:
+    cEOS: "4.35.2F"
+    AVD: "6.1.0"
+    Containerlab: "0.74.3"
+  # Recommended host resources. Rendered as a badge row in the dashboard header.
+  resources:
+    CPUs: 16
+    Memory: "64 GB"
+    Storage: "64 GB"
+
+# ── Credentials surfaced in the dashboard + boot TUI ─────────────────────
+credentials:
+  username: admin
+  password: admin
+
+# ── Boot-time behavior ───────────────────────────────────────────────────
+boot:
+  per_node_timeout: 420
+  probe_port: 22
+  preflight_notes:
+    - "First boot: cEOS + startup-config typically takes 5 minutes for a fabric this size"
+  # skip_nodes: []
+  # roles:
+  #   SomeNode: BorderLeaf
+
+# ── Dashboard content ────────────────────────────────────────────────────
+dashboard:
+  auto_open: true
+  tips:
+    - "Run `pingcheck.sh` on any Linux host to validate reachability across the fabric."
+    - "Refer to `README.md` for lab operations (build / deploy / validate)."
