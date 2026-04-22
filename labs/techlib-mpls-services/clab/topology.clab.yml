@@ -15,6 +15,7 @@ topology:
 
   kinds:
     arista_ceos:
+      enforce-startup-config: true
       image: arista/ceos:latest
       env:
         CLAB_MGMT_VRF: MGMT

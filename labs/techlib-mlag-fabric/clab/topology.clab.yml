@@ -14,10 +14,6 @@ mgmt:
 
 topology:
 
-  defaults:
-    env:
-      INTFTYPE: et
-
   kinds:
     arista_ceos:
       enforce-startup-config: true
@@ -27,8 +23,6 @@ topology:
         INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
-      binds:
-        - /techlib-mlag-fabric:/workspace:ro
 
   nodes:
 

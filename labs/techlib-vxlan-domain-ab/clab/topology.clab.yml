@@ -18,12 +18,10 @@ topology:
       enforce-startup-config: true
       image: arista/ceos:latest
       env:
-        INTFTYPE: et
         CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
-      # binds:
-      #   - /techlib-vxlan-domain-a:/workspace:ro
 
   nodes:
 

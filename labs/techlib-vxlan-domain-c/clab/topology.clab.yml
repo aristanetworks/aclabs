@@ -13,17 +13,15 @@ mgmt:
 
 topology:
 
-  defaults:
-    env:
-      INTFTYPE: et
-
   kinds:
-    ceos:
+    arista_ceos:
+      enforce-startup-config: true
       image: arista/ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
-      binds:
-        - /techlib-vxlan-domain-c:/workspace:ro
 
   nodes:
     ###############################################################
@@ -44,7 +42,7 @@ topology:
     #########################
 
     C-SPINE1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.101
       binds:
         - sn/c-spine1.txt:/mnt/flash/ceos-config:ro
@@ -58,7 +56,7 @@ topology:
         graph-groupLabelPos: bottom-center
 
     C-SPINE2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.102
       binds:
         - sn/c-spine2.txt:/mnt/flash/ceos-config:ro
@@ -76,7 +74,7 @@ topology:
     #########################
 
     C-LEAF1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.103
       binds:
         - sn/c-leaf1.txt:/mnt/flash/ceos-config:ro
@@ -90,7 +88,7 @@ topology:
         graph-groupLabelPos: bottom-center
 
     C-LEAF2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.104
       binds:
         - sn/c-leaf2.txt:/mnt/flash/ceos-config:ro
@@ -104,7 +102,7 @@ topology:
         graph-groupLabelPos: bottom-center
 
     C-LEAF3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.105
       binds:
         - sn/c-leaf3.txt:/mnt/flash/ceos-config:ro
@@ -118,7 +116,7 @@ topology:
         graph-groupLabelPos: bottom-center
 
     C-LEAF4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.106
       binds:
         - sn/c-leaf4.txt:/mnt/flash/ceos-config:ro
@@ -132,7 +130,7 @@ topology:
         graph-groupLabelPos: bottom-center
 
     C-LEAF5:
-      kind: ceos
+      kind: arista_ceos
       group: leaf
       mgmt-ipv4: 172.100.100.107
       binds:
@@ -147,7 +145,7 @@ topology:
         graph-groupLabelPos: bottom-center
 
     C-LEAF6:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.108
       binds:
         - sn/c-leaf6.txt:/mnt/flash/ceos-config:ro
@@ -161,7 +159,7 @@ topology:
         graph-groupLabelPos: bottom-center
 
     C-LEAF7:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.109
       binds:
         - sn/c-leaf7.txt:/mnt/flash/ceos-config:ro
@@ -175,7 +173,7 @@ topology:
         graph-groupLabelPos: bottom-center
 
     C-LEAF8:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.110
       binds:
         - sn/c-leaf8.txt:/mnt/flash/ceos-config:ro
@@ -279,7 +277,7 @@ topology:
     #########################
 
     BB1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.111
       binds:
         - sn/bb1.txt:/mnt/flash/ceos-config:ro
@@ -294,7 +292,7 @@ topology:
         graph-groupLabelPos: bottom-center
 
     BB2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.112
       binds:
         - sn/bb2.txt:/mnt/flash/ceos-config:ro

@@ -13,17 +13,15 @@ mgmt:
 
 topology:
 
-  defaults:
-    env:
-      INTFTYPE: et
-
   kinds:
-    ceos:
+    arista_ceos:
+      enforce-startup-config: true
       image: arista/ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
-      binds:
-        - /techlib-vxlan-domain-b:/workspace:ro
 
   nodes:
 
@@ -45,28 +43,28 @@ topology:
     #########################
 
     B-SPINE1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.101
       binds:
         - sn/b-spine1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE1.cfg
 
     B-SPINE2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.102
       binds:
         - sn/b-spine2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE2.cfg
 
     B-SPINE3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.103
       binds:
         - sn/b-spine3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE3.cfg
 
     B-SPINE4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.104
       binds:
         - sn/b-spine4.txt:/mnt/flash/ceos-config:ro
@@ -77,7 +75,7 @@ topology:
     #########################
 
     B-LEAF1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.105
       binds:
         - sn/b-leaf1.txt:/mnt/flash/ceos-config:ro
@@ -85,7 +83,7 @@ topology:
       startup-delay: 30
 
     B-LEAF2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.106
       binds:
         - sn/b-leaf2.txt:/mnt/flash/ceos-config:ro
@@ -93,7 +91,7 @@ topology:
       startup-delay: 30
 
     B-LEAF3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.107
       binds:
         - sn/b-leaf3.txt:/mnt/flash/ceos-config:ro
@@ -101,7 +99,7 @@ topology:
       startup-delay: 30
 
     B-LEAF4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.108
       binds:
         - sn/b-leaf4.txt:/mnt/flash/ceos-config:ro
@@ -109,7 +107,7 @@ topology:
       startup-delay: 30
 
     B-LEAF5:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.109
       binds:
         - sn/b-leaf5.txt:/mnt/flash/ceos-config:ro
@@ -117,7 +115,7 @@ topology:
       startup-delay: 60
 
     B-LEAF6:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.110
       binds:
         - sn/b-leaf6.txt:/mnt/flash/ceos-config:ro
@@ -125,7 +123,7 @@ topology:
       startup-delay: 60
 
     B-LEAF7:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.111
       binds:
         - sn/b-leaf7.txt:/mnt/flash/ceos-config:ro
@@ -133,7 +131,7 @@ topology:
       startup-delay: 60
 
     B-LEAF8:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.112
       binds:
         - sn/b-leaf8.txt:/mnt/flash/ceos-config:ro
@@ -141,7 +139,7 @@ topology:
       startup-delay: 90
 
     B-SW1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.113
       binds:
         - sn/b-sw1.txt:/mnt/flash/ceos-config:ro
@@ -251,7 +249,7 @@ topology:
     #########################
 
     BB1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.114
       binds:
         - sn/bb1.txt:/mnt/flash/ceos-config:ro
@@ -259,7 +257,7 @@ topology:
       startup-delay: 120
 
     BB2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.115
       binds:
         - sn/bb2.txt:/mnt/flash/ceos-config:ro

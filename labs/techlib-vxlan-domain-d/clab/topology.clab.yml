@@ -13,17 +13,15 @@ mgmt:
 
 topology:
 
-  defaults:
-    env:
-      INTFTYPE: et
-
   kinds:
-    ceos:
+    arista_ceos:
+      enforce-startup-config: true
       image: arista/ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
-      binds:
-        - /techlib-vxlan-domain-d:/workspace:ro
 
   nodes:
 ###############################################################
@@ -44,28 +42,28 @@ topology:
 #########################
 
     D-SPINE1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.101
       binds:
         - sn/d-spine1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-SPINE1.cfg
 
     D-SPINE2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.102
       binds:
         - sn/d-spine2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-SPINE2.cfg
 
     D-SPINE3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.103
       binds:
         - sn/d-spine3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-SPINE3.cfg
 
     D-SPINE4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.104
       binds:
         - sn/d-spine4.txt:/mnt/flash/ceos-config:ro
@@ -76,56 +74,56 @@ topology:
 #########################
 
     D-LEAF1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.105
       binds:
         - sn/d-leaf1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-LEAF1.cfg
 
     D-LEAF2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.106
       binds:
         - sn/d-leaf2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-LEAF2.cfg
 
     D-LEAF3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.107
       binds:
         - sn/d-leaf3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-LEAF3.cfg
 
     D-LEAF4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.108
       binds:
         - sn/d-leaf4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-LEAF4.cfg
 
     D-LEAF5:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.109
       binds:
         - sn/d-leaf5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-LEAF5.cfg
 
     D-LEAF6:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.110
       binds:
         - sn/d-leaf6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-LEAF6.cfg
 
     D-LEAF7:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.111
       binds:
         - sn/d-leaf7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-LEAF7.cfg
 
     D-LEAF8:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.112
       binds:
         - sn/d-leaf8.txt:/mnt/flash/ceos-config:ro
@@ -222,7 +220,7 @@ topology:
 #########################
 
     BB1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.113
       binds:
         - sn/bb1.txt:/mnt/flash/ceos-config:ro
@@ -230,7 +228,7 @@ topology:
       group: 'superspine'
 
     BB2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.114
       binds:
         - sn/bb2.txt:/mnt/flash/ceos-config:ro
