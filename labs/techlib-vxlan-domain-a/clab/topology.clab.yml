@@ -304,7 +304,7 @@ topology:
     - endpoints: [ "A-LEAF7:et5", "A-LEAF8:et5" ]
     - endpoints: [ "A-LEAF7:et6", "A-LEAF8:et6" ]
     ########################
-    # DC "A" HostC6        #
+    # Domain A Hosts       #
     ########################
     - endpoints: [ "HostA1:eth1", "A-LEAF1:et7" ]
     - endpoints: [ "HostA1:eth2", "A-LEAF2:et7" ]

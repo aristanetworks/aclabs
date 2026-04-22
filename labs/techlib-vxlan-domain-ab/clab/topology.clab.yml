@@ -261,7 +261,7 @@ topology:
       startup-config: init-configs/__clabNodeName__.cfg
 
     #########################
-    # DC "B" LEAF           #
+    # Domain B Leaf         #
     #########################
 
     B-LEAF1:
@@ -312,6 +312,10 @@ topology:
       startup-config: init-configs/__clabNodeName__.cfg
       startup-delay: 60
 
+#########################
+# Domain B EVPN Gateway #
+#########################
+
     B-LEAF7:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.111
@@ -337,7 +341,7 @@ topology:
       startup-delay: 90
 
     #########################
-    # DC "B" Hosts          #
+    # Domain B Hosts        #
     #########################
 
     # HostB1 is connected to LEAF1 eth7 and LEAF2 eth7
@@ -513,7 +517,7 @@ topology:
     - endpoints: [ "A-LEAF5:et5", "A-LEAF6:et5" ]
     - endpoints: [ "A-LEAF5:et6", "A-LEAF6:et6" ]
     ########################
-    # DC "A" HostC6        #
+    # Domain A Hosts       #
     ########################
     - endpoints: [ "HostA1:eth1", "A-LEAF1:et7" ]
     - endpoints: [ "HostA1:eth2", "A-LEAF2:et7" ]
@@ -575,7 +579,7 @@ topology:
     - endpoints: [ "B-LEAF5:et7", "B-SW1:et1" ]
     - endpoints: [ "B-LEAF6:et7", "B-SW1:et2" ]
     ########################
-    # DC "B" Hosts         #
+    # Domain B Hosts       #
     ########################
     - endpoints: [ "HostB1:eth1", "B-LEAF1:et7" ]
     - endpoints: [ "HostB1:eth2", "B-LEAF2:et7" ]

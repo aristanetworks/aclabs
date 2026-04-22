@@ -39,7 +39,7 @@ topology:
 
 
     #########################
-    # DC "B" SPINE          #
+    # Domain B SPINE        #
     #########################
 
     B-SPINE1:
@@ -71,7 +71,7 @@ topology:
       startup-config: init-configs/B-SPINE4.cfg
 
     #########################
-    # DC "B" LEAF           #
+    # Domain B LEAF         #
     #########################
 
     B-LEAF1:
@@ -328,7 +328,7 @@ topology:
     - endpoints: [ "B-LEAF7:et5", "B-LEAF8:et5" ]
     - endpoints: [ "B-LEAF7:et6", "B-LEAF8:et6" ]
     ########################
-    # DC "B" HostC6         #
+    # Domain B Hosts       #
     ########################
     - endpoints: [ "HostB1:eth1", "B-LEAF1:et7" ]
     - endpoints: [ "HostB1:eth2", "B-LEAF2:et7" ]
