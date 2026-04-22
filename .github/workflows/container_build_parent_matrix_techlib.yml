@@ -1,0 +1,45 @@
+---
+name: build lab-base-techlib images
+
+on:
+  push:
+    branches: ['**']  # branches will be filtered in the jobs
+    paths:
+      - .github/workflows/container_build_child.yml
+      - .github/workflows/container_build_parent_matrix_techlib.yml
+      - containers/lab-base-techlib/**
+  workflow_dispatch:
+    branches: ['**']  # branches will be filtered in the jobs
+
+permissions:
+  packages: write
+
+jobs:
+  build-lab-containers:
+    # fork - build container from any branch for testing
+    # parent repo - build on main branch only
+    if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/container_build_child.yml
+    strategy:
+      matrix:
+        from_image: ["ghcr.io/aristanetworks/avd/universal"]
+        from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.1.0"]
+        clab_version: ["0.74.3"]
+        user_id: ["1009"]
+        include:
+          - user_id: "1009"
+            group_id: "1009"
+    with:
+      container_name: lab-base-techlib
+      from_image: ${{ matrix.from_image }}
+      from_variant: ${{ matrix.from_variant }}
+      clab_version: ${{ matrix.clab_version }}
+      user_id: ${{ matrix.user_id }}
+      group_id: ${{ matrix.group_id }}
+      # 1.0.0:
+      # - Initial release of lab-base-techlib, forked from lab-base rev 2.6.6
+      # - Drops /bin/lab_start_task.py (unused by every techlib lab)
+      # - Adds /bin/init_lab.py and /bin/docs_generate.py as bundled scripts
+      # - Bakes packetanglers.lab-dashboard extension (floating @latest) for
+      #   auto-launch of init_lab.py and LAB-READY.md dashboard rendering
+      container_revision: "1.0.0"
