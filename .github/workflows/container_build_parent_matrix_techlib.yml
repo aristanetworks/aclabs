@@ -70,4 +70,16 @@ jobs:
       #   it — the init_lab terminal takes focus immediately, and the
       #   LAB-READY.md dashboard auto-opens when the lab is ready. No empty
       #   editor or Welcome tab cluttering the view at any stage.
-      container_revision: "1.0.3"
+      # 1.0.4:
+      # - init_lab.py: add an "SSH to Nodes" section to LAB-READY.md, rendered
+      #   as a pill grid grouped by role (Spines, Leaves, Borders, etc.).
+      #   Pills target the new labDashboard.sshToNode command (lab-dashboard
+      #   0.14.0+), which opens or focuses a per-node terminal and runs
+      #   `ssh <user>@<node>` immediately. One click → logged in.
+      # - Pill clicks reuse existing terminals when re-clicked, so users can
+      #   navigate between active SSH sessions via the dashboard or the
+      #   terminal dropdown without spawning duplicates.
+      # - Picks up packetanglers.lab-dashboard 0.14.0 automatically (floating
+      #   @latest) which registers the sshToNode command and ships the
+      #   matching pill-grid CSS.
+      container_revision: "1.0.4"

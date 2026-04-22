@@ -876,6 +876,18 @@ def _build_open_terminal_uri() -> str:
     return _build_command_uri("labDashboard.openTerminal")
 
 
+def _build_ssh_to_node_uri(node: str, user: str) -> str:
+    """
+    SSH to a lab node via the lab-dashboard extension's sshToNode command.
+    The extension opens (or focuses an existing) terminal named after the
+    node, types `ssh <user>@<node>`, and runs it immediately.
+
+    Requires lab-dashboard >= 0.14.0. Earlier versions don't register
+    this command; the link will silently no-op for those users.
+    """
+    return _build_command_uri("labDashboard.sshToNode", {"node": node, "user": user})
+
+
 def _render_badge_row(label: str, items: dict) -> list[str]:
     """
     Render a labeled row of pill-shaped key/value badges.
@@ -984,6 +996,53 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
     lines.append("")
     lines.append("Open a shell terminal in the bottom panel for running commands like `make build`, `make deploy`, etc.")
     lines.append("")
+
+    # ── SSH to Nodes ──
+    # One pill per node, grouped by role. Clicks fire labDashboard.sshToNode
+    # which opens (or focuses an existing) terminal named after the node and
+    # runs `ssh <user>@<node>`. The node name is the SSH target — it matches
+    # a Host alias written to ~/.ssh/config by populate_ssh_config(), so ssh
+    # resolves it to the correct mgmt IP without any further lookup.
+    #
+    # Nodes without a mgmt_ip are skipped — they don't have a usable SSH
+    # target. Renders nothing if no node in the lab has a mgmt_ip.
+    sshable = [n for n in cfg.nodes if n.mgmt_ip]
+    if sshable:
+        lines.append("---")
+        lines.append("")
+        lines.append("## 🔐 SSH to Nodes")
+        lines.append("")
+        lines.append(
+            f"One click → logged in as `{html.escape(cfg.username)}`. "
+            f"Each node opens its own terminal tab; clicking the same node "
+            f"again brings the existing tab to focus."
+        )
+        lines.append("")
+
+        # Group by role using the same ordering as Node Inventory.
+        by_role: dict[str, list[Node]] = {}
+        for n in sshable:
+            by_role.setdefault(n.role, []).append(n)
+        ordered_roles = [r for r in ROLE_ORDER if r in by_role]
+        ordered_roles += sorted(r for r in by_role if r not in ROLE_ORDER)
+
+        for role in ordered_roles:
+            lines.append('<div class="lab-ssh-group">')
+            lines.append(
+                f'<span class="lab-ssh-group-label">{html.escape(role)}</span>'
+            )
+            lines.append('<div class="lab-ssh-pills">')
+            for n in sorted(by_role[role], key=lambda x: x.name):
+                uri = _build_ssh_to_node_uri(n.name, cfg.username)
+                lines.append(
+                    f'<a class="lab-ssh-pill" href="{uri}" '
+                    f'title="ssh {html.escape(cfg.username)}@{html.escape(n.name)} '
+                    f'({html.escape(n.mgmt_ip or "")})">'
+                    f'{html.escape(n.name)}</a>'
+                )
+            lines.append("</div>")
+            lines.append("</div>")
+        lines.append("")
 
     # ── Node inventory (collapsible) ──
     # The init_lab TUI shows this same data live during boot, so it's not
