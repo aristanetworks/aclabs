@@ -3,7 +3,7 @@
 # Arista EVPN Deployment Guide Topology - Domain B
 # --------------------------------------------------------------
 
-name: arista-evpn-dg
+name: evpn-vxlan-domain-b
 
 prefix: ""
 
@@ -13,17 +13,15 @@ mgmt:
 
 topology:
 
-  defaults:
-    env:
-      INTFTYPE: et
-
   kinds:
-    ceos:
+    arista_ceos:
+      enforce-startup-config: true
       image: arista/ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
-      binds:
-        - /techlib-vxlan-domain-b:/workspace:ro
 
   nodes:
 
@@ -41,43 +39,43 @@ topology:
 
 
     #########################
-    # DC "B" SPINE          #
+    # Domain B SPINE        #
     #########################
 
     B-SPINE1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.101
       binds:
         - sn/b-spine1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE1.cfg
 
     B-SPINE2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.102
       binds:
         - sn/b-spine2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE2.cfg
 
     B-SPINE3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.103
       binds:
         - sn/b-spine3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE3.cfg
 
     B-SPINE4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.104
       binds:
         - sn/b-spine4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-SPINE4.cfg
 
     #########################
-    # DC "B" LEAF           #
+    # Domain B LEAF         #
     #########################
 
     B-LEAF1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.105
       binds:
         - sn/b-leaf1.txt:/mnt/flash/ceos-config:ro
@@ -85,7 +83,7 @@ topology:
       startup-delay: 30
 
     B-LEAF2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.106
       binds:
         - sn/b-leaf2.txt:/mnt/flash/ceos-config:ro
@@ -93,7 +91,7 @@ topology:
       startup-delay: 30
 
     B-LEAF3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.107
       binds:
         - sn/b-leaf3.txt:/mnt/flash/ceos-config:ro
@@ -101,7 +99,7 @@ topology:
       startup-delay: 30
 
     B-LEAF4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.108
       binds:
         - sn/b-leaf4.txt:/mnt/flash/ceos-config:ro
@@ -109,7 +107,7 @@ topology:
       startup-delay: 30
 
     B-LEAF5:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.109
       binds:
         - sn/b-leaf5.txt:/mnt/flash/ceos-config:ro
@@ -117,15 +115,19 @@ topology:
       startup-delay: 60
 
     B-LEAF6:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.110
       binds:
         - sn/b-leaf6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF6.cfg
       startup-delay: 60
 
+    #########################
+    # Domain B EVPN Gateway #
+    #########################
+
     B-LEAF7:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.111
       binds:
         - sn/b-leaf7.txt:/mnt/flash/ceos-config:ro
@@ -133,15 +135,19 @@ topology:
       startup-delay: 60
 
     B-LEAF8:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.112
       binds:
         - sn/b-leaf8.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/B-LEAF8.cfg
       startup-delay: 90
 
+    #########################
+    # Domain B L2 Switch    #
+    #########################
+
     B-SW1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.113
       binds:
         - sn/b-sw1.txt:/mnt/flash/ceos-config:ro
@@ -149,13 +155,15 @@ topology:
       startup-delay: 90
 
     #########################
-    # DC "B" Hosts          #
+    # Domain B Hosts          #
     #########################
 
     # HostB1 is connected to LEAF1 eth7 and LEAF2 eth7
     HostB1:
       kind: linux
       mgmt-ipv4: 172.100.100.201
+      binds:
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.20.20.101/24
@@ -168,6 +176,8 @@ topology:
     HostB2:
       kind: linux
       mgmt-ipv4: 172.100.100.202
+      binds:
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.40.40.101/24
@@ -180,6 +190,8 @@ topology:
     HostB3:
       kind: linux
       mgmt-ipv4: 172.100.100.203
+      binds:
+        - ../assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.60.60.101/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -191,6 +203,8 @@ topology:
     HostB4:
       kind: linux
       mgmt-ipv4: 172.100.100.204
+      binds:
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.10.10.103/24
@@ -203,6 +217,8 @@ topology:
     HostB5:
       kind: linux
       mgmt-ipv4: 172.100.100.205
+      binds:
+        - ../assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.70.70.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -214,6 +230,8 @@ topology:
     HostB6:
       kind: linux
       mgmt-ipv4: 172.100.100.206
+      binds:
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.40.40.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -225,6 +243,8 @@ topology:
     HostB7:
       kind: linux
       mgmt-ipv4: 172.100.100.207
+      binds:
+        - ../assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.80.80.101/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -237,7 +257,7 @@ topology:
     #########################
 
     BB1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.114
       binds:
         - sn/bb1.txt:/mnt/flash/ceos-config:ro
@@ -245,7 +265,7 @@ topology:
       startup-delay: 120
 
     BB2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.115
       binds:
         - sn/bb2.txt:/mnt/flash/ceos-config:ro
@@ -308,7 +328,7 @@ topology:
     - endpoints: [ "B-LEAF7:et5", "B-LEAF8:et5" ]
     - endpoints: [ "B-LEAF7:et6", "B-LEAF8:et6" ]
     ########################
-    # DC "B" HostC6         #
+    # Domain B Hosts       #
     ########################
     - endpoints: [ "HostB1:eth1", "B-LEAF1:et7" ]
     - endpoints: [ "HostB1:eth2", "B-LEAF2:et7" ]

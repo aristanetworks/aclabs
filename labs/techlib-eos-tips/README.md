@@ -1,47 +1,21 @@
-# Arista EOS Tips for Network Operators Lab
+<!-- lab-dashboard:metadata-start -->
 
-> [!WARNING]
-> This lab is in preview. It's fully functional, but breaking changes can happen.
-> We are working hard on building the best lab collection and your feedback is always  appreciated.
-
-Welcome! This pre-configured lab is a sandbox companion to the [EOS Tips for Network Operators Guide](https://tech-library.arista.com/eos/eos_ops/) found in [Arista's Tech Library](https://tech-library.arista.com/).
-
-This lab has been validated with:
-
-- cEOS-lab: **4.35.2F**
-- Containerlab: **0.74.0**
-- Resources:
-  - CPUs: **8**
-  - Memory: **32 GB**
-  - Storage: **64 GB**
-
-> [!IMPORTANT]
-> The average deployment time for this lab is five minutes.
->
-> Issue the `make inspect` command at the terminal to check on the deployment status of the lab.
->
-> Please wait until all nodes are in a `running` state prior to interacting with the lab.
+<!-- lab-dashboard:metadata-end -->
 
 ## Interacting with the Lab
 
-### Credentials
-
-#### Username
-
-```bash
-admin
-```
-
-#### Password
-
-```bash
-admin
-```
-
 > [!TIP]
-> The [ContainerLab VS Code Extension](https://containerlab.dev/manual/vsc-extension/) is pre-installed in the lab. For the best experience, it's recommended to use the [Topology Viewer](https://containerlab.dev/manual/vsc-extension/#topoviewer) to interact with the lab.
+> Quickly validate reachability between hosts in the lab by opening an SSH session to any Linux end host in the topology and running the following the command in the terminal window:
 >
-> Topology Viewer can be opened by selecting the ContainerLab extension icon and then the lab.
+> ```bash
+>pingcheck.sh
+>```
+
+### Topology Viewer
+
+The [ContainerLab VS Code Extension](https://containerlab.dev/manual/vsc-extension/) is pre-installed in the lab. For the best experience, it's recommended to use the [Topology Viewer](https://containerlab.dev/manual/vsc-extension/#topoviewer) to interact with the lab.
+
+Topology Viewer can be opened by selecting the ContainerLab extension icon and then the lab.
 
 <figure>
     <img src="assets/images/topo-extension.png"
@@ -77,6 +51,27 @@ Additional information related to navigating the Topology Viewer UI can be found
          width="350">
 </figure>
 
+### AVD
+
+The [AVD](https://avd.arista.com) data models used to render the configuration in the lab are included within the `avd` directory. The [AVD ansible galaxy collection](https://galaxy.ansible.com/ui/repo/published/arista/avd/) is pre-installed in the lab environment, and can be used to initiate a build, deploy, or validation of the topology.
+
+#### Build
+
+```bash
+make build
+```
+#### Deploy
+
+```bash
+make deploy
+```
+
+#### Validate
+
+```bash
+make validate
+```
+
 Happy Labbing! 🥳🧪
 
-Last reviewed: November 19th, 2025
+Last reviewed: April 14th, 2026

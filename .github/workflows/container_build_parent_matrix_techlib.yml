@@ -1,0 +1,120 @@
+---
+name: build lab-base-techlib images
+
+on:
+  push:
+    branches: ['**']  # branches will be filtered in the jobs
+    paths:
+      - .github/workflows/container_build_child.yml
+      - .github/workflows/container_build_parent_matrix_techlib.yml
+      - containers/lab-base-techlib/**
+  workflow_dispatch:
+    branches: ['**']  # branches will be filtered in the jobs
+
+permissions:
+  packages: write
+
+jobs:
+  build-lab-containers:
+    # fork - build container from any branch for testing
+    # parent repo - build on main branch only
+    if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/container_build_child.yml
+    strategy:
+      matrix:
+        from_image: ["ghcr.io/aristanetworks/avd/universal"]
+        from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.1.0"]
+        clab_version: ["0.74.3"]
+        user_id: ["1000", "1009"]
+        include:
+          - user_id: "1000"
+            group_id: "1000"
+          - user_id: "1009"
+            group_id: "1009"
+    with:
+      container_name: lab-base-techlib
+      from_image: ${{ matrix.from_image }}
+      from_variant: ${{ matrix.from_variant }}
+      clab_version: ${{ matrix.clab_version }}
+      user_id: ${{ matrix.user_id }}
+      group_id: ${{ matrix.group_id }}
+      # 1.0.0:
+      # - Initial release of lab-base-techlib, forked from lab-base rev 2.6.6
+      # - Drops /bin/lab_start_task.py (unused by every techlib lab)
+      # - Adds /bin/init_lab.py and /bin/docs_generate.py as bundled scripts
+      # - Bakes packetanglers.lab-dashboard extension (floating @latest) for
+      #   auto-launch of init_lab.py and LAB-READY.md dashboard rendering
+      # 1.0.1:
+      # - Add UID 1000 variant to the build matrix (alongside existing 1009).
+      #   The acLabs launcher VM runs labs by reading the `image:` value from
+      #   the lab's devcontainer.json and appending `-uid1009` at docker-run
+      #   time — so the lab's devcontainer.json must reference the no-suffix
+      #   (UID 1000) tag. Publishing both variants matches the existing
+      #   lab-base convention and keeps Codespaces workable.
+      # - No Dockerfile / script / setting changes in this revision.
+      # 1.0.2:
+      # - settings.json: drop workbench.startupEditor=readme. That setting
+      #   was forcing README.md to auto-open on boot, which created a focus
+      #   race with the init_lab terminal tab that the lab-dashboard
+      #   extension had to work around with a 5-second wait before launching.
+      #   Removing it eliminates the race entirely.
+      # - Picks up packetanglers.lab-dashboard 0.13.0 automatically (floating
+      #   @latest), which detects the absence of startupEditor=readme and
+      #   skips the 5-second wait. Net result: init_lab TUI appears instantly
+      #   after code-server finishes loading. No more dead air.
+      # 1.0.3:
+      # - settings.json: set workbench.startupEditor=none. Without an explicit
+      #   value, code-server falls back to the VS Code default of
+      #   "welcomePage", which caused the Welcome tab to open on every boot
+      #   after 1.0.2 removed the "readme" override. Setting "none" suppresses
+      #   it — the init_lab terminal takes focus immediately, and the
+      #   LAB-READY.md dashboard auto-opens when the lab is ready. No empty
+      #   editor or Welcome tab cluttering the view at any stage.
+      # 1.0.4:
+      # - init_lab.py: add an "SSH to Nodes" section to LAB-READY.md, rendered
+      #   as a pill grid grouped by role (Spines, Leaves, Borders, etc.).
+      #   Pills target the new labDashboard.sshToNode command (lab-dashboard
+      #   0.14.0+), which opens or focuses a per-node terminal and runs
+      #   `ssh <user>@<node>` immediately. One click → logged in.
+      # - Pill clicks reuse existing terminals when re-clicked, so users can
+      #   navigate between active SSH sessions via the dashboard or the
+      #   terminal dropdown without spawning duplicates.
+      # - Picks up packetanglers.lab-dashboard 0.14.0 automatically (floating
+      #   @latest) which registers the sshToNode command and ships the
+      #   matching pill-grid CSS.
+      # 1.0.5:
+      # - Update lab-dashboard extension to 0.14.1
+      # 1.0.6:
+      # - Pin versions for extensions to minimize risk of breaking changes in extensions
+      # 1.0.7:
+      # - Bump lab-dashboard vsix URL to 0.14.2 to pick up the Quick Action
+      #   button polish — bigger padding (0.6em 1.2em), explicit 1em font
+      #   size, shape parity with SSH pills (same lift + shadow family).
+      #   No Dockerfile logic / recipe changes; just the pinned vsix version.
+      # 1.0.8:
+      # - init_lab.py: expand role inference beyond SPINE / LEAF / BORDER /
+      #   HOST / CVP. Adds regex patterns for Switch (SW / SWITCH as the
+      #   trailing token), Firewall (FW / FIREWALL), Core, Aggregation
+      #   (AGG / AGGREGATION), and Distribution (DIST / DISTRIBUTION).
+      #   ROLE_ORDER expanded correspondingly so the dashboard groups
+      #   render in a sensible hierarchy.
+      # - Nodes that don't match any regex fall through to kind-based
+      #   inference (arista_ceos → Router, linux → Linux, else → Other),
+      #   preserving existing behavior for unaffected labs.
+      # - For anything the regex can't resolve correctly, lab authors
+      #   already have role_overrides in lab.yml as the explicit
+      #   escape hatch — no change needed to that interface.
+      # 1.0.9:
+      # - settings.json: suppress the Red Hat YAML extension telemetry
+      #   consent popup that fires on every fresh lab launch (the YAML
+      #   extension is a transitive dependency of the ContainerLab
+      #   extension, pulled in automatically).
+      #   - redhat.telemetry.enabled=false — explicitly declines telemetry,
+      #     which bypasses the prompt entirely (the prompt only fires
+      #     when the setting is unset).
+      #   - telemetry.telemetryLevel=off — kills VS Code's own telemetry
+      #     for good measure, since lab environments are ephemeral and
+      #     the signal would be noisy anyway.
+      # - Net UX win: fresh lab launches are now popup-free. Respectful
+      #   default for a learning environment.
+      container_revision: "1.0.9"

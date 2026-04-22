@@ -3,7 +3,7 @@
 # Arista EVPN Deployment Guide Topology - Domain A
 # --------------------------------------------------------------
 
-name: arista-evpn-dg
+name: evpn-vxlan-domain-a
 
 prefix: ""
 
@@ -13,17 +13,15 @@ mgmt:
 
 topology:
 
-  defaults:
-    env:
-      INTFTYPE: et
-
   kinds:
-    ceos:
+    arista_ceos:
+      enforce-startup-config: true
       image: arista/ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
-      binds:
-        - /techlib-vxlan-domain-a:/workspace:ro
 
   nodes:
 
@@ -45,28 +43,28 @@ topology:
     #########################
 
     A-SPINE1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.101
       binds:
         - sn/a-spine1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE1.cfg
 
     A-SPINE2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.102
       binds:
         - sn/a-spine2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE2.cfg
 
     A-SPINE3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.103
       binds:
         - sn/a-spine3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-SPINE3.cfg
 
     A-SPINE4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.104
       binds:
         - sn/a-spine4.txt:/mnt/flash/ceos-config:ro
@@ -77,56 +75,60 @@ topology:
     #########################
 
     A-LEAF1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.105
       binds:
         - sn/a-leaf1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF1.cfg
 
     A-LEAF2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.106
       binds:
         - sn/a-leaf2.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF2.cfg
 
     A-LEAF3:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.107
       binds:
         - sn/a-leaf3.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF3.cfg
 
     A-LEAF4:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.108
       binds:
         - sn/a-leaf4.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF4.cfg
 
     A-LEAF5:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.109
       binds:
         - sn/a-leaf5.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF5.cfg
 
     A-LEAF6:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.110
       binds:
         - sn/a-leaf6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF6.cfg
 
+    #########################
+    # Domain A EVPN Gateway #
+    #########################
+
     A-LEAF7:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.111
       binds:
         - sn/a-leaf7.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF7.cfg
 
     A-LEAF8:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.112
       binds:
         - sn/a-leaf8.txt:/mnt/flash/ceos-config:ro
@@ -140,6 +142,8 @@ topology:
     HostA1:
       kind: linux
       mgmt-ipv4: 172.100.100.201
+      binds:
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.10.10.101/24
@@ -152,6 +156,8 @@ topology:
     HostA2:
       kind: linux
       mgmt-ipv4: 172.100.100.202
+      binds:
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.30.30.101/24
@@ -164,6 +170,8 @@ topology:
     HostA3:
       kind: linux
       mgmt-ipv4: 172.100.100.203
+      binds:
+        - ../assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.50.50.101/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -175,6 +183,8 @@ topology:
     HostA4:
       kind: linux
       mgmt-ipv4: 172.100.100.204
+      binds:
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.10.10.102/24
@@ -187,6 +197,8 @@ topology:
     HostA5:
       kind: linux
       mgmt-ipv4: 172.100.100.205
+      binds:
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.30.30.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -198,6 +210,8 @@ topology:
     HostA6:
       kind: linux
       mgmt-ipv4: 172.100.100.206
+      binds:
+        - ../assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.70.70.101/24
@@ -211,14 +225,14 @@ topology:
     #########################
 
     BB1:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.113
       binds:
         - sn/bb1.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/BB1.cfg
 
     BB2:
-      kind: ceos
+      kind: arista_ceos
       mgmt-ipv4: 172.100.100.114
       binds:
         - sn/bb2.txt:/mnt/flash/ceos-config:ro
@@ -290,7 +304,7 @@ topology:
     - endpoints: [ "A-LEAF7:et5", "A-LEAF8:et5" ]
     - endpoints: [ "A-LEAF7:et6", "A-LEAF8:et6" ]
     ########################
-    # DC "A" HostC6        #
+    # Domain A Hosts       #
     ########################
     - endpoints: [ "HostA1:eth1", "A-LEAF1:et7" ]
     - endpoints: [ "HostA1:eth2", "A-LEAF2:et7" ]
