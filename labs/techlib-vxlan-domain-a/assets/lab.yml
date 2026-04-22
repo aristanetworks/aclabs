@@ -51,3 +51,8 @@ dashboard:
   tips:
     - "Run `pingcheck.sh` on any Linux host to validate reachability across the fabric."
     - "Refer to `README.md` for lab operations (build / deploy / validate)."
+
+# ── Role Overrides ───────────────────────────────────────────────────────
+role_overrides:
+  A-LEAF7: EVPN Gateway
+  A-LEAF8: EVPN Gateway
