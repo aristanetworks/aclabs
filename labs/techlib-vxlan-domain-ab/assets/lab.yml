@@ -41,9 +41,13 @@ boot:
   probe_port: 22
   preflight_notes:
     - "First boot: cEOS + startup-config typically takes 5 minutes for a fabric this size"
+  roles:
+    A-LEAF7: EVPN Gateway
+    A-LEAF8: EVPN Gateway
+    B-LEAF7: EVPN Gateway
+    B-LEAF8: EVPN Gateway
+    B-SW1: L2 Switch
   # skip_nodes: []
-  # roles:
-  #   SomeNode: BorderLeaf
 
 # ── Dashboard content ────────────────────────────────────────────────────
 dashboard:
@@ -51,11 +55,3 @@ dashboard:
   tips:
     - "Run `pingcheck.sh` on any Linux host to validate reachability across the fabric."
     - "Refer to `README.md` for lab operations (build / deploy / validate)."
-
-# ── Role Overrides ───────────────────────────────────────────────────────
-role_overrides:
-  A-LEAF7: EVPN Gateway
-  A-LEAF8: EVPN Gateway
-  B-LEAF7: EVPN Gateway
-  B-LEAF8: EVPN Gateway
-  B-SW1: L2 Switch
