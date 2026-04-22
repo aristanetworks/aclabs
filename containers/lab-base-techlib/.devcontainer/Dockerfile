@@ -85,11 +85,16 @@ RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
 # headline addition for this variant — it owns auto-launching init_lab.py
 # and rendering LAB-READY.md as an interactive dashboard. Installed from
 # Open VSX (code-server's default marketplace), floating on latest version.
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.115.0" \
-    && code-server --install-extension srl-labs.vscode-containerlab --force \
-    && code-server --install-extension tuxtina.json2yaml --force \
-    && code-server --install-extension yzhang.markdown-all-in-one --force \
-    && code-server --install-extension packetanglers.lab-dashboard@0.14.1 --force
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.115.0"
+
+RUN code-server --install-extension srl-labs.vscode-containerlab@0.24.2 --force \
+ && code-server --install-extension tuxtina.json2yaml@0.2.0 --force \
+ && code-server --install-extension yzhang.markdown-all-in-one@3.6.2 --force
+
+RUN curl -fsSL -o /tmp/lab-dashboard.vsix \
+      https://open-vsx.org/api/packetanglers/lab-dashboard/0.14.1/file/packetanglers.lab-dashboard-0.14.1.vsix \
+ && code-server --install-extension /tmp/lab-dashboard.vsix \
+ && rm /tmp/lab-dashboard.vsix
 
 USER root
 # User-level code-server settings — applies to every workspace opened
