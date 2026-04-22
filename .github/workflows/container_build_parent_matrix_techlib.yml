@@ -62,4 +62,12 @@ jobs:
       #   @latest), which detects the absence of startupEditor=readme and
       #   skips the 5-second wait. Net result: init_lab TUI appears instantly
       #   after code-server finishes loading. No more dead air.
-      container_revision: "1.0.2"
+      # 1.0.3:
+      # - settings.json: set workbench.startupEditor=none. Without an explicit
+      #   value, code-server falls back to the VS Code default of
+      #   "welcomePage", which caused the Welcome tab to open on every boot
+      #   after 1.0.2 removed the "readme" override. Setting "none" suppresses
+      #   it — the init_lab terminal takes focus immediately, and the
+      #   LAB-READY.md dashboard auto-opens when the lab is ready. No empty
+      #   editor or Welcome tab cluttering the view at any stage.
+      container_revision: "1.0.3"
