@@ -87,7 +87,7 @@
             "disableTextWrap": false,
             "editorMode": "code",
             "exemplar": false,
-            "expr": "gnmic_bgp_neighbors_peer_as{job=\"gnmic\", neighbor_neighbor_address=~\"192.168.255.*\", source=~\"$Device\"}",
+            "expr": "label_join(gnmic_bgp_neighbors_peer_as{job=\"gnmic\", neighbor_neighbor_address=~\"192.168.255.*\", source=~\"$Device\"}, \"join_key\", \"-\", \"source\", \"neighbor_neighbor_address\")",
             "format": "table",
             "fullMetaSearch": false,
             "includeNullMetadata": true,
@@ -105,7 +105,7 @@
             "disableTextWrap": false,
             "editorMode": "code",
             "exemplar": false,
-            "expr": "gnmic_bgp_neighbors_session_state{job=\"gnmic\", neighbor_neighbor_address=~\"192.168.255.*\", source=~\"$Device\"}",
+            "expr": "label_join(gnmic_bgp_neighbors_session_state{job=\"gnmic\", neighbor_neighbor_address=~\"192.168.255.*\", source=~\"$Device\"}, \"join_key\", \"-\", \"source\", \"neighbor_neighbor_address\")",
             "format": "table",
             "fullMetaSearch": false,
             "hide": false,
@@ -124,7 +124,7 @@
             "disableTextWrap": false,
             "editorMode": "code",
             "exemplar": false,
-            "expr": "gnmic_bgp_neighbors_installed{job=\"gnmic\", afi_safi_afi_safi_name=\"L2VPN_EVPN\", source=~\"$Device\"}",
+            "expr": "label_join(gnmic_bgp_neighbors_installed{job=\"gnmic\", afi_safi_afi_safi_name=\"L2VPN_EVPN\", neighbor_neighbor_address=~\"192.168.255.*\", source=~\"$Device\"}, \"join_key\", \"-\", \"source\", \"neighbor_neighbor_address\")",
             "format": "table",
             "fullMetaSearch": false,
             "hide": false,
@@ -143,7 +143,7 @@
             "disableTextWrap": false,
             "editorMode": "code",
             "exemplar": false,
-            "expr": "gnmic_bgp_neighbors_received{job=\"gnmic\", afi_safi_afi_safi_name=\"L2VPN_EVPN\", source=~\"$Device\"}",
+            "expr": "label_join(gnmic_bgp_neighbors_received{job=\"gnmic\", afi_safi_afi_safi_name=\"L2VPN_EVPN\", neighbor_neighbor_address=~\"192.168.255.*\", source=~\"$Device\"}, \"join_key\", \"-\", \"source\", \"neighbor_neighbor_address\")",
             "format": "table",
             "fullMetaSearch": false,
             "hide": false,
@@ -162,7 +162,7 @@
             "disableTextWrap": false,
             "editorMode": "code",
             "exemplar": false,
-            "expr": "gnmic_bgp_neighbors_established_transitions{job=\"gnmic\", neighbor_neighbor_address=~\"192.168.255.*\", source=~\"$Device\"}",
+            "expr": "label_join(gnmic_bgp_neighbors_established_transitions{job=\"gnmic\", neighbor_neighbor_address=~\"192.168.255.*\", source=~\"$Device\"}, \"join_key\", \"-\", \"source\", \"neighbor_neighbor_address\")",
             "format": "table",
             "fullMetaSearch": false,
             "hide": false,
@@ -179,7 +179,7 @@
           {
             "id": "seriesToColumns",
             "options": {
-              "byField": "neighbor_neighbor_address"
+              "byField": "join_key"
             }
           },
           {
@@ -215,6 +215,11 @@
                 "job 3": true,
                 "job 4": true,
                 "job 5": true,
+                "join_key": true,
+                "neighbor_neighbor_address 2": true,
+                "neighbor_neighbor_address 3": true,
+                "neighbor_neighbor_address 4": true,
+                "neighbor_neighbor_address 5": true,
                 "network_instance_name 2": true,
                 "network_instance_name 3": true,
                 "network_instance_name 4": true,
@@ -246,7 +251,7 @@
               "includeByName": {},
               "indexByName": {
                 "source 1": 0,
-                "neighbor_neighbor_address": 1,
+                "neighbor_neighbor_address 1": 1,
                 "network_instance_name 1": 2,
                 "Value #A": 3,
                 "session_state": 4,
@@ -259,8 +264,7 @@
                 "Value #C": "EVPN Pfx Installed",
                 "Value #D": "EVPN Pfx Received",
                 "Value #E": "Est. Transitions",
-                "neighbor_neighbor_address": "Neighbor IP",
-                "network_instance_name": "VRF",
+                "neighbor_neighbor_address 1": "Neighbor IP",
                 "network_instance_name 1": "VRF",
                 "session_state": "Session State",
                 "source 1": "Hostname"
@@ -1154,7 +1158,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "definition": "label_values(gnmic_bgp_neighbors_installed{afi_safi_afi_safi_name=\"L2VPN_EVPN\"}, source)",
+          "definition": "label_values(gnmic_bgp_neighbors_session_state{neighbor_neighbor_address=~\"192.168.255.*\"}, source)",
           "hide": 0,
           "includeAll": true,
           "multi": true,
@@ -1162,7 +1166,7 @@
           "options": [],
           "query": {
             "qryType": 1,
-            "query": "label_values(gnmic_bgp_neighbors_installed{afi_safi_afi_safi_name=\"L2VPN_EVPN\"}, source)",
+            "query": "label_values(gnmic_bgp_neighbors_session_state{neighbor_neighbor_address=~\"192.168.255.*\"}, source)",
             "refId": "PrometheusVariableQueryEditor-VariableQuery"
           },
           "refresh": 1,
