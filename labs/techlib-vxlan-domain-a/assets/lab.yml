@@ -44,6 +44,8 @@ boot:
   roles:
     A-LEAF7: EVPN Gateway
     A-LEAF8: EVPN Gateway
+    BB1: Backbone IP Transport
+    BB2: Backbone IP Transport
   # skip_nodes: []
 
 # ── Dashboard content ────────────────────────────────────────────────────

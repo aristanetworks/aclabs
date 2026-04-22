@@ -47,6 +47,8 @@ boot:
     B-LEAF7: EVPN Gateway
     B-LEAF8: EVPN Gateway
     B-SW1: L2 Switch
+    BB1: Backbone IP Transport
+    BB2: Backbone IP Transport
   # skip_nodes: []
 
 # ── Dashboard content ────────────────────────────────────────────────────
