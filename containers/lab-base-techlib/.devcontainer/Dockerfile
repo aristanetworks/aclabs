@@ -89,7 +89,7 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.115.0"
     && code-server --install-extension srl-labs.vscode-containerlab --force \
     && code-server --install-extension tuxtina.json2yaml --force \
     && code-server --install-extension yzhang.markdown-all-in-one --force \
-    && code-server --install-extension packetanglers.lab-dashboard@0.14.0 --force
+    && code-server --install-extension packetanglers.lab-dashboard@0.14.1 --force
 
 USER root
 # User-level code-server settings — applies to every workspace opened
