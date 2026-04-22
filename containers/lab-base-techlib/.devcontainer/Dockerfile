@@ -88,9 +88,18 @@ RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
 # minimize the risk of breaking changes.
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.115.0"
 
-RUN code-server --install-extension srl-labs.vscode-containerlab@0.24.2 --force \
- && code-server --install-extension tuxtina.json2yaml@0.2.0 --force \
- && code-server --install-extension yzhang.markdown-all-in-one@3.6.2 --force
+RUN for ext in \
+        srl-labs.vscode-containerlab@0.24.2 \
+        tuxtina.json2yaml@0.2.0 \
+        yzhang.markdown-all-in-one@3.6.2; do \
+        echo ">> installing $ext"; \
+        for attempt in 1 2 3; do \
+            code-server --install-extension "$ext" --force && break; \
+            echo ">> attempt $attempt failed for $ext"; \
+            [ "$attempt" = "3" ] && echo ">> FATAL: $ext failed after 3 attempts" && exit 1; \
+            sleep $((attempt * 5)); \
+        done; \
+    done
 
 RUN curl -fsSL -o /tmp/lab-dashboard.vsix \
       https://open-vsx.org/api/packetanglers/lab-dashboard/0.14.1/file/packetanglers.lab-dashboard-0.14.1.vsix \

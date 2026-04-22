@@ -84,4 +84,6 @@ jobs:
       #   matching pill-grid CSS.
       # 1.0.5:
       # - Update lab-dashboard extension to 0.14.1
-      container_revision: "1.0.5"
+      # 1.0.6:
+      # - Pin versions for extensions to minimize risk of breaking changes in extensions
+      container_revision: "1.0.6"
