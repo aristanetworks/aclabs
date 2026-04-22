@@ -25,8 +25,10 @@ jobs:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
         from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.1.0"]
         clab_version: ["0.74.3"]
-        user_id: ["1009"]
+        user_id: ["1000", "1009"]
         include:
+          - user_id: "1000"
+            group_id: "1000"
           - user_id: "1009"
             group_id: "1009"
     with:
@@ -42,4 +44,12 @@ jobs:
       # - Adds /bin/init_lab.py and /bin/docs_generate.py as bundled scripts
       # - Bakes packetanglers.lab-dashboard extension (floating @latest) for
       #   auto-launch of init_lab.py and LAB-READY.md dashboard rendering
-      container_revision: "1.0.0"
+      # 1.0.1:
+      # - Add UID 1000 variant to the build matrix (alongside existing 1009).
+      #   The acLabs launcher VM runs labs by reading the `image:` value from
+      #   the lab's devcontainer.json and appending `-uid1009` at docker-run
+      #   time — so the lab's devcontainer.json must reference the no-suffix
+      #   (UID 1000) tag. Publishing both variants matches the existing
+      #   lab-base convention and keeps Codespaces workable.
+      # - No Dockerfile / script / setting changes in this revision.
+      container_revision: "1.0.1"
