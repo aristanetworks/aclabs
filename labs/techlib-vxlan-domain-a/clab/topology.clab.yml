@@ -3,7 +3,7 @@
 # Arista EVPN Deployment Guide Topology - Domain A
 # --------------------------------------------------------------
 
-name: arista-evpn-dg
+name: evpn-vxlan-domain-a
 
 prefix: ""
 
@@ -115,6 +115,10 @@ topology:
       binds:
         - sn/a-leaf6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/A-LEAF6.cfg
+
+    #########################
+    # Domain A EVPN Gateway #
+    #########################
 
     A-LEAF7:
       kind: arista_ceos

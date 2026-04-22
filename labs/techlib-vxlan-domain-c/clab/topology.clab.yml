@@ -3,7 +3,7 @@
 # Arista EVPN Deployment Guide Topology - Domain C
 # --------------------------------------------------------------
 
-name: arista-evpn-dg
+name: evpn-vxlan-domain-c
 
 prefix: ""
 
@@ -158,6 +158,10 @@ topology:
         graph-posY: "205"
         graph-groupLabelPos: bottom-center
 
+    #########################
+    # Domain C EVPN Gateway #
+    #########################
+
     C-LEAF7:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.109
@@ -187,7 +191,7 @@ topology:
         graph-groupLabelPos: bottom-center
 
     #########################
-    # DC "C" HostC6          #
+    # Domain C Hosts        #
     #########################
 
     # HostC1 is connected to LEAF1 eth7 and LEAF2 eth7

@@ -3,7 +3,7 @@
 # Arista EVPN Deployment Guide Topology - Domain D
 # --------------------------------------------------------------
 
-name: arista-evpn-dg
+name: evpn-vxlan-domain-d
 
 prefix: ""
 
@@ -70,7 +70,7 @@ topology:
       startup-config: init-configs/D-SPINE4.cfg
 
 #########################
-# DC "D" LEAF           #
+# Domain D LEAF         #
 #########################
 
     D-LEAF1:
@@ -115,6 +115,10 @@ topology:
         - sn/d-leaf6.txt:/mnt/flash/ceos-config:ro
       startup-config: init-configs/D-LEAF6.cfg
 
+#########################
+# Domain D EVPN Gateway #
+#########################
+
     D-LEAF7:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.111
@@ -130,7 +134,7 @@ topology:
       startup-config: init-configs/D-LEAF8.cfg
 
 #########################
-# DC "D" HostC6          #
+# Domain D Hosts        #
 #########################
 
     # HostD1 is connected to LEAF1 eth7 and LEAF2 eth7

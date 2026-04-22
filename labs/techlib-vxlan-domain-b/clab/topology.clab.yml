@@ -3,7 +3,7 @@
 # Arista EVPN Deployment Guide Topology - Domain B
 # --------------------------------------------------------------
 
-name: arista-evpn-dg
+name: evpn-vxlan-domain-b
 
 prefix: ""
 
@@ -122,6 +122,10 @@ topology:
       startup-config: init-configs/B-LEAF6.cfg
       startup-delay: 60
 
+    #########################
+    # Domain B EVPN Gateway #
+    #########################
+
     B-LEAF7:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.111
@@ -138,6 +142,10 @@ topology:
       startup-config: init-configs/B-LEAF8.cfg
       startup-delay: 90
 
+    #########################
+    # Domain B L2 Switch    #
+    #########################
+
     B-SW1:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.113
@@ -147,7 +155,7 @@ topology:
       startup-delay: 90
 
     #########################
-    # DC "B" Hosts          #
+    # Domain B Hosts          #
     #########################
 
     # HostB1 is connected to LEAF1 eth7 and LEAF2 eth7
