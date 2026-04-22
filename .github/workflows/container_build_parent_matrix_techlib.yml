@@ -52,4 +52,14 @@ jobs:
       #   (UID 1000) tag. Publishing both variants matches the existing
       #   lab-base convention and keeps Codespaces workable.
       # - No Dockerfile / script / setting changes in this revision.
-      container_revision: "1.0.1"
+      # 1.0.2:
+      # - settings.json: drop workbench.startupEditor=readme. That setting
+      #   was forcing README.md to auto-open on boot, which created a focus
+      #   race with the init_lab terminal tab that the lab-dashboard
+      #   extension had to work around with a 5-second wait before launching.
+      #   Removing it eliminates the race entirely.
+      # - Picks up packetanglers.lab-dashboard 0.13.0 automatically (floating
+      #   @latest), which detects the absence of startupEditor=readme and
+      #   skips the 5-second wait. Net result: init_lab TUI appears instantly
+      #   after code-server finishes loading. No more dead air.
+      container_revision: "1.0.2"
