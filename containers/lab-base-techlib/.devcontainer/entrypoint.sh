@@ -152,7 +152,7 @@ else
     make start
 fi
 
-# on Codespaces this will not work correctly
+# on Codespaces this will not work correctly.
 if ! ${CODESPACES:-false}; then
     # Execute command from docker cli if any.
     if [ ${@+True} ]; then
