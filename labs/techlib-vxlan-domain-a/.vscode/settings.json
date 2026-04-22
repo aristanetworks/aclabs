@@ -1,5 +1,4 @@
 {
-    "yaml.extension.recommendations": false,
     "containerlab": {
         "showWelcomePage": false,
         "skipUpdateCheck": true,
