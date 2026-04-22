@@ -84,7 +84,8 @@ RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
 # code-server + extensions baked in. packetanglers.lab-dashboard is the
 # headline addition for this variant — it owns auto-launching init_lab.py
 # and rendering LAB-READY.md as an interactive dashboard. Installed from
-# Open VSX (code-server's default marketplace), floating on latest version.
+# Open VSX (code-server's default marketplace). Extensions are pinned to
+# minimize the risk of breaking changes.
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.115.0"
 
 RUN code-server --install-extension srl-labs.vscode-containerlab@0.24.2 --force \
