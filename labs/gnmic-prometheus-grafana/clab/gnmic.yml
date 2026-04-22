@@ -149,6 +149,7 @@ outputs:
     debug: false
     event-processors:
       - extract-vlan-id
+      - drop-gr
       - trim-prefixes
       - bounce-map
       - eos-version
@@ -201,3 +202,9 @@ processors:
             apply-on: "value"
             old: "DOWN"
             new: "0"
+  # Need this processor, otherwise trim-prefixes will cause name collision and overwrite the pfxRcd
+  # metrics to 0
+  drop-gr:
+    event-delete:
+      value-names:
+        - ".*graceful-restart.*"
