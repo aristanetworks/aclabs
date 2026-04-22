@@ -195,7 +195,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.201
       binds:
-        - sn/prod_hosts.txt:/home/admin/hosts.txt
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.10.10.104/24
@@ -209,7 +209,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.202
       binds:
-        - sn/prod_hosts.txt:/home/admin/hosts.txt
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.20.20.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -222,7 +222,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.203
       binds:
-        - sn/dev_hosts.txt:/home/admin/hosts.txt
+        - ../assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.60.60.102/24
@@ -236,7 +236,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.204
       binds:
-        - sn/dev_hosts.txt:/home/admin/hosts.txt
+        - ../assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.50.50.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -249,7 +249,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.205
       binds:
-        - sn/prod_hosts.txt:/home/admin/hosts.txt
+        - ../assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.20.20.103/24
@@ -263,7 +263,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.206
       binds:
-        - sn/dev_hosts.txt:/home/admin/hosts.txt
+        - ../assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.60.60.103/24
