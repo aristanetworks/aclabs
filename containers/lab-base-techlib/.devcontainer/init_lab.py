@@ -185,15 +185,46 @@ class LabConfig:
 
 # Role inference — purely heuristic, overridable via lab.yml
 ROLE_RULES: list[tuple[re.Pattern, str]] = [
+    # Ordering matters: more specific patterns first, broad fallbacks last.
+    # The first pattern that matches the node name wins, so "SPINE" gets
+    # checked before any pattern that might also catch a spine node.
     (re.compile(r"SPINE", re.IGNORECASE), "Spine"),
     (re.compile(r"LEAF", re.IGNORECASE), "Leaf"),
     (re.compile(r"BORDER", re.IGNORECASE), "Border"),
+    # Firewalls: FW1, FIREWALL-A, etc. Placed above "switch" patterns since
+    # a node named like FW-SW-01 is a firewall, not a switch.
+    (re.compile(r"(^|[-_])(fw|firewall)(\d+)?([-_]|$)", re.IGNORECASE), "Firewall"),
+    # Enterprise campus tiers: CORE, AGG/AGGREGATION, DIST/DISTRIBUTION.
+    # Word-boundary-anchored so we don't match things like "BORDER-CORE" as
+    # Core (the BORDER rule above already caught it), or accidentally catch
+    # "CORE" inside unrelated substrings.
+    (re.compile(r"(^|[-_])core(\d+)?([-_]|$)", re.IGNORECASE), "Core"),
+    (re.compile(r"(^|[-_])(agg|aggregation)(\d+)?([-_]|$)", re.IGNORECASE), "Aggregation"),
+    (re.compile(r"(^|[-_])(dist|distribution)(\d+)?([-_]|$)", re.IGNORECASE), "Distribution"),
+    # Plain L2/L3 switches. SW / SWITCH as the trailing token (with optional
+    # digits). Runs late so SPINE/LEAF/etc. get first crack at names that
+    # contain SW only incidentally.
+    (re.compile(r"(^|[-_])(sw|switch)(\d+)?$", re.IGNORECASE), "Switch"),
     (re.compile(r"^(host|server|client|pc)", re.IGNORECASE), "Host"),
     (re.compile(r"^(cv|cvp)", re.IGNORECASE), "CVP"),
 ]
 
 # Display order when grouping the status table
-ROLE_ORDER = ["Spine", "Leaf", "Border", "Router", "Host", "CVP", "Linux", "Other"]
+ROLE_ORDER = [
+    "Spine",
+    "Leaf",
+    "Border",
+    "Core",
+    "Aggregation",
+    "Distribution",
+    "Switch",
+    "Router",
+    "Firewall",
+    "Host",
+    "CVP",
+    "Linux",
+    "Other",
+]
 
 
 def infer_role(name: str, kind: str) -> str:

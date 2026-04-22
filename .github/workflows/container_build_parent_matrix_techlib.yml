@@ -91,4 +91,17 @@ jobs:
       #   button polish — bigger padding (0.6em 1.2em), explicit 1em font
       #   size, shape parity with SSH pills (same lift + shadow family).
       #   No Dockerfile logic / recipe changes; just the pinned vsix version.
-      container_revision: "1.0.7"
+      # 1.0.8:
+      # - init_lab.py: expand role inference beyond SPINE / LEAF / BORDER /
+      #   HOST / CVP. Adds regex patterns for Switch (SW / SWITCH as the
+      #   trailing token), Firewall (FW / FIREWALL), Core, Aggregation
+      #   (AGG / AGGREGATION), and Distribution (DIST / DISTRIBUTION).
+      #   ROLE_ORDER expanded correspondingly so the dashboard groups
+      #   render in a sensible hierarchy.
+      # - Nodes that don't match any regex fall through to kind-based
+      #   inference (arista_ceos → Router, linux → Linux, else → Other),
+      #   preserving existing behavior for unaffected labs.
+      # - For anything the regex can't resolve correctly, lab authors
+      #   already have role_overrides in lab.yml as the explicit
+      #   escape hatch — no change needed to that interface.
+      container_revision: "1.0.8"
