@@ -104,4 +104,17 @@ jobs:
       # - For anything the regex can't resolve correctly, lab authors
       #   already have role_overrides in lab.yml as the explicit
       #   escape hatch — no change needed to that interface.
-      container_revision: "1.0.8"
+      # 1.0.9:
+      # - settings.json: suppress the Red Hat YAML extension telemetry
+      #   consent popup that fires on every fresh lab launch (the YAML
+      #   extension is a transitive dependency of the ContainerLab
+      #   extension, pulled in automatically).
+      #   - redhat.telemetry.enabled=false — explicitly declines telemetry,
+      #     which bypasses the prompt entirely (the prompt only fires
+      #     when the setting is unset).
+      #   - telemetry.telemetryLevel=off — kills VS Code's own telemetry
+      #     for good measure, since lab environments are ephemeral and
+      #     the signal would be noisy anyway.
+      # - Net UX win: fresh lab launches are now popup-free. Respectful
+      #   default for a learning environment.
+      container_revision: "1.0.9"

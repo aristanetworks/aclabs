@@ -1,4 +1,6 @@
 {
     "workbench.startupEditor": "none",
-    "task.allowAutomaticTasks": "on"
+    "task.allowAutomaticTasks": "on",
+    "redhat.telemetry.enabled": false,
+    "telemetry.telemetryLevel": "off"
 }
