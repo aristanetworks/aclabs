@@ -86,4 +86,9 @@ jobs:
       # - Update lab-dashboard extension to 0.14.1
       # 1.0.6:
       # - Pin versions for extensions to minimize risk of breaking changes in extensions
-      container_revision: "1.0.6"
+      # 1.0.7:
+      # - Bump lab-dashboard vsix URL to 0.14.2 to pick up the Quick Action
+      #   button polish — bigger padding (0.6em 1.2em), explicit 1em font
+      #   size, shape parity with SSH pills (same lift + shadow family).
+      #   No Dockerfile logic / recipe changes; just the pinned vsix version.
+      container_revision: "1.0.7"
