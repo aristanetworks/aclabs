@@ -75,4 +75,13 @@ jobs:
       #   escaping and the dashboard renders as intended.
       # - Pure extension bump, no image layer changes below the
       #   extension install.
-      container_revision: "1.0.2"
+      # 1.0.3:
+      # - Bump packetanglers.sandbox-dashboard 0.2.1 -> 0.2.2, a
+      #   second hotfix. 0.2.1 correctly rendered the dashboard
+      #   but its containerlab inspect JSON parser was written
+      #   against an older shape assumption; against current
+      #   containerlab 0.74+, every poll surfaced "unrecognized
+      #   JSON shape" in the ContainerLab section. 0.2.2 teaches
+      #   the parser about the current keyed-by-lab_name shape.
+      # - Pure extension bump.
+      container_revision: "1.0.3"
