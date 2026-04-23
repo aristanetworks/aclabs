@@ -65,4 +65,14 @@ jobs:
       #       banner, running-lab indicator)
       # - No base OS / code-server / containerlab / Python-deps
       #   changes. This is a pure extension bump.
-      container_revision: "1.0.1"
+      # 1.0.2:
+      # - Bump packetanglers.sandbox-dashboard 0.2.0 -> 0.2.1, a
+      #   hotfix release. 0.2.0 shipped with a malformed string
+      #   literal in the webview JS (cross-platform path-splitting
+      #   code for topology grouping), which killed the entire
+      #   inline script and stuck all three dashboard sections on
+      #   "Computing…" forever. 0.2.1 restores the correct
+      #   escaping and the dashboard renders as intended.
+      # - Pure extension bump, no image layer changes below the
+      #   extension install.
+      container_revision: "1.0.2"
