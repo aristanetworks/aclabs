@@ -20,7 +20,7 @@ This lab is pre-packaged with:
 
 ### Credentials
 
-All cEOS and Linux nodes use the following credentials:
+All cEOS and Linux nodes use the following credentials
 
 #### Username
 ```bash
