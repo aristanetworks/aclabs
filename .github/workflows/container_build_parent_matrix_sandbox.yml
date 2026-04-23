@@ -84,4 +84,25 @@ jobs:
       #   JSON shape" in the ContainerLab section. 0.2.2 teaches
       #   the parser about the current keyed-by-lab_name shape.
       # - Pure extension bump.
-      container_revision: "1.0.3"
+      # 1.0.4:
+      # - Bump packetanglers.sandbox-dashboard 0.2.2 -> 0.3.0.
+      #   Milestone 3 shipped: the four lifecycle buttons
+      #   (Import, Start, Save, Export) are now real actions,
+      #   not stubs. Users can now drive the complete sandbox
+      #   lab lifecycle from the dashboard without touching the
+      #   CLI:
+      #     * Import — pick a .tar.gz, collision-check, extract
+      #     * Start  — pick a topology, sudo containerlab deploy,
+      #                streaming progress toast
+      #     * Save   — sudo containerlab save + bundle (keeps
+      #                clab-* so captured configs make it into
+      #                the tarball)
+      #     * Export — bundle workspace as .tar.gz (excludes
+      #                .git / node_modules / clab-*)
+      # - Also adds: build-time syntax guardrail on the emitted
+      #   webview script, sudo -n (non-interactive) defense so
+      #   unconfigured NOPASSWD sudo fails fast with a clear
+      #   diagnostic instead of hanging.
+      # - Pure extension bump, no image layer changes below the
+      #   extension install.
+      container_revision: "1.0.4"
