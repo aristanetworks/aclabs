@@ -1,0 +1,57 @@
+---
+name: build lab-base-sandbox images
+
+on:
+  push:
+    branches: ['**']  # branches will be filtered in the jobs
+    paths:
+      - .github/workflows/container_build_child.yml
+      - .github/workflows/container_build_parent_matrix_sandbox.yml
+      - containers/lab-base-sandbox/**
+  workflow_dispatch:
+    branches: ['**']  # branches will be filtered in the jobs
+
+permissions:
+  packages: write
+
+jobs:
+  build-lab-containers:
+    # fork - build container from any branch for testing
+    # parent repo - build on main branch only
+    if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/container_build_child.yml
+    strategy:
+      matrix:
+        from_image: ["ghcr.io/aristanetworks/avd/universal"]
+        from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.1.0"]
+        clab_version: ["0.74.3"]
+        user_id: ["1000", "1009"]
+        include:
+          - user_id: "1000"
+            group_id: "1000"
+          - user_id: "1009"
+            group_id: "1009"
+    with:
+      container_name: lab-base-sandbox
+      from_image: ${{ matrix.from_image }}
+      from_variant: ${{ matrix.from_variant }}
+      clab_version: ${{ matrix.clab_version }}
+      user_id: ${{ matrix.user_id }}
+      group_id: ${{ matrix.group_id }}
+      # 1.0.0:
+      # - Initial release of lab-base-sandbox, sister image to
+      #   lab-base-techlib. Same OS layer, code-server, ContainerLab,
+      #   and Python deps; differs in two ways:
+      #     1. Bakes packetanglers.sandbox-dashboard 0.1.0 instead of
+      #        lab-dashboard. Sandbox is a stateful long-lived control
+      #        plane (import / start / save / export), techlib is a
+      #        write-once status renderer. Different jobs.
+      #     2. Does NOT ship /bin/init_lab.py or /bin/docs_generate.py.
+      #        The sandbox lab doesn't auto-deploy a topology; the user
+      #        drives the lifecycle from the dashboard, so there's
+      #        nothing for init_lab to wait for at boot.
+      # - Pinned extension versions match lab-base-techlib for
+      #   reproducibility (srl-labs.vscode-containerlab@0.24.2,
+      #   tuxtina.json2yaml@0.2.0, yzhang.markdown-all-in-one@3.6.2).
+      # - Inherits the 3-attempt retry loop for OpenVSX installs.
+      container_revision: "1.0.0"
