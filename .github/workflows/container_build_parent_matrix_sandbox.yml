@@ -54,4 +54,15 @@ jobs:
       #   reproducibility (srl-labs.vscode-containerlab@0.24.2,
       #   tuxtina.json2yaml@0.2.0, yzhang.markdown-all-in-one@3.6.2).
       # - Inherits the 3-attempt retry loop for OpenVSX installs.
-      container_revision: "1.0.0"
+      # 1.0.1:
+      # - Bump packetanglers.sandbox-dashboard 0.1.0 -> 0.2.0, adding
+      #   live workspace awareness to the bundled extension:
+      #     * auto-open on first activation per workspace
+      #     * topology file discovery with subfolder grouping
+      #     * containerlab inspection + 30s polling reactivity
+      #     * file-watcher for *.clab.yml changes
+      #     * display polish (empty states, live timestamps, error
+      #       banner, running-lab indicator)
+      # - No base OS / code-server / containerlab / Python-deps
+      #   changes. This is a pure extension bump.
+      container_revision: "1.0.1"
