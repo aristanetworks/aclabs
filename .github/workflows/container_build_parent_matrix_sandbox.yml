@@ -133,4 +133,24 @@ jobs:
       # - Pure additive change at the image layer below the
       #   extension install (settings.json copy is a new step;
       #   no other layers altered).
-      container_revision: "1.0.5"
+      # 1.0.6:
+      # - Bump packetanglers.sandbox-dashboard 0.4.0 -> 0.4.1, a
+      #   user-feedback-driven patch from the v0.4.0 smoke test:
+      #     * After cloning a repo via Import, users hit the
+      #       `git config user.name` / `user.email` wall the moment
+      #       they tried to commit. They had to drop to a terminal
+      #       to set those, breaking the low-friction lab promise.
+      #     * v0.4.1 adds a "Set up Git for committing" capability
+      #       surfaced through three triggers:
+      #         (1) clone-time gate — runImportFromGitHub now prompts
+      #             before the destructive workspace wipe; user
+      #             cancel = clean abort
+      #         (2) activation-time hook — when the workspace contains
+      #             a .git directory AND identity is missing, a
+      #             non-modal nudge appears 2s after auto-open
+      #         (3) command palette — always-available, idempotent
+      # - Honest about ephemerality: sandbox containers reset every
+      #   launch, no persistence layer for git identity. Prompt
+      #   fires once per session in workspaces where git matters.
+      # - Pure extension bump.
+      container_revision: "1.0.6"
