@@ -105,4 +105,32 @@ jobs:
       #   diagnostic instead of hanging.
       # - Pure extension bump, no image layer changes below the
       #   extension install.
-      container_revision: "1.0.4"
+      # 1.0.5:
+      # - Bump packetanglers.sandbox-dashboard 0.3.0 -> 0.4.0.
+      #   Milestone 4 shipped, driven by user feedback from the
+      #   v0.3.0 smoke test:
+      #     * Stop button — fifth button in the actions row,
+      #       runs `containerlab destroy --cleanup`. Three-way
+      #       confirmation modal: Cancel / Save and Stop /
+      #       Stop without Saving. Save-and-Stop captures
+      #       running configs first; if save fails the lab is
+      #       NOT torn down, preserving the user's intent.
+      #     * GitHub clone for Import — Import opens with a
+      #       picker (Upload File OR Clone from GitHub). Clone
+      #       path wipes the workspace (with destructive-
+      #       confirmation modal listing entries to delete) and
+      #       runs `git clone <url> .`. Trusts code-server's
+      #       auth flow; 30s "still working" hint, 5min hard
+      #       timeout against a stuck clone.
+      # - Bake VS Code default settings INTO the image at
+      #   /home/coder/.local/share/code-server/User/settings.json
+      #   instead of shipping per-lab .vscode/ directories.
+      #   Cleaner separation: lab content (topology, configs)
+      #   stays in the lab repo; editor preferences (theme,
+      #   keybindings, terminal defaults) live with the image.
+      #   Users can still override per-lab via .vscode/ if they
+      #   want, but they're not forced to ship one.
+      # - Pure additive change at the image layer below the
+      #   extension install (settings.json copy is a new step;
+      #   no other layers altered).
+      container_revision: "1.0.5"
