@@ -153,4 +153,24 @@ jobs:
       #   launch, no persistence layer for git identity. Prompt
       #   fires once per session in workspaces where git matters.
       # - Pure extension bump.
-      container_revision: "1.0.6"
+      # 1.0.7:
+      # - Bump packetanglers.sandbox-dashboard 0.4.1 -> 0.4.2, a
+      #   second user-feedback-driven patch from the v0.4.1 smoke
+      #   test. Two small but high-value adds:
+      #     * Start fallback file picker — Start now has a three-
+      #       step topology resolver (session memory → *.clab.yml
+      #       glob discovery → fallback file picker for non-
+      #       standard filenames). Repos with topology files named
+      #       topology.yml, lab.yaml, etc. now "just work". Picked
+      #       file is remembered for the lab session so subsequent
+      #       Start clicks don't re-prompt.
+      #     * Topology View button — sixth button in the actions
+      #       row, dispatches to srl-labs' TopoViewer. Uses
+      #       resilient dynamic command lookup (discover at
+      #       runtime rather than hardcode) so future srl-labs
+      #       renames don't break the button.
+      # - Side effect: Start button no longer disabled when the
+      #   dashboard's Topologies section is empty — the fallback
+      #   picker handles that case directly.
+      # - Pure extension bump.
+      container_revision: "1.0.7"
