@@ -231,4 +231,28 @@ jobs:
       #   conforming. Per-case tooltip explains the "why" instead
       #   of letting users click into a confusing srl-labs error.
       # - Pure extension bump.
-      container_revision: "1.0.9"
+      # 1.0.10:
+      # - Bump packetanglers.sandbox-dashboard 0.4.4 -> 0.4.5,
+      #   a fifth user-feedback-driven patch from the v0.4.4
+      #   smoke test. v0.4.4 confirmed Topology View finally
+      #   works end-to-end for conforming labs, but exposed a
+      #   UX issue: the YAML file we open behind the scenes to
+      #   anchor srl-labs' editor-context-discovery lingers in
+      #   the editor pane afterward. A user clicking "Topology
+      #   View" got the graph AND an unwanted YAML tab.
+      # - Two coordinated changes:
+      #     * Topology View smart-close: snapshot textDocuments
+      #       BEFORE pre-open; if our target wasn't there, we
+      #       opened it and we close it after dispatch via
+      #       tabGroups.close(specificTab). Users who already
+      #       had the YAML open have it left untouched.
+      #     * New Open Topology File button (📝) sibling to
+      #       Topology View. Opens the YAML as a normal (non-
+      #       preview) editor tab for users who explicitly want
+      #       to read or edit it. Uses the same three-step
+      #       resolver as Start.
+      # - Behind the scenes: refactored the topology resolver
+      #   into a shared module so Start and Open Topology File
+      #   share session memory and prompting logic.
+      # - Pure extension bump.
+      container_revision: "1.0.10"
