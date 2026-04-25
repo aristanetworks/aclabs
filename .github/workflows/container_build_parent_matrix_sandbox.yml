@@ -194,4 +194,41 @@ jobs:
       #       suffix while their action runs. Catches palette/
       #       keybinding races too.
       # - Pure extension bump.
-      container_revision: "1.0.8"
+      # 1.0.9:
+      # - Bump packetanglers.sandbox-dashboard 0.4.3 -> 0.4.4, a
+      #   fourth user-feedback-driven patch from the v0.4.3 smoke
+      #   test. v0.4.3's TopoViewer fix only worked for labs whose
+      #   topology files matched the *.clab.yml convention — a
+      #   constraint we discovered when smoke testing exposed it.
+      #
+      #   Root cause: srl-labs.vscode-containerlab's tree view
+      #   discovers labs via files matching *.clab.yml /
+      #   *.clab.yaml. Labs deployed from non-conforming filenames
+      #   (lab.yml, topology.yaml) are invisible to their tree,
+      #   which means TopoViewer can't dispatch against them. The
+      #   v0.4.2 Start fallback picker (deploy any topology
+      #   regardless of naming) inadvertently created a class of
+      #   users srl-labs can't serve.
+      #
+      #   v0.4.4 solves it at Start time: when a non-conforming
+      #   topology is selected, three-button modal appears BEFORE
+      #   deploy:
+      #     * Rename and Start: fs.rename to <stem>.clab.yml,
+      #       update remembered topology, deploy. Collision
+      #       detected (delete-existing-or-cancel sub-prompt).
+      #     * Start without Renaming: deploy as-is; Topology View
+      #       disabled per-lab in dashboard with explanatory
+      #       tooltip.
+      #     * Cancel: don't deploy.
+      #
+      #   Renaming BEFORE deploy is the only sane time;
+      #   rename-after-deploy creates broken state because
+      #   containerlab metadata is stamped with the original
+      #   filename.
+      #
+      # - Per-lab Topology View enablement in the dashboard.
+      #   Button now requires a deployed lab AND that lab to be
+      #   conforming. Per-case tooltip explains the "why" instead
+      #   of letting users click into a confusing srl-labs error.
+      # - Pure extension bump.
+      container_revision: "1.0.9"
