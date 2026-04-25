@@ -173,4 +173,25 @@ jobs:
       #   dashboard's Topologies section is empty — the fallback
       #   picker handles that case directly.
       # - Pure extension bump.
-      container_revision: "1.0.7"
+      # 1.0.8:
+      # - Bump packetanglers.sandbox-dashboard 0.4.2 -> 0.4.3, a
+      #   third user-feedback-driven patch from the v0.4.2 smoke
+      #   test. Two fixes in one release:
+      #     * Topology View now actually opens. v0.4.2's button
+      #       dispatched correctly but srl-labs' TopoViewer
+      #       command discovers its target via active text editor
+      #       URI, and our webview wasn't a text editor. Fix:
+      #       pre-open the deployed lab's topology file as a
+      #       preview tab to anchor the editor context before
+      #       dispatching.
+      #     * In-flight action tracking. Smoke logs revealed two
+      #       concurrent containerlab deploy invocations racing
+      #       on the same topology when the user double-clicked
+      #       Start during a slow image pull. System-level fix:
+      #       new in-flight registry + trackedCommand wrapper
+      #       blocks concurrent invocations of all six button-
+      #       bound commands. Buttons grey out and show a "..."
+      #       suffix while their action runs. Catches palette/
+      #       keybinding races too.
+      # - Pure extension bump.
+      container_revision: "1.0.8"
