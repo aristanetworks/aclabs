@@ -406,4 +406,25 @@ jobs:
       #   incorrect magic-var path during design (had `flash/`
       #   segment that doesn't belong in --copy destination paths).
       # - Pure extension bump.
-      container_revision: "1.0.16"
+      # 1.0.17:
+      # - Bump packetanglers.sandbox-dashboard 0.6.0 -> 0.6.1, hotfix
+      #   for the v0.6.0 Save Configs hang.
+      # - v0.6.0 awaited the Save success toast before dispatching
+      #   the magic-variable wiring flow. Smoke testing 2026-04-26
+      #   with a 13-node EVPN gateway demo lab revealed the issue:
+      #   showInformationMessage's promise stays pending if the user
+      #   lets the toast auto-dismiss without clicking a button. The
+      #   await blocked everything downstream, including the wire-
+      #   magic-vars dispatch AND the trackedCommand cleanup. Save
+      #   Configs button stuck on "Save Configs…" forever, no modal
+      #   appeared.
+      # - v0.6.1 fix: fire the toast non-blockingly via void + .then.
+      #   The View Log handler still works; wire-magic-vars dispatches
+      #   immediately; button stops sticking. Toast (corner) and
+      #   modal (center) coexist visually — probably better UX than
+      #   the v0.6.0 sequential design anyway.
+      # - Recurring lesson: don't await non-modal toasts when there's
+      #   downstream work. Notifications are fire-and-forget unless
+      #   you explicitly need the user's button choice.
+      # - Pure extension bump.
+      container_revision: "1.0.17"
