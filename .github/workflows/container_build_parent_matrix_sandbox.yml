@@ -370,4 +370,40 @@ jobs:
       #   deferred to D1 (magic-variable wiring) where the broader
       #   topology-modification UX gets designed coherently.
       # - Pure extension bump.
-      container_revision: "1.0.15"
+      # 1.0.16:
+      # - Bump packetanglers.sandbox-dashboard 0.5.2 -> 0.6.0, the
+      #   first minor bump since v0.5.0 and the largest single
+      #   capability shipped to date.
+      # - v0.6.0 makes the dashboard the first feature in this
+      #   codebase that MODIFIES user-authored content (topology
+      #   YAML and .gitignore). Different risk profile from the
+      #   orchestration features in v0.4.x and v0.5.x.
+      # - Magic-variable wiring for arista_ceos nodes:
+      #   * After Save Configs (or via standalone palette command
+      #     "Sandbox Dashboard: Wire Magic Variables"), dashboard
+      #     offers to wire saved configs into the topology using
+      #     containerlab's __clabLabName__ / __clabNodeName__
+      #     magic variables. Lab auto-resumes with saved configs
+      #     on next deploy.
+      #   * Canonical line written:
+      #       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
+      #   * Single bundled confirmation modal lists all proposed
+      #     changes (topology edits + .gitignore amendment +
+      #     skipped nodes with reasons) BEFORE any file mutation.
+      #   * Defensive: only wires if the saved config file actually
+      #     exists on disk. Don't write paths to nonexistent files.
+      # - .gitignore safety: if .gitignore lacks a !startup-configs
+      #   negation pattern, propose adding !startup-configs/* so
+      #   saved configs travel with the lab repo.
+      # - Per-kind handler architecture (KIND_RULES registry)
+      #   designed for extension. v0.6.0 ships arista_ceos only;
+      #   nokia_srlinux, nokia_sros, juniper_vmx etc. become
+      #   drop-in additions when user demand emerges.
+      # - New runtime dep: yaml@^2.8.3 (eemeli/yaml) for round-
+      #   tripping with comment preservation. Bundle 87KB -> 209KB.
+      # - The verify-then-design pattern from v0.4.x retrospective
+      #   saved us from a silently-broken release: user caught my
+      #   incorrect magic-var path during design (had `flash/`
+      #   segment that doesn't belong in --copy destination paths).
+      # - Pure extension bump.
+      container_revision: "1.0.16"
