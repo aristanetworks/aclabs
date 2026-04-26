@@ -255,4 +255,24 @@ jobs:
       #   into a shared module so Start and Open Topology File
       #   share session memory and prompting logic.
       # - Pure extension bump.
-      container_revision: "1.0.10"
+      # 1.0.11:
+      # - Bump packetanglers.sandbox-dashboard 0.4.5 -> 0.4.6,
+      #   a sixth user-feedback-driven patch from the v0.4.5
+      #   smoke test cycle. Save was doing too much: capturing
+      #   running configs AND bundling the workspace as a
+      #   tarball. v0.4.6 splits these cleanly so each does
+      #   one thing.
+      # - Save now does ONE thing: containerlab save against
+      #   the deployed lab. The tarball-bundling logic is gone.
+      #   Users who want a tarball use Export. Mental model:
+      #     * Save Configs captures running state INTO the
+      #       workspace
+      #     * Export Lab bundles the workspace OUT as a tarball
+      # - Save uses --copy startup-configs (containerlab 0.74+
+      #   feature). Versioned, timestamped, symlinked-to-latest
+      #   archive structure unlocks future iterate-save-stop-
+      #   start-resume workflows when combined with topology
+      #   magic variables (__clabLabName__, __clabNodeName__).
+      # - Button label: "Save" -> "Save Configs". Clearer scope.
+      # - Pure extension bump.
+      container_revision: "1.0.11"
