@@ -344,4 +344,30 @@ jobs:
       #   applies to VS Code's own internals, not just other
       #   extensions. Architectural lesson worth carrying forward.
       # - Pure extension bump.
-      container_revision: "1.0.14"
+      # 1.0.15:
+      # - Bump packetanglers.sandbox-dashboard 0.5.1 -> 0.5.2,
+      #   user-feedback patch from v0.5.1 multi-tester smoke testing.
+      # - Three button label clarifications:
+      #     "Open File" -> "Open Topology File"
+      #     "Import"    -> "Import Workspace (tar)"
+      #     "Export"    -> "Export Workspace (tar)"
+      # - Import split into two distinct buttons. Pre-v0.5.2, Import
+      #   was a router QuickPick ("tarball or GitHub clone?"). Multi-
+      #   tester feedback: this was friction. v0.5.2 splits cleanly
+      #   into Import Workspace (tar) and a NEW "Clone from GitHub"
+      #   (🐙) button. Each does ONE thing.
+      # - Actions row restructured into three semantic sub-rows
+      #   to scale better than a flat row as buttons are added:
+      #     Sources       — Import Workspace (tar), Clone from GitHub
+      #     Lifecycle     — Start, Topology View, Open Topology File,
+      #                     Stop, Save Configs
+      #     Destinations  — Export Workspace (tar), Push to GitHub
+      # - Future Arista buttons (CVaaS onboarding, cEOS downloader,
+      #   ProLabs link) get natural homes in this layout.
+      # - Internal: clone code path extracted to clone-from-github.ts;
+      #   import.ts shrunk from 570 to 255 LOC.
+      # - Item 4 from feedback (.gitignore safety check at Save time)
+      #   deferred to D1 (magic-variable wiring) where the broader
+      #   topology-modification UX gets designed coherently.
+      # - Pure extension bump.
+      container_revision: "1.0.15"
