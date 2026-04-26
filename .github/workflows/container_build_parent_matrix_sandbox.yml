@@ -290,4 +290,27 @@ jobs:
       #   visibility is runtime state. The extension-code path is
       #   the only viable approach.
       # - Pure extension bump.
-      container_revision: "1.0.12"
+      # 1.0.13:
+      # - Bump packetanglers.sandbox-dashboard 0.4.7 -> 0.5.0,
+      #   the first minor bump since v0.3.0. v0.4.x was nine
+      #   releases of bug-and-polish; v0.5.0 marks new
+      #   capability: the dashboard now closes the loop on
+      #   lab work.
+      # - Pre-v0.5.0:  Import → work → Export tarball → manual
+      #                upload to share.
+      # - Post-v0.5.0: Import from GitHub → work → Push to
+      #                GitHub → re-import from GitHub later,
+      #                anywhere.
+      # - New 🚀 Push to GitHub button (eighth in the actions
+      #   row, sibling to Export). Smart scenario detection:
+      #   pristine workspace gets init+commit+push with sensible
+      #   .gitignore defaults; already-a-git-repo workspace
+      #   (e.g., from Import-from-GitHub) gets just commit+push.
+      # - "Already up to date" stop for no-op pushes.
+      # - [View on GitHub] action button in success toast.
+      # - Tailored error hints for auth and non-fast-forward
+      #   failures.
+      # - Auth handled by code-server's git integration; no
+      #   credentials managed by the extension.
+      # - Pure extension bump.
+      container_revision: "1.0.13"
