@@ -313,4 +313,35 @@ jobs:
       # - Auth handled by code-server's git integration; no
       #   credentials managed by the extension.
       # - Pure extension bump.
-      container_revision: "1.0.13"
+      # 1.0.14:
+      # - Bump packetanglers.sandbox-dashboard 0.5.0 -> 0.5.1, an
+      #   honest fix for v0.5.0's silent-hang on git push.
+      # - v0.5.0 spawned git push directly from the extension host
+      #   without realizing code-server's GitHub auth provider
+      #   doesn't reach our spawn context. git silently waited
+      #   forever for credentials it had no way to acquire.
+      #   Smoke testing 2026-04-26 caught it.
+      # - User-led diagnostic (typing "publish" in code-server's
+      #   command palette) revealed both Git: Publish Branch... AND
+      #   Publish to GitHub are registered in lab-base-sandbox.
+      #   The fix path: stop spawning git push ourselves; dispatch
+      #   to VS Code's auth-aware commands instead.
+      # - Three-path dispatch with feature detection:
+      #     * github.publish (Microsoft's "Publish to GitHub")
+      #       preferred for pristine workspaces — handles OAuth +
+      #       repo creation + push in one magical flow
+      #     * git.publish (vscode.git's "Git: Publish Branch") used
+      #       when github.publish absent OR existing remote
+      #     * git.push for existing-repo push
+      # - Spawn fallback (with GIT_TERMINAL_PROMPT=0 + 5min timeout)
+      #   only when no VS Code commands are registered. Unlikely to
+      #   fire in lab-base-sandbox but exists for unusual environments.
+      #   No more silent hangs.
+      # - Two-stage success toast: immediate "Pushing..." dispatch,
+      #   then background follow-up "Pushed to <url>" with [View on
+      #   GitHub] action button when remote URL becomes detectable.
+      # - The integration-shim playbook from v0.4.2-v0.4.5 now
+      #   applies to VS Code's own internals, not just other
+      #   extensions. Architectural lesson worth carrying forward.
+      # - Pure extension bump.
+      container_revision: "1.0.14"
