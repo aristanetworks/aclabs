@@ -275,4 +275,19 @@ jobs:
       #   magic variables (__clabLabName__, __clabNodeName__).
       # - Button label: "Save" -> "Save Configs". Clearer scope.
       # - Pure extension bump.
-      container_revision: "1.0.11"
+      # 1.0.12:
+      # - Bump packetanglers.sandbox-dashboard 0.4.6 -> 0.4.7,
+      #   first item from the user-feedback queue flush.
+      # - Auto-hide auxiliary (secondary side) bar on activation.
+      #   Lab-base-sandbox containers ship without any extensions
+      #   that pin useful views into that right-side panel; it's
+      #   empty visual clutter on lab launch. Now hidden
+      #   automatically via workbench.action.closeAuxiliaryBar
+      #   on every activation (the command is idempotent — safe
+      #   to call unconditionally).
+      # - VS Code does not expose a settings.json key for this
+      #   (microsoft/vscode#198032 closed-as-duplicate); aux-bar
+      #   visibility is runtime state. The extension-code path is
+      #   the only viable approach.
+      # - Pure extension bump.
+      container_revision: "1.0.12"
