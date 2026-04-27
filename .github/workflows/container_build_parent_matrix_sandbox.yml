@@ -797,4 +797,31 @@ jobs:
       #   v0.9.4 is finally the shape we should have shipped at
       #   v0.9.0.
       # - Pure extension bump.
-      container_revision: "1.0.29"
+      # 1.0.30:
+      # - Bump packetanglers.sandbox-dashboard 0.9.4 -> 0.9.5,
+      #   pure UX polish release.
+      # - The bug: real-world testing surfaced that the bare label
+      #   "Reset" was being misinterpreted as "reset my running
+      #   lab" or "reset my topology" — when it actually destroys
+      #   all workspace files and restores from the pristine
+      #   baseline. A user clicking it expecting to restart their
+      #   containers (without losing files) would have a genuinely
+      #   bad time.
+      # - The fix: rename for scope clarity. Dashboard button
+      #   "Reset" -> "Reset Sandbox Workspace". Also updated:
+      #   first confirmation modal title ("Reset Sandbox Lab?" had
+      #   the EXACT bug we are fixing on the button), progress
+      #   notification, success toast, palette command title, and
+      #   the cross-reference in start-building.ts's recovery-hint
+      #   modal.
+      # - Behavior is identical to v0.9.4 — same two-step
+      #   confirmation, same destroy-then-wipe-then-restore flow,
+      #   same SecretStorage preservation. Pure naming change.
+      # - Command ID (sandboxDashboard.reset) preserved so
+      #   keybindings and scripts continue to work.
+      # - Architectural pattern: label specificity beats safety-
+      #   net reliance. The two-step confirmation is meant as a
+      #   final cognitive checkpoint, not as a recovery mechanism
+      #   for an ambiguous label.
+      # - Pure extension bump.
+      container_revision: "1.0.30"
