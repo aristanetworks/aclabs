@@ -735,4 +735,25 @@ jobs:
       #       integrating with another tool's API
       #     * User-explanatory modals for unavoidable UX friction
       # - Pure extension bump.
-      container_revision: "1.0.27"
+      # 1.0.28:
+      # - Bump packetanglers.sandbox-dashboard 0.9.2 -> 0.9.3,
+      #   hotfix release for a permission bug in v0.9.0's Reset
+      #   action.
+      # - The bug: after Save Configs (which runs as root via
+      #   sudo, creating root-owned subdirectories under
+      #   /sandbox/startup-configs/clab-<lab>/), Reset's wipe step
+      #   failed with EACCES because Node's fs.rm runs as the
+      #   non-root dashboard user (avd) and can't remove the
+      #   root-owned dirs.
+      # - The fix: replace fs.rm with sudo -n rm -rf, mirroring
+      #   the existing runContainerlabDestroy pattern. Container's
+      #   sudoers config already grants avd passwordless sudo
+      #   (used by every containerlab invocation), so no
+      #   infrastructure changes required.
+      # - Pure extension bump; latent v0.9.0 bug that surfaced in
+      #   real-world testing on day 2 of the v0.9.x cycle.
+      # - v0.9.2's separate Push to GitHub auth issue is being
+      #   addressed separately as v0.10.0 with empirical
+      #   verification of code-server's GitHub auth API before
+      #   committing to a redesign.
+      container_revision: "1.0.28"
