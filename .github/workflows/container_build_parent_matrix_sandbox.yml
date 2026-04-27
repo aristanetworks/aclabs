@@ -509,4 +509,37 @@ jobs:
       #   the extension, persists across reloads). v0.8.2 will reuse
       #   the same pattern for the CVaaS onboarding token.
       # - Pure extension bump (ardl was already in rev1.0.x).
-      container_revision: "1.0.20"
+      # 1.0.21:
+      # - Bump packetanglers.sandbox-dashboard 0.8.1 -> 0.8.2, the
+      #   third and final Arista vendor on-ramp. Completes the
+      #   v0.8.x trilogy.
+      # - 📡 Onboard to CVaaS button now appears in the Arista
+      #   Integrations sub-row. Concurrent multi-node onboarding
+      #   flow that pushes the CVaaS token + daemon TerminAttr
+      #   config into every arista_ceos node in the deployed lab
+      #   via containerlab exec.
+      # - Three-prompt flow:
+      #     1. Tenant type (Production / Staging) via QuickPick
+      #     2. Management VRF (optional)
+      #     3. CVaaS onboarding token (password-masked,
+      #        SecretStorage-persisted)
+      # - Single confirmation modal lists all proposed changes
+      #   before iterating. Concurrent per-node execution via
+      #   Promise.all (a 20-node lab onboards in ~5 seconds rather
+      #   than ~60-100s sequential).
+      # - Fail-forward semantics with adaptive result modal
+      #   (full success → toast, partial → warning modal with
+      #   per-node status, total failure → error modal).
+      # - "Sandbox Dashboard: Forget CVaaS Token" palette command
+      #   for credential rotation. Mirrors v0.8.1's Forget Arista
+      #   Token pattern for full architectural consistency.
+      # - The Arista Integrations sub-row now has all three
+      #   buttons: Reserve a CVaaS Tenant, Download cEOS Image,
+      #   Onboard to CVaaS. End-to-end Arista lab workflow fully
+      #   supported by the dashboard.
+      # - Most architecturally complex action body in the
+      #   codebase. Introduces several reusable patterns for
+      #   future bulk-per-node operations (push AVD configs, run
+      #   show commands across the lab, apply ZTP templates, etc.).
+      # - Pure extension bump.
+      container_revision: "1.0.21"
