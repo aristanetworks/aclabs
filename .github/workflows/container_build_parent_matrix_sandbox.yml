@@ -673,4 +673,27 @@ jobs:
       # - Lesson captured: rev bumps are cheap and routine, not
       #   ceremony reserved for big changes. Any container content
       #   change deserves a rev bump.
-      container_revision: "1.0.25"
+      # 1.0.26:
+      # - Bump packetanglers.sandbox-dashboard 0.9.0 -> 0.9.1,
+      #   hotfix release for two Push to GitHub bugs surfaced in
+      #   v0.9.0 testing.
+      # - Bug 1: "Push to GitHub" was treating second-click as
+      #   republish instead of "push my latest changes." Root cause:
+      #   VS Code's github.publish can succeed in pushing to GitHub
+      #   WITHOUT persisting the local origin remote, so v0.9.0's
+      #   "is git repo + has origin" detection saw "no origin" on
+      #   second click and took the publish-as-new-repo path.
+      #   v0.9.1 asks the user via modal: "Connect to existing repo"
+      #   (prompt for URL, git remote add, git push -u origin HEAD)
+      #   vs "Publish as new repo" (existing flow preserved).
+      # - Bug 2: Stale 60-second remote-detection background poll
+      #   that always failed (logged "no remote detected after 60s"
+      #   on every push). Reduced to 6 seconds with honest logging.
+      #   The Connect path skips polling entirely — we KNOW the URL
+      #   and we KNOW the push succeeded.
+      # - We can't reliably distinguish "previously-published-but-
+      #   origin-dropped" from "truly-fresh-never-published" via
+      #   observable git state alone. v0.9.1 asks honestly rather
+      #   than guessing wrong.
+      # - Pure extension bump.
+      container_revision: "1.0.26"
