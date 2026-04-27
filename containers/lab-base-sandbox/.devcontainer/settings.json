@@ -1,6 +1,7 @@
 {
     "containerlab": {
         "showWelcomePage": false,
+        "lockLabByDefault": false,
         "skipUpdateCheck": true,
         "defaultSshUser": "admin",
         "editor": {
@@ -27,7 +28,7 @@
             },
             {
                 "name": "Arista cEOS Latest",
-                "kind": "ceos",
+                "kind": "arista_ceos",
                 "type": "",
                 "image": "arista/ceos:latest",
                 "icon": "switch",

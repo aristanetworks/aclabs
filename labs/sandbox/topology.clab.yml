@@ -9,13 +9,14 @@ mgmt:
 topology:
 
   defaults:
-    env:
-      INTFTYPE: et
-    kind: ceos
+    kind: arista_ceos
 
   kinds:
-    ceos:
+    arista_ceos:
       image: arista/ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
 
