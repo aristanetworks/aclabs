@@ -572,4 +572,36 @@ jobs:
       #   against the actual binary before shipping invocations.
       #   Same flavor as v0.6.0's flash/ correction.
       # - Pure extension bump.
-      container_revision: "1.0.22"
+      # 1.0.23:
+      # - Bump packetanglers.sandbox-dashboard 0.8.3 -> 0.8.4,
+      #   feature extension to v0.8.3's CVaaS onboarding.
+      # - Real-world testing surfaced a critical prereq gap: cEOS
+      #   nodes need DNS configured (so TerminAttr can resolve
+      #   apiserver.arista.io) and NTP configured (so the cert
+      #   handshake to CVaaS succeeds). Without these, v0.8.3's
+      #   onboarding succeeds but CVaaS connection fails silently
+      #   hours later.
+      # - v0.8.4 adds transparent pre-flight detection and auto-
+      #   configuration of these prereqs, bundled into the existing
+      #   Onboard to CVaaS flow:
+      #     1. Concurrent pre-flight DNS/NTP detection per node via
+      #        Cli show running-config | include
+      #     2. VRF-aware detection (matches lines in user-specified
+      #        VRF, or default VRF when no VRF given)
+      #     3. Confirmation modal "Prerequisites" section adapts to
+      #        results — shows counts and per-node breakdown, omitted
+      #        entirely when all nodes already have both prereqs
+      #     4. Per-node prereq push (single combined FastCli call
+      #        when both needed) before the existing token + daemon
+      #        push
+      # - Hardcoded defaults (lab-appropriate):
+      #     DNS: 1.1.1.1 (Cloudflare public DNS)
+      #     NTP: time.google.com (Google public NTP)
+      # - Respect-existing rule: if a node ALREADY has any DNS/NTP
+      #   line in the relevant VRF, leave it absolutely alone. Same
+      #   DNA as v0.7.0's permissive magic-var detection.
+      # - Same VRF input drives all three configs (TerminAttr -cvvrf,
+      #   ip name-server vrf, ntp server vrf) — single source of
+      #   truth.
+      # - Pure extension bump.
+      container_revision: "1.0.23"
