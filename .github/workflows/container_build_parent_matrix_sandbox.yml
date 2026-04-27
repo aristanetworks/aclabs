@@ -640,4 +640,37 @@ jobs:
       #     * Defensive-baseline-check before destructive ops
       #     * Free-text confirmation for genuinely irreversible
       #       operations
-      container_revision: "1.0.24"
+      # 1.0.25:
+      # - Re-sync /opt/sandbox-original/ baseline with latest
+      #   labs/sandbox/ content. The 64da680 "update sandbox lab"
+      #   commit changed labs/sandbox/topology.clab.yml (kind:
+      #   ceos -> kind: arista_ceos, env moved into kind block,
+      #   added CLAB_MGMT_VRF=MGMT) and settings.json (added
+      #   lockLabByDefault: false; node template kind: ceos ->
+      #   kind: arista_ceos), but did NOT bump the container
+      #   revision. Without this rev1.0.25, the published
+      #   rev1.0.24 image would have stale baseline content
+      #   (the old kind: ceos topology) baked into
+      #   /opt/sandbox-original/, AND would have the old
+      #   settings.json without lockLabByDefault: false.
+      # - Why this matters: the rev tag is an immutable contract
+      #   between extension version + container content. Letting
+      #   container content drift inside an already-published rev
+      #   would mean "rev1.0.24" means different things to
+      #   different users depending on when they pulled. We bump
+      #   the rev to keep the contract honest.
+      # - Functional impact for users:
+      #     * topology.clab.yml uses arista_ceos kind (correct;
+      #       containerlab now flags bare "ceos" as deprecated)
+      #     * Lab is unlocked by default in TopoViewer — newcomers
+      #       click Start Building! and can immediately drag-and-
+      #       drop without needing to discover the unlock control
+      #     * New nodes added via TopoViewer drag-and-drop default
+      #       to arista_ceos kind (matches the topology defaults)
+      # - Pure content / settings update. No Dockerfile structural
+      #   changes, no extension version bump. sandbox-dashboard
+      #   stays at v0.9.0.
+      # - Lesson captured: rev bumps are cheap and routine, not
+      #   ceremony reserved for big changes. Any container content
+      #   change deserves a rev bump.
+      container_revision: "1.0.25"
