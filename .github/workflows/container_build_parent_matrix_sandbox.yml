@@ -542,4 +542,34 @@ jobs:
       #   future bulk-per-node operations (push AVD configs, run
       #   show commands across the lab, apply ZTP templates, etc.).
       # - Pure extension bump.
-      container_revision: "1.0.21"
+      # 1.0.22:
+      # - Bump packetanglers.sandbox-dashboard 0.8.2 -> 0.8.3,
+      #   hotfix release for v0.8.2's CVaaS onboarding.
+      # - Real-world testing on a 9-node EVPN gateway demo lab
+      #   surfaced TWO bugs:
+      #     1. (visible) FastCli -f doesn't exist. Filename is a
+      #        positional argument. v0.8.2's invocation was rejected
+      #        with "unrecognized arguments: -f" on every node, but
+      #        the failure went silently undetected because of bug #2.
+      #     2. (dangerous) containerlab exec exits 0 even when the
+      #        inner command fails. Inner failures are logged on
+      #        stderr only, in a structured form like:
+      #          ERRO Failed to execute command ... rc=N
+      #        v0.8.2's runContainerlabExec only checked outer exit,
+      #        so FastCli's rc=2 was never detected and was reported
+      #        as success.
+      # - v0.8.3 fixes both:
+      #     - Drops -f from FastCli invocation (uses positional arg)
+      #     - Adds defensive stderr parsing of containerlab's
+      #       "Failed to execute command ... rc=N" marker so inner
+      #       failures propagate as failures to the result modal
+      # - Bug #2 is the more important fix. Silent success on
+      #   failure erodes user trust in ways that loud failures
+      #   don't. Going forward, any external command we shell out
+      #   to gets stderr-scanned for tool-specific failure markers
+      #   in addition to outer-exit-code checking.
+      # - Architectural lesson captured: verify CLI flag shapes
+      #   against the actual binary before shipping invocations.
+      #   Same flavor as v0.6.0's flash/ correction.
+      # - Pure extension bump.
+      container_revision: "1.0.22"
