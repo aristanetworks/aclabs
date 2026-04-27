@@ -696,4 +696,43 @@ jobs:
       #   observable git state alone. v0.9.1 asks honestly rather
       #   than guessing wrong.
       # - Pure extension bump.
-      container_revision: "1.0.26"
+      # 1.0.27:
+      # - Bump packetanglers.sandbox-dashboard 0.9.1 -> 0.9.2,
+      #   hotfix release for the deeper root cause of v0.9.x's
+      #   Push to GitHub issues.
+      # - The realization: code-server's github.publish is a
+      #   "create repo + authenticate" primitive only, not a
+      #   "publish" primitive. Despite the name, it does NOT push
+      #   code. v0.9.0 and v0.9.1 both shipped fixes based on
+      #   partial understanding (assumed publish at least pushed);
+      #   v0.9.2 addresses the underlying mechanism.
+      # - Empirical evidence: after a "successful" Push to GitHub,
+      #   the GitHub repo was completely empty (no commits, no
+      #   files), and the local workspace had no origin configured.
+      #   Yet from VS Code's UI perspective, everything looked
+      #   like a successful publish.
+      # - The new flow:
+      #     1. Pre-publish heads-up modal sets expectations about
+      #        the two-step nature
+      #     2. Dispatch github.publish (still — for repo creation
+      #        + auth)
+      #     3. 3-second courtesy poll for origin (future-proofing)
+      #     4. Post-publish URL prompt with [Look up my repos on
+      #        GitHub] button for newcomers
+      #     5. Explicit git remote add origin + git push -u origin
+      #        HEAD
+      #     6. Confident success toast (we KNOW we pushed)
+      # - User cost: two extra modals per first-publish. Benefit:
+      #   files actually get pushed, every time. Subsequent pushes:
+      #   zero changes.
+      # - The v0.9.1 "Connect to existing repo" path still works
+      #   as a recovery option for partial state from older
+      #   container versions.
+      # - Architectural patterns introduced:
+      #     * Don't trust an external tool's name to describe its
+      #       behavior — verify empirically
+      #     * Explicit-state-machine over magic-dispatch when
+      #       integrating with another tool's API
+      #     * User-explanatory modals for unavoidable UX friction
+      # - Pure extension bump.
+      container_revision: "1.0.27"
