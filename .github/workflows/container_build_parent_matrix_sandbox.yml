@@ -484,4 +484,29 @@ jobs:
       #   integrations emerge (Nokia, Juniper, etc.), they get their
       #   own subdirectories and sub-rows.
       # - Pure extension bump.
-      container_revision: "1.0.19"
+      # 1.0.20:
+      # - Bump packetanglers.sandbox-dashboard 0.8.0 -> 0.8.1, the
+      #   middle Arista vendor on-ramp.
+      # - 🔽 Download cEOS Image button now appears in the Arista
+      #   Integrations sub-row. Wraps ardl (the eos-downloader CLI;
+      #   pre-installed in this container) in a friendly dashboard
+      #   flow:
+      #     1. Prompt for cEOS version (e.g. 4.35.4M), validated
+      #        against Arista's release format 4.X.Y[.Z](F|M)
+      #     2. Defensive Docker cache check; if image already
+      #        exists, offer Use Cached / Force Re-download / Cancel
+      #        modal (saves the user a 560MB transfer when cached)
+      #     3. Get/prompt for arista.com API token (stored in
+      #        VS Code SecretStorage; prompted only on first use)
+      #     4. Run ardl from /tmp (not the user's workspace) with
+      #        progress streaming
+      #     5. Image lands as arista/ceos:<version> ready for use
+      # - "Sandbox Dashboard: Forget Arista Token" palette command
+      #   for credential rotation. cEOS download error path offers
+      #   this directly when an auth-looking error is detected.
+      # - VS Code SecretStorage integration is the architecture for
+      #   credentials going forward (encrypted at rest, scoped to
+      #   the extension, persists across reloads). v0.8.2 will reuse
+      #   the same pattern for the CVaaS onboarding token.
+      # - Pure extension bump (ardl was already in rev1.0.x).
+      container_revision: "1.0.20"
