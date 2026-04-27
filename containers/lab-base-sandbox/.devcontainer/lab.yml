@@ -1,0 +1,44 @@
+# Sandbox lab metadata for sandbox-dashboard v0.10.0+.
+#
+# Baked into the lab-base-sandbox container image and read by
+# sandbox-dashboard at extension activation. Rendered as the
+# Lab Overview card at the top of the dashboard.
+#
+# This file is NOT user-editable — it ships with the container
+# image. To change it, edit this file and bump the container
+# revision (see Pattern 23 in docs/retrospective.md in the
+# sandbox-dashboard repo).
+#
+# Schema reference: src/lab-metadata.ts in PacketAnglers/sandbox-dashboard
+
+name: Arista Networks Sandbox Lab
+
+description: |
+  A pre-configured environment for designing, building, and operating Arista
+  cEOS network labs without leaving the IDE. The lab ships with containerlab,
+  ardl (Arista's downloader), gnmic, AVD tooling, and a curated Python
+  environment ready for SP/DC topology development. Use the dashboard buttons
+  below to build a topology from scratch, deploy it, save device configs,
+  push your work to GitHub, or onboard your lab to CVaaS.
+
+resources:
+  cpu: 16
+  memory: 64G
+  storage: 128G
+
+links:
+  - label: Documentation
+    url: https://github.com/PacketAnglers/sandbox-dashboard/blob/main/CAPABILITIES.md
+    icon: 📖
+  - label: Sandbox Dashboard Repository
+    url: https://github.com/PacketAnglers/sandbox-dashboard
+    icon: 🚀
+  - label: Containerlab Documentation
+    url: https://containerlab.dev
+    icon: 🧪
+  - label: Arista cEOS-lab Documentation
+    url: https://www.arista.com/en/support/software-download
+    icon: 🐙
+  - label: Report an Issue
+    url: https://github.com/PacketAnglers/sandbox-dashboard/issues
+    icon: 🐛

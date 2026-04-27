@@ -824,4 +824,41 @@ jobs:
       #   final cognitive checkpoint, not as a recovery mechanism
       #   for an ambiguous label.
       # - Pure extension bump.
-      container_revision: "1.0.30"
+      # 1.0.31:
+      # - Bump packetanglers.sandbox-dashboard 0.9.5 -> 0.10.0, first
+      #   release of the v0.10.x cycle. Adds a Lab Overview card at
+      #   the top of the dashboard, populated from a new lab.yml file
+      #   baked into this container image at /opt/lab-base-sandbox/
+      #   lab.yml.
+      # - NEW: bake /opt/lab-base-sandbox/lab.yml into the image at
+      #   build time. Owned by ${USERNAME} (avd) so the dashboard
+      #   process can read it without sudo. Mirrors the existing
+      #   /opt/sandbox-original/ ownership pattern (rev1.0.24+).
+      # - The lab.yml ships with: name + description for the Arista
+      #   Networks Sandbox Lab, resource badges (CPU=16, RAM=64G,
+      #   Storage=128G), and helpful links (CAPABILITIES.md, the
+      #   sandbox-dashboard repo, containerlab docs, Arista cEOS-lab
+      #   download, GitHub Issues for reporting bugs).
+      # - The dashboard is no longer purely action-oriented (told
+      #   users what they could DO); it now also serves as a context
+      #   surface (tells users what they HAVE). Meaningful product
+      #   evolution.
+      # - Architectural decisions:
+      #     * Option B from the design discussion: container-baked,
+      #       not workspace-overridable. Single sandbox lab; no
+      #       per-lab variation needed. Collapses complexity (no
+      #       watcher, no merge logic, no write path).
+      #     * Read once at activation, cache for the session. lab.yml
+      #       is immutable per session; no file watcher needed.
+      #     * Graceful degradation: older containers (rev1.0.30 and
+      #       earlier) continue to work cleanly without the Lab
+      #       Overview card. Errors logged to output channel only,
+      #       never surfaced as user-visible UI.
+      #     * URL safety: the new openExternal webview-to-host bridge
+      #       accepts only http/https URLs. Prevents misconfigured
+      #       lab.yml entries from dispatching arbitrary URI schemes
+      #       (file://, vscode://, etc.).
+      # - To change lab.yml content in the future, edit the file AND
+      #   bump this rev (per the immutable-rev contract from
+      #   rev1.0.25's "missed bump" lesson).
+      container_revision: "1.0.31"

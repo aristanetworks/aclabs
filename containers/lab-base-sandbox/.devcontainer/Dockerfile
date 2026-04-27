@@ -94,7 +94,7 @@ RUN for ext in \
     done
 
 RUN curl -fsSL -o /tmp/sandbox-dashboard.vsix \
-      https://open-vsx.org/api/packetanglers/sandbox-dashboard/0.9.5/file/packetanglers.sandbox-dashboard-0.9.5.vsix \
+      https://open-vsx.org/api/packetanglers/sandbox-dashboard/0.10.0/file/packetanglers.sandbox-dashboard-0.10.0.vsix \
  && code-server --install-extension /tmp/sandbox-dashboard.vsix --force \
  && rm /tmp/sandbox-dashboard.vsix
 
@@ -113,6 +113,24 @@ USER root
 # and a sandbox-appropriate .gitignore.
 COPY ./sandbox-original/ /opt/sandbox-original/
 RUN chown -R ${USERNAME}:${USERNAME} /opt/sandbox-original
+
+# Bake the lab metadata file (lab.yml) into the container image. Read
+# by sandbox-dashboard v0.10.0+ at extension activation and rendered as
+# the Lab Overview card at the top of the dashboard. Per the v0.10.0
+# design, this file is NOT user-editable — it ships with the image and
+# changes require a container rebuild.
+#
+# The chown matches the /opt/sandbox-original/ pattern above: owned by
+# the avd user so the dashboard process can read it without sudo. World-
+# readable would also work (mode 644 is the default for COPY), but
+# explicit avd-ownership matches existing precedent and is more
+# defensive against future umask changes in the build environment.
+#
+# Sandbox-dashboard v0.9.5 and earlier do not read this file; they
+# render the dashboard without the Lab Overview card (graceful
+# degradation, by design — see the v0.10.0 changelog).
+COPY ./lab.yml /opt/lab-base-sandbox/lab.yml
+RUN chown -R ${USERNAME}:${USERNAME} /opt/lab-base-sandbox
 
 # User-level code-server settings — applies to every workspace opened
 # in this image. Suppresses the Welcome tab and the Red Hat YAML
