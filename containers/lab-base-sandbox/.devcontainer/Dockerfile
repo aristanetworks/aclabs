@@ -94,11 +94,26 @@ RUN for ext in \
     done
 
 RUN curl -fsSL -o /tmp/sandbox-dashboard.vsix \
-      https://open-vsx.org/api/packetanglers/sandbox-dashboard/0.8.4/file/packetanglers.sandbox-dashboard-0.8.4.vsix \
+      https://open-vsx.org/api/packetanglers/sandbox-dashboard/0.9.0/file/packetanglers.sandbox-dashboard-0.9.0.vsix \
  && code-server --install-extension /tmp/sandbox-dashboard.vsix --force \
  && rm /tmp/sandbox-dashboard.vsix
 
 USER root
+
+# Bake the pristine /sandbox starting state into /opt/sandbox-original/
+# so the dashboard's Reset action has a known-good baseline to restore
+# from. The sandbox-dashboard's "Reset" button (added v0.9.0) wipes
+# /sandbox/ and copies /opt/sandbox-original/. back, giving users a
+# factory-reset experience when they want to start over.
+#
+# The contents here MUST mirror the layout that would otherwise arrive
+# via the labs/sandbox/ bind mount. The baseline includes the default
+# topology (2 cEOS nodes connected), annotations for TopoViewer, the
+# standard sandbox README, the asset images referenced by the README,
+# and a sandbox-appropriate .gitignore.
+COPY ./sandbox-original/ /opt/sandbox-original/
+RUN chown -R ${USERNAME}:${USERNAME} /opt/sandbox-original
+
 # User-level code-server settings — applies to every workspace opened
 # in this image. Suppresses the Welcome tab and the Red Hat YAML
 # telemetry consent popup so users land in a clean workspace ready

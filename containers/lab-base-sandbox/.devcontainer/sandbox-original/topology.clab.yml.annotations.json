@@ -1,0 +1,31 @@
+{
+  "freeTextAnnotations": [],
+  "freeShapeAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "ceos1",
+      "position": {
+        "x": 380,
+        "y": 360
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "ceos2",
+      "position": {
+        "x": 600,
+        "y": 360
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {}
+}

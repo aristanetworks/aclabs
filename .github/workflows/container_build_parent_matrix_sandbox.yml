@@ -604,4 +604,40 @@ jobs:
       #   ip name-server vrf, ntp server vrf) — single source of
       #   truth.
       # - Pure extension bump.
-      container_revision: "1.0.23"
+      # 1.0.24:
+      # - Bump packetanglers.sandbox-dashboard 0.8.4 -> 0.9.0,
+      #   first release deliberately targeting first-time /
+      #   newcomer users.
+      # - NEW: bake /opt/sandbox-original/ at image build time as
+      #   the pristine baseline for the v0.9.0 Reset action. The
+      #   baseline mirrors the workspace starting state exactly:
+      #   topology.clab.yml (2 cEOS nodes connected), annotations
+      #   for TopoViewer, sandbox-appropriate .gitignore, README,
+      #   and supporting asset images.
+      # - NEW: workspace layout flattened. Starter topology files
+      #   (topology.clab.yml + annotations) now live at /sandbox/
+      #   root instead of nested under /sandbox/sandbox-template/.
+      #   Single obvious file at the obvious location for newcomers.
+      #   Topology renamed from "sandbox-template" to "sandbox-lab"
+      #   for a more user-facing default.
+      # - The v0.9.0 dashboard adds two buttons:
+      #     * Start Building! 🎨 (Sources row) — opens workspace
+      #       topology.clab.yml in TopoViewer for drag-and-drop
+      #       topology editing. Disabled while a lab is deployed.
+      #     * Reset 🔄 (Lifecycle row) — factory-restore the
+      #       workspace to pristine state. Two-step confirmation
+      #       (warning modal + free-text "reset" prompt, matching
+      #       GitHub's repo deletion pattern). Destroys running
+      #       labs first; preserves SecretStorage credentials.
+      # - Reset depends on /opt/sandbox-original/ being present.
+      #   The dashboard checks this BEFORE wiping the workspace
+      #   and aborts cleanly if missing — older container images
+      #   that predate rev1.0.24 will surface a clear error
+      #   message rather than silently wiping the user's work.
+      # - Architectural patterns introduced:
+      #     * Dual-audience design — first release for newcomers
+      #       alongside experienced users
+      #     * Defensive-baseline-check before destructive ops
+      #     * Free-text confirmation for genuinely irreversible
+      #       operations
+      container_revision: "1.0.24"
