@@ -756,4 +756,45 @@ jobs:
       #   addressed separately as v0.10.0 with empirical
       #   verification of code-server's GitHub auth API before
       #   committing to a redesign.
-      container_revision: "1.0.28"
+      # 1.0.29:
+      # - Bump packetanglers.sandbox-dashboard 0.9.3 -> 0.9.4, the
+      #   "v0.9.4 reset." Substantially simplifies Push to GitHub.
+      # - The actual root cause of v0.9.0-v0.9.2's progressive
+      #   confusion: `await executeCommand('github.publish')`
+      #   returns IMMEDIATELY when dispatched, not when the user
+      #   finishes interacting with the prompts the command spawns.
+      #   This is how VS Code's command system works in general.
+      # - What this meant in practice: v0.9.2's post-publish URL
+      #   prompt was firing while VS Code's publish dialog was
+      #   still open, superseding VS Code's UI before the user
+      #   could complete the publish flow. Every "evidence" we
+      #   collected ("repo is empty," "origin not persisted") was
+      #   actually evidence of THIS race condition — not of
+      #   github.publish doing nothing useful. The tool was working
+      #   all along; we were just stomping on its UI.
+      # - The fix: drastically simpler. Get out of github.publish's
+      #   way. v0.9.4 flow:
+      #     1. Pre-publish heads-up modal (rewritten to be honest)
+      #     2. Dispatch github.publish
+      #     3. Done. VS Code owns the rest.
+      # - No URL prompt, no explicit git remote add, no explicit
+      #   git push. github.publish does all of that itself when
+      #   not interrupted.
+      # - The v0.9.1 "Connect to existing repo" path is preserved
+      #   as a recovery option for partial state.
+      # - Lessons captured (candidates for retrospective):
+      #     * Don't replicate what an upstream tool already does
+      #       well — the dashboard's role is to nudge users TOWARD
+      #       VS Code's flow, not to redo it
+      #     * executeCommand resolves on dispatch, not on
+      #       completion
+      #     * When a flow seems to skip a step, ask whether
+      #       something is racing rather than assuming the step
+      #       doesn't exist
+      # - Eight tagged releases over two days (v0.9.0 through
+      #   v0.9.4 plus container-side rev bumps), four in Push to
+      #   GitHub alone. Each release added empirical understanding.
+      #   v0.9.4 is finally the shape we should have shipped at
+      #   v0.9.0.
+      # - Pure extension bump.
+      container_revision: "1.0.29"
