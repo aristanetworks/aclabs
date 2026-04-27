@@ -463,4 +463,25 @@ jobs:
       #   When modifying authored values, leave a comment trail.
       #   Costs file clutter; gains trust + manual revertability.
       # - Pure extension bump.
-      container_revision: "1.0.18"
+      # 1.0.19:
+      # - Bump packetanglers.sandbox-dashboard 0.7.0 -> 0.8.0, the
+      #   first vendor-specific on-ramp in the dashboard.
+      # - New "Arista Integrations" sub-row appears below Destinations
+      #   in the actions section. First button in it:
+      #     ☁️  Reserve a CVaaS Tenant
+      #   Opens https://labs.arista.com/prolabs/cvaas-reservation in
+      #   the user's browser via vscode.env.openExternal.
+      # - Architectural firsts in v0.8.0:
+      #     * src/actions/arista/ subdirectory for vendor-specific
+      #       actions, separate from the vendor-neutral core
+      #     * First always-enabled button (no workspace/lab gating)
+      #     * First action that just opens an external URL
+      # - v0.8.x roadmap (not yet shipped):
+      #     v0.8.1 — cEOS downloader via ardl
+      #     v0.8.2 — CVaaS device onboarding (daemon TerminAttr)
+      # - Vendor-specific code segregation keeps the dashboard
+      #   vendor-neutral at its core. If non-Arista vendor
+      #   integrations emerge (Nokia, Juniper, etc.), they get their
+      #   own subdirectories and sub-rows.
+      # - Pure extension bump.
+      container_revision: "1.0.19"
