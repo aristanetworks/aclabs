@@ -427,4 +427,40 @@ jobs:
       #   downstream work. Notifications are fire-and-forget unless
       #   you explicitly need the user's button choice.
       # - Pure extension bump.
-      container_revision: "1.0.17"
+      # 1.0.18:
+      # - Bump packetanglers.sandbox-dashboard 0.6.1 -> 0.7.0, the
+      #   second content-modification feature in the codebase and the
+      #   first DESTRUCTIVE one (replaces user-authored values, not
+      #   just adds keys).
+      # - Surfaced by real-world testing 2026-04-26 against the EVPN
+      #   gateway demo lab where every cEOS node had a static
+      #   reference config (startup-config: configs/A-SPINE.cfg). Two
+      #   distinct issues from one test scenario:
+      #     1. No path to migrate from static refs to magic-var
+      #        auto-resume (just got silently skipped as
+      #        "already-wired")
+      #     2. No visible feedback when wire-magic-vars no-ops
+      #        post-Save (users wondered if anything happened)
+      #   Both addressed in v0.7.0.
+      # - Static→magic-var migration: wire-magic-vars now offers to
+      #   REPLACE existing static startup-config: values with the
+      #   magic-var form. Original values preserved as YAML comments
+      #   above the migrated key (e.g. "# was: startup-config:
+      #   configs/A-SPINE.cfg (replaced by Sandbox Dashboard
+      #   2026-04-27)") for trivial manual revert.
+      # - Visible no-op feedback: post-Save trigger now always shows
+      #   a brief info toast on no-op (e.g. "No magic-variable wiring
+      #   needed. 9 already on auto-resume.") so users know we
+      #   checked.
+      # - Permissive magic-var detection: any value containing
+      #   __clabNodeName__ is treated as user's deliberate auto-
+      #   resume setup and left alone absolutely. We don't normalize
+      #   variants to a canonical form.
+      # - Modal restructured with up to three sections (Add wiring /
+      #   Migrate to auto-resume / .gitignore changes) that adapt
+      #   based on what's being proposed.
+      # - New architectural pattern: destructive-but-transparent.
+      #   When modifying authored values, leave a comment trail.
+      #   Costs file clutter; gains trust + manual revertability.
+      # - Pure extension bump.
+      container_revision: "1.0.18"
