@@ -1001,4 +1001,27 @@ jobs:
       #   `tar -tzf` verification before the design was locked.
       #   Pattern 22 from the retrospective in slow motion.
       # - Pure extension bump.
-      container_revision: "1.0.35"
+      # 1.0.36:
+      # - Bump packetanglers.sandbox-dashboard 0.11.0 -> 0.11.1, bug
+      #   fix release. Borrow from Tech Library now preserves the
+      #   assets/ directory.
+      # - The bug: real-world testing of v0.11.0 surfaced that
+      #   borrowed labs failed to boot. v0.11.0's content-filter
+      #   incorrectly removed assets/, which contains files
+      #   bind-mounted into containers at runtime (e.g.,
+      #   assets/prod_hosts.txt, assets/dev_hosts.txt). When the
+      #   filter dropped assets/, ContainerLab refused to start
+      #   because the bind-mount source was missing.
+      # - The fix: removed 'assets' from FILTERED_TOP_LEVEL_NAMES.
+      #   Borrowed labs now ship with their assets/ directory intact.
+      # - Lesson recorded in code: reading filenames is not the same
+      #   as understanding file roles. The runtime configuration
+      #   (topology.clab.yml binds, playbook references, Makefile
+      #   targets) is the source of truth for what files a lab
+      #   actually needs.
+      # - This is a sub-pattern of Pattern 22 from the retrospective:
+      #   even disciplined verification rounds can leave a class of
+      #   bugs uncaught. The deepest verification is "actually
+      #   running the thing in production conditions."
+      # - Pure extension bump.
+      container_revision: "1.0.36"
