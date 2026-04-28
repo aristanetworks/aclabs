@@ -1024,4 +1024,35 @@ jobs:
       #   bugs uncaught. The deepest verification is "actually
       #   running the thing in production conditions."
       # - Pure extension bump.
-      container_revision: "1.0.36"
+      # 1.0.37:
+      # - Bump packetanglers.sandbox-dashboard 0.11.1 -> 0.11.2, bug
+      #   fix release. Clone from GitHub no longer destroys the
+      #   workspace when run after a Reset that followed a previous
+      #   Clone.
+      # - The bug: the sequence Clone → Reset → Clone would leave the
+      #   workspace completely empty after the second clone. No .git,
+      #   no files, nothing.
+      # - The diagnosis: vscode.git's internal repository registry
+      #   survives shell-level deletion of .git directories. After
+      #   Reset's `sudo rm -rf /sandbox/.git`, vscode.git still
+      #   thought /sandbox was a known repository. The next clone's
+      #   API correctly placed files at parentPath/<repo-name>/ but
+      #   RETURNED /sandbox as the URI. Our promote logic then
+      #   operated on the workspace root (no-op rename loop) and our
+      #   cleanup recursively deleted the staging dir which contained
+      #   the actual cloned content.
+      # - The fix: stop trusting clonedUri.fsPath as the clone
+      #   location. Walk the staging dir to find what's actually
+      #   there. Defensive single-entry check surfaces any future
+      #   weirdness in vscode.git's behavior loudly.
+      # - The fix is defensive rather than corrective — it doesn't
+      #   try to fix vscode.git's internal state (brittle, undocumented),
+      #   it just makes our code immune to the wrong return value.
+      # - Lesson recorded: refinement of Pattern 28. Verification has
+      #   TEMPORAL depth, not just structural depth. Operations that
+      #   work once may fail when repeated, especially if shell
+      #   commands modify state behind a tool's back. v0.10.1's
+      #   testing covered fresh-workspace clones but didn't include
+      #   "Clone after Reset after Clone" as a test sequence.
+      # - Pure extension bump.
+      container_revision: "1.0.37"
