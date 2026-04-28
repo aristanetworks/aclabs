@@ -932,4 +932,33 @@ jobs:
       #   the dashboard repo so future authors of lab.yml see the
       #   contract at the schema definition.
       # - Pure extension bump + lab.yml content refresh.
-      container_revision: "1.0.33"
+      # 1.0.34:
+      # - Bump packetanglers.sandbox-dashboard 0.10.2 -> 0.10.3, UX
+      #   polish release. Second pass on the Lab Overview card after
+      #   real-world testing of v0.10.2 surfaced that the card's
+      #   neutral-gray background made it feel like just another
+      #   content section rather than the hero/orientation surface
+      #   it's intended to be.
+      # - The Lab Overview card now has a proper Arista brand hero
+      #   treatment:
+      #     - Background: pale blue tint (#EBF1F8)
+      #     - Left accent: 4px solid Arista Blue (#16325B), no
+      #       surrounding border
+      #     - Heading: Arista Blue (#16325B)
+      #     - Body: soft dark slate (#1F2937)
+      #     - Links: Arista Blue (#16325B) with Arista Light Blue
+      #       (#4473A9) hover
+      # - Theme-pinning trade-off: all colors inside the card are now
+      #   pinned solid hex values, NOT VS Code theme variables. Same
+      #   trade-off as v0.10.2's badges (brand consistency over theme
+      #   adaptivity). Cost: in dark VS Code themes, the card stays
+      #   as a "light island". Benefit: the card always reads as
+      #   Arista-branded regardless of theme.
+      # - Lesson captured in the v0.10.3 CHANGELOG: partial brand-
+      #   pinning creates theme mismatch surface area. When a surface
+      #   is brand-pinned, EVERYTHING inside it should be brand-
+      #   pinned, because mixing a theme-adaptive foreground with a
+      #   brand-pinned background means one of them is always wrong
+      #   in some theme.
+      # - Pure extension bump.
+      container_revision: "1.0.34"
