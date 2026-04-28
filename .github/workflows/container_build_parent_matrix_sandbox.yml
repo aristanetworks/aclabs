@@ -861,4 +861,47 @@ jobs:
       # - To change lab.yml content in the future, edit the file AND
       #   bump this rev (per the immutable-rev contract from
       #   rev1.0.25's "missed bump" lesson).
-      container_revision: "1.0.31"
+      # 1.0.32:
+      # - Bump packetanglers.sandbox-dashboard 0.10.0 -> 0.10.1, bug
+      #   fix release. Clone from GitHub now correctly handles
+      #   private repositories.
+      # - The bug: real-world testing of v0.10.0 surfaced that Clone
+      #   from GitHub hung forever for private repos. Public repos
+      #   worked perfectly; private repos sat in a perpetual
+      #   "Cloning..." toast with the button greyed out.
+      # - The diagnosis: the dashboard spawned `git clone` directly
+      #   via child_process.spawn with no env-var configuration.
+      #   code-server sets the GIT_ASKPASS / VSCODE_GIT_* bridge
+      #   variables in shells but NOT in the extension host:
+      #     terminal env: GIT_ASKPASS, VSCODE_GIT_ASKPASS_NODE,
+      #                   VSCODE_GIT_ASKPASS_MAIN, VSCODE_GIT_IPC_HANDLE
+      #     extension host env: only GIT_INIT=false
+      #   So git had no path to ask for credentials. With stdio:
+      #   ['ignore', ...] it couldn't even prompt on stdin.
+      # - The fix: stop spawning git ourselves. Delegate to VS
+      #   Code's built-in git extension via its public API
+      #   (vscode.extensions.getExtension('vscode.git').exports
+      #   .getAPI(1).clone(...)). The git extension knows how to
+      #   wire the askpass bridge for any git host (GitHub,
+      #   GitLab, Bitbucket, self-hosted, SSH, HTTPS) — we get
+      #   all of that for free by delegating instead of replicating.
+      # - This is Pattern 21 from the v0.9.x retrospective ("Don't
+      #   replicate what an upstream tool already does well")
+      #   applied at exactly the moment that pattern would have
+      #   prevented the original bug.
+      # - Architectural details:
+      #     * The vscode.git API clones into parentPath/<repo-name>/,
+      #       not parentPath itself. Solution: clone into a hidden
+      #       staging dir (/sandbox/.tmp-clone-<ts>/), move children
+      #       up to /sandbox/, remove the staging tree.
+      #     * extensionDependencies: ["vscode.git"] added so the git
+      #       extension activates before us.
+      #     * API resolution happens BEFORE the destructive wipe so
+      #       a missing extension doesn't destroy the workspace.
+      # - User-visible changes: progress UI is now VS Code's own
+      #   clone notification (with cancel button); auth prompts for
+      #   private repos NOW APPEAR (the "GitHub wants to sign in"
+      #   prompt that worked from terminal will now appear when
+      #   cloning from the dashboard too).
+      # - Pure extension bump.
+      container_revision: "1.0.32"
