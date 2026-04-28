@@ -961,4 +961,44 @@ jobs:
       #   brand-pinned background means one of them is always wrong
       #   in some theme.
       # - Pure extension bump.
-      container_revision: "1.0.34"
+      # 1.0.35:
+      # - Bump packetanglers.sandbox-dashboard 0.10.3 -> 0.11.0,
+      #   first release of the v0.11.x cycle. Adds a new "📚
+      #   Borrow from Tech Library" button in the Sources row that
+      #   lets users start from an Arista-published starter lab
+      #   and make it their own.
+      # - Closes a workflow gap: the dashboard already made it
+      #   easy to clone, edit, save, and push your OWN work, but
+      #   "fork-and-own someone else's starter" was missing. Two
+      #   real users independently surfaced this within a week of
+      #   each other.
+      # - The flow:
+      #     * Fetch available techlib-* labs from aristanetworks/
+      #       aclabs via GitHub Contents API
+      #     * QuickPick of available labs
+      #     * Destructive-confirm modal (same pattern as Clone
+      #       from GitHub)
+      #     * Tarball download from
+      #       https://aristanetworks.github.io/aclabs/lab_archives/
+      #       <name>.tar.gz
+      #     * Two-step staged extraction with filtering of four
+      #       aclabs-specific items (.vscode/, assets/, README.md,
+      #       addAliases.sh)
+      #     * Fresh git init with attributed first commit:
+      #         "Borrowed from aristanetworks/aclabs labs/<name>"
+      #     * Push to GitHub works immediately for publishing
+      # - Architectural note: the tarball extraction is
+      #   deliberately a two-step staged copy (extract to /tmp
+      #   staging, walk and selectively copy) rather than a single
+      #   `tar --strip-components` invocation. The aclabs
+      #   publishing pipeline ships .devcontainer/ at the OUTER
+      #   wrapper level while the lab content is 3 levels deep,
+      #   which means --strip-components=3 would silently drop
+      #   .devcontainer/. The two-step approach makes every file
+      #   placement explicit and surfaces layout changes loudly
+      #   rather than silently.
+      # - This was discovered empirically across 4 rounds of
+      #   `tar -tzf` verification before the design was locked.
+      #   Pattern 22 from the retrospective in slow motion.
+      # - Pure extension bump.
+      container_revision: "1.0.35"
