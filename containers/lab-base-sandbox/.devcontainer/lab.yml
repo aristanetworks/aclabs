@@ -10,16 +10,29 @@
 # sandbox-dashboard repo).
 #
 # Schema reference: src/lab-metadata.ts in PacketAnglers/sandbox-dashboard
+#
+# RENDERING NOTE: the description field is rendered as PLAIN TEXT
+# in the dashboard (textContent, not innerHTML). Line breaks and
+# emoji work; inline markdown (**bold**, _italic_, [links](url),
+# `code`) does NOT render as formatting and will appear as literal
+# characters. See the JSDoc note on the description field in
+# src/lab-metadata.ts in PacketAnglers/sandbox-dashboard for the
+# full contract.
 
-name: Arista Networks Sandbox Lab
+name: Welcome to the Sandbox!
 
 description: |
-  A pre-configured environment for designing, building, and operating Arista
-  cEOS network labs without leaving the IDE. The lab ships with containerlab,
-  ardl (Arista's downloader), gnmic, AVD tooling, and a curated Python
-  environment ready for SP/DC topology development. Use the dashboard buttons
-  below to build a topology from scratch, deploy it, save device configs,
-  push your work to GitHub, or onboard your lab to CVaaS.
+  This sandbox environment is available to all Arista employees and ships with
+  ContainerLab, cEOS-lab, AVD, ardl (Arista's downloader), gnmic, and more!
+
+  Whether it's designing, testing, demoing, or just tinkering, this Sandbox is here
+  to help make labbing up solutions as seamless as possible.
+
+  Use the dashboard buttons below to build a topology, deploy it, save configs,
+  push your work to GitHub, onboard your lab to CVaaS, and more. All without
+  leaving the IDE.
+
+  Happy labbing! 🧪
 
 resources:
   cpu: 16
@@ -27,18 +40,9 @@ resources:
   storage: 128G
 
 links:
-  - label: Documentation
+  - label: Getting Started
     url: https://github.com/PacketAnglers/sandbox-dashboard/blob/main/CAPABILITIES.md
     icon: 📖
-  - label: Sandbox Dashboard Repository
-    url: https://github.com/PacketAnglers/sandbox-dashboard
-    icon: 🚀
-  - label: Containerlab Documentation
-    url: https://containerlab.dev
-    icon: 🧪
-  - label: Arista cEOS-lab Documentation
-    url: https://www.arista.com/en/support/software-download
-    icon: 🐙
   - label: Report an Issue
     url: https://github.com/PacketAnglers/sandbox-dashboard/issues
     icon: 🐛

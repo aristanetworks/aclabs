@@ -904,4 +904,32 @@ jobs:
       #   prompt that worked from terminal will now appear when
       #   cloning from the dashboard too).
       # - Pure extension bump.
-      container_revision: "1.0.32"
+      # 1.0.33:
+      # - Bump packetanglers.sandbox-dashboard 0.10.1 -> 0.10.2, UX
+      #   polish release. The Lab Overview resource badges now render
+      #   in shields.io two-tone style using official Arista brand
+      #   colors:
+      #     - Label half ("CPU", "RAM", "STORAGE"): Arista Dark Gray
+      #       (#58585B, Pantone 425 C), white uppercase letterspaced
+      #     - Value half ("16", "64G", "128G"): Arista Blue (#16325B,
+      #       Pantone 648 C — the main Arista logo color), white
+      #       bold with tabular-nums
+      #     - The two halves form a single unified rounded rectangle
+      #       with no border or visible separation
+      #   Brand colors verified against the official 2025 Arista
+      #   Brand Guidelines PDF.
+      # - NEW lab.yml content. Friendlier "Welcome to the Sandbox!"
+      #   framing that orients newcomers, gives explicit permission
+      #   to "just tinker," directs them to the dashboard buttons,
+      #   and closes with "Happy labbing! 🧪". Trimmed link list
+      #   from 5 down to 2 (Getting Started + Report an Issue) for
+      #   focus.
+      # - Description rendering note: lab.yml's description field is
+      #   rendered as plain text in the dashboard (textContent, not
+      #   innerHTML). Line breaks and emoji work; inline markdown
+      #   (**bold**, _italic_, [links](url), `code`) does NOT render
+      #   as formatting. JSDoc note added to src/lab-metadata.ts in
+      #   the dashboard repo so future authors of lab.yml see the
+      #   contract at the schema definition.
+      # - Pure extension bump + lab.yml content refresh.
+      container_revision: "1.0.33"
