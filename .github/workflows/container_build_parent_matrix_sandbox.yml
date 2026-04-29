@@ -1245,4 +1245,28 @@ jobs:
       #   opaque environments. The probe runs in the EXACT webview
       #   environment we'll ship into.
       # - Pure extension bump.
-      container_revision: "1.0.44"
+      # 1.0.45:
+      # - Bump packetanglers.sandbox-dashboard 0.11.9-pre1 -> 0.11.9,
+      #   UX shipping release. Import/Export now bridge files between
+      #   the user's local machine and the sandbox.
+      # - The capability gap: pre-v0.11.9, both Import and Export
+      #   only saw the container's filesystem. Users couldn't easily
+      #   upload a local-machine tarball into the sandbox or
+      #   download an exported tarball back to their machine.
+      # - The probe (v0.11.9-pre1) verified empirically:
+      #     <input type="file"> → user's local picker  ✅
+      #     postMessage 20 MB round-trip               ✅ (700ms, hash-verified)
+      #     URL.createObjectURL + anchor click download ❌ (iframe sandbox blocks)
+      # - v0.11.9 ships asymmetric paths informed by those results:
+      #   Import: QuickPick → "On my computer" (webview file ferry,
+      #     ~50 MB soft cap) or "In this sandbox" (existing flow).
+      #   Export: writes to /sandbox/<name>-<ts>.tar.gz; toast
+      #     points user at code-server's right-click → Download via
+      #     "Show in Explorer" button (revealInExplorer command).
+      # - The webview-initiated download path is blocked by
+      #   code-server's iframe sandbox; v0.11.9 doesn't fight that —
+      #   it uses code-server's own download primitive (Explorer
+      #   right-click) as the egress point.
+      # - The v0.11.9-pre1 verification probe is removed in v0.11.9.
+      # - Pure extension bump.
+      container_revision: "1.0.45"
