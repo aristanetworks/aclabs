@@ -1111,4 +1111,32 @@ jobs:
       #   wrong layer. v0.11.4's is based on empirical end-to-end
       #   behavior of the upstream tool.
       # - Pure extension bump.
-      container_revision: "1.0.39"
+      # 1.0.40:
+      # - Bump packetanglers.sandbox-dashboard 0.11.4 -> 0.11.5,
+      #   bug fix release. Action buttons (Reset, Push to GitHub,
+      #   Export Workspace) no longer stay grayed-out-as-busy
+      #   waiting for the user to dismiss success toasts.
+      # - The bug: action success toasts were being awaited
+      #   (`await vscode.window.showInformationMessage(...)`), which
+      #   blocks the action's promise chain until the user dismisses
+      #   the toast. The trackedCommand wrapper's finally block (which
+      #   marks the action as no longer in-flight) doesn't fire until
+      #   then. VS Code's "auto-hide" for info toasts is purely
+      #   visual — the underlying Promise stays pending until the
+      #   user clicks X or hits ⌘Backspace in the notifications
+      #   drawer.
+      # - The fix: stop awaiting toasts whose responses don't drive
+      #   control flow. Four toasts converted (Reset success, Push
+      #   "Pushed to X" / "Connected and pushed", Export "Exported
+      #   to X"). For toasts with cosmetic action buttons (View on
+      #   GitHub, Reveal in File Explorer), the .then() pattern
+      #   preserves button functionality without blocking.
+      # - Six other awaited toasts deliberately KEPT awaiting after
+      #   audit because their responses drive control flow (modal
+      #   yes/no prompts, choice prompts).
+      # - Pattern 28 case 3 today: state-cleanup bugs are nearly
+      #   invisible without observing the system across multiple
+      #   operations. Single-action testing doesn't notice the
+      #   lingering disabled state.
+      # - Pure extension bump.
+      container_revision: "1.0.40"
