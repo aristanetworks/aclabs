@@ -1196,4 +1196,33 @@ jobs:
       #   assertion was empirically wrong, demonstrating the danger
       #   of unverified assertions.
       # - Pure extension bump.
-      container_revision: "1.0.42"
+      # 1.0.43:
+      # - Bump packetanglers.sandbox-dashboard 0.11.7 -> 0.11.8,
+      #   UX fix release. Borrow from Tech Library now actually
+      #   creates a working git repo with a first commit on the
+      #   `main` branch, so users see a clean source-control panel
+      #   after borrow (instead of every borrowed file appearing as
+      #   "untracked").
+      # - The bug: Mitch noticed that after Borrow, every file in
+      #   /sandbox showed as untracked in VS Code's source-control
+      #   panel. Borrow's git init step was failing silently with
+      #   "Failed to execute git" (vscode.git's init() API,
+      #   same class of bug as the clone() API issues that
+      #   motivated v0.11.4). The previous code caught the failure
+      #   as "non-fatal" and continued, hiding the bug for several
+      #   releases.
+      # - The fix: same shape as v0.11.4's clone fix — stop using
+      #   vscode.git's API, spawn git directly. runGit helper is
+      #   now a shared module used by both Clone and Borrow.
+      # - Bonus: -b main flag forces modern default branch
+      #   regardless of git's compiled-in default (lab-base-sandbox
+      #   bundles git that defaults to "master").
+      # - Init failure now surfaces as a warning toast instead of
+      #   silent fallback. The silent fallback is what hid this bug
+      #   for several releases.
+      # - Pattern 28 case study #7 in the v0.11.x cycle: unverified
+      #   assertions ("init() — different code path, presumably
+      #   unaffected") creating false confidence. "Presumably" was
+      #   the tell.
+      # - Pure extension bump.
+      container_revision: "1.0.43"
