@@ -1171,4 +1171,29 @@ jobs:
       # - Out of scope: GitLab/Bitbucket/GitHub Enterprise
       #   private-repo auth. SSH URLs (depends on user's SSH agent).
       # - Pure extension bump.
-      container_revision: "1.0.41"
+      # 1.0.42:
+      # - Bump packetanglers.sandbox-dashboard 0.11.6 -> 0.11.7,
+      #   bug fix release. Relative symlinks in cloned/borrowed
+      #   repositories no longer get rewritten as dangling absolute
+      #   /tmp/... paths during the workspace promotion step.
+      # - The bug: Mitch noticed during post-v0.11.6 testing that
+      #   after cloning a private repo containing `containerlab save
+      #   --copy` artifacts, every `startup-config` symlink in
+      #   /sandbox/startup-configs/ pointed to non-existent paths
+      #   under /tmp/sandbox-dashboard-clone-<timestamp>/repo/ — the
+      #   staging directory we'd already deleted.
+      # - Root cause: Node's fs.cp default behavior is to RESOLVE
+      #   relative symlinks against their source location at copy
+      #   time and write the resolved absolute path into the
+      #   destination. So a relative symlink in /tmp staging gets
+      #   rewritten to absolute /tmp/... during the copy to /sandbox.
+      # - The fix: pass verbatimSymlinks: true to fs.cp at both call
+      #   sites (clone-from-github.ts and borrow-from-techlib.ts).
+      #   Tells fs.cp to copy symlinks as-written: relative stays
+      #   relative.
+      # - Pattern 28 case study: a pre-existing comment claimed
+      #   fs.cp "follows symlinks correctly for our purposes" — that
+      #   assertion was empirically wrong, demonstrating the danger
+      #   of unverified assertions.
+      # - Pure extension bump.
+      container_revision: "1.0.42"
