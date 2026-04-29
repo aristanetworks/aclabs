@@ -1055,4 +1055,38 @@ jobs:
       #   testing covered fresh-workspace clones but didn't include
       #   "Clone after Reset after Clone" as a test sequence.
       # - Pure extension bump.
-      container_revision: "1.0.37"
+      # 1.0.38:
+      # - Bump packetanglers.sandbox-dashboard 0.11.2 -> 0.11.3,
+      #   ROOT-CAUSE bug fix release. v0.11.2 prevented workspace
+      #   destruction on the Clone → Reset → Clone sequence but
+      #   didn't fix the underlying clone failure. v0.11.3 fixes the
+      #   root cause.
+      # - The actual root cause: vscode.git's clone() SILENTLY NO-OPS
+      #   when parentPath is inside a workspace folder for which it
+      #   has stale repository state. After Reset's
+      #   `sudo rm -rf /sandbox/.git`, vscode.git's in-memory registry
+      #   still thinks /sandbox is a known repo, so any subsequent
+      #   clone with parentPath inside /sandbox just doesn't happen.
+      # - Empirically confirmed via filesystem checks after v0.11.2's
+      #   defensive error fired:
+      #     ls -la /sandbox/.tmp-clone-* → no matches
+      #     find / -name "evpn-gw-demo"  → no matches anywhere
+      #     find / -name ".git" -newer /tmp → no matches
+      #   The clone API was called, returned without error, did
+      #   NOTHING.
+      # - The fix: stage the clone in /tmp (os.tmpdir()) instead of
+      #   inside the workspace. /tmp is not in any VS Code workspace
+      #   folder, so vscode.git has no reason to maintain registry
+      #   state about it. The clone proceeds normally.
+      # - Cross-filesystem trade-off: /tmp may be on a different
+      #   filesystem than the workspace, so we swapped fs.rename for
+      #   fs.cp (recursive: true) to handle EXDEV cleanly. For
+      #   typical lab repos the cost is negligible.
+      # - The v0.11.2 defensive logic (walk staging dir, single-entry
+      #   check) is RETAINED as belt-and-suspenders.
+      # - Pattern 28 in real time, twice in 24 hours: v0.11.2's
+      #   diagnosis was based on inferred internal behavior;
+      #   v0.11.3's is based on empirical filesystem-state evidence.
+      #   The deeper layer keeps yielding deeper bugs.
+      # - Pure extension bump.
+      container_revision: "1.0.38"
