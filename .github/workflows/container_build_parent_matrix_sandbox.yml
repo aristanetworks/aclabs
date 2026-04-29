@@ -1139,4 +1139,36 @@ jobs:
       #   operations. Single-action testing doesn't notice the
       #   lingering disabled state.
       # - Pure extension bump.
-      container_revision: "1.0.40"
+      # 1.0.41:
+      # - Bump packetanglers.sandbox-dashboard 0.11.5 -> 0.11.6,
+      #   bug fix release. Private GitHub HTTPS clones now work
+      #   via vscode.authentication GitHub session + URL token
+      #   embedding.
+      # - The bug: v0.11.4's spawn-based clone worked for public
+      #   GitHub repos but hung forever for private repos. v0.11.4's
+      #   diagnostic log empirically confirmed the askpass-bridge
+      #   env vars (GIT_ASKPASS, VSCODE_GIT_*) are absent in the
+      #   extension host's process.env, even when the integrated
+      #   terminal has them. So our spawned git couldn't reach VS
+      #   Code's auth UI via askpass no matter what we forwarded.
+      # - The fix: for GitHub HTTPS URLs, acquire an OAuth token
+      #   via vscode.authentication.getSession('github', ['repo'])
+      #   and embed it in the URL using GitHub's documented
+      #   x-access-token mechanism. The spawned git sees a
+      #   pre-authenticated URL and never needs to prompt.
+      # - First time triggers VS Code's standard "GitHub wants to
+      #   sign in" notification → user clicks Allow → browser opens
+      #   to GitHub OAuth → token cached. Subsequent calls use
+      #   cached session silently.
+      # - Security: tokens are redacted from all dashboard logs via
+      #   a new redactedArgsForLog parameter on runGit. Git's own
+      #   --progress output uses GitHub's redacted form (***), so
+      #   stderr is safe to log.
+      # - Defensive behavior: if vscode.authentication fails or user
+      #   cancels, we attempt the clone with the un-tokenized URL.
+      #   Public repos succeed; private repos fail with a clear
+      #   "Authentication failed" git error. No silent destruction.
+      # - Out of scope: GitLab/Bitbucket/GitHub Enterprise
+      #   private-repo auth. SSH URLs (depends on user's SSH agent).
+      # - Pure extension bump.
+      container_revision: "1.0.41"
