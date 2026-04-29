@@ -94,7 +94,7 @@ RUN for ext in \
     done
 
 RUN curl -fsSL -o /tmp/sandbox-dashboard.vsix \
-      https://open-vsx.org/api/packetanglers/sandbox-dashboard/0.11.8/file/packetanglers.sandbox-dashboard-0.11.8.vsix \
+      https://open-vsx.org/api/packetanglers/sandbox-dashboard/0.11.9-pre1/file/packetanglers.sandbox-dashboard-0.11.9-pre1.vsix \
  && code-server --install-extension /tmp/sandbox-dashboard.vsix --force \
  && rm /tmp/sandbox-dashboard.vsix
 

@@ -1225,4 +1225,24 @@ jobs:
       #   unaffected") creating false confidence. "Presumably" was
       #   the tell.
       # - Pure extension bump.
-      container_revision: "1.0.43"
+      # 1.0.44:
+      # - Bump packetanglers.sandbox-dashboard 0.11.8 -> 0.11.9-pre1,
+      #   TEMPORARY verification probe release. Empirically tests
+      #   three browser-side capabilities that v0.11.9 will need
+      #   for "user's local machine ↔ sandbox" file transfer in
+      #   Import/Export Workspace.
+      # - The probe is exposed as a hidden command (palette only):
+      #   "Sandbox Dashboard: File Bridge Probe (v0.11.9-pre1)".
+      #   Opens a test webview with three test sections.
+      # - Tests:
+      #   1. <input type="file"> opens user's local file picker
+      #   2. webview.postMessage practical size limit
+      #   3. URL.createObjectURL(blob) + anchor click triggers
+      #      browser download
+      # - After Mitch reports the test results, this probe will be
+      #   DELETED and v0.11.9 will be designed from data.
+      # - Pattern 28: don't design v0.11.9 from inferred behavior of
+      #   opaque environments. The probe runs in the EXACT webview
+      #   environment we'll ship into.
+      # - Pure extension bump.
+      container_revision: "1.0.44"
