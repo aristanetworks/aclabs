@@ -1089,4 +1089,26 @@ jobs:
       #   v0.11.3's is based on empirical filesystem-state evidence.
       #   The deeper layer keeps yielding deeper bugs.
       # - Pure extension bump.
-      container_revision: "1.0.38"
+      # 1.0.39:
+      # - Bump packetanglers.sandbox-dashboard 0.11.3 -> 0.11.4,
+      #   ARCHITECTURAL REVERT release. The fourth (and hopefully
+      #   final) attempt at the Clone-from-GitHub workspace-destruction
+      #   fix.
+      # - The breakthrough diagnosis: Mitch reproduced the failure
+      #   from VS Code's command palette directly, with no involvement
+      #   from our extension. That proved the bug is upstream in
+      #   vscode.git's clone() API, not in our usage.
+      # - The fix: abandon vscode.git's clone API entirely. Spawn
+      #   `git clone` directly with `env: { ...process.env }` so the
+      #   askpass-bridge env vars (GIT_ASKPASS / VSCODE_GIT_*) flow
+      #   through to git for private-repo auth.
+      # - Public repos: work regardless. Private repos: work if
+      #   askpass vars are present in the extension host's env (will
+      #   be visible in the dashboard log). v0.11.5 will add a PAT-
+      #   prompt fallback if needed.
+      # - Pattern 28 in real time, three times in 24 hours: each
+      #   prior iteration's diagnosis was based on inference at the
+      #   wrong layer. v0.11.4's is based on empirical end-to-end
+      #   behavior of the upstream tool.
+      # - Pure extension bump.
+      container_revision: "1.0.39"
