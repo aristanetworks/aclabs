@@ -1289,4 +1289,28 @@ jobs:
       #   introduced a regression invisible until end-to-end testing
       #   surfaced it.
       # - Pure extension bump.
-      container_revision: "1.0.46"
+      # 1.0.47:
+      # - Bump packetanglers.sandbox-dashboard 0.11.10 -> 0.11.11,
+      #   two small UX improvements shipped together.
+      # - Item 1: Open Terminal button. New button in the Lifecycle
+      #   row of the dashboard. Clicking opens a new integrated
+      #   terminal in the bottom panel area, named "Sandbox", with
+      #   cwd = workspace root. Each click creates a NEW terminal;
+      #   we don't reuse existing ones. Always enabled (even without
+      #   a workspace, falls back to $HOME). Matches the same
+      #   affordance the lab-dashboard extension provides.
+      # - Item 2: Full-wipe Import semantics. Pre-v0.11.11, Import
+      #   did collision-detect-and-overwrite, which left non-
+      #   colliding workspace files in place — workspace ended up
+      #   as a UNION of the tarball and prior contents. Mitch flagged
+      #   that as the wrong mental model: tarballs are Export
+      #   snapshots, so Import should RESTORE that state. v0.11.11
+      #   changes Import to full-wipe-before-extract, matching Clone
+      #   from GitHub and Borrow from Tech Library. Three
+      #   workspace-population actions, one mental model.
+      # - Empty-workspace fast-path: no destructive-confirm modal.
+      # - Populated workspace: modal lists first 8 entries verbatim.
+      # - Bonus: temp-upload (/tmp) cleanup extended to all
+      #   early-exit paths so cancelled uploads don't accumulate.
+      # - Pure extension bump.
+      container_revision: "1.0.47"
