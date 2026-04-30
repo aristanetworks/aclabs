@@ -75,7 +75,7 @@ permanently deleted.
 
 ### 🐙 Clone from GitHub
 
-> *"I want to work with someone's existing GitHub repo."*
+> *"I want to work with an existing GitHub repo."*
 
 Enter the repo URL (public or private — you'll be prompted to authenticate
 for private repos). After the URL, you'll be asked **how** you want to use

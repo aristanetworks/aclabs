@@ -1488,4 +1488,20 @@ jobs:
       # - Single-line code change in webview.ts; pure extension bump
       #   from the container's perspective.
       # - Pure extension bump.
-      container_revision: "1.0.56"
+      # 1.0.57:
+      # - Tiny copy fix in /sandbox/README.md's "Clone from GitHub"
+      #   section. Changed the section's narrator-voice scenario
+      #   line from "I want to work with someone's existing GitHub
+      #   repo." to "I want to work with an existing GitHub repo."
+      # - Mitch's read: "someone's" subtly implies the repo isn't
+      #   yours, but cloning your OWN repo from GitHub is the most
+      #   common case. "An" is neutral and accurate — covers both
+      #   "this is my repo" and "this is someone else's repo".
+      # - First real-world use of the Makefile from the rev1.0.53
+      #   architecture unwind. labs/sandbox/README.md edited;
+      #   `make sync-baseline` from containers/lab-base-sandbox/
+      #   propagated the change to .devcontainer/sandbox-original/.
+      #   Worked on first try. The boring solution we deliberately
+      #   chose is now serving its purpose.
+      # - Pure content fix. No code, no extension, no architecture.
+      container_revision: "1.0.57"
