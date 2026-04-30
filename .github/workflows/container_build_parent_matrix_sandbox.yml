@@ -1423,4 +1423,48 @@ jobs:
       #   derive from VS Code theme variables for automatic
       #   light/dark adaptation.
       # - Pure extension bump.
-      container_revision: "1.0.52"
+      # 1.0.53:
+      # - Bump packetanglers.sandbox-dashboard 0.11.15 -> 0.11.16,
+      #   which adds support for a new `workspace://` URL scheme in
+      #   Lab Overview links. URLs starting with `workspace://` open
+      #   a workspace file in an editor tab; URLs starting with
+      #   `https://` continue to open externally.
+      # - Updates lab.yml's "Getting Started" link from
+      #   https://github.com/PacketAnglers/sandbox-dashboard/blob/main/CAPABILITIES.md
+      #   to `workspace://README.md`. The README that ships with the
+      #   sandbox baseline (the new dashboard-focused content from
+      #   rev1.0.50) is now the canonical "getting started" target —
+      #   in-context, editable, always synced with the user's lab
+      #   revision, no external network round-trip.
+      # - ARCHITECTURAL CHANGE: README sync drift fix. Pre-rev1.0.53,
+      #   the sandbox baseline content was duplicated in two places
+      #   (labs/sandbox/ for the bind-mount flow + sandbox-original/
+      #   inside the container's build context for the image flow).
+      #   Manual sync introduced drift — caught by Mitch when the
+      #   v0.11.14 dashboard-focused README only landed in
+      #   sandbox-original/ and missed labs/sandbox/.
+      # - Approach B (revised): labs/sandbox/ is now the single source
+      #   of truth. containers/lab-base-sandbox/.devcontainer/sandbox-original/
+      #   is deleted from git, .gitignored, and recreated as a build
+      #   artifact at CI time by a new .devcontainer/prebuild.sh
+      #   script that copies labs/sandbox/ into place before the
+      #   devcontainer build runs.
+      # - The prebuild hook is generic: container_build_child.yml
+      #   now invokes containers/<name>/.devcontainer/prebuild.sh if
+      #   it exists (and skips silently otherwise). Other lab-base-*
+      #   containers can adopt the pattern as needed.
+      # - The Dockerfile gained a fail-fast guard after the COPY:
+      #   if /opt/sandbox-original/ doesn't have README.md and
+      #   topology.clab.yml after the COPY, the build errors out
+      #   loudly. Defends against "prebuild was forgotten" failure
+      #   modes (Pattern 28: silent fallback hides bugs).
+      # - Pattern 28 case study #13 (caught locally pre-ship):
+      #   prebuild.sh's repo-root calculation was one ../ too many.
+      # - Pattern 28 case study #14 (caught locally pre-ship): rm -rf
+      #   removes from working tree but not git index; needed git rm
+      #   --cached to actually de-track the directory.
+      # - Local-dev impact: developers running docker outside CI must
+      #   run .devcontainer/prebuild.sh manually before their build,
+      #   or the Dockerfile's fail-fast guard will reject the build
+      #   with a clear error message pointing to prebuild.sh.
+      container_revision: "1.0.53"
