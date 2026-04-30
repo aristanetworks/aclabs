@@ -1404,4 +1404,23 @@ jobs:
       #   adapts automatically when users switch between light/dark
       #   themes.
       # - Pure extension bump.
-      container_revision: "1.0.51"
+      # 1.0.52:
+      # - Bump packetanglers.sandbox-dashboard 0.11.14 -> 0.11.15,
+      #   UX polish. Buttons restyled to an outline aesthetic.
+      # - Pre-v0.11.15, buttons used --vscode-button-background
+      #   directly (saturated VS Code primary blue) which felt
+      #   dated against the soft v0.11.14 cards. v0.11.15 replaces
+      #   the filled style with: transparent bg, soft border using
+      #   --vscode-input-border, soft text using --vscode-foreground.
+      #   Hover fills the bg subtly via --vscode-toolbar-hoverBackground.
+      # - Active state scales to 0.98 for tactile click feedback
+      #   without color shift. Border radius bumped 3px -> 4px to
+      #   feel more current. Disabled state preserved (opacity 0.5
+      #   fades both border and text together).
+      # - Modern, content-forward, harmonious with the v0.11.14 cards.
+      #   Icons + labels carry visual weight instead of chrome.
+      # - NO behavioral change. CSS only. All values continue to
+      #   derive from VS Code theme variables for automatic
+      #   light/dark adaptation.
+      # - Pure extension bump.
+      container_revision: "1.0.52"
