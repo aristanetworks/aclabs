@@ -1423,4 +1423,24 @@ jobs:
       #   derive from VS Code theme variables for automatic
       #   light/dark adaptation.
       # - Pure extension bump.
-      container_revision: "1.0.52"
+      # 1.0.54:
+      # - Bump packetanglers.sandbox-dashboard 0.11.15 -> 0.11.16,
+      #   ONLY. No other changes in this rev.
+      # - v0.11.16 adds support for a new `workspace://` URL scheme
+      #   in Lab Overview links (URLs starting with workspace:// open
+      #   a workspace file in an editor tab; URLs starting with
+      #   https:// continue to open externally). The lab.yml in this
+      #   rev still uses the https:// CAPABILITIES.md URL — meaning
+      #   the new workspace:// scheme is shipped as a CAPABILITY but
+      #   not yet USED. Activating it requires a follow-up rev that
+      #   updates lab.yml's "Getting Started" URL.
+      # - Why split this from the lab.yml change: rev1.0.53 bundled
+      #   three changes (architecture refactor + lab.yml URL change
+      #   + extension bump) and broke launch. Diagnosis was hard
+      #   because we didn't know which of the three was at fault.
+      #   rev1.0.54 ships ONE thing (extension bump) so we can
+      #   verify it doesn't break launch on its own. If it does,
+      #   the diagnosis is unambiguous. rev1.0.55 will then ship
+      #   the lab.yml URL change as its own single-variable rev.
+      # - Pure extension bump.
+      container_revision: "1.0.54"
