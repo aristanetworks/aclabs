@@ -1443,4 +1443,32 @@ jobs:
       #   the diagnosis is unambiguous. rev1.0.55 will then ship
       #   the lab.yml URL change as its own single-variable rev.
       # - Pure extension bump.
-      container_revision: "1.0.54"
+      # 1.0.55:
+      # - Update lab.yml's "Getting Started" link from
+      #   https://github.com/PacketAnglers/sandbox-dashboard/blob/main/CAPABILITIES.md
+      #   to `workspace://README.md`. ONLY this change; no other tree
+      #   modifications.
+      # - The sandbox-dashboard v0.11.16 (already shipped in rev1.0.54)
+      #   recognizes the workspace:// URL scheme and opens the named
+      #   file from the user's workspace in an editor tab. The dashboard
+      #   already opens to /sandbox/README.md, which contains the
+      #   dashboard-focused getting-started content (in-context,
+      #   editable, always synced with the user's lab revision, no
+      #   external network round-trip).
+      # - Why split this from rev1.0.54: rev1.0.53 bundled the
+      #   architecture refactor + lab.yml URL change + extension bump
+      #   and broke launch. rev1.0.54 verified the extension bump is
+      #   safe in isolation. rev1.0.55 verifies the lab.yml URL change
+      #   is safe in isolation. If launch fails on rev1.0.55, we know
+      #   unambiguously that the URL change was the culprit (and the
+      #   architecture changes were the broken part of rev1.0.53). If
+      #   launch succeeds, we've circumstantially proven the
+      #   architecture changes were rev1.0.53's broken part.
+      # - lab.yml is read by sandbox-dashboard at extension activation
+      #   AFTER container start. A bad URL value would surface as an
+      #   activation error rather than a container-startup failure, so
+      #   this is a low-risk change in our threat model. But "low risk"
+      #   is not "no risk" — pattern 28 lesson banked, we ship single
+      #   variables and verify.
+      # - Single line of content change.
+      container_revision: "1.0.55"
