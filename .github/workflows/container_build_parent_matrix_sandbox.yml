@@ -1313,4 +1313,23 @@ jobs:
       # - Bonus: temp-upload (/tmp) cleanup extended to all
       #   early-exit paths so cancelled uploads don't accumulate.
       # - Pure extension bump.
-      container_revision: "1.0.47"
+      # 1.0.48:
+      # - Bump packetanglers.sandbox-dashboard 0.11.11 -> 0.11.12,
+      #   bug fix release. Open Terminal button now reliably opens
+      #   the terminal in the bottom panel (not as an editor tab).
+      # - The bug: v0.11.11's createTerminal call omitted the
+      #   `location` parameter, deferring to the user's
+      #   terminal.integrated.defaultLocation setting. In code-server
+      #   that setting was effectively "editor", so our terminal
+      #   landed in the editor view instead of the bottom panel.
+      # - The fix: pass `location: vscode.TerminalLocation.Panel`
+      #   explicitly to override the user setting for THIS specific
+      #   terminal. Matches the lab-dashboard extension's
+      #   runInTerminal approach.
+      # - Pattern 28 case study #10: I assumed VS Code's default
+      #   placement would be panel because that's the desktop default.
+      #   The discipline going forward: when an API has a
+      #   location/placement parameter that defers to user settings,
+      #   set it explicitly when correctness requires a specific value.
+      # - Pure extension bump.
+      container_revision: "1.0.48"
