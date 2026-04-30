@@ -1332,4 +1332,28 @@ jobs:
       #   location/placement parameter that defers to user settings,
       #   set it explicitly when correctness requires a specific value.
       # - Pure extension bump.
-      container_revision: "1.0.48"
+      # 1.0.49:
+      # - Bump packetanglers.sandbox-dashboard 0.11.12 -> 0.11.13,
+      #   UX feature release. Clone from GitHub now offers two
+      #   modes at clone-time via QuickPick.
+      # - Mode 1 ("Track this repo"): preserves the cloned .git/
+      #   and remote. v0.11.12 behavior, unchanged.
+      # - Mode 2 ("Use as a starting template"): strips the cloned
+      #   .git/ and reinitializes a fresh repo on `main` with an
+      #   attribution commit ("Initial commit (started from <url>)").
+      #   End-state is bit-for-bit equivalent to Borrow from Tech
+      #   Library — same shared runGit helper, same -b main branch,
+      #   same attribution-style commit. After this, Push to GitHub
+      #   goes through the standard "no remote — create a new repo"
+      #   flow that Borrow already uses.
+      # - Pre-v0.11.13, users who wanted template mode had to
+      #   manually run `rm -rf .git && git init -b main && git add .
+      #   && git commit -m '...'` in the terminal. Surfacing the
+      #   choice at clone-time is the right UX hygiene because
+      #   "track vs template" is a meaningful semantic distinction
+      #   that should be settled before the workspace is touched.
+      # - Mode question sits between URL prompt and destructive-
+      #   confirm modal; cancel at QuickPick = nothing on disk
+      #   changes.
+      # - Pure extension bump.
+      container_revision: "1.0.49"
