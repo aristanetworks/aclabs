@@ -1379,4 +1379,29 @@ jobs:
       #   pinned at 0.11.13. This is a baseline content update only.
       #   First content-only revision in the rev history; precedent for
       #   future content-only updates.
-      container_revision: "1.0.50"
+      # 1.0.51:
+      # - Bump packetanglers.sandbox-dashboard 0.11.13 -> 0.11.14,
+      #   UX layout polish. Dashboard's Action sections now render
+      #   as visually distinct cards instead of flat heading +
+      #   button rows.
+      # - Each of the four Actions sub-sections (Sources, Lifecycle,
+      #   Destinations, Arista Integrations) wraps in an
+      #   .action-card div with subtle background tint
+      #   (--vscode-editorWidget-background), 1px border, and the
+      #   section header inside the card paired with its buttons.
+      # - Buttons render in a responsive 2-column grid:
+      #   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))
+      #   Adapts to webview width — 1 col on narrow docked panels,
+      #   2-3 cols at typical/wide widths.
+      # - Section headers gained scenario tags ("— pick a starting
+      #   point", "— work with your lab", "— share your work") for
+      #   context.
+      # - Arista Integrations card gets a 3px orange (#f04e23) left
+      #   accent stripe to mark it as the only vendor-specific
+      #   section in an otherwise vendor-neutral dashboard.
+      # - NO behavioral change. Pure visual layout. All colors
+      #   continue using VS Code theme variables, so the dashboard
+      #   adapts automatically when users switch between light/dark
+      #   themes.
+      # - Pure extension bump.
+      container_revision: "1.0.51"
