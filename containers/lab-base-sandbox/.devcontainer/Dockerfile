@@ -111,6 +111,17 @@ USER root
 # topology (2 cEOS nodes connected), annotations for TopoViewer, the
 # standard sandbox README, the asset images referenced by the README,
 # and a sandbox-appropriate .gitignore.
+#
+# Sync mechanism: when labs/sandbox/ content changes, run
+# `make sync-baseline` from containers/lab-base-sandbox/ (see the
+# Makefile there) to propagate the changes into this directory.
+# Both the source (labs/sandbox/) and the destination (this directory)
+# are tracked in git and committed together when content changes.
+# A prior attempt at automating this sync (rev1.0.53's prebuild.sh
+# + workflow hook + fail-fast guard) broke launch on the host VM
+# and was reverted; the manual Makefile pattern is now the
+# documented mechanism. See lab-base-sandbox commit history c2404c5
+# for the original attempt and e63e299 for the unwind + Makefile.
 COPY ./sandbox-original/ /opt/sandbox-original/
 RUN chown -R ${USERNAME}:${USERNAME} /opt/sandbox-original
 

@@ -1423,6 +1423,39 @@ jobs:
       #   derive from VS Code theme variables for automatic
       #   light/dark adaptation.
       # - Pure extension bump.
+      # 1.0.53: 💀 BURNED — DO NOT REUSE THIS REV TAG.
+      # - Bundled three changes in one rev: prebuild.sh + workflow
+      #   hook for auto-syncing labs/sandbox/ → sandbox-original/
+      #   at build time + Dockerfile fail-fast guard + lab.yml URL
+      #   change to workspace://README.md + sandbox-dashboard
+      #   0.11.15 -> 0.11.16 vsix bump.
+      # - The image built and published to ghcr.io successfully
+      #   (CI green), but the host VM could not LAUNCH the
+      #   container after pull. Root cause was never definitively
+      #   isolated — by elimination via single-variable re-rolls,
+      #   the architecture changes (prebuild.sh + workflow hook +
+      #   Dockerfile guard) are circumstantially the broken part:
+      #   rev1.0.54 (extension bump alone) and rev1.0.55 (lab.yml
+      #   URL alone) both launched cleanly. The rev1.0.53 image
+      #   is still in ghcr.io but nothing points at it.
+      # - Consumer pointer was reverted to rev1.0.52 within
+      #   minutes of the breakage report. After a disciplined
+      #   architecture unwind that restored the tree to
+      #   rev1.0.52-equivalent state plus a manual `make sync-
+      #   baseline` Makefile in containers/lab-base-sandbox/, the
+      #   features were re-rolled as rev1.0.54 / 1.0.55 / 1.0.56
+      #   in single-variable steps.
+      # - DO NOT reuse the rev1.0.53 tag for any future rev.
+      #   ghcr.io still holds the broken image at that tag; image
+      #   caching could result in a host pulling the broken image
+      #   if a future rev1.0.53 re-tag were ever published.
+      # - Pattern 28 lessons banked from this incident:
+      #   * Default to the boring solution. Manual fine for rare
+      #     events. Premature automation is its own bug.
+      #   * Single-variable revs: never bundle architecture +
+      #     feature + content into one rev.
+      #   * Verify-then-flip: build container rev in CI, verify
+      #     on the explicit tag, THEN flip the consumer pointer.
       # 1.0.54:
       # - Bump packetanglers.sandbox-dashboard 0.11.15 -> 0.11.16,
       #   ONLY. No other changes in this rev.
