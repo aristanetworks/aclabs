@@ -16,19 +16,7 @@ close the dashboard.
 
 ---
 
-## 📋 What's in this lab
-
-| Component | Version |
-| --- | --- |
-| cEOS-lab | **4.35.2F** |
-| AVD | **5.7.3** |
-| Containerlab | **0.74.0** |
-
-| Resource | Allocated |
-| --- | --- |
-| CPUs | **16** |
-| Memory | **64 GB** |
-| Storage | **64 GB** |
+## 🔑 Default credentials
 
 **Default credentials** for all cEOS and Linux nodes: username `admin`,
 password `admin`.

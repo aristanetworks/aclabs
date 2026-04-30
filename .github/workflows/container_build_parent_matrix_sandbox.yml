@@ -1537,4 +1537,45 @@ jobs:
       #   Worked on first try. The boring solution we deliberately
       #   chose is now serving its purpose.
       # - Pure content fix. No code, no extension, no architecture.
-      container_revision: "1.0.57"
+      # 1.0.58:
+      # - Bump packetanglers.sandbox-dashboard 0.11.17 -> 0.11.18,
+      #   AND add `components:` block to lab.yml,
+      #   AND remove "What's in this lab" section from
+      #   labs/sandbox/README.md (the same info now renders as
+      #   badges on the dashboard, driven by lab.yml).
+      # - v0.11.18 introduces an optional `components:` map in the
+      #   lab.yml schema that renders as a SECOND badge row in the
+      #   Lab Overview, ABOVE the existing resources row. Same
+      #   shields.io-style two-tone Arista brand styling. Well-known
+      #   triad (ceos / avd / clab) gets canonical labels (cEOS-lab
+      #   / AVD / ContainerLab); unknown keys get title-cased.
+      # - lab.yml gains:
+      #     components:
+      #       ceos: 4.35.2F
+      #       avd: 5.7.3
+      #       clab: 0.74.3
+      #   matching the active devcontainer.json variant pointer
+      #   (python3.12-avd-v5.7.3-clab0.74.3-rev1.0.58).
+      # - labs/sandbox/README.md loses its "## What's in this lab"
+      #   table (was: cEOS-lab / AVD / Containerlab versions + CPU /
+      #   Memory / Storage). The default credentials note from that
+      #   section is preserved as a new "## 🔑 Default credentials"
+      #   section.
+      # - Net effect: the lab's "what's inside" info now lives in
+      #   exactly ONE place (lab.yml) and renders in exactly ONE
+      #   place (the dashboard). README is for narrative; the
+      #   dashboard is for at-a-glance metadata.
+      # - Mitch flagged this optimization opportunity post-rev1.0.57:
+      #   "All of this should be displayed in the sandbox-dashboard,
+      #   derived from lab.yml. Can we please remove the 'What's in
+      #   this lab' section from README.md?" Yes, we can.
+      # - Multi-variable rev — but the variables are all aligned to
+      #   the same goal (component badges + their data + remove
+      #   redundancy), and the change is isolated to text/HTML
+      #   rendering (no architecture, no build pipeline). Risk
+      #   profile is roughly equivalent to a feature ship of v0.11.16
+      #   without the architecture experiment.
+      # - Verify-then-flip pattern: this commit builds rev1.0.58 in
+      #   CI; the consumer pointer (.devcontainer/sandbox/devcontainer
+      #   .json image tag) stays at rev1.0.57 until verified.
+      container_revision: "1.0.58"

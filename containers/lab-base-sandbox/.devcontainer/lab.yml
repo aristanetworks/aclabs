@@ -18,6 +18,15 @@
 # characters. See the JSDoc note on the description field in
 # src/lab-metadata.ts in PacketAnglers/sandbox-dashboard for the
 # full contract.
+#
+# v0.11.18 ADDITION: the optional `components:` map (added below
+# alongside `resources:`) renders as a SECOND badge row in the Lab
+# Overview, ABOVE the resources row. Same shields.io-style two-tone
+# Arista brand styling. Well-known keys (ceos/avd/clab) get canonical
+# labels (cEOS-lab/AVD/ContainerLab). Component versions reflect what
+# this specific image variant ships with — when the active devcontainer
+# pointer flips to a different AVD or ContainerLab variant, update
+# the values here to match.
 
 name: Welcome to the Sandbox!
 
@@ -33,6 +42,11 @@ description: |
   leaving the IDE.
 
   Happy labbing! 🧪
+
+components:
+  ceos: 4.35.2F
+  avd: 5.7.3
+  clab: 0.74.3
 
 resources:
   cpu: 16
