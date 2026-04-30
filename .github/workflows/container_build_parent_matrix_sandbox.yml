@@ -1471,4 +1471,21 @@ jobs:
       #   is not "no risk" — pattern 28 lesson banked, we ship single
       #   variables and verify.
       # - Single line of content change.
-      container_revision: "1.0.55"
+      # 1.0.56:
+      # - Bump packetanglers.sandbox-dashboard 0.11.16 -> 0.11.17,
+      #   ONLY. No other changes.
+      # - v0.11.17 fixes a UX bug in v0.11.16's workspace:// URL
+      #   handler: .md files now open in the rendered markdown
+      #   preview viewer (markdown.showPreview), not the raw text
+      #   editor. Non-markdown file types continue to open as raw
+      #   text. After rev1.0.55 went live with the "Getting Started"
+      #   link → workspace://README.md, clicking it opened the
+      #   README as raw markdown text (visible '#' headers,
+      #   '**bold**' syntax) instead of a rendered guide.
+      # - markdown.showPreview is a built-in VS Code command (part
+      #   of the bundled markdown-language-features extension that
+      #   ships with VS Code and code-server). Safe to assume present.
+      # - Single-line code change in webview.ts; pure extension bump
+      #   from the container's perspective.
+      # - Pure extension bump.
+      container_revision: "1.0.56"
