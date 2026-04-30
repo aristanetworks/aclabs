@@ -41,7 +41,7 @@ resources:
 
 links:
   - label: Getting Started
-    url: workspace://README.md
+    url: https://github.com/PacketAnglers/sandbox-dashboard/blob/main/CAPABILITIES.md
     icon: 📖
   - label: Report an Issue
     url: https://github.com/PacketAnglers/sandbox-dashboard/issues

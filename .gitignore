@@ -297,10 +297,3 @@ clab-*/
 .claude/*
 !.claude/skills
 !.agents/skills
-
-# rev1.0.53: lab-base-sandbox baseline is now sourced from labs/sandbox/
-# at build time (synced into sandbox-original/ by a CI workflow step
-# before the devcontainer build runs). The directory below is a build
-# artifact, not a source of truth — never commit its contents.
-# See containers/lab-base-sandbox/.devcontainer/Dockerfile for context.
-containers/lab-base-sandbox/.devcontainer/sandbox-original/

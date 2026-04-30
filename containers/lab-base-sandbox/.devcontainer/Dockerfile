@@ -94,7 +94,7 @@ RUN for ext in \
     done
 
 RUN curl -fsSL -o /tmp/sandbox-dashboard.vsix \
-      https://open-vsx.org/api/packetanglers/sandbox-dashboard/0.11.16/file/packetanglers.sandbox-dashboard-0.11.16.vsix \
+      https://open-vsx.org/api/packetanglers/sandbox-dashboard/0.11.15/file/packetanglers.sandbox-dashboard-0.11.15.vsix \
  && code-server --install-extension /tmp/sandbox-dashboard.vsix --force \
  && rm /tmp/sandbox-dashboard.vsix
 
@@ -111,24 +111,8 @@ USER root
 # topology (2 cEOS nodes connected), annotations for TopoViewer, the
 # standard sandbox README, the asset images referenced by the README,
 # and a sandbox-appropriate .gitignore.
-#
-# rev1.0.53+: ./sandbox-original/ is now a BUILD ARTIFACT, not source.
-# It is populated by .devcontainer/prebuild.sh which copies labs/sandbox/
-# into place before the docker build runs. labs/sandbox/ is the single
-# source of truth — the same content is also bind-mounted when developers
-# open the aclabs repo directly via Codespaces. The CI workflow runs
-# prebuild.sh automatically; local builds must run it manually.
-#
-# The directory below is .gitignored at the repo level (see repo
-# .gitignore — added in rev1.0.53). If a build fails because
-# ./sandbox-original/ is empty, run prebuild.sh first.
 COPY ./sandbox-original/ /opt/sandbox-original/
-RUN chown -R ${USERNAME}:${USERNAME} /opt/sandbox-original \
- && test -f /opt/sandbox-original/README.md \
- && test -f /opt/sandbox-original/topology.clab.yml \
- || (echo "ERROR: /opt/sandbox-original/ baseline is incomplete." \
-     "Did .devcontainer/prebuild.sh run? See Dockerfile comment above." \
-     && exit 1)
+RUN chown -R ${USERNAME}:${USERNAME} /opt/sandbox-original
 
 # Bake the lab metadata file (lab.yml) into the container image. Read
 # by sandbox-dashboard v0.10.0+ at extension activation and rendered as

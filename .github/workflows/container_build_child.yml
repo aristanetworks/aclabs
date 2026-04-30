@@ -112,39 +112,6 @@ jobs:
             done
           fi
 
-      - name: Run container prebuild script if present 🧰
-        # rev1.0.53 (lab-base-sandbox): generic extensibility hook for
-        # containers that need to assemble build-context content from
-        # elsewhere in the repo before the devcontainer build runs.
-        #
-        # If `containers/<name>/.devcontainer/prebuild.sh` exists, it is
-        # executed from the repo root. The script is expected to be
-        # idempotent (it'll run on every build, including local re-runs)
-        # and self-contained (no external network access guaranteed).
-        #
-        # Used by lab-base-sandbox to copy `labs/sandbox/` into
-        # `.devcontainer/sandbox-original/` before docker build, so the
-        # baseline that ships in the image always reflects the canonical
-        # `labs/sandbox/` content (which is also the bind-mount source
-        # when developers open the aclabs repo directly via Codespaces
-        # or devcontainer-cli). Pre-rev1.0.53, `sandbox-original/` was
-        # a manually-synced duplicate in git; rev1.0.53 makes it a
-        # build-time artifact derived from a single source of truth.
-        #
-        # Containers that don't need this step have no prebuild.sh and
-        # this step short-circuits with no effect.
-        run: |
-          PREBUILD="containers/${{ inputs.container_name }}/.devcontainer/prebuild.sh"
-          if [ -x "$PREBUILD" ]; then
-            echo "Running prebuild script: $PREBUILD"
-            "$PREBUILD"
-          elif [ -f "$PREBUILD" ]; then
-            echo "Found $PREBUILD but it is not executable — running via bash"
-            bash "$PREBUILD"
-          else
-            echo "No prebuild script for ${{ inputs.container_name }} — skipping"
-          fi
-
       - name: Pre-build dev container image 🔨
         uses: devcontainers/ci@v0.3
         # Only build and push the image if at least one of the image tags does not exist.
