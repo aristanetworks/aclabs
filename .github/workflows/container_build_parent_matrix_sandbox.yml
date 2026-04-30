@@ -1356,4 +1356,27 @@ jobs:
       #   confirm modal; cancel at QuickPick = nothing on disk
       #   changes.
       # - Pure extension bump.
-      container_revision: "1.0.49"
+      # 1.0.50:
+      # - Replaces the baseline README.md (in sandbox-original/) with
+      #   a new dashboard-focused guide. The new content pairs each
+      #   dashboard button with a short scenario ("you'd click this
+      #   when…") rather than diving into technical details, making
+      #   it easier for new users to learn when to use which button.
+      # - Adds a prominent "🚨 Closed the dashboard? Here's how to
+      #   bring it back" section near the top of the README. This
+      #   addresses recurring user confusion when the dashboard tab
+      #   is accidentally closed — users didn't know about the
+      #   🧪 Sandbox Dashboard status-bar button or the
+      #   `Sandbox Dashboard: Open` command palette entry.
+      # - Preserves high-value facts from the previous README inline:
+      #   default credentials (admin/admin), lab specs (cEOS 4.35.2F,
+      #   AVD 5.7.3, Containerlab 0.74.0, 16 CPUs / 64 GB RAM /
+      #   64 GB storage), and a reference to the ContainerLab VS Code
+      #   extension as a complement to Topology View.
+      # - Both v0.11.13 (Clone modes) and v0.11.11 (Open Terminal) are
+      #   reflected in the new content.
+      # - NO extension change in this rev — sandbox-dashboard stays
+      #   pinned at 0.11.13. This is a baseline content update only.
+      #   First content-only revision in the rev history; precedent for
+      #   future content-only updates.
+      container_revision: "1.0.50"
