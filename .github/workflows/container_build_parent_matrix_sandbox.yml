@@ -1269,4 +1269,24 @@ jobs:
       #   right-click) as the egress point.
       # - The v0.11.9-pre1 verification probe is removed in v0.11.9.
       # - Pure extension bump.
-      container_revision: "1.0.45"
+      # 1.0.46:
+      # - Bump packetanglers.sandbox-dashboard 0.11.9 -> 0.11.10,
+      #   bug fix release. Export Workspace no longer surfaces a
+      #   misleading "Export failed" toast on every successful export.
+      # - The bug: v0.11.9 wrote the tarball to /sandbox/<name>.tar.gz
+      #   while telling tar to archive `.` (the workspace root). tar
+      #   walks the directory listing, sees the tarball file growing
+      #   in size during the walk, and bails with "tar: .: file
+      #   changed as we read it" and exit code 1.
+      # - GNU tar exit code 1 means "non-fatal" — archive IS produced
+      #   and IS valid (verified by tar -xvf on the actual output).
+      #   But our runTar treats any non-zero exit as failure.
+      # - The fix: stage the tarball in /tmp during the tar phase,
+      #   then move it to /sandbox after tar completes. fs.rename
+      #   fast path + EXDEV fallback (typical when /tmp is tmpfs).
+      # - Pattern 28 case study #9: an architectural decision that
+      #   seemed clean (write to /sandbox for discoverability)
+      #   introduced a regression invisible until end-to-end testing
+      #   surfaced it.
+      # - Pure extension bump.
+      container_revision: "1.0.46"
