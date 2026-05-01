@@ -55,7 +55,7 @@ resources:
 
 links:
   - label: Getting Started
-    url: workspace://README.md
+    url: container:///opt/sandbox-original/README.md
     icon: 📖
   - label: Report an Issue
     url: https://github.com/PacketAnglers/sandbox-dashboard/issues

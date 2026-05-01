@@ -1625,4 +1625,42 @@ jobs:
       #   only changes the devel-branch code path.
       # - Single-variable: extension bump alone. Same shipping
       #   discipline as rev1.0.54 / rev1.0.56 / rev1.0.60 / rev1.0.61.
-      container_revision: "1.0.62"
+      # 1.0.63:
+      # - Bump packetanglers.sandbox-dashboard 0.12.1 -> 0.13.0,
+      #   AND update lab.yml's Getting Started link to use the new
+      #   `container://` URL scheme.
+      # - v0.13.0 introduces the `container://` URL scheme for Lab
+      #   Overview links. It resolves absolute, image-baked paths
+      #   (allowlisted to /opt/) rather than workspace-relative
+      #   paths. lab.yml's Getting Started link moves from
+      #   `workspace://README.md` (which resolved to /sandbox/
+      #   README.md, the bind-mount target) to
+      #   `container:///opt/sandbox-original/README.md` (which
+      #   resolves to the image-baked README, stable across
+      #   user actions).
+      # - Fixes a real bug: when a user ran the dashboard's Clone
+      #   from GitHub action, /sandbox/'s bind-mounted contents
+      #   were replaced with the user's repo. If their repo had a
+      #   README.md, it would shadow the sandbox onboarding README.
+      #   Getting Started would then open the WRONG file. The
+      #   container:// scheme fixes this by pointing at content
+      #   that user actions can't shadow.
+      # - Pairs with the README-as-metadata refactor in the
+      #   immediately preceding aclabs commit (1266664), which
+      #   moved README.md from labs/sandbox/ + sandbox-original/
+      #   into .devcontainer/ as a metadata sibling of lab.yml.
+      #   The Dockerfile now COPYs it separately into
+      #   /opt/sandbox-original/README.md (the path the new
+      #   container:// link references).
+      # - Single-variable: this rev ships the v0.13.0 feature
+      #   end-to-end. Bumping the vsix without updating lab.yml
+      #   would leave the new scheme unused (dead code in the
+      #   container); updating lab.yml without the vsix would
+      #   leave the link silently failing (no host handler in
+      #   v0.12.1). They ship together as one feature delivery.
+      # - The README move (commit 1266664) was a separate
+      #   single-variable structural commit because it doesn't
+      #   change any user-visible behavior on its own — it only
+      #   matters once a build picks up the new layout, which
+      #   is what THIS rev does.
+      container_revision: "1.0.63"
