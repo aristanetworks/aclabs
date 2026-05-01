@@ -1,5 +1,5 @@
 ---
-name: sandbox-lab
+name: sandbox
 prefix: ""
 
 mgmt:
@@ -19,13 +19,5 @@ topology:
         INTFTYPE: et
     linux:
       image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
-
-  nodes:
-    ceos1:
-      image: arista/ceos:latest
-
-    ceos2:
-      image: arista/ceos:latest
-
-  links:
-    - endpoints: [ "ceos1:et1", "ceos2:et1" ]
+  nodes: {}
+  links: []
