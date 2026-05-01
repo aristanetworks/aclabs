@@ -195,11 +195,11 @@ don't have a permanent tenant.
 
 ### 🔽 Download cEOS Image
 
-> *"Pull the latest cEOS container image into this sandbox."*
+> *"Download and import a user-defined version of cEOS-lab into this sandbox."*
 
-Downloads the cEOS container image so it's available for your lab nodes.
-Pre-built sandboxes already include the image, but if you've reset or want
-a different version, this fetches it on demand.
+Downloads the cEOS container image and imports it into Docker so it's available 
+for use in your lab. Pre-built sandboxes already include the latest cEOS image, 
+but if you've reset or want a different version, this fetches it on demand.
 
 ### 📡 Onboard to CVaaS
 
