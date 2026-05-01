@@ -24,7 +24,7 @@ jobs:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
         from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.1.0"]
-        clab_version: ["0.74.3"]
+        clab_version: ["0.75.0"]
         user_id: ["1000", "1009"]
         include:
           - user_id: "1000"
@@ -1578,4 +1578,10 @@ jobs:
       # - Verify-then-flip pattern: this commit builds rev1.0.58 in
       #   CI; the consumer pointer (.devcontainer/sandbox/devcontainer
       #   .json image tag) stays at rev1.0.57 until verified.
-      container_revision: "1.0.58"
+      # - Verify-then-flip pattern: this commit builds rev1.0.58 in
+      #   CI; the consumer pointer (.devcontainer/sandbox/devcontainer
+      #   .json image tag) stays at rev1.0.57 until verified.
+      # 1.0.59:
+      # - Update ContainerLab to 0.75.0
+      # - Update README.md file to reflect updated ContainerLab version
+      container_revision: "1.0.59"
