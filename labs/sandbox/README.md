@@ -195,11 +195,18 @@ don't have a permanent tenant.
 
 ### 🔽 Download cEOS Image
 
-> *"Download and import a user-defined version of cEOS-lab into this sandbox."*
+> *"Download a specific cEOS-lab image into this sandbox."*
 
-Downloads the cEOS container image and imports it into Docker so it's available 
-for use in your lab. Pre-built sandboxes already include the latest cEOS image, 
-but if you've reset or want a different version, this fetches it on demand.
+Fetches a cEOS container image from arista.com (you'll be prompted for your
+arista.com token on first use — it's saved securely after that). Useful when
+your lab needs a specific version that isn't already in Docker's image cache.
+
+Before the download starts you'll see a confirmation modal showing the exact
+image tag (e.g., `arista/ceos:4.35.4M`) and a reminder that you'll need to
+update your `topology.clab.yml` to reference that tag once the download
+completes. The modal includes a **Copy Image Tag** button so you can paste
+straight into your topology file. If the image is already cached, the
+dashboard tells you up front and offers a Force Re-download escape hatch.
 
 ### 📡 Onboard to CVaaS
 
@@ -208,6 +215,17 @@ but if you've reset or want a different version, this fetches it on demand.
 Wires the running nodes in your lab up to a CVaaS tenant so you can manage
 them from CVaaS just like production switches. Pairs naturally with
 **Reserve a CVaaS Tenant** if you don't already have a tenant.
+
+### 📦 Change AVD Version
+
+> *"Switch this lab to a different version of the Arista AVD collection."*
+
+Detects the AVD collection version currently installed in this sandbox and
+opens a picker so you can switch to something else: `devel` for the bleeding
+edge, the top stable releases, or a Custom version you enter yourself.
+Useful when a lab needs a specific AVD version different from the one
+shipped with this sandbox, or when you're testing against a pre-release.
+You'll get a confirmation prompt before any existing version is replaced.
 
 ---
 
