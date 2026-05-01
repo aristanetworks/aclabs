@@ -7,18 +7,40 @@
 # button uses to restore a known-good state when the user wants to
 # start over.
 #
-# That baseline content (topology.clab.yml, README.md, asset images,
-# .gitignore) ALSO needs to be available at labs/sandbox/ in this repo,
-# because developers who open the aclabs repo directly (via Codespaces
-# or devcontainer-cli) get the lab via a bind mount of labs/sandbox/
-# rather than from a pre-built image. The two paths must produce the
-# same lab.
+# That baseline lab CONTENT (topology.clab.yml, asset images,
+# .gitignore) ALSO needs to be available at labs/sandbox/ in this
+# repo, because users open the sandbox via a bind mount of
+# labs/sandbox/ into /sandbox/ at runtime (see
+# .devcontainer/sandbox/devcontainer.json's workspaceMount). The two
+# paths must produce the same lab content.
 #
-# In practice, the content rarely changes. When it does, run
-# `make sync-baseline` from this directory to copy labs/sandbox/
-# into containers/lab-base-sandbox/.devcontainer/sandbox-original/.
-# Then commit both directories together so the next container
-# revision picks up the change.
+# Lab METADATA (lab.yml, README.md) is kept separate. Both files live
+# at .devcontainer/{lab.yml,README.md} and are baked into the image
+# via their own Dockerfile COPY statements (lab.yml →
+# /opt/lab-base-sandbox/lab.yml; README.md → /opt/sandbox-original/
+# README.md). They are NOT under labs/sandbox/, so they don't appear
+# in the bind-mounted /sandbox/ workspace, and they are NOT under
+# .devcontainer/sandbox-original/, so they don't get touched by
+# `make sync-baseline`. Metadata is reached via the dashboard's UI
+# (Lab Overview card for lab.yml; Getting Started button for
+# README.md, using sandbox-dashboard v0.13.0+'s `container://` URL
+# scheme).
+#
+# So this Makefile only manages CONTENT, and the content layout is a
+# straight mirror with no special cases:
+#
+#   labs/sandbox/                    sandbox-original/              /opt/sandbox-original/
+#   ────────────────────────────────────────────────────────────────────────────────────
+#   topology.clab.yml          ←→   topology.clab.yml          →   topology.clab.yml
+#   topology.…annotations.json ←→   topology.…annotations.json →   topology.…annotations.json
+#   assets/**                  ←→   assets/**                  →   assets/**
+#   .gitignore                 ←→   .gitignore                 →   .gitignore
+#
+# When labs/sandbox/ content changes, run `make sync-baseline` from
+# this directory to copy labs/sandbox/ into
+# containers/lab-base-sandbox/.devcontainer/sandbox-original/. Then
+# commit both directories together so the next container revision
+# picks up the change.
 #
 # WHY NOT AUTOMATE THIS
 # ─────────────────────
