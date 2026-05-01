@@ -44,7 +44,7 @@ description: |
   Happy labbing! 🧪
 
 components:
-  ceos: 4.35.2F
+  ceos: 4.36.0.1F
   avd: 5.7.3
   clab: 0.74.3
 
