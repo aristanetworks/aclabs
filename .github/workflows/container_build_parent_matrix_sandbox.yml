@@ -1710,4 +1710,24 @@ jobs:
       # - rev1.0.63 image is left on ghcr.io as historical
       #   record; nobody should pin to it (it's the burned
       #   architecture).
-      container_revision: "1.0.64"
+      # 1.0.65:
+      # - Bump packetanglers.sandbox-dashboard 0.13.0 -> 0.13.1,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.1 ships UX polish for the Download cEOS action:
+      #     * New pre-download confirmation modal (gate-and-
+      #       confirm) that surfaces what's about to happen and
+      #       the required topology edit (`image:` parameter)
+      #       BEFORE ardl is kicked off. Lets users verify the
+      #       version they typed and start editing their topo
+      #       in parallel with the download.
+      #     * Copy Image Tag affordance on both the pre-
+      #       download and cache-hit modals — writes
+      #       arista/ceos:<v> to the clipboard, re-shows the
+      #       modal so the user keeps their place in the flow.
+      #     * Cache-hit modal also surfaces topology guidance
+      #       (previously silent on this).
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as rev1.0.61 / rev1.0.62 / rev1.0.65 and
+      #   the "vsix-only" pattern. No Dockerfile content
+      #   changes beyond the vsix URL itself.
+      container_revision: "1.0.65"
