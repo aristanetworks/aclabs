@@ -7,40 +7,38 @@
 # button uses to restore a known-good state when the user wants to
 # start over.
 #
-# That baseline lab CONTENT (topology.clab.yml, asset images,
-# .gitignore) ALSO needs to be available at labs/sandbox/ in this
-# repo, because users open the sandbox via a bind mount of
-# labs/sandbox/ into /sandbox/ at runtime (see
-# .devcontainer/sandbox/devcontainer.json's workspaceMount). The two
-# paths must produce the same lab content.
+# That baseline content (topology.clab.yml, README.md, asset images,
+# .gitignore) ALSO needs to be available at labs/sandbox/ in this repo,
+# because users open the sandbox via a bind mount of labs/sandbox/
+# into /sandbox/ at runtime (see .devcontainer/sandbox/devcontainer.
+# json's workspaceMount). The two paths must produce the same lab.
 #
-# Lab METADATA (lab.yml, README.md) is kept separate. Both files live
-# at .devcontainer/{lab.yml,README.md} and are baked into the image
-# via their own Dockerfile COPY statements (lab.yml →
-# /opt/lab-base-sandbox/lab.yml; README.md → /opt/sandbox-original/
-# README.md). They are NOT under labs/sandbox/, so they don't appear
-# in the bind-mounted /sandbox/ workspace, and they are NOT under
-# .devcontainer/sandbox-original/, so they don't get touched by
-# `make sync-baseline`. Metadata is reached via the dashboard's UI
-# (Lab Overview card for lab.yml; Getting Started button for
-# README.md, using sandbox-dashboard v0.13.0+'s `container://` URL
-# scheme).
+# In practice, the content rarely changes. When it does, run
+# `make sync-baseline` from this directory to copy labs/sandbox/
+# into containers/lab-base-sandbox/.devcontainer/sandbox-original/.
+# Then commit both directories together so the next container
+# revision picks up the change.
 #
-# So this Makefile only manages CONTENT, and the content layout is a
-# straight mirror with no special cases:
+# A NOTE ON README.md (DAY 12 LESSON)
+# ───────────────────────────────────
+# An earlier refactor (commit 1266664, since reverted) tried to lift
+# README.md out of this mirror and treat it as metadata-only (sibling
+# of lab.yml). The intent was clean separation: labs/sandbox/ becomes
+# pure lab content, .devcontainer/ holds metadata. But it broke an
+# implicit dependency: every rev's image bakes settings.json with a
+# workspace `startupEditor: readme` that resolved against /sandbox/
+# README.md (the bind mount). Removing README from the bind-mount
+# source caused rev1.0.62 (and all earlier revs, retroactively) to
+# fail to boot cleanly. We reverted the architectural move, kept the
+# v0.13.0 container:// URL scheme as the actual fix for the original
+# Clone-from-GitHub README-shadowing bug, and changed startupEditor
+# to "none" in a future rev so the implicit dependency is closed.
 #
-#   labs/sandbox/                    sandbox-original/              /opt/sandbox-original/
-#   ────────────────────────────────────────────────────────────────────────────────────
-#   topology.clab.yml          ←→   topology.clab.yml          →   topology.clab.yml
-#   topology.…annotations.json ←→   topology.…annotations.json →   topology.…annotations.json
-#   assets/**                  ←→   assets/**                  →   assets/**
-#   .gitignore                 ←→   .gitignore                 →   .gitignore
-#
-# When labs/sandbox/ content changes, run `make sync-baseline` from
-# this directory to copy labs/sandbox/ into
-# containers/lab-base-sandbox/.devcontainer/sandbox-original/. Then
-# commit both directories together so the next container revision
-# picks up the change.
+# Lesson banked: "single-variable" architectural changes can still
+# violate implicit cross-component contracts. Before lifting a file
+# out of an established location, grep the entire build context for
+# references to that file's path — including baked-into-image config
+# files like settings.json that might depend on the runtime layout.
 #
 # WHY NOT AUTOMATE THIS
 # ─────────────────────

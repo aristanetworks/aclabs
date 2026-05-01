@@ -106,33 +106,38 @@ USER root
 # /sandbox/ and copies /opt/sandbox-original/. back, giving users a
 # factory-reset experience when they want to start over.
 #
-# The contents of ./sandbox-original/ are pure lab CONTENT —
-# topology.clab.yml, annotations, asset images, .gitignore — and
-# mirror what arrives at runtime via the labs/sandbox/ bind mount.
-# Both copies are kept in sync by `make sync-baseline` (see the
-# Makefile in this container's parent directory).
+# The contents here MUST mirror the layout that would otherwise arrive
+# via the labs/sandbox/ bind mount. The baseline includes the default
+# topology (2 cEOS nodes connected), annotations for TopoViewer, the
+# standard sandbox README, the asset images referenced by the README,
+# and a sandbox-appropriate .gitignore.
 #
-# README.md is kept separate (see the COPY below). It's METADATA, not
-# content — it describes the lab, accessed via the dashboard's
-# Getting Started button (sandbox-dashboard v0.13.0+'s `container://`
-# URL scheme), and never appears in the bind-mounted /sandbox/
-# workspace. Same architectural pattern as lab.yml.
+# A NOTE ON THE README (DAY 12 LESSON):
+# An earlier refactor (commit 1266664, since reverted) attempted to
+# treat README.md as metadata-only, lifting it out of labs/sandbox/
+# and out of sandbox-original/ to a sibling-of-lab.yml location. That
+# was philosophically clean but broke an implicit dependency: every
+# rev's image bakes settings.json with a workspace `startupEditor`
+# that previously resolved against /sandbox/README.md (the bind
+# mount). Removing the README from the bind-mount source caused
+# rev1.0.62 (and earlier revs, retroactively) to fail to boot
+# cleanly. The revert restored the labs/sandbox/ ↔ sandbox-original/
+# mirror, kept the v0.13.0 container:// URL scheme + lab.yml link
+# (the actual valuable fix for the original Clone-from-GitHub
+# shadowing bug), and changed startupEditor to "none" so the
+# implicit dependency is closed for future revs.
 #
-# A prior attempt at automating the content sync (rev1.0.53's
-# prebuild.sh + workflow hook + fail-fast guard) broke launch on the
-# host VM and was reverted; the manual Makefile pattern is now the
+# Sync mechanism: when labs/sandbox/ content changes, run
+# `make sync-baseline` from containers/lab-base-sandbox/ (see the
+# Makefile there) to propagate the changes into this directory.
+# Both the source (labs/sandbox/) and the destination (this directory)
+# are tracked in git and committed together when content changes.
+# A prior attempt at automating this sync (rev1.0.53's prebuild.sh
+# + workflow hook + fail-fast guard) broke launch on the host VM
+# and was reverted; the manual Makefile pattern is now the
 # documented mechanism. See lab-base-sandbox commit history c2404c5
 # for the original attempt and e63e299 for the unwind + Makefile.
 COPY ./sandbox-original/ /opt/sandbox-original/
-
-# Bake the lab README (metadata) into /opt/sandbox-original/README.md.
-# Lives at .devcontainer/README.md (sibling of lab.yml — both
-# metadata) rather than inside .devcontainer/sandbox-original/ so the
-# Makefile's content sync stays a clean wholesale copy with no
-# exclusions. The dashboard's Getting Started button targets this
-# baked path via lab.yml's `container:///opt/sandbox-original/
-# README.md` link (sandbox-dashboard v0.13.0+).
-COPY ./README.md /opt/sandbox-original/README.md
 RUN chown -R ${USERNAME}:${USERNAME} /opt/sandbox-original
 
 # Bake the lab metadata file (lab.yml) into the container image. Read
