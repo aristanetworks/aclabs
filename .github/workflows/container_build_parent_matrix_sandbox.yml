@@ -1584,4 +1584,14 @@ jobs:
       # 1.0.59:
       # - Update ContainerLab to 0.75.0
       # - Update README.md file to reflect updated ContainerLab version
-      container_revision: "1.0.59"
+      # 1.0.60:
+      # - Bump packetanglers.sandbox-dashboard 0.11.18 -> 0.11.19,
+      #   ONLY. No other changes in this rev.
+      # - v0.11.19 restyles the Lab Overview links ("Getting Started"
+      #   and "Report an Issue") from plain text hyperlinks to the
+      #   v0.11.15 outline-button aesthetic, matching the visual
+      #   language of the Actions buttons below. Pure CSS change in
+      #   the extension; no schema change, no behavior change.
+      # - Single-variable: extension bump alone. Same shipping
+      #   discipline as rev1.0.54 / rev1.0.56.
+      container_revision: "1.0.60"
