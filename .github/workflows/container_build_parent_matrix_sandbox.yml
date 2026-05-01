@@ -1663,4 +1663,51 @@ jobs:
       #   change any user-visible behavior on its own — it only
       #   matters once a build picks up the new layout, which
       #   is what THIS rev does.
-      container_revision: "1.0.63"
+      # 1.0.64:
+      # - Day 12 cleanup rev. Reverts the rev1.0.63 architectural
+      #   overhead (the README-as-metadata refactor from commit
+      #   1266664) while preserving the genuinely valuable bit of
+      #   v0.13.0 — the container:// URL scheme handler in the
+      #   extension and lab.yml's Getting Started link pointing at
+      #   /opt/sandbox-original/README.md.
+      # - Why the rev1.0.63 architecture was reverted: it broke
+      #   boot for every existing rev. settings.json's nested
+      #   workbench.startupEditor (and/or some other workspace-
+      #   root README dependency we haven't fully pinpointed)
+      #   needed labs/sandbox/README.md to exist at runtime via
+      #   the bind mount. 1266664 deleted that file. Result:
+      #   rev1.0.62 retroactively stopped booting, rev1.0.63
+      #   never booted properly, and we had to bisect from
+      #   rev1.0.61 backwards to confirm.
+      # - What this rev bakes:
+      #     * Same vsix as rev1.0.63: packetanglers.sandbox-
+      #       dashboard 0.13.0 (the container:// URL scheme).
+      #     * Same lab.yml as rev1.0.63: Getting Started link
+      #       at container:///opt/sandbox-original/README.md.
+      #     * REVERTED Dockerfile: single `COPY ./sandbox-
+      #       original/` (rev1.0.63's separate `COPY ./README.md`
+      #       gone). README is back inside sandbox-original/
+      #       alongside topology and assets.
+      #     * settings.json: nested workbench.startupEditor
+      #       changed from "readme" to "none". The flat
+      #       "workbench.startupEditor": "none" key was already
+      #       overriding it, so this is config alignment, not a
+      #       behavior change. Closes one possible boot
+      #       dependency vector.
+      # - This rev is two related changes shipped together:
+      #     (a) v0.13.0 feature delivery (vsix + lab.yml link),
+      #         which is the same logical unit rev1.0.63 was
+      #         supposed to deliver.
+      #     (b) Day 12 cleanup (revert architectural overhead +
+      #         settings.json alignment), which closes the
+      #         boot regression introduced by 1266664.
+      #   Bundling them here because (b) is small, low-risk
+      #   (settings.json change is empirically a no-op; the
+      #   architectural revert has been validated by Mitch's
+      #   rev1.0.62-with-restored-README boot test), and the
+      #   alternative is two build cycles for what's logically
+      #   the same "ship v0.13.0 correctly" unit.
+      # - rev1.0.63 image is left on ghcr.io as historical
+      #   record; nobody should pin to it (it's the burned
+      #   architecture).
+      container_revision: "1.0.64"
