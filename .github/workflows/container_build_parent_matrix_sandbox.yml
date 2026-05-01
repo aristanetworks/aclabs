@@ -1612,4 +1612,17 @@ jobs:
       #   the existing AVD playbooks); no new packages, no new
       #   architecture, no Dockerfile changes beyond the vsix URL.
       # - Same shipping discipline as rev1.0.54 / rev1.0.56 / rev1.0.60.
-      container_revision: "1.0.61"
+      # 1.0.62:
+      # - Bump packetanglers.sandbox-dashboard 0.12.0 -> 0.12.1,
+      #   ONLY. No other changes in this rev.
+      # - v0.12.1 fixes the `devel` install URL syntax in the AVD
+      #   picker. v0.12.0 used `<repo>.git,<branch>#<subdir>` ordering
+      #   which ansible-galaxy interprets as a single broken git ref;
+      #   v0.12.1 uses the canonical AVD-docs ordering
+      #   `<repo>.git#<subdir>,<branch>`. Tagged Galaxy installs and
+      #   Custom version installs were unaffected — those code paths
+      #   were verified working in v0.12.0 smoke testing. This fix
+      #   only changes the devel-branch code path.
+      # - Single-variable: extension bump alone. Same shipping
+      #   discipline as rev1.0.54 / rev1.0.56 / rev1.0.60 / rev1.0.61.
+      container_revision: "1.0.62"
