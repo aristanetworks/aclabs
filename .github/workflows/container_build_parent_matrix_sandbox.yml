@@ -1730,4 +1730,4 @@ jobs:
       #   discipline as rev1.0.61 / rev1.0.62 / rev1.0.65 and
       #   the "vsix-only" pattern. No Dockerfile content
       #   changes beyond the vsix URL itself.
-      container_revision: "1.0.65"
+      container_revision: "1.0.66"
