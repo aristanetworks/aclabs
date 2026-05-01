@@ -1594,4 +1594,22 @@ jobs:
       #   the extension; no schema change, no behavior change.
       # - Single-variable: extension bump alone. Same shipping
       #   discipline as rev1.0.54 / rev1.0.56.
-      container_revision: "1.0.60"
+      # 1.0.61:
+      # - Bump packetanglers.sandbox-dashboard 0.11.19 -> 0.12.0,
+      #   ONLY. No other changes in this rev.
+      # - v0.12.0 ships the new "Change AVD Version" action — a button
+      #   in the Arista Integrations card that opens a QuickPick of
+      #   stable AVD releases from Ansible Galaxy (top 15, no auth),
+      #   plus a `devel` option pulling from the AVD GitHub main
+      #   branch, plus a `Custom version…` escape hatch. Detects the
+      #   currently-installed version, confirms destructive
+      #   replacement, and runs `ansible-galaxy collection install`
+      #   with progress + output channel streaming. First net-new
+      #   feature of the v0.12.x cycle, driven by user feedback
+      #   collected post-launch.
+      # - Single-variable: extension bump alone. ansible-galaxy is
+      #   already part of the lab-base-sandbox container (used by
+      #   the existing AVD playbooks); no new packages, no new
+      #   architecture, no Dockerfile changes beyond the vsix URL.
+      # - Same shipping discipline as rev1.0.54 / rev1.0.56 / rev1.0.60.
+      container_revision: "1.0.61"
