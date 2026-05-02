@@ -997,6 +997,41 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
     lines.append("---")
     lines.append("")
 
+    # ── Reopening the Dashboard ──
+    # Sits at the top (above Quick Actions) so first-time users see the
+    # guidance without scrolling. Rendered as <details open> so it's
+    # expanded by default but can be collapsed once read — matches the
+    # Node Inventory idiom (collapsible block, no wrapping h2 heading;
+    # the <summary> IS the heading), with `open` flipped on so the
+    # content is visible until the user explicitly dismisses it.
+    #
+    # The status-bar text and Command Palette entry name below are
+    # pinned to the lab-dashboard extension's actual contributions
+    # ('🧪 Lab Dashboard' status item, 'Lab Dashboard: Open' command
+    # title) — keep these in sync if those labels ever change.
+    lines.append("<details open>")
+    lines.append("<summary><strong>🔄 &nbsp; Reopening the Dashboard</strong> &nbsp; <sub>(click to collapse)</sub></summary>")
+    lines.append("")
+    lines.append(
+        "Closed this tab by accident? It's a normal VS Code tab and easy "
+        "to close — here are two ways to bring it back:"
+    )
+    lines.append("")
+    lines.append(
+        "- **Status bar (easiest).** Look at the bottom-left corner of "
+        "this window for a button labeled **🧪 Lab Dashboard**. Click it. Done."
+    )
+    lines.append(
+        "- **Command Palette.** Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> "
+        "(or <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Mac), type "
+        "`Lab Dashboard: Open`, and hit Enter."
+    )
+    lines.append("")
+    lines.append("</details>")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
     # ── Quick Actions ──
     lines.append("## 🚀 Quick Actions")
     lines.append("")
@@ -1109,35 +1144,6 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
         for tip in cfg.tips:
             lines.append(f"- {tip}")
         lines.append("")
-
-    # ── Reopening the Dashboard ──
-    # Always emitted (no config flag) — every lab benefits from this guidance.
-    # Mirrors the equivalent README callout shipped to all techlib labs;
-    # putting it in-dashboard means users who close this tab and dismiss
-    # the README still have an in-product path back. The status-bar item
-    # text and Command Palette entry name below are pinned to the
-    # lab-dashboard extension's actual contributions ('🧪 Lab Dashboard'
-    # status item, 'Lab Dashboard: Open' command title) — keep these in
-    # sync if those labels ever change.
-    lines.append("---")
-    lines.append("")
-    lines.append("## 🔄 Reopening the Dashboard")
-    lines.append("")
-    lines.append(
-        "Closed this tab by accident? It's a normal VS Code tab and easy "
-        "to close — here are two ways to bring it back:"
-    )
-    lines.append("")
-    lines.append(
-        "- **Status bar (easiest).** Look at the bottom-left corner of "
-        "this window for a button labeled **🧪 Lab Dashboard**. Click it. Done."
-    )
-    lines.append(
-        "- **Command Palette.** Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> "
-        "(or <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Mac), type "
-        "`Lab Dashboard: Open`, and hit Enter."
-    )
-    lines.append("")
 
     # ── Footer ──
     lines.append("---")

@@ -148,4 +148,17 @@ jobs:
       #   is no longer a one-way door.
       # - No Dockerfile / vsix / recipe changes; only init_lab.py
       #   markdown emission. Single-variable rev.
-      container_revision: "1.0.12"
+      # 1.0.13:
+      # - init_lab.py: relocate the Reopening section from below
+      #   Tips to immediately above Quick Actions (top of the dash,
+      #   right under the hero) so first-time users see it without
+      #   scrolling.
+      # - init_lab.py: convert the Reopening section from a level-2
+      #   heading + prose to a <details open> collapsible block,
+      #   matching the Node Inventory idiom. Expanded by default
+      #   (the `open` attribute) so first-time users get the
+      #   guidance immediately; collapsible so repeat users can
+      #   tuck it away. Per Mitch's design call.
+      # - No Dockerfile / vsix / recipe changes; only init_lab.py
+      #   markdown emission. Single-variable rev.
+      container_revision: "1.0.13"
