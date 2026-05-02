@@ -9,11 +9,6 @@ maps to a real workflow you'll use day to day. This guide walks you through
 when to click which one, plus how to find your way back if you accidentally
 close the dashboard.
 
-> [!WARNING]
-> This lab is in preview. It's fully functional, but breaking changes can
-> happen. We are working hard on building the best lab collection and your
-> feedback is always appreciated.
-
 ---
 
 ## 🔑 Default credentials
