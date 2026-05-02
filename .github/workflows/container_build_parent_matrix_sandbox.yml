@@ -1730,4 +1730,40 @@ jobs:
       #   discipline as rev1.0.61 / rev1.0.62 / rev1.0.65 and
       #   the "vsix-only" pattern. No Dockerfile content
       #   changes beyond the vsix URL itself.
-      container_revision: "1.0.66"
+      # 1.0.66:
+      # - README content sync ONLY. No Dockerfile / vsix /
+      #   recipe changes. Both labs/sandbox/README.md and
+      #   containers/lab-base-sandbox/.devcontainer/sandbox-original/
+      #   README.md were updated together via `make sync-baseline`:
+      #     * Added back the '📦 Change AVD Version' section
+      #       (was missing since v0.12.0 introduced the action).
+      #     * Rewrote the '🔽 Download cEOS Image' section to
+      #       reflect the v0.13.1 pre-download modal flow, the
+      #       Copy Image Tag affordance, and the topology edit
+      #       guidance the modals now surface.
+      # - Single-variable: README content delta only. Dockerfile
+      #   layer is identical to rev1.0.65; the only difference is
+      #   the bind-mount-source files copied into the image during
+      #   build. Same shipping discipline as the README-only revs
+      #   that came before.
+      # - This comment was added retroactively in rev1.0.67 to fix
+      #   a small drift: the rev1.0.66 entry was never written
+      #   when the pin was bumped. State-of-the-comment-history
+      #   is now back in sync with state-of-the-pin.
+      # 1.0.67:
+      # - Bump packetanglers.sandbox-dashboard 0.13.1 -> 0.13.2,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.2 ships a small wayfinding addition: a new
+      #   '🔄 Reopening the Dashboard' card at the top of the
+      #   dashboard (above the Actions section) that tells users
+      #   how to bring the dashboard tab back if they accidentally
+      #   close it. Two recovery paths offered: status-bar item
+      #   ('🧪 Sandbox Dashboard' at bottom-left) and Command
+      #   Palette ('Sandbox Dashboard: Open'). Native <details
+      #   open> disclosure widget — expanded by default, click-to-
+      #   collapse. Mirrors the equivalent card shipped to all
+      #   techlib labs in lab-base-techlib rev1.0.13.
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as rev1.0.65 and the "vsix-only" pattern.
+      #   No Dockerfile content changes beyond the vsix URL itself.
+      container_revision: "1.0.67"
