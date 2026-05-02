@@ -999,22 +999,27 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
 
     # ── Reopening the Dashboard ──
     # Sits at the top (above Quick Actions) so first-time users see the
-    # guidance without scrolling. Rendered as <details open> so it's
-    # expanded by default but can be collapsed once read — matches the
-    # Node Inventory idiom (collapsible block, no wrapping h2 heading;
-    # the <summary> IS the heading), with `open` flipped on so the
-    # content is visible until the user explicitly dismisses it.
+    # guidance without scrolling. Rendered as a collapsible <details>
+    # block (no `open` attribute as of rev1.0.14) — matches the Node
+    # Inventory idiom (collapsible block, no wrapping h2 heading; the
+    # <summary> IS the heading). Default-collapsed because expanded-
+    # default (rev1.0.13's behavior) drowned out Quick Actions on
+    # smaller-resolution displays per cross-extension live-test
+    # feedback. Discoverability stays covered by the prominent top-
+    # of-dashboard placement plus the '(click to expand)' hint in
+    # the summary.
     #
     # The status-bar text and Command Palette entry name below are
     # pinned to the lab-dashboard extension's actual contributions
     # ('🧪 Lab Dashboard' status item, 'Lab Dashboard: Open' command
     # title) — keep these in sync if those labels ever change.
-    lines.append("<details open>")
-    lines.append("<summary><strong>🔄 &nbsp; Reopening the Dashboard</strong> &nbsp; <sub>(click to collapse)</sub></summary>")
+    lines.append("<details>")
+    lines.append("<summary><strong>🔄 &nbsp; Reopening the Dashboard</strong> &nbsp; <sub>(click to expand)</sub></summary>")
     lines.append("")
     lines.append(
-        "Closed this tab by accident? It's a normal VS Code tab and easy "
-        "to close — here are two ways to bring it back:"
+        "This dashboard is a normal VS Code tab and easy to close — "
+        "if it's accidentally closed, don't fret! Here are two ways "
+        "to bring it back:"
     )
     lines.append("")
     lines.append(

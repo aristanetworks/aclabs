@@ -161,4 +161,25 @@ jobs:
       #   tuck it away. Per Mitch's design call.
       # - No Dockerfile / vsix / recipe changes; only init_lab.py
       #   markdown emission. Single-variable rev.
-      container_revision: "1.0.13"
+      # 1.0.14:
+      # - init_lab.py: flip the Reopening section's default state
+      #   from <details open> to plain <details> (collapsed by
+      #   default). Live-test feedback on rev1.0.13's expanded-
+      #   default UX surfaced first on the sandbox dashboard
+      #   (sandbox-dashboard v0.13.2): the always-expanded card
+      #   took too much vertical real estate and pushed Quick
+      #   Actions off-screen on smaller-resolution displays.
+      #   Cross-extension consistency: applying the same flip
+      #   here so techlib + sandbox surfaces stay symmetric.
+      # - init_lab.py: '(click to collapse)' summary hint
+      #   becomes '(click to expand)' to match the new default
+      #   state. Discoverability stays covered by the card's
+      #   prominent top-of-dashboard placement.
+      # - init_lab.py: body copy softened — opens with assurance
+      #   ('don't fret!') instead of problem-statement-then-
+      #   recovery. Same wording change applied in parallel to
+      #   sandbox-dashboard v0.13.3 for cross-extension copy
+      #   consistency.
+      # - No Dockerfile / vsix / recipe changes; only init_lab.py
+      #   markdown emission. Single-variable rev.
+      container_revision: "1.0.14"
