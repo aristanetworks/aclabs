@@ -135,4 +135,17 @@ jobs:
       #   feedback on rev1.0.10.
       # - No Dockerfile logic / recipe / init_lab.py changes; just
       #   the pinned vsix version. Single-variable rev.
-      container_revision: "1.0.11"
+      # 1.0.12:
+      # - init_lab.py: emit a new '## 🔄 Reopening the Dashboard'
+      #   section in the LAB-READY.md output (between Tips and the
+      #   footer). Tells users how to bring the dashboard back via
+      #   the status-bar item or the Command Palette if they close
+      #   the tab. Mirrors the same guidance now in the techlib lab
+      #   READMEs (commit 88adee6).
+      # - init_lab.py: drop the now-misleading 'Close this tab with
+      #   Ctrl+W' instruction from the footer subscript. The whole
+      #   point of the new Reopening section is that closing the tab
+      #   is no longer a one-way door.
+      # - No Dockerfile / vsix / recipe changes; only init_lab.py
+      #   markdown emission. Single-variable rev.
+      container_revision: "1.0.12"
