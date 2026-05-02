@@ -1766,4 +1766,22 @@ jobs:
       # - Single-variable: extension bump alone, same shipping
       #   discipline as rev1.0.65 and the "vsix-only" pattern.
       #   No Dockerfile content changes beyond the vsix URL itself.
-      container_revision: "1.0.67"
+      # 1.0.68:
+      # - Bump packetanglers.sandbox-dashboard 0.13.2 -> 0.13.3,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.3 ships polish on the Reopening card: collapsed
+      #   by default (was expanded-default in v0.13.2; pushed
+      #   Quick Actions off-screen on smaller-resolution displays
+      #   per live-test feedback), '(click to expand)' summary
+      #   hint added so the affordance still reads, and softer
+      #   body copy that opens with assurance ('don't fret!')
+      #   instead of problem-statement-then-recovery. Cross-
+      #   extension parallel: same three-variable polish landed
+      #   in lab-base-techlib rev1.0.14 (init_lab.py emission)
+      #   to keep the techlib + sandbox surfaces symmetric in
+      #   copy + UX behavior, not just look-and-feel.
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as rev1.0.65 / rev1.0.67 and the "vsix-only"
+      #   pattern. No Dockerfile content changes beyond the vsix
+      #   URL itself.
+      container_revision: "1.0.68"
