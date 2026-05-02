@@ -117,4 +117,14 @@ jobs:
       #     the signal would be noisy anyway.
       # - Net UX win: fresh lab launches are now popup-free. Respectful
       #   default for a learning environment.
-      container_revision: "1.0.9"
+      # 1.0.10:
+      # - Bump lab-dashboard vsix URL to 0.15.0 to pick up the
+      #   sandbox-dashboard visual identity port — hero card +
+      #   action-card + outline-button system that users already
+      #   love on the sandbox lab. Same buttons, same number, same
+      #   click targets; pure visual + DOM-shape refactor in the
+      #   extension's renderer (markdown sources unchanged, so
+      #   init_lab.py is untouched in this rev).
+      # - No Dockerfile logic / recipe changes; just the pinned vsix
+      #   version. Single-variable rev.
+      container_revision: "1.0.10"
