@@ -102,7 +102,7 @@ RUN for ext in \
     done
 
 RUN curl -fsSL -o /tmp/lab-dashboard.vsix \
-      https://open-vsx.org/api/packetanglers/lab-dashboard/0.15.0/file/packetanglers.lab-dashboard-0.15.0.vsix \
+      https://open-vsx.org/api/packetanglers/lab-dashboard/0.15.1/file/packetanglers.lab-dashboard-0.15.1.vsix \
  && code-server --install-extension /tmp/lab-dashboard.vsix --force \
  && rm /tmp/lab-dashboard.vsix
 

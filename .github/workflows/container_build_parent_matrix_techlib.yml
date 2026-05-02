@@ -127,4 +127,12 @@ jobs:
       #   init_lab.py is untouched in this rev).
       # - No Dockerfile logic / recipe changes; just the pinned vsix
       #   version. Single-variable rev.
-      container_revision: "1.0.10"
+      # 1.0.11:
+      # - Bump lab-dashboard vsix URL to 0.15.1 to pick up the badge-
+      #   row alignment polish — Validated with / Resources labels
+      #   now hide via CSS so the badges sit flush-left, matching
+      #   sandbox-dashboard's badge layout exactly. Per live-test
+      #   feedback on rev1.0.10.
+      # - No Dockerfile logic / recipe / init_lab.py changes; just
+      #   the pinned vsix version. Single-variable rev.
+      container_revision: "1.0.11"
