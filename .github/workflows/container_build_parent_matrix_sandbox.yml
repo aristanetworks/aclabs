@@ -1784,4 +1784,22 @@ jobs:
       #   discipline as rev1.0.65 / rev1.0.67 and the "vsix-only"
       #   pattern. No Dockerfile content changes beyond the vsix
       #   URL itself.
-      container_revision: "1.0.68"
+      # 1.0.69:
+      # - Bump packetanglers.sandbox-dashboard 0.13.3 -> 0.13.4,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.4 ships a render-path optimization from an end-
+      #   of-Day-13 Zamboni audit pass: renderLabOverview() now
+      #   skips the components / badges / links DOM rebuild when
+      #   state.labMetadata reference hasn't changed since the
+      #   last render. Pre-v0.13.4 the metadata DOM was demolished
+      #   and rebuilt every 30s on the containerlab poll cadence
+      #   even when nothing had changed, wiping any text
+      #   selection inside the badges and re-attaching click
+      #   listeners each time. The metadata source returns a
+      #   single cached reference (lab-metadata.ts), so strict
+      #   equality is the right check.
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as rev1.0.65 / rev1.0.67 / rev1.0.68 and
+      #   the "vsix-only" pattern. No Dockerfile content changes
+      #   beyond the vsix URL itself.
+      container_revision: "1.0.69"
