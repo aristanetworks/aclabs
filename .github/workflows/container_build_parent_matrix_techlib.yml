@@ -182,4 +182,26 @@ jobs:
       #   consistency.
       # - No Dockerfile / vsix / recipe changes; only init_lab.py
       #   markdown emission. Single-variable rev.
-      container_revision: "1.0.14"
+      # 1.0.15:
+      # - Bump packetanglers.lab-dashboard 0.15.1 -> 0.15.2,
+      #   ONLY. No other changes in this rev.
+      # - v0.15.2 ships TWO security fixes from an end-of-Day-13
+      #   Zamboni audit pass (both MEDIUM severity, neither RCE-
+      #   class):
+      #     * command: URI dispatcher now allowlists command IDs.
+      #       Previously accepted any commandId from a webview
+      #       link and forwarded to vscode.commands.executeCommand,
+      #       which let a poisoned LAB-READY.md (planted by an
+      #       attacker with workspace write access) trigger
+      #       arbitrary VS Code commands. The dispatcher now
+      #       rejects anything not in ALLOWED_COMMAND_IDS — the
+      #       seven commands this extension actually registers.
+      #     * Webview HTML error fallback now HTML-escapes its
+      #       interpolations (uri.fsPath + exception message).
+      #       CSP would have blocked any script execution this
+      #       could enable, but the hygiene gap was real.
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as the rev1.0.10 / rev1.0.11 / rev1.0.13
+      #   "vsix-only" pattern. No Dockerfile content changes
+      #   beyond the vsix URL itself.
+      container_revision: "1.0.15"
