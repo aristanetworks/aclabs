@@ -1821,4 +1821,18 @@ jobs:
       #   discipline as rev1.0.65 / rev1.0.67 / rev1.0.68 /
       #   rev1.0.69 and the "vsix-only" pattern. No Dockerfile
       #   content changes beyond the vsix URL itself.
-      container_revision: "1.0.70"
+      # 1.0.71:
+      # - Bump packetanglers.sandbox-dashboard 0.13.5 -> 0.13.6,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.6 completes the Change AVD Version flow: it now
+      #   installs PyAVD (the Python runtime library that AVD
+      #   playbooks import) alongside the arista.avd Ansible
+      #   collection, in a two-step sequence (pip first, then
+      #   ansible-galaxy). Pre-v0.13.6 the action installed only
+      #   the collection — leaving PyAVD at whatever version was
+      #   previously installed and producing silent version skew
+      #   between the two halves of the AVD toolchain.
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as the "vsix-only" pattern. No Dockerfile
+      #   content changes beyond the vsix URL itself.
+      container_revision: "1.0.71"
