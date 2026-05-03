@@ -1802,4 +1802,23 @@ jobs:
       #   discipline as rev1.0.65 / rev1.0.67 / rev1.0.68 and
       #   the "vsix-only" pattern. No Dockerfile content changes
       #   beyond the vsix URL itself.
-      container_revision: "1.0.69"
+      # 1.0.70:
+      # - Bump packetanglers.sandbox-dashboard 0.13.4 -> 0.13.5,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.5 fixes a user-reported bug: clicking Borrow from
+      #   Tech Library after a save → stop sequence aborted with
+      #   'EACCES: permission denied, rmdir
+      #   /sandbox/startup-configs/clab-<lab>'. Root cause:
+      #   `containerlab save --copy startup-configs` runs as root
+      #   via sudo and creates root-owned subtrees that the
+      #   dashboard's unprivileged fs.rm cannot delete. Reset
+      #   already used `sudo -n rm -rf` for the same scenario
+      #   (since v0.9.3); v0.13.5 extracts that helper to a
+      #   shared module and threads it through both Borrow from
+      #   Tech Library AND Clone from GitHub (which had the same
+      #   latent bug).
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as rev1.0.65 / rev1.0.67 / rev1.0.68 /
+      #   rev1.0.69 and the "vsix-only" pattern. No Dockerfile
+      #   content changes beyond the vsix URL itself.
+      container_revision: "1.0.70"
