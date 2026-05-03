@@ -117,4 +117,91 @@ jobs:
       #     the signal would be noisy anyway.
       # - Net UX win: fresh lab launches are now popup-free. Respectful
       #   default for a learning environment.
-      container_revision: "1.0.9"
+      # 1.0.10:
+      # - Bump lab-dashboard vsix URL to 0.15.0 to pick up the
+      #   sandbox-dashboard visual identity port — hero card +
+      #   action-card + outline-button system that users already
+      #   love on the sandbox lab. Same buttons, same number, same
+      #   click targets; pure visual + DOM-shape refactor in the
+      #   extension's renderer (markdown sources unchanged, so
+      #   init_lab.py is untouched in this rev).
+      # - No Dockerfile logic / recipe changes; just the pinned vsix
+      #   version. Single-variable rev.
+      # 1.0.11:
+      # - Bump lab-dashboard vsix URL to 0.15.1 to pick up the badge-
+      #   row alignment polish — Validated with / Resources labels
+      #   now hide via CSS so the badges sit flush-left, matching
+      #   sandbox-dashboard's badge layout exactly. Per live-test
+      #   feedback on rev1.0.10.
+      # - No Dockerfile logic / recipe / init_lab.py changes; just
+      #   the pinned vsix version. Single-variable rev.
+      # 1.0.12:
+      # - init_lab.py: emit a new '## 🔄 Reopening the Dashboard'
+      #   section in the LAB-READY.md output (between Tips and the
+      #   footer). Tells users how to bring the dashboard back via
+      #   the status-bar item or the Command Palette if they close
+      #   the tab. Mirrors the same guidance now in the techlib lab
+      #   READMEs (commit 88adee6).
+      # - init_lab.py: drop the now-misleading 'Close this tab with
+      #   Ctrl+W' instruction from the footer subscript. The whole
+      #   point of the new Reopening section is that closing the tab
+      #   is no longer a one-way door.
+      # - No Dockerfile / vsix / recipe changes; only init_lab.py
+      #   markdown emission. Single-variable rev.
+      # 1.0.13:
+      # - init_lab.py: relocate the Reopening section from below
+      #   Tips to immediately above Quick Actions (top of the dash,
+      #   right under the hero) so first-time users see it without
+      #   scrolling.
+      # - init_lab.py: convert the Reopening section from a level-2
+      #   heading + prose to a <details open> collapsible block,
+      #   matching the Node Inventory idiom. Expanded by default
+      #   (the `open` attribute) so first-time users get the
+      #   guidance immediately; collapsible so repeat users can
+      #   tuck it away. Per Mitch's design call.
+      # - No Dockerfile / vsix / recipe changes; only init_lab.py
+      #   markdown emission. Single-variable rev.
+      # 1.0.14:
+      # - init_lab.py: flip the Reopening section's default state
+      #   from <details open> to plain <details> (collapsed by
+      #   default). Live-test feedback on rev1.0.13's expanded-
+      #   default UX surfaced first on the sandbox dashboard
+      #   (sandbox-dashboard v0.13.2): the always-expanded card
+      #   took too much vertical real estate and pushed Quick
+      #   Actions off-screen on smaller-resolution displays.
+      #   Cross-extension consistency: applying the same flip
+      #   here so techlib + sandbox surfaces stay symmetric.
+      # - init_lab.py: '(click to collapse)' summary hint
+      #   becomes '(click to expand)' to match the new default
+      #   state. Discoverability stays covered by the card's
+      #   prominent top-of-dashboard placement.
+      # - init_lab.py: body copy softened — opens with assurance
+      #   ('don't fret!') instead of problem-statement-then-
+      #   recovery. Same wording change applied in parallel to
+      #   sandbox-dashboard v0.13.3 for cross-extension copy
+      #   consistency.
+      # - No Dockerfile / vsix / recipe changes; only init_lab.py
+      #   markdown emission. Single-variable rev.
+      # 1.0.15:
+      # - Bump packetanglers.lab-dashboard 0.15.1 -> 0.15.2,
+      #   ONLY. No other changes in this rev.
+      # - v0.15.2 ships TWO security fixes from an end-of-Day-13
+      #   Zamboni audit pass (both MEDIUM severity, neither RCE-
+      #   class):
+      #     * command: URI dispatcher now allowlists command IDs.
+      #       Previously accepted any commandId from a webview
+      #       link and forwarded to vscode.commands.executeCommand,
+      #       which let a poisoned LAB-READY.md (planted by an
+      #       attacker with workspace write access) trigger
+      #       arbitrary VS Code commands. The dispatcher now
+      #       rejects anything not in ALLOWED_COMMAND_IDS — the
+      #       seven commands this extension actually registers.
+      #     * Webview HTML error fallback now HTML-escapes its
+      #       interpolations (uri.fsPath + exception message).
+      #       CSP would have blocked any script execution this
+      #       could enable, but the hygiene gap was real.
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as the rev1.0.10 / rev1.0.11 / rev1.0.13
+      #   "vsix-only" pattern. No Dockerfile content changes
+      #   beyond the vsix URL itself.
+      container_revision: "1.0.15"

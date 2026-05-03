@@ -2,6 +2,14 @@
 
 <!-- lab-dashboard:metadata-end -->
 
+> [!TIP]
+> **Closed the Lab Dashboard? Here's how to bring it back.** It's a normal VS Code tab and easy to close by accident. Two ways to reopen it:
+>
+> - **Status bar (easiest).** Look at the bottom-left corner of this window for a button labeled **🧪 Lab Dashboard**. Click it. Done.
+> - **Command Palette.** Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac), type `Lab Dashboard: Open`, and hit Enter.
+>
+> If you ever feel stuck, those two paths will always bring the dashboard back.
+
 ## Interacting with the Lab
 
 > [!TIP]

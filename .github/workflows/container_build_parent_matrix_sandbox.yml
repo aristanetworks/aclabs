@@ -1,0 +1,1838 @@
+---
+name: build lab-base-sandbox images
+
+on:
+  push:
+    branches: ['**']  # branches will be filtered in the jobs
+    paths:
+      - .github/workflows/container_build_child.yml
+      - .github/workflows/container_build_parent_matrix_sandbox.yml
+      - containers/lab-base-sandbox/**
+  workflow_dispatch:
+    branches: ['**']  # branches will be filtered in the jobs
+
+permissions:
+  packages: write
+
+jobs:
+  build-lab-containers:
+    # fork - build container from any branch for testing
+    # parent repo - build on main branch only
+    if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/container_build_child.yml
+    strategy:
+      matrix:
+        from_image: ["ghcr.io/aristanetworks/avd/universal"]
+        from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.1.0"]
+        clab_version: ["0.75.0"]
+        user_id: ["1000", "1009"]
+        include:
+          - user_id: "1000"
+            group_id: "1000"
+          - user_id: "1009"
+            group_id: "1009"
+    with:
+      container_name: lab-base-sandbox
+      from_image: ${{ matrix.from_image }}
+      from_variant: ${{ matrix.from_variant }}
+      clab_version: ${{ matrix.clab_version }}
+      user_id: ${{ matrix.user_id }}
+      group_id: ${{ matrix.group_id }}
+      # 1.0.0:
+      # - Initial release of lab-base-sandbox, sister image to
+      #   lab-base-techlib. Same OS layer, code-server, ContainerLab,
+      #   and Python deps; differs in two ways:
+      #     1. Bakes packetanglers.sandbox-dashboard 0.1.0 instead of
+      #        lab-dashboard. Sandbox is a stateful long-lived control
+      #        plane (import / start / save / export), techlib is a
+      #        write-once status renderer. Different jobs.
+      #     2. Does NOT ship /bin/init_lab.py or /bin/docs_generate.py.
+      #        The sandbox lab doesn't auto-deploy a topology; the user
+      #        drives the lifecycle from the dashboard, so there's
+      #        nothing for init_lab to wait for at boot.
+      # - Pinned extension versions match lab-base-techlib for
+      #   reproducibility (srl-labs.vscode-containerlab@0.24.2,
+      #   tuxtina.json2yaml@0.2.0, yzhang.markdown-all-in-one@3.6.2).
+      # - Inherits the 3-attempt retry loop for OpenVSX installs.
+      # 1.0.1:
+      # - Bump packetanglers.sandbox-dashboard 0.1.0 -> 0.2.0, adding
+      #   live workspace awareness to the bundled extension:
+      #     * auto-open on first activation per workspace
+      #     * topology file discovery with subfolder grouping
+      #     * containerlab inspection + 30s polling reactivity
+      #     * file-watcher for *.clab.yml changes
+      #     * display polish (empty states, live timestamps, error
+      #       banner, running-lab indicator)
+      # - No base OS / code-server / containerlab / Python-deps
+      #   changes. This is a pure extension bump.
+      # 1.0.2:
+      # - Bump packetanglers.sandbox-dashboard 0.2.0 -> 0.2.1, a
+      #   hotfix release. 0.2.0 shipped with a malformed string
+      #   literal in the webview JS (cross-platform path-splitting
+      #   code for topology grouping), which killed the entire
+      #   inline script and stuck all three dashboard sections on
+      #   "Computing…" forever. 0.2.1 restores the correct
+      #   escaping and the dashboard renders as intended.
+      # - Pure extension bump, no image layer changes below the
+      #   extension install.
+      # 1.0.3:
+      # - Bump packetanglers.sandbox-dashboard 0.2.1 -> 0.2.2, a
+      #   second hotfix. 0.2.1 correctly rendered the dashboard
+      #   but its containerlab inspect JSON parser was written
+      #   against an older shape assumption; against current
+      #   containerlab 0.74+, every poll surfaced "unrecognized
+      #   JSON shape" in the ContainerLab section. 0.2.2 teaches
+      #   the parser about the current keyed-by-lab_name shape.
+      # - Pure extension bump.
+      # 1.0.4:
+      # - Bump packetanglers.sandbox-dashboard 0.2.2 -> 0.3.0.
+      #   Milestone 3 shipped: the four lifecycle buttons
+      #   (Import, Start, Save, Export) are now real actions,
+      #   not stubs. Users can now drive the complete sandbox
+      #   lab lifecycle from the dashboard without touching the
+      #   CLI:
+      #     * Import — pick a .tar.gz, collision-check, extract
+      #     * Start  — pick a topology, sudo containerlab deploy,
+      #                streaming progress toast
+      #     * Save   — sudo containerlab save + bundle (keeps
+      #                clab-* so captured configs make it into
+      #                the tarball)
+      #     * Export — bundle workspace as .tar.gz (excludes
+      #                .git / node_modules / clab-*)
+      # - Also adds: build-time syntax guardrail on the emitted
+      #   webview script, sudo -n (non-interactive) defense so
+      #   unconfigured NOPASSWD sudo fails fast with a clear
+      #   diagnostic instead of hanging.
+      # - Pure extension bump, no image layer changes below the
+      #   extension install.
+      # 1.0.5:
+      # - Bump packetanglers.sandbox-dashboard 0.3.0 -> 0.4.0.
+      #   Milestone 4 shipped, driven by user feedback from the
+      #   v0.3.0 smoke test:
+      #     * Stop button — fifth button in the actions row,
+      #       runs `containerlab destroy --cleanup`. Three-way
+      #       confirmation modal: Cancel / Save and Stop /
+      #       Stop without Saving. Save-and-Stop captures
+      #       running configs first; if save fails the lab is
+      #       NOT torn down, preserving the user's intent.
+      #     * GitHub clone for Import — Import opens with a
+      #       picker (Upload File OR Clone from GitHub). Clone
+      #       path wipes the workspace (with destructive-
+      #       confirmation modal listing entries to delete) and
+      #       runs `git clone <url> .`. Trusts code-server's
+      #       auth flow; 30s "still working" hint, 5min hard
+      #       timeout against a stuck clone.
+      # - Bake VS Code default settings INTO the image at
+      #   /home/coder/.local/share/code-server/User/settings.json
+      #   instead of shipping per-lab .vscode/ directories.
+      #   Cleaner separation: lab content (topology, configs)
+      #   stays in the lab repo; editor preferences (theme,
+      #   keybindings, terminal defaults) live with the image.
+      #   Users can still override per-lab via .vscode/ if they
+      #   want, but they're not forced to ship one.
+      # - Pure additive change at the image layer below the
+      #   extension install (settings.json copy is a new step;
+      #   no other layers altered).
+      # 1.0.6:
+      # - Bump packetanglers.sandbox-dashboard 0.4.0 -> 0.4.1, a
+      #   user-feedback-driven patch from the v0.4.0 smoke test:
+      #     * After cloning a repo via Import, users hit the
+      #       `git config user.name` / `user.email` wall the moment
+      #       they tried to commit. They had to drop to a terminal
+      #       to set those, breaking the low-friction lab promise.
+      #     * v0.4.1 adds a "Set up Git for committing" capability
+      #       surfaced through three triggers:
+      #         (1) clone-time gate — runImportFromGitHub now prompts
+      #             before the destructive workspace wipe; user
+      #             cancel = clean abort
+      #         (2) activation-time hook — when the workspace contains
+      #             a .git directory AND identity is missing, a
+      #             non-modal nudge appears 2s after auto-open
+      #         (3) command palette — always-available, idempotent
+      # - Honest about ephemerality: sandbox containers reset every
+      #   launch, no persistence layer for git identity. Prompt
+      #   fires once per session in workspaces where git matters.
+      # - Pure extension bump.
+      # 1.0.7:
+      # - Bump packetanglers.sandbox-dashboard 0.4.1 -> 0.4.2, a
+      #   second user-feedback-driven patch from the v0.4.1 smoke
+      #   test. Two small but high-value adds:
+      #     * Start fallback file picker — Start now has a three-
+      #       step topology resolver (session memory → *.clab.yml
+      #       glob discovery → fallback file picker for non-
+      #       standard filenames). Repos with topology files named
+      #       topology.yml, lab.yaml, etc. now "just work". Picked
+      #       file is remembered for the lab session so subsequent
+      #       Start clicks don't re-prompt.
+      #     * Topology View button — sixth button in the actions
+      #       row, dispatches to srl-labs' TopoViewer. Uses
+      #       resilient dynamic command lookup (discover at
+      #       runtime rather than hardcode) so future srl-labs
+      #       renames don't break the button.
+      # - Side effect: Start button no longer disabled when the
+      #   dashboard's Topologies section is empty — the fallback
+      #   picker handles that case directly.
+      # - Pure extension bump.
+      # 1.0.8:
+      # - Bump packetanglers.sandbox-dashboard 0.4.2 -> 0.4.3, a
+      #   third user-feedback-driven patch from the v0.4.2 smoke
+      #   test. Two fixes in one release:
+      #     * Topology View now actually opens. v0.4.2's button
+      #       dispatched correctly but srl-labs' TopoViewer
+      #       command discovers its target via active text editor
+      #       URI, and our webview wasn't a text editor. Fix:
+      #       pre-open the deployed lab's topology file as a
+      #       preview tab to anchor the editor context before
+      #       dispatching.
+      #     * In-flight action tracking. Smoke logs revealed two
+      #       concurrent containerlab deploy invocations racing
+      #       on the same topology when the user double-clicked
+      #       Start during a slow image pull. System-level fix:
+      #       new in-flight registry + trackedCommand wrapper
+      #       blocks concurrent invocations of all six button-
+      #       bound commands. Buttons grey out and show a "..."
+      #       suffix while their action runs. Catches palette/
+      #       keybinding races too.
+      # - Pure extension bump.
+      # 1.0.9:
+      # - Bump packetanglers.sandbox-dashboard 0.4.3 -> 0.4.4, a
+      #   fourth user-feedback-driven patch from the v0.4.3 smoke
+      #   test. v0.4.3's TopoViewer fix only worked for labs whose
+      #   topology files matched the *.clab.yml convention — a
+      #   constraint we discovered when smoke testing exposed it.
+      #
+      #   Root cause: srl-labs.vscode-containerlab's tree view
+      #   discovers labs via files matching *.clab.yml /
+      #   *.clab.yaml. Labs deployed from non-conforming filenames
+      #   (lab.yml, topology.yaml) are invisible to their tree,
+      #   which means TopoViewer can't dispatch against them. The
+      #   v0.4.2 Start fallback picker (deploy any topology
+      #   regardless of naming) inadvertently created a class of
+      #   users srl-labs can't serve.
+      #
+      #   v0.4.4 solves it at Start time: when a non-conforming
+      #   topology is selected, three-button modal appears BEFORE
+      #   deploy:
+      #     * Rename and Start: fs.rename to <stem>.clab.yml,
+      #       update remembered topology, deploy. Collision
+      #       detected (delete-existing-or-cancel sub-prompt).
+      #     * Start without Renaming: deploy as-is; Topology View
+      #       disabled per-lab in dashboard with explanatory
+      #       tooltip.
+      #     * Cancel: don't deploy.
+      #
+      #   Renaming BEFORE deploy is the only sane time;
+      #   rename-after-deploy creates broken state because
+      #   containerlab metadata is stamped with the original
+      #   filename.
+      #
+      # - Per-lab Topology View enablement in the dashboard.
+      #   Button now requires a deployed lab AND that lab to be
+      #   conforming. Per-case tooltip explains the "why" instead
+      #   of letting users click into a confusing srl-labs error.
+      # - Pure extension bump.
+      # 1.0.10:
+      # - Bump packetanglers.sandbox-dashboard 0.4.4 -> 0.4.5,
+      #   a fifth user-feedback-driven patch from the v0.4.4
+      #   smoke test. v0.4.4 confirmed Topology View finally
+      #   works end-to-end for conforming labs, but exposed a
+      #   UX issue: the YAML file we open behind the scenes to
+      #   anchor srl-labs' editor-context-discovery lingers in
+      #   the editor pane afterward. A user clicking "Topology
+      #   View" got the graph AND an unwanted YAML tab.
+      # - Two coordinated changes:
+      #     * Topology View smart-close: snapshot textDocuments
+      #       BEFORE pre-open; if our target wasn't there, we
+      #       opened it and we close it after dispatch via
+      #       tabGroups.close(specificTab). Users who already
+      #       had the YAML open have it left untouched.
+      #     * New Open Topology File button (📝) sibling to
+      #       Topology View. Opens the YAML as a normal (non-
+      #       preview) editor tab for users who explicitly want
+      #       to read or edit it. Uses the same three-step
+      #       resolver as Start.
+      # - Behind the scenes: refactored the topology resolver
+      #   into a shared module so Start and Open Topology File
+      #   share session memory and prompting logic.
+      # - Pure extension bump.
+      # 1.0.11:
+      # - Bump packetanglers.sandbox-dashboard 0.4.5 -> 0.4.6,
+      #   a sixth user-feedback-driven patch from the v0.4.5
+      #   smoke test cycle. Save was doing too much: capturing
+      #   running configs AND bundling the workspace as a
+      #   tarball. v0.4.6 splits these cleanly so each does
+      #   one thing.
+      # - Save now does ONE thing: containerlab save against
+      #   the deployed lab. The tarball-bundling logic is gone.
+      #   Users who want a tarball use Export. Mental model:
+      #     * Save Configs captures running state INTO the
+      #       workspace
+      #     * Export Lab bundles the workspace OUT as a tarball
+      # - Save uses --copy startup-configs (containerlab 0.74+
+      #   feature). Versioned, timestamped, symlinked-to-latest
+      #   archive structure unlocks future iterate-save-stop-
+      #   start-resume workflows when combined with topology
+      #   magic variables (__clabLabName__, __clabNodeName__).
+      # - Button label: "Save" -> "Save Configs". Clearer scope.
+      # - Pure extension bump.
+      # 1.0.12:
+      # - Bump packetanglers.sandbox-dashboard 0.4.6 -> 0.4.7,
+      #   first item from the user-feedback queue flush.
+      # - Auto-hide auxiliary (secondary side) bar on activation.
+      #   Lab-base-sandbox containers ship without any extensions
+      #   that pin useful views into that right-side panel; it's
+      #   empty visual clutter on lab launch. Now hidden
+      #   automatically via workbench.action.closeAuxiliaryBar
+      #   on every activation (the command is idempotent — safe
+      #   to call unconditionally).
+      # - VS Code does not expose a settings.json key for this
+      #   (microsoft/vscode#198032 closed-as-duplicate); aux-bar
+      #   visibility is runtime state. The extension-code path is
+      #   the only viable approach.
+      # - Pure extension bump.
+      # 1.0.13:
+      # - Bump packetanglers.sandbox-dashboard 0.4.7 -> 0.5.0,
+      #   the first minor bump since v0.3.0. v0.4.x was nine
+      #   releases of bug-and-polish; v0.5.0 marks new
+      #   capability: the dashboard now closes the loop on
+      #   lab work.
+      # - Pre-v0.5.0:  Import → work → Export tarball → manual
+      #                upload to share.
+      # - Post-v0.5.0: Import from GitHub → work → Push to
+      #                GitHub → re-import from GitHub later,
+      #                anywhere.
+      # - New 🚀 Push to GitHub button (eighth in the actions
+      #   row, sibling to Export). Smart scenario detection:
+      #   pristine workspace gets init+commit+push with sensible
+      #   .gitignore defaults; already-a-git-repo workspace
+      #   (e.g., from Import-from-GitHub) gets just commit+push.
+      # - "Already up to date" stop for no-op pushes.
+      # - [View on GitHub] action button in success toast.
+      # - Tailored error hints for auth and non-fast-forward
+      #   failures.
+      # - Auth handled by code-server's git integration; no
+      #   credentials managed by the extension.
+      # - Pure extension bump.
+      # 1.0.14:
+      # - Bump packetanglers.sandbox-dashboard 0.5.0 -> 0.5.1, an
+      #   honest fix for v0.5.0's silent-hang on git push.
+      # - v0.5.0 spawned git push directly from the extension host
+      #   without realizing code-server's GitHub auth provider
+      #   doesn't reach our spawn context. git silently waited
+      #   forever for credentials it had no way to acquire.
+      #   Smoke testing 2026-04-26 caught it.
+      # - User-led diagnostic (typing "publish" in code-server's
+      #   command palette) revealed both Git: Publish Branch... AND
+      #   Publish to GitHub are registered in lab-base-sandbox.
+      #   The fix path: stop spawning git push ourselves; dispatch
+      #   to VS Code's auth-aware commands instead.
+      # - Three-path dispatch with feature detection:
+      #     * github.publish (Microsoft's "Publish to GitHub")
+      #       preferred for pristine workspaces — handles OAuth +
+      #       repo creation + push in one magical flow
+      #     * git.publish (vscode.git's "Git: Publish Branch") used
+      #       when github.publish absent OR existing remote
+      #     * git.push for existing-repo push
+      # - Spawn fallback (with GIT_TERMINAL_PROMPT=0 + 5min timeout)
+      #   only when no VS Code commands are registered. Unlikely to
+      #   fire in lab-base-sandbox but exists for unusual environments.
+      #   No more silent hangs.
+      # - Two-stage success toast: immediate "Pushing..." dispatch,
+      #   then background follow-up "Pushed to <url>" with [View on
+      #   GitHub] action button when remote URL becomes detectable.
+      # - The integration-shim playbook from v0.4.2-v0.4.5 now
+      #   applies to VS Code's own internals, not just other
+      #   extensions. Architectural lesson worth carrying forward.
+      # - Pure extension bump.
+      # 1.0.15:
+      # - Bump packetanglers.sandbox-dashboard 0.5.1 -> 0.5.2,
+      #   user-feedback patch from v0.5.1 multi-tester smoke testing.
+      # - Three button label clarifications:
+      #     "Open File" -> "Open Topology File"
+      #     "Import"    -> "Import Workspace (tar)"
+      #     "Export"    -> "Export Workspace (tar)"
+      # - Import split into two distinct buttons. Pre-v0.5.2, Import
+      #   was a router QuickPick ("tarball or GitHub clone?"). Multi-
+      #   tester feedback: this was friction. v0.5.2 splits cleanly
+      #   into Import Workspace (tar) and a NEW "Clone from GitHub"
+      #   (🐙) button. Each does ONE thing.
+      # - Actions row restructured into three semantic sub-rows
+      #   to scale better than a flat row as buttons are added:
+      #     Sources       — Import Workspace (tar), Clone from GitHub
+      #     Lifecycle     — Start, Topology View, Open Topology File,
+      #                     Stop, Save Configs
+      #     Destinations  — Export Workspace (tar), Push to GitHub
+      # - Future Arista buttons (CVaaS onboarding, cEOS downloader,
+      #   ProLabs link) get natural homes in this layout.
+      # - Internal: clone code path extracted to clone-from-github.ts;
+      #   import.ts shrunk from 570 to 255 LOC.
+      # - Item 4 from feedback (.gitignore safety check at Save time)
+      #   deferred to D1 (magic-variable wiring) where the broader
+      #   topology-modification UX gets designed coherently.
+      # - Pure extension bump.
+      # 1.0.16:
+      # - Bump packetanglers.sandbox-dashboard 0.5.2 -> 0.6.0, the
+      #   first minor bump since v0.5.0 and the largest single
+      #   capability shipped to date.
+      # - v0.6.0 makes the dashboard the first feature in this
+      #   codebase that MODIFIES user-authored content (topology
+      #   YAML and .gitignore). Different risk profile from the
+      #   orchestration features in v0.4.x and v0.5.x.
+      # - Magic-variable wiring for arista_ceos nodes:
+      #   * After Save Configs (or via standalone palette command
+      #     "Sandbox Dashboard: Wire Magic Variables"), dashboard
+      #     offers to wire saved configs into the topology using
+      #     containerlab's __clabLabName__ / __clabNodeName__
+      #     magic variables. Lab auto-resumes with saved configs
+      #     on next deploy.
+      #   * Canonical line written:
+      #       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
+      #   * Single bundled confirmation modal lists all proposed
+      #     changes (topology edits + .gitignore amendment +
+      #     skipped nodes with reasons) BEFORE any file mutation.
+      #   * Defensive: only wires if the saved config file actually
+      #     exists on disk. Don't write paths to nonexistent files.
+      # - .gitignore safety: if .gitignore lacks a !startup-configs
+      #   negation pattern, propose adding !startup-configs/* so
+      #   saved configs travel with the lab repo.
+      # - Per-kind handler architecture (KIND_RULES registry)
+      #   designed for extension. v0.6.0 ships arista_ceos only;
+      #   nokia_srlinux, nokia_sros, juniper_vmx etc. become
+      #   drop-in additions when user demand emerges.
+      # - New runtime dep: yaml@^2.8.3 (eemeli/yaml) for round-
+      #   tripping with comment preservation. Bundle 87KB -> 209KB.
+      # - The verify-then-design pattern from v0.4.x retrospective
+      #   saved us from a silently-broken release: user caught my
+      #   incorrect magic-var path during design (had `flash/`
+      #   segment that doesn't belong in --copy destination paths).
+      # - Pure extension bump.
+      # 1.0.17:
+      # - Bump packetanglers.sandbox-dashboard 0.6.0 -> 0.6.1, hotfix
+      #   for the v0.6.0 Save Configs hang.
+      # - v0.6.0 awaited the Save success toast before dispatching
+      #   the magic-variable wiring flow. Smoke testing 2026-04-26
+      #   with a 13-node EVPN gateway demo lab revealed the issue:
+      #   showInformationMessage's promise stays pending if the user
+      #   lets the toast auto-dismiss without clicking a button. The
+      #   await blocked everything downstream, including the wire-
+      #   magic-vars dispatch AND the trackedCommand cleanup. Save
+      #   Configs button stuck on "Save Configs…" forever, no modal
+      #   appeared.
+      # - v0.6.1 fix: fire the toast non-blockingly via void + .then.
+      #   The View Log handler still works; wire-magic-vars dispatches
+      #   immediately; button stops sticking. Toast (corner) and
+      #   modal (center) coexist visually — probably better UX than
+      #   the v0.6.0 sequential design anyway.
+      # - Recurring lesson: don't await non-modal toasts when there's
+      #   downstream work. Notifications are fire-and-forget unless
+      #   you explicitly need the user's button choice.
+      # - Pure extension bump.
+      # 1.0.18:
+      # - Bump packetanglers.sandbox-dashboard 0.6.1 -> 0.7.0, the
+      #   second content-modification feature in the codebase and the
+      #   first DESTRUCTIVE one (replaces user-authored values, not
+      #   just adds keys).
+      # - Surfaced by real-world testing 2026-04-26 against the EVPN
+      #   gateway demo lab where every cEOS node had a static
+      #   reference config (startup-config: configs/A-SPINE.cfg). Two
+      #   distinct issues from one test scenario:
+      #     1. No path to migrate from static refs to magic-var
+      #        auto-resume (just got silently skipped as
+      #        "already-wired")
+      #     2. No visible feedback when wire-magic-vars no-ops
+      #        post-Save (users wondered if anything happened)
+      #   Both addressed in v0.7.0.
+      # - Static→magic-var migration: wire-magic-vars now offers to
+      #   REPLACE existing static startup-config: values with the
+      #   magic-var form. Original values preserved as YAML comments
+      #   above the migrated key (e.g. "# was: startup-config:
+      #   configs/A-SPINE.cfg (replaced by Sandbox Dashboard
+      #   2026-04-27)") for trivial manual revert.
+      # - Visible no-op feedback: post-Save trigger now always shows
+      #   a brief info toast on no-op (e.g. "No magic-variable wiring
+      #   needed. 9 already on auto-resume.") so users know we
+      #   checked.
+      # - Permissive magic-var detection: any value containing
+      #   __clabNodeName__ is treated as user's deliberate auto-
+      #   resume setup and left alone absolutely. We don't normalize
+      #   variants to a canonical form.
+      # - Modal restructured with up to three sections (Add wiring /
+      #   Migrate to auto-resume / .gitignore changes) that adapt
+      #   based on what's being proposed.
+      # - New architectural pattern: destructive-but-transparent.
+      #   When modifying authored values, leave a comment trail.
+      #   Costs file clutter; gains trust + manual revertability.
+      # - Pure extension bump.
+      # 1.0.19:
+      # - Bump packetanglers.sandbox-dashboard 0.7.0 -> 0.8.0, the
+      #   first vendor-specific on-ramp in the dashboard.
+      # - New "Arista Integrations" sub-row appears below Destinations
+      #   in the actions section. First button in it:
+      #     ☁️  Reserve a CVaaS Tenant
+      #   Opens https://labs.arista.com/prolabs/cvaas-reservation in
+      #   the user's browser via vscode.env.openExternal.
+      # - Architectural firsts in v0.8.0:
+      #     * src/actions/arista/ subdirectory for vendor-specific
+      #       actions, separate from the vendor-neutral core
+      #     * First always-enabled button (no workspace/lab gating)
+      #     * First action that just opens an external URL
+      # - v0.8.x roadmap (not yet shipped):
+      #     v0.8.1 — cEOS downloader via ardl
+      #     v0.8.2 — CVaaS device onboarding (daemon TerminAttr)
+      # - Vendor-specific code segregation keeps the dashboard
+      #   vendor-neutral at its core. If non-Arista vendor
+      #   integrations emerge (Nokia, Juniper, etc.), they get their
+      #   own subdirectories and sub-rows.
+      # - Pure extension bump.
+      # 1.0.20:
+      # - Bump packetanglers.sandbox-dashboard 0.8.0 -> 0.8.1, the
+      #   middle Arista vendor on-ramp.
+      # - 🔽 Download cEOS Image button now appears in the Arista
+      #   Integrations sub-row. Wraps ardl (the eos-downloader CLI;
+      #   pre-installed in this container) in a friendly dashboard
+      #   flow:
+      #     1. Prompt for cEOS version (e.g. 4.35.4M), validated
+      #        against Arista's release format 4.X.Y[.Z](F|M)
+      #     2. Defensive Docker cache check; if image already
+      #        exists, offer Use Cached / Force Re-download / Cancel
+      #        modal (saves the user a 560MB transfer when cached)
+      #     3. Get/prompt for arista.com API token (stored in
+      #        VS Code SecretStorage; prompted only on first use)
+      #     4. Run ardl from /tmp (not the user's workspace) with
+      #        progress streaming
+      #     5. Image lands as arista/ceos:<version> ready for use
+      # - "Sandbox Dashboard: Forget Arista Token" palette command
+      #   for credential rotation. cEOS download error path offers
+      #   this directly when an auth-looking error is detected.
+      # - VS Code SecretStorage integration is the architecture for
+      #   credentials going forward (encrypted at rest, scoped to
+      #   the extension, persists across reloads). v0.8.2 will reuse
+      #   the same pattern for the CVaaS onboarding token.
+      # - Pure extension bump (ardl was already in rev1.0.x).
+      # 1.0.21:
+      # - Bump packetanglers.sandbox-dashboard 0.8.1 -> 0.8.2, the
+      #   third and final Arista vendor on-ramp. Completes the
+      #   v0.8.x trilogy.
+      # - 📡 Onboard to CVaaS button now appears in the Arista
+      #   Integrations sub-row. Concurrent multi-node onboarding
+      #   flow that pushes the CVaaS token + daemon TerminAttr
+      #   config into every arista_ceos node in the deployed lab
+      #   via containerlab exec.
+      # - Three-prompt flow:
+      #     1. Tenant type (Production / Staging) via QuickPick
+      #     2. Management VRF (optional)
+      #     3. CVaaS onboarding token (password-masked,
+      #        SecretStorage-persisted)
+      # - Single confirmation modal lists all proposed changes
+      #   before iterating. Concurrent per-node execution via
+      #   Promise.all (a 20-node lab onboards in ~5 seconds rather
+      #   than ~60-100s sequential).
+      # - Fail-forward semantics with adaptive result modal
+      #   (full success → toast, partial → warning modal with
+      #   per-node status, total failure → error modal).
+      # - "Sandbox Dashboard: Forget CVaaS Token" palette command
+      #   for credential rotation. Mirrors v0.8.1's Forget Arista
+      #   Token pattern for full architectural consistency.
+      # - The Arista Integrations sub-row now has all three
+      #   buttons: Reserve a CVaaS Tenant, Download cEOS Image,
+      #   Onboard to CVaaS. End-to-end Arista lab workflow fully
+      #   supported by the dashboard.
+      # - Most architecturally complex action body in the
+      #   codebase. Introduces several reusable patterns for
+      #   future bulk-per-node operations (push AVD configs, run
+      #   show commands across the lab, apply ZTP templates, etc.).
+      # - Pure extension bump.
+      # 1.0.22:
+      # - Bump packetanglers.sandbox-dashboard 0.8.2 -> 0.8.3,
+      #   hotfix release for v0.8.2's CVaaS onboarding.
+      # - Real-world testing on a 9-node EVPN gateway demo lab
+      #   surfaced TWO bugs:
+      #     1. (visible) FastCli -f doesn't exist. Filename is a
+      #        positional argument. v0.8.2's invocation was rejected
+      #        with "unrecognized arguments: -f" on every node, but
+      #        the failure went silently undetected because of bug #2.
+      #     2. (dangerous) containerlab exec exits 0 even when the
+      #        inner command fails. Inner failures are logged on
+      #        stderr only, in a structured form like:
+      #          ERRO Failed to execute command ... rc=N
+      #        v0.8.2's runContainerlabExec only checked outer exit,
+      #        so FastCli's rc=2 was never detected and was reported
+      #        as success.
+      # - v0.8.3 fixes both:
+      #     - Drops -f from FastCli invocation (uses positional arg)
+      #     - Adds defensive stderr parsing of containerlab's
+      #       "Failed to execute command ... rc=N" marker so inner
+      #       failures propagate as failures to the result modal
+      # - Bug #2 is the more important fix. Silent success on
+      #   failure erodes user trust in ways that loud failures
+      #   don't. Going forward, any external command we shell out
+      #   to gets stderr-scanned for tool-specific failure markers
+      #   in addition to outer-exit-code checking.
+      # - Architectural lesson captured: verify CLI flag shapes
+      #   against the actual binary before shipping invocations.
+      #   Same flavor as v0.6.0's flash/ correction.
+      # - Pure extension bump.
+      # 1.0.23:
+      # - Bump packetanglers.sandbox-dashboard 0.8.3 -> 0.8.4,
+      #   feature extension to v0.8.3's CVaaS onboarding.
+      # - Real-world testing surfaced a critical prereq gap: cEOS
+      #   nodes need DNS configured (so TerminAttr can resolve
+      #   apiserver.arista.io) and NTP configured (so the cert
+      #   handshake to CVaaS succeeds). Without these, v0.8.3's
+      #   onboarding succeeds but CVaaS connection fails silently
+      #   hours later.
+      # - v0.8.4 adds transparent pre-flight detection and auto-
+      #   configuration of these prereqs, bundled into the existing
+      #   Onboard to CVaaS flow:
+      #     1. Concurrent pre-flight DNS/NTP detection per node via
+      #        Cli show running-config | include
+      #     2. VRF-aware detection (matches lines in user-specified
+      #        VRF, or default VRF when no VRF given)
+      #     3. Confirmation modal "Prerequisites" section adapts to
+      #        results — shows counts and per-node breakdown, omitted
+      #        entirely when all nodes already have both prereqs
+      #     4. Per-node prereq push (single combined FastCli call
+      #        when both needed) before the existing token + daemon
+      #        push
+      # - Hardcoded defaults (lab-appropriate):
+      #     DNS: 1.1.1.1 (Cloudflare public DNS)
+      #     NTP: time.google.com (Google public NTP)
+      # - Respect-existing rule: if a node ALREADY has any DNS/NTP
+      #   line in the relevant VRF, leave it absolutely alone. Same
+      #   DNA as v0.7.0's permissive magic-var detection.
+      # - Same VRF input drives all three configs (TerminAttr -cvvrf,
+      #   ip name-server vrf, ntp server vrf) — single source of
+      #   truth.
+      # - Pure extension bump.
+      # 1.0.24:
+      # - Bump packetanglers.sandbox-dashboard 0.8.4 -> 0.9.0,
+      #   first release deliberately targeting first-time /
+      #   newcomer users.
+      # - NEW: bake /opt/sandbox-original/ at image build time as
+      #   the pristine baseline for the v0.9.0 Reset action. The
+      #   baseline mirrors the workspace starting state exactly:
+      #   topology.clab.yml (2 cEOS nodes connected), annotations
+      #   for TopoViewer, sandbox-appropriate .gitignore, README,
+      #   and supporting asset images.
+      # - NEW: workspace layout flattened. Starter topology files
+      #   (topology.clab.yml + annotations) now live at /sandbox/
+      #   root instead of nested under /sandbox/sandbox-template/.
+      #   Single obvious file at the obvious location for newcomers.
+      #   Topology renamed from "sandbox-template" to "sandbox-lab"
+      #   for a more user-facing default.
+      # - The v0.9.0 dashboard adds two buttons:
+      #     * Start Building! 🎨 (Sources row) — opens workspace
+      #       topology.clab.yml in TopoViewer for drag-and-drop
+      #       topology editing. Disabled while a lab is deployed.
+      #     * Reset 🔄 (Lifecycle row) — factory-restore the
+      #       workspace to pristine state. Two-step confirmation
+      #       (warning modal + free-text "reset" prompt, matching
+      #       GitHub's repo deletion pattern). Destroys running
+      #       labs first; preserves SecretStorage credentials.
+      # - Reset depends on /opt/sandbox-original/ being present.
+      #   The dashboard checks this BEFORE wiping the workspace
+      #   and aborts cleanly if missing — older container images
+      #   that predate rev1.0.24 will surface a clear error
+      #   message rather than silently wiping the user's work.
+      # - Architectural patterns introduced:
+      #     * Dual-audience design — first release for newcomers
+      #       alongside experienced users
+      #     * Defensive-baseline-check before destructive ops
+      #     * Free-text confirmation for genuinely irreversible
+      #       operations
+      # 1.0.25:
+      # - Re-sync /opt/sandbox-original/ baseline with latest
+      #   labs/sandbox/ content. The 64da680 "update sandbox lab"
+      #   commit changed labs/sandbox/topology.clab.yml (kind:
+      #   ceos -> kind: arista_ceos, env moved into kind block,
+      #   added CLAB_MGMT_VRF=MGMT) and settings.json (added
+      #   lockLabByDefault: false; node template kind: ceos ->
+      #   kind: arista_ceos), but did NOT bump the container
+      #   revision. Without this rev1.0.25, the published
+      #   rev1.0.24 image would have stale baseline content
+      #   (the old kind: ceos topology) baked into
+      #   /opt/sandbox-original/, AND would have the old
+      #   settings.json without lockLabByDefault: false.
+      # - Why this matters: the rev tag is an immutable contract
+      #   between extension version + container content. Letting
+      #   container content drift inside an already-published rev
+      #   would mean "rev1.0.24" means different things to
+      #   different users depending on when they pulled. We bump
+      #   the rev to keep the contract honest.
+      # - Functional impact for users:
+      #     * topology.clab.yml uses arista_ceos kind (correct;
+      #       containerlab now flags bare "ceos" as deprecated)
+      #     * Lab is unlocked by default in TopoViewer — newcomers
+      #       click Start Building! and can immediately drag-and-
+      #       drop without needing to discover the unlock control
+      #     * New nodes added via TopoViewer drag-and-drop default
+      #       to arista_ceos kind (matches the topology defaults)
+      # - Pure content / settings update. No Dockerfile structural
+      #   changes, no extension version bump. sandbox-dashboard
+      #   stays at v0.9.0.
+      # - Lesson captured: rev bumps are cheap and routine, not
+      #   ceremony reserved for big changes. Any container content
+      #   change deserves a rev bump.
+      # 1.0.26:
+      # - Bump packetanglers.sandbox-dashboard 0.9.0 -> 0.9.1,
+      #   hotfix release for two Push to GitHub bugs surfaced in
+      #   v0.9.0 testing.
+      # - Bug 1: "Push to GitHub" was treating second-click as
+      #   republish instead of "push my latest changes." Root cause:
+      #   VS Code's github.publish can succeed in pushing to GitHub
+      #   WITHOUT persisting the local origin remote, so v0.9.0's
+      #   "is git repo + has origin" detection saw "no origin" on
+      #   second click and took the publish-as-new-repo path.
+      #   v0.9.1 asks the user via modal: "Connect to existing repo"
+      #   (prompt for URL, git remote add, git push -u origin HEAD)
+      #   vs "Publish as new repo" (existing flow preserved).
+      # - Bug 2: Stale 60-second remote-detection background poll
+      #   that always failed (logged "no remote detected after 60s"
+      #   on every push). Reduced to 6 seconds with honest logging.
+      #   The Connect path skips polling entirely — we KNOW the URL
+      #   and we KNOW the push succeeded.
+      # - We can't reliably distinguish "previously-published-but-
+      #   origin-dropped" from "truly-fresh-never-published" via
+      #   observable git state alone. v0.9.1 asks honestly rather
+      #   than guessing wrong.
+      # - Pure extension bump.
+      # 1.0.27:
+      # - Bump packetanglers.sandbox-dashboard 0.9.1 -> 0.9.2,
+      #   hotfix release for the deeper root cause of v0.9.x's
+      #   Push to GitHub issues.
+      # - The realization: code-server's github.publish is a
+      #   "create repo + authenticate" primitive only, not a
+      #   "publish" primitive. Despite the name, it does NOT push
+      #   code. v0.9.0 and v0.9.1 both shipped fixes based on
+      #   partial understanding (assumed publish at least pushed);
+      #   v0.9.2 addresses the underlying mechanism.
+      # - Empirical evidence: after a "successful" Push to GitHub,
+      #   the GitHub repo was completely empty (no commits, no
+      #   files), and the local workspace had no origin configured.
+      #   Yet from VS Code's UI perspective, everything looked
+      #   like a successful publish.
+      # - The new flow:
+      #     1. Pre-publish heads-up modal sets expectations about
+      #        the two-step nature
+      #     2. Dispatch github.publish (still — for repo creation
+      #        + auth)
+      #     3. 3-second courtesy poll for origin (future-proofing)
+      #     4. Post-publish URL prompt with [Look up my repos on
+      #        GitHub] button for newcomers
+      #     5. Explicit git remote add origin + git push -u origin
+      #        HEAD
+      #     6. Confident success toast (we KNOW we pushed)
+      # - User cost: two extra modals per first-publish. Benefit:
+      #   files actually get pushed, every time. Subsequent pushes:
+      #   zero changes.
+      # - The v0.9.1 "Connect to existing repo" path still works
+      #   as a recovery option for partial state from older
+      #   container versions.
+      # - Architectural patterns introduced:
+      #     * Don't trust an external tool's name to describe its
+      #       behavior — verify empirically
+      #     * Explicit-state-machine over magic-dispatch when
+      #       integrating with another tool's API
+      #     * User-explanatory modals for unavoidable UX friction
+      # - Pure extension bump.
+      # 1.0.28:
+      # - Bump packetanglers.sandbox-dashboard 0.9.2 -> 0.9.3,
+      #   hotfix release for a permission bug in v0.9.0's Reset
+      #   action.
+      # - The bug: after Save Configs (which runs as root via
+      #   sudo, creating root-owned subdirectories under
+      #   /sandbox/startup-configs/clab-<lab>/), Reset's wipe step
+      #   failed with EACCES because Node's fs.rm runs as the
+      #   non-root dashboard user (avd) and can't remove the
+      #   root-owned dirs.
+      # - The fix: replace fs.rm with sudo -n rm -rf, mirroring
+      #   the existing runContainerlabDestroy pattern. Container's
+      #   sudoers config already grants avd passwordless sudo
+      #   (used by every containerlab invocation), so no
+      #   infrastructure changes required.
+      # - Pure extension bump; latent v0.9.0 bug that surfaced in
+      #   real-world testing on day 2 of the v0.9.x cycle.
+      # - v0.9.2's separate Push to GitHub auth issue is being
+      #   addressed separately as v0.10.0 with empirical
+      #   verification of code-server's GitHub auth API before
+      #   committing to a redesign.
+      # 1.0.29:
+      # - Bump packetanglers.sandbox-dashboard 0.9.3 -> 0.9.4, the
+      #   "v0.9.4 reset." Substantially simplifies Push to GitHub.
+      # - The actual root cause of v0.9.0-v0.9.2's progressive
+      #   confusion: `await executeCommand('github.publish')`
+      #   returns IMMEDIATELY when dispatched, not when the user
+      #   finishes interacting with the prompts the command spawns.
+      #   This is how VS Code's command system works in general.
+      # - What this meant in practice: v0.9.2's post-publish URL
+      #   prompt was firing while VS Code's publish dialog was
+      #   still open, superseding VS Code's UI before the user
+      #   could complete the publish flow. Every "evidence" we
+      #   collected ("repo is empty," "origin not persisted") was
+      #   actually evidence of THIS race condition — not of
+      #   github.publish doing nothing useful. The tool was working
+      #   all along; we were just stomping on its UI.
+      # - The fix: drastically simpler. Get out of github.publish's
+      #   way. v0.9.4 flow:
+      #     1. Pre-publish heads-up modal (rewritten to be honest)
+      #     2. Dispatch github.publish
+      #     3. Done. VS Code owns the rest.
+      # - No URL prompt, no explicit git remote add, no explicit
+      #   git push. github.publish does all of that itself when
+      #   not interrupted.
+      # - The v0.9.1 "Connect to existing repo" path is preserved
+      #   as a recovery option for partial state.
+      # - Lessons captured (candidates for retrospective):
+      #     * Don't replicate what an upstream tool already does
+      #       well — the dashboard's role is to nudge users TOWARD
+      #       VS Code's flow, not to redo it
+      #     * executeCommand resolves on dispatch, not on
+      #       completion
+      #     * When a flow seems to skip a step, ask whether
+      #       something is racing rather than assuming the step
+      #       doesn't exist
+      # - Eight tagged releases over two days (v0.9.0 through
+      #   v0.9.4 plus container-side rev bumps), four in Push to
+      #   GitHub alone. Each release added empirical understanding.
+      #   v0.9.4 is finally the shape we should have shipped at
+      #   v0.9.0.
+      # - Pure extension bump.
+      # 1.0.30:
+      # - Bump packetanglers.sandbox-dashboard 0.9.4 -> 0.9.5,
+      #   pure UX polish release.
+      # - The bug: real-world testing surfaced that the bare label
+      #   "Reset" was being misinterpreted as "reset my running
+      #   lab" or "reset my topology" — when it actually destroys
+      #   all workspace files and restores from the pristine
+      #   baseline. A user clicking it expecting to restart their
+      #   containers (without losing files) would have a genuinely
+      #   bad time.
+      # - The fix: rename for scope clarity. Dashboard button
+      #   "Reset" -> "Reset Sandbox Workspace". Also updated:
+      #   first confirmation modal title ("Reset Sandbox Lab?" had
+      #   the EXACT bug we are fixing on the button), progress
+      #   notification, success toast, palette command title, and
+      #   the cross-reference in start-building.ts's recovery-hint
+      #   modal.
+      # - Behavior is identical to v0.9.4 — same two-step
+      #   confirmation, same destroy-then-wipe-then-restore flow,
+      #   same SecretStorage preservation. Pure naming change.
+      # - Command ID (sandboxDashboard.reset) preserved so
+      #   keybindings and scripts continue to work.
+      # - Architectural pattern: label specificity beats safety-
+      #   net reliance. The two-step confirmation is meant as a
+      #   final cognitive checkpoint, not as a recovery mechanism
+      #   for an ambiguous label.
+      # - Pure extension bump.
+      # 1.0.31:
+      # - Bump packetanglers.sandbox-dashboard 0.9.5 -> 0.10.0, first
+      #   release of the v0.10.x cycle. Adds a Lab Overview card at
+      #   the top of the dashboard, populated from a new lab.yml file
+      #   baked into this container image at /opt/lab-base-sandbox/
+      #   lab.yml.
+      # - NEW: bake /opt/lab-base-sandbox/lab.yml into the image at
+      #   build time. Owned by ${USERNAME} (avd) so the dashboard
+      #   process can read it without sudo. Mirrors the existing
+      #   /opt/sandbox-original/ ownership pattern (rev1.0.24+).
+      # - The lab.yml ships with: name + description for the Arista
+      #   Networks Sandbox Lab, resource badges (CPU=16, RAM=64G,
+      #   Storage=128G), and helpful links (CAPABILITIES.md, the
+      #   sandbox-dashboard repo, containerlab docs, Arista cEOS-lab
+      #   download, GitHub Issues for reporting bugs).
+      # - The dashboard is no longer purely action-oriented (told
+      #   users what they could DO); it now also serves as a context
+      #   surface (tells users what they HAVE). Meaningful product
+      #   evolution.
+      # - Architectural decisions:
+      #     * Option B from the design discussion: container-baked,
+      #       not workspace-overridable. Single sandbox lab; no
+      #       per-lab variation needed. Collapses complexity (no
+      #       watcher, no merge logic, no write path).
+      #     * Read once at activation, cache for the session. lab.yml
+      #       is immutable per session; no file watcher needed.
+      #     * Graceful degradation: older containers (rev1.0.30 and
+      #       earlier) continue to work cleanly without the Lab
+      #       Overview card. Errors logged to output channel only,
+      #       never surfaced as user-visible UI.
+      #     * URL safety: the new openExternal webview-to-host bridge
+      #       accepts only http/https URLs. Prevents misconfigured
+      #       lab.yml entries from dispatching arbitrary URI schemes
+      #       (file://, vscode://, etc.).
+      # - To change lab.yml content in the future, edit the file AND
+      #   bump this rev (per the immutable-rev contract from
+      #   rev1.0.25's "missed bump" lesson).
+      # 1.0.32:
+      # - Bump packetanglers.sandbox-dashboard 0.10.0 -> 0.10.1, bug
+      #   fix release. Clone from GitHub now correctly handles
+      #   private repositories.
+      # - The bug: real-world testing of v0.10.0 surfaced that Clone
+      #   from GitHub hung forever for private repos. Public repos
+      #   worked perfectly; private repos sat in a perpetual
+      #   "Cloning..." toast with the button greyed out.
+      # - The diagnosis: the dashboard spawned `git clone` directly
+      #   via child_process.spawn with no env-var configuration.
+      #   code-server sets the GIT_ASKPASS / VSCODE_GIT_* bridge
+      #   variables in shells but NOT in the extension host:
+      #     terminal env: GIT_ASKPASS, VSCODE_GIT_ASKPASS_NODE,
+      #                   VSCODE_GIT_ASKPASS_MAIN, VSCODE_GIT_IPC_HANDLE
+      #     extension host env: only GIT_INIT=false
+      #   So git had no path to ask for credentials. With stdio:
+      #   ['ignore', ...] it couldn't even prompt on stdin.
+      # - The fix: stop spawning git ourselves. Delegate to VS
+      #   Code's built-in git extension via its public API
+      #   (vscode.extensions.getExtension('vscode.git').exports
+      #   .getAPI(1).clone(...)). The git extension knows how to
+      #   wire the askpass bridge for any git host (GitHub,
+      #   GitLab, Bitbucket, self-hosted, SSH, HTTPS) — we get
+      #   all of that for free by delegating instead of replicating.
+      # - This is Pattern 21 from the v0.9.x retrospective ("Don't
+      #   replicate what an upstream tool already does well")
+      #   applied at exactly the moment that pattern would have
+      #   prevented the original bug.
+      # - Architectural details:
+      #     * The vscode.git API clones into parentPath/<repo-name>/,
+      #       not parentPath itself. Solution: clone into a hidden
+      #       staging dir (/sandbox/.tmp-clone-<ts>/), move children
+      #       up to /sandbox/, remove the staging tree.
+      #     * extensionDependencies: ["vscode.git"] added so the git
+      #       extension activates before us.
+      #     * API resolution happens BEFORE the destructive wipe so
+      #       a missing extension doesn't destroy the workspace.
+      # - User-visible changes: progress UI is now VS Code's own
+      #   clone notification (with cancel button); auth prompts for
+      #   private repos NOW APPEAR (the "GitHub wants to sign in"
+      #   prompt that worked from terminal will now appear when
+      #   cloning from the dashboard too).
+      # - Pure extension bump.
+      # 1.0.33:
+      # - Bump packetanglers.sandbox-dashboard 0.10.1 -> 0.10.2, UX
+      #   polish release. The Lab Overview resource badges now render
+      #   in shields.io two-tone style using official Arista brand
+      #   colors:
+      #     - Label half ("CPU", "RAM", "STORAGE"): Arista Dark Gray
+      #       (#58585B, Pantone 425 C), white uppercase letterspaced
+      #     - Value half ("16", "64G", "128G"): Arista Blue (#16325B,
+      #       Pantone 648 C — the main Arista logo color), white
+      #       bold with tabular-nums
+      #     - The two halves form a single unified rounded rectangle
+      #       with no border or visible separation
+      #   Brand colors verified against the official 2025 Arista
+      #   Brand Guidelines PDF.
+      # - NEW lab.yml content. Friendlier "Welcome to the Sandbox!"
+      #   framing that orients newcomers, gives explicit permission
+      #   to "just tinker," directs them to the dashboard buttons,
+      #   and closes with "Happy labbing! 🧪". Trimmed link list
+      #   from 5 down to 2 (Getting Started + Report an Issue) for
+      #   focus.
+      # - Description rendering note: lab.yml's description field is
+      #   rendered as plain text in the dashboard (textContent, not
+      #   innerHTML). Line breaks and emoji work; inline markdown
+      #   (**bold**, _italic_, [links](url), `code`) does NOT render
+      #   as formatting. JSDoc note added to src/lab-metadata.ts in
+      #   the dashboard repo so future authors of lab.yml see the
+      #   contract at the schema definition.
+      # - Pure extension bump + lab.yml content refresh.
+      # 1.0.34:
+      # - Bump packetanglers.sandbox-dashboard 0.10.2 -> 0.10.3, UX
+      #   polish release. Second pass on the Lab Overview card after
+      #   real-world testing of v0.10.2 surfaced that the card's
+      #   neutral-gray background made it feel like just another
+      #   content section rather than the hero/orientation surface
+      #   it's intended to be.
+      # - The Lab Overview card now has a proper Arista brand hero
+      #   treatment:
+      #     - Background: pale blue tint (#EBF1F8)
+      #     - Left accent: 4px solid Arista Blue (#16325B), no
+      #       surrounding border
+      #     - Heading: Arista Blue (#16325B)
+      #     - Body: soft dark slate (#1F2937)
+      #     - Links: Arista Blue (#16325B) with Arista Light Blue
+      #       (#4473A9) hover
+      # - Theme-pinning trade-off: all colors inside the card are now
+      #   pinned solid hex values, NOT VS Code theme variables. Same
+      #   trade-off as v0.10.2's badges (brand consistency over theme
+      #   adaptivity). Cost: in dark VS Code themes, the card stays
+      #   as a "light island". Benefit: the card always reads as
+      #   Arista-branded regardless of theme.
+      # - Lesson captured in the v0.10.3 CHANGELOG: partial brand-
+      #   pinning creates theme mismatch surface area. When a surface
+      #   is brand-pinned, EVERYTHING inside it should be brand-
+      #   pinned, because mixing a theme-adaptive foreground with a
+      #   brand-pinned background means one of them is always wrong
+      #   in some theme.
+      # - Pure extension bump.
+      # 1.0.35:
+      # - Bump packetanglers.sandbox-dashboard 0.10.3 -> 0.11.0,
+      #   first release of the v0.11.x cycle. Adds a new "📚
+      #   Borrow from Tech Library" button in the Sources row that
+      #   lets users start from an Arista-published starter lab
+      #   and make it their own.
+      # - Closes a workflow gap: the dashboard already made it
+      #   easy to clone, edit, save, and push your OWN work, but
+      #   "fork-and-own someone else's starter" was missing. Two
+      #   real users independently surfaced this within a week of
+      #   each other.
+      # - The flow:
+      #     * Fetch available techlib-* labs from aristanetworks/
+      #       aclabs via GitHub Contents API
+      #     * QuickPick of available labs
+      #     * Destructive-confirm modal (same pattern as Clone
+      #       from GitHub)
+      #     * Tarball download from
+      #       https://aristanetworks.github.io/aclabs/lab_archives/
+      #       <name>.tar.gz
+      #     * Two-step staged extraction with filtering of four
+      #       aclabs-specific items (.vscode/, assets/, README.md,
+      #       addAliases.sh)
+      #     * Fresh git init with attributed first commit:
+      #         "Borrowed from aristanetworks/aclabs labs/<name>"
+      #     * Push to GitHub works immediately for publishing
+      # - Architectural note: the tarball extraction is
+      #   deliberately a two-step staged copy (extract to /tmp
+      #   staging, walk and selectively copy) rather than a single
+      #   `tar --strip-components` invocation. The aclabs
+      #   publishing pipeline ships .devcontainer/ at the OUTER
+      #   wrapper level while the lab content is 3 levels deep,
+      #   which means --strip-components=3 would silently drop
+      #   .devcontainer/. The two-step approach makes every file
+      #   placement explicit and surfaces layout changes loudly
+      #   rather than silently.
+      # - This was discovered empirically across 4 rounds of
+      #   `tar -tzf` verification before the design was locked.
+      #   Pattern 22 from the retrospective in slow motion.
+      # - Pure extension bump.
+      # 1.0.36:
+      # - Bump packetanglers.sandbox-dashboard 0.11.0 -> 0.11.1, bug
+      #   fix release. Borrow from Tech Library now preserves the
+      #   assets/ directory.
+      # - The bug: real-world testing of v0.11.0 surfaced that
+      #   borrowed labs failed to boot. v0.11.0's content-filter
+      #   incorrectly removed assets/, which contains files
+      #   bind-mounted into containers at runtime (e.g.,
+      #   assets/prod_hosts.txt, assets/dev_hosts.txt). When the
+      #   filter dropped assets/, ContainerLab refused to start
+      #   because the bind-mount source was missing.
+      # - The fix: removed 'assets' from FILTERED_TOP_LEVEL_NAMES.
+      #   Borrowed labs now ship with their assets/ directory intact.
+      # - Lesson recorded in code: reading filenames is not the same
+      #   as understanding file roles. The runtime configuration
+      #   (topology.clab.yml binds, playbook references, Makefile
+      #   targets) is the source of truth for what files a lab
+      #   actually needs.
+      # - This is a sub-pattern of Pattern 22 from the retrospective:
+      #   even disciplined verification rounds can leave a class of
+      #   bugs uncaught. The deepest verification is "actually
+      #   running the thing in production conditions."
+      # - Pure extension bump.
+      # 1.0.37:
+      # - Bump packetanglers.sandbox-dashboard 0.11.1 -> 0.11.2, bug
+      #   fix release. Clone from GitHub no longer destroys the
+      #   workspace when run after a Reset that followed a previous
+      #   Clone.
+      # - The bug: the sequence Clone → Reset → Clone would leave the
+      #   workspace completely empty after the second clone. No .git,
+      #   no files, nothing.
+      # - The diagnosis: vscode.git's internal repository registry
+      #   survives shell-level deletion of .git directories. After
+      #   Reset's `sudo rm -rf /sandbox/.git`, vscode.git still
+      #   thought /sandbox was a known repository. The next clone's
+      #   API correctly placed files at parentPath/<repo-name>/ but
+      #   RETURNED /sandbox as the URI. Our promote logic then
+      #   operated on the workspace root (no-op rename loop) and our
+      #   cleanup recursively deleted the staging dir which contained
+      #   the actual cloned content.
+      # - The fix: stop trusting clonedUri.fsPath as the clone
+      #   location. Walk the staging dir to find what's actually
+      #   there. Defensive single-entry check surfaces any future
+      #   weirdness in vscode.git's behavior loudly.
+      # - The fix is defensive rather than corrective — it doesn't
+      #   try to fix vscode.git's internal state (brittle, undocumented),
+      #   it just makes our code immune to the wrong return value.
+      # - Lesson recorded: refinement of Pattern 28. Verification has
+      #   TEMPORAL depth, not just structural depth. Operations that
+      #   work once may fail when repeated, especially if shell
+      #   commands modify state behind a tool's back. v0.10.1's
+      #   testing covered fresh-workspace clones but didn't include
+      #   "Clone after Reset after Clone" as a test sequence.
+      # - Pure extension bump.
+      # 1.0.38:
+      # - Bump packetanglers.sandbox-dashboard 0.11.2 -> 0.11.3,
+      #   ROOT-CAUSE bug fix release. v0.11.2 prevented workspace
+      #   destruction on the Clone → Reset → Clone sequence but
+      #   didn't fix the underlying clone failure. v0.11.3 fixes the
+      #   root cause.
+      # - The actual root cause: vscode.git's clone() SILENTLY NO-OPS
+      #   when parentPath is inside a workspace folder for which it
+      #   has stale repository state. After Reset's
+      #   `sudo rm -rf /sandbox/.git`, vscode.git's in-memory registry
+      #   still thinks /sandbox is a known repo, so any subsequent
+      #   clone with parentPath inside /sandbox just doesn't happen.
+      # - Empirically confirmed via filesystem checks after v0.11.2's
+      #   defensive error fired:
+      #     ls -la /sandbox/.tmp-clone-* → no matches
+      #     find / -name "evpn-gw-demo"  → no matches anywhere
+      #     find / -name ".git" -newer /tmp → no matches
+      #   The clone API was called, returned without error, did
+      #   NOTHING.
+      # - The fix: stage the clone in /tmp (os.tmpdir()) instead of
+      #   inside the workspace. /tmp is not in any VS Code workspace
+      #   folder, so vscode.git has no reason to maintain registry
+      #   state about it. The clone proceeds normally.
+      # - Cross-filesystem trade-off: /tmp may be on a different
+      #   filesystem than the workspace, so we swapped fs.rename for
+      #   fs.cp (recursive: true) to handle EXDEV cleanly. For
+      #   typical lab repos the cost is negligible.
+      # - The v0.11.2 defensive logic (walk staging dir, single-entry
+      #   check) is RETAINED as belt-and-suspenders.
+      # - Pattern 28 in real time, twice in 24 hours: v0.11.2's
+      #   diagnosis was based on inferred internal behavior;
+      #   v0.11.3's is based on empirical filesystem-state evidence.
+      #   The deeper layer keeps yielding deeper bugs.
+      # - Pure extension bump.
+      # 1.0.39:
+      # - Bump packetanglers.sandbox-dashboard 0.11.3 -> 0.11.4,
+      #   ARCHITECTURAL REVERT release. The fourth (and hopefully
+      #   final) attempt at the Clone-from-GitHub workspace-destruction
+      #   fix.
+      # - The breakthrough diagnosis: Mitch reproduced the failure
+      #   from VS Code's command palette directly, with no involvement
+      #   from our extension. That proved the bug is upstream in
+      #   vscode.git's clone() API, not in our usage.
+      # - The fix: abandon vscode.git's clone API entirely. Spawn
+      #   `git clone` directly with `env: { ...process.env }` so the
+      #   askpass-bridge env vars (GIT_ASKPASS / VSCODE_GIT_*) flow
+      #   through to git for private-repo auth.
+      # - Public repos: work regardless. Private repos: work if
+      #   askpass vars are present in the extension host's env (will
+      #   be visible in the dashboard log). v0.11.5 will add a PAT-
+      #   prompt fallback if needed.
+      # - Pattern 28 in real time, three times in 24 hours: each
+      #   prior iteration's diagnosis was based on inference at the
+      #   wrong layer. v0.11.4's is based on empirical end-to-end
+      #   behavior of the upstream tool.
+      # - Pure extension bump.
+      # 1.0.40:
+      # - Bump packetanglers.sandbox-dashboard 0.11.4 -> 0.11.5,
+      #   bug fix release. Action buttons (Reset, Push to GitHub,
+      #   Export Workspace) no longer stay grayed-out-as-busy
+      #   waiting for the user to dismiss success toasts.
+      # - The bug: action success toasts were being awaited
+      #   (`await vscode.window.showInformationMessage(...)`), which
+      #   blocks the action's promise chain until the user dismisses
+      #   the toast. The trackedCommand wrapper's finally block (which
+      #   marks the action as no longer in-flight) doesn't fire until
+      #   then. VS Code's "auto-hide" for info toasts is purely
+      #   visual — the underlying Promise stays pending until the
+      #   user clicks X or hits ⌘Backspace in the notifications
+      #   drawer.
+      # - The fix: stop awaiting toasts whose responses don't drive
+      #   control flow. Four toasts converted (Reset success, Push
+      #   "Pushed to X" / "Connected and pushed", Export "Exported
+      #   to X"). For toasts with cosmetic action buttons (View on
+      #   GitHub, Reveal in File Explorer), the .then() pattern
+      #   preserves button functionality without blocking.
+      # - Six other awaited toasts deliberately KEPT awaiting after
+      #   audit because their responses drive control flow (modal
+      #   yes/no prompts, choice prompts).
+      # - Pattern 28 case 3 today: state-cleanup bugs are nearly
+      #   invisible without observing the system across multiple
+      #   operations. Single-action testing doesn't notice the
+      #   lingering disabled state.
+      # - Pure extension bump.
+      # 1.0.41:
+      # - Bump packetanglers.sandbox-dashboard 0.11.5 -> 0.11.6,
+      #   bug fix release. Private GitHub HTTPS clones now work
+      #   via vscode.authentication GitHub session + URL token
+      #   embedding.
+      # - The bug: v0.11.4's spawn-based clone worked for public
+      #   GitHub repos but hung forever for private repos. v0.11.4's
+      #   diagnostic log empirically confirmed the askpass-bridge
+      #   env vars (GIT_ASKPASS, VSCODE_GIT_*) are absent in the
+      #   extension host's process.env, even when the integrated
+      #   terminal has them. So our spawned git couldn't reach VS
+      #   Code's auth UI via askpass no matter what we forwarded.
+      # - The fix: for GitHub HTTPS URLs, acquire an OAuth token
+      #   via vscode.authentication.getSession('github', ['repo'])
+      #   and embed it in the URL using GitHub's documented
+      #   x-access-token mechanism. The spawned git sees a
+      #   pre-authenticated URL and never needs to prompt.
+      # - First time triggers VS Code's standard "GitHub wants to
+      #   sign in" notification → user clicks Allow → browser opens
+      #   to GitHub OAuth → token cached. Subsequent calls use
+      #   cached session silently.
+      # - Security: tokens are redacted from all dashboard logs via
+      #   a new redactedArgsForLog parameter on runGit. Git's own
+      #   --progress output uses GitHub's redacted form (***), so
+      #   stderr is safe to log.
+      # - Defensive behavior: if vscode.authentication fails or user
+      #   cancels, we attempt the clone with the un-tokenized URL.
+      #   Public repos succeed; private repos fail with a clear
+      #   "Authentication failed" git error. No silent destruction.
+      # - Out of scope: GitLab/Bitbucket/GitHub Enterprise
+      #   private-repo auth. SSH URLs (depends on user's SSH agent).
+      # - Pure extension bump.
+      # 1.0.42:
+      # - Bump packetanglers.sandbox-dashboard 0.11.6 -> 0.11.7,
+      #   bug fix release. Relative symlinks in cloned/borrowed
+      #   repositories no longer get rewritten as dangling absolute
+      #   /tmp/... paths during the workspace promotion step.
+      # - The bug: Mitch noticed during post-v0.11.6 testing that
+      #   after cloning a private repo containing `containerlab save
+      #   --copy` artifacts, every `startup-config` symlink in
+      #   /sandbox/startup-configs/ pointed to non-existent paths
+      #   under /tmp/sandbox-dashboard-clone-<timestamp>/repo/ — the
+      #   staging directory we'd already deleted.
+      # - Root cause: Node's fs.cp default behavior is to RESOLVE
+      #   relative symlinks against their source location at copy
+      #   time and write the resolved absolute path into the
+      #   destination. So a relative symlink in /tmp staging gets
+      #   rewritten to absolute /tmp/... during the copy to /sandbox.
+      # - The fix: pass verbatimSymlinks: true to fs.cp at both call
+      #   sites (clone-from-github.ts and borrow-from-techlib.ts).
+      #   Tells fs.cp to copy symlinks as-written: relative stays
+      #   relative.
+      # - Pattern 28 case study: a pre-existing comment claimed
+      #   fs.cp "follows symlinks correctly for our purposes" — that
+      #   assertion was empirically wrong, demonstrating the danger
+      #   of unverified assertions.
+      # - Pure extension bump.
+      # 1.0.43:
+      # - Bump packetanglers.sandbox-dashboard 0.11.7 -> 0.11.8,
+      #   UX fix release. Borrow from Tech Library now actually
+      #   creates a working git repo with a first commit on the
+      #   `main` branch, so users see a clean source-control panel
+      #   after borrow (instead of every borrowed file appearing as
+      #   "untracked").
+      # - The bug: Mitch noticed that after Borrow, every file in
+      #   /sandbox showed as untracked in VS Code's source-control
+      #   panel. Borrow's git init step was failing silently with
+      #   "Failed to execute git" (vscode.git's init() API,
+      #   same class of bug as the clone() API issues that
+      #   motivated v0.11.4). The previous code caught the failure
+      #   as "non-fatal" and continued, hiding the bug for several
+      #   releases.
+      # - The fix: same shape as v0.11.4's clone fix — stop using
+      #   vscode.git's API, spawn git directly. runGit helper is
+      #   now a shared module used by both Clone and Borrow.
+      # - Bonus: -b main flag forces modern default branch
+      #   regardless of git's compiled-in default (lab-base-sandbox
+      #   bundles git that defaults to "master").
+      # - Init failure now surfaces as a warning toast instead of
+      #   silent fallback. The silent fallback is what hid this bug
+      #   for several releases.
+      # - Pattern 28 case study #7 in the v0.11.x cycle: unverified
+      #   assertions ("init() — different code path, presumably
+      #   unaffected") creating false confidence. "Presumably" was
+      #   the tell.
+      # - Pure extension bump.
+      # 1.0.44:
+      # - Bump packetanglers.sandbox-dashboard 0.11.8 -> 0.11.9-pre1,
+      #   TEMPORARY verification probe release. Empirically tests
+      #   three browser-side capabilities that v0.11.9 will need
+      #   for "user's local machine ↔ sandbox" file transfer in
+      #   Import/Export Workspace.
+      # - The probe is exposed as a hidden command (palette only):
+      #   "Sandbox Dashboard: File Bridge Probe (v0.11.9-pre1)".
+      #   Opens a test webview with three test sections.
+      # - Tests:
+      #   1. <input type="file"> opens user's local file picker
+      #   2. webview.postMessage practical size limit
+      #   3. URL.createObjectURL(blob) + anchor click triggers
+      #      browser download
+      # - After Mitch reports the test results, this probe will be
+      #   DELETED and v0.11.9 will be designed from data.
+      # - Pattern 28: don't design v0.11.9 from inferred behavior of
+      #   opaque environments. The probe runs in the EXACT webview
+      #   environment we'll ship into.
+      # - Pure extension bump.
+      # 1.0.45:
+      # - Bump packetanglers.sandbox-dashboard 0.11.9-pre1 -> 0.11.9,
+      #   UX shipping release. Import/Export now bridge files between
+      #   the user's local machine and the sandbox.
+      # - The capability gap: pre-v0.11.9, both Import and Export
+      #   only saw the container's filesystem. Users couldn't easily
+      #   upload a local-machine tarball into the sandbox or
+      #   download an exported tarball back to their machine.
+      # - The probe (v0.11.9-pre1) verified empirically:
+      #     <input type="file"> → user's local picker  ✅
+      #     postMessage 20 MB round-trip               ✅ (700ms, hash-verified)
+      #     URL.createObjectURL + anchor click download ❌ (iframe sandbox blocks)
+      # - v0.11.9 ships asymmetric paths informed by those results:
+      #   Import: QuickPick → "On my computer" (webview file ferry,
+      #     ~50 MB soft cap) or "In this sandbox" (existing flow).
+      #   Export: writes to /sandbox/<name>-<ts>.tar.gz; toast
+      #     points user at code-server's right-click → Download via
+      #     "Show in Explorer" button (revealInExplorer command).
+      # - The webview-initiated download path is blocked by
+      #   code-server's iframe sandbox; v0.11.9 doesn't fight that —
+      #   it uses code-server's own download primitive (Explorer
+      #   right-click) as the egress point.
+      # - The v0.11.9-pre1 verification probe is removed in v0.11.9.
+      # - Pure extension bump.
+      # 1.0.46:
+      # - Bump packetanglers.sandbox-dashboard 0.11.9 -> 0.11.10,
+      #   bug fix release. Export Workspace no longer surfaces a
+      #   misleading "Export failed" toast on every successful export.
+      # - The bug: v0.11.9 wrote the tarball to /sandbox/<name>.tar.gz
+      #   while telling tar to archive `.` (the workspace root). tar
+      #   walks the directory listing, sees the tarball file growing
+      #   in size during the walk, and bails with "tar: .: file
+      #   changed as we read it" and exit code 1.
+      # - GNU tar exit code 1 means "non-fatal" — archive IS produced
+      #   and IS valid (verified by tar -xvf on the actual output).
+      #   But our runTar treats any non-zero exit as failure.
+      # - The fix: stage the tarball in /tmp during the tar phase,
+      #   then move it to /sandbox after tar completes. fs.rename
+      #   fast path + EXDEV fallback (typical when /tmp is tmpfs).
+      # - Pattern 28 case study #9: an architectural decision that
+      #   seemed clean (write to /sandbox for discoverability)
+      #   introduced a regression invisible until end-to-end testing
+      #   surfaced it.
+      # - Pure extension bump.
+      # 1.0.47:
+      # - Bump packetanglers.sandbox-dashboard 0.11.10 -> 0.11.11,
+      #   two small UX improvements shipped together.
+      # - Item 1: Open Terminal button. New button in the Lifecycle
+      #   row of the dashboard. Clicking opens a new integrated
+      #   terminal in the bottom panel area, named "Sandbox", with
+      #   cwd = workspace root. Each click creates a NEW terminal;
+      #   we don't reuse existing ones. Always enabled (even without
+      #   a workspace, falls back to $HOME). Matches the same
+      #   affordance the lab-dashboard extension provides.
+      # - Item 2: Full-wipe Import semantics. Pre-v0.11.11, Import
+      #   did collision-detect-and-overwrite, which left non-
+      #   colliding workspace files in place — workspace ended up
+      #   as a UNION of the tarball and prior contents. Mitch flagged
+      #   that as the wrong mental model: tarballs are Export
+      #   snapshots, so Import should RESTORE that state. v0.11.11
+      #   changes Import to full-wipe-before-extract, matching Clone
+      #   from GitHub and Borrow from Tech Library. Three
+      #   workspace-population actions, one mental model.
+      # - Empty-workspace fast-path: no destructive-confirm modal.
+      # - Populated workspace: modal lists first 8 entries verbatim.
+      # - Bonus: temp-upload (/tmp) cleanup extended to all
+      #   early-exit paths so cancelled uploads don't accumulate.
+      # - Pure extension bump.
+      # 1.0.48:
+      # - Bump packetanglers.sandbox-dashboard 0.11.11 -> 0.11.12,
+      #   bug fix release. Open Terminal button now reliably opens
+      #   the terminal in the bottom panel (not as an editor tab).
+      # - The bug: v0.11.11's createTerminal call omitted the
+      #   `location` parameter, deferring to the user's
+      #   terminal.integrated.defaultLocation setting. In code-server
+      #   that setting was effectively "editor", so our terminal
+      #   landed in the editor view instead of the bottom panel.
+      # - The fix: pass `location: vscode.TerminalLocation.Panel`
+      #   explicitly to override the user setting for THIS specific
+      #   terminal. Matches the lab-dashboard extension's
+      #   runInTerminal approach.
+      # - Pattern 28 case study #10: I assumed VS Code's default
+      #   placement would be panel because that's the desktop default.
+      #   The discipline going forward: when an API has a
+      #   location/placement parameter that defers to user settings,
+      #   set it explicitly when correctness requires a specific value.
+      # - Pure extension bump.
+      # 1.0.49:
+      # - Bump packetanglers.sandbox-dashboard 0.11.12 -> 0.11.13,
+      #   UX feature release. Clone from GitHub now offers two
+      #   modes at clone-time via QuickPick.
+      # - Mode 1 ("Track this repo"): preserves the cloned .git/
+      #   and remote. v0.11.12 behavior, unchanged.
+      # - Mode 2 ("Use as a starting template"): strips the cloned
+      #   .git/ and reinitializes a fresh repo on `main` with an
+      #   attribution commit ("Initial commit (started from <url>)").
+      #   End-state is bit-for-bit equivalent to Borrow from Tech
+      #   Library — same shared runGit helper, same -b main branch,
+      #   same attribution-style commit. After this, Push to GitHub
+      #   goes through the standard "no remote — create a new repo"
+      #   flow that Borrow already uses.
+      # - Pre-v0.11.13, users who wanted template mode had to
+      #   manually run `rm -rf .git && git init -b main && git add .
+      #   && git commit -m '...'` in the terminal. Surfacing the
+      #   choice at clone-time is the right UX hygiene because
+      #   "track vs template" is a meaningful semantic distinction
+      #   that should be settled before the workspace is touched.
+      # - Mode question sits between URL prompt and destructive-
+      #   confirm modal; cancel at QuickPick = nothing on disk
+      #   changes.
+      # - Pure extension bump.
+      # 1.0.50:
+      # - Replaces the baseline README.md (in sandbox-original/) with
+      #   a new dashboard-focused guide. The new content pairs each
+      #   dashboard button with a short scenario ("you'd click this
+      #   when…") rather than diving into technical details, making
+      #   it easier for new users to learn when to use which button.
+      # - Adds a prominent "🚨 Closed the dashboard? Here's how to
+      #   bring it back" section near the top of the README. This
+      #   addresses recurring user confusion when the dashboard tab
+      #   is accidentally closed — users didn't know about the
+      #   🧪 Sandbox Dashboard status-bar button or the
+      #   `Sandbox Dashboard: Open` command palette entry.
+      # - Preserves high-value facts from the previous README inline:
+      #   default credentials (admin/admin), lab specs (cEOS 4.35.2F,
+      #   AVD 5.7.3, Containerlab 0.74.0, 16 CPUs / 64 GB RAM /
+      #   64 GB storage), and a reference to the ContainerLab VS Code
+      #   extension as a complement to Topology View.
+      # - Both v0.11.13 (Clone modes) and v0.11.11 (Open Terminal) are
+      #   reflected in the new content.
+      # - NO extension change in this rev — sandbox-dashboard stays
+      #   pinned at 0.11.13. This is a baseline content update only.
+      #   First content-only revision in the rev history; precedent for
+      #   future content-only updates.
+      # 1.0.51:
+      # - Bump packetanglers.sandbox-dashboard 0.11.13 -> 0.11.14,
+      #   UX layout polish. Dashboard's Action sections now render
+      #   as visually distinct cards instead of flat heading +
+      #   button rows.
+      # - Each of the four Actions sub-sections (Sources, Lifecycle,
+      #   Destinations, Arista Integrations) wraps in an
+      #   .action-card div with subtle background tint
+      #   (--vscode-editorWidget-background), 1px border, and the
+      #   section header inside the card paired with its buttons.
+      # - Buttons render in a responsive 2-column grid:
+      #   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))
+      #   Adapts to webview width — 1 col on narrow docked panels,
+      #   2-3 cols at typical/wide widths.
+      # - Section headers gained scenario tags ("— pick a starting
+      #   point", "— work with your lab", "— share your work") for
+      #   context.
+      # - Arista Integrations card gets a 3px orange (#f04e23) left
+      #   accent stripe to mark it as the only vendor-specific
+      #   section in an otherwise vendor-neutral dashboard.
+      # - NO behavioral change. Pure visual layout. All colors
+      #   continue using VS Code theme variables, so the dashboard
+      #   adapts automatically when users switch between light/dark
+      #   themes.
+      # - Pure extension bump.
+      # 1.0.52:
+      # - Bump packetanglers.sandbox-dashboard 0.11.14 -> 0.11.15,
+      #   UX polish. Buttons restyled to an outline aesthetic.
+      # - Pre-v0.11.15, buttons used --vscode-button-background
+      #   directly (saturated VS Code primary blue) which felt
+      #   dated against the soft v0.11.14 cards. v0.11.15 replaces
+      #   the filled style with: transparent bg, soft border using
+      #   --vscode-input-border, soft text using --vscode-foreground.
+      #   Hover fills the bg subtly via --vscode-toolbar-hoverBackground.
+      # - Active state scales to 0.98 for tactile click feedback
+      #   without color shift. Border radius bumped 3px -> 4px to
+      #   feel more current. Disabled state preserved (opacity 0.5
+      #   fades both border and text together).
+      # - Modern, content-forward, harmonious with the v0.11.14 cards.
+      #   Icons + labels carry visual weight instead of chrome.
+      # - NO behavioral change. CSS only. All values continue to
+      #   derive from VS Code theme variables for automatic
+      #   light/dark adaptation.
+      # - Pure extension bump.
+      # 1.0.53: 💀 BURNED — DO NOT REUSE THIS REV TAG.
+      # - Bundled three changes in one rev: prebuild.sh + workflow
+      #   hook for auto-syncing labs/sandbox/ → sandbox-original/
+      #   at build time + Dockerfile fail-fast guard + lab.yml URL
+      #   change to workspace://README.md + sandbox-dashboard
+      #   0.11.15 -> 0.11.16 vsix bump.
+      # - The image built and published to ghcr.io successfully
+      #   (CI green), but the host VM could not LAUNCH the
+      #   container after pull. Root cause was never definitively
+      #   isolated — by elimination via single-variable re-rolls,
+      #   the architecture changes (prebuild.sh + workflow hook +
+      #   Dockerfile guard) are circumstantially the broken part:
+      #   rev1.0.54 (extension bump alone) and rev1.0.55 (lab.yml
+      #   URL alone) both launched cleanly. The rev1.0.53 image
+      #   is still in ghcr.io but nothing points at it.
+      # - Consumer pointer was reverted to rev1.0.52 within
+      #   minutes of the breakage report. After a disciplined
+      #   architecture unwind that restored the tree to
+      #   rev1.0.52-equivalent state plus a manual `make sync-
+      #   baseline` Makefile in containers/lab-base-sandbox/, the
+      #   features were re-rolled as rev1.0.54 / 1.0.55 / 1.0.56
+      #   in single-variable steps.
+      # - DO NOT reuse the rev1.0.53 tag for any future rev.
+      #   ghcr.io still holds the broken image at that tag; image
+      #   caching could result in a host pulling the broken image
+      #   if a future rev1.0.53 re-tag were ever published.
+      # - Pattern 28 lessons banked from this incident:
+      #   * Default to the boring solution. Manual fine for rare
+      #     events. Premature automation is its own bug.
+      #   * Single-variable revs: never bundle architecture +
+      #     feature + content into one rev.
+      #   * Verify-then-flip: build container rev in CI, verify
+      #     on the explicit tag, THEN flip the consumer pointer.
+      # 1.0.54:
+      # - Bump packetanglers.sandbox-dashboard 0.11.15 -> 0.11.16,
+      #   ONLY. No other changes in this rev.
+      # - v0.11.16 adds support for a new `workspace://` URL scheme
+      #   in Lab Overview links (URLs starting with workspace:// open
+      #   a workspace file in an editor tab; URLs starting with
+      #   https:// continue to open externally). The lab.yml in this
+      #   rev still uses the https:// CAPABILITIES.md URL — meaning
+      #   the new workspace:// scheme is shipped as a CAPABILITY but
+      #   not yet USED. Activating it requires a follow-up rev that
+      #   updates lab.yml's "Getting Started" URL.
+      # - Why split this from the lab.yml change: rev1.0.53 bundled
+      #   three changes (architecture refactor + lab.yml URL change
+      #   + extension bump) and broke launch. Diagnosis was hard
+      #   because we didn't know which of the three was at fault.
+      #   rev1.0.54 ships ONE thing (extension bump) so we can
+      #   verify it doesn't break launch on its own. If it does,
+      #   the diagnosis is unambiguous. rev1.0.55 will then ship
+      #   the lab.yml URL change as its own single-variable rev.
+      # - Pure extension bump.
+      # 1.0.55:
+      # - Update lab.yml's "Getting Started" link from
+      #   https://github.com/PacketAnglers/sandbox-dashboard/blob/main/CAPABILITIES.md
+      #   to `workspace://README.md`. ONLY this change; no other tree
+      #   modifications.
+      # - The sandbox-dashboard v0.11.16 (already shipped in rev1.0.54)
+      #   recognizes the workspace:// URL scheme and opens the named
+      #   file from the user's workspace in an editor tab. The dashboard
+      #   already opens to /sandbox/README.md, which contains the
+      #   dashboard-focused getting-started content (in-context,
+      #   editable, always synced with the user's lab revision, no
+      #   external network round-trip).
+      # - Why split this from rev1.0.54: rev1.0.53 bundled the
+      #   architecture refactor + lab.yml URL change + extension bump
+      #   and broke launch. rev1.0.54 verified the extension bump is
+      #   safe in isolation. rev1.0.55 verifies the lab.yml URL change
+      #   is safe in isolation. If launch fails on rev1.0.55, we know
+      #   unambiguously that the URL change was the culprit (and the
+      #   architecture changes were the broken part of rev1.0.53). If
+      #   launch succeeds, we've circumstantially proven the
+      #   architecture changes were rev1.0.53's broken part.
+      # - lab.yml is read by sandbox-dashboard at extension activation
+      #   AFTER container start. A bad URL value would surface as an
+      #   activation error rather than a container-startup failure, so
+      #   this is a low-risk change in our threat model. But "low risk"
+      #   is not "no risk" — pattern 28 lesson banked, we ship single
+      #   variables and verify.
+      # - Single line of content change.
+      # 1.0.56:
+      # - Bump packetanglers.sandbox-dashboard 0.11.16 -> 0.11.17,
+      #   ONLY. No other changes.
+      # - v0.11.17 fixes a UX bug in v0.11.16's workspace:// URL
+      #   handler: .md files now open in the rendered markdown
+      #   preview viewer (markdown.showPreview), not the raw text
+      #   editor. Non-markdown file types continue to open as raw
+      #   text. After rev1.0.55 went live with the "Getting Started"
+      #   link → workspace://README.md, clicking it opened the
+      #   README as raw markdown text (visible '#' headers,
+      #   '**bold**' syntax) instead of a rendered guide.
+      # - markdown.showPreview is a built-in VS Code command (part
+      #   of the bundled markdown-language-features extension that
+      #   ships with VS Code and code-server). Safe to assume present.
+      # - Single-line code change in webview.ts; pure extension bump
+      #   from the container's perspective.
+      # - Pure extension bump.
+      # 1.0.57:
+      # - Tiny copy fix in /sandbox/README.md's "Clone from GitHub"
+      #   section. Changed the section's narrator-voice scenario
+      #   line from "I want to work with someone's existing GitHub
+      #   repo." to "I want to work with an existing GitHub repo."
+      # - Mitch's read: "someone's" subtly implies the repo isn't
+      #   yours, but cloning your OWN repo from GitHub is the most
+      #   common case. "An" is neutral and accurate — covers both
+      #   "this is my repo" and "this is someone else's repo".
+      # - First real-world use of the Makefile from the rev1.0.53
+      #   architecture unwind. labs/sandbox/README.md edited;
+      #   `make sync-baseline` from containers/lab-base-sandbox/
+      #   propagated the change to .devcontainer/sandbox-original/.
+      #   Worked on first try. The boring solution we deliberately
+      #   chose is now serving its purpose.
+      # - Pure content fix. No code, no extension, no architecture.
+      # 1.0.58:
+      # - Bump packetanglers.sandbox-dashboard 0.11.17 -> 0.11.18,
+      #   AND add `components:` block to lab.yml,
+      #   AND remove "What's in this lab" section from
+      #   labs/sandbox/README.md (the same info now renders as
+      #   badges on the dashboard, driven by lab.yml).
+      # - v0.11.18 introduces an optional `components:` map in the
+      #   lab.yml schema that renders as a SECOND badge row in the
+      #   Lab Overview, ABOVE the existing resources row. Same
+      #   shields.io-style two-tone Arista brand styling. Well-known
+      #   triad (ceos / avd / clab) gets canonical labels (cEOS-lab
+      #   / AVD / ContainerLab); unknown keys get title-cased.
+      # - lab.yml gains:
+      #     components:
+      #       ceos: 4.35.2F
+      #       avd: 5.7.3
+      #       clab: 0.74.3
+      #   matching the active devcontainer.json variant pointer
+      #   (python3.12-avd-v5.7.3-clab0.74.3-rev1.0.58).
+      # - labs/sandbox/README.md loses its "## What's in this lab"
+      #   table (was: cEOS-lab / AVD / Containerlab versions + CPU /
+      #   Memory / Storage). The default credentials note from that
+      #   section is preserved as a new "## 🔑 Default credentials"
+      #   section.
+      # - Net effect: the lab's "what's inside" info now lives in
+      #   exactly ONE place (lab.yml) and renders in exactly ONE
+      #   place (the dashboard). README is for narrative; the
+      #   dashboard is for at-a-glance metadata.
+      # - Mitch flagged this optimization opportunity post-rev1.0.57:
+      #   "All of this should be displayed in the sandbox-dashboard,
+      #   derived from lab.yml. Can we please remove the 'What's in
+      #   this lab' section from README.md?" Yes, we can.
+      # - Multi-variable rev — but the variables are all aligned to
+      #   the same goal (component badges + their data + remove
+      #   redundancy), and the change is isolated to text/HTML
+      #   rendering (no architecture, no build pipeline). Risk
+      #   profile is roughly equivalent to a feature ship of v0.11.16
+      #   without the architecture experiment.
+      # - Verify-then-flip pattern: this commit builds rev1.0.58 in
+      #   CI; the consumer pointer (.devcontainer/sandbox/devcontainer
+      #   .json image tag) stays at rev1.0.57 until verified.
+      # - Verify-then-flip pattern: this commit builds rev1.0.58 in
+      #   CI; the consumer pointer (.devcontainer/sandbox/devcontainer
+      #   .json image tag) stays at rev1.0.57 until verified.
+      # 1.0.59:
+      # - Update ContainerLab to 0.75.0
+      # - Update README.md file to reflect updated ContainerLab version
+      # 1.0.60:
+      # - Bump packetanglers.sandbox-dashboard 0.11.18 -> 0.11.19,
+      #   ONLY. No other changes in this rev.
+      # - v0.11.19 restyles the Lab Overview links ("Getting Started"
+      #   and "Report an Issue") from plain text hyperlinks to the
+      #   v0.11.15 outline-button aesthetic, matching the visual
+      #   language of the Actions buttons below. Pure CSS change in
+      #   the extension; no schema change, no behavior change.
+      # - Single-variable: extension bump alone. Same shipping
+      #   discipline as rev1.0.54 / rev1.0.56.
+      # 1.0.61:
+      # - Bump packetanglers.sandbox-dashboard 0.11.19 -> 0.12.0,
+      #   ONLY. No other changes in this rev.
+      # - v0.12.0 ships the new "Change AVD Version" action — a button
+      #   in the Arista Integrations card that opens a QuickPick of
+      #   stable AVD releases from Ansible Galaxy (top 15, no auth),
+      #   plus a `devel` option pulling from the AVD GitHub main
+      #   branch, plus a `Custom version…` escape hatch. Detects the
+      #   currently-installed version, confirms destructive
+      #   replacement, and runs `ansible-galaxy collection install`
+      #   with progress + output channel streaming. First net-new
+      #   feature of the v0.12.x cycle, driven by user feedback
+      #   collected post-launch.
+      # - Single-variable: extension bump alone. ansible-galaxy is
+      #   already part of the lab-base-sandbox container (used by
+      #   the existing AVD playbooks); no new packages, no new
+      #   architecture, no Dockerfile changes beyond the vsix URL.
+      # - Same shipping discipline as rev1.0.54 / rev1.0.56 / rev1.0.60.
+      # 1.0.62:
+      # - Bump packetanglers.sandbox-dashboard 0.12.0 -> 0.12.1,
+      #   ONLY. No other changes in this rev.
+      # - v0.12.1 fixes the `devel` install URL syntax in the AVD
+      #   picker. v0.12.0 used `<repo>.git,<branch>#<subdir>` ordering
+      #   which ansible-galaxy interprets as a single broken git ref;
+      #   v0.12.1 uses the canonical AVD-docs ordering
+      #   `<repo>.git#<subdir>,<branch>`. Tagged Galaxy installs and
+      #   Custom version installs were unaffected — those code paths
+      #   were verified working in v0.12.0 smoke testing. This fix
+      #   only changes the devel-branch code path.
+      # - Single-variable: extension bump alone. Same shipping
+      #   discipline as rev1.0.54 / rev1.0.56 / rev1.0.60 / rev1.0.61.
+      # 1.0.63:
+      # - Bump packetanglers.sandbox-dashboard 0.12.1 -> 0.13.0,
+      #   AND update lab.yml's Getting Started link to use the new
+      #   `container://` URL scheme.
+      # - v0.13.0 introduces the `container://` URL scheme for Lab
+      #   Overview links. It resolves absolute, image-baked paths
+      #   (allowlisted to /opt/) rather than workspace-relative
+      #   paths. lab.yml's Getting Started link moves from
+      #   `workspace://README.md` (which resolved to /sandbox/
+      #   README.md, the bind-mount target) to
+      #   `container:///opt/sandbox-original/README.md` (which
+      #   resolves to the image-baked README, stable across
+      #   user actions).
+      # - Fixes a real bug: when a user ran the dashboard's Clone
+      #   from GitHub action, /sandbox/'s bind-mounted contents
+      #   were replaced with the user's repo. If their repo had a
+      #   README.md, it would shadow the sandbox onboarding README.
+      #   Getting Started would then open the WRONG file. The
+      #   container:// scheme fixes this by pointing at content
+      #   that user actions can't shadow.
+      # - Pairs with the README-as-metadata refactor in the
+      #   immediately preceding aclabs commit (1266664), which
+      #   moved README.md from labs/sandbox/ + sandbox-original/
+      #   into .devcontainer/ as a metadata sibling of lab.yml.
+      #   The Dockerfile now COPYs it separately into
+      #   /opt/sandbox-original/README.md (the path the new
+      #   container:// link references).
+      # - Single-variable: this rev ships the v0.13.0 feature
+      #   end-to-end. Bumping the vsix without updating lab.yml
+      #   would leave the new scheme unused (dead code in the
+      #   container); updating lab.yml without the vsix would
+      #   leave the link silently failing (no host handler in
+      #   v0.12.1). They ship together as one feature delivery.
+      # - The README move (commit 1266664) was a separate
+      #   single-variable structural commit because it doesn't
+      #   change any user-visible behavior on its own — it only
+      #   matters once a build picks up the new layout, which
+      #   is what THIS rev does.
+      # 1.0.64:
+      # - Day 12 cleanup rev. Reverts the rev1.0.63 architectural
+      #   overhead (the README-as-metadata refactor from commit
+      #   1266664) while preserving the genuinely valuable bit of
+      #   v0.13.0 — the container:// URL scheme handler in the
+      #   extension and lab.yml's Getting Started link pointing at
+      #   /opt/sandbox-original/README.md.
+      # - Why the rev1.0.63 architecture was reverted: it broke
+      #   boot for every existing rev. settings.json's nested
+      #   workbench.startupEditor (and/or some other workspace-
+      #   root README dependency we haven't fully pinpointed)
+      #   needed labs/sandbox/README.md to exist at runtime via
+      #   the bind mount. 1266664 deleted that file. Result:
+      #   rev1.0.62 retroactively stopped booting, rev1.0.63
+      #   never booted properly, and we had to bisect from
+      #   rev1.0.61 backwards to confirm.
+      # - What this rev bakes:
+      #     * Same vsix as rev1.0.63: packetanglers.sandbox-
+      #       dashboard 0.13.0 (the container:// URL scheme).
+      #     * Same lab.yml as rev1.0.63: Getting Started link
+      #       at container:///opt/sandbox-original/README.md.
+      #     * REVERTED Dockerfile: single `COPY ./sandbox-
+      #       original/` (rev1.0.63's separate `COPY ./README.md`
+      #       gone). README is back inside sandbox-original/
+      #       alongside topology and assets.
+      #     * settings.json: nested workbench.startupEditor
+      #       changed from "readme" to "none". The flat
+      #       "workbench.startupEditor": "none" key was already
+      #       overriding it, so this is config alignment, not a
+      #       behavior change. Closes one possible boot
+      #       dependency vector.
+      # - This rev is two related changes shipped together:
+      #     (a) v0.13.0 feature delivery (vsix + lab.yml link),
+      #         which is the same logical unit rev1.0.63 was
+      #         supposed to deliver.
+      #     (b) Day 12 cleanup (revert architectural overhead +
+      #         settings.json alignment), which closes the
+      #         boot regression introduced by 1266664.
+      #   Bundling them here because (b) is small, low-risk
+      #   (settings.json change is empirically a no-op; the
+      #   architectural revert has been validated by Mitch's
+      #   rev1.0.62-with-restored-README boot test), and the
+      #   alternative is two build cycles for what's logically
+      #   the same "ship v0.13.0 correctly" unit.
+      # - rev1.0.63 image is left on ghcr.io as historical
+      #   record; nobody should pin to it (it's the burned
+      #   architecture).
+      # 1.0.65:
+      # - Bump packetanglers.sandbox-dashboard 0.13.0 -> 0.13.1,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.1 ships UX polish for the Download cEOS action:
+      #     * New pre-download confirmation modal (gate-and-
+      #       confirm) that surfaces what's about to happen and
+      #       the required topology edit (`image:` parameter)
+      #       BEFORE ardl is kicked off. Lets users verify the
+      #       version they typed and start editing their topo
+      #       in parallel with the download.
+      #     * Copy Image Tag affordance on both the pre-
+      #       download and cache-hit modals — writes
+      #       arista/ceos:<v> to the clipboard, re-shows the
+      #       modal so the user keeps their place in the flow.
+      #     * Cache-hit modal also surfaces topology guidance
+      #       (previously silent on this).
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as rev1.0.61 / rev1.0.62 / rev1.0.65 and
+      #   the "vsix-only" pattern. No Dockerfile content
+      #   changes beyond the vsix URL itself.
+      # 1.0.66:
+      # - README content sync ONLY. No Dockerfile / vsix /
+      #   recipe changes. Both labs/sandbox/README.md and
+      #   containers/lab-base-sandbox/.devcontainer/sandbox-original/
+      #   README.md were updated together via `make sync-baseline`:
+      #     * Added back the '📦 Change AVD Version' section
+      #       (was missing since v0.12.0 introduced the action).
+      #     * Rewrote the '🔽 Download cEOS Image' section to
+      #       reflect the v0.13.1 pre-download modal flow, the
+      #       Copy Image Tag affordance, and the topology edit
+      #       guidance the modals now surface.
+      # - Single-variable: README content delta only. Dockerfile
+      #   layer is identical to rev1.0.65; the only difference is
+      #   the bind-mount-source files copied into the image during
+      #   build. Same shipping discipline as the README-only revs
+      #   that came before.
+      # - This comment was added retroactively in rev1.0.67 to fix
+      #   a small drift: the rev1.0.66 entry was never written
+      #   when the pin was bumped. State-of-the-comment-history
+      #   is now back in sync with state-of-the-pin.
+      # 1.0.67:
+      # - Bump packetanglers.sandbox-dashboard 0.13.1 -> 0.13.2,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.2 ships a small wayfinding addition: a new
+      #   '🔄 Reopening the Dashboard' card at the top of the
+      #   dashboard (above the Actions section) that tells users
+      #   how to bring the dashboard tab back if they accidentally
+      #   close it. Two recovery paths offered: status-bar item
+      #   ('🧪 Sandbox Dashboard' at bottom-left) and Command
+      #   Palette ('Sandbox Dashboard: Open'). Native <details
+      #   open> disclosure widget — expanded by default, click-to-
+      #   collapse. Mirrors the equivalent card shipped to all
+      #   techlib labs in lab-base-techlib rev1.0.13.
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as rev1.0.65 and the "vsix-only" pattern.
+      #   No Dockerfile content changes beyond the vsix URL itself.
+      # 1.0.68:
+      # - Bump packetanglers.sandbox-dashboard 0.13.2 -> 0.13.3,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.3 ships polish on the Reopening card: collapsed
+      #   by default (was expanded-default in v0.13.2; pushed
+      #   Quick Actions off-screen on smaller-resolution displays
+      #   per live-test feedback), '(click to expand)' summary
+      #   hint added so the affordance still reads, and softer
+      #   body copy that opens with assurance ('don't fret!')
+      #   instead of problem-statement-then-recovery. Cross-
+      #   extension parallel: same three-variable polish landed
+      #   in lab-base-techlib rev1.0.14 (init_lab.py emission)
+      #   to keep the techlib + sandbox surfaces symmetric in
+      #   copy + UX behavior, not just look-and-feel.
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as rev1.0.65 / rev1.0.67 and the "vsix-only"
+      #   pattern. No Dockerfile content changes beyond the vsix
+      #   URL itself.
+      # 1.0.69:
+      # - Bump packetanglers.sandbox-dashboard 0.13.3 -> 0.13.4,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.4 ships a render-path optimization from an end-
+      #   of-Day-13 Zamboni audit pass: renderLabOverview() now
+      #   skips the components / badges / links DOM rebuild when
+      #   state.labMetadata reference hasn't changed since the
+      #   last render. Pre-v0.13.4 the metadata DOM was demolished
+      #   and rebuilt every 30s on the containerlab poll cadence
+      #   even when nothing had changed, wiping any text
+      #   selection inside the badges and re-attaching click
+      #   listeners each time. The metadata source returns a
+      #   single cached reference (lab-metadata.ts), so strict
+      #   equality is the right check.
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as rev1.0.65 / rev1.0.67 / rev1.0.68 and
+      #   the "vsix-only" pattern. No Dockerfile content changes
+      #   beyond the vsix URL itself.
+      # 1.0.70:
+      # - Bump packetanglers.sandbox-dashboard 0.13.4 -> 0.13.5,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.5 fixes a user-reported bug: clicking Borrow from
+      #   Tech Library after a save → stop sequence aborted with
+      #   'EACCES: permission denied, rmdir
+      #   /sandbox/startup-configs/clab-<lab>'. Root cause:
+      #   `containerlab save --copy startup-configs` runs as root
+      #   via sudo and creates root-owned subtrees that the
+      #   dashboard's unprivileged fs.rm cannot delete. Reset
+      #   already used `sudo -n rm -rf` for the same scenario
+      #   (since v0.9.3); v0.13.5 extracts that helper to a
+      #   shared module and threads it through both Borrow from
+      #   Tech Library AND Clone from GitHub (which had the same
+      #   latent bug).
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as rev1.0.65 / rev1.0.67 / rev1.0.68 /
+      #   rev1.0.69 and the "vsix-only" pattern. No Dockerfile
+      #   content changes beyond the vsix URL itself.
+      # 1.0.71:
+      # - Bump packetanglers.sandbox-dashboard 0.13.5 -> 0.13.6,
+      #   ONLY. No other changes in this rev.
+      # - v0.13.6 completes the Change AVD Version flow: it now
+      #   installs PyAVD (the Python runtime library that AVD
+      #   playbooks import) alongside the arista.avd Ansible
+      #   collection, in a two-step sequence (pip first, then
+      #   ansible-galaxy). Pre-v0.13.6 the action installed only
+      #   the collection — leaving PyAVD at whatever version was
+      #   previously installed and producing silent version skew
+      #   between the two halves of the AVD toolchain.
+      # - Single-variable: extension bump alone, same shipping
+      #   discipline as the "vsix-only" pattern. No Dockerfile
+      #   content changes beyond the vsix URL itself.
+      container_revision: "1.0.71"
