@@ -17,11 +17,6 @@ RUN sed -i -e "s/\(${USERNAME}:[^:]*:\)[^:]*:[^:]*/\1${UID}:${GID}/" /etc/passwd
     sed -i -e "s/\([^:]*:[^:]*:\)${OLD_GID}:/\1${GID}:/" /etc/group; \
     chown -R $UID:$GID /home/$USERNAME
 
-# code-server entrypoint — orchestrates code-server launch. Same contract as lab-base.
-COPY ./entrypoint.sh /bin/entrypoint
-RUN chmod +x /bin/entrypoint
-ENTRYPOINT [ "/bin/entrypoint" ]
-
 # Maintain files from labs/sandbox in the container so that they
 # can be used for `reset` operations.
 
