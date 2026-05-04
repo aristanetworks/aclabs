@@ -18,25 +18,5 @@
         // allow fenced blocks in Markdown
         "MD046": false,
     },
-    "markdown.marp.html": "all",
-    "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#f6eca4",
-        "activityBar.background": "#f6eca4",
-        "activityBar.foreground": "#15202b",
-        "activityBar.inactiveForeground": "#15202b99",
-        "activityBarBadge.background": "#11ae9b",
-        "activityBarBadge.foreground": "#e7e7e7",
-        "commandCenter.border": "#15202b99",
-        "sash.hoverBorder": "#f6eca4",
-        "statusBar.background": "#f1e376",
-        "statusBar.foreground": "#15202b",
-        "statusBarItem.hoverBackground": "#ecda48",
-        "statusBarItem.remoteBackground": "#f1e376",
-        "statusBarItem.remoteForeground": "#15202b",
-        "titleBar.activeBackground": "#f1e376",
-        "titleBar.activeForeground": "#15202b",
-        "titleBar.inactiveBackground": "#f1e37699",
-        "titleBar.inactiveForeground": "#15202b99"
-    },
-    "peacock.remoteColor": "#f1e376"
+    "markdown.marp.html": "all"
 }
