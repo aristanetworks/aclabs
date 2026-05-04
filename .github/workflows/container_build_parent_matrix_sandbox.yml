@@ -23,11 +23,13 @@ jobs:
     strategy:
       matrix:
         from_image:
-          - "ghcr.io/aristanetworks/aclabs/lab-base:python3.12-avd-v6.1.0-clab0.74.3-rev2.6.6-uid1009"
-          - "ghcr.io/aristanetworks/aclabs/lab-base:python3.12-avd-v5.7.3-clab0.74.3-rev2.6.6-uid1009"
+          - "ghcr.io/aristanetworks/aclabs/lab-base"
+        from_variant:
+          - "python3.12-avd-v6.1.0-clab0.74.3-rev2.6.6-uid1009"
+          - "python3.12-avd-v5.7.3-clab0.74.3-rev2.6.6-uid1009"
     with:
-      from_image: ${{ matrix.from_image }}
       container_name: lab-base-sandbox
+      from_image: ${{ matrix.from_image }}
       # 1.0.0:
       # - Initial release of lab-base-sandbox container
       container_revision: "1.0.0"
