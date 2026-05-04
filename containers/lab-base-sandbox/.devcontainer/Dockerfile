@@ -37,4 +37,4 @@ RUN chown ${USERNAME} /home/${USERNAME}/.local/share/code-server/User/settings.j
 
 USER ${USERNAME}
 
-code-server --install-extension PacketAnglers.sandbox-dashboard --force
+RUN code-server --install-extension PacketAnglers.sandbox-dashboard --force
