@@ -1,0 +1,62 @@
+# Sandbox lab metadata for sandbox-dashboard v0.10.0+.
+#
+# Baked into the lab-base-sandbox container image and read by
+# sandbox-dashboard at extension activation. Rendered as the
+# Lab Overview card at the top of the dashboard.
+#
+# This file is NOT user-editable — it ships with the container
+# image. To change it, edit this file and bump the container
+# revision (see Pattern 23 in docs/retrospective.md in the
+# sandbox-dashboard repo).
+#
+# Schema reference: src/lab-metadata.ts in PacketAnglers/sandbox-dashboard
+#
+# RENDERING NOTE: the description field is rendered as PLAIN TEXT
+# in the dashboard (textContent, not innerHTML). Line breaks and
+# emoji work; inline markdown (**bold**, _italic_, [links](url),
+# `code`) does NOT render as formatting and will appear as literal
+# characters. See the JSDoc note on the description field in
+# src/lab-metadata.ts in PacketAnglers/sandbox-dashboard for the
+# full contract.
+#
+# v0.11.18 ADDITION: the optional `components:` map (added below
+# alongside `resources:`) renders as a SECOND badge row in the Lab
+# Overview, ABOVE the resources row. Same shields.io-style two-tone
+# Arista brand styling. Well-known keys (ceos/avd/clab) get canonical
+# labels (cEOS-lab/AVD/ContainerLab). Component versions reflect what
+# this specific image variant ships with — when the active devcontainer
+# pointer flips to a different AVD or ContainerLab variant, update
+# the values here to match.
+
+name: Welcome to the Sandbox!
+
+description: |
+  This sandbox environment is available to all Arista employees and ships with
+  ContainerLab, cEOS-lab, AVD, ardl (Arista's downloader), gnmic, and more!
+
+  Whether it's designing, testing, demoing, or just tinkering, this Sandbox is here
+  to help make labbing up solutions as seamless as possible.
+
+  Use the dashboard buttons below to build a topology, deploy it, save configs,
+  push your work to GitHub, onboard your lab to CVaaS, and more. All without
+  leaving the IDE.
+
+  Happy labbing! 🧪
+
+components:
+  ceos: 4.36.0.1F
+  avd: 6.1.0
+  clab: 0.75.0
+
+resources:
+  cpu: 16
+  memory: 64G
+  storage: 128G
+
+links:
+  - label: Getting Started
+    url: container:///opt/sandbox-original/README.md
+    icon: 📖
+  - label: Report an Issue
+    url: https://github.com/PacketAnglers/sandbox-dashboard/issues
+    icon: 🐛
