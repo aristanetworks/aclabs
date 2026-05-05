@@ -3,19 +3,8 @@ ARG FROM_IMAGE
 FROM ${FROM_IMAGE}
 
 ARG USERNAME
-ARG UID
-ARG GID
 
 USER root
-
-# Remap the in-image USERNAME account to the caller-supplied UID/GID so
-# bind-mounted workspace files end up owned correctly. The parent image
-# ships with the account at UID/GID 1000; we rewrite /etc/passwd and
-# /etc/group in place and re-chown the home directory.
-ENV OLD_GID="1000"
-RUN sed -i -e "s/\(${USERNAME}:[^:]*:\)[^:]*:[^:]*/\1${UID}:${GID}/" /etc/passwd; \
-    sed -i -e "s/\([^:]*:[^:]*:\)${OLD_GID}:/\1${GID}:/" /etc/group; \
-    chown -R $UID:$GID /home/$USERNAME
 
 # Bake the lab metadata file (lab.yml) into the container image.
 
