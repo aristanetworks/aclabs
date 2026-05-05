@@ -16,7 +16,20 @@ RUN chown -R ${USERNAME}:${USERNAME} /opt/lab-base-sandbox
 
 USER ${USERNAME}
 
-RUN code-server --install-extension PacketAnglers.sandbox-dashboard --force
+# Using to ensure the latest version of the extension is always installed.
+# Helpful to get around OpenVSX caching issues when iterating through multiple
+# versions while testing.
+RUN set -eu -o pipefail \
+  && LATEST_VSIX=$(curl -fsSL https://api.github.com/repos/PacketAnglers/sandbox-dashboard/releases/latest \
+       | grep '"browser_download_url".*\.vsix"' \
+       | head -n1 \
+       | cut -d'"' -f4) \
+  && [ -n "$LATEST_VSIX" ] || { echo "no vsix found in latest release" >&2; exit 1; } \
+  && curl -fsSL -o /tmp/sandbox-dashboard.vsix "$LATEST_VSIX" \
+  && code-server --install-extension /tmp/sandbox-dashboard.vsix --force \
+  && rm /tmp/sandbox-dashboard.vsix
+
+# RUN code-server --install-extension PacketAnglers.sandbox-dashboard --force
 
 USER root
 
