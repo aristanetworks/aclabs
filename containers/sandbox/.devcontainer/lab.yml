@@ -1,4 +1,4 @@
-# Sandbox lab metadata for sandbox-dashboard v0.10.0+.
+# Sandbox lab metadata for sandbox-dashboard
 #
 # Baked into the lab-base-sandbox container image and read by
 # sandbox-dashboard at extension activation. Rendered as the
@@ -18,15 +18,6 @@
 # characters. See the JSDoc note on the description field in
 # src/lab-metadata.ts in PacketAnglers/sandbox-dashboard for the
 # full contract.
-#
-# v0.11.18 ADDITION: the optional `components:` map (added below
-# alongside `resources:`) renders as a SECOND badge row in the Lab
-# Overview, ABOVE the resources row. Same shields.io-style two-tone
-# Arista brand styling. Well-known keys (ceos/avd/clab) get canonical
-# labels (cEOS-lab/AVD/ContainerLab). Component versions reflect what
-# this specific image variant ships with — when the active devcontainer
-# pointer flips to a different AVD or ContainerLab variant, update
-# the values here to match.
 
 name: Welcome to the Sandbox!
 
@@ -55,7 +46,7 @@ resources:
 
 links:
   - label: Getting Started
-    url: container:///opt/sandbox-original/README.md
+    url: container:///opt/lab-base-sandbox/getting-started.md
     icon: 📖
   - label: Report an Issue
     url: https://github.com/PacketAnglers/sandbox-dashboard/issues

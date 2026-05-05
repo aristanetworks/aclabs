@@ -9,6 +9,7 @@ USER root
 # Bake the lab metadata file (lab.yml) into the container image.
 
 COPY ./lab.yml /opt/lab-base-sandbox/lab.yml
+COPY ./getting-started.md /opt/lab-base-sandbox/getting-started.md
 RUN chown -R ${USERNAME}:${USERNAME} /opt/lab-base-sandbox
 
 # Install the sandbox-dashboard extension
