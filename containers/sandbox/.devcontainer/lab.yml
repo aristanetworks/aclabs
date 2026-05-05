@@ -53,12 +53,7 @@ links:
     icon: 🐛
 
 # Tarball used by the sandbox-dashboard's Reset Workspace action to
-# restore the pristine baseline. Must contain a top-level
-# `<lab>/labs/` subtree whose contents are extracted into the
-# workspace root (the dashboard strips the `<lab>/labs/` prefix on
-# extract). This URL is the production location served by aclabs
-# GitHub Pages, rebuilt automatically when labs/sandbox/ or
-# containers/sandbox/.devcontainer/ change on the main branch.
+# restore the pristine baseline.
 #
 # Forks can override this URL in their own copy of lab.yml to point
 # at a fork-specific Pages location during development.
