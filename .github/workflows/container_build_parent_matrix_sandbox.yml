@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         from_image:
-          - "ghcr.io/aristanetworks/aclabs/lab-base:python3.12-avd-v6.1.0-clab0.74.3-rev2.6.6-uid1000"
+          - "ghcr.io/aristanetworks/aclabs/lab-base:python3.12-avd-v6.1.0-clab0.74.3-rev2.6.6"
           - "ghcr.io/aristanetworks/aclabs/lab-base:python3.12-avd-v6.1.0-clab0.74.3-rev2.6.6-uid1009"
     with:
       container_name: sandbox
