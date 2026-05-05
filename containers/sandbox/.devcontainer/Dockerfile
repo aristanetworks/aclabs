@@ -16,7 +16,7 @@ RUN chown -R ${USERNAME}:${USERNAME} /opt/lab-base-sandbox
 
 USER ${USERNAME}
 
-# Using to ensure the latest version of the extension is always installed.
+# Ensure the latest version of the extension is always installed.
 # Helpful to get around OpenVSX caching issues when iterating through multiple
 # versions while testing.
 RUN set -eu \
