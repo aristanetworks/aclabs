@@ -16,7 +16,7 @@ RUN chown -R ${USERNAME}:${USERNAME} /opt/lab-base-sandbox
 
 USER ${USERNAME}
 
-RUN code-server --install-extension PacketAnglers.sandbox-dashboard --force
+RUN code-server --install-extension PacketAnglers.sandbox-dashboard@0.15.0 --force
 
 USER root
 
