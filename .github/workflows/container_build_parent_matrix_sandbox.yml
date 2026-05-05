@@ -29,6 +29,7 @@ jobs:
     with:
       container_name: sandbox
       from_image: ${{ matrix.from_image }}
+      user_id: ${{ matrix.user_id }}
       # 1.0.0:
       # - Initial release of sandbox container
       container_revision: "1.0.0"
