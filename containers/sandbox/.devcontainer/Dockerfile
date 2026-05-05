@@ -19,7 +19,7 @@ USER ${USERNAME}
 # Using to ensure the latest version of the extension is always installed.
 # Helpful to get around OpenVSX caching issues when iterating through multiple
 # versions while testing.
-RUN set -eu -o pipefail \
+RUN set -eu \
   && LATEST_VSIX=$(curl -fsSL https://api.github.com/repos/PacketAnglers/sandbox-dashboard/releases/latest \
        | grep '"browser_download_url".*\.vsix"' \
        | head -n1 \
