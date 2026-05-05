@@ -17,12 +17,6 @@ RUN sed -i -e "s/\(${USERNAME}:[^:]*:\)[^:]*:[^:]*/\1${UID}:${GID}/" /etc/passwd
     sed -i -e "s/\([^:]*:[^:]*:\)${OLD_GID}:/\1${GID}:/" /etc/group; \
     chown -R $UID:$GID /home/$USERNAME
 
-# Maintain files from labs/sandbox in the container so that they
-# can be used for `reset` operations.
-
-COPY ./sandbox-original/ /opt/sandbox-original/
-RUN chown -R ${USERNAME}:${USERNAME} /opt/sandbox-original
-
 # Bake the lab metadata file (lab.yml) into the container image.
 
 COPY ./lab.yml /opt/lab-base-sandbox/lab.yml
