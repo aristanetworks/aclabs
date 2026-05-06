@@ -20,8 +20,10 @@ password `admin`.
 
 ## 🚨 Closed the dashboard? Here's how to bring it back
 
-This happens — it's a normal VS Code tab and easy to close by accident. Two
-ways to reopen it:
+The dashboard tab is **pinned by default** to make it harder to close by
+accident — pinned tabs ignore middle-click and survive *Close All*. If
+you do close it deliberately (or right-click → Unpin and then close it),
+two ways to reopen:
 
 **Option 1: Status bar (easiest).** Look at the bottom-left corner of this
 window for a button labeled **🧪 Sandbox Dashboard**. Click it. Done.
@@ -46,15 +48,16 @@ Opens the ContainerLab Topology Designer. Drag nodes onto a canvas, wire them
 up, save the result as a topology file. Best for greenfield labs where you
 don't have a starting point.
 
-### 📥 Import Workspace (tar)
+### 📥 Import Lab (tar)
 
-> *"I have a tarball of a workspace and I want to bring it into this sandbox."*
+> *"I have a tarball of a lab and I want to bring it into this sandbox."*
 
-Two options when you click: pick a tarball **from your local machine** (a
-file picker opens in your browser), or pick one **already in this sandbox**
-(e.g., something you created via `tar` in the terminal). The tarball replaces
-your current workspace contents, so existing files in the workspace will be
-permanently deleted.
+A file picker opens in your browser so you can pick a `.tar`, `.tar.xz`, or
+`.tar.gz` from your local machine. The dashboard streams the file into the
+sandbox in 4 MB chunks with a real progress bar, bitrate, and ETA — even
+multi-hundred-MB tarballs upload reliably. The lab replaces your current
+workspace contents, so existing files in the workspace will be permanently
+deleted.
 
 ### 🐙 Clone from GitHub
 
@@ -133,13 +136,16 @@ Shuts down all the running ContainerLab nodes. Files in your workspace are
 left untouched — only the running containers are destroyed. Use this when
 you're done testing or before making large topology changes.
 
-### 💾 Save Configs
+### 💾 Snapshot Lab
 
 > *"Capture the running configs from my nodes back into the workspace."*
 
 Reaches into the running nodes, grabs their current configs, and writes
-them into your workspace. Use this after you've made changes via SSH that
-you want to preserve as part of the lab.
+them into your workspace under `startup-configs/`. Use this after you've
+made changes via SSH that you want to preserve as part of the lab. Snapshot
+Lab is also the on-ramp into the **Snapshot & Resume** workflow described
+below — it'll offer to wire your topology to auto-resume from the snapshot
+on next deploy.
 
 ### 🔄 Reset Sandbox Workspace
 
@@ -149,13 +155,41 @@ Wipes your workspace and restores the pristine baseline this lab shipped
 with. Useful if you're stuck or just want to start over. **This is
 destructive** — you'll get a confirmation prompt before anything happens.
 
----
+## 💾 Snapshot & Resume — making your lab reproducible
 
-## 📤 When you're done
+The dashboard has a built-in workflow for capturing your lab's configs and
+making them survive a redeploy. Without this wiring, ContainerLab brings
+nodes up from scratch every time you run **Start** — which means anything
+you configured via SSH gets wiped on the next deploy.
+
+The workflow is two buttons and a one-time confirmation:
+
+1. **Snapshot Lab** captures the running configs from each node into
+   `startup-configs/` in your workspace, organized by lab name and node
+   name (e.g., `startup-configs/<lab-name>/SPINE1/startup-config`).
+2. After the snapshot, the dashboard offers to **wire your topology** to
+   auto-resume from those snapshots on next deploy. You'll see a
+   plain-language modal explaining exactly what will change (e.g.,
+   *"This updates 4 cEOS nodes in your topology file to always start from
+   `startup-configs/`"*). Existing values are preserved as YAML comments
+   so you can revert if you need to. Your `.gitignore` is also updated
+   so the snapshots travel with your lab repo.
+3. **Stop** and **Start** again — your nodes come back up with the
+   configs you snapshotted.
+
+If your topology is already wired this way, the dashboard recognizes that
+and skips the modal. If you don't want to wire your topology automatically,
+you can decline the offer and edit the YAML yourself — the dashboard never
+modifies your topology without explicit confirmation.
+
+This pairs especially well with **Push to GitHub**: snapshot, wire,
+commit, push, and your lab is reproducible by anyone who clones it.
+
+---
 
 The **Destinations** row is for getting your work out of the sandbox:
 
-### 📦 Export Workspace (tar)
+### 📦 Export Lab (tar)
 
 > *"Bundle up everything in my workspace as a tarball."*
 
@@ -166,12 +200,18 @@ panel) and choose **Download**.
 
 ### 🚀 Push to GitHub
 
-> *"Publish my workspace to a GitHub repo."*
+> *"Publish my work to a GitHub repo."*
 
-Walks you through publishing your workspace to GitHub. If you cloned a repo
-in "Track" mode, this pushes back to that repo. Otherwise, it'll prompt you
-to create a new repo under your account (or choose an existing one to push
-into).
+For new repos: the dashboard creates them as **private only** on your
+GitHub account. You'll see a verification modal listing what to double-
+check before publishing (no customer information, tokens, production
+configs, etc.) — clicking *I have verified — push as private* is your
+explicit acknowledgment. You'll then type a name, and the dashboard
+handles the rest.
+
+For existing remotes (e.g., a repo you tracked via Clone from GitHub):
+this just pushes back to the source. First-time auth uses VS Code's
+built-in GitHub sign-in — no token typing required.
 
 ---
 
@@ -188,20 +228,26 @@ Reserves a CVaaS tenant for use with this lab. Useful when you want to
 exercise CVaaS workflows (provisioning, monitoring, change control) but
 don't have a permanent tenant.
 
-### 🔽 Download cEOS Image
+### 🔽 Import cEOS Image
 
-> *"Download a specific cEOS-lab image into this sandbox."*
+> *"Get a cEOS-lab image into this sandbox so my topology can use it."*
 
-Fetches a cEOS container image from arista.com (you'll be prompted for your
-arista.com token on first use — it's saved securely after that). Useful when
-your lab needs a specific version that isn't already in Docker's image cache.
+A QuickPick offers two paths — pick the one that matches what you have:
 
-Before the download starts you'll see a confirmation modal showing the exact
-image tag (e.g., `arista/ceos:4.35.4M`) and a reminder that you'll need to
-update your `topology.clab.yml` to reference that tag once the download
-completes. The modal includes a **Copy Image Tag** button so you can paste
-straight into your topology file. If the image is already cached, the
-dashboard tells you up front and offers a Force Re-download escape hatch.
+- **Download from arista.com.** Pulls a versioned cEOS-lab release directly
+  into Docker. You'll be prompted for your arista.com token on first use
+  (saved securely after that), then for the version you want (e.g.,
+  `4.35.4M`). If the image is already cached locally, the dashboard tells
+  you up front and offers a Force Re-download escape hatch.
+- **Upload from local machine.** A file picker opens for you to choose a
+  `.tar` or `.tar.xz` cEOS-lab image you've already downloaded — useful for
+  custom builds, archived versions, or images supplied by your team. After
+  the upload, you'll type a tag (e.g., `4.35.4M`); the dashboard prefixes
+  it with `arista/ceos:` and imports it into Docker. The uploaded file is
+  cleaned up automatically after the import succeeds.
+
+Either path leaves you with a cEOS image tagged like `arista/ceos:<your-tag>`,
+ready to reference in your `topology.clab.yml` as `image: arista/ceos:<your-tag>`.
 
 ### 📡 Onboard to CVaaS
 
