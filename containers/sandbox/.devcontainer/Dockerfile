@@ -13,7 +13,7 @@ COPY ./lab.yml /opt/sandbox/lab.yml
 COPY ./getting-started.md /opt/sandbox/getting-started.md
 RUN chown -R ${USERNAME}:${USERNAME} /opt/sandbox
 
-# Back User-level code-server settings into the container image.
+# Bake User-level code-server settings into the container image.
 
 COPY ./settings.json /home/${USERNAME}/.local/share/code-server/User
 RUN chown ${USERNAME} /home/${USERNAME}/.local/share/code-server/User/settings.json
