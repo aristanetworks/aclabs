@@ -46,7 +46,7 @@ resources:
 
 links:
   - label: Getting Started
-    url: container:///opt/lab-base-sandbox/getting-started.md
+    url: container:///opt/sandbox/getting-started.md
     icon: 📖
   - label: Report an Issue
     url: https://github.com/PacketAnglers/sandbox-dashboard/issues
