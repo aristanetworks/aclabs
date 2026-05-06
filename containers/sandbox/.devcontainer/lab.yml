@@ -49,7 +49,7 @@ links:
     url: container:///opt/sandbox/getting-started.md
     icon: 📖
   - label: Report an Issue
-    url: mailto:tech-library-maintainers@arista.com?subject=Sandbox Dashboard Issue
+    url: https://mail.google.com/mail/?view=cm&fs=1&to=support@example.com&su=Issue%20Report&body=Describe%20the%20issue%20here
     icon: 🐛
 
 # Tarball used by the sandbox-dashboard's Reset Workspace action to
