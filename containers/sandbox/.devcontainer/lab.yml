@@ -1,6 +1,6 @@
 # Sandbox lab metadata for sandbox-dashboard
 #
-# Baked into the lab-base-sandbox container image and read by
+# Baked into the sandbox container image and read by
 # sandbox-dashboard at extension activation. Rendered as the
 # Lab Overview card at the top of the dashboard.
 #
@@ -49,7 +49,7 @@ links:
     url: container:///opt/sandbox/getting-started.md
     icon: 📖
   - label: Report an Issue
-    url: https://github.com/PacketAnglers/sandbox-dashboard/issues
+    url: mailto:tech-library-maintainers@arista.com?subject=Sandbox Dashboard Issue
     icon: 🐛
 
 # Tarball used by the sandbox-dashboard's Reset Workspace action to
