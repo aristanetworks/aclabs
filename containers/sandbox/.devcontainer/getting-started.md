@@ -132,9 +132,18 @@ command line.
 
 > *"Tear down the running lab."*
 
-Shuts down all the running ContainerLab nodes. Files in your workspace are
-left untouched — only the running containers are destroyed. Use this when
-you're done testing or before making large topology changes.
+When you click Stop, the dashboard asks how you want to leave the lab:
+
+- **Save and Stop** captures the running configs first (same effect as
+  running Snapshot Lab and letting it wire your topology), then tears
+  down the nodes. The next time you Start, your nodes come back up with
+  exactly the state they had when you stopped. Use this when you're
+  pausing work and want to pick up where you left off.
+- **Stop without Saving** skips the snapshot and just tears down the
+  running containers. Files in your workspace are left untouched — only
+  the running containers are destroyed. Use this when you're done testing
+  or you don't care about preserving the running config (e.g., before
+  making large topology changes that would invalidate it anyway).
 
 ### 💾 Snapshot Lab
 
@@ -162,20 +171,32 @@ making them survive a redeploy. Without this wiring, ContainerLab brings
 nodes up from scratch every time you run **Start** — which means anything
 you configured via SSH gets wiped on the next deploy.
 
-The workflow is two buttons and a one-time confirmation:
+There are **two paths into the same end-state**, depending on whether you
+want to keep the lab running while you snapshot:
 
-1. **Snapshot Lab** captures the running configs from each node into
-   `startup-configs/` in your workspace, organized by lab name and node
-   name (e.g., `startup-configs/<lab-name>/SPINE1/startup-config`).
-2. After the snapshot, the dashboard offers to **wire your topology** to
-   auto-resume from those snapshots on next deploy. You'll see a
-   plain-language modal explaining exactly what will change (e.g.,
-   *"This updates 4 cEOS nodes in your topology file to always start from
-   `startup-configs/`"*). Existing values are preserved as YAML comments
-   so you can revert if you need to. Your `.gitignore` is also updated
-   so the snapshots travel with your lab repo.
-3. **Stop** and **Start** again — your nodes come back up with the
-   configs you snapshotted.
+- **Snapshot Lab** captures configs while the lab keeps running — best
+  for "I just made some great changes and want to bank them without
+  pausing my work."
+- **Save and Stop** captures configs as part of tearing the lab down —
+  best for "I'm pausing work and want to pick up exactly where I left
+  off next time."
+
+Either path produces the same result:
+
+1. The running configs from each node are captured into
+   `startup-configs/` next to your topology file, organized by lab name
+   and node name (e.g., `startup-configs/<lab-name>/SPINE1/startup-config`).
+2. The dashboard offers to **wire your topology** to auto-resume from
+   those snapshots on next deploy. You'll see a plain-language modal
+   explaining exactly what will change (e.g., *"This updates 4 cEOS
+   nodes in your topology file to always start from `startup-configs/`"*).
+   Existing values are preserved as YAML comments so you can revert if
+   you need to. Your `.gitignore` is also updated so the snapshots
+   travel with your lab repo.
+3. Next time you **Start** the lab, your nodes come back up with the
+   configs you snapshotted. (For Save and Stop, "next time" is the
+   next Start; for Snapshot Lab, the lab is already running so the
+   wiring takes effect on the *next* Stop/Start cycle.)
 
 If your topology is already wired this way, the dashboard recognizes that
 and skips the modal. If you don't want to wire your topology automatically,
