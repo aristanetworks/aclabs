@@ -316,6 +316,5 @@ You'll get a confirmation prompt before any existing version is replaced.
   Command Palette (`Ctrl/Cmd+Shift+P`).
 - **Found a bug or have feedback?** Use the **🐞 Report an Issue** link in
   the dashboard's Welcome card.
-- **Want a refresher?** Watch the [UCN Sandbox Lab overview video](https://youtu.be/_YxHMcES0o4).
 
 Happy labbing! 🥳🧪
