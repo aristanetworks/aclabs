@@ -1,0 +1,23 @@
+---
+name: sandbox
+prefix: ""
+
+mgmt:
+  network: custom_mgmt
+  ipv4-subnet: 172.100.100.0/24
+
+topology:
+
+  defaults:
+    kind: arista_ceos
+
+  kinds:
+    arista_ceos:
+      image: arista/ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
+    linux:
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
+  nodes: {}
+  links: []

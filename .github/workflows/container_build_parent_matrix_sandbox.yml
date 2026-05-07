@@ -1,0 +1,34 @@
+---
+name: build sandbox image
+
+on:
+  push:
+    branches: ['**']  # branches will be filtered in the jobs
+    paths:
+      - .github/workflows/container_build_child.yml
+      - .github/workflows/container_build_parent_matrix_sandbox.yml
+      - containers/sandbox/**
+  workflow_dispatch:
+    branches: ['**']  # branches will be filtered in the jobs
+
+permissions:
+  packages: write
+
+jobs:
+  build-lab-containers:
+    # fork - build container from any branch for testing
+    # parent repo - build on main branch only
+    if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/container_build_child.yml
+    strategy:
+      matrix:
+        from_image: ["ghcr.io/aristanetworks/aclabs/lab-base:python3.12-avd-v6.1.0-clab0.74.3-rev2.6.6-uid1009"]
+        user_id: ["1009"]
+
+    with:
+      container_name: sandbox
+      from_image: ${{ matrix.from_image }}
+      user_id: ${{ matrix.user_id }}
+      # 1.0.0:
+      # - Initial release of sandbox container
+      container_revision: "1.0.0"

@@ -107,6 +107,7 @@ $RECYCLE.BIN/
 clab-*
 *.bak
 !clab/init-configs/clab-*/
+!startup-configs/*
 
 # ignore cv onboarding token
 clab/cv-onboarding-token

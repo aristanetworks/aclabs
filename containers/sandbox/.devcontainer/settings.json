@@ -1,6 +1,7 @@
 {
     "containerlab": {
         "showWelcomePage": false,
+        "lockLabByDefault": false,
         "skipUpdateCheck": true,
         "defaultSshUser": "admin",
         "editor": {
@@ -27,7 +28,7 @@
             },
             {
                 "name": "Arista cEOS Latest",
-                "kind": "ceos",
+                "kind": "arista_ceos",
                 "type": "",
                 "image": "arista/ceos:latest",
                 "icon": "switch",
@@ -43,12 +44,12 @@
             "node": {
                 "sshUserMapping": {
                     "ceos": "admin"
-                },
-            },
-        },
+                }
+            }
+        }
     },
     "workbench": {
-        "startupEditor": "readme",
+        "startupEditor": "none",
         "colorTheme": "Default Light Modern",
         "editorAssociations": {
                     "*.md": "vscode.markdown.preview.editor"
@@ -59,5 +60,9 @@
     "chat.agent.enabled": false,
     "chat.disableAIFeatures": true,
     "terminal.integrated.suggest.enabled": true,
-    "terminal.integrated.defaultLocation": "editor"
+    "terminal.integrated.defaultLocation": "editor",
+    "workbench.startupEditor": "none",
+    "task.allowAutomaticTasks": "on",
+    "redhat.telemetry.enabled": false,
+    "telemetry.telemetryLevel": "off"
 }
