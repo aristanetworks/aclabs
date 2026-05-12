@@ -48,16 +48,20 @@ Opens the ContainerLab Topology Designer. Drag nodes onto a canvas, wire them
 up, save the result as a topology file. Best for greenfield labs where you
 don't have a starting point.
 
-### 📥 Import Lab (tar)
+### 📥 Import Lab
 
-> *"I have a tarball of a lab and I want to bring it into this sandbox."*
+> *"I have a lab archive and I want to bring it into this sandbox."*
 
-A file picker opens in your browser so you can pick a `.tar`, `.tar.xz`, or
-`.tar.gz` from your local machine. The dashboard streams the file into the
-sandbox in 4 MB chunks with a real progress bar, bitrate, and ETA — even
-multi-hundred-MB tarballs upload reliably. The lab replaces your current
-workspace contents, so existing files in the workspace will be permanently
-deleted.
+A file picker opens in your browser so you can pick a `.tar`, `.tar.gz`,
+`.tar.bz2`, or `.tar.xz` archive from your local machine. The dashboard
+streams the file into the sandbox in 4 MB chunks with a real progress bar,
+bitrate, and ETA — even multi-hundred-MB archives upload reliably.
+
+The lab replaces your current workspace contents, so existing files will be
+permanently deleted. If a lab is currently running, the dashboard will
+destroy it (`containerlab destroy --cleanup`, no save) before wiping the
+workspace — the destructive-confirmation modal will tell you exactly what's
+about to happen so there are no surprises.
 
 ### 🐙 Clone from GitHub
 
@@ -75,16 +79,27 @@ the repo:
   this when you want the bones of someone's repo but plan to make it your
   own thing.
 
-Like Import, this replaces your current workspace contents.
+Like Import, this replaces your current workspace contents — and if a lab
+is currently running, it will be destroyed (`containerlab destroy --cleanup`,
+no save) before the wipe. The destructive-confirmation modal will disclose
+both the files to be removed AND any running labs to be destroyed.
 
 ### 📚 Borrow from Tech Library
 
 > *"Show me the curated starter labs and let me grab one."*
 
-Shows a list of labs from the Arista Tech Library. Pick one and it lands in
-your workspace as a fresh git repo on `main` — ready to be edited and
-published as your own. Best for "I want a known-good starting point but
-I'm not sure what shape my topology needs yet."
+Shows a list of labs from the Arista Tech Library. Pick one and it lands
+in your workspace, ready to be edited. Best for "I want a known-good
+starting point but I'm not sure what shape my topology needs yet."
+
+The borrow happens without initializing a git repo, so your sidebar stays
+quiet (no untracked-file noise) unless you explicitly opt into source
+control. When you're ready to publish your changes, **Push to GitHub** will
+initialize the git repo and create a fresh remote for you.
+
+Like Import and Clone, Borrow replaces your current workspace contents —
+and if a lab is currently running, it will be destroyed
+(`containerlab destroy --cleanup`, no save) before the wipe.
 
 ---
 
@@ -210,9 +225,9 @@ commit, push, and your lab is reproducible by anyone who clones it.
 
 The **Destinations** row is for getting your work out of the sandbox:
 
-### 📦 Export Lab (tar)
+### 📦 Export Lab
 
-> *"Bundle up everything in my workspace as a tarball."*
+> *"Bundle up everything in my workspace as a lab archive."*
 
 Creates a `.tar.gz` of your workspace at `/sandbox/<name>-<timestamp>.tar.gz`.
 After it completes, the dashboard will tell you how to download the file to
@@ -261,11 +276,11 @@ A QuickPick offers two paths — pick the one that matches what you have:
   `4.35.4M`). If the image is already cached locally, the dashboard tells
   you up front and offers a Force Re-download escape hatch.
 - **Upload from local machine.** A file picker opens for you to choose a
-  `.tar` or `.tar.xz` cEOS-lab image you've already downloaded — useful for
-  custom builds, archived versions, or images supplied by your team. After
-  the upload, you'll type a tag (e.g., `4.35.4M`); the dashboard prefixes
-  it with `arista/ceos:` and imports it into Docker. The uploaded file is
-  cleaned up automatically after the import succeeds.
+  `.tar`, `.tar.gz`, or `.tar.xz` cEOS-lab image you've already downloaded —
+  useful for custom builds, archived versions, or images supplied by your
+  team. After the upload, you'll type a tag (e.g., `4.35.4M`); the dashboard
+  prefixes it with `arista/ceos:` and imports it into Docker. The uploaded
+  file is cleaned up automatically after the import succeeds.
 
 Either path leaves you with a cEOS image tagged like `arista/ceos:<your-tag>`,
 ready to reference in your `topology.clab.yml` as `image: arista/ceos:<your-tag>`.
@@ -300,7 +315,7 @@ You'll get a confirmation prompt before any existing version is replaced.
   disabled if no lab is running). If something looks grayed out, hover for
   a tooltip explaining why.
 - **Most actions are reversible.** Cloned the wrong repo? Click Reset and
-  start over. Imported the wrong tarball? Reset. The dashboard is designed
+  start over. Imported the wrong lab archive? Reset. The dashboard is designed
   to encourage experimentation.
 - **The ContainerLab VS Code Extension** is also pre-installed and gives
   you richer interaction with running labs (look for the ContainerLab icon
