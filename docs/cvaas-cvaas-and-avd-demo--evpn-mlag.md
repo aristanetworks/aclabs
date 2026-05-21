@@ -22,7 +22,7 @@ Arista Community Lab runs in a cloud-based lab environment sponsored by Arista [
 
 [Start the lab :octicons-play-16:](https://labs.arista.com/launch?lab_type=cvaas-cvaas-and-avd-demo--evpn-mlag&origin=tech-lib){ .md-button .md-button--primary target=_blank}
 
-All lab files are also available for [download](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/lab_archives/cvaas-cvaas-and-avd-demo--evpn-mlag.tar.gz) if you want to run the lab on your own machine. This option is intended for experienced users who can manage the environment without extra support.
+All lab files are also available for [download](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/lab_archives/cvaas-cvaas-and-avd-demo--evpn-mlag.tar.gz) if you want to run the lab on your own machine :material-information-outline:{ title="When deploying on ARM host - use cEOS-lab ARM image!" }. This option is intended for experienced users who can manage the environment without extra support.
 
 ## Lab Inventory
 
