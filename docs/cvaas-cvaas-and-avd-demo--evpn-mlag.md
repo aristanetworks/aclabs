@@ -1,14 +1,12 @@
 # CVaaS and AVD Demo, EVPN MLAG
 
-!!! Info "Lab Resource Requirements"
+!!! Info "Lab Details"
 
     :fontawesome-solid-tag: **AVD Version:** 6.1.0  
-    :fontawesome-solid-microchip: CPUs: 16  
-    :fontawesome-solid-gears:  Arch: x86 :material-information-outline:{ title="Works well on ARM if you download the lab to your own machine. Use cEOS-lab ARM image in this case!" }  
-    :fontawesome-solid-memory: Memory: 64 GB  
-    :fontawesome-solid-hard-drive: Storage: 64 GB  
+    :fontawesome-solid-network-wired: **cEOS-lab:** 4.34.2F  
+    :fontawesome-solid-flask: **Containerlab:** 0.74.3  
 
-    :material-alert-circle-outline:{ .heartbeat } Please request high spec Codespace machines from [Github support](https://support.github.com/) first!
+    ![lab topology](assets/topos/small-l3ls-mlag.png)
 
 [Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/slides/cvaas-cvaas-and-avd-demo--evpn-mlag.html){ target=_blank }  
 [PDF Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/pdfs/cvaas-cvaas-and-avd-demo--evpn-mlag.pdf){ target=_blank }
@@ -20,13 +18,11 @@
 
 ## How To Run The Lab
 
-Arista Community Lab is relying on Cloud-based lab environment sponsored by Arista [^1]. To get started, simply sign in at [labs.arista.com](https://labs.arista.com/) and click the button below to launch the lab.
+Arista Community Lab runs in a cloud-based lab environment sponsored by Arista [^1]. To get started, sign in at [labs.arista.com](https://labs.arista.com/) and click the button below to launch the lab.
 
 [Start the lab :octicons-play-16:](https://labs.arista.com/launch?lab_type=cvaas-cvaas-and-avd-demo--evpn-mlag&origin=tech-lib){ .md-button .md-button--primary target=_blank}
 
-All lab files are also availble for [download](https://{{gh.org_name}}.github.io/aclabs/lab_archives/cvaas-cvaas-and-avd-demo--evpn-mlag.tar.gz) if you want to run the lab on your own machine. This option is for skilled users only that can manage the environment without extra support.
-
-To run the lab on your own machine, you can download all required files using the button below.
+All lab files are also available for [download](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/lab_archives/cvaas-cvaas-and-avd-demo--evpn-mlag.tar.gz) if you want to run the lab on your own machine. This option is intended for experienced users who can manage the environment without extra support.
 
 ## Lab Inventory
 
@@ -49,28 +45,23 @@ This lab has following devices:
 
 !!! Info "Last reviewed: 21/05/2026"
 
-    Demos and labs reviewed over 6 month age may be outdated.
-
-# Lab Topology
-
-![lab topology](assets/topos/small-l3ls-mlag.png)
+    Demos and labs reviewed more than 6 months ago may be outdated.
 
 # How To Use The Lab
 
-???+ Tip "Wait until all devices will start streaming to CVaaS."
+???+ Tip "Use the eAPI workflow by default."
 
-    This may take a while.
+    `make deploy` works out of the box in the hosted lab.
+    Use `make deploy_cvp` only after manually onboarding the switches and exporting `CVURL` and `CV_API_TOKEN`.
 
 ```bash
 # 1. build configs with AVD
 make build
-# 2. create CVP change control (1)
-make deploy_cvp
+# 2. deploy configs directly to the lab switches with eAPI
+make deploy
 # 3. validate the deployment with ANTA
 make test
 ```
-
-1. !!! Tip "Review and execute the change control on CVP when all tasks will be created. If you don't have CVaaS available and prefer to deploy the configuration via eAPI, you can use `make deploy` shortcut instead."
 
 Connect to a host (h01 or h02) and execute `test` alias to confirm connectivity.  
 Execute following commands to verify EVPN control plane:
@@ -85,4 +76,4 @@ show bgp evpn route-type mac-ip
 Do any other testing in the lab.  
 You rock! 🚀
 
-[^1]: We removed support for GitHub Codespaces that we used to have in the past due to number of restrictions. Use labs.arista, that is available to any user registered on arista.com!
+[^1]: GitHub Codespaces support was removed due to platform restrictions. Use labs.arista.com instead; it is available to all users with an arista.com account.

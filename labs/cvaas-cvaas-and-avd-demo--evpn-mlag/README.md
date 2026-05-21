@@ -3,23 +3,12 @@
 > [!WARNING]
 > This lab is in preview. It's fully functional, but breaking changes can happen.
 > We are working hard on building the best lab collection and your feedback is always  appreciated.
+>
+> Automated CloudVision onboarding is temporarily unavailable in the hosted lab environment.
+> Use `make build`, `make deploy`, and `make test` for the default workflow.
+> Only use `make deploy_cvp` after manually onboarding the switches to CVaaS and exporting `CVURL` and `CV_API_TOKEN`.
 
-> [!IMPORTANT]
-> The average deployment time for this lab is five minutes.
-> Issue the `make inspect` command at the terminal to check on the deployment status of the lab.
-> Please wait until all nodes are in a `running` state prior to interacting with the lab.
-
-This lab is tested for:  
-
-  AVD version: 6.1.0  
-  cEOS-lab version: 4.34.2F  
-  Containerlab Version: 0.74.3  
-  Codespace Container Size  
-    CPUs: 16  
-    memory: 64 GB  
-    storage: 64 GB  
-
-Last reviewed: 20/04/2026
+Last reviewed: 21/05/2026
 
 > Lab Credentials  
 &nbsp;&nbsp;&nbsp;&nbsp;Username: arista  
