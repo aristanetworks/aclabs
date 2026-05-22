@@ -46,6 +46,14 @@ RUN apt-get update \
     # && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
     # && apt-get clean
 
+# Install Python packages needed in the lab environment. Pinned versions
+# live in requirements.txt — bumping a version there is a deliberate act
+# paired with bumping the image rev tag in
+# .github/workflows/container_build_host_ubuntu.yml.
+COPY ./requirements.txt /tmp/requirements.txt
+RUN pip3 install --break-system-packages --no-cache-dir -r /tmp/requirements.txt \
+    && rm /tmp/requirements.txt
+
 COPY ./entrypoint.sh /bin/entrypoint.sh
 RUN chmod +x /bin/entrypoint.sh
 COPY ./pingcheck.sh /bin/pingcheck.sh
