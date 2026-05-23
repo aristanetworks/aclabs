@@ -1,0 +1,8 @@
+# Python packages installed system-wide in the host-ubuntu lab container.
+# Pinned to exact versions so each container rev installs a deterministic
+# set of tools — bumping a version here is a deliberate act paired with
+# an image rev bump in container_build_host_ubuntu.yml.
+
+# Multicast send/receive/status CLIs for lab traffic generation and
+# inspection. https://github.com/mitchv85/mcast-tools
+mcast-tools==0.1.0
