@@ -57,49 +57,79 @@ A file picker opens in your browser so you can pick a `.tar`, `.tar.gz`,
 streams the file into the sandbox in 4 MB chunks with a real progress bar,
 bitrate, and ETA — even multi-hundred-MB archives upload reliably.
 
-The lab replaces your current workspace contents, so existing files will be
-permanently deleted. If a lab is currently running, the dashboard will
-destroy it (`containerlab destroy --cleanup`, no save) before wiping the
-workspace — the destructive-confirmation modal will tell you exactly what's
-about to happen so there are no surprises.
+After picking the archive, you'll be asked **where** to land it:
+
+- **Replace workspace** — wipes your current workspace contents (and
+  destroys any running lab via `containerlab destroy --cleanup`, no save)
+  before extracting the archive at the workspace root. Best for *"I want
+  this lab to BE my workspace."* The destructive-confirmation modal will
+  tell you exactly what's about to be wiped so there are no surprises.
+- **Import into subfolder** — keeps your existing workspace and any
+  running labs untouched. The archive is extracted into a new subdirectory
+  named after the archive (e.g., `my-cool-lab.tar.gz` → `./my-cool-lab/`).
+  Best for *"I want this lab alongside the other labs I'm working on"* —
+  the "one-repo-many-labs" workflow where each top-level directory in your
+  workspace is its own lab. Subfolder mode refuses if the target directory
+  already exists, so nothing gets silently overwritten.
 
 ### 🐙 Clone from GitHub
 
 > *"I want to work with an existing GitHub repo."*
 
 Enter the repo URL (public or private — you'll be prompted to authenticate
-for private repos). After the URL, you'll be asked **how** you want to use
-the repo:
+for private repos). After the URL, you'll be asked **where** to land the
+cloned content:
 
-- **Track this repo** — keep the existing git history and remote. Push to
-  GitHub will push back to the source repo (if you have access). Use this
-  when you genuinely want to contribute back.
-- **Use as a starting template** — strip the git history and start fresh as
-  your own. Push to GitHub will publish to a new repo of your choice. Use
-  this when you want the bones of someone's repo but plan to make it your
-  own thing.
+- **Replace workspace** — wipes your current workspace contents (and
+  destroys any running lab via `containerlab destroy --cleanup`, no save)
+  before cloning the repo at the workspace root. You'll then be asked
+  **how** you want to use the repo:
+  - **Track this repo** — keep the existing git history and remote. Push
+    to GitHub will push back to the source repo (if you have access). Use
+    this when you genuinely want to contribute back.
+  - **Use as a starting template** — strip the git history and start fresh
+    as your own. Push to GitHub will publish to a new repo of your choice.
+    Use this when you want the bones of someone's repo but plan to make it
+    your own thing.
 
-Like Import, this replaces your current workspace contents — and if a lab
-is currently running, it will be destroyed (`containerlab destroy --cleanup`,
-no save) before the wipe. The destructive-confirmation modal will disclose
-both the files to be removed AND any running labs to be destroyed.
+  The destructive-confirmation modal will disclose both the files to be
+  removed AND any running labs to be destroyed.
+
+- **Import into subfolder — no git history** — keeps your existing
+  workspace and any running labs untouched. The repo is cloned into a new
+  subdirectory named after the repo (e.g., `https://github.com/foo/evpn-gw-demo.git`
+  → `./evpn-gw-demo/`), and the `.git` directory is **removed** so you get
+  the lab files without the upstream tracking. Best for the
+  "one-repo-many-labs" workflow where each top-level directory in your
+  workspace is its own lab. Subfolder mode refuses if the target directory
+  already exists.
+
+  ⚠️ **Note:** Because subfolder mode strips the `.git` directory, you
+  can't pull updates from the source or push changes back to it. If you
+  want either of those, pick **Replace workspace** instead.
 
 ### 📚 Borrow from Tech Library
 
 > *"Show me the curated starter labs and let me grab one."*
 
-Shows a list of labs from the Arista Tech Library. Pick one and it lands
-in your workspace, ready to be edited. Best for "I want a known-good
-starting point but I'm not sure what shape my topology needs yet."
+Shows a list of labs from the Arista Tech Library — best for *"I want a
+known-good starting point but I'm not sure what shape my topology needs
+yet."* Pick one and you'll be asked **where** to land it:
 
-The borrow happens without initializing a git repo, so your sidebar stays
-quiet (no untracked-file noise) unless you explicitly opt into source
-control. When you're ready to publish your changes, **Push to GitHub** will
-initialize the git repo and create a fresh remote for you.
-
-Like Import and Clone, Borrow replaces your current workspace contents —
-and if a lab is currently running, it will be destroyed
-(`containerlab destroy --cleanup`, no save) before the wipe.
+- **Replace workspace** — wipes your current workspace contents (and
+  destroys any running lab via `containerlab destroy --cleanup`, no save)
+  before extracting the borrowed lab at the workspace root. The borrow
+  happens without initializing a git repo, so your sidebar stays quiet
+  (no untracked-file noise) unless you explicitly opt into source control.
+  When you're ready to publish your changes, **Push to GitHub** will
+  initialize the git repo and create a fresh remote for you.
+- **Import into subfolder** — keeps your existing workspace and any
+  running labs untouched. The borrowed lab is extracted into a new
+  subdirectory named after the lab (e.g., `mlag-fabric` →
+  `./mlag-fabric/`). Best for the "one-repo-many-labs" workflow — borrow
+  multiple labs from the Tech Library into a single workspace, each in
+  its own top-level directory. Subfolder mode refuses if the target
+  directory already exists.
 
 ---
 
@@ -317,6 +347,10 @@ You'll get a confirmation prompt before any existing version is replaced.
 - **Most actions are reversible.** Cloned the wrong repo? Click Reset and
   start over. Imported the wrong lab archive? Reset. The dashboard is designed
   to encourage experimentation.
+- **Subfolder mode is non-destructive.** Borrow, Import, and Clone all
+  offer an "Import into subfolder" mode that leaves your workspace and
+  any running labs untouched. If you decide you don't want the subfolder
+  later, just delete it — no need to reset the whole workspace.
 - **The ContainerLab VS Code Extension** is also pre-installed and gives
   you richer interaction with running labs (look for the ContainerLab icon
   in the activity bar on the far left). The dashboard's Topology View
