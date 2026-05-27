@@ -225,6 +225,12 @@ When you click Stop, the dashboard asks how you want to leave the lab:
   or you don't care about preserving the running config (e.g., before
   making large topology changes that would invalidate it anyway).
 
+**After Stop:** if your workspace has multiple topology files (the
+one-repo-many-labs workflow), the next Start will prompt you to pick
+which lab to deploy — useful when your intent is to switch between
+labs rather than redeploy the same one. If your workspace has just
+one topology, the next Start uses it directly with no prompt.
+
 ### 💾 Snapshot Lab
 
 > *"Capture the running configs from my nodes back into the workspace."*
