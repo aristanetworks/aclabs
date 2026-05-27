@@ -145,6 +145,41 @@ is where you'll spend most of your time:
 Spins up the nodes defined in your `topology.clab.yml` file. ContainerLab
 does the heavy lifting; the dashboard just gives you a one-click trigger.
 
+#### 📛 About the `.clab.yml` naming convention
+
+Both ContainerLab and the sandbox-dashboard look for topology files
+matching `*.clab.yml` (or `*.clab.yaml`). The convention is what enables:
+
+- **The dashboard's topology discovery** — Start, Open Topology File,
+  Topology View, and Snapshot Lab all find your topology automatically
+  when it follows the convention.
+- **The ContainerLab VS Code extension** — its inline preview, hover
+  tips, and richer node interactions all key off the `.clab.yml`
+  extension. Files without it look like generic YAML to the extension.
+
+If your workspace has `.yml` files that look like topologies but don't
+follow the convention (e.g., `lab.yml`, `mytopology.yml`), the
+dashboard's Start picker will surface them as rename suggestions
+alongside any already-correctly-named files:
+
+> Pick a topology to deploy (or rename a misnamed file)
+> ▶ Use "techlib-mlag-fabric/clab/topology.clab.yml"
+> ✏️ Rename "evpn-gw-demo/evpn-gw.yml" → "evpn-gw.clab.yml" and use
+> 📂 Pick a file anyway
+> 🔕 Skip rename suggestions for this session
+
+The dashboard recognizes a file as a "topology in need of renaming" only
+when it parses cleanly and has a `topology.nodes:` key — random `.yml`
+files in your workspace (Ansible playbooks, AVD vars, CI configs) won't
+appear as rename suggestions, only actual topology files. Picking a
+rename action does the rename atomically and proceeds straight into
+deploy, so renaming costs you one click.
+
+You can always click **Pick a file anyway** if you want to deploy a
+file with a non-standard name; the dashboard will deploy it as-is. But
+some features (like the ContainerLab extension's preview) require the
+convention, so renaming is usually worth the click.
+
 ### 🗺️ Topology View
 
 > *"Show me the topology graphically so I can interact with it."*
@@ -189,6 +224,12 @@ When you click Stop, the dashboard asks how you want to leave the lab:
   the running containers are destroyed. Use this when you're done testing
   or you don't care about preserving the running config (e.g., before
   making large topology changes that would invalidate it anyway).
+
+**After Stop:** if your workspace has multiple topology files (the
+one-repo-many-labs workflow), the next Start will prompt you to pick
+which lab to deploy — useful when your intent is to switch between
+labs rather than redeploy the same one. If your workspace has just
+one topology, the next Start uses it directly with no prompt.
 
 ### 💾 Snapshot Lab
 
@@ -351,6 +392,11 @@ You'll get a confirmation prompt before any existing version is replaced.
   offer an "Import into subfolder" mode that leaves your workspace and
   any running labs untouched. If you decide you don't want the subfolder
   later, just delete it — no need to reset the whole workspace.
+- **Name your topology files `*.clab.yml`** to unlock dashboard
+  discovery and the ContainerLab VS Code extension's inline features.
+  If a file you cloned or borrowed doesn't follow the convention, the
+  Start picker will offer to rename it for you. See the Start section
+  above for more.
 - **The ContainerLab VS Code Extension** is also pre-installed and gives
   you richer interaction with running labs (look for the ContainerLab icon
   in the activity bar on the far left). The dashboard's Topology View

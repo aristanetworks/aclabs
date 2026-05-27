@@ -3,7 +3,7 @@ name: sandbox
 prefix: ""
 
 mgmt:
-  network: custom_mgmt
+  network: mgmt
   ipv4-subnet: 172.100.100.0/24
 
 topology:
