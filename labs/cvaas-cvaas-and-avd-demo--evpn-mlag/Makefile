@@ -28,7 +28,7 @@ deploy: ## Deploy AVD configs using eAPI
 	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_deploy.yml
 
 .PHONY: deploy_cvp
-deploy_cvp: ## Deploy AVD configs using eAPI
+deploy_cvp: ## Deploy AVD configs using CloudVision
 	cd $(CURRENT_DIR)/avd_inventory; ansible-playbook playbooks/avd_deploy_cvp.yml
 
 .PHONY: diff

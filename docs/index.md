@@ -1,5 +1,7 @@
 # Arista Community Labs
 
+![stay back](assets/img/aclabs-logo.jpg){ width="300" }
+
 ???+ info "🚧  Pardon our dust 🏗️"
     The Arista Community Labs repository is under active development with new labs, features, and functionality coming soon!
 
@@ -33,21 +35,35 @@ Arista Community Labs reduce the burden of this task, with each lab environment 
 
 </div>
 
-The lab environments are pre-packaged with tools such as Ansible, Python, and the Arista [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/), [CVP](https://galaxy.ansible.com/ui/repo/published/arista/cvp/), and [EOS](https://galaxy.ansible.com/ui/repo/published/arista/eos/) Ansible Galaxy collections.
+The lab environments are pre-packaged with tools such as Ansible, Python, and the Arista [AVD](https://galaxy.ansible.com/ui/repo/published/arista/avd/).
 
-Labs are created through the use of templates, [Github Actions](https://docs.github.com/en/actions), [Github Codespaces](https://github.com/features/codespaces), and [ContainerLab](https://containerlab.dev)[^2].'
+Building acLabs would be much harder without following amazing projects:
 
-Once started, labs will automatically download(1) the necessary cEOS-lab(2) and other container images necessary for the toplogy.
-{ .annotate }
+- [Development Containers](https://containers.dev/)
+- [Visual Studio Code](https://code.visualstudio.com/) and [Code Server](https://github.com/coder/code-server)
+- Github and [Github Actions](https://github.com/features/actions), [Pages](https://docs.github.com/en/pages) and [Packages](https://docs.github.com/en/packages)
+- [ContainerLab](https://containerlab.dev)[^2]
 
-1. Automatic download of cEOS-lab is accomplished via the [Arista EOS Downloader](https://pypi.org/project/eos-downloader/) utility.
-2. Downloading cEOS-lab requires an [Arista user token](https://www.arista.com/en/users/profile). See the [Quickstart Guide](./quickstart.md) for more information.
+## The cArL Project
+
+Arista Community Labs is part of a larger initiative called cArL (Containerized Arista Labs)
+
+cArL foundational blocks are:
+
+- [acLabs](https://aclabs.arista.com/) - portable [pre-build lab-base images](https://github.com/aristanetworks/aclabs/pkgs/container/aclabs%2Flab-base) and community lab collection
+- [labs.arista](https://labs.arista.com/) - authentication, deeplink API and cloud backend
+
+cArL foundation is further augmented by various content relying on it. For example:
+
+- [AVD Playground](https://avd.arista.com/stable/ansible_collections/arista/avd/examples/index.html#avd-playground)
+- [TechLibrary](https://tech-library.arista.com/) Labs
 
 ## How do I get started?
 
-The [Quickstart Guide](./quickstart.md) is available to help folks who are trying out the labs for the first time or just need a refresher.
-
-[Get Started :material-greater-than:](./quickstart.md){ .md-button .md-button--primary }
+- Register on [arista.com](https://www.arista.com/)
+- Go to any lab
+- Click the link to start the lab and you will be redirected to [labs.arista](https://labs.arista.com/)
+- Authenticate using you [arista.com](https://www.arista.com/) account and wait for the lab to be deployed
 
 [^1]: This site uses the [Pexels](https://www.pexels.com/) royalty-free image library. Thank you to all Pexels authors and contributors!
 [^2]: Containerlab is distributed under the [BSD-3 license](https://github.com/srl-labs/containerlab/blob/main/LICENSE).

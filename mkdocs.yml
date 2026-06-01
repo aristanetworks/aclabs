@@ -131,10 +131,10 @@ plugins:
 nav:
   - Home:
       - About acLabs: index.md
-      - Quickstart: quickstart.md
+      # - Quickstart: quickstart.md
       # - Codespaces Quickstart: codespaces-quickstart.md
       # - Credits: credits.md
-      - Tech Library Labs: tech-library-labs.md
+      # - Tech Library Labs: tech-library-labs.md
   - CVaaS:
       - CVaaS and AVD Demo, EVPN MLAG: cvaas-cvaas-and-avd-demo--evpn-mlag.md
   - ATD Labs:
