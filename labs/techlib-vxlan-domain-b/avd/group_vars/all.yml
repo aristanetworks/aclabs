@@ -20,9 +20,6 @@ custom_structured_configuration_arp:
   aging:
     timeout_default: 1500
 
-# Stop build if validation error is encountered
-avd_data_validation_mode: error
-
 # DNS Settings
 dns_settings:
   domain: aclabs.lab
