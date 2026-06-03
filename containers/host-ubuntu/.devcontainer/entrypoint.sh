@@ -23,7 +23,9 @@
 #   IPV4           IPv4 address with prefix length, e.g. 10.40.40.101/24
 #   IPV6           IPv6 address with prefix length
 #   GW             IPv4 default-gateway address (unicast)
-#   STATIC_ROUTE   IPv4 prefix routed via GW, e.g. 10.0.0.0/8
+#   STATIC_ROUTE   IPv4 prefix(es) routed via GW. One prefix, or several
+#                  separated by spaces and/or commas. e.g. 10.0.0.0/8
+#                  or "10.0.0.0/8 172.16.0.0/12" or "10.0.0.0/8,172.16.0.0/12"
 #
 #   IGMP_VERSION   force IGMP version on the uplink (1|2|3). Leave unset to
 #                  keep the kernel default.
@@ -211,12 +213,23 @@ fi
 # Unicast routes
 # ---------------------------------------------------------------------------
 if [[ -n "${GW}" && -n "${STATIC_ROUTE}" ]]; then
-  log "Adding unicast route ${STATIC_ROUTE} via ${GW} dev ${UPLINK}"
-  ip route replace "${STATIC_ROUTE}" via "${GW}" dev "${UPLINK}"
+  # STATIC_ROUTE may carry one prefix (the original, common case) or
+  # several, separated by spaces and/or commas — e.g.
+  #   STATIC_ROUTE: 10.0.0.0/8
+  #   STATIC_ROUTE: "10.0.0.0/8 172.16.0.0/12"
+  #   STATIC_ROUTE: "10.0.0.0/8,172.16.0.0/12"
+  # Commas are normalized to spaces, then word-splitting yields the list.
+  # A single prefix is just a one-element list, so existing topologies are
+  # unaffected. Each prefix is applied independently (no `set -e`, so a bad
+  # entry surfaces via `ip` and the remaining routes still apply).
+  for route in ${STATIC_ROUTE//,/ }; do
+    log "Adding unicast route ${route} via ${GW} dev ${UPLINK}"
+    ip route replace "${route}" via "${GW}" dev "${UPLINK}"
+  done
 elif [[ -n "${GW}" && -z "${STATIC_ROUTE}" ]]; then
-  log_warn "GW='${GW}' set but STATIC_ROUTE is empty — skipping unicast route"
+  log_warn "GW='${GW}' set but STATIC_ROUTE is empty — skipping unicast routes"
 elif [[ -z "${GW}" && -n "${STATIC_ROUTE}" ]]; then
-  log_warn "STATIC_ROUTE='${STATIC_ROUTE}' set but GW is empty — skipping unicast route"
+  log_warn "STATIC_ROUTE='${STATIC_ROUTE}' set but GW is empty — skipping unicast routes"
 fi
 
 # ---------------------------------------------------------------------------
