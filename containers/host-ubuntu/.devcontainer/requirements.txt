@@ -5,4 +5,4 @@
 
 # Multicast send/receive/status CLIs for lab traffic generation and
 # inspection. https://github.com/mitchv85/mcast-tools
-mcast-tools==0.1.0
+mcast-tools==0.2.1
