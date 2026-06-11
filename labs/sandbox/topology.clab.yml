@@ -18,6 +18,6 @@ topology:
         CLAB_MGMT_VRF: MGMT
         INTFTYPE: et
     linux:
-      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.5
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.6
   nodes: {}
   links: []
