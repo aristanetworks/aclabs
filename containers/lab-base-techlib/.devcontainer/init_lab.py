@@ -14,7 +14,9 @@ bundled one is absent. Can also be run manually from a lab directory:
     python3 init_lab.py --lab-dir PATH  # explicit lab directory
 
 Discovery: a lab directory must contain BOTH:
-  * clab/topology.clab.yml   — the containerlab topology
+  * topology.clab.yml        — the containerlab topology, at the lab root
+                               (current techlib layout) or under clab/
+                               (legacy layout); see find_topology()
   * assets/lab.yml           — the dashboard/init metadata
 
 Behavior:
@@ -147,9 +149,14 @@ class Node:
 
 @dataclass
 class LabConfig:
-    # ── Core (always populated from topology) ─────────────────────────────
+    # ── Core (always populated at load time) ──────────────────────────────
     name: str                              # from topology.clab.yml `name:`
-    topology_path: Path
+    topology_path: Path                    # resolved topology location (flat or clab/)
+    lab_root: Path                         # the lab directory itself — home of assets/lab.yml,
+                                           # README.md, and the generated LAB-READY.md. Stored
+                                           # explicitly because it CANNOT be derived from
+                                           # topology_path: the two supported layouts place the
+                                           # topology at different depths (see find_topology()).
     nodes: list[Node]
 
     # ── Display (from lab.yml `display:`) ─────────────────────────────────
@@ -172,10 +179,6 @@ class LabConfig:
     # ── Dashboard (from lab.yml `dashboard:`) ─────────────────────────────
     auto_open_dashboard: bool = True
     tips: list[str] = field(default_factory=list)
-
-    @property
-    def lab_root(self) -> Path:
-        return self.topology_path.parent.parent
 
     @property
     def heading(self) -> str:
@@ -242,9 +245,44 @@ def infer_role(name: str, kind: str) -> str:
 # Loading
 # ─────────────────────────────────────────────────────────────────────────────
 
-def resolve_lab_dir(explicit: Optional[Path] = None) -> Path:
+# The containerlab topology filename, and where it may live inside a lab.
+# techlib labs are migrating to a flat layout (topology at the lab root);
+# older labs keep it under clab/. Both are supported — see find_topology().
+TOPOLOGY_FILENAME = "topology.clab.yml"
+
+
+def _topology_candidates(lab_dir: Path) -> tuple[Path, ...]:
     """
-    Determine which lab directory to operate on.
+    The locations a lab's topology may live, in precedence order. This is
+    the ONLY place that knows the candidate list — find_topology() probes
+    it, and resolve_lab_dir()'s error message names it. Nothing else
+    re-derives these paths.
+    """
+    return (
+        lab_dir / TOPOLOGY_FILENAME,            # flat layout (current techlib convention)
+        lab_dir / "clab" / TOPOLOGY_FILENAME,   # legacy layout (pre-migration labs)
+    )
+
+
+def find_topology(lab_dir: Path) -> Optional[Path]:
+    """
+    Locate the containerlab topology for a lab directory.
+
+    Two layouts are supported — flat (topology at the lab root) and legacy
+    (under clab/) — probed in _topology_candidates() order. Flat wins when
+    both exist: it's the forward convention, and it's the file the user
+    sees at the top of their workspace. Returns None when neither location
+    has the file — the caller owns the error message.
+    """
+    for candidate in _topology_candidates(lab_dir):
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def resolve_lab_dir(explicit: Optional[Path] = None) -> tuple[Path, Path]:
+    """
+    Determine which lab directory to operate on, and locate its topology.
 
     init_lab.py is dual-homed — it runs from either /bin/init_lab.py
     (bundled by lab-base-techlib) or <lab>/assets/init_lab.py (workspace
@@ -258,26 +296,31 @@ def resolve_lab_dir(explicit: Optional[Path] = None) -> Path:
          active workspace folder (i.e., the open lab).
 
     A lab directory is identified by the presence of BOTH:
-      * clab/topology.clab.yml  — the containerlab topology
-      * assets/lab.yml          — the dashboard/init metadata
+      * topology.clab.yml — at the lab root (current techlib convention)
+        or under clab/ (legacy layout); see find_topology()
+      * assets/lab.yml    — the dashboard/init metadata
 
-    If those files aren't present at the resolved location, we fail loud
-    with an explicit message naming what's expected and where we looked,
-    so the user knows whether they're in the wrong directory or whether
-    something's actually missing.
+    Returns (lab_root, topology_path) so layout resolution happens exactly
+    once — callers must not re-derive the topology location themselves.
+
+    If the required files aren't present at the resolved location, we fail
+    loud with an explicit message naming what's expected and where we
+    looked, so the user knows whether they're in the wrong directory or
+    whether something's actually missing.
     """
     lab_dir = (explicit if explicit else Path.cwd()).resolve()
-    topology = lab_dir / "clab" / "topology.clab.yml"
+    topology = find_topology(lab_dir)
     lab_yml = lab_dir / "assets" / "lab.yml"
 
-    if topology.is_file() and lab_yml.is_file():
-        return lab_dir
+    if topology is not None and lab_yml.is_file():
+        return lab_dir, topology
 
     # Build a clear, actionable error. Distinguish "wrong dir entirely" from
     # "right dir, missing one file" so the user knows what to fix.
     missing = []
-    if not topology.is_file():
-        missing.append(f"clab/topology.clab.yml (expected at {topology})")
+    if topology is None:
+        looked = " and ".join(str(c) for c in _topology_candidates(lab_dir))
+        missing.append(f"{TOPOLOGY_FILENAME} (looked in {looked})")
     if not lab_yml.is_file():
         missing.append(f"assets/lab.yml (expected at {lab_yml})")
 
@@ -309,8 +352,7 @@ def load_lab_overrides(lab_root: Path) -> dict:
 
 
 def load_lab_config(lab_dir: Optional[Path] = None) -> LabConfig:
-    lab_root = resolve_lab_dir(lab_dir)
-    topology_path = lab_root / "clab" / "topology.clab.yml"
+    lab_root, topology_path = resolve_lab_dir(lab_dir)
 
     with topology_path.open() as f:
         topo = yaml.safe_load(f)
@@ -342,6 +384,7 @@ def load_lab_config(lab_dir: Optional[Path] = None) -> LabConfig:
     return LabConfig(
         name=lab_name,
         topology_path=topology_path,
+        lab_root=lab_root,
         nodes=nodes,
         # display
         display_name=display.get("name"),
@@ -1197,7 +1240,14 @@ def build_failure_panel(cfg: LabConfig, total_elapsed: float) -> RenderableType:
 
     body.append(Text(""))
     body.append(Text("Remediation:", style="info"))
-    body.append(Text("  → sudo containerlab inspect --topo clab/topology.clab.yml", style=""))
+    # Name the topology at its resolved location — flat labs read
+    # `topology.clab.yml`, legacy labs `clab/topology.clab.yml`. The hint
+    # is meant to be pasted from the lab root, so prefer the relative form.
+    try:
+        topo_display = cfg.topology_path.relative_to(cfg.lab_root)
+    except ValueError:  # outside lab_root — shouldn't happen, but stay honest
+        topo_display = cfg.topology_path
+    body.append(Text(f"  → sudo containerlab inspect --topo {topo_display}", style=""))
     for n in failed[:3]:  # cap the per-node suggestions to keep the panel tight
         body.append(Text(f"  → docker logs clab-{cfg.name}-{n.name}", style=""))
     if len(failed) > 3:
@@ -1321,8 +1371,9 @@ def parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
         type=Path,
         default=None,
         help=(
-            "Path to the lab directory (must contain clab/topology.clab.yml "
-            "and assets/lab.yml). Defaults to the current working directory."
+            "Path to the lab directory (must contain assets/lab.yml and a "
+            "topology.clab.yml, either at the lab root or under clab/). "
+            "Defaults to the current working directory."
         ),
     )
     return parser.parse_args(argv)

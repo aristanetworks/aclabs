@@ -117,4 +117,21 @@ jobs:
       #     the signal would be noisy anyway.
       # - Net UX win: fresh lab launches are now popup-free. Respectful
       #   default for a learning environment.
-      container_revision: "1.0.9"
+      # 1.0.10:
+      # - init_lab.py: support both lab layouts. techlib labs are migrating
+      #   to a flat layout (topology.clab.yml at the lab root, no clab/
+      #   directory). The resolver now accepts either the flat location
+      #   (checked first — the forward convention) or the legacy
+      #   clab/topology.clab.yml, via a single find_topology() helper that
+      #   is the only place layout knowledge lives.
+      # - LabConfig.lab_root is now an explicit field populated at
+      #   resolution time. The old property derived it as
+      #   topology_path.parent.parent, which for flat labs resolves to the
+      #   PARENT of the workspace — LAB-READY.md would have been written
+      #   outside the lab, README lookups would miss, and docs_generate
+      #   would be pointed at the wrong directory.
+      # - The failure panel's remediation hint and the --lab-dir help text
+      #   name the actual resolved topology location instead of a
+      #   hardcoded clab/ path.
+      # - No behavior change for legacy clab/ labs.
+      container_revision: "1.0.10"
