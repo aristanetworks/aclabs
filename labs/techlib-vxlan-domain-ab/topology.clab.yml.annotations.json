@@ -68,7 +68,7 @@
       "id": "freeText_1771953480823",
       "text": "- IP: **10.70.70.101**\n- MAC: **00:01:01:00:00:A6**\n- VLAN: **70**\n- VRF: **DEV**",
       "position": {
-        "x": 586.3183824026646,
+        "x": 457.793699007083,
         "y": 751.3233836666997
       },
       "fontSize": 9,
@@ -82,7 +82,7 @@
     },
     {
       "id": "freeText_1771954147411",
-      "text": "# EVPN-VXLAN Domain A\n\n- Loopback0: 1.1.1.**<NodeID>**\n- Loopback1: 2.2.1.**<NodeID>**`\n- Local P2P Underlay: **192.168.0.0/24**\n- WAN P2P Underlay: **172.16.1.0/24**\n- Underlay Routing: **eBGP**\n- Overlay Peering: **eBGP**\n- Multihoming: **MLAG**\n- IRB Model: **Symmetric IRB**\n- Overlay Multicast (OISM): **Yes**",
+      "text": "# EVPN-VXLAN Domain A\n\n- Loopback0: 10.0.1.**<NodeID>**\n- Loopback1: 10.1.1.**<NodeID>**`\n- Local P2P Underlay: **192.168.0.0/24**\n- WAN P2P Underlay: **172.16.1.0/24**\n- Underlay Routing: **eBGP**\n- Overlay Peering: **eBGP**\n- Endpoint Multihoming: **MLAG**\n- Gateway Resiliency: **All Active**\n- IRB Model: **Symmetric IRB**\n- Overlay Multicast (OISM): **No**",
       "position": {
         "x": -553.8822891504681,
         "y": -34.03032671931915
@@ -100,8 +100,8 @@
       "id": "freeText_1771955912860",
       "text": "## Domain A Node IDs:\n\n- A-SPINE1: **201**\n- A-SPINE2: **202**\n- A-SPINE3: **203**\n- A-SPINE4: **204**\n- A-LEAF1: **1**\n- A-LEAF2: **2**\n- A-LEAF3: **3**\n- A-LEAF4: **4**\n- A-LEAF5: **5**\n- A-LEAF6: **6**\n- A-LEAF7: **7**\n- A-LEAF8: **8**",
       "position": {
-        "x": 642.086127669761,
-        "y": -35.323508956701104
+        "x": 678.9030942674538,
+        "y": -31.9765119932745
       },
       "fontSize": 12,
       "fontColor": "#000000",
@@ -130,7 +130,7 @@
     },
     {
       "id": "freeText_1773355016595",
-      "text": "# EVPN-VXLAN Domain B\n\n- Loopback0: 1.1.2.**<NodeID>**\n- Loopback1: 2.2.2.**<NodeID>**`\n- Local P2P Underlay: **Unnumbered**\n- WAN P2P Underlay: **172.16.2.0/24**\n- Underlay Routing: **IS-IS**\n- Overlay Peering: **iBGP**\n- Multihoming: **ALl Active**\n- IRB Model: **Symmetric IRB**\n- Overlay Multicast (OISM): **Yes**",
+      "text": "# EVPN-VXLAN Domain B\n\n- Loopback0: 10.0.2.**<NodeID>**\n- Loopback1: 10.1.2.**<NodeID>**`\n- Local P2P Underlay: **Unnumbered**\n- WAN P2P Underlay: **172.16.2.0/24**\n- Underlay Routing: **IS-IS**\n- Overlay Peering: **iBGP**\n- Endpoint Multihoming: **All Active**\n- Gateway Resiliency: **All Active**\n- IRB Model: **Symmetric IRB**\n- Overlay Multicast (OISM): **Yes**",
       "position": {
         "x": 2017.701432145796,
         "y": -34.21095667355442
@@ -164,8 +164,8 @@
       "id": "freeText_1775622470617",
       "text": "# Backbone IP Transport",
       "position": {
-        "x": 696.9072038430609,
-        "y": -378.8201962907803
+        "x": 694.0987653473924,
+        "y": -553.9541027620221
       },
       "fontSize": 14,
       "fontColor": "#000000",
@@ -180,8 +180,8 @@
       "id": "freeText_1775622627990",
       "text": "- IP: **10.20.20.101**\n- MAC: **00:01:01:00:00:B1**\n- VLAN: **20**\n- VRF: **PROD**",
       "position": {
-        "x": 900.4884931971951,
-        "y": 754.7208835776621
+        "x": 900.9301320942525,
+        "y": 752.0710501953175
       },
       "fontSize": 9,
       "fontColor": "#000000",
@@ -197,7 +197,7 @@
       "text": "- IP: **10.40.40.101**\n- MAC: **00:01:01:00:00:B2**\n- VLAN: **40**\n- VRF: **PROD**",
       "position": {
         "x": 1137.9449347645343,
-        "y": 756.7643107611875
+        "y": 752.7895606876707
       },
       "fontSize": 9,
       "fontColor": "#000000",
@@ -212,8 +212,8 @@
       "id": "freeText_1775623146669",
       "text": "- IP: **10.60.60.101**\n- MAC: **00:01:01:00:00:B3**\n- VLAN: **60**\n- VRF: **DEV**",
       "position": {
-        "x": 1379.6060228642318,
-        "y": 755.1710198212464
+        "x": 1380.4893006583466,
+        "y": 752.9628253359593
       },
       "fontSize": 9,
       "fontColor": "#000000",
@@ -244,8 +244,8 @@
       "id": "freeText_1775623261816",
       "text": "- IP: **10.70.70.102**\n- MAC: **00:01:01:00:00:B5**\n- VLAN: **70**\n- VRF: **DEV**",
       "position": {
-        "x": 1620.5352073929466,
-        "y": 754.7251729778257
+        "x": 1618.768651804717,
+        "y": 752.9586173895959
       },
       "fontSize": 9,
       "fontColor": "#000000",
@@ -261,7 +261,7 @@
       "text": "- IP: **10.40.40.102**\n- MAC: **00:01:01:00:00:B6**\n- VLAN: **40**\n- VRF: **PROD**",
       "position": {
         "x": 1857.8969317165947,
-        "y": 755.4931787740566
+        "y": 753.2849842887695
       },
       "fontSize": 9,
       "fontColor": "#000000",
@@ -276,11 +276,59 @@
       "id": "freeText_1775623332382",
       "text": "- IP: **10.80.80.101**\n- MAC: **00:01:01:00:00:B7**\n- VLAN: **80**\n- VRF: **DEV**",
       "position": {
-        "x": 2102.2701974272345,
-        "y": 757.2963013971262
+        "x": 2101.3869196331198,
+        "y": 752.8799124265519
       },
       "fontSize": 9,
       "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1782391326285",
+      "text": "- IP: **10.50.50.103**\n- MAC: **00:01:01:00:00:A8**\n- VLAN: **50**\n- VRF: **DEV**",
+      "position": {
+        "x": 100.49759347737564,
+        "y": 0.5468457016352914
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1782391595780",
+      "text": "- IP: **10.20.20.102**\n- MAC: **00:01:01:00:00:B8**\n- VLAN: **20**\n- VRF: **PROD**",
+      "position": {
+        "x": 1502.1898753437792,
+        "y": -1.1511634229350811
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1782405241240",
+      "text": "- IP: **10.50.50.102**\n- MAC: **00:01:01:00:00:A7**\n- VLAN: **50**\n- VRF: **DEV**",
+      "position": {
+        "x": 697.6026658824871,
+        "y": 749.5907453684395
+      },
+      "fontSize": 9,
+      "fontColor": "#3b3b3b",
       "backgroundColor": "#f5f5f5",
       "fontWeight": "normal",
       "fontStyle": "normal",
@@ -295,10 +343,10 @@
       "shapeType": "rectangle",
       "position": {
         "x": -564.4711085811905,
-        "y": -40.60111533228945
+        "y": -117.60111533228945
       },
-      "width": 1404,
-      "height": 940,
+      "width": 1442,
+      "height": 1017,
       "fillColor": "#ff9500",
       "fillOpacity": 0.2,
       "borderColor": "#3b3b3b",
@@ -311,11 +359,11 @@
       "id": "freeShape_1773354959899",
       "shapeType": "rectangle",
       "position": {
-        "x": 879.5402677186503,
-        "y": -40.1452456582048
+        "x": 878.7590160116529,
+        "y": -118.1452456582048
       },
       "width": 1442,
-      "height": 940,
+      "height": 1018,
       "fillColor": "#0f59d2",
       "fillOpacity": 0.2,
       "borderColor": "#3b3b3b",
@@ -328,11 +376,11 @@
       "id": "freeShape_1775622434919",
       "shapeType": "rectangle",
       "position": {
-        "x": 601.3508200120536,
-        "y": -392.37156150314615
+        "x": 657.0709442534178,
+        "y": -561.1274099641296
       },
-      "width": 516,
-      "height": 187,
+      "width": 399,
+      "height": 280,
       "fillColor": "rgba(127, 127, 127, 0.16)",
       "fillOpacity": 0.2,
       "borderColor": "#3b3b3b",
@@ -425,7 +473,7 @@
       "id": "HostA6",
       "icon": "client",
       "position": {
-        "x": 640,
+        "x": 520,
         "y": 680
       },
       "geoCoordinates": {
@@ -590,8 +638,8 @@
       "id": "A-LEAF7",
       "icon": "dcgw",
       "position": {
-        "x": -80,
-        "y": 40
+        "x": -200,
+        "y": 0
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -605,8 +653,8 @@
       "id": "A-LEAF8",
       "icon": "dcgw",
       "position": {
-        "x": 400,
-        "y": 40
+        "x": 520,
+        "y": 0
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -620,8 +668,8 @@
       "id": "BB2",
       "icon": "pe",
       "position": {
-        "x": 1000,
-        "y": -280
+        "x": 920,
+        "y": -440
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -635,8 +683,8 @@
       "id": "BB1",
       "icon": "pe",
       "position": {
-        "x": 680,
-        "y": -280
+        "x": 760,
+        "y": -440
       },
       "geoCoordinates": {
         "lat": 48.684826888402256,
@@ -729,8 +777,8 @@
     {
       "id": "B-LEAF8",
       "position": {
-        "x": 1800,
-        "y": 40
+        "x": 1920,
+        "y": 0
       },
       "icon": "dcgw",
       "iconColor": "#16325b",
@@ -739,8 +787,8 @@
     {
       "id": "B-LEAF7",
       "position": {
-        "x": 1320,
-        "y": 40
+        "x": 1200,
+        "y": 0
       },
       "icon": "dcgw",
       "iconColor": "#16325b",
@@ -845,6 +893,36 @@
       "icon": "spine",
       "iconColor": "#16325b",
       "iconCornerRadius": 0
+    },
+    {
+      "id": "HostA8",
+      "position": {
+        "x": 160,
+        "y": -80
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "interfacePattern": "eth{n}"
+    },
+    {
+      "id": "HostB8",
+      "position": {
+        "x": 1560,
+        "y": -80
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "interfacePattern": "eth{n}"
+    },
+    {
+      "id": "HostA7",
+      "position": {
+        "x": 760,
+        "y": 680
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "interfacePattern": "eth{n}"
     }
   ],
   "edgeAnnotations": [
