@@ -1,5 +1,5 @@
 {
-    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base-techlib:python3.12-avd-v6.1.0-clab0.74.3-rev1.0.10",   // containerEnv set the variables applied to entire container,
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/techlib:latest-clab-rev1.0.0",   // containerEnv set the variables applied to entire container,
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
