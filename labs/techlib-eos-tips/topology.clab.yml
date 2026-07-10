@@ -23,28 +23,28 @@ topology:
       mgmt-ipv4: 10.0.1.1
       binds:
         - sn/SPINE1.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-eos-tips/SPINE1/startup-config
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     SPINE2:
       kind: arista_ceos
       mgmt-ipv4: 10.0.1.2
       binds:
         - sn/SPINE2.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-eos-tips/SPINE2/startup-config
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     LEAF1:
       kind: arista_ceos
       mgmt-ipv4: 10.0.2.1
       binds:
         - sn/LEAF1.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-eos-tips/LEAF1/startup-config
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     LEAF2:
       kind: arista_ceos
       mgmt-ipv4: 10.0.2.2
       binds:
         - sn/LEAF2.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/clab-eos-tips/LEAF2/startup-config
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     Host1:
       kind: linux
