@@ -51,7 +51,7 @@ RUN bash -c "$(curl -sL https://get.containerlab.dev)" -- -v ${CLAB_VERSION} \
 
 # install coder and extensions
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version="4.115.0" \
-    && code-server --install-extension srl-labs.vscode-containerlab --force \
+    && code-server --install-extension srl-labs.vscode-containerlab@0.26.0 --force \
     && code-server --install-extension tuxtina.json2yaml --force \
     && code-server --install-extension yzhang.markdown-all-in-one --force
 
