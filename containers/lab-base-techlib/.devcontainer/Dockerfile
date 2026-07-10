@@ -101,10 +101,7 @@ RUN for ext in \
         done; \
     done
 
-RUN curl -fsSL -o /tmp/lab-dashboard.vsix \
-      https://open-vsx.org/api/packetanglers/lab-dashboard/0.14.2/file/packetanglers.lab-dashboard-0.14.2.vsix \
- && code-server --install-extension /tmp/lab-dashboard.vsix --force \
- && rm /tmp/lab-dashboard.vsix
+RUN code-server --install-extension PacketAnglers.lab-dashboard@0.15.2 --force
 
 USER root
 # User-level code-server settings — applies to every workspace opened
