@@ -101,7 +101,7 @@ RUN for ext in \
         done; \
     done
 
-RUN code-server --install-extension PacketAnglers.lab-dashboard@0.15.2 --force
+RUN code-server --install-extension PacketAnglers.lab-dashboard@0.15.4 --force
 
 USER root
 # User-level code-server settings — applies to every workspace opened
