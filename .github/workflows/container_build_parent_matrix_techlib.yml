@@ -31,4 +31,4 @@ jobs:
       user_id: ${{ matrix.user_id }}
       # 1.0.0:
       # - Initial release of techlib container
-      container_revision: "1.0..0"
+      container_revision: "1.0.0"
