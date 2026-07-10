@@ -1,0 +1,116 @@
+! Startup-config last modified at Wed Feb 25 15:52:46 2026 by root
+! device: SPINE1 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+!
+no aaa root
+!
+username admin privilege 15 role network-admin nopassword
+!
+aaa authentication policy local allow-nopassword-remote-login
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+event-monitor
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname SPINE1
+ip name-server vrf MGMT 8.8.8.8
+dns domain avd.lab
+!
+platform tfa
+   personality arfa
+!
+spanning-tree mode mstp
+no spanning-tree vlan-id 4094
+spanning-tree mst 0 priority 4096
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vlan 10
+   name Ten
+!
+vlan 20
+   name Twenty
+!
+vlan 4094
+   name MLAG_PEER_SYNC
+   trunk group MLAG_PEER
+!
+vrf instance MGMT
+!
+aaa authorization exec default local
+!
+interface Port-Channel101
+   description LEAF1
+   switchport mode trunk
+   mlag 101
+!
+interface Port-Channel1000
+   description MLAG PEER LINK
+   switchport mode trunk
+   switchport trunk group MLAG_PEER
+!
+interface Ethernet1
+   channel-group 101 mode active
+!
+interface Ethernet2
+   channel-group 101 mode active
+!
+interface Ethernet47
+   channel-group 1000 mode active
+!
+interface Ethernet48
+   channel-group 1000 mode active
+!
+interface Management0
+   vrf MGMT
+   ip address 10.0.1.1/16
+!
+interface Vlan10
+   ip address 10.10.10.2/24
+   ipv6 address 2001:db8:10:10::2/64
+   ip virtual-router address 10.10.10.1
+   ipv6 virtual-router address 2001:db8:10:10::1
+!
+interface Vlan20
+   ip address 10.20.20.2/24
+   ipv6 address 2001:db8:20:20::2/64
+   ip virtual-router address 10.20.20.1
+   ipv6 virtual-router address 2001:db8:20:20::1
+!
+interface Vlan4094
+   description MLAG PEER SYNC
+   no autostate
+   ip address 169.254.0.1/30
+!
+ip virtual-router mac-address 00:1c:73:00:00:01
+!
+ip routing
+no ip routing vrf MGMT
+!
+ipv6 unicast-routing
+!
+mlag configuration
+   domain-id 100
+   local-interface Vlan4094
+   peer-address 169.254.0.2
+   peer-link Port-Channel1000
+!
+ip route vrf MGMT 0.0.0.0/0 10.0.0.1
+!
+ntp local-interface vrf MGMT Management0
+ntp server vrf MGMT time.apple.com
+ntp server vrf MGMT time.google.com
+ntp server vrf MGMT time.windows.com
+!
+end

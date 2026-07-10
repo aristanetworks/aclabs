@@ -287,7 +287,7 @@ avd_inventory/config_backup/
 # ContainerLab
 
 clab-*
-!labs/techlib-*/startup-configs/*
+!startup-configs/*
 *.bak
 
 # do NOT ignore public lab env variables
