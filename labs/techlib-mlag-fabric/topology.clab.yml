@@ -35,14 +35,14 @@ topology:
       mgmt-ipv4: 172.100.100.10
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     A-SPINE2:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.11
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     #########################
     #     DC B SPINE        #
@@ -53,14 +53,14 @@ topology:
       mgmt-ipv4: 172.100.100.20
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     B-SPINE2:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.21
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     #########################
     #     DC A LEAF         #
@@ -71,28 +71,28 @@ topology:
       mgmt-ipv4: 172.100.100.13
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     A-LEAF2:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.14
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     A-LEAF3:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.15
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     A-LEAF4:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.16
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     #########################
     #     DC B LEAF         #
@@ -103,28 +103,28 @@ topology:
       mgmt-ipv4: 172.100.100.23
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     B-LEAF2:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.24
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     B-LEAF3:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.25
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     B-LEAF4:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.26
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-      startup-config: init-configs/__clabNodeName__.cfg
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     #########################
     #     DC A Hosts        #
@@ -135,7 +135,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.111
       binds:
-        - ../assets/hosts.txt:/home/admin/hosts.txt
+        - assets//hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.10.10.101/24
@@ -148,7 +148,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.112
       binds:
-        - ../assets/hosts.txt:/home/admin/hosts.txt
+        - assets//hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.30.30.101/24
@@ -161,7 +161,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.113
       binds:
-        - ../assets/hosts.txt:/home/admin/hosts.txt
+        - assets//hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.20.20.101/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -173,7 +173,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.114
       binds:
-        - ../assets/hosts.txt:/home/admin/hosts.txt
+        - assets//hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.10.10.102/24
@@ -186,7 +186,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.115
       binds:
-        - ../assets/hosts.txt:/home/admin/hosts.txt
+        - assets//hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.30.30.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -202,7 +202,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.121
       binds:
-        - ../assets/hosts.txt:/home/admin/hosts.txt
+        - assets//hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.10.10.103/24
@@ -215,7 +215,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.122
       binds:
-        - ../assets/hosts.txt:/home/admin/hosts.txt
+        - assets//hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.40.40.101/24
@@ -228,7 +228,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.123
       binds:
-        - ../assets/hosts.txt:/home/admin/hosts.txt
+        - assets//hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.20.20.102/24
         STATIC_ROUTE: 10.0.0.0/8
@@ -240,7 +240,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.124
       binds:
-        - ../assets/hosts.txt:/home/admin/hosts.txt
+        - assets//hosts.txt:/home/admin/hosts.txt
       env:
         TMODE: lacp
         IPV4: 10.10.10.104/24
@@ -253,7 +253,7 @@ topology:
       kind: linux
       mgmt-ipv4: 172.100.100.125
       binds:
-        - ../assets/hosts.txt:/home/admin/hosts.txt
+        - assets//hosts.txt:/home/admin/hosts.txt
       env:
         IPV4: 10.40.40.102/24
         STATIC_ROUTE: 10.0.0.0/8
