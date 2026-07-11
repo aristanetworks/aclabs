@@ -25,8 +25,6 @@ no service interface inactive port-id allocation disabled
 !
 load-interval default 1
 !
-load-interval default 1
-!
 service routing protocols model multi-agent
 !
 hostname B-LEAF8
@@ -47,20 +45,8 @@ clock timezone America/Detroit
 vlan 10
    name Blue
 !
-vlan 20
-   name Green
-!
-vlan 40
-   name Purple
-!
-vlan 60
-   name Red
-!
 vlan 70
    name Brown
-!
-vlan 80
-   name Black
 !
 vrf instance DEV
 !
@@ -143,7 +129,6 @@ interface Loopback0
 interface Loopback1
    description VTEP IP
    ip address 10.1.2.8/32
-   ip address 10.1.2.255/32 secondary
    isis enable 100
    isis circuit-type level-2
    isis passive
@@ -159,40 +144,16 @@ interface Vlan10
    ip address virtual 10.10.10.1/24
    ipv6 address virtual 2001:db8:10:10::1/64
 !
-interface Vlan20
-   mtu 9014
-   vrf PROD
-   ip address virtual 10.20.20.1/24
-   ipv6 address virtual 2001:db8:20:20::1/64
-!
-interface Vlan40
-   mtu 9014
-   vrf PROD
-   ip address virtual 10.40.40.1/24
-   ipv6 address virtual 2001:db8:40:40::1/64
-!
-interface Vlan60
-   mtu 9014
-   vrf DEV
-   ip address virtual 10.60.60.1/24
-   ipv6 address virtual 2001:db8:60:60::1/64
-!
 interface Vlan70
    mtu 9014
    vrf DEV
    ip address virtual 10.70.70.1/24
    ipv6 address virtual 2001:db8:70:70::1/64
 !
-interface Vlan80
-   mtu 9014
-   vrf DEV
-   ip address virtual 10.80.80.1/24
-   ipv6 address virtual 2001:db8:80:80::1/64
-!
 interface Vxlan1
    vxlan source-interface Loopback1
    vxlan udp-port 4789
-   vxlan vlan 10,20,40,60,70,80 vni 10010,10020,10040,10060,10070,10080
+   vxlan vlan 10,70 vni 10010,10070
    vxlan vrf DEV vni 50002
    vxlan vrf PROD vni 50001
 !
@@ -274,37 +235,11 @@ router bgp 65200
       rd evpn domain all 10.0.2.8:10010
       route-target import export evpn domain all 10010:10010
       redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
-   !
-   vlan 20
-      rd 10.0.2.8:10020
-      route-target both 10020:10020
-      redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
-   !
-   vlan 40
-      rd 10.0.2.8:10040
-      route-target both 10040:10040
-      redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
-   !
-   vlan 60
-      rd 10.0.2.8:10060
-      route-target both 10060:10060
-      redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
    !
    vlan 70
       rd evpn domain all 10.0.2.8:10070
       route-target import export evpn domain all 10070:10070
       redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
-   !
-   vlan 80
-      rd 10.0.2.8:10080
-      route-target both 10080:10080
-      redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
    !
    address-family evpn
       route type ethernet-segment route-target auto

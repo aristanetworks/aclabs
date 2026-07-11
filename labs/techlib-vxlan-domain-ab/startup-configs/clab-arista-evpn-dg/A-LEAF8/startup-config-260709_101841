@@ -1,4 +1,4 @@
-! Startup-config last modified at Thu Jul  9 06:18:41 2026 by root
+! Command: show running-config
 ! device: A-LEAF8 (cEOSLab, EOS-4.36.1F-48405728.4361F (engineering build))
 !
 no aaa root
@@ -46,9 +46,6 @@ clock timezone America/Detroit
 !
 vlan 10
    name Blue
-!
-vlan 30
-   name Orange
 !
 vlan 50
    name Yellow
@@ -122,7 +119,6 @@ interface Loopback0
 interface Loopback1
    description Shared VTEP IP
    ip address 10.1.1.8/32
-   ip address 10.1.1.255/32 secondary
 !
 interface Management0
    description OOB_MANAGEMENT
@@ -134,12 +130,6 @@ interface Vlan10
    vrf PROD
    ip address virtual 10.10.10.1/24
    ipv6 address virtual 2001:db8:10:10::1/64
-!
-interface Vlan30
-   mtu 9014
-   vrf PROD
-   ip address virtual 10.30.30.1/24
-   ipv6 address virtual 2001:db8:30:30::1/64
 !
 interface Vlan50
    mtu 9014
@@ -156,7 +146,7 @@ interface Vlan70
 interface Vxlan1
    vxlan source-interface Loopback1
    vxlan udp-port 4789
-   vxlan vlan 10,30,50,70 vni 10010,10030,10050,10070
+   vxlan vlan 10,50,70 vni 10010,10050,10070
    vxlan vrf DEV vni 50002
    vxlan vrf PROD vni 50001
 !
@@ -268,14 +258,9 @@ router bgp 65108
       route-target import export evpn domain all 10010:10010
       redistribute learned
    !
-   vlan 30
-      rd 10.0.1.8:10030
-      route-target both 10030:10030
-      redistribute learned
-   !
    vlan 50
-      rd evpn domain all 10.0.1.8:10050
-      route-target import export evpn domain all 10050:10050
+      rd 10.0.1.8:10050
+      route-target both 10050:10050
       redistribute learned
    !
    vlan 70
