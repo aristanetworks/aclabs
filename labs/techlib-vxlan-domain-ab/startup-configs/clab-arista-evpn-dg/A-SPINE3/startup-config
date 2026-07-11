@@ -18,6 +18,8 @@ event-monitor
 !
 no service interface inactive port-id allocation disabled
 !
+load-interval default 1
+!
 service routing protocols model multi-agent
 !
 hostname A-SPINE3
