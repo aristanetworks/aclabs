@@ -1,4 +1,4 @@
-! Startup-config last modified at Thu Jul  9 06:18:41 2026 by root
+! Command: show running-config
 ! device: B-LEAF8 (cEOSLab, EOS-4.36.1F-48405728.4361F (engineering build))
 !
 no aaa root
@@ -23,6 +23,8 @@ event-monitor
 !
 no service interface inactive port-id allocation disabled
 !
+load-interval default 1
+!
 service routing protocols model multi-agent
 !
 hostname B-LEAF8
@@ -43,20 +45,8 @@ clock timezone America/Detroit
 vlan 10
    name Blue
 !
-vlan 20
-   name Green
-!
-vlan 40
-   name Purple
-!
-vlan 60
-   name Red
-!
 vlan 70
    name Brown
-!
-vlan 80
-   name Black
 !
 vrf instance DEV
 !
@@ -139,20 +129,9 @@ interface Loopback0
 interface Loopback1
    description VTEP IP
    ip address 10.1.2.8/32
-   ip address 10.1.2.255/32 secondary
    isis enable 100
    isis circuit-type level-2
    isis passive
-!
-interface Loopback101
-   description OISM PIM/IGMP Source (PROD)
-   vrf PROD
-   ip address 10.101.101.8/32
-!
-interface Loopback102
-   description OISM PIM/IGMP Source (DEV)
-   vrf DEV
-   ip address 10.102.102.8/32
 !
 interface Management0
    description OOB_MANAGEMENT
@@ -162,67 +141,21 @@ interface Management0
 interface Vlan10
    mtu 9014
    vrf PROD
-   ip igmp
-   mld
-   pim ipv4 local-interface Loopback101
    ip address virtual 10.10.10.1/24
    ipv6 address virtual 2001:db8:10:10::1/64
-!
-interface Vlan20
-   mtu 9014
-   vrf PROD
-   ip igmp
-   mld
-   pim ipv4 local-interface Loopback101
-   ip address virtual 10.20.20.1/24
-   ipv6 address virtual 2001:db8:20:20::1/64
-!
-interface Vlan40
-   mtu 9014
-   vrf PROD
-   ip igmp
-   mld
-   pim ipv4 local-interface Loopback101
-   ip address virtual 10.40.40.1/24
-   ipv6 address virtual 2001:db8:40:40::1/64
-!
-interface Vlan60
-   mtu 9014
-   vrf DEV
-   ip igmp
-   mld
-   pim ipv4 local-interface Loopback102
-   ip address virtual 10.60.60.1/24
-   ipv6 address virtual 2001:db8:60:60::1/64
 !
 interface Vlan70
    mtu 9014
    vrf DEV
-   ip igmp
-   mld
-   pim ipv4 local-interface Loopback102
    ip address virtual 10.70.70.1/24
    ipv6 address virtual 2001:db8:70:70::1/64
-!
-interface Vlan80
-   mtu 9014
-   vrf DEV
-   ip igmp
-   mld
-   pim ipv4 local-interface Loopback102
-   ip address virtual 10.80.80.1/24
-   ipv6 address virtual 2001:db8:80:80::1/64
 !
 interface Vxlan1
    vxlan source-interface Loopback1
    vxlan udp-port 4789
-   vxlan vlan 10,20,40,60,70,80 vni 10010,10020,10040,10060,10070,10080
+   vxlan vlan 10,70 vni 10010,10070
    vxlan vrf DEV vni 50002
    vxlan vrf PROD vni 50001
-   vxlan vrf DEV multicast group 232.1.1.2
-   vxlan vrf PROD multicast group 232.1.1.1
-   vxlan vrf PROD multicast group overlay 239.0.20.101 encap 232.1.1.20 immediate
-   vxlan multicast ipv6
 !
 mac address-table aging-time 1800
 !
@@ -241,9 +174,6 @@ ip prefix-list PL-GATEWAY-LOOP
 !
 ipv6 unicast-routing vrf DEV
 ipv6 unicast-routing vrf PROD
-!
-mld snooping
-   vlan 10,20,40,60,70,80
 !
 ip route vrf MGMT 0.0.0.0/0 172.100.100.1
 !
@@ -305,37 +235,11 @@ router bgp 65200
       rd evpn domain all 10.0.2.8:10010
       route-target import export evpn domain all 10010:10010
       redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
-   !
-   vlan 20
-      rd 10.0.2.8:10020
-      route-target both 10020:10020
-      redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
-   !
-   vlan 40
-      rd 10.0.2.8:10040
-      route-target both 10040:10040
-      redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
-   !
-   vlan 60
-      rd 10.0.2.8:10060
-      route-target both 10060:10060
-      redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
    !
    vlan 70
       rd evpn domain all 10.0.2.8:10070
       route-target import export evpn domain all 10070:10070
       redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
-   !
-   vlan 80
-      rd 10.0.2.8:10080
-      route-target both 10080:10080
-      redistribute learned
-      redistribute router-mac virtual-ip next-hop vtep primary
    !
    address-family evpn
       route type ethernet-segment route-target auto
@@ -366,11 +270,6 @@ router bgp 65200
       route-target export evpn domain all 50002:50002
       update wait-install
       redistribute connected
-      !
-      evpn multicast
-         address-family ipv4
-         !
-         address-family ipv6
    !
    vrf PROD
       rd evpn domain all 10.0.2.8:50001
@@ -378,11 +277,6 @@ router bgp 65200
       route-target export evpn domain all 50001:50001
       update wait-install
       redistribute connected
-      !
-      evpn multicast
-         address-family ipv4
-         !
-         address-family ipv6
    !
    session tracker TRACK-LOCAL-EVPN-PEERS
       recovery delay 10 seconds
@@ -394,23 +288,5 @@ router isis 100
    log-adjacency-changes
    !
    address-family ipv4 unicast
-!
-router multicast
-   ipv4
-      routing
-   !
-   vrf DEV
-      ipv4
-         routing
-      !
-      ipv6
-         routing
-   !
-   vrf PROD
-      ipv4
-         routing
-      !
-      ipv6
-         routing
 !
 end

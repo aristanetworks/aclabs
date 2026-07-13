@@ -24,7 +24,7 @@ jobs:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
         from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.1.0"]
-        clab_version: ["0.75.0"]
+        clab_version: ["0.77.0"]
         user_id: ["1000", "1009"]
         include:
           - user_id: "1000"
@@ -103,4 +103,7 @@ jobs:
       # - Add AVD 6.1.0 lab-base variant
       # 2.6.7
       # - ContainerLab 0.75.0
-      container_revision: "2.6.7"
+      # 2.6.8
+      # - ContainerLab 0.77.0
+      # - Set lab-base cLab extension to v0.26.0
+      container_revision: "2.6.8"
