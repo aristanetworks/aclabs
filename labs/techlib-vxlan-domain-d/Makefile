@@ -6,15 +6,15 @@ help: ## Display help message
 
 .PHONY: start
 start: ## Deploy ceos lab
-	sudo containerlab deploy --debug --topo $(CURRENT_DIR)/topology.clab.yml --max-workers 10 --timeout 5m --reconfigure
+	sudo containerlab deploy --debug --topo $(CURRENT_DIR)/clab/topology.clab.yml --max-workers 10 --timeout 5m --reconfigure
 
 .PHONY: stop
 stop: ## Destroy ceos lab
-	sudo containerlab destroy --debug --topo $(CURRENT_DIR)/topology.clab.yml --cleanup
+	sudo containerlab destroy --debug --topo $(CURRENT_DIR)/clab/topology.clab.yml --cleanup
 
 .PHONY: inspect
 inspect: ## Inspect ceos lab
-	@sudo containerlab inspect --topo $(CURRENT_DIR)/topology.clab.yml
+	@sudo containerlab inspect --topo $(CURRENT_DIR)/clab/topology.clab.yml
 	@echo ""
 	@echo "You can check the lab status, hostnames and management addresses above."
 	@echo "To connect to a lab device use \`ssh admin@<hostname>\` and password \`admin\`."
