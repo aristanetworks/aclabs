@@ -19,6 +19,8 @@ transceiver qsfp default-mode 4x10G
 interface defaults
    mtu 9214
 !
+load-interval default 1
+!
 service routing protocols model multi-agent
 !
 hostname BB2

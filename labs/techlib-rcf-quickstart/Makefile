@@ -6,12 +6,12 @@ help: ## Display help message
 
 .PHONY: start
 start: ## Deploy the lab
-	sudo containerlab deploy --topo $(CURRENT_DIR)/clab/topology.clab.yml --max-workers 10 --timeout 5m --reconfigure
+	sudo containerlab deploy --topo $(CURRENT_DIR)/topology.clab.yml --max-workers 10 --timeout 5m --reconfigure
 
 .PHONY: stop
 stop: ## Destroy the lab
-	sudo containerlab destroy --topo $(CURRENT_DIR)/clab/topology.clab.yml --cleanup
+	sudo containerlab destroy --topo $(CURRENT_DIR)/topology.clab.yml --cleanup
 
 .PHONY: inspect
 inspect: ## Inspect the lab
-	@sudo containerlab inspect --topo $(CURRENT_DIR)/clab/topology.clab.yml
+	@sudo containerlab inspect --topo $(CURRENT_DIR)/topology.clab.yml

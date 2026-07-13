@@ -16,12 +16,12 @@ topology:
   kinds:
     arista_ceos:
       enforce-startup-config: true
-      image: arista/ceos:4.36.1F
+      image: arista/ceos:latest
       env:
         CLAB_MGMT_VRF: MGMT
         INTFTYPE: et
     linux:
-      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.6
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.7
 
   nodes:
 

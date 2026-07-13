@@ -9,7 +9,7 @@
 # --- CONFIGURATION ----------------------------------------
 HOSTS_FILE="${1:-hosts.txt}"   # Default: hosts.txt, or pass a path as $1
 INTERVAL=2                     # Seconds between ping rounds
-PING_TIMEOUT=1                 # Seconds to wait per ping before declaring failure
+PING_TIMEOUT=2                 # Seconds to wait per ping before declaring failure
 
 # --- LOAD HOSTS -------------------------------------------
 if [[ ! -f "$HOSTS_FILE" ]]; then
