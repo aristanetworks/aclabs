@@ -3,7 +3,7 @@
 init_lab.py — Lab readiness TUI for Arista Containerized Labs (cArL).
 
 Dual-home script:
-  * /bin/init_lab.py — bundled by the lab-base-techlib container image (preferred)
+  * /bin/init_lab.py — bundled by the techlib container image (preferred)
   * <lab>/assets/init_lab.py — per-lab override / legacy layout
 
 Auto-launched by the lab-dashboard VS Code extension, which resolves
@@ -285,7 +285,7 @@ def resolve_lab_dir(explicit: Optional[Path] = None) -> tuple[Path, Path]:
     Determine which lab directory to operate on, and locate its topology.
 
     init_lab.py is dual-homed — it runs from either /bin/init_lab.py
-    (bundled by lab-base-techlib) or <lab>/assets/init_lab.py (workspace
+    (bundled by techlib) or <lab>/assets/init_lab.py (workspace
     fallback). The lab directory it operates on is NOT implied by the
     script's own location — it's resolved separately here.
 

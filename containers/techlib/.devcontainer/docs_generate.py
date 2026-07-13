@@ -3,7 +3,7 @@
 docs_generate.py — Regenerate README.md managed blocks from lab.yml + shared snippets.
 
 Dual-home script:
-  * /bin/docs_generate.py — bundled by the lab-base-techlib container image (preferred)
+  * /bin/docs_generate.py — bundled by the techlib container image (preferred)
   * <lab>/assets/docs_generate.py — per-lab override / legacy layout
 
 Called automatically by init_lab.py during lab boot (via Path(__file__).parent
