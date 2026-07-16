@@ -31,4 +31,6 @@ jobs:
       user_id: ${{ matrix.user_id }}
       # 1.0.0:
       # - Initial release of techlib container
+      # 1.0.1:
+      # - Set `from_image` to use lab-base container rev 2.6.8
       container_revision: "1.0.1"
