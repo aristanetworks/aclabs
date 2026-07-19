@@ -22,7 +22,7 @@ jobs:
     uses: ./.github/workflows/container_build_child.yml
     strategy:
       matrix:
-        from_image: ["ghcr.io/aristanetworks/aclabs/lab-base:python3.12-avd-v6.1.0-clab0.75.0-rev2.6.7-uid1009"]
+        from_image: ["ghcr.io/aristanetworks/aclabs/lab-base:python3.12-avd-v6.1.0-clab0.77.0-rev2.6.8-uid1009"]
         user_id: ["1009"]
 
     with:
@@ -33,4 +33,6 @@ jobs:
       # - Initial release of sandbox container
       # 1.0.1:
       # - Set base from_image to lab-base:python3.12-avd-v6.1.0-clab0.75.0-rev2.6.7-uid1009
-      container_revision: "1.0.1"
+      # 1.0.2:
+      # - Set base from_image to lab-base:python3.12-avd-v6.1.0-clab0.77.0-rev2.6.8-uid1009
+      container_revision: "1.0.2"
