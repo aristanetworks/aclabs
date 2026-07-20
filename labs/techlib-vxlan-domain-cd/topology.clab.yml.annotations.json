@@ -146,7 +146,7 @@
     },
     {
       "id": "freeText_1773355096403",
-      "text": "## Domain B Node IDs:\n\n- D-SPINE1: **201**\n- D-SPINE2: **202**\n- D-SPINE3: **203**\n- D-SPINE4: **204**\n- D-LEAF1: **1**\n- D-LEAF2: **2**\n- D-LEAF3: **3**\n- D-LEAF4: **4**\n- D-LEAF5: **5**\n- D-LEAF6: **6**\n- D-LEAF7: **7**\n- D-LEAF8: **8**",
+      "text": "## Domain D Node IDs:\n\n- D-SPINE1: **201**\n- D-SPINE2: **202**\n- D-SPINE3: **203**\n- D-SPINE4: **204**\n- D-LEAF1: **1**\n- D-LEAF2: **2**\n- D-LEAF3: **3**\n- D-LEAF4: **4**\n- D-LEAF5: **5**\n- D-LEAF6: **6**\n- D-LEAF7: **7**\n- D-LEAF8: **8**",
       "position": {
         "x": 883.6145406732433,
         "y": -113.10664791416151
@@ -162,10 +162,10 @@
     },
     {
       "id": "freeText_1775622470617",
-      "text": "# Backbone IP Transport",
+      "text": "# Backbone MPLS Transport",
       "position": {
-        "x": 694.0987653473924,
-        "y": -553.9541027620221
+        "x": 669.5565353036341,
+        "y": -556.2449703668935
       },
       "fontSize": 14,
       "fontColor": "#000000",
