@@ -116,11 +116,13 @@ interface Loopback1
 interface Loopback101
    description OISM PIM/IGMP Source (PROD)
    vrf PROD
+   ip address 10.101.4.3/32
    ipv6 address 2001:db8:d101::3/128
 !
 interface Loopback102
    description OISM PIM/IGMP Source (DEV)
    vrf DEV
+   ip address 10.102.4.3/32
    ipv6 address 2001:db8:d102::3/128
 !
 interface Management0
