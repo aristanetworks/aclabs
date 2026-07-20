@@ -202,7 +202,6 @@ router bgp 65400
    neighbor LOCAL-EVPN-PEERS remote-as 65400
    neighbor LOCAL-EVPN-PEERS update-source Loopback0
    neighbor LOCAL-EVPN-PEERS bfd
-   neighbor LOCAL-EVPN-PEERS ebgp-multihop 3
    neighbor LOCAL-EVPN-PEERS session tracker TRACK-LOCAL-EVPN-PEERS
    neighbor LOCAL-IPV6-PEERS peer group
    neighbor LOCAL-IPV6-PEERS remote-as 65400
