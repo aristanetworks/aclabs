@@ -3,7 +3,7 @@
 # Arista EVPN Deployment Guide Topology - Domains C and D
 # --------------------------------------------------------------
 
-name: arista-evpn-dg
+name: arista-evpn-dg-domain-cd
 
 prefix: ""
 
@@ -71,7 +71,7 @@ topology:
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     #########################
-    # Domain A LEAF         #
+    # Domain C LEAF         #
     #########################
 
     C-LEAF1:
@@ -131,7 +131,7 @@ topology:
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     #########################
-    # Domain A Hosts        #
+    # Domain C Hosts        #
     #########################
 
     HostC1:
@@ -285,7 +285,7 @@ topology:
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     #########################
-    # Domain B Leaf         #
+    # Domain D Leaf         #
     #########################
 
     D-LEAF1:
@@ -337,7 +337,7 @@ topology:
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     #########################
-    # Domain B EVPN Gateway #
+    # Domain D EVPN Gateway #
     #########################
 
     D-LEAF7:
@@ -365,7 +365,7 @@ topology:
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     #########################
-    # Domain B Hosts        #
+    # Domain D Hosts        #
     #########################
 
     HostD1:
@@ -557,7 +557,7 @@ topology:
     - endpoints: [ "C-LEAF5:et5", "C-LEAF6:et5" ]
     - endpoints: [ "C-LEAF5:et6", "C-LEAF6:et6" ]
     ########################
-    # Domain A Hosts       #
+    # Domain C Hosts       #
     ########################
     - endpoints: [ "HostC1:eth1", "C-LEAF1:et7" ]
     - endpoints: [ "HostC1:eth2", "C-LEAF2:et7" ]
@@ -619,7 +619,7 @@ topology:
     - endpoints: [ "D-LEAF5:et7", "D-SW1:et1" ]
     - endpoints: [ "D-LEAF6:et7", "D-SW1:et2" ]
     ########################
-    # Domain B Hosts       #
+    # Domain D Hosts       #
     ########################
     - endpoints: [ "HostD1:eth1", "D-LEAF1:et7" ]
     - endpoints: [ "HostD1:eth2", "D-LEAF2:et7" ]
