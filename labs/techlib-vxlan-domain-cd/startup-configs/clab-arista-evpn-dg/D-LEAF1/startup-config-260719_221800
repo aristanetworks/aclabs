@@ -156,6 +156,7 @@ interface Vxlan1
    vxlan vlan 20,40 vni 10020,10040
    vxlan vrf PROD vni 50001
    vxlan vrf PROD multicast group ff3e::1
+   vxlan multicast ipv6
 !
 mac address-table aging-time 1800
 !
