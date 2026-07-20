@@ -99,6 +99,7 @@ interface Ethernet7
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 address 2001:db8:bb1:d8::d8/64
    mpls ip
    isis enable BACKBONE
    isis network point-to-point
@@ -108,6 +109,7 @@ interface Ethernet8
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 address 2001:db8:bb2:d8::d8/64
    mpls ip
    isis enable BACKBONE
    isis network point-to-point

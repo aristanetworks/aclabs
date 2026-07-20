@@ -255,7 +255,7 @@ topology:
     D-SPINE1:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.101
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -263,7 +263,7 @@ topology:
     D-SPINE2:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.102
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -271,7 +271,7 @@ topology:
     D-SPINE3:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.103
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -279,7 +279,7 @@ topology:
     D-SPINE4:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.104
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -291,7 +291,7 @@ topology:
     D-LEAF1:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.105
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -299,7 +299,7 @@ topology:
     D-LEAF2:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.106
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -307,7 +307,7 @@ topology:
     D-LEAF3:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.107
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -315,7 +315,7 @@ topology:
     D-LEAF4:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.108
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -323,7 +323,7 @@ topology:
     D-LEAF5:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.109
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -331,7 +331,7 @@ topology:
     D-LEAF6:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.110
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -343,7 +343,7 @@ topology:
     D-LEAF7:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.111
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -351,7 +351,7 @@ topology:
     D-LEAF8:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.112
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -359,7 +359,7 @@ topology:
     D-SW1:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.113
-      startup_delay: 30
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -373,7 +373,7 @@ topology:
       mgmt-ipv4: 172.100.102.201
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
-      startup_delay: 45
+      startup-delay: 45
       env:
         TMODE: lacp
         IPV4: 10.20.20.101/24
@@ -387,7 +387,7 @@ topology:
       mgmt-ipv4: 172.100.102.202
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
-      startup_delay: 45
+      startup-delay: 45
       env:
         TMODE: lacp
         IPV4: 10.40.40.101/24
@@ -401,7 +401,7 @@ topology:
       mgmt-ipv4: 172.100.102.203
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
-      startup_delay: 45
+      startup-delay: 45
       env:
         IPV4: 10.60.60.101/24
         STATIC_ROUTE: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
@@ -414,7 +414,7 @@ topology:
       mgmt-ipv4: 172.100.102.204
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
-      startup_delay: 45
+      startup-delay: 45
       env:
         TMODE: lacp
         IPV4: 10.10.10.103/24
@@ -428,7 +428,7 @@ topology:
       mgmt-ipv4: 172.100.102.205
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
-      startup_delay: 45
+      startup-delay: 45
       env:
         IPV4: 10.70.70.102/24
         STATIC_ROUTE: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
@@ -441,7 +441,7 @@ topology:
       mgmt-ipv4: 172.100.102.206
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
-      startup_delay: 45
+      startup-delay: 45
       env:
         IPV4: 10.40.40.102/24
         STATIC_ROUTE: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
@@ -454,7 +454,7 @@ topology:
       mgmt-ipv4: 172.100.102.207
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
-      startup_delay: 45
+      startup-delay: 45
       env:
         IPV4: 10.80.80.101/24
         STATIC_ROUTE: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
@@ -467,7 +467,7 @@ topology:
       mgmt-ipv4: 172.100.102.208
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
-      startup_delay: 45
+      startup-delay: 45
       env:
         IPV4: 10.60.60.102/24
         IPV6: 2001:db8:60:60::102/64
