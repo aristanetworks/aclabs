@@ -624,6 +624,7 @@ topology:
     ########################
     # Backbone             #
     ########################
+    - endpoints: [ "BB1:et5", "BB2:et5" ]
     - endpoints: [ "BB1:et1", "A-LEAF7:et7" ]
     - endpoints: [ "BB1:et2", "A-LEAF8:et7" ]
     - endpoints: [ "BB2:et1", "A-LEAF7:et8" ]

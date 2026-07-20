@@ -61,30 +61,6 @@ interface Ethernet4
    ip address 172.16.2.2/31
 !
 interface Ethernet5
-   description C-LEAF7
-   mtu 9214
-   no switchport
-   ip address 172.16.3.0/31
-!
-interface Ethernet6
-   description C-LEAF8
-   mtu 9214
-   no switchport
-   ip address 172.16.3.2/31
-!
-interface Ethernet7
-   description D-LEAF7
-   mtu 9214
-   no switchport
-   ip address 172.16.4.0/31
-!
-interface Ethernet8
-   description D-LEAF8
-   mtu 9214
-   no switchport
-   ip address 172.16.4.2/31
-!
-interface Ethernet9
    description BB2
    mtu 9214
    no switchport
