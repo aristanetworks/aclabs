@@ -3,7 +3,7 @@
 # Arista EVPN Deployment Guide Topology - Domains A and B
 # --------------------------------------------------------------
 
-name: arista-evpn-dg
+name: arista-evpn-dg-domain-ab
 
 prefix: ""
 

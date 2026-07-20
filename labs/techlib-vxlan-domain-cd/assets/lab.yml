@@ -8,7 +8,7 @@
 
 # ── Lab identity ─────────────────────────────────────────────────────────
 display:
-  name: "Arista EVPN-VXLAN Deployment Guide - Domain A+B"
+  name: "Arista EVPN-VXLAN Deployment Guide - Domain C+D"
   subtitle: "Tech Library Deployment Guide"
   # Optional banner rendered as a GitHub alert at the top of the README.
   # Type must be one of: note, tip, important, warning, caution.
