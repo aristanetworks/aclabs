@@ -1,0 +1,154 @@
+! Startup-config last modified at Sun Jul 19 22:18:00 2026 by root
+! device: BB2 (cEOSLab, EOS-4.36.0.1F-47401373.43601F (engineering build))
+!
+no aaa root
+aaa authentication policy local allow-nopassword-remote-login
+!
+username admin privilege 15 role network-admin nopassword
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+load-interval default 1
+!
+transceiver qsfp default-mode 4x10G
+!
+interface defaults
+   mtu 9214
+!
+service routing protocols model multi-agent
+!
+hostname BB2
+ip name-server vrf MGMT 8.8.8.8
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vrf instance MGMT
+!
+aaa authorization exec default local
+!
+interface Ethernet1
+   description C-LEAF7
+   mtu 9114
+   no switchport
+   ipv6 enable
+   ipv6 address 2001:db8:bb2:c7::bb2/64
+   isis enable BACKBONE
+   isis network point-to-point
+!
+interface Ethernet2
+   description C-LEAF8
+   mtu 9114
+   no switchport
+   ipv6 enable
+   ipv6 address 2001:db8:bb2:c8::bb2/64
+   isis enable BACKBONE
+   isis network point-to-point
+!
+interface Ethernet3
+   description D-LEAF7
+   mtu 9114
+   no switchport
+   ipv6 enable
+   ipv6 address 2001:db8:bb2:d7::bb2/64
+   isis enable BACKBONE
+   isis network point-to-point
+!
+interface Ethernet4
+   description D-LEAF8
+   mtu 9114
+   no switchport
+   ipv6 enable
+   ipv6 address 2001:db8:bb2:d8::bb2/64
+   isis enable BACKBONE
+   isis network point-to-point
+!
+interface Ethernet5
+   description BB1
+   mtu 9214
+   no switchport
+   ipv6 enable
+   mpls ip
+   isis enable BACKBONE
+   isis network point-to-point
+!
+interface Loopback0
+   description Globally Unique Address
+   ip address 10.0.0.2/32
+   ipv6 address 2001:db8:bb::2/128
+   node-segment ipv6 index 2
+   isis enable BACKBONE
+   isis passive
+!
+interface Management0
+   description OOB_MANAGEMENT
+   vrf MGMT
+   ip address 172.100.100.102/22
+!
+ip routing
+no ip routing vrf MGMT
+!
+ipv6 unicast-routing
+!
+ip route vrf MGMT 0.0.0.0/0 172.100.100.1
+!
+mpls ip
+!
+router bfd
+   multihop interval 1000 min-rx 1000 multiplier 3
+!
+router bgp 65000
+   router-id 1.1.0.2
+   no bgp default ipv4-unicast
+   distance bgp 20 200 200
+   graceful-restart restart-time 300
+   bgp cluster-id 1.1.0.0
+   graceful-restart
+   maximum-paths 4
+   neighbor default send-community
+   neighbor EVPN-MPLS-GW-PEERS peer group
+   neighbor EVPN-MPLS-GW-PEERS remote-as 65000
+   neighbor EVPN-MPLS-GW-PEERS next-hop-unchanged
+   neighbor EVPN-MPLS-GW-PEERS update-source Loopback0
+   neighbor EVPN-MPLS-GW-PEERS bfd
+   neighbor EVPN-MPLS-GW-PEERS route-reflector-client
+   neighbor 2001:db8:c3::307 peer group EVPN-MPLS-GW-PEERS
+   neighbor 2001:db8:c3::307 description C-LEAF7.EVPN
+   neighbor 2001:db8:c3::308 peer group EVPN-MPLS-GW-PEERS
+   neighbor 2001:db8:c3::308 description C-LEAF8.EVPN
+   neighbor 2001:db8:d3::407 peer group EVPN-MPLS-GW-PEERS
+   neighbor 2001:db8:d3::407 description D-LEAF7.EVPN
+   neighbor 2001:db8:d3::408 peer group EVPN-MPLS-GW-PEERS
+   neighbor 2001:db8:d3::408 description D-LEAF8.EVPN
+   !
+   address-family evpn
+      neighbor EVPN-MPLS-GW-PEERS activate
+      neighbor EVPN-MPLS-GW-PEERS encapsulation mpls next-hop-self source-interface Loopback0
+!
+router isis BACKBONE
+   net 49.0000.0000.0000.0002.00
+   is-hostname BB2
+   router-id ipv4 10.0.0.2
+   is-type level-2
+   log-adjacency-changes
+   !
+   address-family ipv6 unicast
+      fast-reroute ti-lfa mode node-protection
+   !
+   segment-routing mpls
+      no shutdown
+!
+management ssh
+   vrf MGMT
+      no shutdown
+!
+end

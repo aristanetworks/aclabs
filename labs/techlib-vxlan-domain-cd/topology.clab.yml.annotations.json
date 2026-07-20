@@ -1,0 +1,1375 @@
+{
+  "freeTextAnnotations": [
+    {
+      "id": "freeText_1771952889853",
+      "text": "- IP: **10.30.30.101**\n- MAC: **00:01:01:00:00:C2**\n- VLAN: **30**\n- VRF: **Prod**",
+      "position": {
+        "x": -251.79789473683812,
+        "y": 751.2589473684205
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771952926123",
+      "text": "- IP: **10.50.50.101**\n- MAC: **00:01:01:00:00:C3**\n- VLAN: **50**\n- VRF: **DEV**",
+      "position": {
+        "x": -12.058947368417279,
+        "y": 747.3052631578944
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771952988027",
+      "text": "- IP: **10.10.10.102**\n- MAC: **00:01:01:00:00:C4**\n- VLAN: **10**\n- VRF: **PROD**",
+      "position": {
+        "x": 102.04382974644219,
+        "y": 637.7077126875473
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771953033477",
+      "text": "- IP: **10.30.30.102**\n- MAC: **00:01:01:00:00:C5**\n- VLAN: **30**\n- VRF: **PROD**",
+      "position": {
+        "x": 231.1139918715618,
+        "y": 750.2827793639535
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771953480823",
+      "text": "- IP: **10.70.70.101**\n- MAC: **00:01:01:00:00:C6**\n- VLAN: **70**\n- VRF: **DEV**",
+      "position": {
+        "x": 457.793699007083,
+        "y": 751.3233836666997
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771954147411",
+      "text": "# EVPN-VXLAN Domain C\n\n- Loopback0: **2001:db8:c0::<NodeID>**\n- Loopback1: **2001:db8:c1::<NodeID>**\n- Loopback2: **2001:db8:c2::<NodeID>**\n- Loopback3: **2001:db8:c3::<NodeID>**\n- Local P2P Underlay: **IPv6 LLA**\n- WAN P2P Underlay:\n  - **2001:db8:bb1:c7::/64**\n  - **2001:db8:bb2:c7::/64**\n  - **2001:db8:bb1:c8::/64**\n  - **2001:db8:bb2:c8::/64**\n- Underlay Routing: **eBGP**\n- Overlay Peering: **eBGP**\n- Endpoint Multihoming: **MLAG**\n- Gateway Resiliency: **All Active**\n- IRB Model: **Symmetric IRB**\n- Overlay Multicast (OISM): **Yes**",
+      "position": {
+        "x": -559.1136401315929,
+        "y": -113.2479272906379
+      },
+      "fontSize": 12,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771955912860",
+      "text": "## Domain C Node IDs:\n\n- C-SPINE1: **201**\n- C-SPINE2: **202**\n- C-SPINE3: **203**\n- C-SPINE4: **204**\n- C-LEAF1: **1**\n- C-LEAF2: **2**\n- C-LEAF3: **3**\n- C-LEAF4: **4**\n- C-LEAF5: **5**\n- C-LEAF6: **6**\n- C-LEAF7: **7**\n- C-LEAF8: **8**",
+      "position": {
+        "x": 681.7133386812658,
+        "y": -112.83101009791112
+      },
+      "fontSize": 12,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1771963455154",
+      "text": "- IP: **10.10.10.101**\n- MAC: **00:01:01:00:00:C1**\n- VLAN: **10**\n- VRF: **Prod**",
+      "position": {
+        "x": -498.5693409323229,
+        "y": 751.6125138291785
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1773355016595",
+      "text": "# EVPN-VXLAN Domain D\n\n- Loopback0: **2001:db8:d0::<NodeID>**\n- Loopback1: **2001:db8:d1::<NodeID>**\n- Loopback2: **2001:db8:d2::<NodeID>**\n- Loopback3: **2001:db8:d3::<NodeID>**\n- Local P2P Underlay: **IPv6 LLA**\n- WAN P2P Underlay:\n  - **2001:db8:bb1:d7::/64**\n  - **2001:db8:bb2:d7::/64**\n  - **2001:db8:bb1:d8::/64**\n  - **2001:db8:bb2:d8::/64**\n- Underlay Routing: **iBGP**\n- Overlay Peering: **iBGP**\n- Endpoint Multihoming: **All Active**\n- Gateway Resiliency: **All Active**\n- IRB Model: **Symmetric IRB**\n- Overlay Multicast (OISM): **Yes**",
+      "position": {
+        "x": 2025.7342248580198,
+        "y": -111.8612862250518
+      },
+      "fontSize": 12,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1773355096403",
+      "text": "## Domain B Node IDs:\n\n- D-SPINE1: **201**\n- D-SPINE2: **202**\n- D-SPINE3: **203**\n- D-SPINE4: **204**\n- D-LEAF1: **1**\n- D-LEAF2: **2**\n- D-LEAF3: **3**\n- D-LEAF4: **4**\n- D-LEAF5: **5**\n- D-LEAF6: **6**\n- D-LEAF7: **7**\n- D-LEAF8: **8**",
+      "position": {
+        "x": 883.6145406732433,
+        "y": -113.10664791416151
+      },
+      "fontSize": 12,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1775622470617",
+      "text": "# Backbone IP Transport",
+      "position": {
+        "x": 694.0987653473924,
+        "y": -553.9541027620221
+      },
+      "fontSize": 14,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1775622627990",
+      "text": "- IP: **10.20.20.101**\n- MAC: **00:01:01:00:00:D1**\n- VLAN: **20**\n- VRF: **PROD**",
+      "position": {
+        "x": 900.9301320942525,
+        "y": 752.0710501953175
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1775623113635",
+      "text": "- IP: **10.40.40.101**\n- MAC: **00:01:01:00:00:D2**\n- VLAN: **40**\n- VRF: **PROD**",
+      "position": {
+        "x": 1137.9449347645343,
+        "y": 752.7895606876707
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1775623146669",
+      "text": "- IP: **10.60.60.101**\n- MAC: **00:01:01:00:00:D3**\n- VLAN: **60**\n- VRF: **DEV**",
+      "position": {
+        "x": 1380.4893006583466,
+        "y": 752.9628253359593
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1775623211483",
+      "text": "- IP: **10.10.10.103**\n- MAC: **00:01:01:00:00:D4**\n- VLAN: **10**\n- VRF: **PROD**",
+      "position": {
+        "x": 1502.8617149369286,
+        "y": 636.6024792737196
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1775623261816",
+      "text": "- IP: **10.70.70.102**\n- MAC: **00:01:01:00:00:D5**\n- VLAN: **70**\n- VRF: **DEV**",
+      "position": {
+        "x": 1618.768651804717,
+        "y": 752.9586173895959
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1775623303415",
+      "text": "- IP: **10.40.40.102**\n- MAC: **00:01:01:00:00:D6**\n- VLAN: **40**\n- VRF: **PROD**",
+      "position": {
+        "x": 1857.8969317165947,
+        "y": 753.2849842887695
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1775623332382",
+      "text": "- IP: **10.80.80.101**\n- MAC: **00:01:01:00:00:D7**\n- VLAN: **80**\n- VRF: **DEV**",
+      "position": {
+        "x": 2101.3869196331198,
+        "y": 752.8799124265519
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1782391326285",
+      "text": "- IP: **10.50.50.103**\n- MAC: **00:01:01:00:00:C8**\n- VLAN: **50**\n- VRF: **DEV**",
+      "position": {
+        "x": 100.49759347737564,
+        "y": 0.5468457016352914
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1782391595780",
+      "text": "- IP: **10.60.60.102**\n- MAC: **00:01:01:00:00:D8**\n- VLAN: **60**\n- VRF: **DEV**",
+      "position": {
+        "x": 1502.1898753437792,
+        "y": -1.1511634229350811
+      },
+      "fontSize": 9,
+      "fontColor": "#000000",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    },
+    {
+      "id": "freeText_1782405241240",
+      "text": "- IP: **10.50.50.102**\n- MAC: **00:01:01:00:00:C7**\n- VLAN: **50**\n- VRF: **DEV**",
+      "position": {
+        "x": 697.6026658824871,
+        "y": 749.5907453684395
+      },
+      "fontSize": 9,
+      "fontColor": "#3b3b3b",
+      "backgroundColor": "#f5f5f5",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "textDecoration": "none",
+      "textAlign": "left",
+      "fontFamily": "Arial"
+    }
+  ],
+  "freeShapeAnnotations": [
+    {
+      "id": "freeShape_1773354911413",
+      "shapeType": "rectangle",
+      "position": {
+        "x": -564.4711085811905,
+        "y": -117.60111533228945
+      },
+      "width": 1442,
+      "height": 1017,
+      "fillColor": "#ff9500",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    },
+    {
+      "id": "freeShape_1773354959899",
+      "shapeType": "rectangle",
+      "position": {
+        "x": 878.7590160116529,
+        "y": -118.1452456582048
+      },
+      "width": 1442,
+      "height": 1018,
+      "fillColor": "#0f59d2",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    },
+    {
+      "id": "freeShape_1775622434919",
+      "shapeType": "rectangle",
+      "position": {
+        "x": 657.0709442534178,
+        "y": -561.1274099641296
+      },
+      "width": 399,
+      "height": 280,
+      "fillColor": "rgba(127, 127, 127, 0.16)",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "zIndex": -1
+    }
+  ],
+  "trafficRateAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "HostC1",
+      "icon": "client",
+      "position": {
+        "x": -440,
+        "y": 680
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostC2",
+      "icon": "client",
+      "position": {
+        "x": -200,
+        "y": 680
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostC3",
+      "icon": "client",
+      "position": {
+        "x": 40,
+        "y": 680
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostC4",
+      "icon": "client",
+      "position": {
+        "x": 160,
+        "y": 560
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostC5",
+      "icon": "client",
+      "position": {
+        "x": 280,
+        "y": 680
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostC6",
+      "icon": "client",
+      "position": {
+        "x": 520,
+        "y": 680
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "5",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-LEAF1",
+      "icon": "leaf",
+      "position": {
+        "x": -440,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-LEAF2",
+      "icon": "leaf",
+      "position": {
+        "x": -200,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-LEAF3",
+      "icon": "leaf",
+      "position": {
+        "x": 40,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-LEAF4",
+      "icon": "leaf",
+      "position": {
+        "x": 280,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-LEAF5",
+      "icon": "leaf",
+      "position": {
+        "x": 520,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-LEAF6",
+      "icon": "leaf",
+      "position": {
+        "x": 760,
+        "y": 480
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "4",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-SPINE1",
+      "icon": "spine",
+      "position": {
+        "x": -200,
+        "y": 200
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "3",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-SPINE2",
+      "icon": "spine",
+      "position": {
+        "x": 40,
+        "y": 200
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "3",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-SPINE3",
+      "icon": "spine",
+      "position": {
+        "x": 280,
+        "y": 200
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "3",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-SPINE4",
+      "icon": "spine",
+      "position": {
+        "x": 520,
+        "y": 200
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "3",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-LEAF7",
+      "icon": "dcgw",
+      "position": {
+        "x": -200,
+        "y": 0
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "2",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "C-LEAF8",
+      "icon": "dcgw",
+      "position": {
+        "x": 520,
+        "y": 0
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "2",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "BB2",
+      "icon": "pe",
+      "position": {
+        "x": 920,
+        "y": -440
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "1",
+      "iconCornerRadius": 40,
+      "iconColor": "#16325b"
+    },
+    {
+      "id": "BB1",
+      "icon": "pe",
+      "position": {
+        "x": 760,
+        "y": -440
+      },
+      "geoCoordinates": {
+        "lat": 48.684826888402256,
+        "lng": 9.007895390625677
+      },
+      "level": "1",
+      "iconCornerRadius": 40,
+      "iconColor": "#16325b"
+    },
+    {
+      "id": "HostD7",
+      "position": {
+        "x": 2160,
+        "y": 680
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostD6",
+      "position": {
+        "x": 1920,
+        "y": 680
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostD5",
+      "position": {
+        "x": 1680,
+        "y": 680
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostD4",
+      "position": {
+        "x": 1560,
+        "y": 560
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostD3",
+      "position": {
+        "x": 1440,
+        "y": 680
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostD2",
+      "position": {
+        "x": 1200,
+        "y": 680
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostD1",
+      "position": {
+        "x": 960,
+        "y": 680
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-SW1",
+      "position": {
+        "x": 2040,
+        "y": 600
+      },
+      "icon": "switch",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-LEAF8",
+      "position": {
+        "x": 1920,
+        "y": 0
+      },
+      "icon": "dcgw",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-LEAF7",
+      "position": {
+        "x": 1200,
+        "y": 0
+      },
+      "icon": "dcgw",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-LEAF6",
+      "position": {
+        "x": 2160,
+        "y": 480
+      },
+      "icon": "leaf",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-LEAF5",
+      "position": {
+        "x": 1920,
+        "y": 480
+      },
+      "icon": "leaf",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-LEAF4",
+      "position": {
+        "x": 1680,
+        "y": 480
+      },
+      "icon": "leaf",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-LEAF3",
+      "position": {
+        "x": 1440,
+        "y": 480
+      },
+      "icon": "leaf",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-LEAF2",
+      "position": {
+        "x": 1200,
+        "y": 480
+      },
+      "icon": "leaf",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-LEAF1",
+      "position": {
+        "x": 960,
+        "y": 480
+      },
+      "icon": "leaf",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-SPINE4",
+      "position": {
+        "x": 1920,
+        "y": 200
+      },
+      "icon": "spine",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-SPINE3",
+      "position": {
+        "x": 1680,
+        "y": 200
+      },
+      "icon": "spine",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-SPINE2",
+      "position": {
+        "x": 1440,
+        "y": 200
+      },
+      "icon": "spine",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "D-SPINE1",
+      "position": {
+        "x": 1200,
+        "y": 200
+      },
+      "icon": "spine",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "HostC8",
+      "position": {
+        "x": 160,
+        "y": -80
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "interfacePattern": "eth{n}"
+    },
+    {
+      "id": "HostD8",
+      "position": {
+        "x": 1560,
+        "y": -80
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "interfacePattern": "eth{n}"
+    },
+    {
+      "id": "HostC7",
+      "position": {
+        "x": 760,
+        "y": 680
+      },
+      "icon": "client",
+      "iconColor": "#16325b",
+      "interfacePattern": "eth{n}"
+    }
+  ],
+  "edgeAnnotations": [
+    {
+      "id": "Clab-Link49",
+      "source": "HostC6",
+      "target": "C-LEAF6",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link48",
+      "source": "HostC6",
+      "target": "C-LEAF5",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link47",
+      "source": "HostC5",
+      "target": "C-LEAF4",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link44",
+      "source": "HostC3",
+      "target": "C-LEAF3",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link45",
+      "source": "HostC4",
+      "target": "C-LEAF3",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link46",
+      "source": "HostC4",
+      "target": "C-LEAF4",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link43",
+      "source": "HostC2",
+      "target": "C-LEAF2",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link40",
+      "source": "HostC1",
+      "target": "C-LEAF1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link42",
+      "source": "HostC2",
+      "target": "C-LEAF1",
+      "sourceEndpoint": "eth1",
+      "targetEndpoint": "et8",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link41",
+      "source": "HostC1",
+      "target": "C-LEAF2",
+      "sourceEndpoint": "eth2",
+      "targetEndpoint": "et7",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link33",
+      "source": "C-LEAF1",
+      "target": "C-LEAF2",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et6",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link32",
+      "source": "C-LEAF1",
+      "target": "C-LEAF2",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et5",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link35",
+      "source": "C-LEAF3",
+      "target": "C-LEAF4",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et6",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link34",
+      "source": "C-LEAF3",
+      "target": "C-LEAF4",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et5",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link37",
+      "source": "C-LEAF5",
+      "target": "C-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et6",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link36",
+      "source": "C-LEAF5",
+      "target": "C-LEAF6",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et5",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 50
+    },
+    {
+      "id": "Clab-Link29",
+      "source": "C-SPINE4",
+      "target": "C-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link21",
+      "source": "C-SPINE3",
+      "target": "C-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link13",
+      "source": "C-SPINE2",
+      "target": "C-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link5",
+      "source": "C-SPINE1",
+      "target": "C-LEAF6",
+      "sourceEndpoint": "et6",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link28",
+      "source": "C-SPINE4",
+      "target": "C-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link20",
+      "source": "C-SPINE3",
+      "target": "C-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link12",
+      "source": "C-SPINE2",
+      "target": "C-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link4",
+      "source": "C-SPINE1",
+      "target": "C-LEAF5",
+      "sourceEndpoint": "et5",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link27",
+      "source": "C-SPINE4",
+      "target": "C-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link19",
+      "source": "C-SPINE3",
+      "target": "C-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link11",
+      "source": "C-SPINE2",
+      "target": "C-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link3",
+      "source": "C-SPINE1",
+      "target": "C-LEAF4",
+      "sourceEndpoint": "et4",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link26",
+      "source": "C-SPINE4",
+      "target": "C-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link18",
+      "source": "C-SPINE3",
+      "target": "C-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link10",
+      "source": "C-SPINE2",
+      "target": "C-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link2",
+      "source": "C-SPINE1",
+      "target": "C-LEAF3",
+      "sourceEndpoint": "et3",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link17",
+      "source": "C-SPINE3",
+      "target": "C-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link16",
+      "source": "C-SPINE3",
+      "target": "C-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link9",
+      "source": "C-SPINE2",
+      "target": "C-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link8",
+      "source": "C-SPINE2",
+      "target": "C-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link24",
+      "source": "C-SPINE4",
+      "target": "C-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link25",
+      "source": "C-SPINE4",
+      "target": "C-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link0",
+      "source": "C-SPINE1",
+      "target": "C-LEAF1",
+      "sourceEndpoint": "et1",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link1",
+      "source": "C-SPINE1",
+      "target": "C-LEAF2",
+      "sourceEndpoint": "et2",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link22",
+      "source": "C-SPINE3",
+      "target": "C-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link23",
+      "source": "C-SPINE3",
+      "target": "C-LEAF8",
+      "sourceEndpoint": "et8",
+      "targetEndpoint": "et3",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link30",
+      "source": "C-SPINE4",
+      "target": "C-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link31",
+      "source": "C-SPINE4",
+      "target": "C-LEAF8",
+      "sourceEndpoint": "et8",
+      "targetEndpoint": "et4",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link15",
+      "source": "C-SPINE2",
+      "target": "C-LEAF8",
+      "sourceEndpoint": "et8",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link14",
+      "source": "C-SPINE2",
+      "target": "C-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et2",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 30
+    },
+    {
+      "id": "Clab-Link7",
+      "source": "C-SPINE1",
+      "target": "C-LEAF8",
+      "sourceEndpoint": "et8",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    },
+    {
+      "id": "Clab-Link6",
+      "source": "C-SPINE1",
+      "target": "C-LEAF7",
+      "sourceEndpoint": "et7",
+      "targetEndpoint": "et1",
+      "endpointLabelOffsetEnabled": true,
+      "endpointLabelOffset": 40
+    }
+  ],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {
+    "style": "default",
+    "linkLabelMode": "show-all",
+    "lastNonTelemetryLinkLabelMode": "show-all",
+    "telemetryNodeSizePx": 40,
+    "telemetryInterfaceSizePercent": 100,
+    "gridLineWidth": 0.5,
+    "gridStyle": "quadratic",
+    "gridColor": null,
+    "gridBgColor": null
+  },
+  "cloudNodeAnnotations": []
+}

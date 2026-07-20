@@ -1,0 +1,203 @@
+! Startup-config last modified at Sun Jul 19 18:18:00 2026 by root
+! device: C-SPINE2 (cEOSLab, EOS-4.36.0.1F-47401373.43601F (engineering build))
+!
+no aaa root
+aaa authentication policy local allow-nopassword-remote-login
+!
+username admin privilege 15 role network-admin nopassword
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+switchport default mode routed
+!
+vlan internal order ascending range 1006 1199
+!
+event-monitor
+!
+no service interface inactive port-id allocation disabled
+!
+load-interval default 1
+!
+service routing protocols model multi-agent
+!
+hostname C-SPINE2
+ip domain lookup vrf MGMT source-interface Management0
+ip name-server vrf MGMT 8.8.8.8
+dns domain aclabs.lab
+!
+spanning-tree mode none
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+clock timezone America/Detroit
+!
+vrf instance MGMT
+!
+aaa authorization exec default local
+!
+interface Ethernet1
+   description C-LEAF1
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet2
+   description C-LEAF2
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet3
+   description C-LEAF3
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet4
+   description C-LEAF4
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet5
+   description C-LEAF5
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet6
+   description C-LEAF6
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet7
+   description C-LEAF7
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet8
+   description C-LEAF8
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Loopback0
+   description Globally Unique Address
+   ipv6 address 2001:db8:c0::202/128
+!
+interface Management0
+   description OOB_MANAGEMENT
+   vrf MGMT
+   ip address 172.100.101.102/22
+!
+mac address-table aging-time 1800
+!
+ip routing ipv6 interfaces 
+no ip routing vrf MGMT
+!
+ipv6 prefix-list PL6-LOOPBACKS
+   seq 10 permit 2001:db8:c0::/48 le 128
+   seq 20 permit 2001:db8:c1::/48 le 128
+   seq 30 permit 2001:db8:c2::/48 le 128
+!
+ipv6 unicast-routing
+!
+ip route vrf MGMT 0.0.0.0/0 172.100.100.1
+!
+arp aging timeout default 1500
+!
+ip http client local-interface Management0 vrf MGMT
+ip ssh client source-interface Management0 vrf MGMT
+!
+ntp local-interface vrf MGMT Management0
+ntp server vrf MGMT time.apple.com iburst
+ntp server vrf MGMT time.google.com prefer iburst
+ntp server vrf MGMT time.windows.com iburst
+!
+route-map RM-CONN-2-BGP permit 10
+   match ipv6 address prefix-list PL6-LOOPBACKS
+!
+peer-filter LEAF-AS-RANGE
+   10 match as-range 65301-65399 result accept
+!
+router bfd
+   multihop interval 1000 min-rx 1000 multiplier 3
+!
+router bgp 65300
+   router-id 10.0.3.202
+   update wait-install
+   no bgp default ipv4-unicast
+   distance bgp 20 200 200
+   maximum-paths 128
+   neighbor default send-community
+   neighbor LOCAL-EVPN-PEERS peer group
+   neighbor LOCAL-EVPN-PEERS update-source Loopback0
+   neighbor LOCAL-EVPN-PEERS bfd
+   neighbor LOCAL-EVPN-PEERS ebgp-multihop 3
+   neighbor LOCAL-IPV6-PEERS peer group
+   neighbor LOCAL-IPV6-PEERS bfd
+   neighbor 2001:db8:c0::1 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:c0::1 remote-as 65301
+   neighbor 2001:db8:c0::1 description C-LEAF1.EVPN
+   neighbor 2001:db8:c0::2 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:c0::2 remote-as 65301
+   neighbor 2001:db8:c0::2 description C-LEAF2.EVPN
+   neighbor 2001:db8:c0::3 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:c0::3 remote-as 65303
+   neighbor 2001:db8:c0::3 description C-LEAF3.EVPN
+   neighbor 2001:db8:c0::4 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:c0::4 remote-as 65303
+   neighbor 2001:db8:c0::4 description C-LEAF4.EVPN
+   neighbor 2001:db8:c0::5 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:c0::5 remote-as 65305
+   neighbor 2001:db8:c0::5 description C-LEAF5.EVPN
+   neighbor 2001:db8:c0::6 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:c0::6 remote-as 65305
+   neighbor 2001:db8:c0::6 description C-LEAF6.EVPN
+   neighbor 2001:db8:c0::7 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:c0::7 remote-as 65307
+   neighbor 2001:db8:c0::7 description C-LEAF7.EVPN
+   neighbor 2001:db8:c0::8 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:c0::8 remote-as 65308
+   neighbor 2001:db8:c0::8 description C-LEAF8.EVPN
+   neighbor interface Ethernet1 peer-group LOCAL-IPV6-PEERS peer-filter LEAF-AS-RANGE
+   neighbor interface Ethernet2 peer-group LOCAL-IPV6-PEERS peer-filter LEAF-AS-RANGE
+   neighbor interface Ethernet3 peer-group LOCAL-IPV6-PEERS peer-filter LEAF-AS-RANGE
+   neighbor interface Ethernet4 peer-group LOCAL-IPV6-PEERS peer-filter LEAF-AS-RANGE
+   neighbor interface Ethernet5 peer-group LOCAL-IPV6-PEERS peer-filter LEAF-AS-RANGE
+   neighbor interface Ethernet6 peer-group LOCAL-IPV6-PEERS peer-filter LEAF-AS-RANGE
+   neighbor interface Ethernet7 peer-group LOCAL-IPV6-PEERS peer-filter LEAF-AS-RANGE
+   neighbor interface Ethernet8 peer-group LOCAL-IPV6-PEERS peer-filter LEAF-AS-RANGE
+   !
+   address-family evpn
+      neighbor LOCAL-EVPN-PEERS activate
+   !
+   address-family ipv6
+      neighbor LOCAL-IPV6-PEERS activate
+      redistribute connected route-map RM-CONN-2-BGP
+!
+router multicast
+   ipv6
+      routing
+!
+router pim sparse-mode
+   ipv6
+      make-before-break disabled
+!
+end

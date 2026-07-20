@@ -1,0 +1,31 @@
+---
+all:
+  children:
+    DOMAIN_A_FABRIC:
+      children:
+        DOMAIN_A_SPINES:
+          vars:
+            type: spine
+          hosts:
+            A-SPINE1:
+            A-SPINE2:
+            A-SPINE3:
+            A-SPINE4:
+        DOMAIN_A_LEAFS:
+          vars:
+            type: l3leaf
+          hosts:
+            A-LEAF1:
+            A-LEAF2:
+            A-LEAF3:
+            A-LEAF4:
+            A-LEAF5:
+            A-LEAF6:
+            A-LEAF7:
+            A-LEAF8:
+    DOMAIN_A_ENDPOINTS:
+      children:
+        DOMAIN_A_LEAFS:
+    DOMAIN_A_SERVICES:
+      children:
+        DOMAIN_A_LEAFS:

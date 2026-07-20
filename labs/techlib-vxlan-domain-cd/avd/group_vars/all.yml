@@ -1,0 +1,100 @@
+---
+
+# AAA settings
+aaa_settings:
+  authorization:
+    exec:
+      default: local
+  local_users:
+    - name: arista
+      privilege: 15
+      role: network-admin
+      sha512_password: $6$Ap6u4I1WR/jMoNKe$LPLoHgIXFg5kiGPDWGF0w5lVVuOZZ4T15cIBbNxE2ykqh98uVvsi9jPdybkbTXBTZFzi3haaPJVaGVwnpuck40
+    - name: admin
+      privilege: 15
+      role: network-admin
+      sha512_password: $6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/.
+
+# Global ARP Timer
+custom_structured_configuration_arp:
+  aging:
+    timeout_default: 1500
+
+# Stop build if validation error is encountered
+avd_data_validation_mode: error
+
+# DNS Settings
+dns_settings:
+  domain: aclabs.lab
+  servers:
+    - vrf: use_mgmt_interface_vrf
+      ip_address: 8.8.8.8
+
+# Enable eAPI
+management_eapi:
+  enabled: true
+  enable_http: true
+  enable_https: true
+  vrfs:
+    - enabled: true
+      name: use_mgmt_interface_vrf
+
+# Event Monitor in EOS
+event_monitor:
+  enabled: true
+
+# Global MAC Aging Timer
+mac_address_table:
+  aging_time: 1800
+
+# Out of Band Management
+mgmt_gateway: 172.100.100.1
+mgmt_interface: Management0
+mgmt_interface_vrf: MGMT
+default_mgmt_method: oob
+
+# Enable SSH for MGMT VRF
+ssh_settings:
+    vrfs:
+      - name: use_mgmt_interface_vrf
+        enabled: true
+
+# Set source interfaces
+source_interfaces:
+  http_client:
+    mgmt_interface: true
+  ssh_client:
+    mgmt_interface: true
+
+# NTP Servers
+ntp_settings:
+  server_vrf: use_mgmt_interface_vrf
+  servers:
+    - name: time.google.com
+      iburst: true
+    - name: time.windows.com
+      iburst: true
+    - name: time.apple.com
+      iburst: true
+
+timezone: America/Detroit
+
+# Global IP MTU for Point-to-Point links
+p2p_uplinks_mtu: 9214
+
+# Default mode of "routed" interfaces
+custom_structured_configuration_switchport_default:
+  mode: routed
+
+ansible_user: admin
+ansible_password: admin
+ansible_network_os: arista.eos.eos
+# Configure privilege escalation
+ansible_become: true
+ansible_become_method: enable
+# HTTPAPI configuration
+ansible_connection: ansible.netcommon.httpapi
+ansible_httpapi_port: 443
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: false
+ansible_python_interpreter: $(which python3)
