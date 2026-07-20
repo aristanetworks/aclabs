@@ -108,7 +108,6 @@ interface Management0
 !
 mac address-table aging-time 1800
 !
-ip routing ipv6 interfaces 
 no ip routing vrf MGMT
 !
 ipv6 prefix-list PL6-LOOPBACKS
