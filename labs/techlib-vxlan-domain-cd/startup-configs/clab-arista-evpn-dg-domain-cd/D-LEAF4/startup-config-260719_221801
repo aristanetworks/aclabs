@@ -1,0 +1,301 @@
+! Startup-config last modified at Sun Jul 19 18:18:01 2026 by root
+! device: D-LEAF4 (cEOSLab, EOS-4.36.0.1F-47401373.43601F (engineering build))
+!
+no aaa root
+aaa authentication policy local allow-nopassword-remote-login
+!
+username admin privilege 15 role network-admin nopassword
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+dhcp relay
+   tunnel requests disabled
+!
+switchport default mode routed
+!
+vlan internal order ascending range 1006 1199
+!
+event-monitor
+!
+no service interface inactive port-id allocation disabled
+!
+load-interval default 1
+!
+service routing protocols model multi-agent
+!
+hostname D-LEAF4
+ip domain lookup vrf MGMT source-interface Management0
+ip name-server vrf MGMT 8.8.8.8
+dns domain aclabs.lab
+!
+spanning-tree mode mstp
+spanning-tree edge-port bpduguard default
+spanning-tree root super
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+clock timezone America/Detroit
+!
+vlan 10
+   name Blue
+!
+vlan 70
+   name Brown
+!
+vrf instance DEV
+!
+vrf instance MGMT
+!
+vrf instance PROD
+!
+aaa authorization exec default local
+!
+interface Port-Channel8
+   description D4
+   bgp session tracker TRACK-LOCAL-EVPN-PEERS
+   switchport access vlan 10
+   switchport
+   !
+   evpn ethernet-segment
+      identifier auto lacp
+   lacp system-id c0d6.8200.0004
+   spanning-tree portfast edge
+!
+interface Ethernet1
+   description D-SPINE1
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet2
+   description D-SPINE2
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet3
+   description D-SPINE3
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet4
+   description D-SPINE4
+   mtu 9114
+   no switchport
+   ipv6 enable
+   pim ipv6 sparse-mode
+!
+interface Ethernet7
+   description HostD5
+   switchport access vlan 70
+   switchport
+   spanning-tree portfast edge
+!
+interface Ethernet8
+   switchport
+   channel-group 8 mode active
+!
+interface Loopback0
+   description Globally Unique Address
+   ipv6 address 2001:db8:d0::4/128
+!
+interface Loopback1
+   description VTEP IP
+   ipv6 address 2001:db8:d1::4/128
+!
+interface Loopback101
+   description OISM PIM/IGMP Source (PROD)
+   vrf PROD
+   ip address 10.101.4.4/32
+   ipv6 address 2001:db8:d101::4/128
+!
+interface Loopback102
+   description OISM PIM/IGMP Source (DEV)
+   vrf DEV
+   ip address 10.102.4.4/32
+   ipv6 address 2001:db8:d102::4/128
+!
+interface Management0
+   description OOB_MANAGEMENT
+   vrf MGMT
+   ip address 172.100.102.108/22
+!
+interface Vlan10
+   mtu 9014
+   vrf PROD
+   ip igmp
+   mld
+   pim ipv4 local-interface Loopback101
+   ip address virtual 10.10.10.1/24
+   ipv6 address virtual 2001:db8:10:10::1/64
+!
+interface Vlan70
+   mtu 9014
+   vrf DEV
+   ip igmp
+   mld
+   pim ipv4 local-interface Loopback102
+   ip address virtual 10.70.70.1/24
+   ipv6 address virtual 2001:db8:70:70::1/64
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan encapsulation ipv6
+   vxlan vlan 10,70 vni 10010,10070
+   vxlan vrf DEV vni 50002
+   vxlan vrf PROD vni 50001
+   vxlan vrf DEV multicast group ff3e::2
+   vxlan vrf PROD multicast group ff3e::1
+   vxlan multicast ipv6
+!
+mac address-table aging-time 1800
+!
+ip virtual-router mac-address 00:1c:73:00:00:01
+!
+ip routing
+ip routing vrf DEV
+no ip routing vrf MGMT
+ip routing vrf PROD
+!
+ipv6 prefix-list PL6-LOOPBACKS
+   seq 10 permit 2001:db8:d0::/48 le 128
+   seq 20 permit 2001:db8:d1::/48 le 128
+!
+ipv6 unicast-routing
+ipv6 unicast-routing vrf DEV
+ipv6 unicast-routing vrf PROD
+!
+mld snooping
+   vlan 10,70
+!
+ip route vrf MGMT 0.0.0.0/0 172.100.100.1
+!
+arp aging timeout default 1500
+!
+ip http client local-interface Management0 vrf MGMT
+ip ssh client source-interface Management0 vrf MGMT
+!
+ntp local-interface vrf MGMT Management0
+ntp server vrf MGMT time.apple.com iburst
+ntp server vrf MGMT time.google.com prefer iburst
+ntp server vrf MGMT time.windows.com iburst
+!
+route-map RM-CONN-2-BGP permit 10
+   match ipv6 address prefix-list PL6-LOOPBACKS
+!
+router bfd
+   multihop interval 1000 min-rx 1000 multiplier 3
+!
+router bgp 65400
+   router-id 10.0.4.4
+   update wait-install
+   no bgp default ipv4-unicast
+   distance bgp 20 200 200
+   maximum-paths 4
+   neighbor default send-community
+   neighbor LOCAL-EVPN-PEERS peer group
+   neighbor LOCAL-EVPN-PEERS remote-as 65400
+   neighbor LOCAL-EVPN-PEERS update-source Loopback0
+   neighbor LOCAL-EVPN-PEERS bfd
+   neighbor LOCAL-EVPN-PEERS session tracker TRACK-LOCAL-EVPN-PEERS
+   neighbor LOCAL-IPV6-PEERS peer group
+   neighbor LOCAL-IPV6-PEERS remote-as 65400
+   neighbor LOCAL-IPV6-PEERS bfd
+   neighbor 2001:db8:d0::201 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:d0::201 description D-SPINE1.EVPN
+   neighbor 2001:db8:d0::202 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:d0::202 description D-SPINE2.EVPN
+   neighbor 2001:db8:d0::203 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:d0::203 description D-SPINE3.EVPN
+   neighbor 2001:db8:d0::204 peer group LOCAL-EVPN-PEERS
+   neighbor 2001:db8:d0::204 description D-SPINE4.EVPN
+   redistribute connected route-map RM-CONN-2-BGP
+   neighbor interface Ethernet1 peer-group LOCAL-IPV6-PEERS
+   neighbor interface Ethernet2 peer-group LOCAL-IPV6-PEERS
+   neighbor interface Ethernet3 peer-group LOCAL-IPV6-PEERS
+   neighbor interface Ethernet4 peer-group LOCAL-IPV6-PEERS
+   !
+   vlan 10
+      rd 10.0.4.4:10010
+      route-target both 10010:10010
+      redistribute learned
+      redistribute router-mac next-hop vtep primary
+      redistribute router-mac virtual-ip next-hop vtep primary
+   !
+   vlan 70
+      rd 10.0.4.4:10070
+      route-target both 10070:10070
+      redistribute learned
+      redistribute router-mac next-hop vtep primary
+      redistribute router-mac virtual-ip next-hop vtep primary
+   !
+   address-family evpn
+      route type ethernet-segment route-target auto
+      neighbor LOCAL-EVPN-PEERS activate
+      route import match-failure action discard
+      layer-2 fec in-place update
+   !
+   address-family ipv6
+      neighbor LOCAL-IPV6-PEERS activate
+   !
+   vrf DEV
+      rd 10.0.4.4:50002
+      route-target import evpn 50002:50002
+      route-target export evpn 50002:50002
+      update wait-install
+      redistribute connected
+      !
+      evpn multicast
+         address-family ipv4
+         !
+         address-family ipv6
+   !
+   vrf PROD
+      rd 10.0.4.4:50001
+      route-target import evpn 50001:50001
+      route-target export evpn 50001:50001
+      update wait-install
+      redistribute connected
+      !
+      evpn multicast
+         address-family ipv4
+         !
+         address-family ipv6
+   !
+   session tracker TRACK-LOCAL-EVPN-PEERS
+      recovery delay 10 seconds
+!
+router multicast
+   ipv6
+      routing
+   !
+   vrf DEV
+      ipv4
+         routing
+      !
+      ipv6
+         routing
+   !
+   vrf PROD
+      ipv4
+         routing
+      !
+      ipv6
+         routing
+!
+router pim sparse-mode
+   ipv6
+      make-before-break disabled
+!
+end

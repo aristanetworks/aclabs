@@ -1,5 +1,5 @@
 ! Startup-config last modified at Thu Jul  9 10:18:41 2026 by root
-! device: BB2 (cEOSLab, EOS-4.36.1F-48405728.4361F (engineering build))
+! device: BB1 (cEOSLab, EOS-4.36.1F-48405728.4361F (engineering build))
 !
 no aaa root
 aaa authentication policy local allow-nopassword-remote-login
@@ -23,7 +23,7 @@ load-interval default 1
 !
 service routing protocols model multi-agent
 !
-hostname BB2
+hostname BB1
 ip name-server vrf MGMT 8.8.8.8
 !
 spanning-tree mode mstp
@@ -40,62 +40,38 @@ interface Ethernet1
    description A-LEAF7
    mtu 9214
    no switchport
-   ip address 172.16.1.4/31
+   ip address 172.16.1.0/31
 !
 interface Ethernet2
    description A-LEAF8
    mtu 9214
    no switchport
-   ip address 172.16.1.6/31
+   ip address 172.16.1.2/31
 !
 interface Ethernet3
    description B-LEAF7
    mtu 9214
    no switchport
-   ip address 172.16.2.4/31
+   ip address 172.16.2.0/31
 !
 interface Ethernet4
    description B-LEAF8
    mtu 9214
    no switchport
-   ip address 172.16.2.6/31
+   ip address 172.16.2.2/31
 !
 interface Ethernet5
-   description C-LEAF7
+   description BB2
    mtu 9214
    no switchport
-   ip address 172.16.3.4/31
-!
-interface Ethernet6
-   description C-LEAF8
-   mtu 9214
-   no switchport
-   ip address 172.16.3.6/31
-!
-interface Ethernet7
-   description D-LEAF7
-   mtu 9214
-   no switchport
-   ip address 172.16.4.4/31
-!
-interface Ethernet8
-   description D-LEAF8
-   mtu 9214
-   no switchport
-   ip address 172.16.4.6/31
-!
-interface Ethernet9
-   description BB1
-   mtu 9214
-   no switchport
-   ip address 172.16.255.1/31
+   ip address 172.16.255.0/31
 !
 interface Loopback0
-   ip address 10.0.0.2/32
+   ip address 10.0.0.1/32
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.102/22
+   ip address 172.100.100.101/22
 !
 ip routing
 no ip routing vrf MGMT
@@ -106,7 +82,7 @@ peer-filter DC-ASN-RANGE
    10 match as-range 65100-65499 result accept
 !
 router bgp 65000
-   router-id 1.1.0.2
+   router-id 1.1.0.1
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    graceful-restart restart-time 300
@@ -130,7 +106,7 @@ router bgp 65000
    !
    address-family ipv4
       neighbor IP-TRANSPORT-CLIENTS activate
-      network 10.0.0.2/32
+      network 10.0.0.1/32
 !
 management ssh
    vrf MGMT

@@ -21,9 +21,9 @@ display:
   # Software versions this lab was validated against. Rendered as a badge row
   # in the dashboard header.
   validated_with:
-    cEOS: "4.35.2F"
-    AVD: "5.7.3"
-    Containerlab: "0.74.3"
+    cEOS: "4.36.1F"
+    AVD: "6.1.0"
+    Containerlab: "0.77.0"
   # Recommended host resources. Rendered as a badge row in the dashboard header.
   resources:
     CPUs: 16
@@ -49,5 +49,6 @@ boot:
 dashboard:
   auto_open: true
   tips:
-    - "Run `pingcheck.sh` on any Linux host to validate reachability across the fabric."
-    - "Refer to `README.md` for lab operations (build / deploy / validate)."
+    - "Run `pingcheck.sh` on any of the Linux endhosts to validate IPv4 and IPv6 unicast reachability."
+    - "Run `mcast-send` and `mcast-receive` on any of the Linux endhosts to validate IPv4 and IPv6 multicast transport."
+    - "Refer to `README.md` for AVD operations (build / deploy / validate)."

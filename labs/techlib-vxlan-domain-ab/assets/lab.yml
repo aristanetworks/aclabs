@@ -8,7 +8,7 @@
 
 # ── Lab identity ─────────────────────────────────────────────────────────
 display:
-  name: "Arista EVPN-VXLAN Deployment Guide - Domain A+B"
+  name: "Arista EVPN-VXLAN Deployment Guide - Domains A+B"
   subtitle: "Tech Library Deployment Guide"
   # Optional banner rendered as a GitHub alert at the top of the README.
   # Type must be one of: note, tip, important, warning, caution.
@@ -22,7 +22,7 @@ display:
   # in the dashboard header.
   validated_with:
     cEOS: "4.36.1F"
-    AVD: "6.1.0"
+    AVD: "6.3.0"
     Containerlab: "0.77.0"
   # Recommended host resources. Rendered as a badge row in the dashboard header.
   resources:
@@ -55,5 +55,6 @@ boot:
 dashboard:
   auto_open: true
   tips:
-    - "Run `pingcheck.sh` on any Linux host to validate reachability across the fabric."
-    - "Refer to `README.md` for lab operations (build / deploy / validate)."
+    - "Run `pingcheck.sh` on any of the Linux endhosts to validate IPv4 and IPv6 unicast reachability."
+    - "Run `mcast-send` and `mcast-receive` on any of the Linux endhosts to validate IPv4 and IPv6 multicast transport."
+    - "Refer to `README.md` for AVD operations (build / deploy / validate)."
