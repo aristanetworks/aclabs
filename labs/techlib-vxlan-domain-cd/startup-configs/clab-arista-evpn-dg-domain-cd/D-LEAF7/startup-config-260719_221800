@@ -171,12 +171,6 @@ ip routing vrf DEV
 no ip routing vrf MGMT
 ip routing vrf PROD
 !
-ipv6 prefix-list PL6-GATEWAY-LOOP
-   seq 10 permit 2001:db8:d0::7/128
-   seq 20 permit 2001:db8:d0::8/128
-   seq 30 permit 2001:db8:d1::7/128
-   seq 40 permit 2001:db8:d1::8/128
-!
 ipv6 prefix-list PL6-LOOPBACKS
    seq 10 permit 2001:db8:d0::/48 le 128
    seq 20 permit 2001:db8:d1::/48 le 128
