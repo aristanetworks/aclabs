@@ -1,3 +1,4 @@
 # AVD build artifacts — regenerated on every `make build*`
 avd/intended/
 avd/reports/
+avd/documentation/
