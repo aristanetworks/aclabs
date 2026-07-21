@@ -1,0 +1,73 @@
+---
+###################################################
+# ANTA — Underlay + BGP peerings + interface state
+#
+# Applies to all AVD-managed devices unless filtered per-test.
+###################################################
+
+anta.tests.interfaces:
+  - VerifyInterfacesStatus:
+      # Every fabric-facing + host-facing + backbone p2p interface must be
+      # up/up. ANTA's built-in test walks the device's structured_configs
+      # to determine the expected interface list.
+      minimum_up_percentage: 100
+  - VerifyInterfaceUtilization:
+      threshold: 90.0
+  - VerifyInterfaceErrors:                   # No CRC / input-error / runt / giant increments
+  - VerifyInterfaceDiscards:
+  - VerifyInterfaceErrDisabled:              # Nothing should be errdisabled unless intentional
+  - VerifyIPProxyARP:                        # Proxy ARP should not be inadvertently enabled
+
+anta.tests.mtu:
+  - VerifyMTU:
+      mtu: 9114                              # Fabric MTU per tech-library guide
+      # VERIFY: MTU filter — need to exclude MGMT + Loopbacks. ANTA's
+      # VerifyMTU may support include/exclude patterns; if not, split into
+      # per-device catalog overlays.
+
+anta.tests.routing.generic:
+  - VerifyRoutingProtocolModel:
+      model: multi-agent
+  - VerifyRoutingTableSize:
+      minimum: 10                            # Every VTEP has at least a handful of routes
+      maximum: 4096
+
+anta.tests.routing.bgp:
+  ###################################################
+  # eBGP underlay (Domain A only) — Spine↔Leaf, MLAG-peer, Gateway↔BB
+  ###################################################
+  - VerifyBGPPeersHealth:                    # All BGP peers Established, no message queues backing up
+      address_families:
+        - afi: ipv4
+        - afi: evpn
+  - VerifyBGPSpecificPeers:
+      # VERIFY: this test needs an explicit list of expected peers per device.
+      # AVD 6.3.0 + anta_runner should auto-generate this from the built
+      # structured_config. Confirm during first render.
+      address_families:
+        - afi: ipv4
+          vrf: default
+        - afi: evpn
+          vrf: default
+  - VerifyBGPPeerMPCaps:                     # Multi-protocol capabilities (EVPN AF) negotiated on the right peers
+
+anta.tests.routing.isis:                     # Domain B only
+  - VerifyISISInterfaceMode:
+      # VERIFY: filter to Domain B nodes only. anta_runner supports per-test
+      # tags/filters; if not, use device-role filter or hostname pattern.
+      interfaces:
+        - name: Ethernet1
+          mode: point-to-point
+          level: 2
+  - VerifyISISNeighborState:
+      # Every IS-IS neighbor should be `up` at L2
+
+anta.tests.bfd:
+  - VerifyBFDPeersHealth:                    # Multi-hop BFD sessions on EVPN peerings all `Up`
+
+anta.tests.stp:
+  - VerifySTPMode:
+      mode: mstp
+  - VerifySTPRootPriority:
+      priority: 0
+      # VERIFY: applies only to l3leafs (spines have STP disabled). Filter.

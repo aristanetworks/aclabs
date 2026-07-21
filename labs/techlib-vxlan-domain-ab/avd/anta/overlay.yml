@@ -1,0 +1,59 @@
+---
+###################################################
+# ANTA — EVPN overlay state
+#
+# EVPN Type 2/3/5 route presence, MAC-VRF + IP-VRF RTs, VXLAN VNI mappings.
+# Applies to l3leaf + backbone_router devices.
+###################################################
+
+anta.tests.vxlan:
+  - VerifyVxlan1Interface:                   # Vxlan1 interface admin+oper up
+  - VerifyVxlanConfigSanity:                 # No `show vxlan config-sanity` errors
+  - VerifyVxlanVniBinding:
+      # VNI mappings match tech-library:
+      #   VLAN 10 → 10010, VLAN 30 → 10030, VLAN 50 → 10050, VLAN 70 → 10070
+      #   VLAN 20 → 10020, VLAN 40 → 10040, VLAN 60 → 10060, VLAN 80 → 10080
+      #   VRF PROD → 50001, VRF DEV → 50002
+      # VERIFY: exact schema for VerifyVxlanVniBinding — it may want VNI:VLAN
+      # mapping per-device. anta_runner should auto-derive from
+      # structured_config; confirm during first render.
+      bindings: []
+
+anta.tests.routing.bgp:
+  ###################################################
+  # EVPN control-plane state
+  ###################################################
+  - VerifyBGPEVPNCount:
+      # Total EVPN routes in the RIB should be > 0 on every VTEP + Gateway
+      minimum: 1
+  - VerifyEVPNType2:
+      # For each configured tenant SVI VIP, verify a MAC-IP Type-2 route exists
+      # at every VTEP (via the anycast gateway advertisement)
+      vni: 10010                             # Repeat per L2VNI in the deployment
+  - VerifyEVPNType3:
+      # For each configured L2VNI, verify a Type-3 IMET route from every VTEP
+      # that hosts the VLAN
+  - VerifyEVPNType5:
+      # For each tenant SVI subnet, verify a Type-5 IP-Prefix route in the VRF's
+      # EVPN RIB. Domain A: 10.10.10.0/24, 10.30.30.0/24, 10.50.50.0/24, 10.70.70.0/24
+      #                     + 2001:db8:XX::/64 counterparts.
+      # Domain B: 10.10.10.0/24, 10.20.20.0/24, 10.40.40.0/24, 10.60.60.0/24,
+      #           10.70.70.0/24, 10.80.80.0/24 + IPv6.
+
+  ###################################################
+  # Route-Target Membership
+  ###################################################
+  - VerifyBGPRouteTargetMembership:
+      # Every MAC-VRF and IP-VRF's import/export RT list matches the design
+      # RD/RT schema: MAC-VRF (VLAN-Based) = Loopback0:L2VNI, RT = L2VNI:L2VNI;
+      #               IP-VRF                = Loopback0:L3VNI, RT = L3VNI:L3VNI
+
+  ###################################################
+  # Multi-Domain RT/RD verification (Gateway pair only)
+  ###################################################
+  - VerifyBGPEVPNDomainAll:
+      # Verify `rd evpn domain all` and `route-target import export evpn
+      # domain all` present on the Gateway pair for the multi-domain VLANs
+      # (VLAN 10, VLAN 70) and multi-domain VRFs (PROD, DEV).
+      # VERIFY: this custom check may not exist in stock ANTA. If not,
+      # move to a per-device custom test in a separate tests_custom.yml.

@@ -1,0 +1,366 @@
+---
+###################################################
+# Domain B — Fabric shape
+#
+# IS-IS Level-2 underlay (IPv4 unnumbered on transit interfaces)
+# Single-ASN iBGP EVPN overlay in AS 65200, RR on Spines
+# EVPN All-Active multihoming on all standard leafs AND Gateway pair
+# STP super-root on all VTEPs
+# IPv4 fabric addressing, dual-stack overlay IRB
+#
+# Rendered configs must match:
+#   docs/data_center/evpnvxlan/deployment_guide/domains_a_b/full_configs/B-*.cfg
+# in the aristanetworks/tech-library repo.
+###################################################
+
+fabric_name: DOMAIN_B_FABRIC
+
+###################################################
+# Underlay: IS-IS Level 2 only, IPv4 unnumbered
+###################################################
+
+underlay_routing_protocol: isis
+isis_area_id: '49.1111'                            # NET: 49.1111.0000.0000.[NodeID].00
+isis_ti_lfa:
+  enabled: false                                   # Not required for the base design (add if needed)
+isis_default_is_type: level-2
+isis_maximum_paths: 4
+
+# VERIFY: `underlay_ipv4_unnumbered` schema key for AVD 6.3.0. Target render:
+#   interface Ethernet<N>
+#      ip address unnumbered Loopback0
+# (per tech-library B-SPINE1.cfg / B-LEAF1.cfg)
+underlay_ipv4_unnumbered: true
+
+###################################################
+# Overlay: iBGP EVPN AS 65200, RR on Spines
+###################################################
+
+overlay_routing_protocol: ibgp
+
+bgp_distance:
+  external_routes: 20
+  internal_routes: 200
+  local_routes: 200
+
+bgp_peer_groups:
+  evpn_overlay_peers:
+    name: LOCAL-EVPN-PEERS
+    password: WzKnNSduqwPYvUePYIh40g==
+    bfd: true
+  evpn_overlay_core:
+    name: REMOTE-EVPN-PEERS
+    password: IO6gE/ln7Sp2wt33WX/Asg==
+    bfd: true
+
+evpn_ebgp_multihop: 3
+
+bgp_update_wait_install: true
+evpn_import_pruning: true
+evpn_multicast: true
+
+router_id_loopback_description: "Globally Unique Address"
+vtep_loopback_description: "VTEP IP"                # Per tech-library B-LEAF1.cfg
+default_vrf_diag_loopback_description: "OISM PIM/IGMP Source"
+
+# BGP peer description template — match tech-library `B-LEAF1.EVPN` style.
+overlay_bgp_peer_description: "{peer}.EVPN"
+
+underlay_multicast_pim_sm: true
+
+###################################################
+# Custom Structured Config — VTEP-side (Domain B has no MLAG)
+#
+# CSC: tunnel-only DHCP relay suppression (no MLAG peer-link to suppress).
+# CSC: spanning-tree root super — advertise a shared bridge ID of
+# 0000.0000.0001 with priority 0 via BPDUs so downstream CE switches
+# (B-SW1) see a single root across the EVPN A/A pair.
+###################################################
+
+custom_vtep_dhcp_relay:
+  tunnel_requests_disabled: true
+
+custom_vtep_stp_root_super:
+  spanning_tree:
+    root_super: true
+
+custom_vtep_bgp_session_tracker:
+  router_bgp:
+    peer_groups:
+      - name: LOCAL-EVPN-PEERS
+        session_tracker: TRACK-LOCAL-EVPN-PEERS
+    address_family_evpn:
+      # VERIFY: `layer_2_fec_in_place_update` schema key for AVD 6.3.0.
+      # Target render: `layer-2 fec in-place update` under address-family evpn.
+      layer_2_fec_in_place_update:
+        enabled: true
+    session_trackers:
+      - name: TRACK-LOCAL-EVPN-PEERS
+        recovery_delay: 300
+
+###################################################
+# Custom Structured Config — Gateway-side (B-LEAF7/B-LEAF8)
+#
+# CSC: WAN-facing IPv4 eBGP session to BB1/BB2 (same shape as Domain A's
+# custom_evpn_gw_bgp_config, tuned for Domain B's AS 65200 + local-as 65000
+# trick + Domain B's local-domain identifier 2:2).
+###################################################
+
+custom_evpn_gw_bgp_config:
+  address_family_ipv4:
+    peer_groups:
+      - name: REMOTE-IPV4-PEERS
+        activate: true
+  address_family_evpn:
+    domain_identifier: '2:2'
+    domain_identifier_remote: '99:99'
+  bgp:
+    bestpath:
+      d_path: true
+  peer_groups:
+    - name: REMOTE-IPV4-PEERS
+      password: dkvBq1jk4inJHsHfMjYRnQ==
+      remote_as: 65000
+      route_map_out: RM-AS65000-IPV4-OUT
+      send_community: all
+    - name: REMOTE-EVPN-PEERS
+      local_as: 65000
+    - name: LOCAL-EVPN-PEERS
+      route_reflector_client: true
+      # Domain B's Gateway pair reflects local-EVPN-peer routes so the pair can
+      # exchange Type-1/Type-4 routes for their I-ESI (`0000:bbbb:0007:0008:0000`)
+      # without relying on the Spine RRs to reflect ES routes back to the
+      # originator. Standard iBGP+RR pattern for a pair of Gateways in the same AS.
+
+custom_evpn_gw_prefix_lists:
+  - name: PL-GATEWAY-LOOP
+    sequence_numbers:
+      - sequence: 10
+        action: permit 10.0.2.7/32
+      - sequence: 20
+        action: permit 10.0.2.8/32
+      - sequence: 30
+        action: permit 10.1.2.7/32
+      - sequence: 40
+        action: permit 10.1.2.8/32
+
+custom_evpn_gw_route_maps:
+  - name: RM-AS65000-IPV4-OUT
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ip address prefix-list PL-GATEWAY-LOOP
+
+b_leaf7_dci_bgp_peers:
+  router_bgp:
+    neighbors:
+      - ip_address: 172.16.2.0
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB1.IPV4
+      - ip_address: 172.16.2.4
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB2.IPV4
+
+b_leaf8_dci_bgp_peers:
+  router_bgp:
+    neighbors:
+      - ip_address: 172.16.2.2
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB1.IPV4
+      - ip_address: 172.16.2.6
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB2.IPV4
+
+###################################################
+# Custom Structured Config — Spine RR
+#
+# Domain B's Spines are RRs for iBGP EVPN. cluster-id shared across all
+# four Spines so RR-reflected routes deduplicate cleanly on the Leaf side.
+###################################################
+
+csc_spine_rr:
+  router_bgp:
+    bgp_cluster_id: 10.0.2.205
+    peer_groups:
+      - name: LOCAL-EVPN-PEERS
+        route_reflector_client: true
+
+csc_spine_multicast:
+  ipv4:
+    routing: true
+    software_forwarding: sfe
+
+###################################################
+# DOMAIN B SPINES
+###################################################
+
+spine:
+  defaults:
+    platform: cEOS-LAB
+    bgp_as: 65200
+    loopback_ipv4_pool: 10.0.2.0/24
+    structured_config:
+      router_multicast: "{{ csc_spine_multicast }}"
+      router_bgp: "{{ csc_spine_rr.router_bgp }}"
+  nodes:
+    - name: B-SPINE1
+      id: 201
+      mgmt_ip: 172.100.102.101/22
+    - name: B-SPINE2
+      id: 202
+      mgmt_ip: 172.100.102.102/22
+    - name: B-SPINE3
+      id: 203
+      mgmt_ip: 172.100.102.103/22
+    - name: B-SPINE4
+      id: 204
+      mgmt_ip: 172.100.102.104/22
+
+##################################################
+# DOMAIN B LEAFS — EVPN All-Active everywhere
+##################################################
+
+l3leaf:
+  defaults:
+    platform: cEOS-LAB
+    bgp_as: 65200                                  # Shared ASN — single-ASN iBGP fabric
+    loopback_ipv4_pool: 10.0.2.0/24
+    vtep_loopback: Loopback1                       # explicit VTEP source loopback
+    vtep_loopback_ipv4_pool: 10.1.2.0/24
+    # Placeholder IPv4 uplink pool — required by AVD schema even when
+    # underlay_ipv4_unnumbered: true (AVD renders `ip address unnumbered
+    # Loopback0` on the interfaces regardless of the pool value). The pool
+    # is never actually consumed as numbered addresses.
+    uplink_ipv4_pool: 172.31.255.0/24
+    uplink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4]
+    uplink_switches: [B-SPINE1, B-SPINE2, B-SPINE3, B-SPINE4]
+    virtual_router_mac_address: 00:1c:73:00:00:01
+    spanning_tree_mode: mstp
+    structured_config:
+      dhcp_relay: "{{ custom_vtep_dhcp_relay }}"
+      spanning_tree: "{{ custom_vtep_stp_root_super.spanning_tree }}"
+      router_bgp: "{{ custom_vtep_bgp_session_tracker.router_bgp }}"
+  nodes:
+    ##############################################
+    # Standard leafs (B-LEAF1..B-LEAF6)
+    # Per-leaf VLAN/VRF scoping via host_vars.
+    ##############################################
+    - name: B-LEAF1
+      id: 1
+      mgmt_ip: 172.100.102.105/22
+      uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
+    - name: B-LEAF2
+      id: 2
+      mgmt_ip: 172.100.102.106/22
+      uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
+    - name: B-LEAF3
+      id: 3
+      mgmt_ip: 172.100.102.107/22
+      uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
+    - name: B-LEAF4
+      id: 4
+      mgmt_ip: 172.100.102.108/22
+      uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
+    - name: B-LEAF5
+      id: 5
+      mgmt_ip: 172.100.102.109/22
+      uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
+    - name: B-LEAF6
+      id: 6
+      mgmt_ip: 172.100.102.110/22
+      uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
+
+  ##############################################
+  # Gateway leafs (B-LEAF7, B-LEAF8) — A/A Gateway
+  # OISM disabled per host_vars.
+  ##############################################
+  node_groups:
+    - group: B_GATEWAY
+      mlag: false                                # Domain B uses EVPN A/A, not MLAG
+      evpn_gateway:
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+        remote_peers:
+          - hostname: BB1
+            ip_address: 10.0.0.1
+            bgp_as: 65000
+          - hostname: BB2
+            ip_address: 10.0.0.2
+            bgp_as: 65000
+      filter:
+        tags: ['BLUE', 'RED', 'BROWN']              # VLANs 10, 60 (local, HostB8), 70
+      structured_config:
+        router_bgp: "{{ custom_evpn_gw_bgp_config }}"
+        prefix_lists: "{{ custom_evpn_gw_prefix_lists }}"
+        route_maps: "{{ custom_evpn_gw_route_maps }}"
+      nodes:
+        - name: B-LEAF7
+          id: 7
+          mgmt_ip: 172.100.102.111/22
+          uplink_switch_interfaces: [Ethernet7, Ethernet7, Ethernet7, Ethernet7]
+          structured_config:
+            router_bgp: "{{ b_leaf7_dci_bgp_peers.router_bgp }}"
+        - name: B-LEAF8
+          id: 8
+          mgmt_ip: 172.100.102.112/22
+          uplink_switch_interfaces: [Ethernet8, Ethernet8, Ethernet8, Ethernet8]
+          structured_config:
+            router_bgp: "{{ b_leaf8_dci_bgp_peers.router_bgp }}"
+
+##################################################
+# DOMAIN B L2 SWITCHES — B-SW1 (CE switch)
+##################################################
+
+l2leaf:
+  defaults:
+    platform: cEOS-LAB
+    spanning_tree_mode: mstp
+    uplink_switches: [B-LEAF5, B-LEAF6]
+    uplink_interfaces: [Ethernet1, Ethernet2]         # B-SW1's own Et1/Et2 face the LEAFs
+    uplink_type: port-channel                          # Single LACP trunk to both VTEPs
+  nodes:
+    - name: B-SW1
+      id: 100
+      mgmt_ip: 172.100.102.113/22
+      uplink_switch_interfaces: [Ethernet7, Ethernet7]  # onto B-LEAF5 Et7 + B-LEAF6 Et7
+
+##########################################################
+# DCI Connectivity — B Gateway pair to BB1/BB2 backbone
+##########################################################
+
+l3_edge:
+  p2p_links:
+    - nodes: [B-LEAF7, BB1]
+      interfaces: [Ethernet7, Ethernet3]
+      subnet: 172.16.2.0/31
+      ip:
+        - 172.16.2.1/31
+        - 172.16.2.0/31
+      include_in_underlay_protocol: false
+
+    - nodes: [B-LEAF7, BB2]
+      interfaces: [Ethernet8, Ethernet3]
+      subnet: 172.16.2.4/31
+      ip:
+        - 172.16.2.5/31
+        - 172.16.2.4/31
+      include_in_underlay_protocol: false
+
+    - nodes: [B-LEAF8, BB1]
+      interfaces: [Ethernet7, Ethernet4]
+      subnet: 172.16.2.2/31
+      ip:
+        - 172.16.2.3/31
+        - 172.16.2.2/31
+      include_in_underlay_protocol: false
+
+    - nodes: [B-LEAF8, BB2]
+      interfaces: [Ethernet8, Ethernet4]
+      subnet: 172.16.2.6/31
+      ip:
+        - 172.16.2.7/31
+        - 172.16.2.6/31
+      include_in_underlay_protocol: false

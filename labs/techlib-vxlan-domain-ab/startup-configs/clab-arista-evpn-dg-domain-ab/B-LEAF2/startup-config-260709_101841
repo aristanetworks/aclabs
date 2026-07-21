@@ -134,7 +134,6 @@ interface Loopback0
 interface Loopback1
    description VTEP IP
    ip address 10.1.2.2/32
-   ip address 10.1.2.255/32 secondary
    isis enable 100
    isis circuit-type level-2
    isis passive
@@ -229,12 +228,14 @@ router bgp 65200
       rd 10.0.2.2:10020
       route-target both 10020:10020
       redistribute learned
+      redistribute router-mac next-hop vtep primary
       redistribute router-mac virtual-ip next-hop vtep primary
    !
    vlan 40
       rd 10.0.2.2:10040
       route-target both 10040:10040
       redistribute learned
+      redistribute router-mac next-hop vtep primary
       redistribute router-mac virtual-ip next-hop vtep primary
    !
    address-family evpn

@@ -1,0 +1,51 @@
+---
+###################################################
+# ANTA — OISM (Optimized Inter-Subnet Multicast)
+#
+# PIM neighbors, IGMP/MLD sources, SBD instantiation, Type 6/7/8/10 routes,
+# mroute state per VRF.
+# Applies to standard leafs only (A-LEAF1..A-LEAF6, B-LEAF1..B-LEAF6) —
+# Gateway pair has OISM disabled.
+###################################################
+
+anta.tests.multicast:
+  - VerifyIGMPSnoopingGlobal:
+      enabled: true
+  - VerifyIGMPSnoopingVlans:
+      # IGMP snooping enabled on the OISM VLANs per domain:
+      #   Domain A: 10, 30 (POD1), 10, 30, 50 (POD2), 50, 70 (POD3)
+      #   Domain B: 20, 40 (B-LEAF1/2), 10, 40 (B-LEAF3/4), 40, 80 (B-LEAF5/6)
+  - VerifyMLDSnooping:                       # MLD snooping enabled on OISM VLANs for IPv6
+  - VerifyMROUTECount:
+      minimum: 1                             # At least the SSM (S,G) trees for the underlay group
+
+anta.tests.pim:
+  - VerifyPIMAllNeighborsHealth:
+      # Every Spine↔Leaf transit interface has a PIM adjacency.
+      # VERIFY: exclude Gateway-facing interfaces on Spines (Et7 to
+      # A-LEAF7, Et8 to A-LEAF8 on A-SPINE1, similar on B side —
+      # Gateway pair doesn't run PIM). ANTA filter needed.
+
+  - VerifyPIMSpecificNeighbor:
+      # Enumerated per-neighbor check with the expected IP address.
+      # VERIFY: anta_runner should auto-derive from structured_config.
+
+  - VerifyPIMRPSSMMappings:
+      # PROD group range 232.1.1.1/32 (single group, SSM), DEV
+      # group range 232.1.1.2/32 (SSM). If additional 1:1 mappings
+      # (e.g. Domain B's 239.0.20.101 → 232.1.1.20) are configured,
+      # verify those too.
+
+anta.tests.routing.bgp:
+  ###################################################
+  # EVPN Type-6/7/8/10 (multicast) routes
+  ###################################################
+  - VerifyEVPNType6:                         # SMET routes for locally-attached IGMP joins
+  - VerifyEVPNType7:                         # IGMP-Join-Sync routes for A/A ES-attached joins
+  - VerifyEVPNType8:                         # IGMP-Leave-Sync routes
+  - VerifyEVPNType10:                        # S-PMSI A-D routes for the SBD
+
+anta.tests.evpn:
+  - VerifyEVPNSBD:
+      # SBD (Supplementary Broadcast Domain) instantiated per OISM-enabled VRF.
+      # VERIFY: test name may differ in current ANTA; check catalog reference.

@@ -1,27 +1,24 @@
 ---
 
-# AAA settings
+# AAA settings — matches tech-library (nopassword for lab reproducibility)
 aaa_settings:
+  authentication:
+    policies:
+      local:
+        allow_nopassword: true
   authorization:
     exec:
       default: local
   local_users:
-    - name: arista
-      privilege: 15
-      role: network-admin
-      sha512_password: $6$Ap6u4I1WR/jMoNKe$LPLoHgIXFg5kiGPDWGF0w5lVVuOZZ4T15cIBbNxE2ykqh98uVvsi9jPdybkbTXBTZFzi3haaPJVaGVwnpuck40
     - name: admin
       privilege: 15
       role: network-admin
-      sha512_password: $6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/.
+      no_password: true
 
 # Global ARP Timer
 custom_structured_configuration_arp:
   aging:
     timeout_default: 1500
-
-# Stop build if validation error is encountered
-avd_data_validation_mode: error
 
 # DNS Settings
 dns_settings:
@@ -30,11 +27,9 @@ dns_settings:
     - vrf: use_mgmt_interface_vrf
       ip_address: 8.8.8.8
 
-# Enable eAPI
+# Enable eAPI — MGMT vrf only, no protocol overrides (matches tech-library)
 management_eapi:
   enabled: true
-  enable_http: true
-  enable_https: true
   vrfs:
     - enabled: true
       name: use_mgmt_interface_vrf
@@ -49,8 +44,9 @@ mac_address_table:
 
 # Out of Band Management
 mgmt_gateway: 172.100.100.1
-mgmt_interface: Management0
-mgmt_interface_vrf: MGMT
+mgmt_interface_settings:
+  interface: Management0
+  vrf: MGMT
 default_mgmt_method: oob
 
 # Enable SSH for MGMT VRF
@@ -79,8 +75,14 @@ ntp_settings:
 
 timezone: America/Detroit
 
-# Global IP MTU for Point-to-Point links
-p2p_uplinks_mtu: 9214
+# Global IP MTU for Point-to-Point links (matches tech-library fabric interfaces)
+p2p_uplinks_mtu: 9114
+
+# NOTE: overriding the default interface descriptions from
+# "P2P_<peer>_<peer_int>" to just "<peer>" requires either a custom
+# Jinja template file or a custom Python interface_descriptions module.
+# Deferred as a follow-up cosmetic parity item — functionally the AVD
+# default descriptions work fine.
 
 # Default mode of "routed" interfaces
 custom_structured_configuration_switchport_default:

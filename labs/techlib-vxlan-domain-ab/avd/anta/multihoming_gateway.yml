@@ -1,0 +1,66 @@
+---
+###################################################
+# ANTA — Multihoming + EVPN Gateway
+#
+# MLAG state (Domain A standard leafs), EVPN Ethernet Segments
+# (Domain B standard leafs + all Gateways), DF election, I-ESI,
+# D-PATH identifier stamp verification.
+###################################################
+
+anta.tests.mlag:
+  ###################################################
+  # MLAG state — Domain A standard leafs only (A-LEAF1..A-LEAF6)
+  # A-LEAF7/8 are A/A Gateway (not MLAG). Domain B has no MLAG.
+  ###################################################
+  - VerifyMlagStatus:
+      # active + primary/secondary agreement between MLAG peers
+      # VERIFY: filter to A-LEAF1..A-LEAF6 only. Use device-role tag or
+      # hostname pattern filter.
+  - VerifyMlagInterfaces:                    # MLAG port-channel members up per host
+  - VerifyMlagConfigSanity:                  # No config-mismatch between MLAG peers
+  - VerifyMlagReloadDelay:                   # Reload delay > 0
+
+anta.tests.routing.bgp:
+  ###################################################
+  # EVPN Ethernet Segment routes (Type-1 / Type-4)
+  ###################################################
+  - VerifyEVPNType4:
+      # ES-Discovery (Type-4) routes present for every configured EVPN A/A
+      # Ethernet Segment:
+      #   - HostA8 ES on A-LEAF7/A-LEAF8 (LACP system-id c0d6.8200.0000)
+      #   - Interconnect-ESI (0000:aaaa:0007:0008:0000) on A-LEAF7/A-LEAF8
+      #   - HostB1..B4 EVPN A/A ESIs on B-LEAF1..B-LEAF4
+      #   - B-SW1 uplink ES on B-LEAF5/B-LEAF6
+      #   - HostB8 ES on B-LEAF7/B-LEAF8 (LACP system-id c0d6.8200.0008)
+      #   - Interconnect-ESI (0000:bbbb:0007:0008:0000) on B-LEAF7/B-LEAF8
+
+  - VerifyEVPNType1:                         # ES-AD per-ES and per-EVI routes
+
+  ###################################################
+  # DF election deterministic per configured preference
+  ###################################################
+  - VerifyEVPNDesignatedForwarder:
+      # DF preference 2000 (A-LEAF7, B-LEAF7) wins over 1000 (A-LEAF8, B-LEAF8)
+      # for the Interconnect-ESI. Locally-attached-host ESIs use the default
+      # modulus algorithm (round-robin per EVI).
+      # VERIFY: this check may need a per-device expected-DF list. May not
+      # exist stock; may need custom check.
+
+anta.tests.evpn:
+  ###################################################
+  # D-PATH identifier stamp verification (Gateway pair only)
+  #
+  # Verifies routes crossing the domain boundary carry the expected
+  # local-domain identifier + `99:99` remote identifier + Gateway-attach
+  # identifier where applicable.
+  ###################################################
+  - VerifyBGPEVPNDomainPath:
+      # Type-2 and Type-5 routes locally originated on A-LEAF7 for HostA8
+      # should stamp: `1:1` local + `65107:65107` attach.
+      # On A-LEAF8: `1:1` local + `65108:65108` attach.
+      # On B-LEAF7 / B-LEAF8: `2:2` local (attach TBD per Domain B design).
+      # Routes re-originated from A into B should carry `99:99` in the
+      # D-PATH list at every B-side receiver.
+      # VERIFY: this test likely doesn't exist stock. Almost certainly
+      # need a custom ANTA test that parses `show bgp evpn route detail`
+      # and asserts the domain-path attribute. Flag as followup.

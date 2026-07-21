@@ -1,0 +1,34 @@
+---
+###################################################
+# ANTA test catalog — Domain A + B (baseline)
+#
+# The `arista.avd.anta_runner` role auto-merges all *.yml files in this
+# directory into a single test catalog. This file contains only the
+# baseline system-level tests; per-concern tests live in the sibling
+# files (underlay.yml, overlay.yml, multihoming_gateway.yml, oism.yml,
+# dataplane.yml).
+#
+# Test scoping strategy:
+#   - Underlay + overlay tests run against every AVD-managed device
+#   - Multihoming + Gateway tests filter to leafs + Gateway pairs
+#   - OISM tests filter to standard leafs only (Gateway pair excluded)
+#   - Data-plane tests run from designated linux hosts in containerlab
+###################################################
+
+anta.tests.system:
+  - VerifyReloadCause:
+  - VerifyCoredump:
+  - VerifyAgentLogs:
+  - VerifyCPUUtilization:
+  - VerifyMemoryUtilization:
+  - VerifyFileSystemUtilization:
+  - VerifyNTP:
+
+anta.tests.hardware:
+  - VerifyEnvironmentSystemCooling:
+  - VerifyEnvironmentPower:
+  - VerifyTransceiversStatus:
+
+anta.tests.configuration:
+  - VerifyRunningConfigDiffs:                # Alerts on any running-config drift from startup-config
+  - VerifyZeroTouch:                         # ZTP must be inactive on running devices
