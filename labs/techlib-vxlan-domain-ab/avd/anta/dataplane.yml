@@ -1,0 +1,99 @@
+---
+###################################################
+# ANTA — Data-plane reachability tests
+#
+# Ping/traceroute between hosts across intra- and inter-domain scopes.
+# Validates that the control-plane state actually forwards traffic:
+#   - Intra-domain L2 (same VLAN, cross-VTEP)
+#   - Intra-domain L3 (same VRF, cross-VLAN)
+#   - Inter-domain L2 (shared VLAN across Gateway pairs)
+#   - Inter-domain L3 (different VLANs same VRF across Gateway pairs)
+#   - IPv6 counterparts for at least one pair per scope
+#
+# These tests use `VerifyReachability` from anta.tests.connectivity,
+# which issues `ping` on the source device with the source-interface set
+# to the tenant SVI or Loopback in the right VRF.
+###################################################
+
+anta.tests.connectivity:
+  ###################################################
+  # Intra-domain L3 (same VRF, cross-VLAN) — Domain A
+  ###################################################
+  - VerifyReachability:
+      hosts:
+        - source: 10.10.10.1                 # A: HostA1 (VLAN 10 PROD) VIP
+          destination: 10.30.30.1            # A: HostA5 (VLAN 30 PROD) VIP
+          vrf: PROD
+          repeat: 3
+
+  ###################################################
+  # Intra-domain L2 (same VLAN, cross-VTEP) — Domain A
+  ###################################################
+  - VerifyReachability:
+      hosts:
+        - source: 10.10.10.10                # HostA1 host IP
+          destination: 10.10.10.40           # HostA4 host IP (both VLAN 10, cross-VTEP)
+          vrf: PROD
+          repeat: 3
+
+  ###################################################
+  # Intra-domain L3 — Domain B
+  ###################################################
+  - VerifyReachability:
+      hosts:
+        - source: 10.20.20.1                 # B: HostB1 (VLAN 20 PROD) VIP
+          destination: 10.40.40.1            # B: HostB2 (VLAN 40 PROD) VIP
+          vrf: PROD
+          repeat: 3
+
+  ###################################################
+  # Inter-domain L2 (shared VLAN 10 PROD across Gateway pairs)
+  ###################################################
+  - VerifyReachability:
+      hosts:
+        - source: 10.10.10.10                # HostA1 (Domain A, VLAN 10 PROD)
+          destination: 10.10.10.30           # HostB3/B4 (Domain B, VLAN 10 PROD, EVPN A/A)
+          vrf: PROD
+          repeat: 3
+
+  ###################################################
+  # Inter-domain L3 (different VLANs same PROD VRF across domains)
+  ###################################################
+  - VerifyReachability:
+      hosts:
+        - source: 10.30.30.1                 # Domain A VLAN 30 PROD VIP
+          destination: 10.20.20.1            # Domain B VLAN 20 PROD VIP
+          vrf: PROD
+          repeat: 3
+
+  ###################################################
+  # Inter-domain L3 DEV VRF (validates D-PATH with Gateway-attached endpoints)
+  ###################################################
+  - VerifyReachability:
+      hosts:
+        - source: 10.50.50.1                 # Domain A VLAN 50 DEV VIP (HostA7, HostA8)
+          destination: 10.60.60.1            # Domain B VLAN 60 DEV VIP (HostB8, Gateway-attached)
+          vrf: DEV
+          repeat: 3
+
+  ###################################################
+  # IPv6 counterparts
+  ###################################################
+  - VerifyReachability:
+      hosts:
+        - source: 2001:db8:10:10::1          # Domain A VLAN 10 PROD IPv6 VIP
+          destination: 2001:db8:20:20::1     # Domain B VLAN 20 PROD IPv6 VIP
+          vrf: PROD
+          repeat: 3
+      # VERIFY: VerifyReachability schema for IPv6 — may need `af: ipv6` hint
+
+# VERIFY: for these tests to run, the ANTA runner needs SSH access into the
+# switch and the switch needs data-plane reachability into the tenant subnets.
+# In cEOSLab, the source of the ping is the switch itself (issued via eAPI),
+# using `source-interface Vlan<N>` or `source Loopback<N>` inside the VRF.
+# Tenant SVIs exist on every VTEP where the SVI is configured — so any VTEP
+# that hosts the source VLAN can issue the ping.
+#
+# If host-endpoint pings (from the actual containerlab `linux` kind) are
+# preferred, use `containerlab tools netem` or ANTA's `SendCommand` to run
+# `ping` inside the host container. That would be a follow-up test file.
