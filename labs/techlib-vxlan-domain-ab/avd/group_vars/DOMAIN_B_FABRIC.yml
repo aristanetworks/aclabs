@@ -226,6 +226,7 @@ l3leaf:
     platform: cEOS-LAB
     bgp_as: 65200                                  # Shared ASN — single-ASN iBGP fabric
     loopback_ipv4_pool: 10.0.2.0/24
+    vtep_loopback: Loopback1                       # explicit VTEP source loopback
     vtep_loopback_ipv4_pool: 10.1.2.0/24
     # Placeholder IPv4 uplink pool — required by AVD schema even when
     # underlay_ipv4_unnumbered: true (AVD renders `ip address unnumbered

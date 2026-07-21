@@ -227,6 +227,103 @@ csc_leaf_peer_tag_spines:
         peer_tag_out_discard: SPINES
 
 ###################################################
+# Custom Structured Config — paired redistribute-router-mac + Multi-VTEP MLAG
+#
+# CSC #1 (paired redistribute-router-mac): the anycast gateway
+# advertisement mechanism from EOS 4.34.0F. Injected under each MAC-VRF
+# on standard leafs ONLY (not the Gateway pair, which lets remote-domain
+# reachability come through the Interconnect-ESI machinery instead).
+#
+# CSC #2 (Multi-VTEP MLAG Loopback2): the MLAG shared VTEP loopback
+# for the Multi-VTEP MLAG pattern. Both peers in an MLAG pair share the
+# same Loopback2 IP; both peers' Vxlan1 uses `vxlan mlag source-interface
+# Loopback2` for MLAG-attached hosts while `vxlan source-interface
+# Loopback1` remains the per-node unique VTEP source for OISM.
+#
+# These are combined per-POD because the VLAN set differs per POD.
+###################################################
+
+# POD1 (A-LEAF1/2): VLANs 10, 30. MLAG shared VTEP = 10.2.1.1/32
+csc_pod1_leaf_features:
+  loopback_interfaces:
+    - name: Loopback2
+      description: MLAG Shared VTEP IP
+      ip_address: 10.2.1.1/32
+  vxlan_interface:
+    vxlan1:
+      vxlan:
+        source_interface: Loopback1
+        mlag_source_interface: Loopback2
+        virtual_router_encapsulation_mac_address: mlag-system-id
+  router_bgp:
+    vlans:
+      - id: 10
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 30
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+
+# POD2 (A-LEAF3/4): VLANs 10, 30, 50. MLAG shared VTEP = 10.2.1.3/32
+csc_pod2_leaf_features:
+  loopback_interfaces:
+    - name: Loopback2
+      description: MLAG Shared VTEP IP
+      ip_address: 10.2.1.3/32
+  vxlan_interface:
+    vxlan1:
+      vxlan:
+        source_interface: Loopback1
+        mlag_source_interface: Loopback2
+        virtual_router_encapsulation_mac_address: mlag-system-id
+  router_bgp:
+    vlans:
+      - id: 10
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 30
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 50
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+
+# POD3 (A-LEAF5/6): VLANs 50, 70. MLAG shared VTEP = 10.2.1.5/32
+csc_pod3_leaf_features:
+  loopback_interfaces:
+    - name: Loopback2
+      description: MLAG Shared VTEP IP
+      ip_address: 10.2.1.5/32
+  vxlan_interface:
+    vxlan1:
+      vxlan:
+        source_interface: Loopback1
+        mlag_source_interface: Loopback2
+        virtual_router_encapsulation_mac_address: mlag-system-id
+  router_bgp:
+    vlans:
+      - id: 50
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 70
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+
+###################################################
 # DOMAIN A SPINES
 ###################################################
 spine:
@@ -257,6 +354,7 @@ l3leaf:
   defaults:
     platform: cEOS-LAB
     loopback_ipv4_pool: 10.0.1.0/24
+    vtep_loopback: Loopback1                       # explicit VTEP source loopback
     vtep_loopback_ipv4_pool: 10.1.1.0/24
     # NOTE: Multi-VTEP MLAG shared VTEP (Loopback2) has no native AVD 6.3 key.
     # Injected via structured_config on the MLAG l3leaf node_groups (see below).
@@ -286,6 +384,10 @@ l3leaf:
       bgp_as: 65101                    # Shared per MLAG pair
       filter:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
+      structured_config:
+        loopback_interfaces: "{{ csc_pod1_leaf_features.loopback_interfaces }}"
+        vxlan_interface: "{{ csc_pod1_leaf_features.vxlan_interface }}"
+        router_bgp: "{{ csc_pod1_leaf_features.router_bgp }}"
       nodes:
         - name: A-LEAF1
           id: 1
@@ -302,6 +404,10 @@ l3leaf:
       bgp_as: 65103
       filter:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
+      structured_config:
+        loopback_interfaces: "{{ csc_pod2_leaf_features.loopback_interfaces }}"
+        vxlan_interface: "{{ csc_pod2_leaf_features.vxlan_interface }}"
+        router_bgp: "{{ csc_pod2_leaf_features.router_bgp }}"
       nodes:
         - name: A-LEAF3
           id: 3
@@ -318,6 +424,10 @@ l3leaf:
       bgp_as: 65105
       filter:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
+      structured_config:
+        loopback_interfaces: "{{ csc_pod3_leaf_features.loopback_interfaces }}"
+        vxlan_interface: "{{ csc_pod3_leaf_features.vxlan_interface }}"
+        router_bgp: "{{ csc_pod3_leaf_features.router_bgp }}"
       nodes:
         - name: A-LEAF5
           id: 5
