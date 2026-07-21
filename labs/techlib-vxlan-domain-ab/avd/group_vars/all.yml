@@ -20,9 +20,6 @@ custom_structured_configuration_arp:
   aging:
     timeout_default: 1500
 
-# Stop build if validation error is encountered
-avd_data_validation_mode: error
-
 # DNS Settings
 dns_settings:
   domain: aclabs.lab
@@ -49,8 +46,9 @@ mac_address_table:
 
 # Out of Band Management
 mgmt_gateway: 172.100.100.1
-mgmt_interface: Management0
-mgmt_interface_vrf: MGMT
+mgmt_interface_settings:
+  interface: Management0
+  vrf: MGMT
 default_mgmt_method: oob
 
 # Enable SSH for MGMT VRF

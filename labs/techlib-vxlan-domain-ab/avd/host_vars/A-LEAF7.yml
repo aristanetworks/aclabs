@@ -10,7 +10,7 @@
 # OISM is not enabled on the Gateway pair (Multi-Domain VXLAN-MPLS EVPN
 # doesn't yet support OISM across the domain boundary; HostA8 is unicast-only).
 evpn_multicast: false
-underlay_multicast: false
+underlay_multicast_pim_sm: false
 
 ###################################################
 # Custom Structured Config — Gateway-side

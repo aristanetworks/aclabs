@@ -53,6 +53,8 @@ bgp_peer_groups:
     password: IO6gE/ln7Sp2wt33WX/Asg==
     bfd: true
 
+evpn_ebgp_multihop: 3
+
 bgp_update_wait_install: true
 evpn_import_pruning: true
 evpn_multicast: true

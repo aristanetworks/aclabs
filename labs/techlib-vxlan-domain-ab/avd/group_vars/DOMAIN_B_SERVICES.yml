@@ -1,10 +1,6 @@
 ---
 ###################################################
 # Domain B — Tenants, VRFs, SVIs, OISM
-#
-# One tenant, one PROD VRF + one DEV VRF. VLAN set:
-#   PROD: 10 (multi-domain), 20, 40
-#   DEV : 60 (local, HostB8), 70 (multi-domain), 80
 ###################################################
 
 tenants:
@@ -13,26 +9,11 @@ tenants:
     evpn_l2_multi_domain: false
 
     vrfs:
-      #############################################
-      # VRF PROD (L3VNI 50001)
-      # OISM underlay group: 232.1.1.1 (per tech-library B-LEAF1.cfg)
-      # OISM PIM/IGMP source: Loopback101 = 10.101.101.[NodeID]/32
-      #############################################
       - name: PROD
         vrf_vni: 50001
-        evpn_l3_multi_domain: true
         evpn_l3_multicast:
           enabled: true
           evpn_underlay_l3_multicast_group: 232.1.1.1
-          # VERIFY: overlay-to-underlay 1:1 group mapping — 239.0.20.101 → 232.1.1.20.
-          # AVD schema key TBD. Target rendered output (per tech-library B-LEAF1.cfg):
-          #   vxlan vrf PROD multicast group overlay 239.0.20.101 encap 232.1.1.20 immediate
-          evpn_underlay_l3_multicast_group_mappings:
-            - overlay_group: 239.0.20.101
-              underlay_group: 232.1.1.20
-              flags: immediate
-          address_family_ipv6:
-            enabled: true
         vtep_diagnostic:
           loopback: 101
           loopback_ip_range: 10.101.101.0/24
@@ -44,12 +25,7 @@ tenants:
             mtu: 9014
             ip_address_virtual: 10.10.10.1/24
             ipv6_address_virtuals: [2001:db8:10:10::1/64]
-            evpn_l2_multi_domain: true                # Shared with Domain A
-            evpn_l2_redistribute_router_mac:
-              enabled: true
-              variants: [next_hop_vtep_primary, virtual_ip_next_hop_vtep_primary]
-            igmp: {enabled: true}
-            evpn_l2_multicast: {enabled: true}
+            evpn_l2_multi_domain: true
           - id: 20
             name: Green
             tags: ['PROD', 'GREEN']
@@ -57,12 +33,7 @@ tenants:
             mtu: 9014
             ip_address_virtual: 10.20.20.1/24
             ipv6_address_virtuals: [2001:db8:20:20::1/64]
-            evpn_l2_multi_domain: false               # Local to Domain B
-            evpn_l2_redistribute_router_mac:
-              enabled: true
-              variants: [next_hop_vtep_primary, virtual_ip_next_hop_vtep_primary]
-            igmp: {enabled: true}
-            evpn_l2_multicast: {enabled: true}
+            evpn_l2_multi_domain: false
           - id: 40
             name: Purple
             tags: ['PROD', 'PURPLE']
@@ -71,25 +42,12 @@ tenants:
             ip_address_virtual: 10.40.40.1/24
             ipv6_address_virtuals: [2001:db8:40:40::1/64]
             evpn_l2_multi_domain: false
-            evpn_l2_redistribute_router_mac:
-              enabled: true
-              variants: [next_hop_vtep_primary, virtual_ip_next_hop_vtep_primary]
-            igmp: {enabled: true}
-            evpn_l2_multicast: {enabled: true}
 
-      #############################################
-      # VRF DEV (L3VNI 50002)
-      # OISM underlay group: 232.1.1.2 (per tech-library B-LEAF5.cfg)
-      # OISM PIM/IGMP source: Loopback102 = 10.102.102.[NodeID]/32
-      #############################################
       - name: DEV
         vrf_vni: 50002
-        evpn_l3_multi_domain: true
         evpn_l3_multicast:
           enabled: true
           evpn_underlay_l3_multicast_group: 232.1.1.2
-          address_family_ipv6:
-            enabled: true
         vtep_diagnostic:
           loopback: 102
           loopback_ip_range: 10.102.102.0/24
@@ -101,12 +59,7 @@ tenants:
             mtu: 9014
             ip_address_virtual: 10.60.60.1/24
             ipv6_address_virtuals: [2001:db8:60:60::1/64]
-            evpn_l2_multi_domain: false               # Local to Domain B (HostB8 on Gateway)
-            evpn_l2_redistribute_router_mac:
-              enabled: true
-              variants: [next_hop_vtep_primary, virtual_ip_next_hop_vtep_primary]
-            igmp: {enabled: true}
-            evpn_l2_multicast: {enabled: true}
+            evpn_l2_multi_domain: false
           - id: 70
             name: Brown
             tags: ['DEV', 'BROWN']
@@ -114,12 +67,7 @@ tenants:
             mtu: 9014
             ip_address_virtual: 10.70.70.1/24
             ipv6_address_virtuals: [2001:db8:70:70::1/64]
-            evpn_l2_multi_domain: true                # Shared with Domain A
-            evpn_l2_redistribute_router_mac:
-              enabled: true
-              variants: [next_hop_vtep_primary, virtual_ip_next_hop_vtep_primary]
-            igmp: {enabled: true}
-            evpn_l2_multicast: {enabled: true}
+            evpn_l2_multi_domain: true
           - id: 80
             name: Black
             tags: ['DEV', 'BLACK']
@@ -128,8 +76,3 @@ tenants:
             ip_address_virtual: 10.80.80.1/24
             ipv6_address_virtuals: [2001:db8:80:80::1/64]
             evpn_l2_multi_domain: false
-            evpn_l2_redistribute_router_mac:
-              enabled: true
-              variants: [next_hop_vtep_primary, virtual_ip_next_hop_vtep_primary]
-            igmp: {enabled: true}
-            evpn_l2_multicast: {enabled: true}

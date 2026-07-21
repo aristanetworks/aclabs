@@ -38,10 +38,12 @@ bgp_peer_groups:
     name: LOCAL-EVPN-PEERS
     password: WzKnNSduqwPYvUePYIh40g==
     bfd: true
-    ebgp_multihop: 3
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
     password: IO6gE/ln7Sp2wt33WX/Asg==
+
+# ebgp-multihop is a fabric-level setting in AVD 6.3 (not per peer-group).
+evpn_ebgp_multihop: 3
 
 bgp_update_wait_install: true
 evpn_import_pruning: true
@@ -204,27 +206,19 @@ csc_spine_multicast:
 # Custom Structured Config — peer-tag SPINES
 #
 # CSC: BGP Peer Tagging (EOS 4.34.0F). Prevents leaf-side re-advertisement of
-# routes learned from one spine to another. AVD 6.3.0 may not natively expose
-# peer-tag under bgp_peer_groups yet — verify during first build; if native,
-# drop this CSC.
+# routes learned from one spine to another. AVD 6.3 exposes this natively as
+# `peer_tag_in` + `peer_tag_out_discard` under each peer_group's
+# structured_config.
 ###################################################
 csc_leaf_peer_tag_spines:
   router_bgp:
     peer_groups:
       - name: LOCAL-IPV4-PEERS
-        peer_tag:
-          - direction: in
-            tag: SPINES
-          - direction: out
-            action: discard
-            tag: SPINES
+        peer_tag_in: SPINES
+        peer_tag_out_discard: SPINES
       - name: LOCAL-EVPN-PEERS
-        peer_tag:
-          - direction: in
-            tag: SPINES
-          - direction: out
-            action: discard
-            tag: SPINES
+        peer_tag_in: SPINES
+        peer_tag_out_discard: SPINES
 
 ###################################################
 # DOMAIN A SPINES
@@ -258,11 +252,10 @@ l3leaf:
     platform: cEOS-LAB
     loopback_ipv4_pool: 10.0.1.0/24
     vtep_loopback_ipv4_pool: 10.1.1.0/24
-    # VERIFY: Multi-VTEP MLAG shared VTEP loopback. AVD 6.3.0 schema key TBD —
-    # candidates: `mlag_ibgp_peering_vrfs`-adjacent `vtep_mlag_shared_ipv4_pool`,
-    # or a separate `mlag_shared_vtep_ipv4_pool`. Confirm during first build
-    # and update the key here to match. Target: Loopback2 = 10.2.1.[MLAG-Pair-Primary-NodeID]/32.
-    mlag_shared_vtep_ipv4_pool: 10.2.1.0/24
+    # NOTE: Multi-VTEP MLAG shared VTEP (Loopback2) has no native AVD 6.3 key.
+    # Injected via structured_config on the MLAG l3leaf node_groups (see below).
+    # Target render: interface Loopback2 with 10.2.1.[MLAG-Pair-Primary-NodeID]/32
+    # + `vxlan mlag source-interface Loopback2` on Vxlan1.
     uplink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4]
     uplink_switches: [A-SPINE1, A-SPINE2, A-SPINE3, A-SPINE4]
     uplink_ipv4_pool: 192.168.0.0/24
