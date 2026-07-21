@@ -43,11 +43,8 @@ node_type_keys:
     default_overlay_address_families: [evpn]
     default_underlay_routing_protocol: none  # No fabric-wide IGP/BGP; underlay comes from l3_edge
     default_mpls_overlay_role: none
-    interface_descriptions:
-      underlay_ethernet_interface: "{{ peer }}"
     ip_addressing:
       router_id: "loopback0"                 # BGP router-id from Loopback0
-    structured_config: {}
 
 ###################################################
 # BGP knobs — iBGP AS 65000, RR to all four Gateway nodes
@@ -84,8 +81,8 @@ router_id_loopback_description: "Globally Unique Address"
 csc_backbone_rr_bgp:
   router_bgp:
     router_id: null  # will be set per-node via structured_config; AVD auto-derives from Loopback0
+    bgp_cluster_id: 10.0.0.100
     bgp:
-      cluster_id: 10.0.0.100
       # bestpath.d_path is a per-BGP-process setting; enable so the RR
       # evaluates D-PATH length in best-path selection.
       bestpath:

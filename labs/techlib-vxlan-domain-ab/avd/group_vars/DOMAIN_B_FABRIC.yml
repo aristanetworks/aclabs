@@ -89,7 +89,8 @@ custom_vtep_bgp_session_tracker:
     address_family_evpn:
       # VERIFY: `layer_2_fec_in_place_update` schema key for AVD 6.3.0.
       # Target render: `layer-2 fec in-place update` under address-family evpn.
-      layer_2_fec_in_place_update: true
+      layer_2_fec_in_place_update:
+        enabled: true
     session_trackers:
       - name: TRACK-LOCAL-EVPN-PEERS
         recovery_delay: 300
@@ -177,8 +178,7 @@ b_leaf8_dci_bgp_peers:
 
 csc_spine_rr:
   router_bgp:
-    bgp:
-      cluster_id: 10.0.2.205
+    bgp_cluster_id: 10.0.2.205
     peer_groups:
       - name: LOCAL-EVPN-PEERS
         route_reflector_client: true
@@ -308,7 +308,6 @@ l2leaf:
   defaults:
     platform: cEOS-LAB
     spanning_tree_mode: mstp
-    spanning_tree_bpduguard_default: true
     uplink_switches: [B-LEAF5, B-LEAF6]
     uplink_interfaces: [Ethernet1, Ethernet2]
     # VERIFY: `uplink_type: port-channel` renders as a single LACP port-channel

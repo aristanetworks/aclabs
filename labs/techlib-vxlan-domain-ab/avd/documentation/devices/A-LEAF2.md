@@ -15,6 +15,7 @@
 - [Authentication](#authentication)
   - [Local Users](#local-users)
   - [Enable Password](#enable-password)
+  - [AAA Authentication](#aaa-authentication)
   - [AAA Authorization](#aaa-authorization)
 - [DHCP Relay](#dhcp-relay)
   - [DHCP Relay Summary](#dhcp-relay-summary)
@@ -226,7 +227,7 @@ ip ssh client source-interface Management0 vrf MGMT
 
 | HTTP | HTTPS | UNIX-Socket | Default Services | Session Timeout |
 | ---- | ----- | ----------- | ---------------- | --------------- |
-| True | True | - | - | 1440 minutes |
+| False | True | - | - | 1440 minutes |
 
 #### Management API VRF Access
 
@@ -240,7 +241,6 @@ ip ssh client source-interface Management0 vrf MGMT
 !
 management api http-commands
    protocol https
-   protocol http
    no shutdown
    !
    vrf MGMT
@@ -256,19 +256,33 @@ management api http-commands
 | User | Privilege | Role | Disabled | Shell |
 | ---- | --------- | ---- | -------- | ----- |
 | admin | 15 | network-admin | False | - |
-| arista | 15 | network-admin | False | - |
 
 #### Local Users Device Configuration
 
 ```eos
 !
-username admin privilege 15 role network-admin secret sha512 <removed>
-username arista privilege 15 role network-admin secret sha512 <removed>
+username admin privilege 15 role network-admin nopassword
 ```
 
 ### Enable Password
 
 Enable password has been disabled
+
+### AAA Authentication
+
+#### AAA Authentication Summary
+
+| Type | Sub-type | User Stores |
+| ---- | -------- | ---------- |
+
+Policy local allow-nopassword-remote-login has been enabled.
+
+#### AAA Authentication Device Configuration
+
+```eos
+aaa authentication policy local allow-nopassword-remote-login
+!
+```
 
 ### AAA Authorization
 
@@ -448,10 +462,10 @@ switchport default mode routed
 
 | Interface | Description | Channel Group | IP Address | VRF | MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | --- | --- | -------- | ------ | ------- |
-| Ethernet1 | P2P_A-SPINE1_Ethernet2 | - | 192.168.0.9/31 | default | 9214 | False | - | - |
-| Ethernet2 | P2P_A-SPINE2_Ethernet2 | - | 192.168.0.11/31 | default | 9214 | False | - | - |
-| Ethernet3 | P2P_A-SPINE3_Ethernet2 | - | 192.168.0.13/31 | default | 9214 | False | - | - |
-| Ethernet4 | P2P_A-SPINE4_Ethernet2 | - | 192.168.0.15/31 | default | 9214 | False | - | - |
+| Ethernet1 | P2P_A-SPINE1_Ethernet2 | - | 192.168.0.9/31 | default | 9114 | False | - | - |
+| Ethernet2 | P2P_A-SPINE2_Ethernet2 | - | 192.168.0.11/31 | default | 9114 | False | - | - |
+| Ethernet3 | P2P_A-SPINE3_Ethernet2 | - | 192.168.0.13/31 | default | 9114 | False | - | - |
+| Ethernet4 | P2P_A-SPINE4_Ethernet2 | - | 192.168.0.15/31 | default | 9114 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -460,7 +474,7 @@ switchport default mode routed
 interface Ethernet1
    description P2P_A-SPINE1_Ethernet2
    no shutdown
-   mtu 9214
+   mtu 9114
    no switchport
    ip address 192.168.0.9/31
    pim ipv4 sparse-mode
@@ -468,7 +482,7 @@ interface Ethernet1
 interface Ethernet2
    description P2P_A-SPINE2_Ethernet2
    no shutdown
-   mtu 9214
+   mtu 9114
    no switchport
    ip address 192.168.0.11/31
    pim ipv4 sparse-mode
@@ -476,7 +490,7 @@ interface Ethernet2
 interface Ethernet3
    description P2P_A-SPINE3_Ethernet2
    no shutdown
-   mtu 9214
+   mtu 9114
    no switchport
    ip address 192.168.0.13/31
    pim ipv4 sparse-mode
@@ -484,7 +498,7 @@ interface Ethernet3
 interface Ethernet4
    description P2P_A-SPINE4_Ethernet2
    no shutdown
-   mtu 9214
+   mtu 9114
    no switchport
    ip address 192.168.0.15/31
    pim ipv4 sparse-mode
@@ -603,9 +617,9 @@ interface Loopback101
 | --------- | ----------- | --- | --- | -------- |
 | Vlan10 | Blue | PROD | 9014 | False |
 | Vlan30 | Orange | PROD | 9014 | False |
-| Vlan3001 | MLAG_L3_VRF_PROD | PROD | 9214 | False |
-| Vlan4093 | MLAG_L3 | default | 9214 | False |
-| Vlan4094 | MLAG | default | 9214 | False |
+| Vlan3001 | MLAG_L3_VRF_PROD | PROD | 9114 | False |
+| Vlan4093 | MLAG_L3 | default | 9114 | False |
+| Vlan4094 | MLAG | default | 9114 | False |
 
 ##### IPv4
 
@@ -653,21 +667,21 @@ interface Vlan30
 interface Vlan3001
    description MLAG_L3_VRF_PROD
    no shutdown
-   mtu 9214
+   mtu 9114
    vrf PROD
    ip address 192.0.0.1/31
 !
 interface Vlan4093
    description MLAG_L3
    no shutdown
-   mtu 9214
+   mtu 9114
    ip address 192.0.0.1/31
    pim ipv4 sparse-mode
 !
 interface Vlan4094
    description MLAG
    no shutdown
-   mtu 9214
+   mtu 9114
    no autostate
    ip address 169.254.0.1/31
 ```
