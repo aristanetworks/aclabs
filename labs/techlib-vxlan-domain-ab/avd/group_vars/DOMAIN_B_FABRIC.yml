@@ -63,6 +63,9 @@ router_id_loopback_description: "Globally Unique Address"
 vtep_loopback_description: "VTEP IP"                # Per tech-library B-LEAF1.cfg
 default_vrf_diag_loopback_description: "OISM PIM/IGMP Source"
 
+# BGP peer description template — match tech-library `B-LEAF1.EVPN` style.
+overlay_bgp_peer_description: "{peer}.EVPN"
+
 underlay_multicast_pim_sm: true
 
 ###################################################

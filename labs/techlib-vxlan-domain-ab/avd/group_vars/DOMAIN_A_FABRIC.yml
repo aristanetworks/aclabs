@@ -70,6 +70,12 @@ fabric_ip_addressing:
 
 router_id_loopback_description: "Globally Unique Address"
 vtep_loopback_description: "Unique VTEP IP"
+
+# BGP peer description templates — match tech-library `A-LEAF1.EVPN`
+# and `A-LEAF2.IPV4` style rather than AVD default `A-LEAF1_Loopback0` /
+# `A-LEAF1_Ethernet1`.
+overlay_bgp_peer_description: "{peer}.EVPN"
+mlag_bgp_peer_description: "{mlag_peer}.IPV4"
 default_vrf_diag_loopback_description: "OISM PIM/IGMP Source"
 
 underlay_multicast_pim_sm: true
