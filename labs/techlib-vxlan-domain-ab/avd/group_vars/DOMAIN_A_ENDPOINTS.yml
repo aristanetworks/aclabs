@@ -1,14 +1,21 @@
 ---
+###################################################
+# Domain A — Port profiles + connected endpoints
+#
+# Reflects the shipped topology per the tech-library guide's Design Summary +
+# Tenant Networks tables. Every host with a defined attachment in the guide's
+# figures is represented here.
+###################################################
 
-########################################################
-# Port Profiles                                        #
-########################################################
 port_profiles:
+  #########################################
+  # PROD-side hosts (VLANs 10, 30)
+  #########################################
   - profile: PROF-BLUE-MLAG
     mode: access
     spanning_tree_portfast: edge
     spanning_tree_bpduguard: true
-    vlans: 10
+    vlans: '10'
     port_channel:
       mode: active
 
@@ -16,7 +23,7 @@ port_profiles:
     mode: access
     spanning_tree_portfast: edge
     spanning_tree_bpduguard: true
-    vlans: 30
+    vlans: '30'
     port_channel:
       mode: active
 
@@ -24,26 +31,53 @@ port_profiles:
     mode: access
     spanning_tree_portfast: edge
     spanning_tree_bpduguard: true
-    vlans: 30
+    vlans: '30'
 
+  #########################################
+  # DEV-side hosts (VLANs 50, 70)
+  #########################################
   - profile: PROF-YELLOW-SINGLE-HOMED
     mode: access
     spanning_tree_portfast: edge
     spanning_tree_bpduguard: true
-    vlans: 50
+    vlans: '50'
 
   - profile: PROF-BROWN-MLAG
     mode: access
     spanning_tree_portfast: edge
     spanning_tree_bpduguard: true
-    vlans: 70
+    vlans: '70'
     port_channel:
       mode: active
 
-########################################################
-# End hosts                                            #
-########################################################
+  #########################################
+  # Gateway-attached hosts (VLAN 50 — HostA8)
+  # EVPN A/A on the Gateway pair (no MLAG).
+  #########################################
+  - profile: PROF-YELLOW-EVPN-AA
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '50'
+    port_channel:
+      mode: active
+    # VERIFY: EVPN Ethernet Segment (Type-1 auto-ESI) on the port-channel.
+    # AVD schema for connected_endpoints + ethernet_segment TBD; may need CSC.
+    ethernet_segment:
+      short_esi: auto
+      # Rendered output target (per tech-library A-LEAF7.cfg):
+      #   interface Port-Channel9
+      #      description SERVER_HostA8
+      #      bgp session tracker TRACK-EVPN-PEERS
+      #      switchport access vlan 50
+      #      evpn ethernet-segment
+      #         identifier auto lacp
+      #      lacp system-id c0d6.8200.0000
+      #      spanning-tree portfast edge
+
 servers:
+  #########################################
+  # A-LEAF1/A-LEAF2 pair (MLAG POD1)
+  #########################################
   - name: HostA1
     adapters:
       - endpoint_ports: [eth1, eth2]
@@ -58,6 +92,9 @@ servers:
         switches: [A-LEAF1, A-LEAF2]
         profile: PROF-ORANGE-MLAG
 
+  #########################################
+  # A-LEAF3/A-LEAF4 pair (MLAG POD2 — PROD+DEV)
+  #########################################
   - name: HostA3
     adapters:
       - endpoint_ports: [eth1]
@@ -79,9 +116,37 @@ servers:
         switches: [A-LEAF4]
         profile: PROF-ORANGE-SINGLE-HOMED
 
+  #########################################
+  # A-LEAF5/A-LEAF6 pair (MLAG POD3 — DEV only)
+  #########################################
   - name: HostA6
     adapters:
       - endpoint_ports: [eth1, eth2]
         switch_ports: [Ethernet7, Ethernet7]
         switches: [A-LEAF5, A-LEAF6]
         profile: PROF-BROWN-MLAG
+
+  - name: HostA7
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet8]
+        switches: [A-LEAF5]
+        profile: PROF-YELLOW-SINGLE-HOMED
+
+  #########################################
+  # A-LEAF7/A-LEAF8 pair (EVPN Gateway, All-Active)
+  # HostA8: locally-attached to the Gateway pair via EVPN A/A ESI.
+  # LACP system-id `c0d6.8200.0000` shared across both Gateway nodes.
+  #########################################
+  - name: HostA8
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet9, Ethernet9]
+        switches: [A-LEAF7, A-LEAF8]
+        profile: PROF-YELLOW-EVPN-AA
+        # VERIFY: shared LACP system-id across the Gateway pair. AVD schema key
+        # for per-endpoint lacp system-id TBD; may need CSC on both A-LEAF7 and
+        # A-LEAF8 host_vars.
+        port_channel:
+          lacp_fallback:
+            mode: static

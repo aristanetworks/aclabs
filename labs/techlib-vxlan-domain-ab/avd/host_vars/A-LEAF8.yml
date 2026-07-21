@@ -1,4 +1,41 @@
 ---
+###################################################
+# A-LEAF8 — EVPN Gateway (All-Active), Domain A
+#
+# Mirror of A-LEAF7 with its own ASN (65108), its own attach D-PATH tag
+# (65108:65108), and its own WAN-facing neighbor IPs.
+###################################################
 
 evpn_multicast: false
 underlay_multicast: false
+
+a_leaf8_gateway_csc:
+  router_bgp:
+    neighbors:
+      - ip_address: 172.16.1.2
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB1.IPV4
+      - ip_address: 172.16.1.6
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB2.IPV4
+    peer_groups:
+      - name: LOCAL-EVPN-PEERS
+        session_tracker: TRACK-EVPN-PEERS
+    address_family_evpn:
+      route:
+        - type: ethernet-segment
+          route_target: auto
+      domain_identifier_attach: '65108:65108'
+    session_trackers:
+      - name: TRACK-EVPN-PEERS
+        recovery_delay: 10
+
+a_leaf8_hosta8_csc:
+  port_channel_interfaces:
+    - name: Port-Channel9
+      bgp:
+        session_tracker: TRACK-EVPN-PEERS
+
+structured_config:
+  router_bgp: "{{ a_leaf8_gateway_csc.router_bgp }}"
+  port_channel_interfaces: "{{ a_leaf8_hosta8_csc.port_channel_interfaces }}"

@@ -1,67 +1,125 @@
 ---
+###################################################
+# Domain A — Tenants, VRFs, SVIs, OISM
+#
+# Two tenants (PROD, DEV) — modeled here as a single AVD tenant whose VRFs
+# carry the per-tenant scoping. AVD's `evpn_l2_multi_domain: true` flag on
+# a VLAN produces the `rd evpn domain all` + `route-target import export evpn
+# domain all` form on the Gateway pair for that VLAN.
+###################################################
 
-###################################################
-# Tenants and Per-VRF Config                      #
-###################################################
 tenants:
   - name: DOMAIN_A_FABRIC
-    mac_vrf_vni_base: 10000
+    mac_vrf_vni_base: 10000                        # L2VNI = 10000 + VLAN ID
+    # Fabric-scope multi-domain toggle: FALSE here (per-VLAN opt-in below).
+    # Set true only if EVERY VLAN under the tenant needs multi-domain presence.
     evpn_l2_multi_domain: false
+
     vrfs:
+      #############################################
+      # VRF PROD (L3VNI 50001)
+      # OISM underlay group: 232.1.1.1 (per tech-library A-LEAF1.cfg)
+      # OISM PIM/IGMP source: Loopback101 = 10.101.101.[NodeID]/32
+      #############################################
       - name: PROD
         vrf_vni: 50001
+        # VERIFY: `evpn_l3_multi_domain` — activate `rd evpn domain all` +
+        # `route-target import|export evpn domain all` on the L3VNI at the
+        # Gateway pair. AVD 6.3.0 schema key TBD; verify against first build.
+        evpn_l3_multi_domain: true
         evpn_l3_multicast:
           enabled: true
           evpn_underlay_l3_multicast_group: 232.1.1.1
+          # VERIFY: IPv6 EVPN multicast address-family enablement. Should render
+          # `address-family ipv6` under `evpn multicast` in the VRF BGP block.
+          address_family_ipv6:
+            enabled: true
         mlag_ibgp_peering_vlan: 3001
-        mlag_ibgp_peering_ipv4_pool: 192.2.2.0/31
+        mlag_ibgp_peering_ipv4_pool: 192.0.0.0/31
         vtep_diagnostic:
           loopback: 101
           loopback_ip_range: 10.101.101.0/24
+          # VERIFY: description on Loopback101. Tech-library renders
+          # "description OISM PIM/IGMP Source (PROD)" — check the AVD schema
+          # key for per-VRF vtep_diagnostic loopback description override.
         svis:
           - id: 10
             name: Blue
-            description: Blue Network
             tags: ['PROD', 'BLUE']
             enabled: true
             mtu: 9014
             ip_address_virtual: 10.10.10.1/24
             ipv6_address_virtuals: [2001:db8:10:10::1/64]
-            evpn_l2_multi_domain: true
+            evpn_l2_multi_domain: true             # VLAN 10 is shared with Domain B
+            # VERIFY: paired-redistribute-router-mac. Native in AVD 6.3.0?
+            # Target rendered output (per tech-library A-LEAF1.cfg):
+            #   vlan 10
+            #      redistribute router-mac next-hop vtep primary
+            #      redistribute router-mac virtual-ip next-hop vtep primary
+            # If not native in 6.3.0, fall back to CSC on the SVI.
+            evpn_l2_redistribute_router_mac:
+              enabled: true
+              variants: [next_hop_vtep_primary, virtual_ip_next_hop_vtep_primary]
+            # OISM per-SVI settings (MLAG-OISM pattern requires PIM sparse-mode
+            # + IGMP + PIM source Loopback101):
+            igmp: {enabled: true}
+            evpn_l2_multicast: {enabled: true}     # MLD snooping on the VLAN
           - id: 30
             name: Orange
-            description: Orange Network
             tags: ['PROD', 'ORANGE']
             enabled: true
             mtu: 9014
             ip_address_virtual: 10.30.30.1/24
             ipv6_address_virtuals: [2001:db8:30:30::1/64]
+            evpn_l2_multi_domain: false            # VLAN 30 is local to Domain A
+            evpn_l2_redistribute_router_mac:
+              enabled: true
+              variants: [next_hop_vtep_primary, virtual_ip_next_hop_vtep_primary]
+            igmp: {enabled: true}
+            evpn_l2_multicast: {enabled: true}
+
+      #############################################
+      # VRF DEV (L3VNI 50002)
+      # OISM underlay group: 232.1.1.2 (per tech-library A-LEAF3.cfg + A-LEAF5.cfg)
+      # OISM PIM/IGMP source: Loopback102 = 10.102.102.[NodeID]/32
+      #############################################
       - name: DEV
         vrf_vni: 50002
+        evpn_l3_multi_domain: true
         evpn_l3_multicast:
           enabled: true
-          evpn_underlay_l3_multicast_group: 232.2.2.2
+          evpn_underlay_l3_multicast_group: 232.1.1.2     # CORRECTED from 232.2.2.2
+          address_family_ipv6:
+            enabled: true
         mlag_ibgp_peering_vlan: 3002
-        mlag_ibgp_peering_ipv4_pool: 192.2.2.0/31
+        mlag_ibgp_peering_ipv4_pool: 192.0.0.0/31         # CORRECTED from 192.2.2.0/31
         vtep_diagnostic:
           loopback: 102
           loopback_ip_range: 10.102.102.0/24
         svis:
           - id: 50
             name: Yellow
-            description: Yellow Network
             tags: ['DEV', 'YELLOW']
             enabled: true
             mtu: 9014
             ip_address_virtual: 10.50.50.1/24
             ipv6_address_virtuals: [2001:db8:50:50::1/64]
-            evpn_l2_multi_domain: true
+            evpn_l2_multi_domain: false                   # VLAN 50 is local to Domain A
+            evpn_l2_redistribute_router_mac:
+              enabled: true
+              variants: [next_hop_vtep_primary, virtual_ip_next_hop_vtep_primary]
+            igmp: {enabled: true}
+            evpn_l2_multicast: {enabled: true}
           - id: 70
             name: Brown
-            description: Brown Network
             tags: ['DEV', 'BROWN']
             enabled: true
             mtu: 9014
             ip_address_virtual: 10.70.70.1/24
             ipv6_address_virtuals: [2001:db8:70:70::1/64]
-            evpn_l2_multi_domain: true
+            evpn_l2_multi_domain: true                    # VLAN 70 is shared with Domain B
+            evpn_l2_redistribute_router_mac:
+              enabled: true
+              variants: [next_hop_vtep_primary, virtual_ip_next_hop_vtep_primary]
+            igmp: {enabled: true}
+            evpn_l2_multicast: {enabled: true}

@@ -1,4 +1,60 @@
 ---
+###################################################
+# A-LEAF7 — EVPN Gateway (All-Active), Domain A
+#
+# Fabric-level defaults + POD4 evpn_gateway config in
+# group_vars/DOMAIN_A_FABRIC.yml handle the bulk of the Gateway shape.
+# This host_vars file layers on the A-LEAF7-specific overrides.
+###################################################
 
+# OISM is not enabled on the Gateway pair (Multi-Domain VXLAN-MPLS EVPN
+# doesn't yet support OISM across the domain boundary; HostA8 is unicast-only).
 evpn_multicast: false
 underlay_multicast: false
+
+###################################################
+# Custom Structured Config — Gateway-side
+#
+# CSC: three things AVD's evpn_gateway doesn't natively express:
+#   1. The `domain identifier <own-ASN>:<own-ASN> attach` D-PATH tag,
+#      applied to Type-2 and Type-5 routes locally originated for
+#      HostA8. On A-LEAF7 this is `65107:65107 attach`.
+#   2. The BGP Session Tracker (`TRACK-EVPN-PEERS`) that binds HostA8's
+#      port-channel to the state of the local-domain EVPN peerings.
+#   3. `route type ethernet-segment route-target auto` under
+#      address-family evpn — auto-derive the ES-Import route-target.
+###################################################
+
+a_leaf7_gateway_csc:
+  router_bgp:
+    neighbors:
+      - ip_address: 172.16.1.0
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB1.IPV4
+      - ip_address: 172.16.1.4
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB2.IPV4
+    peer_groups:
+      - name: LOCAL-EVPN-PEERS
+        session_tracker: TRACK-EVPN-PEERS
+    address_family_evpn:
+      route:
+        - type: ethernet-segment
+          route_target: auto
+      domain_identifier_attach: '65107:65107'    # VERIFY: schema key for the `attach` D-PATH tag
+    session_trackers:
+      - name: TRACK-EVPN-PEERS
+        recovery_delay: 10
+
+# CSC: HostA8 port-channel needs a `bgp session tracker TRACK-EVPN-PEERS`
+# statement. AVD's connected_endpoints doesn't currently expose this;
+# apply via port_channel_interfaces override.
+a_leaf7_hosta8_csc:
+  port_channel_interfaces:
+    - name: Port-Channel9
+      bgp:
+        session_tracker: TRACK-EVPN-PEERS
+
+structured_config:
+  router_bgp: "{{ a_leaf7_gateway_csc.router_bgp }}"
+  port_channel_interfaces: "{{ a_leaf7_hosta8_csc.port_channel_interfaces }}"
