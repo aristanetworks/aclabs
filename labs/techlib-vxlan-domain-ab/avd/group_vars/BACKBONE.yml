@@ -160,7 +160,7 @@ backbone_router:
   nodes:
     - name: BB1
       id: 1                                        # → Loopback0 = 10.0.0.1/32
-      mgmt_ip: 172.100.100.201/24
+      mgmt_ip: 172.100.100.101/22
     - name: BB2
       id: 2                                        # → Loopback0 = 10.0.0.2/32
-      mgmt_ip: 172.100.100.202/24
+      mgmt_ip: 172.100.100.102/22

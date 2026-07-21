@@ -233,16 +233,16 @@ spine:
   nodes:
     - name: A-SPINE1
       id: 201
-      mgmt_ip: 172.100.100.101/24
+      mgmt_ip: 172.100.101.101/22
     - name: A-SPINE2
       id: 202
-      mgmt_ip: 172.100.100.102/24
+      mgmt_ip: 172.100.101.102/22
     - name: A-SPINE3
       id: 203
-      mgmt_ip: 172.100.100.103/24
+      mgmt_ip: 172.100.101.103/22
     - name: A-SPINE4
       id: 204
-      mgmt_ip: 172.100.100.104/24
+      mgmt_ip: 172.100.101.104/22
 
 ##################################################
 # DOMAIN A LEAFS
@@ -277,49 +277,49 @@ l3leaf:
 # DOMAIN A POD 1 — A-LEAF1/2 (PROD only, VLANs 10, 30)
 ########################################################
     - group: POD1
-      bgp_as: 65112
+      bgp_as: 65101                    # Shared per MLAG pair
       filter:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
       nodes:
         - name: A-LEAF1
           id: 1
-          mgmt_ip: 172.100.100.105/24
+          mgmt_ip: 172.100.101.105/22
           uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
         - name: A-LEAF2
           id: 2
-          mgmt_ip: 172.100.100.106/24
+          mgmt_ip: 172.100.101.106/22
           uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
 ########################################################
 # DOMAIN A POD 2 — A-LEAF3/4 (PROD + DEV, VLANs 10, 30, 50)
 ########################################################
     - group: POD2
-      bgp_as: 65134
+      bgp_as: 65103
       filter:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
       nodes:
         - name: A-LEAF3
           id: 3
-          mgmt_ip: 172.100.100.107/24
+          mgmt_ip: 172.100.101.107/22
           uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
         - name: A-LEAF4
           id: 4
-          mgmt_ip: 172.100.100.108/24
+          mgmt_ip: 172.100.101.108/22
           uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
 ########################################################
 # DOMAIN A POD 3 — A-LEAF5/6 (DEV only, VLANs 50, 70)
 ########################################################
     - group: POD3
-      bgp_as: 65156
+      bgp_as: 65105
       filter:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
       nodes:
         - name: A-LEAF5
           id: 5
-          mgmt_ip: 172.100.100.109/24
+          mgmt_ip: 172.100.101.109/22
           uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
         - name: A-LEAF6
           id: 6
-          mgmt_ip: 172.100.100.110/24
+          mgmt_ip: 172.100.101.110/22
           uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
 ########################################################
 # DOMAIN A POD 4 — A-LEAF7/8 (EVPN Gateway pair, All-Active)
@@ -329,7 +329,8 @@ l3leaf:
 # OISM disabled on Gateway pair (see host_vars/A-LEAF7.yml + A-LEAF8.yml).
 ########################################################
     - group: POD4
-      bgp_as: 65178
+      # Domain A's Gateway pair uses distinct per-Gateway ASNs (not shared
+      # like the MLAG pairs). bgp_as is overridden per-node below.
       # Filter: BLUE (VLAN 10, multi-domain), YELLOW (VLAN 50, local, HostA8),
       # BROWN (VLAN 70, multi-domain). ORANGE (VLAN 30) is intentionally excluded —
       # VLAN 30 is scoped to POD1+POD2 only and does not appear on the Gateway pair.
@@ -354,13 +355,15 @@ l3leaf:
       nodes:
         - name: A-LEAF7
           id: 7
-          mgmt_ip: 172.100.100.111/24
+          bgp_as: 65107                # Distinct per-Gateway ASN
+          mgmt_ip: 172.100.101.111/22
           uplink_switch_interfaces: [Ethernet7, Ethernet7, Ethernet7, Ethernet7]
           structured_config:
             router_bgp: "{{ a_leaf7_dci_bgp_peers.router_bgp }}"
         - name: A-LEAF8
           id: 8
-          mgmt_ip: 172.100.100.112/24
+          bgp_as: 65108
+          mgmt_ip: 172.100.101.112/22
           uplink_switch_interfaces: [Ethernet8, Ethernet8, Ethernet8, Ethernet8]
           structured_config:
             router_bgp: "{{ a_leaf8_dci_bgp_peers.router_bgp }}"
