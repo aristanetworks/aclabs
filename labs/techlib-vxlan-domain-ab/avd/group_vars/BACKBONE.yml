@@ -1,0 +1,169 @@
+---
+###################################################
+# Backbone (BB1, BB2) — dedicated fabric for the DCI
+#
+# BB1 and BB2 provide two things to the Domain A + Domain B Gateway pairs:
+#   1. IPv4 transport (the /31 point-to-point links between each Gateway
+#      and each backbone node, addressed from 172.16.1.0/24 for Domain A
+#      and 172.16.2.0/24 for Domain B).
+#   2. EVPN Route Reflection in AS 65000 — every Gateway (A-LEAF7/8 in
+#      AS 65107/65108, B-LEAF7/8 in AS 65200) peers with BB1 + BB2 as
+#      iBGP RR clients (via `neighbor ... local-as 65000 no-prepend
+#      replace-as` on the Gateway side).
+#
+# BB1/BB2 are NOT part of either domain's fabric — they have no local
+# tenant SVIs, no VXLAN, and no OISM. The `backbone_router` node_type_keys
+# entry below expresses this shape cleanly.
+###################################################
+
+fabric_name: BACKBONE
+
+###################################################
+# Custom node_type_keys — backbone_router
+#
+# CSC: AVD 6.3.0 ships spine, l3leaf, l2leaf, super-spine, wan_router, etc.
+# but no `backbone_router` type. This custom key expresses "a routing
+# node that acts purely as an EVPN Route Reflector + IPv4 transit for
+# other domains' Gateway pairs":
+#   - No connected endpoints (no tenant hosts)
+#   - No underlay routing protocol at the fabric level (peerings come
+#     via l3_edge.p2p_links from the Gateway pairs)
+#   - EVPN address-family only (RR role, next-hop-unchanged, cluster-id)
+#   - Interface descriptions follow the same {{ peer }} pattern as spines
+#
+# VERIFY: node_type_keys schema in AVD 6.3.0. The key names below are
+# best-guess; may need to align with 6.3's exact schema.
+###################################################
+
+node_type_keys:
+  - key: backbone_router
+    type: backbone_router
+    connected_endpoints: false
+    default_evpn_role: server                # RR (EVPN server) role
+    default_overlay_address_families: [evpn]
+    default_underlay_routing_protocol: none  # No fabric-wide IGP/BGP; underlay comes from l3_edge
+    default_mpls_overlay_role: none
+    interface_descriptions:
+      underlay_ethernet_interface: "{{ peer }}"
+    ip_addressing:
+      router_id: "loopback0"                 # BGP router-id from Loopback0
+    structured_config: {}
+
+###################################################
+# BGP knobs — iBGP AS 65000, RR to all four Gateway nodes
+###################################################
+
+bgp_distance:
+  external_routes: 20
+  internal_routes: 200
+  local_routes: 200
+
+bgp_peer_groups:
+  ipv4_underlay_peers:
+    name: REMOTE-IPV4-PEERS
+    password: dkvBq1jk4inJHsHfMjYRnQ==
+  evpn_overlay_peers:
+    name: REMOTE-EVPN-PEERS
+    password: IO6gE/ln7Sp2wt33WX/Asg==
+    bfd: true
+
+bgp_update_wait_install: true
+evpn_import_pruning: true
+
+router_id_loopback_description: "Globally Unique Address"
+
+###################################################
+# Custom Structured Config — RR-side EVPN peerings + IPv4 transit
+#
+# CSC: the RR-client behavior (cluster-id, next-hop-unchanged, per-client
+# `neighbor <ip> route-reflector-client`) plus the WAN-facing IPv4 unicast
+# neighbors for all four Gateway loopbacks. Both BB1 and BB2 use cluster-id
+# 10.0.0.100 so RR-reflected routes deduplicate cleanly at the Gateway pairs.
+###################################################
+
+csc_backbone_rr_bgp:
+  router_bgp:
+    router_id: null  # will be set per-node via structured_config; AVD auto-derives from Loopback0
+    bgp:
+      cluster_id: 10.0.0.100
+      # bestpath.d_path is a per-BGP-process setting; enable so the RR
+      # evaluates D-PATH length in best-path selection.
+      bestpath:
+        d_path: true
+    peer_groups:
+      - name: REMOTE-IPV4-PEERS
+        remote_as: 65107    # Placeholder — per-neighbor remote_as override below
+        # NOTE: each Gateway pair has its own ASN, so we can't set a peer-group
+        # remote_as here. Use per-neighbor remote_as instead. AVD may prefer
+        # separate peer-groups per remote AS; verify during first render.
+        send_community: all
+      - name: REMOTE-EVPN-PEERS
+        remote_as: 65000
+        update_source: Loopback0
+        next_hop_unchanged: true
+        route_reflector_client: true
+        bfd: true
+        send_community: all
+    neighbors:
+      # IPv4 underlay session with A-LEAF7 (Gateway loopbacks reachable
+      # via the direct /31 uplinks defined in DOMAIN_A_FABRIC.yml l3_edge)
+      - ip_address: 172.16.1.1
+        peer_group: REMOTE-IPV4-PEERS
+        remote_as: 65107
+        description: A-LEAF7.IPV4
+      - ip_address: 172.16.1.3
+        peer_group: REMOTE-IPV4-PEERS
+        remote_as: 65108
+        description: A-LEAF8.IPV4
+      # IPv4 underlay session with B-LEAF7 (Domain B Gateway pair)
+      - ip_address: 172.16.2.1
+        peer_group: REMOTE-IPV4-PEERS
+        remote_as: 65200
+        description: B-LEAF7.IPV4
+      - ip_address: 172.16.2.3
+        peer_group: REMOTE-IPV4-PEERS
+        remote_as: 65200
+        description: B-LEAF8.IPV4
+
+      # EVPN sessions with all four Gateway loopbacks (Loopback0 to Loopback0,
+      # over the IPv4 transit above). All in iBGP AS 65000 via local-as on the
+      # Gateway side.
+      - ip_address: 10.0.1.7
+        peer_group: REMOTE-EVPN-PEERS
+        description: A-LEAF7.EVPN
+      - ip_address: 10.0.1.8
+        peer_group: REMOTE-EVPN-PEERS
+        description: A-LEAF8.EVPN
+      - ip_address: 10.0.2.7
+        peer_group: REMOTE-EVPN-PEERS
+        description: B-LEAF7.EVPN
+      - ip_address: 10.0.2.8
+        peer_group: REMOTE-EVPN-PEERS
+        description: B-LEAF8.EVPN
+    address_family_evpn:
+      peer_groups:
+        - name: REMOTE-EVPN-PEERS
+          activate: true
+    address_family_ipv4:
+      peer_groups:
+        - name: REMOTE-IPV4-PEERS
+          activate: true
+
+###################################################
+# backbone_router node definitions
+###################################################
+
+backbone_router:
+  defaults:
+    platform: cEOS-LAB
+    bgp_as: 65000
+    loopback_ipv4_pool: 10.0.0.0/24                # Loopback0: 10.0.0.[NodeID]/32
+    structured_config:
+      router_bgp: "{{ csc_backbone_rr_bgp.router_bgp }}"
+  nodes:
+    - name: BB1
+      id: 1                                        # → Loopback0 = 10.0.0.1/32
+      mgmt_ip: 172.100.100.201/24
+    - name: BB2
+      id: 2                                        # → Loopback0 = 10.0.0.2/32
+      mgmt_ip: 172.100.100.202/24

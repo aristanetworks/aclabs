@@ -1,6 +1,9 @@
 ---
 all:
   children:
+    #########################################################
+    # Domain A — eBGP + MLAG standard leafs + A/A Gateway
+    #########################################################
     DOMAIN_A_FABRIC:
       children:
         DOMAIN_A_SPINES:
@@ -29,3 +32,51 @@ all:
     DOMAIN_A_SERVICES:
       children:
         DOMAIN_A_LEAFS:
+
+    #########################################################
+    # Domain B — IS-IS underlay + iBGP + A/A everywhere
+    #########################################################
+    DOMAIN_B_FABRIC:
+      children:
+        DOMAIN_B_SPINES:
+          vars:
+            type: spine
+          hosts:
+            B-SPINE1:
+            B-SPINE2:
+            B-SPINE3:
+            B-SPINE4:
+        DOMAIN_B_LEAFS:
+          vars:
+            type: l3leaf
+          hosts:
+            B-LEAF1:
+            B-LEAF2:
+            B-LEAF3:
+            B-LEAF4:
+            B-LEAF5:
+            B-LEAF6:
+            B-LEAF7:
+            B-LEAF8:
+        DOMAIN_B_L2_SWITCHES:
+          vars:
+            type: l2leaf              # AVD's L2-only leaf role — no BGP, no VXLAN
+          hosts:
+            B-SW1:
+    DOMAIN_B_ENDPOINTS:
+      children:
+        DOMAIN_B_LEAFS:
+        DOMAIN_B_L2_SWITCHES:
+    DOMAIN_B_SERVICES:
+      children:
+        DOMAIN_B_LEAFS:
+
+    #########################################################
+    # Backbone (BB1, BB2) — dedicated node_type for the DCI
+    #########################################################
+    BACKBONE:
+      vars:
+        type: backbone_router          # Custom node_type_keys entry defined in BACKBONE.yml
+      hosts:
+        BB1:
+        BB2:
