@@ -141,7 +141,6 @@ interface Loopback0
 interface Loopback1
    description Unique VTEP IP and Anycast Gateway VARP VTEP
    ip address 10.1.1.2/32
-   ip address 10.1.1.255/32 secondary
 !
 interface Loopback2
    description MLAG Shared VTEP IP
@@ -312,13 +311,13 @@ router bgp 65101
    vlan 10
       rd 10.0.1.2:10010
       route-target both 10010:10010
-      redistribute learned
+      redistribute router-mac next-hop vtep primary
       redistribute router-mac virtual-ip next-hop vtep primary
    !
    vlan 30
       rd 10.0.1.2:10030
       route-target both 10030:10030
-      redistribute learned
+      redistribute router-mac next-hop vtep primary
       redistribute router-mac virtual-ip next-hop vtep primary
    !
    address-family evpn
