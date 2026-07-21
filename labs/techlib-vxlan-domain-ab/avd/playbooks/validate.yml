@@ -1,10 +1,17 @@
 ---
 
-- name: Validate Fabric
+- name: Validate Fabric with ANTA
   hosts: "{{ target_hosts }}"
   gather_facts: false
 
   tasks:
-    - name: Validate Fabric
+    - name: Run ANTA tests from the merged catalog dir
       ansible.builtin.import_role:
         name: arista.avd.anta_runner
+      vars:
+        # The anta_runner role auto-merges every *.yml file in this directory
+        # into a single test catalog before dispatch.
+        anta_catalog_dir: "{{ playbook_dir }}/../anta"
+        # Save the ANTA report next to the intended configs.
+        anta_report_dir: "{{ playbook_dir }}/../intended/anta_reports"
+        anta_report_filename: "{{ inventory_hostname }}.txt"

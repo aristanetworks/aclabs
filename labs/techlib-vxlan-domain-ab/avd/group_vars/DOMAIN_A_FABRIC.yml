@@ -1,6 +1,22 @@
 ---
+###################################################
+# Domain A — Fabric shape
+#
+# eBGP underlay (per-node ASN) + eBGP EVPN overlay
+# MLAG multihoming on standard leafs (Multi-VTEP MLAG)
+# All-Active EVPN Gateway on A-LEAF7/8
+# IPv4 fabric addressing, dual-stack overlay IRB
+#
+# Rendered configs must match:
+#   docs/data_center/evpnvxlan/deployment_guide/domains_a_b/full_configs/A-*.cfg
+# in the aristanetworks/tech-library repo.
+###################################################
 
 fabric_name: DOMAIN_A_FABRIC
+
+###################################################
+# BGP knobs (fabric-wide)
+###################################################
 
 bgp_distance:
   external_routes: 20
@@ -21,30 +37,54 @@ bgp_peer_groups:
   evpn_overlay_peers:
     name: LOCAL-EVPN-PEERS
     password: WzKnNSduqwPYvUePYIh40g==
+    bfd: true
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
     password: IO6gE/ln7Sp2wt33WX/Asg==
 
+# ebgp-multihop is a fabric-level setting in AVD 6.3 (not per peer-group).
+evpn_ebgp_multihop: 3
+
 bgp_update_wait_install: true
-
 evpn_import_pruning: true
-
 evpn_multicast: true
+
+###################################################
+# Address pools (aligned with tech-library schema)
+#
+# Loopback0 : 10.0.1.[NodeID]/32   (Globally Unique Address)
+# Loopback1 : 10.1.1.[NodeID]/32   (Unique VTEP IP)
+# Loopback2 : 10.2.1.[Pair-Primary-NodeID]/32   (MLAG Shared VTEP IP)
+# Underlay  : 192.168.0.0/24 (/31 point-to-points, Spine↔Leaf)
+# WAN uplink: 172.16.1.0/24 (/31 point-to-points, Gateway↔BB1/BB2)
+# MLAG sync : 169.254.0.0/30 (VLAN 4094)
+# MLAG L3   : 192.0.0.0/31   (VLAN 4093)
+# MLAG VRF  : 192.0.0.0/31   (VLAN 3001 PROD, VLAN 3002 DEV — same subnet reused per VRF)
+# OISM (PROD): Loopback101, 10.101.101.[NodeID]/32, underlay SSM group 232.1.1.1
+# OISM (DEV) : Loopback102, 10.102.102.[NodeID]/32, underlay SSM group 232.1.1.2
+###################################################
 
 fabric_ip_addressing:
   mlag:
-    algorithm: same_subnet
+    algorithm: same_subnet   # produces 169.254.0.1/30 + 169.254.0.2/30 on the /30 sync VLAN
 
 router_id_loopback_description: "Globally Unique Address"
+vtep_loopback_description: "Unique VTEP IP"
 
-default_vrf_diag_loopback_description: "Per-VRF Unique Loopback"
+# BGP peer description templates — match tech-library `A-LEAF1.EVPN`
+# and `A-LEAF2.IPV4` style rather than AVD default `A-LEAF1_Loopback0` /
+# `A-LEAF1_Ethernet1`.
+overlay_bgp_peer_description: "{peer}.EVPN"
+mlag_bgp_peer_description: "{mlag_peer}.IPV4"
+default_vrf_diag_loopback_description: "OISM PIM/IGMP Source"
 
 underlay_multicast_pim_sm: true
 
-vtep_loopback_description: "VTEP IP"
-
 ###################################################
-# Customized Structured Config                    #
+# Custom Structured Config — VTEP-side
+#
+# CSC: DHCP relay tuning — dual suppress (tunnel + MLAG peer-link) required for
+# distributed-IRB + MLAG deployments to prevent duplicate DHCP relays.
 ###################################################
 custom_vtep_dhcp_relay:
   tunnel_requests_disabled: true
@@ -53,6 +93,39 @@ custom_vtep_dhcp_relay:
 custom_vtep_ip_dhcp_relay:
   information_option: true
 
+# CSC: extcommunity list used by RM-MLAG-PEER-OUT to filter routes learned from
+# the MLAG peer that already carry a route-target (i.e. were originated by the
+# MLAG peer and imported via EVPN — don't re-advertise back over the peer-link).
+custom_vtep_ext_community_lists:
+  - name: evpn-imported
+    entries:
+      - type: permit
+        regexp: RT.*
+
+custom_vtep_route_maps:
+  - name: RM-MLAG-PEER-OUT
+    sequence_numbers:
+      - sequence: 10
+        type: deny
+        match:
+          - extcommunity evpn-imported
+        description: Deny routes learned from MLAG peer that already carry an EVPN-imported route-target
+      - sequence: 20
+        type: permit
+        set:
+          - origin incomplete
+        description: Mark MLAG-peer-originated routes as origin incomplete so remote VTEPs prefer paths via a direct spine
+
+###################################################
+# Custom Structured Config — Gateway-side (A-LEAF7/A-LEAF8)
+#
+# CSC: EVPN Gateway pair needs a WAN-facing IPv4 eBGP session to BB1/BB2 to
+# advertise the Gateway loopbacks (Loopback0, Loopback1) into the backbone.
+# AVD's evpn_gateway.remote_peers handles the EVPN peering, but not the
+# separate IPv4 unicast session or the outbound route filtering. All the
+# gateway-specific plumbing (peer-group, prefix-list, route-map, d-path
+# bestpath, local-as trick to peer with BB in AS 65000) lives here.
+###################################################
 custom_evpn_gw_bgp_config:
   address_family_ipv4:
     peer_groups:
@@ -60,6 +133,7 @@ custom_evpn_gw_bgp_config:
         activate: true
   address_family_evpn:
     domain_identifier: '1:1'
+    domain_identifier_remote: '99:99'
   bgp:
     bestpath:
       d_path: true
@@ -71,30 +145,28 @@ custom_evpn_gw_bgp_config:
       send_community: all
     - name: REMOTE-EVPN-PEERS
       local_as: 65000
+      # Note: the REMOTE-EVPN-PEERS peer-group is created by evpn_gateway.remote_peers;
+      # local_as is layered on top here so the AS 65107/65108 Gateway can peer with the
+      # AS 65000 backbone RRs as-if in AS 65000.
 
+# CSC: PL-GATEWAY-LOOP restricts the Gateway's WAN advertisements to just the
+# four loopback addresses (Loopback0 + Loopback1 for both A-LEAF7 and A-LEAF8).
+# With EVPN Gateway in place, VTEPs in different domains don't need underlay
+# reachability to each other — only the Gateway loopbacks need to leave the
+# local domain.
 custom_evpn_gw_prefix_lists:
   - name: PL-GATEWAY-LOOP
     sequence_numbers:
       - sequence: 10
-        action: permit 2.2.1.7/32
+        action: permit 10.0.1.7/32
       - sequence: 20
-        action: permit 1.1.1.7/32
+        action: permit 10.0.1.8/32
       - sequence: 30
-        action: permit 1.1.1.8/32
+        action: permit 10.1.1.7/32
+      - sequence: 40
+        action: permit 10.1.1.8/32
 
 custom_evpn_gw_route_maps:
-  - name: RM-MLAG-PEER-IN
-    sequence_numbers:
-      - sequence: 10
-        type: deny
-        match:
-          - extcommunity CL-EVPN-IMPORTED
-        description: Do not accept routes learned from MLAG peer that contain Route-Target extended communities
-      - sequence: 20
-        type: permit
-        set:
-          - origin incomplete
-        description: Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
   - name: RM-AS65000-IPV4-OUT
     sequence_numbers:
       - sequence: 10
@@ -102,86 +174,197 @@ custom_evpn_gw_route_maps:
         match:
           - ip address prefix-list PL-GATEWAY-LOOP
 
-custom_vtep_route_maps:
-  - name: RM-MLAG-PEER-IN
-    sequence_numbers:
-      - sequence: 10
-        type: deny
-        match:
-          - extcommunity CL-EVPN-IMPORTED
-        description: Do not accept routes learned from MLAG peer that contain Route-Target extended communities
-      - sequence: 20
-        type: permit
-        set:
-          - origin incomplete
-        description: Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
-
-custom_vtep_ext_community_lists:
-  - name: CL-EVPN-IMPORTED
-    entries:
-      - type: permit
-        regexp: RT.*
-
+# Per-Gateway WAN-facing eBGP neighbors to BB1/BB2 in AS 65000.
+# Structured-config injected onto A-LEAF7 / A-LEAF8 via node-level structured_config
+# reference in the l3leaf.node_groups.POD4.nodes section below.
 a_leaf7_dci_bgp_peers:
-  neighbors:
-    - ip_address: 172.16.1.0
-      peer_group: REMOTE-IPV4-PEERS
-      description: BB1.IPV4
-    - ip_address: 172.16.1.4
-      peer_group: REMOTE-IPV4-PEERS
-      description: BB2.IPV4
+  router_bgp:
+    neighbors:
+      - ip_address: 172.16.1.0
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB1.IPV4
+      - ip_address: 172.16.1.4
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB2.IPV4
 
 a_leaf8_dci_bgp_peers:
-  neighbors:
-    - ip_address: 172.16.1.2
-      peer_group: REMOTE-IPV4-PEERS
-      description: BB1.IPV4
-    - ip_address: 172.16.1.6
-      peer_group: REMOTE-IPV4-PEERS
-      description: BB2.IPV4
+  router_bgp:
+    neighbors:
+      - ip_address: 172.16.1.2
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB1.IPV4
+      - ip_address: 172.16.1.6
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB2.IPV4
 
+###################################################
+# Custom Structured Config — Spine multicast
+#
+# CSC: enable IPv4 multicast routing on the spines so PIM-SSM (S,G) trees for
+# OISM overlay multicast can be forwarded through the underlay.
+###################################################
 csc_spine_multicast:
   ipv4:
     routing: true
-    software_forwarding: sfe
+    software_forwarding: sfe   # required on cEOSLab; harmless on hardware
 
 ###################################################
-# DOMAIN A SPINES                                 #
+# Custom Structured Config — peer-tag SPINES
+#
+# CSC: BGP Peer Tagging (EOS 4.34.0F). Prevents leaf-side re-advertisement of
+# routes learned from one spine to another. AVD 6.3 exposes this natively as
+# `peer_tag_in` + `peer_tag_out_discard` under each peer_group's
+# structured_config.
+###################################################
+csc_leaf_peer_tag_spines:
+  router_bgp:
+    peer_groups:
+      - name: LOCAL-IPV4-PEERS
+        peer_tag_in: SPINES
+        peer_tag_out_discard: SPINES
+      - name: LOCAL-EVPN-PEERS
+        peer_tag_in: SPINES
+        peer_tag_out_discard: SPINES
+
+###################################################
+# Custom Structured Config — paired redistribute-router-mac + Multi-VTEP MLAG
+#
+# CSC #1 (paired redistribute-router-mac): the anycast gateway
+# advertisement mechanism from EOS 4.34.0F. Injected under each MAC-VRF
+# on standard leafs ONLY (not the Gateway pair, which lets remote-domain
+# reachability come through the Interconnect-ESI machinery instead).
+#
+# CSC #2 (Multi-VTEP MLAG Loopback2): the MLAG shared VTEP loopback
+# for the Multi-VTEP MLAG pattern. Both peers in an MLAG pair share the
+# same Loopback2 IP; both peers' Vxlan1 uses `vxlan mlag source-interface
+# Loopback2` for MLAG-attached hosts while `vxlan source-interface
+# Loopback1` remains the per-node unique VTEP source for OISM.
+#
+# These are combined per-POD because the VLAN set differs per POD.
+###################################################
+
+# POD1 (A-LEAF1/2): VLANs 10, 30. MLAG shared VTEP = 10.2.1.1/32
+csc_pod1_leaf_features:
+  loopback_interfaces:
+    - name: Loopback2
+      description: MLAG Shared VTEP IP
+      ip_address: 10.2.1.1/32
+  vxlan_interface:
+    vxlan1:
+      vxlan:
+        source_interface: Loopback1
+        mlag_source_interface: Loopback2
+        virtual_router_encapsulation_mac_address: mlag-system-id
+  router_bgp:
+    vlans:
+      - id: 10
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 30
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+
+# POD2 (A-LEAF3/4): VLANs 10, 30, 50. MLAG shared VTEP = 10.2.1.3/32
+csc_pod2_leaf_features:
+  loopback_interfaces:
+    - name: Loopback2
+      description: MLAG Shared VTEP IP
+      ip_address: 10.2.1.3/32
+  vxlan_interface:
+    vxlan1:
+      vxlan:
+        source_interface: Loopback1
+        mlag_source_interface: Loopback2
+        virtual_router_encapsulation_mac_address: mlag-system-id
+  router_bgp:
+    vlans:
+      - id: 10
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 30
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 50
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+
+# POD3 (A-LEAF5/6): VLANs 50, 70. MLAG shared VTEP = 10.2.1.5/32
+csc_pod3_leaf_features:
+  loopback_interfaces:
+    - name: Loopback2
+      description: MLAG Shared VTEP IP
+      ip_address: 10.2.1.5/32
+  vxlan_interface:
+    vxlan1:
+      vxlan:
+        source_interface: Loopback1
+        mlag_source_interface: Loopback2
+        virtual_router_encapsulation_mac_address: mlag-system-id
+  router_bgp:
+    vlans:
+      - id: 50
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 70
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+
+###################################################
+# DOMAIN A SPINES
 ###################################################
 spine:
   defaults:
     platform: cEOS-LAB
     bgp_as: 65100
-    loopback_ipv4_pool: 1.1.1.0/24
+    loopback_ipv4_pool: 10.0.1.0/24
     structured_config:
       router_multicast: "{{ csc_spine_multicast }}"
   nodes:
     - name: A-SPINE1
       id: 201
-      mgmt_ip: 172.100.100.101/24
+      mgmt_ip: 172.100.101.101/22
     - name: A-SPINE2
       id: 202
-      mgmt_ip: 172.100.100.102/24
+      mgmt_ip: 172.100.101.102/22
     - name: A-SPINE3
       id: 203
-      mgmt_ip: 172.100.100.103/24
+      mgmt_ip: 172.100.101.103/22
     - name: A-SPINE4
       id: 204
-      mgmt_ip: 172.100.100.104/24
+      mgmt_ip: 172.100.101.104/22
 
 ##################################################
-# DOMAIN A LEAFS                                 #
+# DOMAIN A LEAFS
 ##################################################
 l3leaf:
   defaults:
     platform: cEOS-LAB
-    loopback_ipv4_pool: 1.1.1.0/24
-    vtep_loopback_ipv4_pool: 2.2.1.0/24
+    loopback_ipv4_pool: 10.0.1.0/24
+    vtep_loopback: Loopback1                       # explicit VTEP source loopback
+    vtep_loopback_ipv4_pool: 10.1.1.0/24
+    # NOTE: Multi-VTEP MLAG shared VTEP (Loopback2) has no native AVD 6.3 key.
+    # Injected via structured_config on the MLAG l3leaf node_groups (see below).
+    # Target render: interface Loopback2 with 10.2.1.[MLAG-Pair-Primary-NodeID]/32
+    # + `vxlan mlag source-interface Loopback2` on Vxlan1.
     uplink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4]
     uplink_switches: [A-SPINE1, A-SPINE2, A-SPINE3, A-SPINE4]
     uplink_ipv4_pool: 192.168.0.0/24
     mlag_interfaces: [Ethernet5, Ethernet6]
-    mlag_peer_ipv4_pool: 169.254.0.0/31
+    mlag_peer_ipv4_pool: 169.254.0.0/30
     mlag_peer_l3_ipv4_pool: 192.0.0.0/31
     mlag_port_channel_id: 1000
     virtual_router_mac_address: 00:1c:73:00:00:01
@@ -192,60 +375,83 @@ l3leaf:
       ip_dhcp_relay: "{{ custom_vtep_ip_dhcp_relay }}"
       ip_extcommunity_lists_regexp: "{{ custom_vtep_ext_community_lists }}"
       route_maps: "{{ custom_vtep_route_maps }}"
+      router_bgp: "{{ csc_leaf_peer_tag_spines.router_bgp }}"
   node_groups:
 ########################################################
-# DOMAIN A POD 1                                       #
+# DOMAIN A POD 1 — A-LEAF1/2 (PROD only, VLANs 10, 30)
 ########################################################
     - group: POD1
-      bgp_as: 65112
+      bgp_as: 65101                    # Shared per MLAG pair
       filter:
-        tags: ['BLUE', 'ORANGE']
+        tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
+      structured_config:
+        loopback_interfaces: "{{ csc_pod1_leaf_features.loopback_interfaces }}"
+        vxlan_interface: "{{ csc_pod1_leaf_features.vxlan_interface }}"
+        router_bgp: "{{ csc_pod1_leaf_features.router_bgp }}"
       nodes:
         - name: A-LEAF1
           id: 1
-          mgmt_ip: 172.100.100.105/24
+          mgmt_ip: 172.100.101.105/22
           uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
         - name: A-LEAF2
           id: 2
-          mgmt_ip: 172.100.100.106/24
+          mgmt_ip: 172.100.101.106/22
           uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
 ########################################################
-# DOMAIN A POD 2                                       #
+# DOMAIN A POD 2 — A-LEAF3/4 (PROD + DEV, VLANs 10, 30, 50)
 ########################################################
     - group: POD2
+      bgp_as: 65103
       filter:
-        tags: ['BLUE', 'ORANGE', 'YELLOW']
-      bgp_as: 65134
+        tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
+      structured_config:
+        loopback_interfaces: "{{ csc_pod2_leaf_features.loopback_interfaces }}"
+        vxlan_interface: "{{ csc_pod2_leaf_features.vxlan_interface }}"
+        router_bgp: "{{ csc_pod2_leaf_features.router_bgp }}"
       nodes:
         - name: A-LEAF3
           id: 3
-          mgmt_ip: 172.100.100.107/24
+          mgmt_ip: 172.100.101.107/22
           uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
         - name: A-LEAF4
           id: 4
-          mgmt_ip: 172.100.100.108/24
+          mgmt_ip: 172.100.101.108/22
           uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
 ########################################################
-# DOMAIN A POD 3                                       #
+# DOMAIN A POD 3 — A-LEAF5/6 (DEV only, VLANs 50, 70)
 ########################################################
     - group: POD3
-      bgp_as: 65156
+      bgp_as: 65105
       filter:
-        tags: ['BROWN']
+        tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
+      structured_config:
+        loopback_interfaces: "{{ csc_pod3_leaf_features.loopback_interfaces }}"
+        vxlan_interface: "{{ csc_pod3_leaf_features.vxlan_interface }}"
+        router_bgp: "{{ csc_pod3_leaf_features.router_bgp }}"
       nodes:
         - name: A-LEAF5
           id: 5
-          mgmt_ip: 172.100.100.109/24
+          mgmt_ip: 172.100.101.109/22
           uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
         - name: A-LEAF6
           id: 6
-          mgmt_ip: 172.100.100.110/24
+          mgmt_ip: 172.100.101.110/22
           uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
 ########################################################
-# DOMAIN A POD 4 (Border Leaf / EVPN Gateway)          #
+# DOMAIN A POD 4 — A-LEAF7/8 (EVPN Gateway pair, All-Active)
+#
+# VLAN scoping: 10 (multi-domain, PROD), 50 (local DEV, HostA8), 70 (multi-domain, DEV)
+# VLAN 30 not present on Gateway pair.
+# OISM disabled on Gateway pair (see host_vars/A-LEAF7.yml + A-LEAF8.yml).
 ########################################################
     - group: POD4
-      bgp_as: 65178
+      # Domain A's Gateway pair uses distinct per-Gateway ASNs (not shared
+      # like the MLAG pairs). bgp_as is overridden per-node below.
+      # Filter: BLUE (VLAN 10, multi-domain), YELLOW (VLAN 50, local, HostA8),
+      # BROWN (VLAN 70, multi-domain). ORANGE (VLAN 30) is intentionally excluded —
+      # VLAN 30 is scoped to POD1+POD2 only and does not appear on the Gateway pair.
+      filter:
+        tags: ['BLUE', 'YELLOW', 'BROWN']
       evpn_gateway:
         evpn_l2:
           enabled: true
@@ -253,10 +459,10 @@ l3leaf:
           enabled: true
         remote_peers:
           - hostname: BB1
-            ip_address: 1.1.0.1
+            ip_address: 10.0.0.1
             bgp_as: 65000
           - hostname: BB2
-            ip_address: 1.1.0.2
+            ip_address: 10.0.0.2
             bgp_as: 65000
       structured_config:
         router_bgp: "{{ custom_evpn_gw_bgp_config }}"
@@ -265,18 +471,25 @@ l3leaf:
       nodes:
         - name: A-LEAF7
           id: 7
-          mgmt_ip: 172.100.100.111/24
+          bgp_as: 65107                # Distinct per-Gateway ASN
+          mgmt_ip: 172.100.101.111/22
           uplink_switch_interfaces: [Ethernet7, Ethernet7, Ethernet7, Ethernet7]
           structured_config:
-            router_bgp: "{{ a_leaf7_dci_bgp_peers }}"
+            router_bgp: "{{ a_leaf7_dci_bgp_peers.router_bgp }}"
         - name: A-LEAF8
           id: 8
-          mgmt_ip: 172.100.100.112/24
+          bgp_as: 65108
+          mgmt_ip: 172.100.101.112/22
           uplink_switch_interfaces: [Ethernet8, Ethernet8, Ethernet8, Ethernet8]
           structured_config:
-            router_bgp: "{{ a_leaf8_dci_bgp_peers }}"
+            router_bgp: "{{ a_leaf8_dci_bgp_peers.router_bgp }}"
+
 ##########################################################
-# DCI Connectivity                                       #
+# DCI Connectivity — A Gateway pair to BB1/BB2 backbone
+#
+# Point-to-point /31 links, IPv4-numbered per tech-library schema.
+# Not part of the underlay routing protocol — the Gateway pair reaches BB1/BB2
+# via an eBGP session over these links (see custom_evpn_gw_bgp_config).
 ##########################################################
 l3_edge:
   p2p_links:
@@ -297,7 +510,7 @@ l3_edge:
       include_in_underlay_protocol: false
 
     - nodes: [A-LEAF8, BB1]
-      interfaces: [Ethernet7, Ethernet1]
+      interfaces: [Ethernet7, Ethernet2]
       subnet: 172.16.1.2/31
       ip:
         - 172.16.1.3/31
@@ -305,7 +518,7 @@ l3_edge:
       include_in_underlay_protocol: false
 
     - nodes: [A-LEAF8, BB2]
-      interfaces: [Ethernet8, Ethernet1]
+      interfaces: [Ethernet8, Ethernet2]
       subnet: 172.16.1.6/31
       ip:
         - 172.16.1.7/31

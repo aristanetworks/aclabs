@@ -1,0 +1,163 @@
+---
+###################################################
+# Domain B — Port profiles + connected endpoints
+#
+# All host attachments in Domain B are EVPN A/A (no MLAG). Each host-facing
+# port-channel gets `evpn ethernet-segment identifier auto lacp` + a shared
+# LACP system-id across the pair of VTEPs the host is dual-attached to.
+###################################################
+
+port_profiles:
+  #########################################
+  # EVPN A/A host profiles (VLANs 10, 20, 40, 60, 70, 80)
+  #########################################
+  - profile: PROF-BLUE-EVPN-AA
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '10'
+    port_channel:
+      mode: active
+    ethernet_segment:
+      short_esi: auto
+
+  - profile: PROF-GREEN-EVPN-AA
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '20'
+    port_channel:
+      mode: active
+    ethernet_segment:
+      short_esi: auto
+
+  - profile: PROF-PURPLE-EVPN-AA
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '40'
+    port_channel:
+      mode: active
+    ethernet_segment:
+      short_esi: auto
+
+  - profile: PROF-RED-EVPN-AA
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '60'
+    port_channel:
+      mode: active
+    ethernet_segment:
+      short_esi: auto
+
+  - profile: PROF-BROWN-EVPN-AA
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '70'
+    port_channel:
+      mode: active
+    ethernet_segment:
+      short_esi: auto
+
+  #########################################
+  # CE switch uplink profile (B-LEAF5/6 to B-SW1 via LACP trunk)
+  # No `spanning-tree portfast edge` because B-SW1 participates in STP.
+  #########################################
+  - profile: PROF-CE-SWITCH-EVPN-AA
+    mode: trunk
+    vlans: '40,80'
+    port_channel:
+      mode: active
+    ethernet_segment:
+      short_esi: auto
+
+  #########################################
+  # B-SW1 downstream access ports (standard access)
+  #########################################
+  - profile: PROF-PURPLE-ACCESS
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: '40'
+
+  - profile: PROF-BLACK-ACCESS
+    mode: access
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: true
+    vlans: '80'
+
+servers:
+  #########################################
+  # B-LEAF1/B-LEAF2 pair — HostB1 (VLAN 20), HostB2 (VLAN 40)
+  # LACP system-id shared per Ethernet Segment.
+  # VERIFY: LACP system-id per-ES override. AVD schema TBD; likely needs
+  # host_vars CSC on each VTEP if not natively supported.
+  #########################################
+  - name: HostB1
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [B-LEAF1, B-LEAF2]
+        profile: PROF-GREEN-EVPN-AA
+
+  - name: HostB2
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [B-LEAF1, B-LEAF2]
+        profile: PROF-PURPLE-EVPN-AA
+
+  #########################################
+  # B-LEAF3/B-LEAF4 pair — HostB3 (VLAN 10), HostB4 (VLAN 40)
+  #########################################
+  - name: HostB3
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [B-LEAF3, B-LEAF4]
+        profile: PROF-BLUE-EVPN-AA
+
+  - name: HostB4
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [B-LEAF3, B-LEAF4]
+        profile: PROF-PURPLE-EVPN-AA
+
+  #########################################
+  # NOTE: B-LEAF5/B-LEAF6 uplink to B-SW1 is handled natively by AVD as
+  # part of the l2leaf node's uplink config (see DOMAIN_B_FABRIC.yml
+  # l2leaf.nodes.B-SW1). AVD auto-renders the port-channel + Ethernet
+  # Segment on both the VTEP side (B-LEAF5/6) and CE side (B-SW1).
+  #########################################
+  # B-SW1 downstream hosts (standard access ports on the CE switch)
+  #########################################
+  - name: HostB5
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet3]
+        switches: [B-SW1]
+        profile: PROF-PURPLE-ACCESS
+
+  - name: HostB6
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet4]
+        switches: [B-SW1]
+        profile: PROF-PURPLE-ACCESS
+
+  - name: HostB7
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet5]
+        switches: [B-SW1]
+        profile: PROF-BLACK-ACCESS
+
+  #########################################
+  # HostB8 — locally attached to B-LEAF7/B-LEAF8 Gateway pair via EVPN A/A.
+  # LACP system-id `c0d6.8200.0008` (differs from Domain A's `c0d6.8200.0000`
+  # so the two Gateway pairs' locally-attached hosts have distinct ESIs).
+  #########################################
+  - name: HostB8
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet9, Ethernet9]
+        switches: [B-LEAF7, B-LEAF8]
+        profile: PROF-RED-EVPN-AA
