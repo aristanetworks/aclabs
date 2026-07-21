@@ -139,7 +139,7 @@ interface Loopback0
    ip address 10.0.1.6/32
 !
 interface Loopback1
-   description Unique VTEP IP and Anycast Gateway VARP VTEP
+   description Unique VTEP IP
    ip address 10.1.1.6/32
 !
 interface Loopback2
@@ -312,12 +312,14 @@ router bgp 65105
    vlan 50
       rd 10.0.1.6:10050
       route-target both 10050:10050
+      redistribute learned
       redistribute router-mac next-hop vtep primary
       redistribute router-mac virtual-ip next-hop vtep primary
    !
    vlan 70
       rd 10.0.1.6:10070
       route-target both 10070:10070
+      redistribute learned
       redistribute router-mac next-hop vtep primary
       redistribute router-mac virtual-ip next-hop vtep primary
    !

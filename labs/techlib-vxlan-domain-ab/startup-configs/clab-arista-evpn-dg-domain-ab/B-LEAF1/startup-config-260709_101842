@@ -227,12 +227,14 @@ router bgp 65200
    vlan 20
       rd 10.0.2.1:10020
       route-target both 10020:10020
+      redistribute learned
       redistribute router-mac next-hop vtep primary
       redistribute router-mac virtual-ip next-hop vtep primary
    !
    vlan 40
       rd 10.0.2.1:10040
       route-target both 10040:10040
+      redistribute learned
       redistribute router-mac next-hop vtep primary
       redistribute router-mac virtual-ip next-hop vtep primary
    !
