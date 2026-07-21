@@ -1,0 +1,45 @@
+---
+###################################################
+# B-LEAF7 — EVPN Gateway (All-Active), Domain B
+###################################################
+
+evpn_multicast: false
+underlay_multicast: false
+
+b_leaf7_gateway_csc:
+  router_bgp:
+    neighbors:
+      - ip_address: 172.16.2.0
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB1.IPV4
+      - ip_address: 172.16.2.4
+        peer_group: REMOTE-IPV4-PEERS
+        description: BB2.IPV4
+    peer_groups:
+      - name: LOCAL-EVPN-PEERS
+        session_tracker: TRACK-LOCAL-EVPN-PEERS
+    address_family_evpn:
+      route:
+        - type: ethernet-segment
+          route_target: auto
+      # Domain B uses ASN 65200 for both Gateway nodes; the `attach` D-PATH
+      # identifier is a per-Gateway *label* (not required to match router ASN).
+      # Convention: `65207:65207` on B-LEAF7 mirrors Domain A's numeric scheme
+      # where the last two digits track the leaf ID.
+      # VERIFY: Domain B's tech-library guide doesn't currently render an
+      # `attach` identifier line — check B-LEAF7.cfg to see if it's present.
+      # If not, remove this override.
+      domain_identifier_attach: '65207:65207'
+    session_trackers:
+      - name: TRACK-LOCAL-EVPN-PEERS
+        recovery_delay: 10
+
+b_leaf7_hostb8_csc:
+  port_channel_interfaces:
+    - name: Port-Channel9
+      bgp:
+        session_tracker: TRACK-LOCAL-EVPN-PEERS
+
+structured_config:
+  router_bgp: "{{ b_leaf7_gateway_csc.router_bgp }}"
+  port_channel_interfaces: "{{ b_leaf7_hostb8_csc.port_channel_interfaces }}"
