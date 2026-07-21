@@ -224,6 +224,11 @@ l3leaf:
     bgp_as: 65200                                  # Shared ASN — single-ASN iBGP fabric
     loopback_ipv4_pool: 10.0.2.0/24
     vtep_loopback_ipv4_pool: 10.1.2.0/24
+    # Placeholder IPv4 uplink pool — required by AVD schema even when
+    # underlay_ipv4_unnumbered: true (AVD renders `ip address unnumbered
+    # Loopback0` on the interfaces regardless of the pool value). The pool
+    # is never actually consumed as numbered addresses.
+    uplink_ipv4_pool: 172.31.255.0/24
     uplink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4]
     uplink_switches: [B-SPINE1, B-SPINE2, B-SPINE3, B-SPINE4]
     virtual_router_mac_address: 00:1c:73:00:00:01
@@ -268,6 +273,7 @@ l3leaf:
   ##############################################
   node_groups:
     - group: B_GATEWAY
+      mlag: false                                # Domain B uses EVPN A/A, not MLAG
       evpn_gateway:
         evpn_l2:
           enabled: true
@@ -309,16 +315,13 @@ l2leaf:
     platform: cEOS-LAB
     spanning_tree_mode: mstp
     uplink_switches: [B-LEAF5, B-LEAF6]
-    uplink_interfaces: [Ethernet1, Ethernet2]
-    # VERIFY: `uplink_type: port-channel` renders as a single LACP port-channel
-    # trunk to both upstream VTEPs (matches tech-library B-SW1.cfg
-    # Port-Channel1 pattern with `switchport trunk allowed vlan 40,80`).
-    uplink_type: port-channel
+    uplink_interfaces: [Ethernet1, Ethernet2]         # B-SW1's own Et1/Et2 face the LEAFs
+    uplink_type: port-channel                          # Single LACP trunk to both VTEPs
   nodes:
     - name: B-SW1
       id: 100
       mgmt_ip: 172.100.100.125/24
-      uplink_switch_interfaces: [Ethernet1, Ethernet1]  # onto B-LEAF5 + B-LEAF6
+      uplink_switch_interfaces: [Ethernet7, Ethernet7]  # onto B-LEAF5 Et7 + B-LEAF6 Et7
 
 ##########################################################
 # DCI Connectivity — B Gateway pair to BB1/BB2 backbone

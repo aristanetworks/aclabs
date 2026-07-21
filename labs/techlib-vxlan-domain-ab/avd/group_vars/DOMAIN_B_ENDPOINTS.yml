@@ -122,16 +122,10 @@ servers:
         profile: PROF-PURPLE-EVPN-AA
 
   #########################################
-  # B-LEAF5/B-LEAF6 pair — B-SW1 CE uplink (trunk 40, 80)
-  #########################################
-  - name: B-SW1-UPLINK
-    adapters:
-      - endpoint_ports: [Ethernet1, Ethernet2]
-        switch_ports: [Ethernet7, Ethernet7]
-        switches: [B-LEAF5, B-LEAF6]
-        profile: PROF-CE-SWITCH-EVPN-AA
-        description: Uplink to B-SW1
-
+  # NOTE: B-LEAF5/B-LEAF6 uplink to B-SW1 is handled natively by AVD as
+  # part of the l2leaf node's uplink config (see DOMAIN_B_FABRIC.yml
+  # l2leaf.nodes.B-SW1). AVD auto-renders the port-channel + Ethernet
+  # Segment on both the VTEP side (B-LEAF5/6) and CE side (B-SW1).
   #########################################
   # B-SW1 downstream hosts (standard access ports on the CE switch)
   #########################################

@@ -43,8 +43,8 @@ node_type_keys:
     default_overlay_address_families: [evpn]
     default_underlay_routing_protocol: none  # No fabric-wide IGP/BGP; underlay comes from l3_edge
     default_mpls_overlay_role: none
-    ip_addressing:
-      router_id: "loopback0"                 # BGP router-id from Loopback0
+    # BGP router-id auto-derives from Loopback0 (10.0.0.[NodeID]) via
+    # backbone_router.defaults.loopback_ipv4_pool below.
 
 ###################################################
 # BGP knobs — iBGP AS 65000, RR to all four Gateway nodes
