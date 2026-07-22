@@ -18,6 +18,10 @@
 
 fabric_name: BACKBONE
 
+# Backbone p2p links use MTU 9214 (larger than leaf-facing 9114 to
+# accommodate the fabric MTU headers on transit).
+p2p_uplinks_mtu: 9214
+
 ###################################################
 # Custom node_type_keys — backbone_router
 #
@@ -164,3 +168,95 @@ backbone_router:
     - name: BB2
       id: 2                                        # → Loopback0 = 10.0.0.2/32
       mgmt_ip: 172.100.100.102/22
+
+##########################################################
+# DCI Connectivity — BB1/BB2 to Domain A + Domain B Gateway pairs
+#
+# Duplicates the l3_edge.p2p_links from DOMAIN_A_FABRIC.yml and
+# DOMAIN_B_FABRIC.yml so the BB1/BB2 side of each link renders.
+# AVD's l3_edge is per-fabric — links defined in a domain fabric
+# don't cross the fabric boundary into BACKBONE.
+##########################################################
+
+l3_edge:
+  p2p_links:
+    # BB1↔A-LEAF7 (BB1 Et1 ↔ A-LEAF7 Et7)
+    - nodes: [A-LEAF7, BB1]
+      interfaces: [Ethernet7, Ethernet1]
+      subnet: 172.16.1.0/31
+      ip:
+        - 172.16.1.1/31
+        - 172.16.1.0/31
+      include_in_underlay_protocol: false
+
+    # BB2↔A-LEAF7 (BB2 Et1 ↔ A-LEAF7 Et8)
+    - nodes: [A-LEAF7, BB2]
+      interfaces: [Ethernet8, Ethernet1]
+      subnet: 172.16.1.4/31
+      ip:
+        - 172.16.1.5/31
+        - 172.16.1.4/31
+      include_in_underlay_protocol: false
+
+    # BB1↔A-LEAF8 (BB1 Et2 ↔ A-LEAF8 Et7)
+    - nodes: [A-LEAF8, BB1]
+      interfaces: [Ethernet7, Ethernet2]
+      subnet: 172.16.1.2/31
+      ip:
+        - 172.16.1.3/31
+        - 172.16.1.2/31
+      include_in_underlay_protocol: false
+
+    # BB2↔A-LEAF8 (BB2 Et2 ↔ A-LEAF8 Et8)
+    - nodes: [A-LEAF8, BB2]
+      interfaces: [Ethernet8, Ethernet2]
+      subnet: 172.16.1.6/31
+      ip:
+        - 172.16.1.7/31
+        - 172.16.1.6/31
+      include_in_underlay_protocol: false
+
+    # BB1↔B-LEAF7 (BB1 Et3 ↔ B-LEAF7 Et7)
+    - nodes: [B-LEAF7, BB1]
+      interfaces: [Ethernet7, Ethernet3]
+      subnet: 172.16.2.0/31
+      ip:
+        - 172.16.2.1/31
+        - 172.16.2.0/31
+      include_in_underlay_protocol: false
+
+    # BB2↔B-LEAF7 (BB2 Et3 ↔ B-LEAF7 Et8)
+    - nodes: [B-LEAF7, BB2]
+      interfaces: [Ethernet8, Ethernet3]
+      subnet: 172.16.2.4/31
+      ip:
+        - 172.16.2.5/31
+        - 172.16.2.4/31
+      include_in_underlay_protocol: false
+
+    # BB1↔B-LEAF8 (BB1 Et4 ↔ B-LEAF8 Et7)
+    - nodes: [B-LEAF8, BB1]
+      interfaces: [Ethernet7, Ethernet4]
+      subnet: 172.16.2.2/31
+      ip:
+        - 172.16.2.3/31
+        - 172.16.2.2/31
+      include_in_underlay_protocol: false
+
+    # BB2↔B-LEAF8 (BB2 Et4 ↔ B-LEAF8 Et8)
+    - nodes: [B-LEAF8, BB2]
+      interfaces: [Ethernet8, Ethernet4]
+      subnet: 172.16.2.6/31
+      ip:
+        - 172.16.2.7/31
+        - 172.16.2.6/31
+      include_in_underlay_protocol: false
+
+    # BB1↔BB2 direct link (BB1 Et5 ↔ BB2 Et5)
+    - nodes: [BB1, BB2]
+      interfaces: [Ethernet5, Ethernet5]
+      subnet: 172.16.255.0/31
+      ip:
+        - 172.16.255.0/31
+        - 172.16.255.1/31
+      include_in_underlay_protocol: false

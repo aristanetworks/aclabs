@@ -23,10 +23,6 @@ bgp_distance:
   internal_routes: 200
   local_routes: 200
 
-bgp_graceful_restart:
-  enabled: true
-  restart_time: 300
-
 bgp_peer_groups:
   ipv4_underlay_peers:
     name: LOCAL-IPV4-PEERS

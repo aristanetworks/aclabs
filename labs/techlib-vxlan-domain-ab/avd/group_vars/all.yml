@@ -49,13 +49,8 @@ mgmt_interface_settings:
   vrf: MGMT
 default_mgmt_method: oob
 
-# Enable SSH for MGMT VRF
-ssh_settings:
-    vrfs:
-      - name: use_mgmt_interface_vrf
-        enabled: true
-
-# Set source interfaces
+# Set source interfaces (SSH server is enabled by default in EOS; no explicit
+# `management ssh` block needed. Tech-library omits the block entirely.)
 source_interfaces:
   http_client:
     mgmt_interface: true
