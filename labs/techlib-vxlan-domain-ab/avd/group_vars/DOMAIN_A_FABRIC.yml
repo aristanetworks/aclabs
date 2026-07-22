@@ -14,6 +14,18 @@
 
 fabric_name: DOMAIN_A_FABRIC
 
+# PARITY-LEDGER class 16 — the guide's MLAG naming dialect: one trunk
+# group `MLAG_PEER` for all peering VLANs, and explicit VLAN names.
+# Descriptions are parity-exempt; only names/trunk-groups are set.
+trunk_groups:
+  mlag:
+    name: MLAG_PEER
+  mlag_l3:
+    name: MLAG_PEER
+mlag_peer_vlan_name: MLAG_PEER_SYNC
+mlag_peer_l3_vlan_name: MLAG_PEER_L3_UNDERLAY
+mlag_peer_l3_vrf_vlan_name: MLAG_PEER_VRF_{vrf}
+
 # Suppress the AVD-default `transceiver qsfp default-mode 4x10G` line on
 # spines/leafs. Tech-library doesn't render this on Domain A/B nodes
 # (only on BACKBONE where AVD's default is correct).

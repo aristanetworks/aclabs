@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **2045** |
-| MISSING — in the guide, not yet rendered | 796 |
-| EXTRA — rendered, not in the guide | 1249 |
+| **Residual total (non-exempt)** | **1953** |
+| MISSING — in the guide, not yet rendered | 750 |
+| EXTRA — rendered, not in the guide | 1203 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -28,7 +28,7 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (235 distinct)
+### MISSING — top exact lines (229 distinct)
 
 | count | line |
 |---|---|
@@ -36,7 +36,6 @@ acceptance stays visible.
 | 32× | `pim ipv4 local-interface Loopback0` |
 | 26× | `mld` |
 | 26× | `neighbor default send-community` |
-| 20× | `trunk group MLAG_PEER` |
 | 20× | `routing` |
 | 20× | `isis circuit-type level-2` |
 | 18× | `address-family ipv4` |
@@ -47,6 +46,7 @@ acceptance stays visible.
 | 14× | `ip igmp` |
 | 14× | `no autostate` |
 | 14× | `update wait-install` |
+| 12× | `vxlan multicast ipv6` |
 
 ### MISSING — top shapes (digits→`#`)
 
@@ -60,15 +60,14 @@ acceptance stays visible.
 | 30× | `seq # permit #.#.#.#/# eq #` |
 | 26× | `mld` |
 | 26× | `neighbor default send-community` |
-| 20× | `trunk group MLAG_PEER` |
 | 20× | `routing` |
+| 20× | `ipv#` |
 
 ### EXTRA — top exact lines (425 distinct)
 
 | count | line |
 |---|---|
 | 38× | `ipv6 enable` |
-| 28× | `trunk group MLAG` |
 | 26× | `switchport mode access` |
 | 24× | `neighbor LOCAL-EVPN-PEERS password 7 WzKnNSduqwPYvUePYIh40g==` |
 | 24× | `neighbor LOCAL-EVPN-PEERS send-community` |
@@ -82,6 +81,7 @@ acceptance stays visible.
 | 12× | `router bfd` |
 | 12× | `multihop interval 1000 min-rx 1000 multiplier 3` |
 | 12× | `maximum-paths 4` |
+| 12× | `neighbor LOCAL-IPV4-PEERS password 7 DGMjRCIj8IZAFhehikpUIQ==` |
 
 ### EXTRA — top shapes (digits→`#`)
 
@@ -92,22 +92,22 @@ acceptance stays visible.
 | 34× | `vxlan vlan # vni #` |
 | 32× | `neighbor #.#.#.# description A-SPINE#_Ethernet#` |
 | 32× | `neighbor #.#.#.# description A-LEAF#_Ethernet#` |
-| 28× | `trunk group MLAG` |
 | 26× | `switchport mode access` |
 | 26× | `ip address #.#.#.#/#` |
 | 24× | `neighbor LOCAL-EVPN-PEERS password # WzKnNSduqwPYvUePYIh#g==` |
 | 24× | `neighbor LOCAL-EVPN-PEERS send-community` |
+| 24× | `neighbor LOCAL-EVPN-PEERS maximum-routes #` |
 
 ## Per-node residual
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 47 | 59 | 106 |
-| A-LEAF2 | 48 | 60 | 108 |
-| A-LEAF3 | 58 | 67 | 125 |
-| A-LEAF4 | 59 | 68 | 127 |
-| A-LEAF5 | 50 | 58 | 108 |
-| A-LEAF6 | 54 | 56 | 110 |
+| A-LEAF1 | 40 | 52 | 92 |
+| A-LEAF2 | 41 | 53 | 94 |
+| A-LEAF3 | 49 | 58 | 107 |
+| A-LEAF4 | 50 | 59 | 109 |
+| A-LEAF5 | 43 | 51 | 94 |
+| A-LEAF6 | 47 | 49 | 96 |
 | A-LEAF7 | 23 | 143 | 166 |
 | A-LEAF8 | 24 | 144 | 168 |
 | A-SPINE1 | 15 | 21 | 36 |
@@ -129,4 +129,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 23 | 54 | 77 |
 | BB2 | 23 | 54 | 77 |
-| **TOTAL** | **796** | **1249** | **2045** |
+| **TOTAL** | **750** | **1203** | **1953** |
