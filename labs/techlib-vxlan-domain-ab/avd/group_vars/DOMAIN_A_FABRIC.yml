@@ -392,6 +392,12 @@ csc_pod1_leaf_features:
         source_interface: Loopback1
         mlag_source_interface: Loopback2
         virtual_router_encapsulation_mac_address: mlag-system-id
+      # Class 4c: dual-stack overlay flooding — no native key or template
+      # path for this line in 6.3 (vxlan.multicast has only
+      # headend_replication). Sibling of `vxlan:` — a mid-dict insert
+      # here once swallowed the keys above into the literal (banked).
+      eos_cli: |
+        vxlan multicast ipv6
   router_bgp:
     vlans:
       - id: 10
@@ -417,6 +423,12 @@ csc_pod2_leaf_features:
         source_interface: Loopback1
         mlag_source_interface: Loopback2
         virtual_router_encapsulation_mac_address: mlag-system-id
+      # Class 4c: dual-stack overlay flooding — no native key or template
+      # path for this line in 6.3 (vxlan.multicast has only
+      # headend_replication). Sibling of `vxlan:` — a mid-dict insert
+      # here once swallowed the keys above into the literal (banked).
+      eos_cli: |
+        vxlan multicast ipv6
   router_bgp:
     vlans:
       - id: 10
@@ -447,6 +459,12 @@ csc_pod3_leaf_features:
         source_interface: Loopback1
         mlag_source_interface: Loopback2
         virtual_router_encapsulation_mac_address: mlag-system-id
+      # Class 4c: dual-stack overlay flooding — no native key or template
+      # path for this line in 6.3 (vxlan.multicast has only
+      # headend_replication). Sibling of `vxlan:` — a mid-dict insert
+      # here once swallowed the keys above into the literal (banked).
+      eos_cli: |
+        vxlan multicast ipv6
   router_bgp:
     vlans:
       - id: 50
@@ -574,8 +592,10 @@ l3leaf:
           # stays igmp-free per the guide.
           - name: Vlan10
             ip_igmp: true
+            eos_cli: mld
           - name: Vlan30
             ip_igmp: true
+            eos_cli: mld
         loopback_interfaces: "{{ csc_pod1_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod1_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod1_leaf_features.router_bgp }}"
@@ -612,10 +632,13 @@ l3leaf:
           # stays igmp-free per the guide.
           - name: Vlan10
             ip_igmp: true
+            eos_cli: mld
           - name: Vlan30
             ip_igmp: true
+            eos_cli: mld
           - name: Vlan50
             ip_igmp: true
+            eos_cli: mld
         loopback_interfaces: "{{ csc_pod2_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod2_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod2_leaf_features.router_bgp }}"
@@ -652,8 +675,10 @@ l3leaf:
           # stays igmp-free per the guide.
           - name: Vlan50
             ip_igmp: true
+            eos_cli: mld
           - name: Vlan70
             ip_igmp: true
+            eos_cli: mld
         loopback_interfaces: "{{ csc_pod3_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod3_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod3_leaf_features.router_bgp }}"

@@ -1,0 +1,19 @@
+---
+# Class 4c — dual-stack multicast lines with no native 6.3 expression:
+#   * global `mld snooping` (no cli_config_gen key)
+#   * `ipv6 { routing }` inside router-multicast VRF blocks
+#     (cli vrfs item = ipv4+name only; input schema rejects it too)
+# LANDMINE: root eos_cli is CHANNEL-SENSITIVE — silently dropped when set
+# via node/node_group structured_config; renders ONLY via this CSC var
+# (custom_structured_configuration_eos_cli) or object-level eos_cli.
+# The re-entered `router multicast` header is the accepted parity cost.
+# NOTE: root eos_cli is a STRING — this CSC var (merged last) REPLACES
+# the platform profile's eos_cli wholesale, so the platform line must
+# ride here too or it silently vanishes (cost one −1/node hunt).
+custom_structured_configuration_eos_cli: |
+  no service interface inactive port-id allocation disabled
+  mld snooping
+  router multicast
+     vrf PROD
+        ipv6
+           routing

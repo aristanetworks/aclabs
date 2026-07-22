@@ -494,6 +494,16 @@ l3leaf:
       filter:
         tags: ['GREEN', 'PURPLE']
       structured_config:
+        vlan_interfaces:
+          - name: Vlan20
+            eos_cli: mld
+          - name: Vlan40
+            eos_cli: mld
+        vxlan_interface:
+          vxlan1:
+            eos_cli: |
+              vxlan vrf PROD multicast group overlay 239.0.20.101 encap 232.1.1.20 immediate
+              vxlan multicast ipv6
         router_bgp: "{{ csc_b_pod1_leaf_features.router_bgp }}"
       nodes:
         - name: B-LEAF1
@@ -513,6 +523,16 @@ l3leaf:
       filter:
         tags: ['BLUE', 'PURPLE']
       structured_config:
+        vlan_interfaces:
+          - name: Vlan10
+            eos_cli: mld
+          - name: Vlan40
+            eos_cli: mld
+        vxlan_interface:
+          vxlan1:
+            eos_cli: |
+              vxlan vrf PROD multicast group overlay 239.0.20.101 encap 232.1.1.20 immediate
+              vxlan multicast ipv6
         router_bgp: "{{ csc_b_pod2_leaf_features.router_bgp }}"
       nodes:
         - name: B-LEAF3
@@ -532,6 +552,16 @@ l3leaf:
       filter:
         tags: ['PURPLE', 'BLACK']
       structured_config:
+        vlan_interfaces:
+          - name: Vlan40
+            eos_cli: mld
+          - name: Vlan80
+            eos_cli: mld
+        vxlan_interface:
+          vxlan1:
+            eos_cli: |
+              vxlan vrf PROD multicast group overlay 239.0.20.101 encap 232.1.1.20 immediate
+              vxlan multicast ipv6
         router_bgp: "{{ csc_b_pod3_leaf_features.router_bgp }}"
       nodes:
         - name: B-LEAF5

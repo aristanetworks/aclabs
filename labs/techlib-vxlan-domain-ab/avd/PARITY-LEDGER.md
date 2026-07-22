@@ -122,7 +122,8 @@ regenerated PARITY-STATUS):
 | 0336225 | CROWN JEWEL pt.2 (B-side mirror): native model + attach-ASN fix — ALL FOUR password 7 renders dead | 1,293 |
 | f522223 | contract amendment: BGP neighbor descriptions exempt (Mitch's ruling; −64 missing / −72 extra) | 1,157 |
 | 8b73922 | class 4b: spine PIM dialect — unnumbered local-interface (eos_cli), Et7/8 sparse-mode, Vlan4093 de-PIM | 1,103 |
-| (this) | class 4a: MLAG-leaf SVI `ip igmp` (guide runs igmp+sparse-mode; AVD's OISM forks on MLAG) | **1,089** |
+| 57a15cd | class 4a: MLAG-leaf SVI `ip igmp` (guide runs igmp+sparse-mode; AVD's OISM forks on MLAG) | 1,089 |
+| e7e8e9d | class 4c: the IPv6/MLD leg — SVI `mld`, global `mld snooping`, `vxlan multicast ipv6`, PROD overlay mapping, router-multicast VRF ipv6 re-entries | **1,029** |
 
 **Landmines banked (crown jewel):** (1) The models' `platform: cEOS-LAB`
 does NOT match AVD 6.3's built-in CEOS platform entry (matcher lacks the
@@ -166,6 +167,26 @@ decisions; passed schema + renderer); eos_config_future/cli-gen inputs
 must ride INSIDE structured config; merge-by-name interface CSC on
 node-type defaults. **Phantom found:** `underlay_ipv4_unnumbered` was
 set since the initial build but does not exist in the 6.3.0 schema.
+
+**Landmines banked (class 4c):** (1) Root `eos_cli` is CHANNEL-SENSITIVE —
+set via node/node_group `structured_config` it is SILENTLY DROPPED
+(input-valid, never renders); it renders via
+`custom_structured_configuration_eos_cli` (scratch-proven) and via
+object-level eos_cli (vlan_interfaces[], vxlan1, router_bgp). (2) CSC
+root eos_cli REPLACES the platform profile's eos_cli wholesale (string,
+last-merge-wins) — platform lines like `no service interface inactive
+port-id allocation disabled` must ride inside the CSC literal or vanish
+(cost a −1/node hunt). (3) Mid-dict `eos_cli: |` inserts SWALLOW the
+mapping's remaining same-indent keys into the literal — the tell is raw
+YAML rendered into EOS config (and the A MLAG VTEP source silently moved
+to Loopback1); insert literals as the LAST sibling and re-verify the
+anchor. (4) `router_multicast.vrfs[].ipv6` does not exist in 6.3 on
+either schema side — VRF-level IPv6 multicast routing requires eos_cli
+context re-entry; the duplicated `router multicast`/`vrf X` headers are
+the accepted cost (+28 fleet-wide). (5)
+`vxlan.vrfs[].multicast_group_encap_range` is schema-only — no template
+render path in 6.3 (half-landed upstream); the overlay mapping line
+rides vxlan1 eos_cli.
 
 ## NEXT SESSION — pickup spec (BGP dialect, fully reconned)
 
