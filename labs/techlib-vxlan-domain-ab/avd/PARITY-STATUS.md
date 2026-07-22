@@ -8,8 +8,8 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **1103** |
-| MISSING — in the guide, not yet rendered | 479 |
+| **Residual total (non-exempt)** | **1089** |
+| MISSING — in the guide, not yet rendered | 465 |
 | EXTRA — rendered, not in the guide | 624 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
@@ -29,7 +29,7 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (126 distinct)
+### MISSING — top exact lines (125 distinct)
 
 | count | line |
 |---|---|
@@ -41,13 +41,13 @@ acceptance stays visible.
 | 18× | `address-family ipv6` |
 | 18× | `ipv6` |
 | 17× | `spanning-tree edge-port bpduguard default` |
-| 14× | `ip igmp` |
 | 14× | `no autostate` |
 | 12× | `vxlan multicast ipv6` |
 | 12× | `mld snooping` |
 | 12× | `identifier auto lacp` |
 | 8× | `mtu 9014` |
 | 8× | `neighbor LOCAL-EVPN-PEERS remote-as 65100` |
+| 8× | `neighbor LOCAL-IPV4-PEERS remote-as 65100` |
 
 ### MISSING — top shapes (digits→`#`)
 
@@ -60,9 +60,9 @@ acceptance stays visible.
 | 20× | `ipv#` |
 | 20× | `isis circuit-type level-#` |
 | 17× | `spanning-tree edge-port bpduguard default` |
-| 14× | `ip igmp` |
 | 14× | `no autostate` |
 | 12× | `vxlan multicast ipv#` |
+| 12× | `mld snooping` |
 
 ### EXTRA — top exact lines (228 distinct)
 
@@ -103,12 +103,12 @@ acceptance stays visible.
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 29 | 28 | 57 |
-| A-LEAF2 | 30 | 29 | 59 |
-| A-LEAF3 | 38 | 33 | 71 |
-| A-LEAF4 | 39 | 34 | 73 |
-| A-LEAF5 | 32 | 27 | 59 |
-| A-LEAF6 | 36 | 25 | 61 |
+| A-LEAF1 | 27 | 28 | 55 |
+| A-LEAF2 | 28 | 29 | 57 |
+| A-LEAF3 | 35 | 33 | 68 |
+| A-LEAF4 | 36 | 34 | 70 |
+| A-LEAF5 | 30 | 27 | 57 |
+| A-LEAF6 | 34 | 25 | 59 |
 | A-LEAF7 | 8 | 48 | 56 |
 | A-LEAF8 | 8 | 48 | 56 |
 | A-SPINE1 | 0 | 3 | 3 |
@@ -130,4 +130,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **479** | **624** | **1103** |
+| **TOTAL** | **465** | **624** | **1089** |

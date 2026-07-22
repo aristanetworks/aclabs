@@ -567,6 +567,15 @@ l3leaf:
         vlan_interfaces:
           - name: Vlan4093
             pim: null
+          # Class 4a: the guide's MLAG-leaf SVIs run `ip igmp` ALONGSIDE
+          # sparse-mode; AVD's OISM forks (vlan_interfaces.py:171) — MLAG
+          # leafs get sparse-mode only. Pod-scoped so the multicast-
+          # disabled Gateway pair (which carries some of these VLANs)
+          # stays igmp-free per the guide.
+          - name: Vlan10
+            ip_igmp: true
+          - name: Vlan30
+            ip_igmp: true
         loopback_interfaces: "{{ csc_pod1_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod1_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod1_leaf_features.router_bgp }}"
@@ -596,6 +605,17 @@ l3leaf:
         vlan_interfaces:
           - name: Vlan4093
             pim: null
+          # Class 4a: the guide's MLAG-leaf SVIs run `ip igmp` ALONGSIDE
+          # sparse-mode; AVD's OISM forks (vlan_interfaces.py:171) — MLAG
+          # leafs get sparse-mode only. Pod-scoped so the multicast-
+          # disabled Gateway pair (which carries some of these VLANs)
+          # stays igmp-free per the guide.
+          - name: Vlan10
+            ip_igmp: true
+          - name: Vlan30
+            ip_igmp: true
+          - name: Vlan50
+            ip_igmp: true
         loopback_interfaces: "{{ csc_pod2_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod2_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod2_leaf_features.router_bgp }}"
@@ -625,6 +645,15 @@ l3leaf:
         vlan_interfaces:
           - name: Vlan4093
             pim: null
+          # Class 4a: the guide's MLAG-leaf SVIs run `ip igmp` ALONGSIDE
+          # sparse-mode; AVD's OISM forks (vlan_interfaces.py:171) — MLAG
+          # leafs get sparse-mode only. Pod-scoped so the multicast-
+          # disabled Gateway pair (which carries some of these VLANs)
+          # stays igmp-free per the guide.
+          - name: Vlan50
+            ip_igmp: true
+          - name: Vlan70
+            ip_igmp: true
         loopback_interfaces: "{{ csc_pod3_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod3_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod3_leaf_features.router_bgp }}"
