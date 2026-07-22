@@ -14,6 +14,31 @@
 
 fabric_name: DOMAIN_A_FABRIC
 
+###################################################
+# Platform settings — cEOS-LAB (class 3 enabler)
+#
+# The models' platform string `cEOS-LAB` does NOT match AVD 6.3's built-in
+# CEOS entry (matcher: CEOS/cEOS/ceos/cEOSLab — no hyphen), so nodes fall
+# through to the `default` entry, whose feature_support leaves
+# evpn_gateway_all_active_multihoming at the schema default (False) and
+# the eos_designs gateway block raises. Renaming the platform is NOT an
+# option: the CEOS entry also sets bgp_update_wait_install: False, which
+# would suppress the guide's 24 `update wait-install` lines.
+#
+# This custom entry (matched before built-ins) mirrors the `default`
+# entry the fleet renders with today, PLUS the two gateway feature flags
+# the guide's design demonstrates, MINUS reload_delay (the guide renders
+# no reload-delay lines). B-side gets the identical entry when its
+# Gateway pair is converted.
+###################################################
+
+custom_platform_settings:
+  - platforms: ['cEOS-LAB']
+    feature_support:
+      queue_monitor_length_notify: false
+      evpn_gateway_all_active_multihoming: true
+      evpn_gateway_rd_rt_rewrite: true
+
 # PARITY-LEDGER class 16 — the guide's MLAG naming dialect: one trunk
 # group `MLAG_PEER` for all peering VLANs, and explicit VLAN names.
 # Descriptions are parity-exempt; only names/trunk-groups are set.
@@ -67,6 +92,14 @@ bgp_peer_groups:
       maximum_routes: null
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
+    structured_config:
+      # Class 8 dialect for the core group too: the guide's
+      # REMOTE-EVPN-PEERS carries no send-community / maximum-routes /
+      # ebgp-multihop (multihop is unnecessary — Gateway loopbacks peer
+      # over directly-advertised /32s with update-source Loopback0).
+      send_community: null
+      maximum_routes: null
+      ebgp_multihop: null
 
 # ebgp-multihop is a fabric-level setting in AVD 6.3 (not per peer-group).
 evpn_ebgp_multihop: 3
@@ -168,22 +201,19 @@ custom_vtep_route_maps:
 # bestpath, local-as trick to peer with BB in AS 65000) lives here.
 ###################################################
 custom_evpn_gw_bgp_config:
+  # Class 3 (crown jewel): domain identifiers + `bgp bestpath d-path` are
+  # now generated NATIVELY by evpn_gateway.d_path + all_active_multihoming
+  # (see POD4). The old hand-stitched keys (address_family_evpn domain ids,
+  # bgp.bestpath.d_path, REMOTE-IPV4-PEERS password/send-community) died
+  # with the swap — the guide's gateways carry none of them.
   address_family_ipv4:
     peer_groups:
       - name: REMOTE-IPV4-PEERS
         activate: true
-  address_family_evpn:
-    domain_identifier: '1:1'
-    domain_identifier_remote: '99:99'
-  bgp:
-    bestpath:
-      d_path: true
   peer_groups:
     - name: REMOTE-IPV4-PEERS
-      password: dkvBq1jk4inJHsHfMjYRnQ==
       remote_as: 65000
       route_map_out: RM-AS65000-IPV4-OUT
-      send_community: all
     - name: REMOTE-EVPN-PEERS
       local_as: 65000
       # Note: the REMOTE-EVPN-PEERS peer-group is created by evpn_gateway.remote_peers;
@@ -587,13 +617,23 @@ l3leaf:
       # Filter: BLUE (VLAN 10, multi-domain), YELLOW (VLAN 50, local, HostA8),
       # BROWN (VLAN 70, multi-domain). ORANGE (VLAN 30) is intentionally excluded —
       # VLAN 30 is scoped to POD1+POD2 only and does not appear on the Gateway pair.
+      mlag: false
       filter:
         tags: ['BLUE', 'YELLOW', 'BROWN']
       evpn_gateway:
+        all_active_multihoming:
+          enabled: true
+          evpn_ethernet_segment:
+            identifier: '0000:aaaa:0007:0008:0000'
+            rt_import: '00:aa:aa:07:08:00'
+        d_path:
+          local_domain_id: '1:1'
+          remote_domain_id: '99:99'
         evpn_l2:
           enabled: true
         evpn_l3:
           enabled: true
+          mode: rd-rt-rewrite
         remote_peers:
           - hostname: BB1
             ip_address: 10.0.0.1

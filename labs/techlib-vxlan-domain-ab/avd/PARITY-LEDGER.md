@@ -109,7 +109,23 @@ regenerated PARITY-STATUS):
 | 4d45bf3 | class 8/20: wait-install scoping — per-VRF via vrfs[].bgp.structured_config, BB explicit false | 1,737 |
 | 8b6c444 | class 20: maximum-paths map — A leafs 128, B spines suppressed, B isis-AF suppressed | 1,705 |
 | 6eb7344 | backbone rewrite: dynamic listen-range RR model (EVPN-GW-PEERS / IP-TRANSPORT-CLIENTS / DC-ASN-RANGE) | 1,597 |
-| (this) | class 7: PL-LOOPBACKS dialect — knob-false + CSC-owned redistribute objects, POD seq-30 union | **1,499** |
+| 7da8ea1 | class 7: PL-LOOPBACKS dialect — knob-false + CSC-owned redistribute objects, POD seq-30 union | 1,499 |
+| (this) | CROWN JEWEL pt.1 (A-side): native evpn_gateway all_active_multihoming + d_path + rd-rt-rewrite | **1,327** |
+
+**Landmines banked (crown jewel):** (1) The models' `platform: cEOS-LAB`
+does NOT match AVD 6.3's built-in CEOS platform entry (matcher lacks the
+hyphenated form) — nodes silently use the `default` entry. This mismatch
+is LOAD-BEARING: the CEOS entry sets bgp_update_wait_install support
+False, which would suppress the guide's 24 wait-install lines. Never
+"fix" the platform string; the custom_platform_settings entry is the
+seam. (2) STALE-RENDER TRAP: when an eos_designs task fails for a host,
+the previous intended config REMAINS ON DISK — reading artifacts after a
+build whose recap was not verified produces false conclusions (cost us a
+full false-positive recon pass). Corollary discipline candidate: *a
+render you didn't watch succeed is not evidence; check the PLAY RECAP
+before reading artifacts.* (3) `evpn_gateway.evpn_l3.mode: rd-rt-rewrite`
+rewrites IP-VRF (L3) RD/RT to domain-all single-form ONLY — MAC-VRF (L2)
+domain-all overrides must stay hand-stitched in 6.3.
 
 **Landmine banked (session 2):** `custom_structured_configuration_<key>`
 is an ANSIBLE variable — a host_vars definition SHADOWS the group_vars

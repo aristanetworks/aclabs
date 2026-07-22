@@ -59,13 +59,17 @@ a_leaf7_gateway_csc:
       address-family evpn
          route type ethernet-segment route-target auto
          domain identifier 65107:65107 attach
+         !
+         evpn ethernet-segment domain all
+            designated-forwarder election algorithm preference 2000
     session_trackers:
       - name: TRACK-EVPN-PEERS
         recovery_delay: 10
-    # Multi-domain MAC-VRFs: VLANs 10 and 70 use `rd evpn domain all` +
-    # `route-target import export evpn domain all` (single RD/RT shared
-    # for local + remote). Overrides AVD's default `domain remote`
-    # rendering which uses separate RD/RT for the remote domain.
+    # Class 3: the IP-VRF `rd evpn domain all` + RT overrides died with
+    # the native swap — evpn_gateway.evpn_l3.mode: rd-rt-rewrite covers
+    # L3 (render-gated identical to the guide). The MAC-VRF (VLAN 10/70)
+    # domain-all overrides below MUST stay: the mode is L3-only; AVD has
+    # no native L2 domain-all rewrite in 6.3.
     vlans:
       - id: 10
         rd_evpn_domain:
@@ -83,33 +87,6 @@ a_leaf7_gateway_csc:
           import_export_evpn_domains:
             - domain: all
               route_target: '10070:10070'
-    # Multi-domain IP-VRFs: PROD (50001) and DEV (50002) use `rd evpn
-    # domain all` + `route-target import|export evpn domain all` on the
-    # L3VNI at the Gateway pair.
-    vrfs:
-      - name: PROD
-        rd_evpn_domain:
-          domain: all
-          rd: '10.0.1.7:50001'
-        route_targets:
-          import_evpn_domains:
-            - domain: all
-              route_target: '50001:50001'
-          export_evpn_domains:
-            - domain: all
-              route_target: '50001:50001'
-      - name: DEV
-        rd_evpn_domain:
-          domain: all
-          rd: '10.0.1.7:50002'
-        route_targets:
-          import_evpn_domains:
-            - domain: all
-              route_target: '50002:50002'
-          export_evpn_domains:
-            - domain: all
-              route_target: '50002:50002'
-
 # CSC: HostA8 port-channel needs a `bgp session tracker TRACK-EVPN-PEERS`
 # statement. AVD's connected_endpoints doesn't currently expose this;
 # apply via port_channel_interfaces override.

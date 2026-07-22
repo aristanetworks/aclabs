@@ -40,10 +40,17 @@ a_leaf8_gateway_csc:
       address-family evpn
          route type ethernet-segment route-target auto
          domain identifier 65108:65108 attach
+         !
+         evpn ethernet-segment domain all
+            designated-forwarder election algorithm preference 1000
     session_trackers:
       - name: TRACK-EVPN-PEERS
         recovery_delay: 10
-    # Multi-domain MAC-VRFs on VLANs 10 and 70 — see A-LEAF7 for full rationale.
+    # Class 3: the IP-VRF `rd evpn domain all` + RT overrides died with
+    # the native swap — evpn_gateway.evpn_l3.mode: rd-rt-rewrite covers
+    # L3 (render-gated identical to the guide). The MAC-VRF (VLAN 10/70)
+    # domain-all overrides below MUST stay: the mode is L3-only; AVD has
+    # no native L2 domain-all rewrite in 6.3.
     vlans:
       - id: 10
         rd_evpn_domain:
@@ -61,29 +68,6 @@ a_leaf8_gateway_csc:
           import_export_evpn_domains:
             - domain: all
               route_target: '10070:10070'
-    vrfs:
-      - name: PROD
-        rd_evpn_domain:
-          domain: all
-          rd: '10.0.1.8:50001'
-        route_targets:
-          import_evpn_domains:
-            - domain: all
-              route_target: '50001:50001'
-          export_evpn_domains:
-            - domain: all
-              route_target: '50001:50001'
-      - name: DEV
-        rd_evpn_domain:
-          domain: all
-          rd: '10.0.1.8:50002'
-        route_targets:
-          import_evpn_domains:
-            - domain: all
-              route_target: '50002:50002'
-          export_evpn_domains:
-            - domain: all
-              route_target: '50002:50002'
 
 a_leaf8_hosta8_csc:
   port_channel_interfaces:

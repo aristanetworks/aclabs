@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **1499** |
-| MISSING — in the guide, not yet rendered | 612 |
-| EXTRA — rendered, not in the guide | 887 |
+| **Residual total (non-exempt)** | **1327** |
+| MISSING — in the guide, not yet rendered | 601 |
+| EXTRA — rendered, not in the guide | 726 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -22,13 +22,13 @@ acceptance stays visible.
 | Accepted deviation | Lines absorbed today |
 |---|---|
 | comment lines | 54 |
-| explicit `no shutdown` (accepted AVD default) | 492 |
-| interface/host descriptions | 720 |
+| explicit `no shutdown` (accepted AVD default) | 478 |
+| interface/host descriptions | 704 |
 | line ordering (positions never compared) | n/a — structural |
 
 ## Remaining differences
 
-### MISSING — top exact lines (201 distinct)
+### MISSING — top exact lines (197 distinct)
 
 | count | line |
 |---|---|
@@ -63,25 +63,25 @@ acceptance stays visible.
 | 20× | `isis circuit-type level-#` |
 | 17× | `spanning-tree edge-port bpduguard default` |
 
-### EXTRA — top exact lines (366 distinct)
+### EXTRA — top exact lines (315 distinct)
 
 | count | line |
 |---|---|
 | 38× | `ipv6 enable` |
 | 26× | `switchport mode access` |
-| 16× | `mtu 9114` |
 | 14× | `spanning-tree bpduguard enable` |
 | 12× | `router bfd` |
 | 12× | `multihop interval 1000 min-rx 1000 multiplier 3` |
 | 10× | `vxlan vlan 10 vni 10010` |
-| 10× | `set origin incomplete` |
 | 10× | `vlan internal order ascending range 1006 1199` |
 | 9× | `spanning-tree mst 0 priority 32768` |
-| 8× | `no spanning-tree vlan-id 4093-4094` |
-| 8× | `reload-delay mlag 300` |
-| 8× | `reload-delay non-mlag 330` |
-| 8× | `route-map RM-MLAG-PEER-IN permit 10` |
-| 8× | `neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-IN in` |
+| 8× | `mtu 9114` |
+| 8× | `set origin incomplete` |
+| 8× | `neighbor 10.0.1.201 remote-as 65100` |
+| 8× | `neighbor 10.0.1.202 remote-as 65100` |
+| 8× | `neighbor 10.0.1.203 remote-as 65100` |
+| 8× | `neighbor 10.0.1.204 remote-as 65100` |
+| 8× | `route-map RM-EVPN-SOO-IN deny 10` |
 
 ### EXTRA — top shapes (digits→`#`)
 
@@ -93,23 +93,23 @@ acceptance stays visible.
 | 32× | `neighbor #.#.#.# description A-SPINE#_Ethernet#` |
 | 32× | `neighbor #.#.#.# description A-LEAF#_Ethernet#` |
 | 26× | `switchport mode access` |
-| 26× | `ip address #.#.#.#/#` |
 | 24× | `router-id #.#.#.#` |
-| 21× | `rd #.#.#.#:#` |
-| 18× | `mtu #` |
+| 17× | `ip address #.#.#.#/#` |
+| 17× | `rd #.#.#.#:#` |
+| 14× | `spanning-tree bpduguard enable` |
 
 ## Per-node residual
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 33 | 36 | 69 |
-| A-LEAF2 | 34 | 37 | 71 |
-| A-LEAF3 | 42 | 42 | 84 |
-| A-LEAF4 | 43 | 43 | 86 |
-| A-LEAF5 | 36 | 35 | 71 |
-| A-LEAF6 | 40 | 33 | 73 |
-| A-LEAF7 | 17 | 126 | 143 |
-| A-LEAF8 | 18 | 127 | 145 |
+| A-LEAF1 | 33 | 34 | 67 |
+| A-LEAF2 | 34 | 35 | 69 |
+| A-LEAF3 | 42 | 40 | 82 |
+| A-LEAF4 | 43 | 41 | 84 |
+| A-LEAF5 | 36 | 33 | 69 |
+| A-LEAF6 | 40 | 31 | 71 |
+| A-LEAF7 | 12 | 52 | 64 |
+| A-LEAF8 | 12 | 52 | 64 |
 | A-SPINE1 | 10 | 11 | 21 |
 | A-SPINE2 | 10 | 11 | 21 |
 | A-SPINE3 | 10 | 11 | 21 |
@@ -129,4 +129,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **612** | **887** | **1499** |
+| **TOTAL** | **601** | **726** | **1327** |

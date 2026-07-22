@@ -18,6 +18,14 @@ tenants:
       #############################################
       - name: PROD
         vrf_vni: 50001
+        # Class 3/8: `update wait-install` in every VRF BGP context. The
+        # MLAG leafs get it from their MLAG iBGP VRF peering machinery; the
+        # Gateway pair (mlag: false since the native swap) needs it from the
+        # VRF-scoped anchor. Idempotent where both paths write it.
+        bgp:
+          structured_config:
+            updates:
+              wait_install: true
         # NOTE: L3 multi-domain (VRF-level `rd evpn domain all` + multi-domain
         # RTs on IP-VRF Type-5) has no native AVD 6.3 key. Injected via
         # structured_config on the Gateway pair host_vars (A-LEAF7/A-LEAF8).
@@ -58,6 +66,14 @@ tenants:
       #############################################
       - name: DEV
         vrf_vni: 50002
+        # Class 3/8: `update wait-install` in every VRF BGP context. The
+        # MLAG leafs get it from their MLAG iBGP VRF peering machinery; the
+        # Gateway pair (mlag: false since the native swap) needs it from the
+        # VRF-scoped anchor. Idempotent where both paths write it.
+        bgp:
+          structured_config:
+            updates:
+              wait_install: true
         evpn_l3_multicast:
           enabled: true
           evpn_underlay_l3_multicast_group: 232.1.1.2
