@@ -10,22 +10,6 @@
       ansible.builtin.import_role:
         name: arista.avd.eos_designs
 
-    # PARITY-LEDGER class 9: strip the default `shutdown: false` that
-    # eos_designs hardcodes onto every generated interface (no 6.3.0
-    # knob exists) so the render matches what a switch actually saves.
-    # eos_cli_config_gen re-reads the structured configs from disk
-    # (read_structured_config_from_file defaults true), so this edit
-    # is what the renderer consumes. shutdown: true is preserved.
-    - name: Normalize structured configs for startup-config parity
-      ansible.builtin.command:
-        argv:
-          - python3
-          - "{{ playbook_dir }}/../scripts/normalize_structured_configs.py"
-          - "{{ playbook_dir }}/../intended/structured_configs"
-      delegate_to: localhost
-      run_once: true
-      changed_when: true
-
     - name: Generate Intended Config and Documentation
       ansible.builtin.import_role:
         name: arista.avd.eos_cli_config_gen

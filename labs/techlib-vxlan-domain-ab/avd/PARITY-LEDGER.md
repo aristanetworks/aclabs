@@ -42,7 +42,7 @@ key (sanctioned, documented). **OPEN** = mechanism to be settled during build.
 
 | # | Class | Verdict |
 |---|---|---|
-| 9 | `no shutdown` ×382 | **OPEN** — the single biggest class. cli_config_gen omits the line when `shutdown` is unset; the question is stopping eos_designs from setting `shutdown: false`. Candidates: structured_config `shutdown: null` merge, `default_interfaces`, or a documented knob — settle empirically first thing in the build |
+| 9 | `no shutdown` ×382 | **EXEMPT (contract amendment, 2026-07-21)** — Mitch accepted the explicit `no shutdown` AVD emits on interfaces as a sanctioned default; no code-around. The interim normalizer (commit 40e1016) was retired the same day |
 | 10 | `no enable password` ×27, other global defaults | **NATIVE** `generate_default_config: false` (via structured_config) |
 | 11 | `protocol https` ×27 under mgmt api | **NATIVE** management_api_http keys — omit the explicit protocol (default) |
 | 12 | `spanning-tree portfast` vs guide's `portfast edge` ×26 | **NATIVE** `eos_config_future.render_spanning_tree_portfast_edge: true` |
@@ -60,10 +60,16 @@ key (sanctioned, documented). **OPEN** = mechanism to be settled during build.
 - Interface descriptions (`description …`) — any format accepted.
 - Host descriptions.
 - Comment lines (`! …`) incl. the startup-config modification header.
+- **`no shutdown` on interfaces** — accepted AVD default (contract
+  amendment, 2026-07-21). AVD emits it explicitly; the guide configs
+  don't save it; both are fine.
+- **Line ordering** — the parity gate is CONTENT-SET parity: every
+  configuration line present on both sides, position not compared.
+  (Formally: the multiset diff of non-exempt lines must be empty.)
 
 ## Build sequencing (rebuild from scratch, evidence-driven)
 
-1. **Class-9 mechanism settle** (the ×382 monster) + the cEOSLab platform profile — these two touch every node.
+1. ~~Class-9 mechanism~~ (exempt per amendment) → the cEOSLab platform profile + foundation knobs — done.
 2. `all.yml` foundation (mgmt, defaults suppression, eos_config_future, platform profile, bfd, bgp style).
 3. Domain A fabric → services → endpoints (render-diff loop per group).
 4. Domain B fabric (IS-IS + unnumbered CSC + iBGP RR) → services (OISM incl. 1:1 group) → endpoints + B-SW1.
