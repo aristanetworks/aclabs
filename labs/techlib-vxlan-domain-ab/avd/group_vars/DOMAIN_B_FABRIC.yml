@@ -193,7 +193,6 @@ csc_spine_rr:
 csc_spine_multicast:
   ipv4:
     routing: true
-    software_forwarding: sfe
 
 ###################################################
 # Custom Structured Config — Paired redistribute-router-mac per Domain B POD

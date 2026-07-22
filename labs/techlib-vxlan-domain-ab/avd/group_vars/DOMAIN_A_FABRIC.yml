@@ -207,7 +207,9 @@ a_leaf8_dci_bgp_peers:
 csc_spine_multicast:
   ipv4:
     routing: true
-    software_forwarding: sfe   # required on cEOSLab; harmless on hardware
+    # NOTE: `software-forwarding sfe` under router multicast ipv4 was
+    # required on EOS < 4.36 for OISM. In 4.36+ it's implicit; tech-library
+    # omits the line entirely. Not rendered here to match.
 
 ###################################################
 # Custom Structured Config — PL-P2P-UNDERLAY + RM-CONN-2-BGP permit 20
