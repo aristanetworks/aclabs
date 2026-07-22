@@ -313,34 +313,114 @@ spine:
           ip_address: unnumbered Loopback0
           isis_metric: null
           isis_circuit_type: level-2
+          # Class 4b: the guide runs PIM on ALL 8 spine transit
+          # interfaces (incl. Et7/8 toward the multicast-disabled
+          # Gateway pair) with the unnumbered local-interface form.
+          # local-interface is NOT in cli_config_gen's ethernet pim
+          # schema (vlan-only key) — eos_cli carries that one line.
+          pim:
+            ipv4:
+              sparse_mode: true
+          eos_cli: |
+            pim ipv4 local-interface Loopback0
         - name: Ethernet2
           ip_address: unnumbered Loopback0
           isis_metric: null
           isis_circuit_type: level-2
+          # Class 4b: the guide runs PIM on ALL 8 spine transit
+          # interfaces (incl. Et7/8 toward the multicast-disabled
+          # Gateway pair) with the unnumbered local-interface form.
+          # local-interface is NOT in cli_config_gen's ethernet pim
+          # schema (vlan-only key) — eos_cli carries that one line.
+          pim:
+            ipv4:
+              sparse_mode: true
+          eos_cli: |
+            pim ipv4 local-interface Loopback0
         - name: Ethernet3
           ip_address: unnumbered Loopback0
           isis_metric: null
           isis_circuit_type: level-2
+          # Class 4b: the guide runs PIM on ALL 8 spine transit
+          # interfaces (incl. Et7/8 toward the multicast-disabled
+          # Gateway pair) with the unnumbered local-interface form.
+          # local-interface is NOT in cli_config_gen's ethernet pim
+          # schema (vlan-only key) — eos_cli carries that one line.
+          pim:
+            ipv4:
+              sparse_mode: true
+          eos_cli: |
+            pim ipv4 local-interface Loopback0
         - name: Ethernet4
           ip_address: unnumbered Loopback0
           isis_metric: null
           isis_circuit_type: level-2
+          # Class 4b: the guide runs PIM on ALL 8 spine transit
+          # interfaces (incl. Et7/8 toward the multicast-disabled
+          # Gateway pair) with the unnumbered local-interface form.
+          # local-interface is NOT in cli_config_gen's ethernet pim
+          # schema (vlan-only key) — eos_cli carries that one line.
+          pim:
+            ipv4:
+              sparse_mode: true
+          eos_cli: |
+            pim ipv4 local-interface Loopback0
         - name: Ethernet5
           ip_address: unnumbered Loopback0
           isis_metric: null
           isis_circuit_type: level-2
+          # Class 4b: the guide runs PIM on ALL 8 spine transit
+          # interfaces (incl. Et7/8 toward the multicast-disabled
+          # Gateway pair) with the unnumbered local-interface form.
+          # local-interface is NOT in cli_config_gen's ethernet pim
+          # schema (vlan-only key) — eos_cli carries that one line.
+          pim:
+            ipv4:
+              sparse_mode: true
+          eos_cli: |
+            pim ipv4 local-interface Loopback0
         - name: Ethernet6
           ip_address: unnumbered Loopback0
           isis_metric: null
           isis_circuit_type: level-2
+          # Class 4b: the guide runs PIM on ALL 8 spine transit
+          # interfaces (incl. Et7/8 toward the multicast-disabled
+          # Gateway pair) with the unnumbered local-interface form.
+          # local-interface is NOT in cli_config_gen's ethernet pim
+          # schema (vlan-only key) — eos_cli carries that one line.
+          pim:
+            ipv4:
+              sparse_mode: true
+          eos_cli: |
+            pim ipv4 local-interface Loopback0
         - name: Ethernet7
           ip_address: unnumbered Loopback0
           isis_metric: null
           isis_circuit_type: level-2
+          # Class 4b: the guide runs PIM on ALL 8 spine transit
+          # interfaces (incl. Et7/8 toward the multicast-disabled
+          # Gateway pair) with the unnumbered local-interface form.
+          # local-interface is NOT in cli_config_gen's ethernet pim
+          # schema (vlan-only key) — eos_cli carries that one line.
+          pim:
+            ipv4:
+              sparse_mode: true
+          eos_cli: |
+            pim ipv4 local-interface Loopback0
         - name: Ethernet8
           ip_address: unnumbered Loopback0
           isis_metric: null
           isis_circuit_type: level-2
+          # Class 4b: the guide runs PIM on ALL 8 spine transit
+          # interfaces (incl. Et7/8 toward the multicast-disabled
+          # Gateway pair) with the unnumbered local-interface form.
+          # local-interface is NOT in cli_config_gen's ethernet pim
+          # schema (vlan-only key) — eos_cli carries that one line.
+          pim:
+            ipv4:
+              sparse_mode: true
+          eos_cli: |
+            pim ipv4 local-interface Loopback0
   nodes:
     - name: B-SPINE1
       id: 201

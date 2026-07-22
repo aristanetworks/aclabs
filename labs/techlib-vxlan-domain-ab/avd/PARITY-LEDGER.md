@@ -120,7 +120,8 @@ regenerated PARITY-STATUS):
 | 7da8ea1 | class 7: PL-LOOPBACKS dialect — knob-false + CSC-owned redistribute objects, POD seq-30 union | 1,499 |
 | 370f885 | CROWN JEWEL pt.1 (A-side): native evpn_gateway all_active_multihoming + d_path + rd-rt-rewrite | 1,327 |
 | 0336225 | CROWN JEWEL pt.2 (B-side mirror): native model + attach-ASN fix — ALL FOUR password 7 renders dead | 1,293 |
-| (this) | contract amendment: BGP neighbor descriptions exempt (Mitch's ruling; −64 missing / −72 extra) | **1,157** |
+| f522223 | contract amendment: BGP neighbor descriptions exempt (Mitch's ruling; −64 missing / −72 extra) | 1,157 |
+| (this) | class 4b: spine PIM dialect — unnumbered local-interface (eos_cli), Et7/8 sparse-mode, Vlan4093 de-PIM | **1,103** |
 
 **Landmines banked (crown jewel):** (1) The models' `platform: cEOS-LAB`
 does NOT match AVD 6.3's built-in CEOS platform entry (matcher lacks the

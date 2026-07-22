@@ -472,6 +472,18 @@ spine:
       router_multicast: "{{ csc_spine_multicast }}"
       # Class 7 — redistribute route-map re-attach (see the dialect block).
       router_bgp: "{{ csc_underlay_redistribute.router_bgp }}"
+      # Class 4b: the guide runs PIM sparse-mode on ALL spine downlinks,
+      # including Et7/8 toward the multicast-disabled Gateway pair (AVD
+      # skips those). Merge-by-name onto the generated entries.
+      ethernet_interfaces:
+        - name: Ethernet7
+          pim:
+            ipv4:
+              sparse_mode: true
+        - name: Ethernet8
+          pim:
+            ipv4:
+              sparse_mode: true
   nodes:
     # Per-spine downlink_pools override AVD's default per-leaf offset
     # assignment. Each spine gets a /28 (16 addresses = 8 /31 links,
@@ -548,6 +560,13 @@ l3leaf:
       structured_config:
         # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
         prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
+        # Class 4b: the guide runs NO PIM on the MLAG L3 peer VLAN
+        # (Vlan4093); AVD enables sparse-mode there for VRF-default
+        # multicast. Pod-scoped (defaults-level would create-trap the
+        # empty interface onto the Gateway pair).
+        vlan_interfaces:
+          - name: Vlan4093
+            pim: null
         loopback_interfaces: "{{ csc_pod1_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod1_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod1_leaf_features.router_bgp }}"
@@ -570,6 +589,13 @@ l3leaf:
       structured_config:
         # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
         prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
+        # Class 4b: the guide runs NO PIM on the MLAG L3 peer VLAN
+        # (Vlan4093); AVD enables sparse-mode there for VRF-default
+        # multicast. Pod-scoped (defaults-level would create-trap the
+        # empty interface onto the Gateway pair).
+        vlan_interfaces:
+          - name: Vlan4093
+            pim: null
         loopback_interfaces: "{{ csc_pod2_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod2_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod2_leaf_features.router_bgp }}"
@@ -592,6 +618,13 @@ l3leaf:
       structured_config:
         # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
         prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
+        # Class 4b: the guide runs NO PIM on the MLAG L3 peer VLAN
+        # (Vlan4093); AVD enables sparse-mode there for VRF-default
+        # multicast. Pod-scoped (defaults-level would create-trap the
+        # empty interface onto the Gateway pair).
+        vlan_interfaces:
+          - name: Vlan4093
+            pim: null
         loopback_interfaces: "{{ csc_pod3_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod3_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod3_leaf_features.router_bgp }}"

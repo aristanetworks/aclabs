@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **1157** |
-| MISSING — in the guide, not yet rendered | 527 |
-| EXTRA — rendered, not in the guide | 630 |
+| **Residual total (non-exempt)** | **1103** |
+| MISSING — in the guide, not yet rendered | 479 |
+| EXTRA — rendered, not in the guide | 624 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -29,12 +29,11 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (128 distinct)
+### MISSING — top exact lines (126 distinct)
 
 | count | line |
 |---|---|
 | 32× | `no switchport` |
-| 32× | `pim ipv4 local-interface Loopback0` |
 | 26× | `mld` |
 | 20× | `routing` |
 | 20× | `isis circuit-type level-2` |
@@ -42,29 +41,30 @@ acceptance stays visible.
 | 18× | `address-family ipv6` |
 | 18× | `ipv6` |
 | 17× | `spanning-tree edge-port bpduguard default` |
-| 16× | `pim ipv4 sparse-mode` |
 | 14× | `ip igmp` |
 | 14× | `no autostate` |
 | 12× | `vxlan multicast ipv6` |
 | 12× | `mld snooping` |
 | 12× | `identifier auto lacp` |
+| 8× | `mtu 9014` |
+| 8× | `neighbor LOCAL-EVPN-PEERS remote-as 65100` |
 
 ### MISSING — top shapes (digits→`#`)
 
 | count | line |
 |---|---|
 | 36× | `address-family ipv#` |
-| 34× | `pim ipv# local-interface Loopback#` |
 | 32× | `no switchport` |
 | 26× | `mld` |
 | 20× | `routing` |
 | 20× | `ipv#` |
 | 20× | `isis circuit-type level-#` |
 | 17× | `spanning-tree edge-port bpduguard default` |
-| 16× | `pim ipv# sparse-mode` |
 | 14× | `ip igmp` |
+| 14× | `no autostate` |
+| 12× | `vxlan multicast ipv#` |
 
-### EXTRA — top exact lines (229 distinct)
+### EXTRA — top exact lines (228 distinct)
 
 | count | line |
 |---|---|
@@ -103,18 +103,18 @@ acceptance stays visible.
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 29 | 29 | 58 |
-| A-LEAF2 | 30 | 30 | 60 |
-| A-LEAF3 | 38 | 34 | 72 |
-| A-LEAF4 | 39 | 35 | 74 |
-| A-LEAF5 | 32 | 28 | 60 |
-| A-LEAF6 | 36 | 26 | 62 |
+| A-LEAF1 | 29 | 28 | 57 |
+| A-LEAF2 | 30 | 29 | 59 |
+| A-LEAF3 | 38 | 33 | 71 |
+| A-LEAF4 | 39 | 34 | 73 |
+| A-LEAF5 | 32 | 27 | 59 |
+| A-LEAF6 | 36 | 25 | 61 |
 | A-LEAF7 | 8 | 48 | 56 |
 | A-LEAF8 | 8 | 48 | 56 |
-| A-SPINE1 | 2 | 3 | 5 |
-| A-SPINE2 | 2 | 3 | 5 |
-| A-SPINE3 | 2 | 3 | 5 |
-| A-SPINE4 | 2 | 3 | 5 |
+| A-SPINE1 | 0 | 3 | 3 |
+| A-SPINE2 | 0 | 3 | 3 |
+| A-SPINE3 | 0 | 3 | 3 |
+| A-SPINE4 | 0 | 3 | 3 |
 | B-LEAF1 | 25 | 25 | 50 |
 | B-LEAF2 | 25 | 25 | 50 |
 | B-LEAF3 | 54 | 39 | 93 |
@@ -123,11 +123,11 @@ acceptance stays visible.
 | B-LEAF6 | 27 | 20 | 47 |
 | B-LEAF7 | 13 | 53 | 66 |
 | B-LEAF8 | 13 | 53 | 66 |
-| B-SPINE1 | 12 | 2 | 14 |
-| B-SPINE2 | 12 | 2 | 14 |
-| B-SPINE3 | 12 | 2 | 14 |
-| B-SPINE4 | 12 | 2 | 14 |
+| B-SPINE1 | 2 | 2 | 4 |
+| B-SPINE2 | 2 | 2 | 4 |
+| B-SPINE3 | 2 | 2 | 4 |
+| B-SPINE4 | 2 | 2 | 4 |
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **527** | **630** | **1157** |
+| **TOTAL** | **479** | **624** | **1103** |
