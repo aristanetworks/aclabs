@@ -108,7 +108,8 @@ regenerated PARITY-STATUS):
 | 1e0c2b8 | class 8 pt.2: peer-group/process dialect (CSC-null attrs + neighbor default send-community) | 1,751 |
 | 4d45bf3 | class 8/20: wait-install scoping — per-VRF via vrfs[].bgp.structured_config, BB explicit false | 1,737 |
 | 8b6c444 | class 20: maximum-paths map — A leafs 128, B spines suppressed, B isis-AF suppressed | 1,705 |
-| (this) | backbone rewrite: dynamic listen-range RR model (EVPN-GW-PEERS / IP-TRANSPORT-CLIENTS / DC-ASN-RANGE) | **1,597** |
+| 6eb7344 | backbone rewrite: dynamic listen-range RR model (EVPN-GW-PEERS / IP-TRANSPORT-CLIENTS / DC-ASN-RANGE) | 1,597 |
+| (this) | class 7: PL-LOOPBACKS dialect — knob-false + CSC-owned redistribute objects, POD seq-30 union | **1,499** |
 
 **Landmine banked (session 2):** `custom_structured_configuration_<key>`
 is an ANSIBLE variable — a host_vars definition SHADOWS the group_vars
@@ -118,7 +119,16 @@ ever sees one value). The four gateway host_vars define
 dialect knobs must be repeated inside the gateway anchors. pyavd-side
 merge order (read from source, `custom_structured_configuration/__init__.py`):
 node structured_config → root → nested (role structured_config) →
-custom_structured_configuration_* LAST. **Technique proven:**
+custom_structured_configuration_* LAST. **Technique proven (session 2):** `underlay_filter_redistribute_connected:
+false` kills the generator's loopback prefix-list, its RM-CONN-2-BGP
+seq 10, AND detaches the route-map from `redistribute connected` — the
+seam for owning the whole redistribute dialect via CSC. List unions by
+(name, sequence) across channels are ORDER-INDEPENDENT — a POD-level
+seq-30 contribution merges cleanly into a group-CSC 2-seq entry.
+Node-type defaults + node_group structured_configs MERGE (both apply),
+proven empirically on B-LEAF1 (session-tracker + pod-vlans coexist).
+
+**Technique proven:**
 `bgp_peer_groups.<role>.structured_config` merges under
 `router_bgp.peer_groups[name=<name>]` only where eos_designs
 materializes the group — the create-trap-free CSC-null anchor.

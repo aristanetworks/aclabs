@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **1597** |
-| MISSING — in the guide, not yet rendered | 666 |
-| EXTRA — rendered, not in the guide | 931 |
+| **Residual total (non-exempt)** | **1499** |
+| MISSING — in the guide, not yet rendered | 612 |
+| EXTRA — rendered, not in the guide | 887 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -28,7 +28,7 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (206 distinct)
+### MISSING — top exact lines (201 distinct)
 
 | count | line |
 |---|---|
@@ -45,8 +45,8 @@ acceptance stays visible.
 | 14× | `ip igmp` |
 | 14× | `no autostate` |
 | 12× | `vxlan multicast ipv6` |
-| 12× | `ip prefix-list PL-LOOPBACKS` |
-| 12× | `seq 10 permit 10.0.0.0/16 eq 32` |
+| 12× | `mld snooping` |
+| 12× | `identifier auto lacp` |
 
 ### MISSING — top shapes (digits→`#`)
 
@@ -57,13 +57,13 @@ acceptance stays visible.
 | 32× | `no switchport` |
 | 32× | `neighbor #.#.#.# description A-SPINE#.IPV#` |
 | 32× | `neighbor #.#.#.# description A-LEAF#.IPV#` |
-| 30× | `seq # permit #.#.#.#/# eq #` |
 | 26× | `mld` |
 | 20× | `routing` |
 | 20× | `ipv#` |
 | 20× | `isis circuit-type level-#` |
+| 17× | `spanning-tree edge-port bpduguard default` |
 
-### EXTRA — top exact lines (370 distinct)
+### EXTRA — top exact lines (366 distinct)
 
 | count | line |
 |---|---|
@@ -71,9 +71,6 @@ acceptance stays visible.
 | 26× | `switchport mode access` |
 | 16× | `mtu 9114` |
 | 14× | `spanning-tree bpduguard enable` |
-| 12× | `ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY` |
-| 12× | `seq 10 permit 10.0.1.0/24 eq 32` |
-| 12× | `match ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY` |
 | 12× | `router bfd` |
 | 12× | `multihop interval 1000 min-rx 1000 multiplier 3` |
 | 10× | `vxlan vlan 10 vni 10010` |
@@ -81,7 +78,10 @@ acceptance stays visible.
 | 10× | `vlan internal order ascending range 1006 1199` |
 | 9× | `spanning-tree mst 0 priority 32768` |
 | 8× | `no spanning-tree vlan-id 4093-4094` |
-| 8× | `seq 20 permit 10.1.1.0/24 eq 32` |
+| 8× | `reload-delay mlag 300` |
+| 8× | `reload-delay non-mlag 330` |
+| 8× | `route-map RM-MLAG-PEER-IN permit 10` |
+| 8× | `neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-IN in` |
 
 ### EXTRA — top shapes (digits→`#`)
 
@@ -96,24 +96,24 @@ acceptance stays visible.
 | 26× | `ip address #.#.#.#/#` |
 | 24× | `router-id #.#.#.#` |
 | 21× | `rd #.#.#.#:#` |
-| 20× | `seq # permit #.#.#.#/# eq #` |
+| 18× | `mtu #` |
 
 ## Per-node residual
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 38 | 40 | 78 |
-| A-LEAF2 | 39 | 41 | 80 |
-| A-LEAF3 | 47 | 46 | 93 |
-| A-LEAF4 | 48 | 47 | 95 |
-| A-LEAF5 | 41 | 39 | 80 |
-| A-LEAF6 | 45 | 37 | 82 |
-| A-LEAF7 | 21 | 130 | 151 |
-| A-LEAF8 | 22 | 131 | 153 |
-| A-SPINE1 | 14 | 14 | 28 |
-| A-SPINE2 | 14 | 14 | 28 |
-| A-SPINE3 | 14 | 14 | 28 |
-| A-SPINE4 | 14 | 14 | 28 |
+| A-LEAF1 | 33 | 36 | 69 |
+| A-LEAF2 | 34 | 37 | 71 |
+| A-LEAF3 | 42 | 42 | 84 |
+| A-LEAF4 | 43 | 43 | 86 |
+| A-LEAF5 | 36 | 35 | 71 |
+| A-LEAF6 | 40 | 33 | 73 |
+| A-LEAF7 | 17 | 126 | 143 |
+| A-LEAF8 | 18 | 127 | 145 |
+| A-SPINE1 | 10 | 11 | 21 |
+| A-SPINE2 | 10 | 11 | 21 |
+| A-SPINE3 | 10 | 11 | 21 |
+| A-SPINE4 | 10 | 11 | 21 |
 | B-LEAF1 | 25 | 25 | 50 |
 | B-LEAF2 | 25 | 25 | 50 |
 | B-LEAF3 | 54 | 39 | 93 |
@@ -129,4 +129,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **666** | **931** | **1597** |
+| **TOTAL** | **612** | **887** | **1499** |

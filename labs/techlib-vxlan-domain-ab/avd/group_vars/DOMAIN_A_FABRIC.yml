@@ -252,15 +252,35 @@ csc_spine_multicast:
     # omits the line entirely. Not rendered here to match.
 
 ###################################################
-# Custom Structured Config — PL-P2P-UNDERLAY + RM-CONN-2-BGP permit 20
+# Custom Structured Config — underlay redistribute dialect (class 7)
 #
-# Tech-library A/B spines + leafs redistribute BOTH loopbacks AND the
-# fabric point-to-point /31 subnets into BGP. AVD only redistributes
-# loopbacks by default. Add the second prefix-list + route-map stanza.
-# Applied fabric-wide via custom_structured_configuration_*.
+# The guide's A-side redistribute design, owned WHOLESALE here:
+#   ip prefix-list PL-LOOPBACKS      <- /16 supernets over ALL loopback
+#     seq 10: 10.0.0.0/16 eq 32         spaces (router-ids incl. BB + B),
+#     seq 20: 10.1.0.0/16 eq 32         VTEP loopbacks, and (leafs only,
+#     [seq 30: 10.2.0.0/16 eq 32]       via the POD groups) the Multi-VTEP
+#                                       MLAG shared-VTEP Loopback2 space.
+#   ip prefix-list PL-P2P-UNDERLAY   <- fabric p2p /31s
+#   route-map RM-CONN-2-BGP 10/20 + `redistribute connected route-map ...`
+#
+# underlay_filter_redistribute_connected: false kills the generator's
+# PL-LOOPBACKS-EVPN-OVERLAY list, its RM-CONN-2-BGP seq 10, AND detaches
+# the route-map from `redistribute connected` — all three are re-owned
+# below (the re-attach rides the node-type defaults' structured_config
+# router_bgp channel, which the gateway host_vars CSC shadowing cannot
+# touch). Merge-order note: the POD-level seq-30 contribution unions with
+# this group-level entry by (name, sequence) — order-independent.
 ###################################################
 
+underlay_filter_redistribute_connected: false
+
 custom_structured_configuration_prefix_lists:
+  - name: PL-LOOPBACKS
+    sequence_numbers:
+      - sequence: 10
+        action: permit 10.0.0.0/16 eq 32
+      - sequence: 20
+        action: permit 10.1.0.0/16 eq 32
   - name: PL-P2P-UNDERLAY
     sequence_numbers:
       - sequence: 10
@@ -269,10 +289,31 @@ custom_structured_configuration_prefix_lists:
 custom_structured_configuration_route_maps:
   - name: RM-CONN-2-BGP
     sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ip address prefix-list PL-LOOPBACKS
       - sequence: 20
         type: permit
         match:
           - ip address prefix-list PL-P2P-UNDERLAY
+
+# Re-attach for the redistribute line the knob detaches (see note above).
+csc_underlay_redistribute:
+  router_bgp:
+    redistribute:
+      connected:
+        route_map: RM-CONN-2-BGP
+
+# The leaf-only PL-LOOPBACKS seq 30 (Multi-VTEP MLAG shared-VTEP
+# Loopback2 space) — merged into the group-level entry by the POD
+# structured_configs. The Gateway pair (POD4) deliberately lacks it.
+csc_mlag_leaf_loopback_seq30:
+  prefix_lists:
+    - name: PL-LOOPBACKS
+      sequence_numbers:
+        - sequence: 30
+          action: permit 10.2.0.0/16 eq 32
 
 ###################################################
 # Custom Structured Config — peer-tag SPINES
@@ -399,6 +440,8 @@ spine:
     loopback_ipv4_pool: 10.0.1.0/24
     structured_config:
       router_multicast: "{{ csc_spine_multicast }}"
+      # Class 7 — redistribute route-map re-attach (see the dialect block).
+      router_bgp: "{{ csc_underlay_redistribute.router_bgp }}"
   nodes:
     # Per-spine downlink_pools override AVD's default per-leaf offset
     # assignment. Each spine gets a /28 (16 addresses = 8 /31 links,
@@ -461,7 +504,9 @@ l3leaf:
       ip_dhcp_relay: "{{ custom_vtep_ip_dhcp_relay }}"
       ip_extcommunity_lists_regexp: "{{ custom_vtep_ext_community_lists }}"
       route_maps: "{{ custom_vtep_route_maps }}"
-      router_bgp: "{{ csc_leaf_peer_tag_spines.router_bgp }}"
+      # Class 7 — peer-tag anchor combined with the redistribute re-attach
+      # (recursive combine; the two dicts share no list-typed keys).
+      router_bgp: "{{ csc_leaf_peer_tag_spines.router_bgp | combine(csc_underlay_redistribute.router_bgp, recursive=True) }}"
   node_groups:
 ########################################################
 # DOMAIN A POD 1 — A-LEAF1/2 (PROD only, VLANs 10, 30)
@@ -471,6 +516,8 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
       structured_config:
+        # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
+        prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
         loopback_interfaces: "{{ csc_pod1_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod1_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod1_leaf_features.router_bgp }}"
@@ -491,6 +538,8 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
       structured_config:
+        # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
+        prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
         loopback_interfaces: "{{ csc_pod2_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod2_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod2_leaf_features.router_bgp }}"
@@ -511,6 +560,8 @@ l3leaf:
       filter:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
       structured_config:
+        # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
+        prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
         loopback_interfaces: "{{ csc_pod3_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod3_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod3_leaf_features.router_bgp }}"
