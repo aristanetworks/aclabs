@@ -25,6 +25,7 @@ custom_structured_configuration_transceiver_qsfp_default_mode_4x10: null
 
 underlay_routing_protocol: isis
 isis_area_id: '49.1111'                            # NET: 49.1111.0000.0000.[NodeID].00
+underlay_isis_instance_name: "100"                 # The guide names its IS-IS instance `100` (PARITY-LEDGER class 1)
 isis_ti_lfa:
   enabled: false                                   # Not required for the base design (add if needed)
 isis_default_is_type: level-2
