@@ -25,7 +25,7 @@ tenants:
             mtu: 9014
             ip_address_virtual: 10.10.10.1/24
             ipv6_address_virtuals: [2001:db8:10:10::1/64]
-            evpn_l2_multi_domain: true
+            evpn_l2_multi_domain: false   # Multi-domain handled via CSC on Gateway host_vars
           - id: 20
             name: Green
             tags: ['PROD', 'GREEN']
@@ -67,7 +67,7 @@ tenants:
             mtu: 9014
             ip_address_virtual: 10.70.70.1/24
             ipv6_address_virtuals: [2001:db8:70:70::1/64]
-            evpn_l2_multi_domain: true
+            evpn_l2_multi_domain: false   # Multi-domain handled via CSC on Gateway host_vars
           - id: 80
             name: Black
             tags: ['DEV', 'BLACK']

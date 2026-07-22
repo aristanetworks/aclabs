@@ -209,6 +209,29 @@ csc_spine_multicast:
     software_forwarding: sfe   # required on cEOSLab; harmless on hardware
 
 ###################################################
+# Custom Structured Config — PL-P2P-UNDERLAY + RM-CONN-2-BGP permit 20
+#
+# Tech-library A/B spines + leafs redistribute BOTH loopbacks AND the
+# fabric point-to-point /31 subnets into BGP. AVD only redistributes
+# loopbacks by default. Add the second prefix-list + route-map stanza.
+# Applied fabric-wide via custom_structured_configuration_*.
+###################################################
+
+custom_structured_configuration_prefix_lists:
+  - name: PL-P2P-UNDERLAY
+    sequence_numbers:
+      - sequence: 10
+        action: permit 192.168.0.0/24 le 31
+
+custom_structured_configuration_route_maps:
+  - name: RM-CONN-2-BGP
+    sequence_numbers:
+      - sequence: 20
+        type: permit
+        match:
+          - ip address prefix-list PL-P2P-UNDERLAY
+
+###################################################
 # Custom Structured Config — peer-tag SPINES
 #
 # CSC: BGP Peer Tagging (EOS 4.34.0F). Prevents leaf-side re-advertisement of

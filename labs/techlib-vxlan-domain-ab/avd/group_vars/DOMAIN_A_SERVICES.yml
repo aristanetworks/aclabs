@@ -39,7 +39,7 @@ tenants:
             mtu: 9014
             ip_address_virtual: 10.10.10.1/24
             ipv6_address_virtuals: [2001:db8:10:10::1/64]
-            evpn_l2_multi_domain: true             # Shared with Domain B
+            evpn_l2_multi_domain: false            # Multi-domain handled via CSC on Gateway hosts_vars
             # NOTE: paired-redistribute-router-mac has no native AVD 6.3 key.
             # Injected via structured_config below.
           - id: 30
@@ -82,7 +82,7 @@ tenants:
             mtu: 9014
             ip_address_virtual: 10.70.70.1/24
             ipv6_address_virtuals: [2001:db8:70:70::1/64]
-            evpn_l2_multi_domain: true             # Shared with Domain B
+            evpn_l2_multi_domain: false            # Multi-domain handled via CSC on Gateway hosts_vars
 
 ###################################################
 # CSC: paired `redistribute router-mac ... next-hop vtep primary` per VLAN

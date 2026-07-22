@@ -88,6 +88,20 @@ p2p_uplinks_mtu: 9114
 custom_structured_configuration_switchport_default:
   mode: routed
 
+# cEOSLab-specific settings that tech-library renders on every node.
+custom_structured_configuration_system:
+  l1:
+    unsupported_speed_action: error
+    unsupported_error_correction_action: error
+
+custom_structured_configuration_load_interval:
+  default: 1
+
+# `no service interface inactive port-id allocation disabled` — no native
+# AVD 6.3 schema key. Applied via top-level eos_cli (renders at end of config).
+custom_structured_configuration_eos_cli: |
+  no service interface inactive port-id allocation disabled
+
 ansible_user: admin
 ansible_password: admin
 ansible_network_os: arista.eos.eos
