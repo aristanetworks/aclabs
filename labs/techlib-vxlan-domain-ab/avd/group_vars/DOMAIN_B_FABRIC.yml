@@ -15,6 +15,10 @@
 
 fabric_name: DOMAIN_B_FABRIC
 
+# Suppress the AVD-default `transceiver qsfp default-mode 4x10G` line on
+# spines/leafs. Tech-library doesn't render this on Domain B nodes.
+custom_structured_configuration_transceiver_qsfp_default_mode_4x10: null
+
 ###################################################
 # Underlay: IS-IS Level 2 only, IPv4 unnumbered
 ###################################################

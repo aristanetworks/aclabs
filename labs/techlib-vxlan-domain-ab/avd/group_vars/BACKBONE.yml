@@ -22,6 +22,11 @@ fabric_name: BACKBONE
 # accommodate the fabric MTU headers on transit).
 p2p_uplinks_mtu: 9214
 
+# Global default MTU on backbone (tech-library BB1/BB2 have this so all
+# interfaces default to 9214 without needing per-interface overrides).
+custom_structured_configuration_interface_defaults:
+  mtu: 9214
+
 ###################################################
 # Custom node_type_keys — backbone_router
 #
