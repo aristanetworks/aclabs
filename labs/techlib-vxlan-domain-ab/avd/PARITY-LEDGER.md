@@ -59,6 +59,14 @@ key (sanctioned, documented). **OPEN** = mechanism to be settled during build.
 
 - Interface descriptions (`description …`) — any format accepted.
 - Host descriptions.
+- **BGP neighbor descriptions** (`neighbor <X> description <Y>`) —
+  contract amendment, 2026-07-22 (Day 54 s2). The guide styles underlay
+  peers `<peer>.IPV4`; AVD 6.3.0 has NO underlay peer-description knob
+  (schema-verified — only overlay_bgp_peer_description and
+  mlag_bgp_peer_description exist), so matching would mean ~64 per-node
+  CSC entries of mechanical sprawl for a purely cosmetic string. Mitch
+  ruled: exempt. Absorbed at amendment time: 64 missing + 72 extra
+  (the 64 underlay pairs + 8 render-side VRF MLAG neighbor descs).
 - Comment lines (`! …`) incl. the startup-config modification header.
 - **`no shutdown` on interfaces** — accepted AVD default (contract
   amendment, 2026-07-21). AVD emits it explicitly; the guide configs
@@ -111,7 +119,8 @@ regenerated PARITY-STATUS):
 | 6eb7344 | backbone rewrite: dynamic listen-range RR model (EVPN-GW-PEERS / IP-TRANSPORT-CLIENTS / DC-ASN-RANGE) | 1,597 |
 | 7da8ea1 | class 7: PL-LOOPBACKS dialect — knob-false + CSC-owned redistribute objects, POD seq-30 union | 1,499 |
 | 370f885 | CROWN JEWEL pt.1 (A-side): native evpn_gateway all_active_multihoming + d_path + rd-rt-rewrite | 1,327 |
-| (this) | CROWN JEWEL pt.2 (B-side mirror): native model + attach-ASN fix — ALL FOUR password 7 renders dead | **1,293** |
+| 0336225 | CROWN JEWEL pt.2 (B-side mirror): native model + attach-ASN fix — ALL FOUR password 7 renders dead | 1,293 |
+| (this) | contract amendment: BGP neighbor descriptions exempt (Mitch's ruling; −64 missing / −72 extra) | **1,157** |
 
 **Landmines banked (crown jewel):** (1) The models' `platform: cEOS-LAB`
 does NOT match AVD 6.3's built-in CEOS platform entry (matcher lacks the

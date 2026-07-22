@@ -34,6 +34,8 @@ def classify_exempt(s: str) -> str | None:
         return "comment lines"
     if s.startswith("description "):
         return "interface/host descriptions"
+    if re.match(r"neighbor \S+ description ", s):
+        return "BGP neighbor descriptions (contract amended Day 54 s2)"
     if s == "no shutdown":
         return "explicit `no shutdown` (accepted AVD default)"
     return ""  # not exempt
