@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **1751** |
-| MISSING — in the guide, not yet rendered | 726 |
-| EXTRA — rendered, not in the guide | 1025 |
+| **Residual total (non-exempt)** | **1737** |
+| MISSING — in the guide, not yet rendered | 714 |
+| EXTRA — rendered, not in the guide | 1023 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -44,9 +44,9 @@ acceptance stays visible.
 | 16× | `pim ipv4 sparse-mode` |
 | 14× | `ip igmp` |
 | 14× | `no autostate` |
-| 14× | `update wait-install` |
 | 12× | `vxlan multicast ipv6` |
 | 12× | `ip prefix-list PL-LOOPBACKS` |
+| 12× | `seq 10 permit 10.0.0.0/16 eq 32` |
 
 ### MISSING — top shapes (digits→`#`)
 
@@ -63,7 +63,7 @@ acceptance stays visible.
 | 20× | `ipv#` |
 | 20× | `isis circuit-type level-#` |
 
-### EXTRA — top exact lines (405 distinct)
+### EXTRA — top exact lines (404 distinct)
 
 | count | line |
 |---|---|
@@ -114,19 +114,19 @@ acceptance stays visible.
 | A-SPINE2 | 14 | 14 | 28 |
 | A-SPINE3 | 14 | 14 | 28 |
 | A-SPINE4 | 14 | 14 | 28 |
-| B-LEAF1 | 26 | 26 | 52 |
-| B-LEAF2 | 26 | 26 | 52 |
-| B-LEAF3 | 55 | 40 | 95 |
-| B-LEAF4 | 55 | 40 | 95 |
-| B-LEAF5 | 29 | 21 | 50 |
-| B-LEAF6 | 29 | 21 | 50 |
-| B-LEAF7 | 20 | 66 | 86 |
-| B-LEAF8 | 20 | 66 | 86 |
+| B-LEAF1 | 25 | 26 | 51 |
+| B-LEAF2 | 25 | 26 | 51 |
+| B-LEAF3 | 54 | 40 | 94 |
+| B-LEAF4 | 54 | 40 | 94 |
+| B-LEAF5 | 27 | 21 | 48 |
+| B-LEAF6 | 27 | 21 | 48 |
+| B-LEAF7 | 18 | 66 | 84 |
+| B-LEAF8 | 18 | 66 | 84 |
 | B-SPINE1 | 12 | 4 | 16 |
 | B-SPINE2 | 12 | 4 | 16 |
 | B-SPINE3 | 12 | 4 | 16 |
 | B-SPINE4 | 12 | 4 | 16 |
 | B-SW1 | 7 | 20 | 27 |
-| BB1 | 23 | 54 | 77 |
-| BB2 | 23 | 54 | 77 |
-| **TOTAL** | **726** | **1025** | **1751** |
+| BB1 | 23 | 53 | 76 |
+| BB2 | 23 | 53 | 76 |
+| **TOTAL** | **714** | **1023** | **1737** |

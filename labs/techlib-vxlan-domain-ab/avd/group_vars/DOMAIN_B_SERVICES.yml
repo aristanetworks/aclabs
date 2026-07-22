@@ -11,6 +11,15 @@ tenants:
     vrfs:
       - name: PROD
         vrf_vni: 50001
+        # PARITY-LEDGER class 8/20 — the guide carries `update wait-install`
+        # inside every VRF BGP context on Domain B leafs. Domain A gets these
+        # free from its MLAG iBGP VRF peerings; B VRFs have no VRF peers, so
+        # eos_designs never emits it. vrfs[].bgp.structured_config scopes the
+        # line to exactly the nodes that carry the VRF.
+        bgp:
+          structured_config:
+            updates:
+              wait_install: true
         evpn_l3_multicast:
           enabled: true
           evpn_underlay_l3_multicast_group: 232.1.1.1
@@ -45,6 +54,15 @@ tenants:
 
       - name: DEV
         vrf_vni: 50002
+        # PARITY-LEDGER class 8/20 — the guide carries `update wait-install`
+        # inside every VRF BGP context on Domain B leafs. Domain A gets these
+        # free from its MLAG iBGP VRF peerings; B VRFs have no VRF peers, so
+        # eos_designs never emits it. vrfs[].bgp.structured_config scopes the
+        # line to exactly the nodes that carry the VRF.
+        bgp:
+          structured_config:
+            updates:
+              wait_install: true
         evpn_l3_multicast:
           enabled: true
           evpn_underlay_l3_multicast_group: 232.1.1.2

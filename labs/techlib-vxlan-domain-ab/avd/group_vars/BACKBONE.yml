@@ -73,7 +73,11 @@ bgp_peer_groups:
     password: IO6gE/ln7Sp2wt33WX/Asg==
     bfd: true
 
-bgp_update_wait_install: true
+# PARITY-LEDGER class 8/20: the guide's BB1/BB2 do NOT carry
+# `update wait-install` (RRs converge on control-plane only; FIB install
+# gating is a VTEP concern). MUST be explicit false — the AVD 6.3.0
+# schema default is TRUE, so omission still renders the line.
+bgp_update_wait_install: false
 evpn_import_pruning: true
 
 router_id_loopback_description: "Globally Unique Address"
