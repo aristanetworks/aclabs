@@ -232,7 +232,7 @@ ipv6 unicast-routing vrf PROD
 mlag configuration
    domain-id 100
    local-interface Vlan4094
-   peer-address 2001:db80:4094::1
+   peer-address 2001:db8:4094::1
    peer-link Port-Channel1000
 !
 mld snooping
