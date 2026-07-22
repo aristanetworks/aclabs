@@ -31,12 +31,6 @@ isis_ti_lfa:
 isis_default_is_type: level-2
 isis_maximum_paths: 4
 
-# VERIFY: `underlay_ipv4_unnumbered` schema key for AVD 6.3.0. Target render:
-#   interface Ethernet<N>
-#      ip address unnumbered Loopback0
-# (per tech-library B-SPINE1.cfg / B-LEAF1.cfg)
-underlay_ipv4_unnumbered: true
-
 ###################################################
 # Overlay: iBGP EVPN AS 65200, RR on Spines
 ###################################################
@@ -260,6 +254,46 @@ spine:
     structured_config:
       router_multicast: "{{ csc_spine_multicast }}"
       router_bgp: "{{ csc_spine_rr.router_bgp }}"
+      # PARITY-LEDGER class 2 (+15, +circuit-type): the guide's Domain B
+      # underlay is IPv4-unnumbered with default IS-IS metric and explicit
+      # circuit-type. No native 6.3.0 key exists (underlay_ipv4_unnumbered
+      # was a phantom — set since the initial build, absent from the
+      # schema, silently ignored). CSC merges onto the generated
+      # interfaces BY NAME: ip_address replaced, isis_metric nulled
+      # (CSC-null pattern), circuit-type made explicit.
+      ethernet_interfaces:
+        - name: Ethernet1
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
+        - name: Ethernet2
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
+        - name: Ethernet3
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
+        - name: Ethernet4
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
+        - name: Ethernet5
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
+        - name: Ethernet6
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
+        - name: Ethernet7
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
+        - name: Ethernet8
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
   nodes:
     - name: B-SPINE1
       id: 201
@@ -285,10 +319,9 @@ l3leaf:
     loopback_ipv4_pool: 10.0.2.0/24
     vtep_loopback: Loopback1                       # explicit VTEP source loopback
     vtep_loopback_ipv4_pool: 10.1.2.0/24
-    # Placeholder IPv4 uplink pool — required by AVD schema even when
-    # underlay_ipv4_unnumbered: true (AVD renders `ip address unnumbered
-    # Loopback0` on the interfaces regardless of the pool value). The pool
-    # is never actually consumed as numbered addresses.
+    # Uplink pool feeds eos_designs' numbered p2p generation; the CSC in
+    # structured_config below overrides every uplink to `ip address
+    # unnumbered Loopback0`, so these numbers never reach a render.
     uplink_ipv4_pool: 172.31.255.0/24
     uplink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4]
     uplink_switches: [B-SPINE1, B-SPINE2, B-SPINE3, B-SPINE4]
@@ -298,6 +331,24 @@ l3leaf:
       dhcp_relay: "{{ custom_vtep_dhcp_relay }}"
       spanning_tree: "{{ custom_vtep_stp_root_super.spanning_tree }}"
       router_bgp: "{{ custom_vtep_bgp_session_tracker.router_bgp }}"
+      # Class 2 batch — see the spine block note above.
+      ethernet_interfaces:
+        - name: Ethernet1
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
+        - name: Ethernet2
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
+        - name: Ethernet3
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
+        - name: Ethernet4
+          ip_address: unnumbered Loopback0
+          isis_metric: null
+          isis_circuit_type: level-2
 
   ##############################################
   # Per-pod grouping for VLAN filtering + Domain B redistribute-router-mac CSC
