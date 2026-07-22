@@ -570,6 +570,7 @@ spine:
     bgp_as: 65100
     loopback_ipv4_pool: 10.0.1.0/24
     structured_config:
+      router_bfd: null
       router_multicast: "{{ csc_spine_multicast }}"
       # Class 7 — redistribute route-map re-attach (see the dialect block).
       router_bgp: "{{ csc_underlay_redistribute.router_bgp }}"
@@ -655,10 +656,13 @@ l3leaf:
 # DOMAIN A POD 1 — A-LEAF1/2 (PROD only, VLANs 10, 30)
 ########################################################
     - group: POD1
+      mlag_domain_id: '100'   # guide uses 100 on every pair
       bgp_as: 65101                    # Shared per MLAG pair
       filter:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
       structured_config:
+        # Guide A carries no router-bfd tuning block.
+        router_bfd: null
         # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
         # line (access is default; the guide doesn't save it). Null the
         # emitted mode.
@@ -715,6 +719,13 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
           # remote-as rides the peer groups (anchor above).
           structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.1/30
+            mlag_configuration:
+              peer_address: 169.254.0.2
             router_bgp:
               neighbors:
                 - ip_address: 192.168.0.0
@@ -739,6 +750,13 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
           # remote-as rides the peer groups (anchor above).
           structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.2/30
+            mlag_configuration:
+              peer_address: 169.254.0.1
             router_bgp:
               neighbors:
                 - ip_address: 192.168.0.2
@@ -761,10 +779,13 @@ l3leaf:
 # DOMAIN A POD 2 — A-LEAF3/4 (PROD + DEV, VLANs 10, 30, 50)
 ########################################################
     - group: POD2
+      mlag_domain_id: '100'   # guide uses 100 on every pair
       bgp_as: 65103
       filter:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
       structured_config:
+        # Guide A carries no router-bfd tuning block.
+        router_bfd: null
         # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
         # line (access is default; the guide doesn't save it). Null the
         # emitted mode.
@@ -822,6 +843,13 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
           # remote-as rides the peer groups (anchor above).
           structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.1/30
+            mlag_configuration:
+              peer_address: 169.254.0.2
             router_bgp:
               neighbors:
                 - ip_address: 192.168.0.4
@@ -846,6 +874,13 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
           # remote-as rides the peer groups (anchor above).
           structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.2/30
+            mlag_configuration:
+              peer_address: 169.254.0.1
             router_bgp:
               neighbors:
                 - ip_address: 192.168.0.6
@@ -868,10 +903,13 @@ l3leaf:
 # DOMAIN A POD 3 — A-LEAF5/6 (DEV only, VLANs 50, 70)
 ########################################################
     - group: POD3
+      mlag_domain_id: '100'   # guide uses 100 on every pair
       bgp_as: 65105
       filter:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
       structured_config:
+        # Guide A carries no router-bfd tuning block.
+        router_bfd: null
         # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
         # line (access is default; the guide doesn't save it). Null the
         # emitted mode.
@@ -922,6 +960,13 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
           # remote-as rides the peer groups (anchor above).
           structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.1/30
+            mlag_configuration:
+              peer_address: 169.254.0.2
             router_bgp:
               neighbors:
                 - ip_address: 192.168.0.8
@@ -946,6 +991,13 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
           # remote-as rides the peer groups (anchor above).
           structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.2/30
+            mlag_configuration:
+              peer_address: 169.254.0.1
             router_bgp:
               neighbors:
                 - ip_address: 192.168.0.10
@@ -1002,6 +1054,8 @@ l3leaf:
             ip_address: 10.0.0.2
             bgp_as: 65000
       structured_config:
+        # Guide A carries no router-bfd tuning block.
+        router_bfd: null
         # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
         # line (access is default; the guide doesn't save it). Null the
         # emitted mode.

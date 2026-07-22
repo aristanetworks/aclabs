@@ -33,6 +33,8 @@ custom_structured_configuration_transceiver_qsfp_default_mode_4x10: null
 ###################################################
 
 underlay_routing_protocol: isis
+# Guide sysids are node-id based (0000.0000.000N), not loopback-derived.
+isis_system_id_format: node_id
 isis_area_id: '49.1111'                            # NET: 49.1111.0000.0000.[NodeID].00
 underlay_isis_instance_name: "100"                 # The guide names its IS-IS instance `100` (PARITY-LEDGER class 1)
 isis_ti_lfa:
@@ -368,6 +370,7 @@ csc_b_pod3_leaf_features:
 
 spine:
   defaults:
+    isis_system_id_prefix: '0000.0000'
     platform: cEOS-LAB
     bgp_as: 65200
     loopback_ipv4_pool: 10.0.2.0/24
@@ -562,6 +565,7 @@ spine:
 
 l3leaf:
   defaults:
+    isis_system_id_prefix: '0000.0000'
     platform: cEOS-LAB
     bgp_as: 65200                                  # Shared ASN — single-ASN iBGP fabric
     loopback_ipv4_pool: 10.0.2.0/24
