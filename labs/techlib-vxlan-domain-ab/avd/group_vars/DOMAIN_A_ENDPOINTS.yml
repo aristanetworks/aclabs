@@ -42,6 +42,15 @@ port_profiles:
     spanning_tree_bpduguard: true
     vlans: '50'
 
+  # Endpoints refresh: HostA7 dual-homes on the POD3 pair per guide
+  # (Po8, VLAN 50/Yellow) — was modeled single-homed on A-LEAF5.
+  - profile: PROF-YELLOW-MLAG
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '50'
+    port_channel:
+      mode: active
+
   - profile: PROF-BROWN-MLAG
     mode: access
     spanning_tree_portfast: edge
@@ -128,10 +137,10 @@ servers:
 
   - name: HostA7
     adapters:
-      - endpoint_ports: [eth1]
-        switch_ports: [Ethernet8]
-        switches: [A-LEAF5]
-        profile: PROF-YELLOW-SINGLE-HOMED
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [A-LEAF5, A-LEAF6]
+        profile: PROF-YELLOW-MLAG
 
   #########################################
   # A-LEAF7/A-LEAF8 pair (EVPN Gateway, All-Active)

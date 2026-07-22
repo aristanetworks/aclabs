@@ -578,8 +578,10 @@ l3leaf:
     ##############################################
     - group: B_POD2
       mlag: false
-      filter:
-        tags: ['BLUE', 'PURPLE']
+      # Endpoints refresh: per-node filters — B3 carries RED (VLAN 60,
+      # DEV) and B4 carries BROWN (VLAN 70, DEV) per guide; PURPLE
+      # leaves the pod (HostB4 is BLUE). Node filter replaces group
+      # filter, so each node lists its full set.
       structured_config:
         # Sweep S2: null the emitted `switchport mode access` per guide dialect.
         # B3/4 Po7 deferred (rend-only, dies in the endpoints refresh).
@@ -594,9 +596,9 @@ l3leaf:
             switchport:
               enabled: false
         vlan_interfaces:
+          # (Vlan40 left with PURPLE in the endpoints refresh; its entry
+          # here would create-trap a bare SVI.)
           - name: Vlan10
-            eos_cli: mld
-          - name: Vlan40
             eos_cli: mld
         vxlan_interface:
           vxlan1:
@@ -606,10 +608,26 @@ l3leaf:
         router_bgp: "{{ csc_b_pod2_leaf_features.router_bgp }}"
       nodes:
         - name: B-LEAF3
+          filter:
+            tags: ['BLUE', 'RED']
+          # DEV SVI mld (node-scoped — pod scope would trap Vlan60
+          # onto the sibling).
+          structured_config:
+            vlan_interfaces:
+              - name: Vlan60
+                eos_cli: mld
           id: 3
           mgmt_ip: 172.100.102.107/22
           uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
         - name: B-LEAF4
+          filter:
+            tags: ['BLUE', 'BROWN']
+          # DEV SVI mld (node-scoped — pod scope would trap Vlan70
+          # onto the sibling).
+          structured_config:
+            vlan_interfaces:
+              - name: Vlan70
+                eos_cli: mld
           id: 4
           mgmt_ip: 172.100.102.108/22
           uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]

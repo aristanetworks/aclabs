@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **901** |
-| MISSING — in the guide, not yet rendered | 333 |
-| EXTRA — rendered, not in the guide | 568 |
+| **Residual total (non-exempt)** | **805** |
+| MISSING — in the guide, not yet rendered | 261 |
+| EXTRA — rendered, not in the guide | 544 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -23,13 +23,13 @@ acceptance stays visible.
 |---|---|
 | BGP neighbor descriptions (contract amended Day 54 s2) | 436 |
 | comment lines | 54 |
-| explicit `no shutdown` (accepted AVD default) | 478 |
-| interface/host descriptions | 704 |
+| explicit `no shutdown` (accepted AVD default) | 481 |
+| interface/host descriptions | 707 |
 | line ordering (positions never compared) | n/a — structural |
 
 ## Remaining differences
 
-### MISSING — top exact lines (119 distinct)
+### MISSING — top exact lines (75 distinct)
 
 | count | line |
 |---|---|
@@ -42,12 +42,12 @@ acceptance stays visible.
 | 8× | `mtu 9014` |
 | 8× | `address-family ipv4` |
 | 8× | `bgp session tracker TRACK-LOCAL-EVPN-PEERS` |
-| 8× | `vrf DEV` |
 | 6× | `domain-id 100` |
 | 6× | `neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-OUT out` |
 | 6× | `lacp system-id c0d6.8200.0000` |
 | 6× | `route type ethernet-segment route-target auto` |
 | 6× | `recovery delay 10 seconds` |
+| 4× | `neighbor 192.0.0.1 activate` |
 
 ### MISSING — top shapes (digits→`#`)
 
@@ -60,21 +60,21 @@ acceptance stays visible.
 | 12× | `identifier auto lacp` |
 | 12× | `lacp system-id c#d#.#.#` |
 | 12× | `net #.#.#.#.#.#` |
-| 11× | `ip address #.#.#.#/#` |
 | 10× | `vxlan vlan #,# vni #,#` |
 | 10× | `vlan #,#` |
+| 9× | `ip address #.#.#.#/#` |
 
-### EXTRA — top exact lines (192 distinct)
+### EXTRA — top exact lines (177 distinct)
 
 | count | line |
 |---|---|
 | 38× | `ipv6 enable` |
 | 19× | `router multicast` |
-| 16× | `vrf PROD` |
-| 14× | `spanning-tree bpduguard enable` |
+| 14× | `vrf PROD` |
+| 14× | `vrf DEV` |
+| 13× | `spanning-tree bpduguard enable` |
 | 12× | `router bfd` |
 | 12× | `multihop interval 1000 min-rx 1000 multiplier 3` |
-| 12× | `vrf DEV` |
 | 10× | `vxlan vlan 10 vni 10010` |
 | 10× | `vlan internal order ascending range 1006 1199` |
 | 9× | `spanning-tree mst 0 priority 32768` |
@@ -90,13 +90,13 @@ acceptance stays visible.
 |---|---|
 | 38× | `ipv# enable` |
 | 34× | `vxlan vlan # vni #` |
-| 24× | `router-id #.#.#.#` |
+| 26× | `router-id #.#.#.#` |
 | 19× | `router multicast` |
 | 17× | `ip address #.#.#.#/#` |
-| 16× | `vrf PROD` |
-| 14× | `spanning-tree bpduguard enable` |
+| 14× | `vrf PROD` |
 | 14× | `ip address virtual source-nat vrf PROD address #.#.#.#` |
-| 13× | `rd #.#.#.#:#` |
+| 14× | `vrf DEV` |
+| 13× | `spanning-tree bpduguard enable` |
 | 12× | `router bfd` |
 
 ## Per-node residual
@@ -107,8 +107,8 @@ acceptance stays visible.
 | A-LEAF2 | 16 | 21 | 37 |
 | A-LEAF3 | 21 | 26 | 47 |
 | A-LEAF4 | 22 | 27 | 49 |
-| A-LEAF5 | 19 | 20 | 39 |
-| A-LEAF6 | 23 | 18 | 41 |
+| A-LEAF5 | 16 | 19 | 35 |
+| A-LEAF6 | 16 | 19 | 35 |
 | A-LEAF7 | 6 | 39 | 45 |
 | A-LEAF8 | 6 | 39 | 45 |
 | A-SPINE1 | 0 | 3 | 3 |
@@ -117,8 +117,8 @@ acceptance stays visible.
 | A-SPINE4 | 0 | 3 | 3 |
 | B-LEAF1 | 16 | 25 | 41 |
 | B-LEAF2 | 16 | 25 | 41 |
-| B-LEAF3 | 46 | 40 | 86 |
-| B-LEAF4 | 46 | 40 | 86 |
+| B-LEAF3 | 15 | 28 | 43 |
+| B-LEAF4 | 15 | 28 | 43 |
 | B-LEAF5 | 17 | 23 | 40 |
 | B-LEAF6 | 17 | 23 | 40 |
 | B-LEAF7 | 13 | 52 | 65 |
@@ -130,4 +130,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **333** | **568** | **901** |
+| **TOTAL** | **261** | **544** | **805** |

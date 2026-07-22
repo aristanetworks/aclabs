@@ -14,6 +14,9 @@ custom_structured_configuration_eos_cli: |
   no service interface inactive port-id allocation disabled
   mld snooping
   router multicast
+     vrf DEV
+        ipv6
+           routing
      vrf PROD
         ipv6
            routing

@@ -126,13 +126,13 @@ The `custom_structured_configuration_*` pattern (already in use in the existing 
 |---|---|---|---|---|
 | B-LEAF1 | 20, 40 | PROD | PROD | HostB1 (PC7, vlan 20), HostB2 (PC8, vlan 40) |
 | B-LEAF2 | (mirror of B-LEAF1) | PROD | PROD | (partner in ES for HostB1/B2) |
-| B-LEAF3 | 10, 40 | PROD | PROD | HostB3 (mirroring B-LEAF3/4 pair) |
-| B-LEAF4 | 10, 40 | PROD | PROD | HostB4 |
+| B-LEAF3 | 10, 60 | PROD + DEV | PROD + DEV | HostB3 (Eth7 single, vlan 60/Red), HostB4 (PC8, vlan 10, EVPN A/A) |
+| B-LEAF4 | 10, 70 | PROD + DEV | PROD + DEV | HostB9 — guide desc "B5" (Eth7 single, vlan 70/Brown), HostB4 (PC8 partner) |
 | B-LEAF5 | 40, 80 | PROD + DEV | PROD + DEV | B-SW1 uplink (trunk 40, 80) |
 | B-LEAF6 | 40, 80 | PROD + DEV | PROD + DEV | B-SW1 uplink (trunk 40, 80) |
 | B-LEAF7, B-LEAF8 (Gateway) | 10 (multi-domain), 60 (local), 70 (multi-domain) | PROD + DEV | **OISM disabled on Gateway** | HostB8 (PC9, vlan 60, EVPN A/A) |
 
-> **Confirmation needed during first render:** the per-leaf VLAN distribution above is derived from a skim of the tech-library configs. If any specific leaf differs (e.g. B-LEAF3/4 carry a different VLAN set than shown), the host_vars will need adjustment. Flagged for review during first `make build` diff.
+> **Verified against the guide (Day 54 s4 endpoints refresh):** B-LEAF3/4 rows corrected from render-vs-guide structural diff — DEV VLANs 60/70 land via per-node filter tags; PURPLE (40) left the pod.
 
 **Hosts (Domain B) + D-SW1 downstream:**
 
@@ -140,7 +140,9 @@ The `custom_structured_configuration_*` pattern (already in use in the existing 
 |---|---|---|---|---|
 | HostB1 | B-LEAF1/2 Port-Channel 7 | 20 | PROD | EVPN A/A |
 | HostB2 | B-LEAF1/2 Port-Channel 8 | 40 | PROD | EVPN A/A |
-| HostB3, HostB4 | B-LEAF3/4 similar pattern | (10, 40) | PROD | EVPN A/A |
+| HostB3 | B-LEAF3 Ethernet7 (single) | 60 | DEV | Standard access |
+| HostB4 | B-LEAF3/4 Port-Channel 8 | 10 | PROD | EVPN A/A |
+| HostB9 (guide desc "B5") | B-LEAF4 Ethernet7 (single) | 70 | DEV | Standard access |
 | HostB5, HostB6 | (attached downstream of B-SW1 via VLAN 40 access) | 40 | PROD | Standard access |
 | HostB7 | attached downstream of B-SW1 via VLAN 80 access | 80 | DEV | Standard access |
 | HostB8 | B-LEAF7/8 Port-Channel 9 | 60 | DEV | EVPN A/A (LACP system-id `c0d6.8200.0008`) |

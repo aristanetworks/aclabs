@@ -29,6 +29,19 @@ port_profiles:
     ethernet_segment:
       short_esi: auto
 
+  # Endpoints refresh: B_POD2 hosts per guide — B3 and B5 are
+  # single-homed access hosts on the DEV VLANs (60 Red on B-LEAF3,
+  # 70 Brown on B-LEAF4); the dual-homed HostB4 rides BLUE, not PURPLE.
+  - profile: PROF-RED-SINGLE
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '60'
+
+  - profile: PROF-BROWN-SINGLE
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '70'
+
   - profile: PROF-PURPLE-EVPN-AA
     mode: access
     spanning_tree_portfast: edge
@@ -109,17 +122,26 @@ servers:
   #########################################
   - name: HostB3
     adapters:
-      - endpoint_ports: [eth1, eth2]
-        switch_ports: [Ethernet7, Ethernet7]
-        switches: [B-LEAF3, B-LEAF4]
-        profile: PROF-BLUE-EVPN-AA
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [B-LEAF3]
+        profile: PROF-RED-SINGLE
 
   - name: HostB4
     adapters:
       - endpoint_ports: [eth1, eth2]
         switch_ports: [Ethernet8, Ethernet8]
         switches: [B-LEAF3, B-LEAF4]
-        profile: PROF-PURPLE-EVPN-AA
+        profile: PROF-BLUE-EVPN-AA
+
+  # (Guide labels this host "B5" in its descriptions; HostB5 is taken
+  # by the B_POD3 pair host, and names are model-internal.)
+  - name: HostB9
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [B-LEAF4]
+        profile: PROF-BROWN-SINGLE
 
   #########################################
   # NOTE: B-LEAF5/B-LEAF6 uplink to B-SW1 is handled natively by AVD as
