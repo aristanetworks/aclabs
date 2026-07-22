@@ -18,7 +18,11 @@ b_leaf8_gateway_csc:
     peer_groups:
       - name: LOCAL-EVPN-PEERS
         session_tracker: TRACK-LOCAL-EVPN-PEERS
-    # NOTE: same follow-up as B-LEAF7 for the two AVD 6.3 schema gaps.
+    eos_cli: |
+      !
+      address-family evpn
+         route type ethernet-segment route-target auto
+         domain identifier 65208:65208 attach
     session_trackers:
       - name: TRACK-LOCAL-EVPN-PEERS
         recovery_delay: 10

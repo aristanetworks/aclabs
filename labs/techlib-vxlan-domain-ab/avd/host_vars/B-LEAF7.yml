@@ -18,9 +18,11 @@ b_leaf7_gateway_csc:
     peer_groups:
       - name: LOCAL-EVPN-PEERS
         session_tracker: TRACK-LOCAL-EVPN-PEERS
-    # NOTE: `route type ethernet-segment route-target auto` and
-    # `domain identifier 65207:65207 attach` will be added via raw_eos_cli
-    # in a follow-up commit (no native AVD 6.3 schema for these two lines).
+    eos_cli: |
+      !
+      address-family evpn
+         route type ethernet-segment route-target auto
+         domain identifier 65207:65207 attach
     session_trackers:
       - name: TRACK-LOCAL-EVPN-PEERS
         recovery_delay: 10

@@ -37,10 +37,14 @@ a_leaf7_gateway_csc:
     peer_groups:
       - name: LOCAL-EVPN-PEERS
         session_tracker: TRACK-EVPN-PEERS
-    # NOTE: two lines that AVD 6.3's schema doesn't natively express — will
-    # be added via raw_eos_cli in a follow-up commit:
-    #   route type ethernet-segment route-target auto
-    #   domain identifier 65107:65107 attach
+    # Two lines AVD 6.3's schema doesn't natively express — injected via
+    # router_bgp.eos_cli multi-line string. Renders inside `router bgp
+    # <ASN>` at end. Ordering doesn't matter for these two lines.
+    eos_cli: |
+      !
+      address-family evpn
+         route type ethernet-segment route-target auto
+         domain identifier 65107:65107 attach
     session_trackers:
       - name: TRACK-EVPN-PEERS
         recovery_delay: 10
