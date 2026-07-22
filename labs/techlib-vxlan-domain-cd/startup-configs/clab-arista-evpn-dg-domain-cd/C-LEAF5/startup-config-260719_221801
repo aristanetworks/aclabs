@@ -321,6 +321,10 @@ router bgp 65305
       neighbor LOCAL-EVPN-PEERS activate
       route import match-failure action discard
    !
+   address-family ipv4
+      neighbor MLAG-IPV6-PEER activate
+      neighbor MLAG-IPV6-PEER next-hop address-family ipv6 originate
+   !
    address-family ipv6
       neighbor LOCAL-IPV6-PEERS activate
       neighbor MLAG-IPV6-PEER activate
