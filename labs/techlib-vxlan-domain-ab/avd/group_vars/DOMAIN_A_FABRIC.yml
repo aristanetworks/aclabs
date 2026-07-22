@@ -41,18 +41,50 @@ bgp_distance:
   local_routes: 200
 
 bgp_peer_groups:
+  # PARITY-LEDGER class 8 — the guide's dialect: groups carry ONLY
+  # peer group / remote-as / update-source / bfd / route-reflector-client.
+  # CSC-null (via each role's structured_config, which merges under
+  # router_bgp.peer_groups[name=<name>] ONLY on nodes where eos_designs
+  # materializes the group) un-sets the hardcoded send-community /
+  # maximum-routes / description attributes. `neighbor default
+  # send-community` (global) replaces the per-group lines.
   ipv4_underlay_peers:
     name: LOCAL-IPV4-PEERS
+    structured_config:
+      send_community: null
+      maximum_routes: null
   mlag_ipv4_underlay_peer:
     name: MLAG-IPV4-PEER
+    structured_config:
+      send_community: null
+      maximum_routes: null
+      description: null
   evpn_overlay_peers:
     name: LOCAL-EVPN-PEERS
     bfd: true
+    structured_config:
+      send_community: null
+      maximum_routes: null
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
 
 # ebgp-multihop is a fabric-level setting in AVD 6.3 (not per peer-group).
 evpn_ebgp_multihop: 3
+
+# PARITY-LEDGER class 8 — process-level dialect:
+#   `neighbor default send-community` (bare form — cli_config_gen renders
+#   it when the value is exactly "all"), and the guide's implicit ipv4-AF
+#   deactivation (`no bgp default ipv4-unicast` covers it; the explicit
+#   `no neighbor LOCAL-EVPN-PEERS activate` eos_designs emits is un-set
+#   with CSC-null merge-by-name). Safe at fabric-group scope: the
+#   router-bgp template renders nothing unless router_bgp.as is defined.
+custom_structured_configuration_router_bgp:
+  neighbor_default:
+    send_community: all
+  address_family_ipv4:
+    peer_groups:
+      - name: LOCAL-EVPN-PEERS
+        activate: null
 
 bgp_update_wait_install: true
 evpn_import_pruning: true

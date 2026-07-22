@@ -99,7 +99,26 @@ regenerated PARITY-STATUS):
 | 0dce0bf | class 1: underlay_isis_instance_name "100" | 2,237 |
 | ef42f3a | class 2+15: Domain B unnumbered CSC batch | 2,045 |
 | a0d0111 | class 16: MLAG naming dialect (5 native keys) | 1,953 |
-| (this) | class 8 pt.1: fabric peer-group passwords stripped (6) | **1,905** |
+| d3bcfe3 | class 8 pt.1: fabric peer-group passwords stripped (6) | 1,905 |
+
+## Session log — rebuild session 2
+
+| Commit | Increment | Residual after |
+|---|---|---|
+| (this) | class 8 pt.2: peer-group/process dialect (CSC-null attrs + neighbor default send-community) | **1,751** |
+
+**Landmine banked (session 2):** `custom_structured_configuration_<key>`
+is an ANSIBLE variable — a host_vars definition SHADOWS the group_vars
+definition of the same name wholesale (host>group precedence; pyavd only
+ever sees one value). The four gateway host_vars define
+`custom_structured_configuration_router_bgp`, so fabric-wide router_bgp
+dialect knobs must be repeated inside the gateway anchors. pyavd-side
+merge order (read from source, `custom_structured_configuration/__init__.py`):
+node structured_config → root → nested (role structured_config) →
+custom_structured_configuration_* LAST. **Technique proven:**
+`bgp_peer_groups.<role>.structured_config` merges under
+`router_bgp.peer_groups[name=<name>]` only where eos_designs
+materializes the group — the create-trap-free CSC-null anchor.
 
 **Techniques proven:** CSC-null (un-sets hardcoded eos_designs
 decisions; passed schema + renderer); eos_config_future/cli-gen inputs

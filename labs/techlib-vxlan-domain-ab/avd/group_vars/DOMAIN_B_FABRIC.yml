@@ -43,14 +43,29 @@ bgp_distance:
   local_routes: 200
 
 bgp_peer_groups:
+  # PARITY-LEDGER class 8 — see DOMAIN_A_FABRIC.yml for the dialect note.
+  # CSC-null via the role's structured_config (merges under
+  # router_bgp.peer_groups[name=LOCAL-EVPN-PEERS] only where the group
+  # materializes).
   evpn_overlay_peers:
     name: LOCAL-EVPN-PEERS
     bfd: true
+    structured_config:
+      send_community: null
+      maximum_routes: null
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
     bfd: true
 
 evpn_ebgp_multihop: 3
+
+# PARITY-LEDGER class 8 — `neighbor default send-community` on every BGP
+# speaker (bare form renders when the value is exactly "all"). Safe at
+# fabric-group scope: B-SW1 (l2leaf) never defines router_bgp.as, so the
+# router-bgp template renders nothing for it.
+custom_structured_configuration_router_bgp:
+  neighbor_default:
+    send_community: all
 
 bgp_update_wait_install: true
 evpn_import_pruning: true
@@ -108,6 +123,11 @@ custom_evpn_gw_bgp_config:
     peer_groups:
       - name: REMOTE-IPV4-PEERS
         activate: true
+      # Class 8: the Gateway keeps its ipv4 AF (REMOTE-IPV4-PEERS activate
+      # above) but not the explicit LOCAL-EVPN deactivate — implicit via
+      # `no bgp default ipv4-unicast`, same dialect as the rest of the fabric.
+      - name: LOCAL-EVPN-PEERS
+        activate: null
   address_family_evpn:
     domain_identifier: '2:2'
     domain_identifier_remote: '99:99'
@@ -182,6 +202,10 @@ csc_spine_rr:
     peer_groups:
       - name: LOCAL-EVPN-PEERS
         route_reflector_client: true
+    # Class 8: the guide's B nodes carry NO router-bgp-level ipv4 AF
+    # (the deactivate is implicit via `no bgp default ipv4-unicast`).
+    # CSC-null removes the block eos_designs emits for the deactivate.
+    address_family_ipv4: null
 
 csc_spine_multicast:
   ipv4:
@@ -198,6 +222,8 @@ csc_spine_multicast:
 # B_POD1 (B-LEAF1/2): VLANs 20, 40
 csc_b_pod1_leaf_features:
   router_bgp:
+    # Class 8: no router-bgp-level ipv4 AF on B standard leafs (see csc_spine_rr note).
+    address_family_ipv4: null
     vlans:
       - id: 20
         redistribute_routes:
@@ -213,6 +239,8 @@ csc_b_pod1_leaf_features:
 # B_POD2 (B-LEAF3/4): VLANs 10, 40
 csc_b_pod2_leaf_features:
   router_bgp:
+    # Class 8: no router-bgp-level ipv4 AF on B standard leafs (see csc_spine_rr note).
+    address_family_ipv4: null
     vlans:
       - id: 10
         redistribute_routes:
@@ -228,6 +256,8 @@ csc_b_pod2_leaf_features:
 # B_POD3 (B-LEAF5/6): VLANs 40, 80
 csc_b_pod3_leaf_features:
   router_bgp:
+    # Class 8: no router-bgp-level ipv4 AF on B standard leafs (see csc_spine_rr note).
+    address_family_ipv4: null
     vlans:
       - id: 40
         redistribute_routes:

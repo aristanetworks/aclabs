@@ -11,6 +11,20 @@ underlay_multicast_pim_sm: false
 
 a_leaf8_gateway_csc:
   router_bgp:
+    # PARITY-LEDGER class 8 — LANDMINE: this host_vars file defines
+    # custom_structured_configuration_router_bgp, which SHADOWS the
+    # group-level variable of the same name (Ansible host>group
+    # precedence — the group var is replaced wholesale, never merged).
+    # Any fabric-wide router_bgp dialect knob must therefore be
+    # repeated inside this anchor.
+    neighbor_default:
+      send_community: all
+    # Class 8 (A gateway): un-set the explicit ipv4-AF deactivate —
+    # implicit via `no bgp default ipv4-unicast`, same as the fabric.
+    address_family_ipv4:
+      peer_groups:
+        - name: LOCAL-EVPN-PEERS
+          activate: null
     neighbors:
       - ip_address: 172.16.1.2
         peer_group: REMOTE-IPV4-PEERS
