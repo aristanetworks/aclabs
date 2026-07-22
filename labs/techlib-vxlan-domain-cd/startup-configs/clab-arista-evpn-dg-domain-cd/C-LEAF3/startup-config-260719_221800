@@ -204,6 +204,7 @@ interface Vlan3001
    no autostate
    vrf PROD
    ipv6 address 2001:db8:3001::1/64
+   ipv6 enable
 !
 interface Vlan3002
    description MLAG iBGP Peer - VRF DEV
@@ -211,6 +212,7 @@ interface Vlan3002
    no autostate
    vrf DEV
    ipv6 address 2001:db8:3002::1/64
+   ipv6 enable
 !
 interface Vlan4093
    description MLAG UNDERLAY BGP PEER
@@ -241,10 +243,10 @@ mac address-table aging-time 1800
 !
 ip virtual-router mac-address 00:1c:73:00:00:01
 !
-ip routing
-ip routing vrf DEV
+ip routing ipv6 interfaces
+ip routing ipv6 interfaces vrf DEV
 no ip routing vrf MGMT
-ip routing vrf PROD
+ip routing ipv6 interfaces vrf PROD
 !
 ip extcommunity-list regexp evpn-imported permit RT.*
 !
