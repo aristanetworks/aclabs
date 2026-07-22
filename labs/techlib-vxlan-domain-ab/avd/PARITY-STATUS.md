@@ -8,8 +8,8 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **719** |
-| MISSING — in the guide, not yet rendered | 217 |
+| **Residual total (non-exempt)** | **663** |
+| MISSING — in the guide, not yet rendered | 161 |
 | EXTRA — rendered, not in the guide | 502 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
@@ -29,13 +29,10 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (66 distinct)
+### MISSING — top exact lines (63 distinct)
 
 | count | line |
 |---|---|
-| 20× | `isis circuit-type level-2` |
-| 18× | `address-family ipv4` |
-| 18× | `address-family ipv6` |
 | 17× | `spanning-tree edge-port bpduguard default` |
 | 14× | `no autostate` |
 | 8× | `mtu 9014` |
@@ -48,13 +45,14 @@ acceptance stays visible.
 | 4× | `no switchport` |
 | 3× | `ip address 169.254.0.1/30` |
 | 3× | `peer-address 169.254.0.2` |
+| 3× | `ip address 169.254.0.2/30` |
+| 3× | `peer-address 169.254.0.1` |
+| 3× | `vxlan vlan 10,70 vni 10010,10070` |
 
 ### MISSING — top shapes (digits→`#`)
 
 | count | line |
 |---|---|
-| 36× | `address-family ipv#` |
-| 20× | `isis circuit-type level-#` |
 | 17× | `spanning-tree edge-port bpduguard default` |
 | 14× | `no autostate` |
 | 12× | `net #.#.#.#.#.#` |
@@ -63,6 +61,8 @@ acceptance stays visible.
 | 9× | `ip address #.#.#.#/#` |
 | 8× | `mtu #` |
 | 8× | `address-family ipv#` |
+| 8× | `neighbor #.#.#.# activate` |
+| 8× | `network #.#.#.#/#` |
 
 ### EXTRA — top exact lines (157 distinct)
 
@@ -103,31 +103,31 @@ acceptance stays visible.
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 15 | 20 | 35 |
-| A-LEAF2 | 16 | 21 | 37 |
-| A-LEAF3 | 21 | 26 | 47 |
-| A-LEAF4 | 22 | 27 | 49 |
-| A-LEAF5 | 16 | 19 | 35 |
-| A-LEAF6 | 16 | 19 | 35 |
+| A-LEAF1 | 13 | 20 | 33 |
+| A-LEAF2 | 14 | 21 | 35 |
+| A-LEAF3 | 17 | 26 | 43 |
+| A-LEAF4 | 18 | 27 | 45 |
+| A-LEAF5 | 14 | 19 | 33 |
+| A-LEAF6 | 14 | 19 | 33 |
 | A-LEAF7 | 3 | 33 | 36 |
 | A-LEAF8 | 3 | 33 | 36 |
 | A-SPINE1 | 0 | 3 | 3 |
 | A-SPINE2 | 0 | 3 | 3 |
 | A-SPINE3 | 0 | 3 | 3 |
 | A-SPINE4 | 0 | 3 | 3 |
-| B-LEAF1 | 9 | 18 | 27 |
-| B-LEAF2 | 9 | 18 | 27 |
-| B-LEAF3 | 11 | 24 | 35 |
-| B-LEAF4 | 11 | 24 | 35 |
-| B-LEAF5 | 12 | 22 | 34 |
-| B-LEAF6 | 12 | 22 | 34 |
-| B-LEAF7 | 10 | 49 | 59 |
-| B-LEAF8 | 10 | 49 | 59 |
-| B-SPINE1 | 2 | 2 | 4 |
-| B-SPINE2 | 2 | 2 | 4 |
-| B-SPINE3 | 2 | 2 | 4 |
-| B-SPINE4 | 2 | 2 | 4 |
+| B-LEAF1 | 5 | 18 | 23 |
+| B-LEAF2 | 5 | 18 | 23 |
+| B-LEAF3 | 5 | 24 | 29 |
+| B-LEAF4 | 5 | 24 | 29 |
+| B-LEAF5 | 6 | 22 | 28 |
+| B-LEAF6 | 6 | 22 | 28 |
+| B-LEAF7 | 8 | 49 | 57 |
+| B-LEAF8 | 8 | 49 | 57 |
+| B-SPINE1 | 1 | 2 | 3 |
+| B-SPINE2 | 1 | 2 | 3 |
+| B-SPINE3 | 1 | 2 | 3 |
+| B-SPINE4 | 1 | 2 | 3 |
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **217** | **502** | **719** |
+| **TOTAL** | **161** | **502** | **663** |

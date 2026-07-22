@@ -448,6 +448,15 @@ csc_pod1_leaf_features:
       eos_cli: |
         vxlan multicast ipv6
   router_bgp:
+    # OISM evpn-multicast sub-AF dialect (see Domain B note).
+    vrfs:
+      - name: PROD
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
     vlans:
       - id: 10
         redistribute_routes:
@@ -479,6 +488,22 @@ csc_pod2_leaf_features:
       eos_cli: |
         vxlan multicast ipv6
   router_bgp:
+    # OISM evpn-multicast sub-AF dialect (see Domain B note).
+    vrfs:
+      - name: DEV
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
+      - name: PROD
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
     vlans:
       - id: 10
         redistribute_routes:
@@ -515,6 +540,15 @@ csc_pod3_leaf_features:
       eos_cli: |
         vxlan multicast ipv6
   router_bgp:
+    # OISM evpn-multicast sub-AF dialect (see Domain B note).
+    vrfs:
+      - name: DEV
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
     vlans:
       - id: 50
         redistribute_routes:

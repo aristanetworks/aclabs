@@ -129,7 +129,8 @@ regenerated PARITY-STATUS):
 | 277c4bf | sweep S2: `switchport mode access` nulls ×20 on access POs + A3/4 Eth7 (3 deferred to refresh) | 901 |
 | 05d47fa | endpoints/services refresh: B3/4 DEV via per-node filters (60 Red / 70 Brown), HostB3→single + HostB9 single, HostB4→BLUE, HostA7→POD3 MLAG Po8; DESIGN.md B rows verified | 805 |
 | 8131c25 | ES/LACP style: `identifier auto lacp` + route-target null + session tracker (profile-level), per-host `lacp system-id` (adapter-level), B-SW1 uplink Po pod-scoped; HostA8 duplicate-key fallback block removed | 735 |
-| (this) | gateway `REMOTE-EVPN-PEERS remote-as 65000` (both domains' anchors) + tracker `recovery delay 10` via pod-channel (auto-created trackers default 300 and merge after the defaults channel) | **719** |
+| c2b7672 | gateway `REMOTE-EVPN-PEERS remote-as 65000` (both domains' anchors) + tracker `recovery delay 10` via pod-channel (auto-created trackers default 300 and merge after the defaults channel) | 719 |
+| (this) | isis circuit-type on loopbacks ×20 (eos_cli — no native loopback key) + OISM evpn-multicast sub-AFs ×36 via vrf eos_cli with native header nulled (net −36) | **663** |
 
 **Landmines banked (crown jewel):** (1) The models' `platform: cEOS-LAB`
 does NOT match AVD 6.3's built-in CEOS platform entry (matcher lacks the
@@ -173,6 +174,20 @@ decisions; passed schema + renderer); eos_config_future/cli-gen inputs
 must ride INSIDE structured config; merge-by-name interface CSC on
 node-type defaults. **Phantom found:** `underlay_ipv4_unnumbered` was
 set since the initial build but does not exist in the 6.3.0 schema.
+
+**Landmines banked (loopback/evpn-mcast leg):** (1) `&&` after
+`grep -c` returning zero (rc=1) silently skips everything downstream —
+struck for the THIRD time this campaign (a schema check never ran and
+an invalid key shipped). Rule: chain diagnostics with `;`, reserve
+`&&` for genuine dependencies. (2) `isis_circuit_type` is native on
+ethernet items but INVALID on loopback items (only
+enable/bfd/passive/metric/p2p exist there) — per-item eos_cli is the
+loopback path, and the same key string appearing at the same indent in
+unrelated entry types makes blind replaces dangerous (an assert caught
+15 hits where 3 were expected: the eth CSC entries share the line).
+(3) A-pod group structured_config router_bgp lives in the
+csc_podN_leaf_features anchors (4c era) — the assert-before-append
+discipline fired twice before any damage.
 
 **Landmines banked (session-5 batch):** (1) Auto-created objects merge
 AFTER the defaults channel: eos_designs generates session_trackers for
@@ -233,7 +248,25 @@ the accepted cost (+28 fleet-wide). (5)
 render path in 6.3 (half-landed upstream); the overlay mapping line
 rides vxlan1 eos_cli.
 
-## NEXT SESSION — pickup spec (BGP dialect, fully reconned)
+## NEXT SESSION — pickup spec (MLAG-vrf-peering class, reconned Day 54 s5)
+
+Guide A vrf blocks carry MLAG iBGP peering INSIDE each vrf:
+`neighbor 192.0.0.x peer group MLAG-IPV4-PEER` + a vrf-level
+`address-family ipv4 / neighbor 192.0.0.x activate` (the ×8 AF bucket
+and the ×4/×4 activate buckets), redistribute carries route-map
+RM-CONN-2-BGP-VRFS. This class likely also owns `no autostate` ×14 and
+`mtu 9014` ×8 (peering SVIs) and relates to `ip address 169.254.0.1/30`
+missing ×3. NATIVE mechanism first: services vrfs
+`enable_mlag_ibgp_peering_vrfs: true` + `mlag_ibgp_peering_ipv4_pool`
+(guide subnet 192.0.0.0/…, per-pod offsets — read guide 192.0.0.x per
+pod before choosing the pool). Verify what AVD generates (SVI id, mtu,
+autostate, route-map name) vs guide dialect; expect follow-up nulls.
+A-only (B is mlag:false). THEN: bpduguard swap ×17/×13, autostate
+remainder, router-id ×24 extras, SOO ×8 extras, router bfd ×24 B
+extras, ipv6-enable ×38, mst ×9, vlan-internal-order ×10, domain-id
+×6, RM-MLAG-PEER-OUT ×6, vxlan ranged ×10, mtu 9114 ×8 extras.
+
+## OLD pickup spec (retired, kept for history)
 
 The guide's dialect (read from B-SPINE1; verify A/BB during work):
 `neighbor default send-community` global; groups carry ONLY peer

@@ -246,6 +246,18 @@ csc_spine_multicast:
 # B_POD1 (B-LEAF1/2): VLANs 20, 40
 csc_b_pod1_leaf_features:
   router_bgp:
+    # OISM evpn-multicast sub-AF dialect: no native cli path for the
+    # bare address-family ipv4/ipv6 blocks (only ipv4.transit exists),
+    # so the three-line construct rides vrf eos_cli with the native
+    # header nulled — net-zero headers, both AFs gained.
+    vrfs:
+      - name: PROD
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
     # Tracker recovery dialect (guide: 10s; AVD auto-creates referenced
     # trackers with default 300 AFTER the defaults channel merges — the
     # node-group channel is the one that wins).
@@ -269,6 +281,25 @@ csc_b_pod1_leaf_features:
 # B_POD2 (B-LEAF3/4): VLANs 10, 40
 csc_b_pod2_leaf_features:
   router_bgp:
+    # OISM evpn-multicast sub-AF dialect: no native cli path for the
+    # bare address-family ipv4/ipv6 blocks (only ipv4.transit exists),
+    # so the three-line construct rides vrf eos_cli with the native
+    # header nulled — net-zero headers, both AFs gained.
+    vrfs:
+      - name: PROD
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
+      - name: DEV
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
     # Tracker recovery dialect (guide: 10s; AVD auto-creates referenced
     # trackers with default 300 AFTER the defaults channel merges — the
     # node-group channel is the one that wins).
@@ -292,6 +323,25 @@ csc_b_pod2_leaf_features:
 # B_POD3 (B-LEAF5/6): VLANs 40, 80
 csc_b_pod3_leaf_features:
   router_bgp:
+    # OISM evpn-multicast sub-AF dialect: no native cli path for the
+    # bare address-family ipv4/ipv6 blocks (only ipv4.transit exists),
+    # so the three-line construct rides vrf eos_cli with the native
+    # header nulled — net-zero headers, both AFs gained.
+    vrfs:
+      - name: PROD
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
+      - name: DEV
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
     # Tracker recovery dialect (guide: 10s; AVD auto-creates referenced
     # trackers with default 300 AFTER the defaults channel merges — the
     # node-group channel is the one that wins).
@@ -322,6 +372,10 @@ spine:
     bgp_as: 65200
     loopback_ipv4_pool: 10.0.2.0/24
     structured_config:
+      # Guide dialect: isis circuit-type level-2 on loopbacks too.
+      loopback_interfaces:
+        - name: Loopback0
+          eos_cli: isis circuit-type level-2
       router_multicast: "{{ csc_spine_multicast }}"
       router_bgp: "{{ csc_spine_rr.router_bgp }}"
       # Class 20 — see the isis_maximum_paths note above.
@@ -522,6 +576,12 @@ l3leaf:
     virtual_router_mac_address: 00:1c:73:00:00:01
     spanning_tree_mode: mstp
     structured_config:
+      # Guide dialect: isis circuit-type level-2 on loopbacks too.
+      loopback_interfaces:
+        - name: Loopback0
+          eos_cli: isis circuit-type level-2
+        - name: Loopback1
+          eos_cli: isis circuit-type level-2
       dhcp_relay: "{{ custom_vtep_dhcp_relay }}"
       # Class 20 — see the isis_maximum_paths note above.
       router_isis:
