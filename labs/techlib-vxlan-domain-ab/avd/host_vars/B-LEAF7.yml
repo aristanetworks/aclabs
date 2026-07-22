@@ -18,21 +18,53 @@ b_leaf7_gateway_csc:
     peer_groups:
       - name: LOCAL-EVPN-PEERS
         session_tracker: TRACK-LOCAL-EVPN-PEERS
-    address_family_evpn:
-      route:
-        - type: ethernet-segment
-          route_target: auto
-      # Domain B uses ASN 65200 for both Gateway nodes; the `attach` D-PATH
-      # identifier is a per-Gateway *label* (not required to match router ASN).
-      # Convention: `65207:65207` on B-LEAF7 mirrors Domain A's numeric scheme
-      # where the last two digits track the leaf ID.
-      # VERIFY: Domain B's tech-library guide doesn't currently render an
-      # `attach` identifier line — check B-LEAF7.cfg to see if it's present.
-      # If not, remove this override.
-      domain_identifier_attach: '65207:65207'
+    # NOTE: `route type ethernet-segment route-target auto` and
+    # `domain identifier 65207:65207 attach` will be added via raw_eos_cli
+    # in a follow-up commit (no native AVD 6.3 schema for these two lines).
     session_trackers:
       - name: TRACK-LOCAL-EVPN-PEERS
         recovery_delay: 10
+    # Multi-domain MAC-VRFs on VLANs 10 and 70 (shared with Domain A).
+    vlans:
+      - id: 10
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.2.7:10010'
+        route_targets:
+          import_export_evpn_domains:
+            - domain: all
+              route_target: '10010:10010'
+      - id: 70
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.2.7:10070'
+        route_targets:
+          import_export_evpn_domains:
+            - domain: all
+              route_target: '10070:10070'
+    vrfs:
+      - name: PROD
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.2.7:50001'
+        route_targets:
+          import_evpn_domains:
+            - domain: all
+              route_target: '50001:50001'
+          export_evpn_domains:
+            - domain: all
+              route_target: '50001:50001'
+      - name: DEV
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.2.7:50002'
+        route_targets:
+          import_evpn_domains:
+            - domain: all
+              route_target: '50002:50002'
+          export_evpn_domains:
+            - domain: all
+              route_target: '50002:50002'
 
 b_leaf7_hostb8_csc:
   port_channel_interfaces:
@@ -40,6 +72,5 @@ b_leaf7_hostb8_csc:
       bgp:
         session_tracker: TRACK-LOCAL-EVPN-PEERS
 
-structured_config:
-  router_bgp: "{{ b_leaf7_gateway_csc.router_bgp }}"
-  port_channel_interfaces: "{{ b_leaf7_hostb8_csc.port_channel_interfaces }}"
+custom_structured_configuration_router_bgp: "{{ b_leaf7_gateway_csc.router_bgp }}"
+custom_structured_configuration_port_channel_interfaces: "{{ b_leaf7_hostb8_csc.port_channel_interfaces }}"

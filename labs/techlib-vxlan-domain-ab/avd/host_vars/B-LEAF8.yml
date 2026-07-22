@@ -18,14 +18,51 @@ b_leaf8_gateway_csc:
     peer_groups:
       - name: LOCAL-EVPN-PEERS
         session_tracker: TRACK-LOCAL-EVPN-PEERS
-    address_family_evpn:
-      route:
-        - type: ethernet-segment
-          route_target: auto
-      domain_identifier_attach: '65208:65208'
+    # NOTE: same follow-up as B-LEAF7 for the two AVD 6.3 schema gaps.
     session_trackers:
       - name: TRACK-LOCAL-EVPN-PEERS
         recovery_delay: 10
+    # Multi-domain MAC-VRFs on VLANs 10 and 70.
+    vlans:
+      - id: 10
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.2.8:10010'
+        route_targets:
+          import_export_evpn_domains:
+            - domain: all
+              route_target: '10010:10010'
+      - id: 70
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.2.8:10070'
+        route_targets:
+          import_export_evpn_domains:
+            - domain: all
+              route_target: '10070:10070'
+    vrfs:
+      - name: PROD
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.2.8:50001'
+        route_targets:
+          import_evpn_domains:
+            - domain: all
+              route_target: '50001:50001'
+          export_evpn_domains:
+            - domain: all
+              route_target: '50001:50001'
+      - name: DEV
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.2.8:50002'
+        route_targets:
+          import_evpn_domains:
+            - domain: all
+              route_target: '50002:50002'
+          export_evpn_domains:
+            - domain: all
+              route_target: '50002:50002'
 
 b_leaf8_hostb8_csc:
   port_channel_interfaces:
@@ -33,6 +70,5 @@ b_leaf8_hostb8_csc:
       bgp:
         session_tracker: TRACK-LOCAL-EVPN-PEERS
 
-structured_config:
-  router_bgp: "{{ b_leaf8_gateway_csc.router_bgp }}"
-  port_channel_interfaces: "{{ b_leaf8_hostb8_csc.port_channel_interfaces }}"
+custom_structured_configuration_router_bgp: "{{ b_leaf8_gateway_csc.router_bgp }}"
+custom_structured_configuration_port_channel_interfaces: "{{ b_leaf8_hostb8_csc.port_channel_interfaces }}"

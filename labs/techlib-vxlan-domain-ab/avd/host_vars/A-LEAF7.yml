@@ -37,14 +37,60 @@ a_leaf7_gateway_csc:
     peer_groups:
       - name: LOCAL-EVPN-PEERS
         session_tracker: TRACK-EVPN-PEERS
-    address_family_evpn:
-      route:
-        - type: ethernet-segment
-          route_target: auto
-      domain_identifier_attach: '65107:65107'    # VERIFY: schema key for the `attach` D-PATH tag
+    # NOTE: two lines that AVD 6.3's schema doesn't natively express — will
+    # be added via raw_eos_cli in a follow-up commit:
+    #   route type ethernet-segment route-target auto
+    #   domain identifier 65107:65107 attach
     session_trackers:
       - name: TRACK-EVPN-PEERS
         recovery_delay: 10
+    # Multi-domain MAC-VRFs: VLANs 10 and 70 use `rd evpn domain all` +
+    # `route-target import export evpn domain all` (single RD/RT shared
+    # for local + remote). Overrides AVD's default `domain remote`
+    # rendering which uses separate RD/RT for the remote domain.
+    vlans:
+      - id: 10
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.1.7:10010'
+        route_targets:
+          import_export_evpn_domains:
+            - domain: all
+              route_target: '10010:10010'
+      - id: 70
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.1.7:10070'
+        route_targets:
+          import_export_evpn_domains:
+            - domain: all
+              route_target: '10070:10070'
+    # Multi-domain IP-VRFs: PROD (50001) and DEV (50002) use `rd evpn
+    # domain all` + `route-target import|export evpn domain all` on the
+    # L3VNI at the Gateway pair.
+    vrfs:
+      - name: PROD
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.1.7:50001'
+        route_targets:
+          import_evpn_domains:
+            - domain: all
+              route_target: '50001:50001'
+          export_evpn_domains:
+            - domain: all
+              route_target: '50001:50001'
+      - name: DEV
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.1.7:50002'
+        route_targets:
+          import_evpn_domains:
+            - domain: all
+              route_target: '50002:50002'
+          export_evpn_domains:
+            - domain: all
+              route_target: '50002:50002'
 
 # CSC: HostA8 port-channel needs a `bgp session tracker TRACK-EVPN-PEERS`
 # statement. AVD's connected_endpoints doesn't currently expose this;
@@ -55,6 +101,5 @@ a_leaf7_hosta8_csc:
       bgp:
         session_tracker: TRACK-EVPN-PEERS
 
-structured_config:
-  router_bgp: "{{ a_leaf7_gateway_csc.router_bgp }}"
-  port_channel_interfaces: "{{ a_leaf7_hosta8_csc.port_channel_interfaces }}"
+custom_structured_configuration_router_bgp: "{{ a_leaf7_gateway_csc.router_bgp }}"
+custom_structured_configuration_port_channel_interfaces: "{{ a_leaf7_hosta8_csc.port_channel_interfaces }}"
