@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **1705** |
-| MISSING — in the guide, not yet rendered | 706 |
-| EXTRA — rendered, not in the guide | 999 |
+| **Residual total (non-exempt)** | **1597** |
+| MISSING — in the guide, not yet rendered | 666 |
+| EXTRA — rendered, not in the guide | 931 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -28,7 +28,7 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (228 distinct)
+### MISSING — top exact lines (206 distinct)
 
 | count | line |
 |---|---|
@@ -63,7 +63,7 @@ acceptance stays visible.
 | 20× | `ipv#` |
 | 20× | `isis circuit-type level-#` |
 
-### EXTRA — top exact lines (402 distinct)
+### EXTRA — top exact lines (370 distinct)
 
 | count | line |
 |---|---|
@@ -87,7 +87,7 @@ acceptance stays visible.
 
 | count | line |
 |---|---|
-| 80× | `neighbor #.#.#.# remote-as #` |
+| 72× | `neighbor #.#.#.# remote-as #` |
 | 38× | `ipv# enable` |
 | 34× | `vxlan vlan # vni #` |
 | 32× | `neighbor #.#.#.# description A-SPINE#_Ethernet#` |
@@ -127,6 +127,6 @@ acceptance stays visible.
 | B-SPINE3 | 12 | 2 | 14 |
 | B-SPINE4 | 12 | 2 | 14 |
 | B-SW1 | 7 | 20 | 27 |
-| BB1 | 23 | 53 | 76 |
-| BB2 | 23 | 53 | 76 |
-| **TOTAL** | **706** | **999** | **1705** |
+| BB1 | 3 | 19 | 22 |
+| BB2 | 3 | 19 | 22 |
+| **TOTAL** | **666** | **931** | **1597** |
