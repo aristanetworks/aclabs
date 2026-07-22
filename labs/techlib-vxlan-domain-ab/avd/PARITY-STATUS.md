@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **587** |
-| MISSING — in the guide, not yet rendered | 135 |
-| EXTRA — rendered, not in the guide | 452 |
+| **Residual total (non-exempt)** | **529** |
+| MISSING — in the guide, not yet rendered | 91 |
+| EXTRA — rendered, not in the guide | 438 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -29,42 +29,42 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (48 distinct)
+### MISSING — top exact lines (40 distinct)
 
 | count | line |
 |---|---|
 | 17× | `spanning-tree edge-port bpduguard default` |
-| 14× | `no autostate` |
-| 8× | `mtu 9014` |
-| 8× | `address-family ipv4` |
 | 6× | `neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-OUT out` |
 | 6× | `route type ethernet-segment route-target auto` |
-| 4× | `neighbor 192.0.0.1 activate` |
-| 4× | `neighbor 192.0.0.0 activate` |
 | 4× | `no switchport` |
 | 3× | `vxlan vlan 10,70 vni 10010,10070` |
 | 3× | `switchport trunk allowed vlan 40,80` |
-| 2× | `no spanning-tree vlan-id 3001,4093-4094` |
 | 2× | `vxlan vlan 10,30 vni 10010,10030` |
 | 2× | `vlan 10,30` |
-| 2× | `no spanning-tree vlan-id 3001-3002,4093-4094` |
+| 2× | `vxlan vlan 10,30,50 vni 10010,10030,10050` |
+| 2× | `vlan 10,30,50` |
+| 2× | `vlan 50,70` |
+| 2× | `switchport` |
+| 2× | `vxlan vlan 10,50,70 vni 10010,10050,10070` |
+| 2× | `router bfd` |
+| 2× | `multihop interval 1000 min-rx 1000 multiplier 3` |
 
 ### MISSING — top shapes (digits→`#`)
 
 | count | line |
 |---|---|
 | 17× | `spanning-tree edge-port bpduguard default` |
-| 14× | `no autostate` |
 | 10× | `vxlan vlan #,# vni #,#` |
 | 10× | `vlan #,#` |
-| 8× | `mtu #` |
-| 8× | `address-family ipv#` |
-| 8× | `neighbor #.#.#.# activate` |
 | 8× | `network #.#.#.#/#` |
 | 6× | `neighbor MLAG-IPV#-PEER route-map RM-MLAG-PEER-OUT out` |
 | 6× | `route type ethernet-segment route-target auto` |
+| 4× | `vxlan vlan #,#,# vni #,#,#` |
+| 4× | `no switchport` |
+| 3× | `ip address #.#.#.#/#` |
+| 3× | `switchport trunk allowed vlan #,#` |
 
-### EXTRA — top exact lines (138 distinct)
+### EXTRA — top exact lines (136 distinct)
 
 | count | line |
 |---|---|
@@ -76,13 +76,13 @@ acceptance stays visible.
 | 10× | `vxlan vlan 10 vni 10010` |
 | 10× | `vlan internal order ascending range 1006 1199` |
 | 9× | `spanning-tree mst 0 priority 32768` |
-| 8× | `mtu 9114` |
 | 8× | `set origin incomplete` |
 | 8× | `route-map RM-EVPN-SOO-IN deny 10` |
 | 8× | `match extcommunity ECL-EVPN-SOO` |
 | 8× | `route-map RM-EVPN-SOO-IN permit 20` |
 | 8× | `route-map RM-EVPN-SOO-OUT permit 10` |
 | 8× | `neighbor LOCAL-EVPN-PEERS route-map RM-EVPN-SOO-IN in` |
+| 8× | `neighbor LOCAL-EVPN-PEERS route-map RM-EVPN-SOO-OUT out` |
 
 ### EXTRA — top shapes (digits→`#`)
 
@@ -103,12 +103,12 @@ acceptance stays visible.
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 10 | 15 | 25 |
-| A-LEAF2 | 11 | 16 | 27 |
-| A-LEAF3 | 14 | 21 | 35 |
-| A-LEAF4 | 15 | 22 | 37 |
-| A-LEAF5 | 11 | 14 | 25 |
-| A-LEAF6 | 11 | 14 | 25 |
+| A-LEAF1 | 4 | 13 | 17 |
+| A-LEAF2 | 5 | 14 | 19 |
+| A-LEAF3 | 4 | 18 | 22 |
+| A-LEAF4 | 5 | 19 | 24 |
+| A-LEAF5 | 5 | 12 | 17 |
+| A-LEAF6 | 5 | 12 | 17 |
 | A-LEAF7 | 5 | 33 | 38 |
 | A-LEAF8 | 5 | 33 | 38 |
 | A-SPINE1 | 0 | 1 | 1 |
@@ -130,4 +130,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **135** | **452** | **587** |
+| **TOTAL** | **91** | **438** | **529** |

@@ -661,6 +661,8 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
       structured_config:
+        spanning_tree:
+          no_spanning_tree_vlan: '3001,4093-4094'
         # Guide A carries no router-bfd tuning block.
         router_bfd: null
         # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
@@ -696,8 +698,13 @@ l3leaf:
         # multicast. Pod-scoped (defaults-level would create-trap the
         # empty interface onto the Gateway pair).
         vlan_interfaces:
+          # vrf-peering SVI dialect: mtu 9014 + no autostate.
+          - name: Vlan3001
+            mtu: 9014
+            no_autostate: true
           - name: Vlan4093
             pim: null
+            no_autostate: true
           # Class 4a: the guide's MLAG-leaf SVIs run `ip igmp` ALONGSIDE
           # sparse-mode; AVD's OISM forks (vlan_interfaces.py:171) — MLAG
           # leafs get sparse-mode only. Pod-scoped so the multicast-
@@ -727,6 +734,12 @@ l3leaf:
             mlag_configuration:
               peer_address: 169.254.0.2
             router_bgp:
+              vrfs:
+                - name: PROD
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.1
+                        activate: true
               neighbors:
                 - ip_address: 192.168.0.0
                   remote_as: null
@@ -758,6 +771,12 @@ l3leaf:
             mlag_configuration:
               peer_address: 169.254.0.1
             router_bgp:
+              vrfs:
+                - name: PROD
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.0
+                        activate: true
               neighbors:
                 - ip_address: 192.168.0.2
                   remote_as: null
@@ -784,6 +803,8 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
       structured_config:
+        spanning_tree:
+          no_spanning_tree_vlan: '3001-3002,4093-4094'
         # Guide A carries no router-bfd tuning block.
         router_bfd: null
         # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
@@ -817,8 +838,16 @@ l3leaf:
         # multicast. Pod-scoped (defaults-level would create-trap the
         # empty interface onto the Gateway pair).
         vlan_interfaces:
+          # vrf-peering SVI dialect: mtu 9014 + no autostate.
+          - name: Vlan3001
+            mtu: 9014
+            no_autostate: true
+          - name: Vlan3002
+            mtu: 9014
+            no_autostate: true
           - name: Vlan4093
             pim: null
+            no_autostate: true
           # Class 4a: the guide's MLAG-leaf SVIs run `ip igmp` ALONGSIDE
           # sparse-mode; AVD's OISM forks (vlan_interfaces.py:171) — MLAG
           # leafs get sparse-mode only. Pod-scoped so the multicast-
@@ -851,6 +880,17 @@ l3leaf:
             mlag_configuration:
               peer_address: 169.254.0.2
             router_bgp:
+              vrfs:
+                - name: DEV
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.1
+                        activate: true
+                - name: PROD
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.1
+                        activate: true
               neighbors:
                 - ip_address: 192.168.0.4
                   remote_as: null
@@ -882,6 +922,17 @@ l3leaf:
             mlag_configuration:
               peer_address: 169.254.0.1
             router_bgp:
+              vrfs:
+                - name: DEV
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.0
+                        activate: true
+                - name: PROD
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.0
+                        activate: true
               neighbors:
                 - ip_address: 192.168.0.6
                   remote_as: null
@@ -908,6 +959,8 @@ l3leaf:
       filter:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
       structured_config:
+        spanning_tree:
+          no_spanning_tree_vlan: '3002,4093-4094'
         # Guide A carries no router-bfd tuning block.
         router_bfd: null
         # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
@@ -937,8 +990,13 @@ l3leaf:
         # multicast. Pod-scoped (defaults-level would create-trap the
         # empty interface onto the Gateway pair).
         vlan_interfaces:
+          # vrf-peering SVI dialect: mtu 9014 + no autostate.
+          - name: Vlan3002
+            mtu: 9014
+            no_autostate: true
           - name: Vlan4093
             pim: null
+            no_autostate: true
           # Class 4a: the guide's MLAG-leaf SVIs run `ip igmp` ALONGSIDE
           # sparse-mode; AVD's OISM forks (vlan_interfaces.py:171) — MLAG
           # leafs get sparse-mode only. Pod-scoped so the multicast-
@@ -968,6 +1026,12 @@ l3leaf:
             mlag_configuration:
               peer_address: 169.254.0.2
             router_bgp:
+              vrfs:
+                - name: DEV
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.1
+                        activate: true
               neighbors:
                 - ip_address: 192.168.0.8
                   remote_as: null
@@ -999,6 +1063,12 @@ l3leaf:
             mlag_configuration:
               peer_address: 169.254.0.1
             router_bgp:
+              vrfs:
+                - name: DEV
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.0
+                        activate: true
               neighbors:
                 - ip_address: 192.168.0.10
                   remote_as: null
