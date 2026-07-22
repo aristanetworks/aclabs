@@ -222,7 +222,7 @@ interface Vlan4094
    description MLAG PEER SYNC
    mtu 9114
    no autostate
-   ip address 169.254.0.1/30
+   ipv6 address 2001:db8:4094::1/64
 !
 interface Vxlan1
    vxlan source-interface Loopback1
@@ -263,7 +263,7 @@ ipv6 unicast-routing vrf PROD
 mlag configuration
    domain-id 100
    local-interface Vlan4094
-   peer-address 169.254.0.2
+   peer-address 2001:db80:4094::2
    peer-link Port-Channel1000
 !
 mld snooping

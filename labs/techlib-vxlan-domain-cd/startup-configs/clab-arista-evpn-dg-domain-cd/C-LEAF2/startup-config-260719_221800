@@ -194,7 +194,7 @@ interface Vlan4094
    description MLAG PEER SYNC
    mtu 9114
    no autostate
-   ip address 169.254.0.2/30
+   ipv6 address 2001:db8:4094::2/64
 !
 interface Vxlan1
    vxlan source-interface Loopback1
@@ -231,7 +231,7 @@ ipv6 unicast-routing vrf PROD
 mlag configuration
    domain-id 100
    local-interface Vlan4094
-   peer-address 169.254.0.1
+   peer-address 2001:db80:4094::1
    peer-link Port-Channel1000
 !
 mld snooping
@@ -284,16 +284,10 @@ router bgp 65301
    neighbor LOCAL-IPV6-PEERS bfd
    neighbor LOCAL-IPV6-PEERS peer-tag in SPINES
    neighbor LOCAL-IPV6-PEERS peer-tag out discard SPINES
-   neighbor MLAG-IPV4-PEER peer group
-   neighbor MLAG-IPV4-PEER remote-as 65301
-   neighbor MLAG-IPV4-PEER next-hop-self
-   neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-OUT out
    neighbor MLAG-IPV6-PEER peer group
    neighbor MLAG-IPV6-PEER remote-as 65301
    neighbor MLAG-IPV6-PEER next-hop-self
    neighbor MLAG-IPV6-PEER route-map RM-MLAG-PEER-OUT out
-   neighbor 192.0.0.0 peer group MLAG-IPV4-PEER
-   neighbor 192.0.0.0 description C-LEAF1.IPV4
    neighbor 2001:db8:c0::201 peer group LOCAL-EVPN-PEERS
    neighbor 2001:db8:c0::201 description C-SPINE1.EVPN
    neighbor 2001:db8:c0::202 peer group LOCAL-EVPN-PEERS
@@ -327,6 +321,10 @@ router bgp 65301
       neighbor LOCAL-EVPN-PEERS activate
       route import match-failure action discard
    !
+   address-family ipv4
+      neighbor MLAG-IPV6-PEER activate
+      neighbor MLAG-IPV6-PEER next-hop address-family ipv6 originate
+   !
    address-family ipv6
       neighbor LOCAL-IPV6-PEERS activate
       neighbor MLAG-IPV6-PEER activate
@@ -336,11 +334,8 @@ router bgp 65301
       route-target import evpn 50001:50001
       route-target export evpn 50001:50001
       update wait-install
-      neighbor 192.0.0.0 peer group MLAG-IPV4-PEER
+      neighbor 2001:db8:3001::1 peer group MLAG-IPV6-PEER
       redistribute connected route-map RM-CONN-2-BGP-VRFS
-      !
-      address-family ipv4
-         neighbor 192.0.0.0 activate
       !
       evpn multicast
          address-family ipv4
