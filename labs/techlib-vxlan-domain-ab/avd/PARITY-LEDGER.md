@@ -127,7 +127,8 @@ regenerated PARITY-STATUS):
 | 446ad25 | remote-as dialect: group remote-as on LOCAL-* (A leafs), per-neighbor kills via node channel + gateway DCI anchors | 949 |
 | a8239f8 | sweep S1: member/routed-port `no switchport` ×28 pod-scoped (4 deferred to endpoints refresh) | 921 |
 | 277c4bf | sweep S2: `switchport mode access` nulls ×20 on access POs + A3/4 Eth7 (3 deferred to refresh) | 901 |
-| (this) | endpoints/services refresh: B3/4 DEV via per-node filters (60 Red / 70 Brown), HostB3→single + HostB9 single, HostB4→BLUE, HostA7→POD3 MLAG Po8; DESIGN.md B rows verified | **805** |
+| 05d47fa | endpoints/services refresh: B3/4 DEV via per-node filters (60 Red / 70 Brown), HostB3→single + HostB9 single, HostB4→BLUE, HostA7→POD3 MLAG Po8; DESIGN.md B rows verified | 805 |
+| (this) | ES/LACP style: `identifier auto lacp` + route-target null + session tracker (profile-level), per-host `lacp system-id` (adapter-level), B-SW1 uplink Po pod-scoped; HostA8 duplicate-key fallback block removed | **735** |
 
 **Landmines banked (crown jewel):** (1) The models' `platform: cEOS-LAB`
 does NOT match AVD 6.3's built-in CEOS platform entry (matcher lacks the
@@ -171,6 +172,17 @@ decisions; passed schema + renderer); eos_config_future/cli-gen inputs
 must ride INSIDE structured config; merge-by-name interface CSC on
 node-type defaults. **Phantom found:** `underlay_ipv4_unnumbered` was
 set since the initial build but does not exist in the 6.3.0 schema.
+
+**Landmines banked (ES/LACP class):** The duplicate-YAML-key landmine
+struck AGAIN same-day, this time on an ADAPTER: the HostA8 adapter
+already carried a `port_channel:` key (a stale lacp_fallback block with
+a VERIFY comment from the original design pass), and the appended
+second `port_channel:` key silently lost to it. The tell was one node
+pair keeping a derived value the others dropped. Rule generalizes:
+before appending any key to a node entry, adapter, or profile, grep
+the block for an existing key of that name. Also: `lacp_fallback.mode`
+alone renders BOTH fallback lines (`timeout 90` is a cli-gen default —
+the YAML need not contain it to produce it).
 
 **Landmines banked (remote-as dialect):** (1) A SECOND `structured_config`
 key on a node entry is a DUPLICATE YAML KEY — the loader keeps one and

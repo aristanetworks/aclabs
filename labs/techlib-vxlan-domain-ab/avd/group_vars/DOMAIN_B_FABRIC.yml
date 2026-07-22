@@ -640,6 +640,17 @@ l3leaf:
       filter:
         tags: ['PURPLE', 'BLACK']
       structured_config:
+        # ES/LACP style on the B-SW1 uplink Po (l2leaf parent side) —
+        # same guide dialect as the endpoint profiles; pod-scoped since
+        # the l2leaf uplink Po is generated, not adapter-driven.
+        port_channel_interfaces:
+          - name: Port-Channel7
+            lacp_id: c0d6.8200.0506
+            bgp:
+              session_tracker: TRACK-LOCAL-EVPN-PEERS
+            evpn_ethernet_segment:
+              identifier: auto lacp
+              route_target: null
         # Sweep S1: member-port `no switchport` per guide; B3/4 Eth7 deferred to the
         # endpoints refresh (single-vs-dual-homing gap).
         ethernet_interfaces:

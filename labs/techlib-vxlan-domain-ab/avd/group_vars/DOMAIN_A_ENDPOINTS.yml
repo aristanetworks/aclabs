@@ -67,8 +67,15 @@ port_profiles:
     mode: access
     spanning_tree_portfast: edge
     vlans: '50'
+    # ES/LACP style per guide — A Gateway tracker name differs.
     port_channel:
       mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+          route_target: null
+        bgp:
+          session_tracker: TRACK-EVPN-PEERS
     # VERIFY: EVPN Ethernet Segment (Type-1 auto-ESI) on the port-channel.
     # AVD schema for connected_endpoints + ethernet_segment TBD; may need CSC.
     ethernet_segment:
@@ -153,9 +160,10 @@ servers:
         switch_ports: [Ethernet9, Ethernet9]
         switches: [A-LEAF7, A-LEAF8]
         profile: PROF-YELLOW-EVPN-AA
-        # VERIFY: shared LACP system-id across the Gateway pair. AVD schema key
-        # for per-endpoint lacp system-id TBD; may need CSC on both A-LEAF7 and
-        # A-LEAF8 host_vars.
+        # lacp system-id rides port_channel.structured_config (proven on
+        # the B adapters); the old lacp_fallback block was guide-absent and
+        # its duplicate port_channel key was silently eating this one —
+        # same landmine as the Gateway node entries, now on an adapter.
         port_channel:
-          lacp_fallback:
-            mode: static
+          structured_config:
+            lacp_id: c0d6.8200.0000

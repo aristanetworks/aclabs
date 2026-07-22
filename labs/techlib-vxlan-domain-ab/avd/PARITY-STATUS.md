@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **805** |
-| MISSING — in the guide, not yet rendered | 261 |
-| EXTRA — rendered, not in the guide | 544 |
+| **Residual total (non-exempt)** | **735** |
+| MISSING — in the guide, not yet rendered | 227 |
+| EXTRA — rendered, not in the guide | 508 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -29,7 +29,7 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (75 distinct)
+### MISSING — top exact lines (68 distinct)
 
 | count | line |
 |---|---|
@@ -38,16 +38,16 @@ acceptance stays visible.
 | 18× | `address-family ipv6` |
 | 17× | `spanning-tree edge-port bpduguard default` |
 | 14× | `no autostate` |
-| 12× | `identifier auto lacp` |
 | 8× | `mtu 9014` |
 | 8× | `address-family ipv4` |
-| 8× | `bgp session tracker TRACK-LOCAL-EVPN-PEERS` |
 | 6× | `domain-id 100` |
 | 6× | `neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-OUT out` |
-| 6× | `lacp system-id c0d6.8200.0000` |
 | 6× | `route type ethernet-segment route-target auto` |
 | 6× | `recovery delay 10 seconds` |
 | 4× | `neighbor 192.0.0.1 activate` |
+| 4× | `neighbor 192.0.0.0 activate` |
+| 4× | `no switchport` |
+| 4× | `neighbor REMOTE-EVPN-PEERS remote-as 65000` |
 
 ### MISSING — top shapes (digits→`#`)
 
@@ -57,14 +57,14 @@ acceptance stays visible.
 | 20× | `isis circuit-type level-#` |
 | 17× | `spanning-tree edge-port bpduguard default` |
 | 14× | `no autostate` |
-| 12× | `identifier auto lacp` |
-| 12× | `lacp system-id c#d#.#.#` |
 | 12× | `net #.#.#.#.#.#` |
 | 10× | `vxlan vlan #,# vni #,#` |
 | 10× | `vlan #,#` |
 | 9× | `ip address #.#.#.#/#` |
+| 8× | `mtu #` |
+| 8× | `address-family ipv#` |
 
-### EXTRA — top exact lines (177 distinct)
+### EXTRA — top exact lines (158 distinct)
 
 | count | line |
 |---|---|
@@ -109,20 +109,20 @@ acceptance stays visible.
 | A-LEAF4 | 22 | 27 | 49 |
 | A-LEAF5 | 16 | 19 | 35 |
 | A-LEAF6 | 16 | 19 | 35 |
-| A-LEAF7 | 6 | 39 | 45 |
-| A-LEAF8 | 6 | 39 | 45 |
+| A-LEAF7 | 4 | 33 | 37 |
+| A-LEAF8 | 4 | 33 | 37 |
 | A-SPINE1 | 0 | 3 | 3 |
 | A-SPINE2 | 0 | 3 | 3 |
 | A-SPINE3 | 0 | 3 | 3 |
 | A-SPINE4 | 0 | 3 | 3 |
-| B-LEAF1 | 16 | 25 | 41 |
-| B-LEAF2 | 16 | 25 | 41 |
-| B-LEAF3 | 15 | 28 | 43 |
-| B-LEAF4 | 15 | 28 | 43 |
-| B-LEAF5 | 17 | 23 | 40 |
-| B-LEAF6 | 17 | 23 | 40 |
-| B-LEAF7 | 13 | 52 | 65 |
-| B-LEAF8 | 13 | 52 | 65 |
+| B-LEAF1 | 10 | 19 | 29 |
+| B-LEAF2 | 10 | 19 | 29 |
+| B-LEAF3 | 12 | 25 | 37 |
+| B-LEAF4 | 12 | 25 | 37 |
+| B-LEAF5 | 13 | 23 | 36 |
+| B-LEAF6 | 13 | 23 | 36 |
+| B-LEAF7 | 11 | 49 | 60 |
+| B-LEAF8 | 11 | 49 | 60 |
 | B-SPINE1 | 2 | 2 | 4 |
 | B-SPINE2 | 2 | 2 | 4 |
 | B-SPINE3 | 2 | 2 | 4 |
@@ -130,4 +130,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **261** | **544** | **805** |
+| **TOTAL** | **227** | **508** | **735** |
