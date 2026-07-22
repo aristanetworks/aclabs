@@ -125,7 +125,8 @@ regenerated PARITY-STATUS):
 | 57a15cd | class 4a: MLAG-leaf SVI `ip igmp` (guide runs igmp+sparse-mode; AVD's OISM forks on MLAG) | 1,089 |
 | e2e5830 | class 4c: the IPv6/MLD leg — SVI `mld`, global `mld snooping`, `vxlan multicast ipv6`, PROD overlay mapping, router-multicast VRF ipv6 re-entries | 1,029 |
 | 446ad25 | remote-as dialect: group remote-as on LOCAL-* (A leafs), per-neighbor kills via node channel + gateway DCI anchors | 949 |
-| (this) | sweep S1: member/routed-port `no switchport` ×28 pod-scoped (4 deferred to endpoints refresh) | **921** |
+| a8239f8 | sweep S1: member/routed-port `no switchport` ×28 pod-scoped (4 deferred to endpoints refresh) | 921 |
+| (this) | sweep S2: `switchport mode access` nulls ×20 on access POs + A3/4 Eth7 (3 deferred to refresh) | **901** |
 
 **Landmines banked (crown jewel):** (1) The models' `platform: cEOS-LAB`
 does NOT match AVD 6.3's built-in CEOS platform entry (matcher lacks the

@@ -534,6 +534,15 @@ l3leaf:
       filter:
         tags: ['GREEN', 'PURPLE']
       structured_config:
+        # Sweep S2: null the emitted `switchport mode access` per guide dialect.
+        # B3/4 Po7 deferred (rend-only, dies in the endpoints refresh).
+        port_channel_interfaces:
+          - name: Port-Channel7
+            switchport:
+              mode: null
+          - name: Port-Channel8
+            switchport:
+              mode: null
         # Sweep S1: member-port `no switchport` per guide; B3/4 Eth7 deferred to the
         # endpoints refresh (single-vs-dual-homing gap).
         ethernet_interfaces:
@@ -572,6 +581,12 @@ l3leaf:
       filter:
         tags: ['BLUE', 'PURPLE']
       structured_config:
+        # Sweep S2: null the emitted `switchport mode access` per guide dialect.
+        # B3/4 Po7 deferred (rend-only, dies in the endpoints refresh).
+        port_channel_interfaces:
+          - name: Port-Channel8
+            switchport:
+              mode: null
         # Sweep S1: member-port `no switchport` per guide; B3/4 Eth7 deferred to the
         # endpoints refresh (single-vs-dual-homing gap).
         ethernet_interfaces:
@@ -664,6 +679,12 @@ l3leaf:
       filter:
         tags: ['BLUE', 'RED', 'BROWN']              # VLANs 10, 60 (local, HostB8), 70
       structured_config:
+        # Sweep S2: null the emitted `switchport mode access` per guide dialect.
+        # B3/4 Po7 deferred (rend-only, dies in the endpoints refresh).
+        port_channel_interfaces:
+          - name: Port-Channel9
+            switchport:
+              mode: null
         router_bgp: "{{ custom_evpn_gw_bgp_config }}"
         prefix_lists: "{{ custom_evpn_gw_prefix_lists }}"
         route_maps: "{{ custom_evpn_gw_route_maps }}"

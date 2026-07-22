@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **921** |
+| **Residual total (non-exempt)** | **901** |
 | MISSING — in the guide, not yet rendered | 333 |
-| EXTRA — rendered, not in the guide | 588 |
+| EXTRA — rendered, not in the guide | 568 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -69,7 +69,6 @@ acceptance stays visible.
 | count | line |
 |---|---|
 | 38× | `ipv6 enable` |
-| 26× | `switchport mode access` |
 | 19× | `router multicast` |
 | 16× | `vrf PROD` |
 | 14× | `spanning-tree bpduguard enable` |
@@ -83,6 +82,7 @@ acceptance stays visible.
 | 8× | `set origin incomplete` |
 | 8× | `route-map RM-EVPN-SOO-IN deny 10` |
 | 8× | `match extcommunity ECL-EVPN-SOO` |
+| 8× | `route-map RM-EVPN-SOO-IN permit 20` |
 
 ### EXTRA — top shapes (digits→`#`)
 
@@ -90,7 +90,6 @@ acceptance stays visible.
 |---|---|
 | 38× | `ipv# enable` |
 | 34× | `vxlan vlan # vni #` |
-| 26× | `switchport mode access` |
 | 24× | `router-id #.#.#.#` |
 | 19× | `router multicast` |
 | 17× | `ip address #.#.#.#/#` |
@@ -98,31 +97,32 @@ acceptance stays visible.
 | 14× | `spanning-tree bpduguard enable` |
 | 14× | `ip address virtual source-nat vrf PROD address #.#.#.#` |
 | 13× | `rd #.#.#.#:#` |
+| 12× | `router bfd` |
 
 ## Per-node residual
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 15 | 22 | 37 |
-| A-LEAF2 | 16 | 23 | 39 |
-| A-LEAF3 | 21 | 28 | 49 |
-| A-LEAF4 | 22 | 29 | 51 |
-| A-LEAF5 | 19 | 21 | 40 |
-| A-LEAF6 | 23 | 19 | 42 |
-| A-LEAF7 | 6 | 40 | 46 |
-| A-LEAF8 | 6 | 40 | 46 |
+| A-LEAF1 | 15 | 20 | 35 |
+| A-LEAF2 | 16 | 21 | 37 |
+| A-LEAF3 | 21 | 26 | 47 |
+| A-LEAF4 | 22 | 27 | 49 |
+| A-LEAF5 | 19 | 20 | 39 |
+| A-LEAF6 | 23 | 18 | 41 |
+| A-LEAF7 | 6 | 39 | 45 |
+| A-LEAF8 | 6 | 39 | 45 |
 | A-SPINE1 | 0 | 3 | 3 |
 | A-SPINE2 | 0 | 3 | 3 |
 | A-SPINE3 | 0 | 3 | 3 |
 | A-SPINE4 | 0 | 3 | 3 |
-| B-LEAF1 | 16 | 27 | 43 |
-| B-LEAF2 | 16 | 27 | 43 |
-| B-LEAF3 | 46 | 41 | 87 |
-| B-LEAF4 | 46 | 41 | 87 |
+| B-LEAF1 | 16 | 25 | 41 |
+| B-LEAF2 | 16 | 25 | 41 |
+| B-LEAF3 | 46 | 40 | 86 |
+| B-LEAF4 | 46 | 40 | 86 |
 | B-LEAF5 | 17 | 23 | 40 |
 | B-LEAF6 | 17 | 23 | 40 |
-| B-LEAF7 | 13 | 53 | 66 |
-| B-LEAF8 | 13 | 53 | 66 |
+| B-LEAF7 | 13 | 52 | 65 |
+| B-LEAF8 | 13 | 52 | 65 |
 | B-SPINE1 | 2 | 2 | 4 |
 | B-SPINE2 | 2 | 2 | 4 |
 | B-SPINE3 | 2 | 2 | 4 |
@@ -130,4 +130,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **333** | **588** | **921** |
+| **TOTAL** | **333** | **568** | **901** |

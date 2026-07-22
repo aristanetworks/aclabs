@@ -624,6 +624,16 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
       structured_config:
+        # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
+        # line (access is default; the guide doesn't save it). Null the
+        # emitted mode.
+        port_channel_interfaces:
+          - name: Port-Channel7
+            switchport:
+              mode: null
+          - name: Port-Channel8
+            switchport:
+              mode: null
         # Sweep S1: guide keeps explicit `no switchport` on channel members and
         # single-homed routed ports; AVD omits it on members. A5/6 Eth8
         # deferred to the endpoints refresh (dual-homing gap).
@@ -720,6 +730,13 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
       structured_config:
+        # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
+        # line (access is default; the guide doesn't save it). Null the
+        # emitted mode.
+        port_channel_interfaces:
+          - name: Port-Channel8
+            switchport:
+              mode: null
         # Sweep S1: guide keeps explicit `no switchport` on channel members and
         # single-homed routed ports; AVD omits it on members. A5/6 Eth8
         # deferred to the endpoints refresh (dual-homing gap).
@@ -733,6 +750,10 @@ l3leaf:
           - name: Ethernet8
             switchport:
               enabled: false
+          # Sweep S2: single-homed access port — guide saves no mode line.
+          - name: Ethernet7
+            switchport:
+              mode: null
         # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
         prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
         # Class 4b: the guide runs NO PIM on the MLAG L3 peer VLAN
@@ -816,6 +837,13 @@ l3leaf:
       filter:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
       structured_config:
+        # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
+        # line (access is default; the guide doesn't save it). Null the
+        # emitted mode.
+        port_channel_interfaces:
+          - name: Port-Channel7
+            switchport:
+              mode: null
         # Sweep S1: guide keeps explicit `no switchport` on channel members and
         # single-homed routed ports; AVD omits it on members. A5/6 Eth8
         # deferred to the endpoints refresh (dual-homing gap).
@@ -939,6 +967,13 @@ l3leaf:
             ip_address: 10.0.0.2
             bgp_as: 65000
       structured_config:
+        # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
+        # line (access is default; the guide doesn't save it). Null the
+        # emitted mode.
+        port_channel_interfaces:
+          - name: Port-Channel9
+            switchport:
+              mode: null
         router_bgp: "{{ custom_evpn_gw_bgp_config }}"
         prefix_lists: "{{ custom_evpn_gw_prefix_lists }}"
         route_maps: "{{ custom_evpn_gw_route_maps }}"
