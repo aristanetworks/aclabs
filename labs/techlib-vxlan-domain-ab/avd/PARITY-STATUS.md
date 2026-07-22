@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **1327** |
-| MISSING — in the guide, not yet rendered | 601 |
-| EXTRA — rendered, not in the guide | 726 |
+| **Residual total (non-exempt)** | **1293** |
+| MISSING — in the guide, not yet rendered | 591 |
+| EXTRA — rendered, not in the guide | 702 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -28,7 +28,7 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (197 distinct)
+### MISSING — top exact lines (192 distinct)
 
 | count | line |
 |---|---|
@@ -63,7 +63,7 @@ acceptance stays visible.
 | 20× | `isis circuit-type level-#` |
 | 17× | `spanning-tree edge-port bpduguard default` |
 
-### EXTRA — top exact lines (315 distinct)
+### EXTRA — top exact lines (299 distinct)
 
 | count | line |
 |---|---|
@@ -95,8 +95,8 @@ acceptance stays visible.
 | 26× | `switchport mode access` |
 | 24× | `router-id #.#.#.#` |
 | 17× | `ip address #.#.#.#/#` |
-| 17× | `rd #.#.#.#:#` |
 | 14× | `spanning-tree bpduguard enable` |
+| 14× | `ip address virtual source-nat vrf PROD address #.#.#.#` |
 
 ## Per-node residual
 
@@ -120,8 +120,8 @@ acceptance stays visible.
 | B-LEAF4 | 54 | 39 | 93 |
 | B-LEAF5 | 27 | 20 | 47 |
 | B-LEAF6 | 27 | 20 | 47 |
-| B-LEAF7 | 18 | 65 | 83 |
-| B-LEAF8 | 18 | 65 | 83 |
+| B-LEAF7 | 13 | 53 | 66 |
+| B-LEAF8 | 13 | 53 | 66 |
 | B-SPINE1 | 12 | 2 | 14 |
 | B-SPINE2 | 12 | 2 | 14 |
 | B-SPINE3 | 12 | 2 | 14 |
@@ -129,4 +129,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **601** | **726** | **1327** |
+| **TOTAL** | **591** | **702** | **1293** |

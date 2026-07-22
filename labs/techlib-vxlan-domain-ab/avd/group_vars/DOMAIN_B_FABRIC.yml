@@ -15,6 +15,15 @@
 
 fabric_name: DOMAIN_B_FABRIC
 
+# Class 3 enabler — same custom cEOS-LAB platform entry as Domain A
+# (see DOMAIN_A_FABRIC.yml for the full hyphen-matcher landmine note).
+custom_platform_settings:
+  - platforms: ['cEOS-LAB']
+    feature_support:
+      queue_monitor_length_notify: false
+      evpn_gateway_all_active_multihoming: true
+      evpn_gateway_rd_rt_rewrite: true
+
 # Suppress the AVD-default `transceiver qsfp default-mode 4x10G` line on
 # spines/leafs. Tech-library doesn't render this on Domain B nodes.
 custom_structured_configuration_transceiver_qsfp_default_mode_4x10: null
@@ -59,6 +68,11 @@ bgp_peer_groups:
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
     bfd: true
+    structured_config:
+      # Class 8 dialect (see DOMAIN_A_FABRIC.yml core-group note).
+      send_community: null
+      maximum_routes: null
+      ebgp_multihop: null
 
 evpn_ebgp_multihop: 3
 
@@ -131,18 +145,13 @@ custom_evpn_gw_bgp_config:
       # `no bgp default ipv4-unicast`, same dialect as the rest of the fabric.
       - name: LOCAL-EVPN-PEERS
         activate: null
-  address_family_evpn:
-    domain_identifier: '2:2'
-    domain_identifier_remote: '99:99'
-  bgp:
-    bestpath:
-      d_path: true
+  # Class 3: domain identifiers + bestpath d-path now native (B_GATEWAY's
+  # d_path/all_active_multihoming); the REMOTE-IPV4-PEERS password and
+  # send-community died with the swap (guide carries neither).
   peer_groups:
     - name: REMOTE-IPV4-PEERS
-      password: dkvBq1jk4inJHsHfMjYRnQ==
       remote_as: 65000
       route_map_out: RM-AS65000-IPV4-OUT
-      send_community: all
     - name: REMOTE-EVPN-PEERS
       local_as: 65000
     - name: LOCAL-EVPN-PEERS
@@ -461,10 +470,19 @@ l3leaf:
     - group: B_GATEWAY
       mlag: false
       evpn_gateway:
+        all_active_multihoming:
+          enabled: true
+          evpn_ethernet_segment:
+            identifier: '0000:bbbb:0007:0008:0000'
+            rt_import: '00:bb:bb:07:08:00'
+        d_path:
+          local_domain_id: '2:2'
+          remote_domain_id: '99:99'
         evpn_l2:
           enabled: true
         evpn_l3:
           enabled: true
+          mode: rd-rt-rewrite
         remote_peers:
           - hostname: BB1
             ip_address: 10.0.0.1

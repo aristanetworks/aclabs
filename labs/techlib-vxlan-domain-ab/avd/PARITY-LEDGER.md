@@ -110,7 +110,8 @@ regenerated PARITY-STATUS):
 | 8b6c444 | class 20: maximum-paths map — A leafs 128, B spines suppressed, B isis-AF suppressed | 1,705 |
 | 6eb7344 | backbone rewrite: dynamic listen-range RR model (EVPN-GW-PEERS / IP-TRANSPORT-CLIENTS / DC-ASN-RANGE) | 1,597 |
 | 7da8ea1 | class 7: PL-LOOPBACKS dialect — knob-false + CSC-owned redistribute objects, POD seq-30 union | 1,499 |
-| (this) | CROWN JEWEL pt.1 (A-side): native evpn_gateway all_active_multihoming + d_path + rd-rt-rewrite | **1,327** |
+| 370f885 | CROWN JEWEL pt.1 (A-side): native evpn_gateway all_active_multihoming + d_path + rd-rt-rewrite | 1,327 |
+| (this) | CROWN JEWEL pt.2 (B-side mirror): native model + attach-ASN fix — ALL FOUR password 7 renders dead | **1,293** |
 
 **Landmines banked (crown jewel):** (1) The models' `platform: cEOS-LAB`
 does NOT match AVD 6.3's built-in CEOS platform entry (matcher lacks the
