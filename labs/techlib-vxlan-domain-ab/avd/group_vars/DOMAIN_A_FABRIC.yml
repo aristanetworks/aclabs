@@ -624,6 +624,22 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
       structured_config:
+        # Sweep S1: guide keeps explicit `no switchport` on channel members and
+        # single-homed routed ports; AVD omits it on members. A5/6 Eth8
+        # deferred to the endpoints refresh (dual-homing gap).
+        ethernet_interfaces:
+          - name: Ethernet5
+            switchport:
+              enabled: false
+          - name: Ethernet6
+            switchport:
+              enabled: false
+          - name: Ethernet7
+            switchport:
+              enabled: false
+          - name: Ethernet8
+            switchport:
+              enabled: false
         # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
         prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
         # Class 4b: the guide runs NO PIM on the MLAG L3 peer VLAN
@@ -704,6 +720,19 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
       structured_config:
+        # Sweep S1: guide keeps explicit `no switchport` on channel members and
+        # single-homed routed ports; AVD omits it on members. A5/6 Eth8
+        # deferred to the endpoints refresh (dual-homing gap).
+        ethernet_interfaces:
+          - name: Ethernet5
+            switchport:
+              enabled: false
+          - name: Ethernet6
+            switchport:
+              enabled: false
+          - name: Ethernet8
+            switchport:
+              enabled: false
         # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
         prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
         # Class 4b: the guide runs NO PIM on the MLAG L3 peer VLAN
@@ -787,6 +816,19 @@ l3leaf:
       filter:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
       structured_config:
+        # Sweep S1: guide keeps explicit `no switchport` on channel members and
+        # single-homed routed ports; AVD omits it on members. A5/6 Eth8
+        # deferred to the endpoints refresh (dual-homing gap).
+        ethernet_interfaces:
+          - name: Ethernet5
+            switchport:
+              enabled: false
+          - name: Ethernet6
+            switchport:
+              enabled: false
+          - name: Ethernet7
+            switchport:
+              enabled: false
         # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
         prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
         # Class 4b: the guide runs NO PIM on the MLAG L3 peer VLAN

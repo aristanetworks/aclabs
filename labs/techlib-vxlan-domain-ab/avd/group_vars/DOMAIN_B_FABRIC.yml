@@ -318,6 +318,11 @@ spine:
           # Gateway pair) with the unnumbered local-interface form.
           # local-interface is NOT in cli_config_gen's ethernet pim
           # schema (vlan-only key) — eos_cli carries that one line.
+          # Sweep: the guide's spine transit blocks carry explicit
+          # `no switchport`; these CSC-created entries render only what
+          # they set.
+          switchport:
+            enabled: false
           pim:
             ipv4:
               sparse_mode: true
@@ -332,6 +337,11 @@ spine:
           # Gateway pair) with the unnumbered local-interface form.
           # local-interface is NOT in cli_config_gen's ethernet pim
           # schema (vlan-only key) — eos_cli carries that one line.
+          # Sweep: the guide's spine transit blocks carry explicit
+          # `no switchport`; these CSC-created entries render only what
+          # they set.
+          switchport:
+            enabled: false
           pim:
             ipv4:
               sparse_mode: true
@@ -346,6 +356,11 @@ spine:
           # Gateway pair) with the unnumbered local-interface form.
           # local-interface is NOT in cli_config_gen's ethernet pim
           # schema (vlan-only key) — eos_cli carries that one line.
+          # Sweep: the guide's spine transit blocks carry explicit
+          # `no switchport`; these CSC-created entries render only what
+          # they set.
+          switchport:
+            enabled: false
           pim:
             ipv4:
               sparse_mode: true
@@ -360,6 +375,11 @@ spine:
           # Gateway pair) with the unnumbered local-interface form.
           # local-interface is NOT in cli_config_gen's ethernet pim
           # schema (vlan-only key) — eos_cli carries that one line.
+          # Sweep: the guide's spine transit blocks carry explicit
+          # `no switchport`; these CSC-created entries render only what
+          # they set.
+          switchport:
+            enabled: false
           pim:
             ipv4:
               sparse_mode: true
@@ -374,6 +394,11 @@ spine:
           # Gateway pair) with the unnumbered local-interface form.
           # local-interface is NOT in cli_config_gen's ethernet pim
           # schema (vlan-only key) — eos_cli carries that one line.
+          # Sweep: the guide's spine transit blocks carry explicit
+          # `no switchport`; these CSC-created entries render only what
+          # they set.
+          switchport:
+            enabled: false
           pim:
             ipv4:
               sparse_mode: true
@@ -388,6 +413,11 @@ spine:
           # Gateway pair) with the unnumbered local-interface form.
           # local-interface is NOT in cli_config_gen's ethernet pim
           # schema (vlan-only key) — eos_cli carries that one line.
+          # Sweep: the guide's spine transit blocks carry explicit
+          # `no switchport`; these CSC-created entries render only what
+          # they set.
+          switchport:
+            enabled: false
           pim:
             ipv4:
               sparse_mode: true
@@ -402,6 +432,11 @@ spine:
           # Gateway pair) with the unnumbered local-interface form.
           # local-interface is NOT in cli_config_gen's ethernet pim
           # schema (vlan-only key) — eos_cli carries that one line.
+          # Sweep: the guide's spine transit blocks carry explicit
+          # `no switchport`; these CSC-created entries render only what
+          # they set.
+          switchport:
+            enabled: false
           pim:
             ipv4:
               sparse_mode: true
@@ -416,6 +451,11 @@ spine:
           # Gateway pair) with the unnumbered local-interface form.
           # local-interface is NOT in cli_config_gen's ethernet pim
           # schema (vlan-only key) — eos_cli carries that one line.
+          # Sweep: the guide's spine transit blocks carry explicit
+          # `no switchport`; these CSC-created entries render only what
+          # they set.
+          switchport:
+            enabled: false
           pim:
             ipv4:
               sparse_mode: true
@@ -494,6 +534,15 @@ l3leaf:
       filter:
         tags: ['GREEN', 'PURPLE']
       structured_config:
+        # Sweep S1: member-port `no switchport` per guide; B3/4 Eth7 deferred to the
+        # endpoints refresh (single-vs-dual-homing gap).
+        ethernet_interfaces:
+          - name: Ethernet7
+            switchport:
+              enabled: false
+          - name: Ethernet8
+            switchport:
+              enabled: false
         vlan_interfaces:
           - name: Vlan20
             eos_cli: mld
@@ -523,6 +572,12 @@ l3leaf:
       filter:
         tags: ['BLUE', 'PURPLE']
       structured_config:
+        # Sweep S1: member-port `no switchport` per guide; B3/4 Eth7 deferred to the
+        # endpoints refresh (single-vs-dual-homing gap).
+        ethernet_interfaces:
+          - name: Ethernet8
+            switchport:
+              enabled: false
         vlan_interfaces:
           - name: Vlan10
             eos_cli: mld
@@ -552,6 +607,12 @@ l3leaf:
       filter:
         tags: ['PURPLE', 'BLACK']
       structured_config:
+        # Sweep S1: member-port `no switchport` per guide; B3/4 Eth7 deferred to the
+        # endpoints refresh (single-vs-dual-homing gap).
+        ethernet_interfaces:
+          - name: Ethernet7
+            switchport:
+              enabled: false
         vlan_interfaces:
           - name: Vlan40
             eos_cli: mld
