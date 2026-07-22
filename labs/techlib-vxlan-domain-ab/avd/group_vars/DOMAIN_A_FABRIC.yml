@@ -215,6 +215,7 @@ custom_evpn_gw_bgp_config:
       remote_as: 65000
       route_map_out: RM-AS65000-IPV4-OUT
     - name: REMOTE-EVPN-PEERS
+      remote_as: 65000
       local_as: 65000
       # Note: the REMOTE-EVPN-PEERS peer-group is created by evpn_gateway.remote_peers;
       # local_as is layered on top here so the AS 65107/65108 Gateway can peer with the

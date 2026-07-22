@@ -125,6 +125,8 @@ custom_vtep_bgp_session_tracker:
         enabled: true
     session_trackers:
       - name: TRACK-LOCAL-EVPN-PEERS
+        # Guide dialect: fast recovery (AVD default is 300s).
+        recovery_delay: 10
         recovery_delay: 300
 
 ###################################################
@@ -154,6 +156,7 @@ custom_evpn_gw_bgp_config:
       route_map_out: RM-AS65000-IPV4-OUT
     - name: REMOTE-EVPN-PEERS
       local_as: 65000
+      remote_as: 65000
     - name: LOCAL-EVPN-PEERS
       route_reflector_client: true
       # Domain B's Gateway pair reflects local-EVPN-peer routes so the pair can
@@ -183,6 +186,12 @@ custom_evpn_gw_route_maps:
 
 b_leaf7_dci_bgp_peers:
   router_bgp:
+    # Tracker recovery dialect (guide: 10s; AVD auto-creates referenced
+    # trackers with default 300 AFTER the defaults channel merges — the
+    # node-group channel is the one that wins).
+    session_trackers:
+      - name: TRACK-LOCAL-EVPN-PEERS
+        recovery_delay: 10
     neighbors:
       - ip_address: 172.16.2.0
         peer_group: REMOTE-IPV4-PEERS
@@ -237,6 +246,12 @@ csc_spine_multicast:
 # B_POD1 (B-LEAF1/2): VLANs 20, 40
 csc_b_pod1_leaf_features:
   router_bgp:
+    # Tracker recovery dialect (guide: 10s; AVD auto-creates referenced
+    # trackers with default 300 AFTER the defaults channel merges — the
+    # node-group channel is the one that wins).
+    session_trackers:
+      - name: TRACK-LOCAL-EVPN-PEERS
+        recovery_delay: 10
     # Class 8: no router-bgp-level ipv4 AF on B standard leafs (see csc_spine_rr note).
     address_family_ipv4: null
     vlans:
@@ -254,6 +269,12 @@ csc_b_pod1_leaf_features:
 # B_POD2 (B-LEAF3/4): VLANs 10, 40
 csc_b_pod2_leaf_features:
   router_bgp:
+    # Tracker recovery dialect (guide: 10s; AVD auto-creates referenced
+    # trackers with default 300 AFTER the defaults channel merges — the
+    # node-group channel is the one that wins).
+    session_trackers:
+      - name: TRACK-LOCAL-EVPN-PEERS
+        recovery_delay: 10
     # Class 8: no router-bgp-level ipv4 AF on B standard leafs (see csc_spine_rr note).
     address_family_ipv4: null
     vlans:
@@ -271,6 +292,12 @@ csc_b_pod2_leaf_features:
 # B_POD3 (B-LEAF5/6): VLANs 40, 80
 csc_b_pod3_leaf_features:
   router_bgp:
+    # Tracker recovery dialect (guide: 10s; AVD auto-creates referenced
+    # trackers with default 300 AFTER the defaults channel merges — the
+    # node-group channel is the one that wins).
+    session_trackers:
+      - name: TRACK-LOCAL-EVPN-PEERS
+        recovery_delay: 10
     # Class 8: no router-bgp-level ipv4 AF on B standard leafs (see csc_spine_rr note).
     address_family_ipv4: null
     vlans:

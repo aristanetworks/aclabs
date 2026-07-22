@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **735** |
-| MISSING — in the guide, not yet rendered | 227 |
-| EXTRA — rendered, not in the guide | 508 |
+| **Residual total (non-exempt)** | **719** |
+| MISSING — in the guide, not yet rendered | 217 |
+| EXTRA — rendered, not in the guide | 502 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -29,7 +29,7 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (68 distinct)
+### MISSING — top exact lines (66 distinct)
 
 | count | line |
 |---|---|
@@ -43,11 +43,11 @@ acceptance stays visible.
 | 6× | `domain-id 100` |
 | 6× | `neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-OUT out` |
 | 6× | `route type ethernet-segment route-target auto` |
-| 6× | `recovery delay 10 seconds` |
 | 4× | `neighbor 192.0.0.1 activate` |
 | 4× | `neighbor 192.0.0.0 activate` |
 | 4× | `no switchport` |
-| 4× | `neighbor REMOTE-EVPN-PEERS remote-as 65000` |
+| 3× | `ip address 169.254.0.1/30` |
+| 3× | `peer-address 169.254.0.2` |
 
 ### MISSING — top shapes (digits→`#`)
 
@@ -64,7 +64,7 @@ acceptance stays visible.
 | 8× | `mtu #` |
 | 8× | `address-family ipv#` |
 
-### EXTRA — top exact lines (158 distinct)
+### EXTRA — top exact lines (157 distinct)
 
 | count | line |
 |---|---|
@@ -109,20 +109,20 @@ acceptance stays visible.
 | A-LEAF4 | 22 | 27 | 49 |
 | A-LEAF5 | 16 | 19 | 35 |
 | A-LEAF6 | 16 | 19 | 35 |
-| A-LEAF7 | 4 | 33 | 37 |
-| A-LEAF8 | 4 | 33 | 37 |
+| A-LEAF7 | 3 | 33 | 36 |
+| A-LEAF8 | 3 | 33 | 36 |
 | A-SPINE1 | 0 | 3 | 3 |
 | A-SPINE2 | 0 | 3 | 3 |
 | A-SPINE3 | 0 | 3 | 3 |
 | A-SPINE4 | 0 | 3 | 3 |
-| B-LEAF1 | 10 | 19 | 29 |
-| B-LEAF2 | 10 | 19 | 29 |
-| B-LEAF3 | 12 | 25 | 37 |
-| B-LEAF4 | 12 | 25 | 37 |
-| B-LEAF5 | 13 | 23 | 36 |
-| B-LEAF6 | 13 | 23 | 36 |
-| B-LEAF7 | 11 | 49 | 60 |
-| B-LEAF8 | 11 | 49 | 60 |
+| B-LEAF1 | 9 | 18 | 27 |
+| B-LEAF2 | 9 | 18 | 27 |
+| B-LEAF3 | 11 | 24 | 35 |
+| B-LEAF4 | 11 | 24 | 35 |
+| B-LEAF5 | 12 | 22 | 34 |
+| B-LEAF6 | 12 | 22 | 34 |
+| B-LEAF7 | 10 | 49 | 59 |
+| B-LEAF8 | 10 | 49 | 59 |
 | B-SPINE1 | 2 | 2 | 4 |
 | B-SPINE2 | 2 | 2 | 4 |
 | B-SPINE3 | 2 | 2 | 4 |
@@ -130,4 +130,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **227** | **508** | **735** |
+| **TOTAL** | **217** | **502** | **719** |

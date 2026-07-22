@@ -128,7 +128,8 @@ regenerated PARITY-STATUS):
 | a8239f8 | sweep S1: member/routed-port `no switchport` ×28 pod-scoped (4 deferred to endpoints refresh) | 921 |
 | 277c4bf | sweep S2: `switchport mode access` nulls ×20 on access POs + A3/4 Eth7 (3 deferred to refresh) | 901 |
 | 05d47fa | endpoints/services refresh: B3/4 DEV via per-node filters (60 Red / 70 Brown), HostB3→single + HostB9 single, HostB4→BLUE, HostA7→POD3 MLAG Po8; DESIGN.md B rows verified | 805 |
-| (this) | ES/LACP style: `identifier auto lacp` + route-target null + session tracker (profile-level), per-host `lacp system-id` (adapter-level), B-SW1 uplink Po pod-scoped; HostA8 duplicate-key fallback block removed | **735** |
+| 8131c25 | ES/LACP style: `identifier auto lacp` + route-target null + session tracker (profile-level), per-host `lacp system-id` (adapter-level), B-SW1 uplink Po pod-scoped; HostA8 duplicate-key fallback block removed | 735 |
+| (this) | gateway `REMOTE-EVPN-PEERS remote-as 65000` (both domains' anchors) + tracker `recovery delay 10` via pod-channel (auto-created trackers default 300 and merge after the defaults channel) | **719** |
 
 **Landmines banked (crown jewel):** (1) The models' `platform: cEOS-LAB`
 does NOT match AVD 6.3's built-in CEOS platform entry (matcher lacks the
@@ -172,6 +173,21 @@ decisions; passed schema + renderer); eos_config_future/cli-gen inputs
 must ride INSIDE structured config; merge-by-name interface CSC on
 node-type defaults. **Phantom found:** `underlay_ipv4_unnumbered` was
 set since the initial build but does not exist in the 6.3.0 schema.
+
+**Landmines banked (session-5 batch):** (1) Auto-created objects merge
+AFTER the defaults channel: eos_designs generates session_trackers for
+referenced trackers with default recovery_delay 300, and that
+generation lands on top of the l3leaf-defaults anchor's entry — the
+node-group channel is the one that wins. (2) Schema pickles: read the
+node's TYPE before its keys — a list-typed key answers `.get('keys')`
+with {} and masquerades as an empty dict (the af-evpn
+evpn_ethernet_segment probe shipped as a dict and failed designs-side
+validation: 'Invalid type Dict, expected List'; the list's items are
+the `domain all` construct, unrelated to our line). (3) Parked as
+net-zero: `route type ethernet-segment route-target auto` (af-evpn)
+has NO native cli key — an eos_cli re-entry buys the line at the cost
+of a duplicate `address-family evpn` header. Revisit at deploy-
+validity time, where the line must exist regardless of parity math.
 
 **Landmines banked (ES/LACP class):** The duplicate-YAML-key landmine
 struck AGAIN same-day, this time on an ADAPTER: the HostA8 adapter
