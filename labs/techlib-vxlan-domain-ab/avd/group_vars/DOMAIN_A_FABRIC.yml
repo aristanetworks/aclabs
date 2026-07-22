@@ -251,6 +251,26 @@ custom_evpn_gw_route_maps:
 a_leaf7_dci_bgp_peers:
   router_bgp:
     neighbors:
+      # remote-as dialect: kill the generated per-neighbor remote-as
+      # (group carries it). This anchor IS the node channel for the
+      # Gateways — a second structured_config key on the node entry
+      # is a DUPLICATE YAML KEY and silently loses (banked).
+      - ip_address: 192.168.0.12
+        remote_as: null
+      - ip_address: 192.168.0.28
+        remote_as: null
+      - ip_address: 192.168.0.44
+        remote_as: null
+      - ip_address: 192.168.0.60
+        remote_as: null
+      - ip_address: 10.0.1.201
+        remote_as: null
+      - ip_address: 10.0.1.202
+        remote_as: null
+      - ip_address: 10.0.1.203
+        remote_as: null
+      - ip_address: 10.0.1.204
+        remote_as: null
       - ip_address: 172.16.1.0
         peer_group: REMOTE-IPV4-PEERS
         description: BB1.IPV4
@@ -261,6 +281,26 @@ a_leaf7_dci_bgp_peers:
 a_leaf8_dci_bgp_peers:
   router_bgp:
     neighbors:
+      # remote-as dialect: kill the generated per-neighbor remote-as
+      # (group carries it). This anchor IS the node channel for the
+      # Gateways — a second structured_config key on the node entry
+      # is a DUPLICATE YAML KEY and silently loses (banked).
+      - ip_address: 192.168.0.14
+        remote_as: null
+      - ip_address: 192.168.0.30
+        remote_as: null
+      - ip_address: 192.168.0.46
+        remote_as: null
+      - ip_address: 192.168.0.62
+        remote_as: null
+      - ip_address: 10.0.1.201
+        remote_as: null
+      - ip_address: 10.0.1.202
+        remote_as: null
+      - ip_address: 10.0.1.203
+        remote_as: null
+      - ip_address: 10.0.1.204
+        remote_as: null
       - ip_address: 172.16.1.2
         peer_group: REMOTE-IPV4-PEERS
         description: BB1.IPV4
@@ -356,10 +396,18 @@ csc_mlag_leaf_loopback_seq30:
 csc_leaf_peer_tag_spines:
   router_bgp:
     peer_groups:
+      # Class: remote-as dialect — the guide sets remote-as on the peer
+      # GROUPS (all four uplinks target AS 65100 spines, so it groups);
+      # AVD emits per-neighbor remote-as instead. Group lines land here
+      # (same merge-by-name channel the peer tags already prove);
+      # per-neighbor kills live in each node entry (single-channel, no
+      # cross-channel list-merge ambiguity).
       - name: LOCAL-IPV4-PEERS
+        remote_as: '65100'
         peer_tag_in: SPINES
         peer_tag_out_discard: SPINES
       - name: LOCAL-EVPN-PEERS
+        remote_as: '65100'
         peer_tag_in: SPINES
         peer_tag_out_discard: SPINES
 
@@ -604,10 +652,50 @@ l3leaf:
           id: 1
           mgmt_ip: 172.100.101.105/22
           uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            router_bgp:
+              neighbors:
+                - ip_address: 192.168.0.0
+                  remote_as: null
+                - ip_address: 192.168.0.16
+                  remote_as: null
+                - ip_address: 192.168.0.32
+                  remote_as: null
+                - ip_address: 192.168.0.48
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
         - name: A-LEAF2
           id: 2
           mgmt_ip: 172.100.101.106/22
           uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            router_bgp:
+              neighbors:
+                - ip_address: 192.168.0.2
+                  remote_as: null
+                - ip_address: 192.168.0.18
+                  remote_as: null
+                - ip_address: 192.168.0.34
+                  remote_as: null
+                - ip_address: 192.168.0.50
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
 ########################################################
 # DOMAIN A POD 2 — A-LEAF3/4 (PROD + DEV, VLANs 10, 30, 50)
 ########################################################
@@ -647,10 +735,50 @@ l3leaf:
           id: 3
           mgmt_ip: 172.100.101.107/22
           uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            router_bgp:
+              neighbors:
+                - ip_address: 192.168.0.4
+                  remote_as: null
+                - ip_address: 192.168.0.20
+                  remote_as: null
+                - ip_address: 192.168.0.36
+                  remote_as: null
+                - ip_address: 192.168.0.52
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
         - name: A-LEAF4
           id: 4
           mgmt_ip: 172.100.101.108/22
           uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            router_bgp:
+              neighbors:
+                - ip_address: 192.168.0.6
+                  remote_as: null
+                - ip_address: 192.168.0.22
+                  remote_as: null
+                - ip_address: 192.168.0.38
+                  remote_as: null
+                - ip_address: 192.168.0.54
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
 ########################################################
 # DOMAIN A POD 3 — A-LEAF5/6 (DEV only, VLANs 50, 70)
 ########################################################
@@ -687,10 +815,50 @@ l3leaf:
           id: 5
           mgmt_ip: 172.100.101.109/22
           uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            router_bgp:
+              neighbors:
+                - ip_address: 192.168.0.8
+                  remote_as: null
+                - ip_address: 192.168.0.24
+                  remote_as: null
+                - ip_address: 192.168.0.40
+                  remote_as: null
+                - ip_address: 192.168.0.56
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
         - name: A-LEAF6
           id: 6
           mgmt_ip: 172.100.101.110/22
           uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            router_bgp:
+              neighbors:
+                - ip_address: 192.168.0.10
+                  remote_as: null
+                - ip_address: 192.168.0.26
+                  remote_as: null
+                - ip_address: 192.168.0.42
+                  remote_as: null
+                - ip_address: 192.168.0.58
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
 ########################################################
 # DOMAIN A POD 4 — A-LEAF7/8 (EVPN Gateway pair, All-Active)
 #

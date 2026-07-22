@@ -123,7 +123,8 @@ regenerated PARITY-STATUS):
 | f522223 | contract amendment: BGP neighbor descriptions exempt (Mitch's ruling; −64 missing / −72 extra) | 1,157 |
 | 8b73922 | class 4b: spine PIM dialect — unnumbered local-interface (eos_cli), Et7/8 sparse-mode, Vlan4093 de-PIM | 1,103 |
 | 57a15cd | class 4a: MLAG-leaf SVI `ip igmp` (guide runs igmp+sparse-mode; AVD's OISM forks on MLAG) | 1,089 |
-| e7e8e9d | class 4c: the IPv6/MLD leg — SVI `mld`, global `mld snooping`, `vxlan multicast ipv6`, PROD overlay mapping, router-multicast VRF ipv6 re-entries | **1,029** |
+| e2e5830 | class 4c: the IPv6/MLD leg — SVI `mld`, global `mld snooping`, `vxlan multicast ipv6`, PROD overlay mapping, router-multicast VRF ipv6 re-entries | 1,029 |
+| (this) | remote-as dialect: group remote-as on LOCAL-* (A leafs), per-neighbor kills via node channel + gateway DCI anchors | **949** |
 
 **Landmines banked (crown jewel):** (1) The models' `platform: cEOS-LAB`
 does NOT match AVD 6.3's built-in CEOS platform entry (matcher lacks the
@@ -167,6 +168,19 @@ decisions; passed schema + renderer); eos_config_future/cli-gen inputs
 must ride INSIDE structured config; merge-by-name interface CSC on
 node-type defaults. **Phantom found:** `underlay_ipv4_unnumbered` was
 set since the initial build but does not exist in the 6.3.0 schema.
+
+**Landmines banked (remote-as dialect):** (1) A SECOND `structured_config`
+key on a node entry is a DUPLICATE YAML KEY — the loader keeps one and
+SILENTLY DISCARDS the other (the Gateway node entries already carry
+`structured_config` referencing the per-gateway DCI anchors; new node-
+channel content for those nodes must merge INTO the referenced anchor,
+never add a sibling key). Diagnosis chain that found it: render → 
+intended/structured_configs/<node>.yml intermediate (named the losing
+layer) → the in-file comment naming the existing reference. (2)
+`remote_as: null` in the node channel cleanly deletes the generated
+per-neighbor attribute (proven ×6 standard leafs); peer-group
+`remote_as` added via the peer-tag anchor merges onto materialized
+groups exactly like the tags do.
 
 **Landmines banked (class 4c):** (1) Root `eos_cli` is CHANNEL-SENSITIVE —
 set via node/node_group `structured_config` it is SILENTLY DROPPED

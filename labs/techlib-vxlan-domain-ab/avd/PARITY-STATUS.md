@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **1029** |
-| MISSING — in the guide, not yet rendered | 377 |
-| EXTRA — rendered, not in the guide | 652 |
+| **Residual total (non-exempt)** | **949** |
+| MISSING — in the guide, not yet rendered | 361 |
+| EXTRA — rendered, not in the guide | 588 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -29,7 +29,7 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (121 distinct)
+### MISSING — top exact lines (119 distinct)
 
 | count | line |
 |---|---|
@@ -41,13 +41,13 @@ acceptance stays visible.
 | 14× | `no autostate` |
 | 12× | `identifier auto lacp` |
 | 8× | `mtu 9014` |
-| 8× | `neighbor LOCAL-EVPN-PEERS remote-as 65100` |
-| 8× | `neighbor LOCAL-IPV4-PEERS remote-as 65100` |
 | 8× | `address-family ipv4` |
 | 8× | `bgp session tracker TRACK-LOCAL-EVPN-PEERS` |
 | 8× | `vrf DEV` |
 | 6× | `domain-id 100` |
 | 6× | `neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-OUT out` |
+| 6× | `lacp system-id c0d6.8200.0000` |
+| 6× | `route type ethernet-segment route-target auto` |
 
 ### MISSING — top shapes (digits→`#`)
 
@@ -64,7 +64,7 @@ acceptance stays visible.
 | 11× | `ip address #.#.#.#/#` |
 | 10× | `vxlan vlan #,# vni #,#` |
 
-### EXTRA — top exact lines (228 distinct)
+### EXTRA — top exact lines (192 distinct)
 
 | count | line |
 |---|---|
@@ -81,14 +81,13 @@ acceptance stays visible.
 | 9× | `spanning-tree mst 0 priority 32768` |
 | 8× | `mtu 9114` |
 | 8× | `set origin incomplete` |
-| 8× | `neighbor 10.0.1.201 remote-as 65100` |
-| 8× | `neighbor 10.0.1.202 remote-as 65100` |
+| 8× | `route-map RM-EVPN-SOO-IN deny 10` |
+| 8× | `match extcommunity ECL-EVPN-SOO` |
 
 ### EXTRA — top shapes (digits→`#`)
 
 | count | line |
 |---|---|
-| 72× | `neighbor #.#.#.# remote-as #` |
 | 38× | `ipv# enable` |
 | 34× | `vxlan vlan # vni #` |
 | 26× | `switchport mode access` |
@@ -98,19 +97,20 @@ acceptance stays visible.
 | 16× | `vrf PROD` |
 | 14× | `spanning-tree bpduguard enable` |
 | 14× | `ip address virtual source-nat vrf PROD address #.#.#.#` |
+| 13× | `rd #.#.#.#:#` |
 
 ## Per-node residual
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 21 | 30 | 51 |
-| A-LEAF2 | 22 | 31 | 53 |
-| A-LEAF3 | 26 | 36 | 62 |
-| A-LEAF4 | 27 | 37 | 64 |
-| A-LEAF5 | 24 | 29 | 53 |
-| A-LEAF6 | 28 | 27 | 55 |
-| A-LEAF7 | 8 | 48 | 56 |
-| A-LEAF8 | 8 | 48 | 56 |
+| A-LEAF1 | 19 | 22 | 41 |
+| A-LEAF2 | 20 | 23 | 43 |
+| A-LEAF3 | 24 | 28 | 52 |
+| A-LEAF4 | 25 | 29 | 54 |
+| A-LEAF5 | 22 | 21 | 43 |
+| A-LEAF6 | 26 | 19 | 45 |
+| A-LEAF7 | 6 | 40 | 46 |
+| A-LEAF8 | 6 | 40 | 46 |
 | A-SPINE1 | 0 | 3 | 3 |
 | A-SPINE2 | 0 | 3 | 3 |
 | A-SPINE3 | 0 | 3 | 3 |
@@ -130,4 +130,4 @@ acceptance stays visible.
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 3 | 19 | 22 |
 | BB2 | 3 | 19 | 22 |
-| **TOTAL** | **377** | **652** | **1029** |
+| **TOTAL** | **361** | **588** | **949** |
