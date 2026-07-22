@@ -358,18 +358,37 @@ spine:
     structured_config:
       router_multicast: "{{ csc_spine_multicast }}"
   nodes:
+    # Per-spine downlink_pools override AVD's default per-leaf offset
+    # assignment. Each spine gets a /28 (16 addresses = 8 /31 links,
+    # Et1..Et8). Matches tech-library scheme:
+    #   A-SPINE1 Et1..Et8 → 192.168.0.0/2/4/6/8/10/12/14 (0-14)
+    #   A-SPINE2 Et1..Et8 → 192.168.0.16/18/20/22/24/26/28/30
+    #   A-SPINE3 Et1..Et8 → 192.168.0.32/34/36/38/40/42/44/46
+    #   A-SPINE4 Et1..Et8 → 192.168.0.48/50/52/54/56/58/60/62
     - name: A-SPINE1
       id: 201
       mgmt_ip: 172.100.101.101/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.0/28
+          downlink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4, Ethernet5, Ethernet6, Ethernet7, Ethernet8]
     - name: A-SPINE2
       id: 202
       mgmt_ip: 172.100.101.102/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.16/28
+          downlink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4, Ethernet5, Ethernet6, Ethernet7, Ethernet8]
     - name: A-SPINE3
       id: 203
       mgmt_ip: 172.100.101.103/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.32/28
+          downlink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4, Ethernet5, Ethernet6, Ethernet7, Ethernet8]
     - name: A-SPINE4
       id: 204
       mgmt_ip: 172.100.101.104/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.48/28
+          downlink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4, Ethernet5, Ethernet6, Ethernet7, Ethernet8]
 
 ##################################################
 # DOMAIN A LEAFS
@@ -386,7 +405,8 @@ l3leaf:
     # + `vxlan mlag source-interface Loopback2` on Vxlan1.
     uplink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4]
     uplink_switches: [A-SPINE1, A-SPINE2, A-SPINE3, A-SPINE4]
-    uplink_ipv4_pool: 192.168.0.0/24
+    # No uplink_ipv4_pool — each spine defines its own downlink_pools that
+    # allocate exact tech-library IPs per interface.
     mlag_interfaces: [Ethernet5, Ethernet6]
     mlag_peer_ipv4_pool: 169.254.0.0/30
     mlag_peer_l3_ipv4_pool: 192.0.0.0/31
