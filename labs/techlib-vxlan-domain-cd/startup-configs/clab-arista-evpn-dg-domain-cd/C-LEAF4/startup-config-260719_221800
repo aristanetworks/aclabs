@@ -203,14 +203,14 @@ interface Vlan3001
    mtu 9014
    no autostate
    vrf PROD
-   ip address 192.0.0.1/31
+   ipv6 address 2001:db8:3001::2/64
 !
 interface Vlan3002
    description MLAG iBGP Peer - VRF DEV
    mtu 9014
    no autostate
    vrf DEV
-   ip address 192.0.0.1/31
+   ipv6 address 2001:db8:3002::2/64
 !
 interface Vlan4093
    description MLAG UNDERLAY BGP PEER
@@ -316,16 +316,10 @@ router bgp 65303
    neighbor LOCAL-IPV6-PEERS bfd
    neighbor LOCAL-IPV6-PEERS peer-tag in SPINES
    neighbor LOCAL-IPV6-PEERS peer-tag out discard SPINES
-   neighbor MLAG-IPV4-PEER peer group
-   neighbor MLAG-IPV4-PEER remote-as 65303
-   neighbor MLAG-IPV4-PEER next-hop-self
-   neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-OUT out
    neighbor MLAG-IPV6-PEER peer group
    neighbor MLAG-IPV6-PEER remote-as 65303
    neighbor MLAG-IPV6-PEER next-hop-self
    neighbor MLAG-IPV6-PEER route-map RM-MLAG-PEER-OUT out
-   neighbor 192.0.0.0 peer group MLAG-IPV4-PEER
-   neighbor 192.0.0.0 description C-LEAF3.IPV4
    neighbor 2001:db8:c0::201 peer group LOCAL-EVPN-PEERS
    neighbor 2001:db8:c0::201 description C-SPINE1.EVPN
    neighbor 2001:db8:c0::202 peer group LOCAL-EVPN-PEERS
@@ -375,11 +369,8 @@ router bgp 65303
       route-target import evpn 50002:50002
       route-target export evpn 50002:50002
       update wait-install
-      neighbor 192.0.0.0 peer group MLAG-IPV4-PEER
+      neighbor 2001:db8:3002::1 peer group MLAG-IPV6-PEER
       redistribute connected route-map RM-CONN-2-BGP-VRFS
-      !
-      address-family ipv4
-         neighbor 192.0.0.0 activate
       !
       evpn multicast
          address-family ipv4
@@ -391,11 +382,8 @@ router bgp 65303
       route-target import evpn 50001:50001
       route-target export evpn 50001:50001
       update wait-install
-      neighbor 192.0.0.0 peer group MLAG-IPV4-PEER
+      neighbor 2001:db8:3001::1 peer group MLAG-IPV6-PEER
       redistribute connected route-map RM-CONN-2-BGP-VRFS
-      !
-      address-family ipv4
-         neighbor 192.0.0.0 activate
       !
       evpn multicast
          address-family ipv4

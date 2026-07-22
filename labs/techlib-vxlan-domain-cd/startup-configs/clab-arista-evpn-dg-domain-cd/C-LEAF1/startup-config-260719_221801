@@ -182,7 +182,7 @@ interface Vlan3001
    mtu 9014
    no autostate
    vrf PROD
-   ip address 192.0.0.0/31
+   ipv6 address 2001:db8:3001::1/64
 !
 interface Vlan4093
    description MLAG UNDERLAY BGP PEER
