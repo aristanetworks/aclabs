@@ -106,7 +106,8 @@ regenerated PARITY-STATUS):
 | Commit | Increment | Residual after |
 |---|---|---|
 | 1e0c2b8 | class 8 pt.2: peer-group/process dialect (CSC-null attrs + neighbor default send-community) | 1,751 |
-| (this) | class 8/20: wait-install scoping — per-VRF via vrfs[].bgp.structured_config, BB explicit false | **1,737** |
+| 4d45bf3 | class 8/20: wait-install scoping — per-VRF via vrfs[].bgp.structured_config, BB explicit false | 1,737 |
+| (this) | class 20: maximum-paths map — A leafs 128, B spines suppressed, B isis-AF suppressed | **1,705** |
 
 **Landmine banked (session 2):** `custom_structured_configuration_<key>`
 is an ANSIBLE variable — a host_vars definition SHADOWS the group_vars

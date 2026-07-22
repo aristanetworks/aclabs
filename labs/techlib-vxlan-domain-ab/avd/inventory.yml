@@ -17,6 +17,9 @@ all:
         DOMAIN_A_LEAFS:
           vars:
             type: l3leaf
+            # PARITY-LEDGER class 20 — the guide's A leafs run
+            # `maximum-paths 128` (spines keep the 4 default).
+            bgp_maximum_paths: 128
           hosts:
             A-LEAF1:
             A-LEAF2:

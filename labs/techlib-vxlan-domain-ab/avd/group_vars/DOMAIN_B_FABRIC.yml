@@ -29,7 +29,10 @@ underlay_isis_instance_name: "100"                 # The guide names its IS-IS i
 isis_ti_lfa:
   enabled: false                                   # Not required for the base design (add if needed)
 isis_default_is_type: level-2
-isis_maximum_paths: 4
+# Class 20: the guide's B nodes render an EMPTY `address-family ipv4
+# unicast` under router isis — no maximum-paths line. The schema default
+# for isis_maximum_paths is 4 (emitted even when the var is absent), so
+# the CSC-null in each node-type's structured_config below un-sets it.
 
 ###################################################
 # Overlay: iBGP EVPN AS 65200, RR on Spines
@@ -206,6 +209,9 @@ csc_spine_rr:
     # (the deactivate is implicit via `no bgp default ipv4-unicast`).
     # CSC-null removes the block eos_designs emits for the deactivate.
     address_family_ipv4: null
+    # Class 20: the guide's B spines (pure RRs, no ECMP role in the
+    # underlay — that's IS-IS's job) carry no maximum-paths line.
+    maximum_paths: null
 
 csc_spine_multicast:
   ipv4:
@@ -282,6 +288,10 @@ spine:
     structured_config:
       router_multicast: "{{ csc_spine_multicast }}"
       router_bgp: "{{ csc_spine_rr.router_bgp }}"
+      # Class 20 — see the isis_maximum_paths note above.
+      router_isis:
+        address_family_ipv4:
+          maximum_paths: null
       # PARITY-LEDGER class 2 (+15, +circuit-type): the guide's Domain B
       # underlay is IPv4-unnumbered with default IS-IS metric and explicit
       # circuit-type. No native 6.3.0 key exists (underlay_ipv4_unnumbered
@@ -357,6 +367,10 @@ l3leaf:
     spanning_tree_mode: mstp
     structured_config:
       dhcp_relay: "{{ custom_vtep_dhcp_relay }}"
+      # Class 20 — see the isis_maximum_paths note above.
+      router_isis:
+        address_family_ipv4:
+          maximum_paths: null
       spanning_tree: "{{ custom_vtep_stp_root_super.spanning_tree }}"
       router_bgp: "{{ custom_vtep_bgp_session_tracker.router_bgp }}"
       # Class 2 batch — see the spine block note above.
