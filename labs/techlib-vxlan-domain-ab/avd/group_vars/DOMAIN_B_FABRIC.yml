@@ -192,6 +192,59 @@ csc_spine_multicast:
     software_forwarding: sfe
 
 ###################################################
+# Custom Structured Config — Paired redistribute-router-mac per Domain B POD
+#
+# CSC: EOS 4.34.0F anycast gateway advertisement (paired next-hop-vtep-primary
+# variants). Not natively exposed by AVD 6.3. Injected per standard-leaf POD.
+# The Gateway pair (B_GATEWAY) intentionally does NOT carry these lines.
+###################################################
+
+# B_POD1 (B-LEAF1/2): VLANs 20, 40
+csc_b_pod1_leaf_features:
+  router_bgp:
+    vlans:
+      - id: 20
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 40
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+
+# B_POD2 (B-LEAF3/4): VLANs 10, 40
+csc_b_pod2_leaf_features:
+  router_bgp:
+    vlans:
+      - id: 10
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 40
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+
+# B_POD3 (B-LEAF5/6): VLANs 40, 80
+csc_b_pod3_leaf_features:
+  router_bgp:
+    vlans:
+      - id: 40
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+      - id: 80
+        redistribute_routes:
+          - learned
+          - router-mac next-hop vtep primary
+          - router-mac virtual-ip next-hop vtep primary
+
+###################################################
 # DOMAIN B SPINES
 ###################################################
 
@@ -241,43 +294,75 @@ l3leaf:
       dhcp_relay: "{{ custom_vtep_dhcp_relay }}"
       spanning_tree: "{{ custom_vtep_stp_root_super.spanning_tree }}"
       router_bgp: "{{ custom_vtep_bgp_session_tracker.router_bgp }}"
-  nodes:
-    ##############################################
-    # Standard leafs (B-LEAF1..B-LEAF6)
-    # Per-leaf VLAN/VRF scoping via host_vars.
-    ##############################################
-    - name: B-LEAF1
-      id: 1
-      mgmt_ip: 172.100.102.105/22
-      uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
-    - name: B-LEAF2
-      id: 2
-      mgmt_ip: 172.100.102.106/22
-      uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
-    - name: B-LEAF3
-      id: 3
-      mgmt_ip: 172.100.102.107/22
-      uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
-    - name: B-LEAF4
-      id: 4
-      mgmt_ip: 172.100.102.108/22
-      uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
-    - name: B-LEAF5
-      id: 5
-      mgmt_ip: 172.100.102.109/22
-      uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
-    - name: B-LEAF6
-      id: 6
-      mgmt_ip: 172.100.102.110/22
-      uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
 
   ##############################################
-  # Gateway leafs (B-LEAF7, B-LEAF8) — A/A Gateway
-  # OISM disabled per host_vars.
+  # Per-pod grouping for VLAN filtering + Domain B redistribute-router-mac CSC
+  # (all pods are `mlag: false` — Domain B uses EVPN A/A throughout)
   ##############################################
   node_groups:
+    ##############################################
+    # B_POD1 (B-LEAF1/B-LEAF2): VLANs 20 (HostB1), 40 (HostB2). PROD only.
+    ##############################################
+    - group: B_POD1
+      mlag: false
+      filter:
+        tags: ['GREEN', 'PURPLE']
+      structured_config:
+        router_bgp: "{{ csc_b_pod1_leaf_features.router_bgp }}"
+      nodes:
+        - name: B-LEAF1
+          id: 1
+          mgmt_ip: 172.100.102.105/22
+          uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
+        - name: B-LEAF2
+          id: 2
+          mgmt_ip: 172.100.102.106/22
+          uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
+
+    ##############################################
+    # B_POD2 (B-LEAF3/B-LEAF4): VLANs 10 (HostB4, shared w/ Domain A), 40. PROD only.
+    ##############################################
+    - group: B_POD2
+      mlag: false
+      filter:
+        tags: ['BLUE', 'PURPLE']
+      structured_config:
+        router_bgp: "{{ csc_b_pod2_leaf_features.router_bgp }}"
+      nodes:
+        - name: B-LEAF3
+          id: 3
+          mgmt_ip: 172.100.102.107/22
+          uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
+        - name: B-LEAF4
+          id: 4
+          mgmt_ip: 172.100.102.108/22
+          uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
+
+    ##############################################
+    # B_POD3 (B-LEAF5/B-LEAF6): VLANs 40, 80 (uplink to B-SW1). PROD + DEV.
+    ##############################################
+    - group: B_POD3
+      mlag: false
+      filter:
+        tags: ['PURPLE', 'BLACK']
+      structured_config:
+        router_bgp: "{{ csc_b_pod3_leaf_features.router_bgp }}"
+      nodes:
+        - name: B-LEAF5
+          id: 5
+          mgmt_ip: 172.100.102.109/22
+          uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
+        - name: B-LEAF6
+          id: 6
+          mgmt_ip: 172.100.102.110/22
+          uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
+
+    ##############################################
+    # B_GATEWAY (B-LEAF7/B-LEAF8) — A/A EVPN Gateway. OISM disabled per host_vars.
+    # NO redistribute-router-mac CSC (Gateway relies on Interconnect-ESI machinery).
+    ##############################################
     - group: B_GATEWAY
-      mlag: false                                # Domain B uses EVPN A/A, not MLAG
+      mlag: false
       evpn_gateway:
         evpn_l2:
           enabled: true
