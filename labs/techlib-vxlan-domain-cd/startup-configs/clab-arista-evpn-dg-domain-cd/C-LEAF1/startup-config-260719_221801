@@ -331,7 +331,7 @@ router bgp 65301
       neighbor MLAG-IPV6-PEER activate
    !
    vrf PROD
-      rd 3.3.0.1:50001
+      rd 10.0.3.1:50001
       route-target import evpn 50001:50001
       route-target export evpn 50001:50001
       update wait-install

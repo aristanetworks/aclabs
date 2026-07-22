@@ -88,14 +88,12 @@ interface Ethernet7
    mtu 9114
    no switchport
    ipv6 enable
-   pim ipv6 sparse-mode
 !
 interface Ethernet8
    description C-LEAF8
    mtu 9114
    no switchport
    ipv6 enable
-   pim ipv6 sparse-mode
 !
 interface Loopback0
    description Globally Unique Address
