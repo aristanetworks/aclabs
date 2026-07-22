@@ -80,3 +80,63 @@ key (sanctioned, documented). **OPEN** = mechanism to be settled during build.
 Prior escape hatches slated for deletion once native equivalents render:
 round-5 `domain all` RD/RT CSC, round-6 `router_bgp.eos_cli` gateway lines,
 round-7/8/9/11 platform/MTU suppressions (replaced by the platform profile).
+
+
+---
+
+## Session log — 2026-07-21 (rebuild session 1)
+
+**Shipped this session** (each gated on full/affected-fabric rebuild +
+regenerated PARITY-STATUS):
+
+| Commit | Increment | Residual after |
+|---|---|---|
+| bdfa5d8 | Phase 1: taxonomy + this ledger | 2,943 (baseline) |
+| 40e1016 | class-9 normalizer (later retired) | 2,561 |
+| 6c13843 | all.yml foundation (cls 10/12/14, 18 partial) | 2,431 |
+| 0560591 | contract amendment (no-shutdown + ordering exempt) | 2,429 |
+| c9354f4 | parity_report.py — the running tally | 2,429 |
+| 0dce0bf | class 1: underlay_isis_instance_name "100" | 2,237 |
+| ef42f3a | class 2+15: Domain B unnumbered CSC batch | 2,045 |
+| a0d0111 | class 16: MLAG naming dialect (5 native keys) | **1,953** |
+
+**Techniques proven:** CSC-null (un-sets hardcoded eos_designs
+decisions; passed schema + renderer); eos_config_future/cli-gen inputs
+must ride INSIDE structured config; merge-by-name interface CSC on
+node-type defaults. **Phantom found:** `underlay_ipv4_unnumbered` was
+set since the initial build but does not exist in the 6.3.0 schema.
+
+## NEXT SESSION — pickup spec (BGP dialect, fully reconned)
+
+The guide's dialect (read from B-SPINE1; verify A/BB during work):
+`neighbor default send-community` global; groups carry ONLY peer
+group / remote-as / update-source / bfd / route-reflector-client —
+NO password, NO maximum-routes, NO per-group send-community, NO
+`no neighbor X activate` under ipv4 AF (implicit via `no bgp default
+ipv4-unicast`). Guide also has `update wait-install` (x14: Domain B
+12 + BB 2) and `distance bgp 20 200 200`.
+
+Mechanism plan:
+1. The models' peer-group passwords + send_community live in the CSC
+   anchor vars near the top of DOMAIN_A_FABRIC.yml (~lines 40-60) and
+   DOMAIN_B_FABRIC.yml (~lines 45-125) — STRIP there.
+2. Remaining rendered attrs (maximum-routes, ipv4-AF deactivate) get
+   the CSC-null merge-by-name inside those same anchor vars:
+   peer_groups[{name, maximum_routes: null, send_community: null}],
+   address_family_ipv4.peer_groups[{name, activate: null}].
+3. `neighbor default send-community`: router_bgp.neighbor_default.
+   send_community — probe the VALUE that renders the bare line
+   (try "all" first). Scope: BGP nodes only (place in the node-type
+   defaults / anchor vars, NOT all.yml — B-SW1 must not grow a
+   router bgp block).
+4. bgp_update_wait_install: true (DOMAIN_B_FABRIC + BACKBONE);
+   check bgp_distance for 20/200/200.
+
+**Then remaining, in ledger order:** PL-LOOPBACKS naming/content
+(class 7), the native evpn_gateway replacement of rounds 5-6 (class
+3 — the crown jewel; keys confirmed native), OISM depth incl. IPv6
+(class 4), then the per-node sweep (vlan-internal-order 17/27,
+switchport mode access, edge-port bpduguard 17-node scope, autostate,
+source-nat, transceiver re-add x2, mtu leftovers, ipv6 enable style,
+RD/RT scheme) and the services/endpoints/host_vars refresh against
+the per-leaf tables in DESIGN.md. ANTA catalog rebuild last.
