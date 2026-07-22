@@ -45,11 +45,9 @@ bgp_distance:
 bgp_peer_groups:
   evpn_overlay_peers:
     name: LOCAL-EVPN-PEERS
-    password: WzKnNSduqwPYvUePYIh40g==
     bfd: true
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
-    password: IO6gE/ln7Sp2wt33WX/Asg==
     bfd: true
 
 evpn_ebgp_multihop: 3

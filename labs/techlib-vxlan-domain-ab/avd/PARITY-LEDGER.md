@@ -98,7 +98,8 @@ regenerated PARITY-STATUS):
 | c9354f4 | parity_report.py — the running tally | 2,429 |
 | 0dce0bf | class 1: underlay_isis_instance_name "100" | 2,237 |
 | ef42f3a | class 2+15: Domain B unnumbered CSC batch | 2,045 |
-| a0d0111 | class 16: MLAG naming dialect (5 native keys) | **1,953** |
+| a0d0111 | class 16: MLAG naming dialect (5 native keys) | 1,953 |
+| (this) | class 8 pt.1: fabric peer-group passwords stripped (6) | **1,905** |
 
 **Techniques proven:** CSC-null (un-sets hardcoded eos_designs
 decisions; passed schema + renderer); eos_config_future/cli-gen inputs
@@ -116,8 +117,10 @@ NO password, NO maximum-routes, NO per-group send-community, NO
 ipv4-unicast`). Guide also has `update wait-install` (x14: Domain B
 12 + BB 2) and `distance bgp 20 200 200`.
 
-Mechanism plan:
-1. The models' peer-group passwords + send_community live in the CSC
+Mechanism plan (step 1 DONE — 6 fabric-level passwords stripped, -48;
+the 4 surviving `password 7` renders are the gateway CSC's, deferred
+to the gateway swap):
+1. ~~The models' peer-group passwords~~ DONE. Next: the CSC-anchor + send_community live in the CSC
    anchor vars near the top of DOMAIN_A_FABRIC.yml (~lines 40-60) and
    DOMAIN_B_FABRIC.yml (~lines 45-125) — STRIP there.
 2. Remaining rendered attrs (maximum-routes, ipv4-AF deactivate) get

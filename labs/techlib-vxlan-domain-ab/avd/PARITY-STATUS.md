@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **1953** |
+| **Residual total (non-exempt)** | **1905** |
 | MISSING — in the guide, not yet rendered | 750 |
-| EXTRA — rendered, not in the guide | 1203 |
+| EXTRA — rendered, not in the guide | 1155 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -63,13 +63,12 @@ acceptance stays visible.
 | 20× | `routing` |
 | 20× | `ipv#` |
 
-### EXTRA — top exact lines (425 distinct)
+### EXTRA — top exact lines (421 distinct)
 
 | count | line |
 |---|---|
 | 38× | `ipv6 enable` |
 | 26× | `switchport mode access` |
-| 24× | `neighbor LOCAL-EVPN-PEERS password 7 WzKnNSduqwPYvUePYIh40g==` |
 | 24× | `neighbor LOCAL-EVPN-PEERS send-community` |
 | 24× | `neighbor LOCAL-EVPN-PEERS maximum-routes 0` |
 | 24× | `no neighbor LOCAL-EVPN-PEERS activate` |
@@ -81,7 +80,8 @@ acceptance stays visible.
 | 12× | `router bfd` |
 | 12× | `multihop interval 1000 min-rx 1000 multiplier 3` |
 | 12× | `maximum-paths 4` |
-| 12× | `neighbor LOCAL-IPV4-PEERS password 7 DGMjRCIj8IZAFhehikpUIQ==` |
+| 12× | `neighbor LOCAL-IPV4-PEERS send-community` |
+| 12× | `neighbor LOCAL-IPV4-PEERS maximum-routes 256000` |
 
 ### EXTRA — top shapes (digits→`#`)
 
@@ -94,39 +94,39 @@ acceptance stays visible.
 | 32× | `neighbor #.#.#.# description A-LEAF#_Ethernet#` |
 | 26× | `switchport mode access` |
 | 26× | `ip address #.#.#.#/#` |
-| 24× | `neighbor LOCAL-EVPN-PEERS password # WzKnNSduqwPYvUePYIh#g==` |
 | 24× | `neighbor LOCAL-EVPN-PEERS send-community` |
 | 24× | `neighbor LOCAL-EVPN-PEERS maximum-routes #` |
+| 24× | `no neighbor LOCAL-EVPN-PEERS activate` |
 
 ## Per-node residual
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 40 | 52 | 92 |
-| A-LEAF2 | 41 | 53 | 94 |
-| A-LEAF3 | 49 | 58 | 107 |
-| A-LEAF4 | 50 | 59 | 109 |
-| A-LEAF5 | 43 | 51 | 94 |
-| A-LEAF6 | 47 | 49 | 96 |
-| A-LEAF7 | 23 | 143 | 166 |
-| A-LEAF8 | 24 | 144 | 168 |
-| A-SPINE1 | 15 | 21 | 36 |
-| A-SPINE2 | 15 | 21 | 36 |
-| A-SPINE3 | 15 | 21 | 36 |
-| A-SPINE4 | 15 | 21 | 36 |
-| B-LEAF1 | 27 | 31 | 58 |
-| B-LEAF2 | 27 | 31 | 58 |
-| B-LEAF3 | 56 | 45 | 101 |
-| B-LEAF4 | 56 | 45 | 101 |
-| B-LEAF5 | 30 | 26 | 56 |
-| B-LEAF6 | 30 | 26 | 56 |
-| B-LEAF7 | 21 | 71 | 92 |
-| B-LEAF8 | 21 | 71 | 92 |
-| B-SPINE1 | 13 | 9 | 22 |
-| B-SPINE2 | 13 | 9 | 22 |
-| B-SPINE3 | 13 | 9 | 22 |
-| B-SPINE4 | 13 | 9 | 22 |
+| A-LEAF1 | 40 | 49 | 89 |
+| A-LEAF2 | 41 | 50 | 91 |
+| A-LEAF3 | 49 | 55 | 104 |
+| A-LEAF4 | 50 | 56 | 106 |
+| A-LEAF5 | 43 | 48 | 91 |
+| A-LEAF6 | 47 | 46 | 93 |
+| A-LEAF7 | 23 | 139 | 162 |
+| A-LEAF8 | 24 | 140 | 164 |
+| A-SPINE1 | 15 | 19 | 34 |
+| A-SPINE2 | 15 | 19 | 34 |
+| A-SPINE3 | 15 | 19 | 34 |
+| A-SPINE4 | 15 | 19 | 34 |
+| B-LEAF1 | 27 | 30 | 57 |
+| B-LEAF2 | 27 | 30 | 57 |
+| B-LEAF3 | 56 | 44 | 100 |
+| B-LEAF4 | 56 | 44 | 100 |
+| B-LEAF5 | 30 | 25 | 55 |
+| B-LEAF6 | 30 | 25 | 55 |
+| B-LEAF7 | 21 | 69 | 90 |
+| B-LEAF8 | 21 | 69 | 90 |
+| B-SPINE1 | 13 | 8 | 21 |
+| B-SPINE2 | 13 | 8 | 21 |
+| B-SPINE3 | 13 | 8 | 21 |
+| B-SPINE4 | 13 | 8 | 21 |
 | B-SW1 | 7 | 20 | 27 |
 | BB1 | 23 | 54 | 77 |
 | BB2 | 23 | 54 | 77 |
-| **TOTAL** | **750** | **1203** | **1953** |
+| **TOTAL** | **750** | **1155** | **1905** |

@@ -43,17 +43,13 @@ bgp_distance:
 bgp_peer_groups:
   ipv4_underlay_peers:
     name: LOCAL-IPV4-PEERS
-    password: DGMjRCIj8IZAFhehikpUIQ==
   mlag_ipv4_underlay_peer:
     name: MLAG-IPV4-PEER
-    password: CRkxra9QRmU5k9/wECPlUA==
   evpn_overlay_peers:
     name: LOCAL-EVPN-PEERS
-    password: WzKnNSduqwPYvUePYIh40g==
     bfd: true
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
-    password: IO6gE/ln7Sp2wt33WX/Asg==
 
 # ebgp-multihop is a fabric-level setting in AVD 6.3 (not per peer-group).
 evpn_ebgp_multihop: 3
