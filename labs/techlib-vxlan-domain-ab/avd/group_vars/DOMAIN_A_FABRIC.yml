@@ -1086,6 +1086,10 @@ l3leaf:
         # single-homed routed ports; AVD omits it on members. A5/6 Eth8
         # deferred to the endpoints refresh (dual-homing gap).
         ethernet_interfaces:
+          # guide puts explicit no-switchport on the Po8 member
+          - name: Ethernet8
+            switchport:
+              enabled: false
           - name: Ethernet5
             switchport:
               enabled: false
@@ -1244,7 +1248,10 @@ l3leaf:
               vlans: null
             eos_cli: |
               vxlan vlan 10,50,70 vni 10010,10050,10070
-        ip_extcommunity_lists: null   # generated evpn-imported ECL is a stray
+        ip_extcommunity_lists_regexp: null   # generated evpn-imported regexp ECL is a stray
+        dhcp_relay:
+          # the guide's dhcp relay block has no mlag peer-link line
+          mlag_peerlink_requests_disabled: null
         # guide has no source-nat lines anywhere
         virtual_source_nat_vrfs: null
         vlan_interfaces:

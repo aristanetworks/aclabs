@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **106** |
-| MISSING — in the guide, not yet rendered | 26 |
-| EXTRA — rendered, not in the guide | 80 |
+| **Residual total (non-exempt)** | **90** |
+| MISSING — in the guide, not yet rendered | 19 |
+| EXTRA — rendered, not in the guide | 71 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -23,21 +23,19 @@ acceptance stays visible.
 |---|---|
 | BGP neighbor descriptions (contract amended Day 54 s2) | 436 |
 | comment lines | 54 |
-| explicit `no shutdown` (accepted AVD default) | 481 |
-| interface/host descriptions | 695 |
+| explicit `no shutdown` (accepted AVD default) | 480 |
+| interface/host descriptions | 694 |
 | line ordering (positions never compared) | n/a — structural |
 
 ## Remaining differences
 
-### MISSING — top exact lines (14 distinct)
+### MISSING — top exact lines (11 distinct)
 
 | count | line |
 |---|---|
 | 6× | `route type ethernet-segment route-target auto` |
-| 4× | `no switchport` |
 | 3× | `switchport trunk allowed vlan 40,80` |
 | 2× | `switchport` |
-| 2× | `ip name-server vrf MGMT 8.8.8.8` |
 | 1× | `ip address 10.1.1.2/32` |
 | 1× | `ip address 10.1.1.4/32` |
 | 1× | `rd 10.0.1.6:10050` |
@@ -46,42 +44,39 @@ acceptance stays visible.
 | 1× | `name Purple` |
 | 1× | `vlan 80` |
 | 1× | `name Black` |
-| 1× | `no ip routing` |
 
 ### MISSING — top shapes (digits→`#`)
 
 | count | line |
 |---|---|
 | 6× | `route type ethernet-segment route-target auto` |
-| 4× | `no switchport` |
 | 3× | `ip address #.#.#.#/#` |
 | 3× | `switchport trunk allowed vlan #,#` |
 | 2× | `switchport` |
 | 2× | `vlan #` |
-| 2× | `ip name-server vrf MGMT #.#.#.#` |
 | 1× | `rd #.#.#.#:#` |
 | 1× | `name Purple` |
 | 1× | `name Black` |
 
-### EXTRA — top exact lines (25 distinct)
+### EXTRA — top exact lines (21 distinct)
 
 | count | line |
 |---|---|
 | 19× | `router multicast` |
-| 7× | `switchport mode access` |
+| 4× | `switchport mode access` |
 | 4× | `interface Loopback101` |
 | 4× | `vrf PROD` |
 | 4× | `interface Loopback102` |
 | 4× | `vrf DEV` |
 | 4× | `address-family evpn` |
 | 4× | `evpn ethernet-segment domain all` |
-| 4× | `switchport` |
 | 3× | `switchport trunk allowed vlan none` |
-| 2× | `mlag peer-link requests disabled` |
+| 3× | `switchport` |
 | 2× | `ip address 10.101.101.7/32` |
 | 2× | `ip address 10.102.102.7/32` |
-| 2× | `ip extcommunity-list regexp evpn-imported permit RT.*` |
 | 2× | `ip address 10.101.101.8/32` |
+| 2× | `ip address 10.102.102.8/32` |
+| 2× | `interface Port-Channel7` |
 
 ### EXTRA — top shapes (digits→`#`)
 
@@ -90,13 +85,13 @@ acceptance stays visible.
 | 19× | `router multicast` |
 | 11× | `ip address #.#.#.#/#` |
 | 8× | `interface Loopback#` |
-| 7× | `switchport mode access` |
+| 4× | `switchport mode access` |
 | 4× | `vrf PROD` |
 | 4× | `vrf DEV` |
 | 4× | `address-family evpn` |
 | 4× | `evpn ethernet-segment domain all` |
-| 4× | `switchport` |
 | 3× | `switchport trunk allowed vlan none` |
+| 3× | `switchport` |
 
 ## Per-node residual
 
@@ -106,27 +101,27 @@ acceptance stays visible.
 | A-LEAF2 | 1 | 2 | 3 |
 | A-LEAF3 | 0 | 1 | 1 |
 | A-LEAF4 | 1 | 2 | 3 |
-| A-LEAF5 | 2 | 3 | 5 |
-| A-LEAF6 | 2 | 3 | 5 |
-| A-LEAF7 | 1 | 11 | 12 |
-| A-LEAF8 | 1 | 11 | 12 |
+| A-LEAF5 | 1 | 3 | 4 |
+| A-LEAF6 | 1 | 3 | 4 |
+| A-LEAF7 | 1 | 9 | 10 |
+| A-LEAF8 | 1 | 9 | 10 |
 | A-SPINE1 | 0 | 0 | 0 |
 | A-SPINE2 | 0 | 0 | 0 |
 | A-SPINE3 | 0 | 0 | 0 |
 | A-SPINE4 | 0 | 0 | 0 |
 | B-LEAF1 | 1 | 1 | 2 |
 | B-LEAF2 | 1 | 1 | 2 |
-| B-LEAF3 | 1 | 4 | 5 |
-| B-LEAF4 | 1 | 4 | 5 |
+| B-LEAF3 | 1 | 5 | 6 |
+| B-LEAF4 | 1 | 5 | 6 |
 | B-LEAF5 | 2 | 2 | 4 |
 | B-LEAF6 | 2 | 2 | 4 |
-| B-LEAF7 | 1 | 9 | 10 |
-| B-LEAF8 | 1 | 9 | 10 |
+| B-LEAF7 | 0 | 9 | 9 |
+| B-LEAF8 | 0 | 9 | 9 |
 | B-SPINE1 | 0 | 0 | 0 |
 | B-SPINE2 | 0 | 0 | 0 |
 | B-SPINE3 | 0 | 0 | 0 |
 | B-SPINE4 | 0 | 0 | 0 |
-| B-SW1 | 6 | 12 | 18 |
-| BB1 | 1 | 1 | 2 |
-| BB2 | 1 | 1 | 2 |
-| **TOTAL** | **26** | **80** | **106** |
+| B-SW1 | 5 | 5 | 10 |
+| BB1 | 0 | 1 | 1 |
+| BB2 | 0 | 1 | 1 |
+| **TOTAL** | **19** | **71** | **90** |

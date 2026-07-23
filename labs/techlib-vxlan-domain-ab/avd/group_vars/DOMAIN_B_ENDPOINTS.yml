@@ -230,14 +230,16 @@ servers:
       - endpoint_ports: [eth1]
         switch_ports: [Ethernet4]
         switches: [B-SW1]
-        profile: PROF-PURPLE-ACCESS
+        profile: PROF-BLACK-ACCESS   # guide Et4 = access vlan 80
 
-  - name: HostB7
-    adapters:
-      - endpoint_ports: [eth1]
-        switch_ports: [Ethernet5]
-        switches: [B-SW1]
-        profile: PROF-BLACK-ACCESS
+  # HostB7 — the guide's B-SW1 carries no Ethernet5 host port; adapter
+  # removed for parity (container stays defined but unwired).
+  # - name: HostB7
+  #   adapters:
+  #     - endpoint_ports: [eth1]
+  #       switch_ports: [Ethernet5]
+  #       switches: [B-SW1]
+  #       profile: PROF-BLACK-ACCESS
 
   #########################################
   # HostB8 — locally attached to B-LEAF7/B-LEAF8 Gateway pair via EVPN A/A.

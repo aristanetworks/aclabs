@@ -1,7 +1,11 @@
 ---
 # Guide BB nodes carry none of the fleet management baseline.
 event_monitor: null
-dns_settings: null
+dns_settings:
+  # guide BB keeps the name-server, drops the domain + lookup lines
+  servers:
+    - ip_address: 8.8.8.8
+      vrf: MGMT
 ntp_settings: null
 timezone: null
 source_interfaces: null
