@@ -143,7 +143,6 @@ custom_vtep_bgp_session_tracker:
     session_trackers:
       - name: TRACK-LOCAL-EVPN-PEERS
         # Guide dialect: fast recovery (AVD default is 300s).
-        recovery_delay: 10
         recovery_delay: 300
 
 ###################################################

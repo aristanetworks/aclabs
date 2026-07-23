@@ -8,6 +8,7 @@ all:
       children:
         DOMAIN_A_SPINES:
           vars:
+            anta_tags: [domain_a, spine, ntp]
             type: spine
           hosts:
             A-SPINE1:
@@ -16,6 +17,9 @@ all:
             A-SPINE4:
         DOMAIN_A_LEAFS:
           vars:
+            anta_tags: "{{ ['domain_a', 'leaf', 'ntp']
+              + (['gateway', 'a_gateway', 'es', 'bfd', 'dci'] if inventory_hostname in ['A-LEAF7', 'A-LEAF8'] else ['standard_leaf', 'mlag', 'oism'])
+              + (['df_primary'] if inventory_hostname == 'A-LEAF7' else ['df_secondary'] if inventory_hostname == 'A-LEAF8' else []) }}"
             type: l3leaf
             # PARITY-LEDGER class 20 — the guide's A leafs run
             # `maximum-paths 128` (spines keep the 4 default).
@@ -43,6 +47,7 @@ all:
       children:
         DOMAIN_B_SPINES:
           vars:
+            anta_tags: [domain_b, spine, ntp, bfd, isis]
             type: spine
           hosts:
             B-SPINE1:
@@ -51,6 +56,11 @@ all:
             B-SPINE4:
         DOMAIN_B_LEAFS:
           vars:
+            anta_tags: "{{ ['domain_b', 'leaf', 'ntp', 'bfd', 'es', 'isis']
+              + (['gateway', 'b_gateway', 'dci'] if inventory_hostname in ['B-LEAF7', 'B-LEAF8'] else ['standard_leaf', 'oism'])
+              + (['df_primary'] if inventory_hostname == 'B-LEAF7' else ['df_secondary'] if inventory_hostname == 'B-LEAF8' else []) }}"
+            # ^ B DF prefs tie at 2000/2000 (guide truth) — B-LEAF7 wins the
+            #   lowest-originator tiebreak, hence df_primary.
             type: l3leaf
           hosts:
             B-LEAF1:
@@ -63,6 +73,7 @@ all:
             B-LEAF8:
         DOMAIN_B_L2_SWITCHES:
           vars:
+            anta_tags: [domain_b, l2leaf, ntp]
             type: l2leaf              # AVD's L2-only leaf role — no BGP, no VXLAN
           hosts:
             B-SW1:
@@ -79,6 +90,7 @@ all:
     #########################################################
     BACKBONE:
       vars:
+        anta_tags: [backbone, dci]
         type: backbone_router          # Custom node_type_keys entry defined in BACKBONE.yml
       hosts:
         BB1:

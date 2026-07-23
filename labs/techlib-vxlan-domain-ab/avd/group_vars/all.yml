@@ -109,9 +109,15 @@ custom_structured_configuration_router_multicast:
   ipv4:
     software_forwarding: null
 
-# Same probe for `protocol https` (27x extra): explicit line vs EOS default.
+# eAPI: the guide runs https by EOS DEFAULT (block present, line omitted).
+# enable_https must be TRUE here because the arista.avd.anta_workflow
+# hard-gates every device on structured management_api_http enable_https/
+# enable_http (plugins/action/anta_workflow.py:474) — no override exists.
+# Cost: the explicit `protocol https` line renders (+27 config-diff
+# extras vs the guide) but is DEFAULT-SUPPRESSED in running-config —
+# the on-box delta is unchanged. Two-tier accounting in PARITY-LEDGER.
 custom_structured_configuration_management_api_http:
-  enable_https: null
+  enable_https: true
 
 # Global IP MTU for Point-to-Point links (matches tech-library fabric interfaces)
 p2p_uplinks_mtu: 9114

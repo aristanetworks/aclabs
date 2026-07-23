@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **57** |
+| **Residual total (non-exempt)** | **84** |
 | MISSING — in the guide, not yet rendered | 0 |
-| EXTRA — rendered, not in the guide | 57 |
+| EXTRA — rendered, not in the guide | 84 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -39,10 +39,11 @@ acceptance stays visible.
 | count | line |
 |---|---|
 
-### EXTRA — top exact lines (11 distinct)
+### EXTRA — top exact lines (12 distinct)
 
 | count | line |
 |---|---|
+| 27× | `protocol https` |
 | 19× | `router multicast` |
 | 10× | `address-family evpn` |
 | 4× | `interface Loopback101` |
@@ -59,6 +60,7 @@ acceptance stays visible.
 
 | count | line |
 |---|---|
+| 27× | `protocol https` |
 | 19× | `router multicast` |
 | 10× | `address-family evpn` |
 | 8× | `interface Loopback#` |
@@ -71,31 +73,31 @@ acceptance stays visible.
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 0 | 1 | 1 |
-| A-LEAF2 | 0 | 1 | 1 |
-| A-LEAF3 | 0 | 1 | 1 |
-| A-LEAF4 | 0 | 1 | 1 |
-| A-LEAF5 | 0 | 1 | 1 |
-| A-LEAF6 | 0 | 1 | 1 |
-| A-LEAF7 | 0 | 9 | 9 |
-| A-LEAF8 | 0 | 9 | 9 |
-| A-SPINE1 | 0 | 0 | 0 |
-| A-SPINE2 | 0 | 0 | 0 |
-| A-SPINE3 | 0 | 0 | 0 |
-| A-SPINE4 | 0 | 0 | 0 |
-| B-LEAF1 | 0 | 2 | 2 |
-| B-LEAF2 | 0 | 2 | 2 |
-| B-LEAF3 | 0 | 2 | 2 |
-| B-LEAF4 | 0 | 2 | 2 |
-| B-LEAF5 | 0 | 2 | 2 |
-| B-LEAF6 | 0 | 2 | 2 |
-| B-LEAF7 | 0 | 9 | 9 |
-| B-LEAF8 | 0 | 9 | 9 |
-| B-SPINE1 | 0 | 0 | 0 |
-| B-SPINE2 | 0 | 0 | 0 |
-| B-SPINE3 | 0 | 0 | 0 |
-| B-SPINE4 | 0 | 0 | 0 |
-| B-SW1 | 0 | 1 | 1 |
-| BB1 | 0 | 1 | 1 |
-| BB2 | 0 | 1 | 1 |
-| **TOTAL** | **0** | **57** | **57** |
+| A-LEAF1 | 0 | 2 | 2 |
+| A-LEAF2 | 0 | 2 | 2 |
+| A-LEAF3 | 0 | 2 | 2 |
+| A-LEAF4 | 0 | 2 | 2 |
+| A-LEAF5 | 0 | 2 | 2 |
+| A-LEAF6 | 0 | 2 | 2 |
+| A-LEAF7 | 0 | 10 | 10 |
+| A-LEAF8 | 0 | 10 | 10 |
+| A-SPINE1 | 0 | 1 | 1 |
+| A-SPINE2 | 0 | 1 | 1 |
+| A-SPINE3 | 0 | 1 | 1 |
+| A-SPINE4 | 0 | 1 | 1 |
+| B-LEAF1 | 0 | 3 | 3 |
+| B-LEAF2 | 0 | 3 | 3 |
+| B-LEAF3 | 0 | 3 | 3 |
+| B-LEAF4 | 0 | 3 | 3 |
+| B-LEAF5 | 0 | 3 | 3 |
+| B-LEAF6 | 0 | 3 | 3 |
+| B-LEAF7 | 0 | 10 | 10 |
+| B-LEAF8 | 0 | 10 | 10 |
+| B-SPINE1 | 0 | 1 | 1 |
+| B-SPINE2 | 0 | 1 | 1 |
+| B-SPINE3 | 0 | 1 | 1 |
+| B-SPINE4 | 0 | 1 | 1 |
+| B-SW1 | 0 | 2 | 2 |
+| BB1 | 0 | 2 | 2 |
+| BB2 | 0 | 2 | 2 |
+| **TOTAL** | **0** | **84** | **84** |

@@ -366,3 +366,22 @@ benign**: gateway Loopback101/102 diag interfaces + IPs
 (vtep_diagnostic has no node filter; four /32s as Type-5s, zero
 protocol harm). Projected true on-box running-config delta: ~16
 lines. Verification path: deploy, `show run` diff per node.
+
+## Two-tier accounting (ANTA phase amendment)
+
+The `arista.avd.anta_workflow` runner hard-gates every device on
+structured `management_api_http.enable_https/enable_http` (no override
+exists), so the eAPI probe flipped from `null` to `true`. The explicit
+`protocol https` line this renders is an EOS *default* — present in the
+config diff, suppressed in running-config. The floor is therefore
+tracked at two tiers:
+
+* **Config-render floor: 84** (missing 0 / extra 84) — the honest
+  file-diff number. 68 of the 84 evaporate at config load (19 bare
+  router-multicast headers, 8 empty gateway VRF contexts, 8+6 af-evpn
+  re-entry headers, 27 default `protocol https` lines); 16 are benign
+  gateway diag loopbacks.
+* **Projected on-box floor: ~16** — unchanged by the eAPI flip.
+  Verification play: deploy + per-node `show run` diff.
+
+Every line the guide asks for still renders: **missing stays 0.**

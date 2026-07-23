@@ -18,9 +18,6 @@ tenants:
         # line to exactly the nodes that carry the VRF.
         bgp:
           structured_config:
-            # guide has no vrf-level router-id lines
-            router_id: null
-          structured_config:
             updates:
               wait_install: true
         evpn_l3_multicast:
@@ -63,9 +60,6 @@ tenants:
         # eos_designs never emits it. vrfs[].bgp.structured_config scopes the
         # line to exactly the nodes that carry the VRF.
         bgp:
-          structured_config:
-            # guide has no vrf-level router-id lines
-            router_id: null
           structured_config:
             updates:
               wait_install: true

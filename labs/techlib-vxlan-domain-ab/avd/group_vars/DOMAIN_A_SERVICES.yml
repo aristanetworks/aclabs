@@ -24,9 +24,6 @@ tenants:
         # VRF-scoped anchor. Idempotent where both paths write it.
         bgp:
           structured_config:
-            # guide has no vrf-level router-id lines
-            router_id: null
-          structured_config:
             updates:
               wait_install: true
         # NOTE: L3 multi-domain (VRF-level `rd evpn domain all` + multi-domain
@@ -74,9 +71,6 @@ tenants:
         # Gateway pair (mlag: false since the native swap) needs it from the
         # VRF-scoped anchor. Idempotent where both paths write it.
         bgp:
-          structured_config:
-            # guide has no vrf-level router-id lines
-            router_id: null
           structured_config:
             updates:
               wait_install: true

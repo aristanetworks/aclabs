@@ -1,0 +1,50 @@
+---
+###################################################
+# ANTA user catalog — custom techlib tests (EVPN multi-domain + OISM)
+#
+# Requires: pip install -e avd/anta/anta_techlib_tests
+# These are the tests stock ANTA cannot express — including the direct
+# validation of the Day 54 s6 es-rt-auto functional patch.
+###################################################
+
+anta_techlib_tests.evpn_multidomain:
+  # Peer's Type-4 route imported => auto ES-Import RT derivation works.
+  - VerifyEVPNType4Routes:
+      minimum: 2
+      filters:
+        tags: [es]
+
+  # DF verdicts on the gateway pairs' Po9 (HostX8 segment).
+  # A-side: preference 2000 (A-LEAF7) beats 1000 (A-LEAF8).
+  # B-side: 2000/2000 tie — B-LEAF7 wins the lowest-originator tiebreak.
+  - VerifyEVPNDFElection:
+      interface: Port-Channel9
+      expect_df: true
+      filters:
+        tags: [df_primary]
+  - VerifyEVPNDFElection:
+      interface: Port-Channel9
+      expect_df: false
+      filters:
+        tags: [df_secondary]
+
+  # Cross-domain D-PATH stamps: each side's gateways must see the OTHER
+  # domain's identifier on a prefix that only exists over there.
+  - VerifyEVPNDPath:
+      prefix: 10.30.30.0/24      # Domain A-only (VLAN 30, PROD)
+      expected_domains: ['1:1']
+      filters:
+        tags: [b_gateway]
+  - VerifyEVPNDPath:
+      prefix: 10.20.20.0/24      # Domain B-only (VLAN 20, PROD)
+      expected_domains: ['2:2']
+      filters:
+        tags: [a_gateway]
+
+anta_techlib_tests.oism:
+  # Dual-stack OISM: MLD snooping enabled with the ranged member VLANs
+  # (every standard leaf carries at least two).
+  - VerifyMldSnoopingVlans:
+      minimum_vlans: 2
+      filters:
+        tags: [oism]

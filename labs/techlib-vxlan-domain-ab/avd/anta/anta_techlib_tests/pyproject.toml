@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anta-techlib-tests"
+version = "0.1.0"
+description = "Custom ANTA tests for the techlib-vxlan-domain-ab lab: EVPN multi-domain (Type-4 / DF / D-PATH) and OISM MLD state."
+requires-python = ">=3.10"
+dependencies = ["anta>=1.9"]
+
+[tool.setuptools.packages.find]
+include = ["anta_techlib_tests*"]
