@@ -201,6 +201,12 @@ custom_vtep_route_maps:
 # bestpath, local-as trick to peer with BB in AS 65000) lives here.
 ###################################################
 custom_evpn_gw_bgp_config:
+  vrfs:
+    # guide has no vrf-level router-id lines
+    - name: PROD
+      router_id: null
+    - name: DEV
+      router_id: null
   # Class 3 (crown jewel): domain identifiers + `bgp bestpath d-path` are
   # now generated NATIVELY by evpn_gateway.d_path + all_active_multihoming
   # (see POD4). The old hand-stitched keys (address_family_evpn domain ids,
@@ -245,6 +251,14 @@ custom_evpn_gw_route_maps:
         type: permit
         match:
           - ip address prefix-list PL-GATEWAY-LOOP
+  # No MLAG peer on the gateways — the generated OUT map is a stray;
+  # RM-CONN-2-BGP drops the set-origin line (guide dialect).
+  - name: RM-MLAG-PEER-OUT
+    sequence_numbers: null
+  - name: RM-CONN-2-BGP
+    sequence_numbers:
+      - sequence: 10
+        set: null
 
 # Per-Gateway WAN-facing eBGP neighbors to BB1/BB2 in AS 65000.
 # Structured-config injected onto A-LEAF7 / A-LEAF8 via node-level structured_config
@@ -448,9 +462,15 @@ csc_pod1_leaf_features:
       eos_cli: |
         vxlan multicast ipv6
   router_bgp:
+    peer_groups:
+      # Attach swap: guide runs the OUT map on the MLAG peer, no IN map.
+      - name: MLAG-IPV4-PEER
+        route_map_in: null
+        route_map_out: RM-MLAG-PEER-OUT
     # OISM evpn-multicast sub-AF dialect (see Domain B note).
     vrfs:
       - name: PROD
+        router_id: null
         evpn_multicast: null
         eos_cli: |
           evpn multicast
@@ -488,9 +508,15 @@ csc_pod2_leaf_features:
       eos_cli: |
         vxlan multicast ipv6
   router_bgp:
+    peer_groups:
+      # Attach swap: guide runs the OUT map on the MLAG peer, no IN map.
+      - name: MLAG-IPV4-PEER
+        route_map_in: null
+        route_map_out: RM-MLAG-PEER-OUT
     # OISM evpn-multicast sub-AF dialect (see Domain B note).
     vrfs:
       - name: DEV
+        router_id: null
         evpn_multicast: null
         eos_cli: |
           evpn multicast
@@ -498,6 +524,7 @@ csc_pod2_leaf_features:
              !
              address-family ipv6
       - name: PROD
+        router_id: null
         evpn_multicast: null
         eos_cli: |
           evpn multicast
@@ -540,9 +567,15 @@ csc_pod3_leaf_features:
       eos_cli: |
         vxlan multicast ipv6
   router_bgp:
+    peer_groups:
+      # Attach swap: guide runs the OUT map on the MLAG peer, no IN map.
+      - name: MLAG-IPV4-PEER
+        route_map_in: null
+        route_map_out: RM-MLAG-PEER-OUT
     # OISM evpn-multicast sub-AF dialect (see Domain B note).
     vrfs:
       - name: DEV
+        router_id: null
         evpn_multicast: null
         eos_cli: |
           evpn multicast
@@ -662,6 +695,18 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
       structured_config:
+        route_maps:
+          # Guide attaches RM-MLAG-PEER-OUT (defined identically to the
+          # render) and never defines the IN map; RM-CONN-2-BGP drops the
+          # set-origin line.
+          - name: RM-MLAG-PEER-IN
+            sequence_numbers: null
+          - name: RM-CONN-2-BGP
+            sequence_numbers:
+              - sequence: 10
+                set: null
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
         spanning_tree:
           edge_port:
             bpduguard_default: true
@@ -714,9 +759,11 @@ l3leaf:
           # disabled Gateway pair (which carries some of these VLANs)
           # stays igmp-free per the guide.
           - name: Vlan10
+            ipv6_enable: null
             ip_igmp: true
             eos_cli: mld
           - name: Vlan30
+            ipv6_enable: null
             ip_igmp: true
             eos_cli: mld
         loopback_interfaces: "{{ csc_pod1_leaf_features.loopback_interfaces }}"
@@ -806,6 +853,18 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
       structured_config:
+        route_maps:
+          # Guide attaches RM-MLAG-PEER-OUT (defined identically to the
+          # render) and never defines the IN map; RM-CONN-2-BGP drops the
+          # set-origin line.
+          - name: RM-MLAG-PEER-IN
+            sequence_numbers: null
+          - name: RM-CONN-2-BGP
+            sequence_numbers:
+              - sequence: 10
+                set: null
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
         spanning_tree:
           edge_port:
             bpduguard_default: true
@@ -859,12 +918,15 @@ l3leaf:
           # disabled Gateway pair (which carries some of these VLANs)
           # stays igmp-free per the guide.
           - name: Vlan10
+            ipv6_enable: null
             ip_igmp: true
             eos_cli: mld
           - name: Vlan30
+            ipv6_enable: null
             ip_igmp: true
             eos_cli: mld
           - name: Vlan50
+            ipv6_enable: null
             ip_igmp: true
             eos_cli: mld
         loopback_interfaces: "{{ csc_pod2_leaf_features.loopback_interfaces }}"
@@ -964,6 +1026,18 @@ l3leaf:
       filter:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
       structured_config:
+        route_maps:
+          # Guide attaches RM-MLAG-PEER-OUT (defined identically to the
+          # render) and never defines the IN map; RM-CONN-2-BGP drops the
+          # set-origin line.
+          - name: RM-MLAG-PEER-IN
+            sequence_numbers: null
+          - name: RM-CONN-2-BGP
+            sequence_numbers:
+              - sequence: 10
+                set: null
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
         spanning_tree:
           edge_port:
             bpduguard_default: true
@@ -1010,9 +1084,11 @@ l3leaf:
           # disabled Gateway pair (which carries some of these VLANs)
           # stays igmp-free per the guide.
           - name: Vlan50
+            ipv6_enable: null
             ip_igmp: true
             eos_cli: mld
           - name: Vlan70
+            ipv6_enable: null
             ip_igmp: true
             eos_cli: mld
         loopback_interfaces: "{{ csc_pod3_leaf_features.loopback_interfaces }}"
@@ -1131,11 +1207,22 @@ l3leaf:
             ip_address: 10.0.0.2
             bgp_as: 65000
       structured_config:
+        ip_extcommunity_lists: null   # generated evpn-imported ECL is a stray
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
+        vlan_interfaces:
+          - name: Vlan10
+            # guide SVIs carry ipv6 virtual without ipv6 enable
+            ipv6_enable: null
+          - name: Vlan50
+            # guide SVIs carry ipv6 virtual without ipv6 enable
+            ipv6_enable: null
+          - name: Vlan70
+            # guide SVIs carry ipv6 virtual without ipv6 enable
+            ipv6_enable: null
         spanning_tree:
           edge_port:
             bpduguard_default: true
-        # Guide A carries no router-bfd tuning block.
-        router_bfd: null
         # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
         # line (access is default; the guide doesn't save it). Null the
         # emitted mode.

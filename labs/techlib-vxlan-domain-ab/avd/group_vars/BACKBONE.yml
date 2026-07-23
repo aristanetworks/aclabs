@@ -165,6 +165,7 @@ backbone_router:
       id: 1                                        # → Loopback0 = 10.0.0.1/32
       mgmt_ip: 172.100.100.101/22
       structured_config:
+        router_bfd: null   # guide BB has no bfd tuning block
         mac_address_table: null
         router_bgp:
           router_id: 1.1.0.1
@@ -175,6 +176,7 @@ backbone_router:
       id: 2                                        # → Loopback0 = 10.0.0.2/32
       mgmt_ip: 172.100.100.102/22
       structured_config:
+        router_bfd: null   # guide BB has no bfd tuning block
         mac_address_table: null
         router_bgp:
           router_id: 1.1.0.2

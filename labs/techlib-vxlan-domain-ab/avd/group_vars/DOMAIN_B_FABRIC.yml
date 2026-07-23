@@ -155,6 +155,12 @@ custom_vtep_bgp_session_tracker:
 ###################################################
 
 custom_evpn_gw_bgp_config:
+  vrfs:
+    # guide has no vrf-level router-id lines
+    - name: PROD
+      router_id: null
+    - name: DEV
+      router_id: null
   address_family_evpn:
     peer_groups:
       - name: LOCAL-EVPN-PEERS
@@ -288,6 +294,7 @@ csc_b_pod1_leaf_features:
     # header nulled — net-zero headers, both AFs gained.
     vrfs:
       - name: PROD
+        router_id: null
         evpn_multicast: null
         eos_cli: |
           evpn multicast
@@ -331,6 +338,7 @@ csc_b_pod2_leaf_features:
     # header nulled — net-zero headers, both AFs gained.
     vrfs:
       - name: PROD
+        router_id: null
         evpn_multicast: null
         eos_cli: |
           evpn multicast
@@ -338,6 +346,7 @@ csc_b_pod2_leaf_features:
              !
              address-family ipv6
       - name: DEV
+        router_id: null
         evpn_multicast: null
         eos_cli: |
           evpn multicast
@@ -381,6 +390,7 @@ csc_b_pod3_leaf_features:
     # header nulled — net-zero headers, both AFs gained.
     vrfs:
       - name: PROD
+        router_id: null
         evpn_multicast: null
         eos_cli: |
           evpn multicast
@@ -388,6 +398,7 @@ csc_b_pod3_leaf_features:
              !
              address-family ipv6
       - name: DEV
+        router_id: null
         evpn_multicast: null
         eos_cli: |
           evpn multicast
@@ -676,6 +687,8 @@ l3leaf:
       filter:
         tags: ['GREEN', 'PURPLE']
       structured_config:
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
         # Guide B pod leafs define no route-maps or ECLs at all —
         # the generated SOO set is the only occupant; null wholesale.
         route_maps: null
@@ -700,8 +713,10 @@ l3leaf:
               enabled: false
         vlan_interfaces:
           - name: Vlan20
+            ipv6_enable: null
             eos_cli: mld
           - name: Vlan40
+            ipv6_enable: null
             eos_cli: mld
         vxlan_interface:
           vxlan1:
@@ -729,6 +744,8 @@ l3leaf:
       # leaves the pod (HostB4 is BLUE). Node filter replaces group
       # filter, so each node lists its full set.
       structured_config:
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
         # Guide B pod leafs define no route-maps or ECLs at all —
         # the generated SOO set is the only occupant; null wholesale.
         route_maps: null
@@ -749,6 +766,7 @@ l3leaf:
           # (Vlan40 left with PURPLE in the endpoints refresh; its entry
           # here would create-trap a bare SVI.)
           - name: Vlan10
+            ipv6_enable: null
             eos_cli: mld
         vxlan_interface:
           vxlan1:
@@ -765,6 +783,7 @@ l3leaf:
           structured_config:
             vlan_interfaces:
               - name: Vlan60
+                ipv6_enable: null
                 eos_cli: mld
           id: 3
           mgmt_ip: 172.100.102.107/22
@@ -777,6 +796,7 @@ l3leaf:
           structured_config:
             vlan_interfaces:
               - name: Vlan70
+                ipv6_enable: null
                 eos_cli: mld
           id: 4
           mgmt_ip: 172.100.102.108/22
@@ -790,6 +810,8 @@ l3leaf:
       filter:
         tags: ['PURPLE', 'BLACK']
       structured_config:
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
         # Guide B pod leafs define no route-maps or ECLs at all —
         # the generated SOO set is the only occupant; null wholesale.
         route_maps: null
@@ -813,8 +835,10 @@ l3leaf:
               enabled: false
         vlan_interfaces:
           - name: Vlan40
+            ipv6_enable: null
             eos_cli: mld
           - name: Vlan80
+            ipv6_enable: null
             eos_cli: mld
         vxlan_interface:
           vxlan1:
@@ -862,6 +886,18 @@ l3leaf:
       filter:
         tags: ['BLUE', 'RED', 'BROWN']              # VLANs 10, 60 (local, HostB8), 70
       structured_config:
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
+        vlan_interfaces:
+          - name: Vlan10
+            # guide SVIs carry ipv6 virtual without ipv6 enable
+            ipv6_enable: null
+          - name: Vlan60
+            # guide SVIs carry ipv6 virtual without ipv6 enable
+            ipv6_enable: null
+          - name: Vlan70
+            # guide SVIs carry ipv6 virtual without ipv6 enable
+            ipv6_enable: null
         ip_extcommunity_lists: null
         # Sweep S2: null the emitted `switchport mode access` per guide dialect.
         # B3/4 Po7 deferred (rend-only, dies in the endpoints refresh).
