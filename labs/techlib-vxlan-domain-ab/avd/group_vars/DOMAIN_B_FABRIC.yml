@@ -33,6 +33,14 @@ custom_structured_configuration_transceiver_qsfp_default_mode_4x10: null
 ###################################################
 
 underlay_routing_protocol: isis
+# Guide has no SOO re-advertisement protection machinery. NOTE: this flag
+# does NOT gate the generated SOO set (that path is hard-coded on
+# ibgp+vtep+client); retained only to document intent. The actual kills
+# ride the pod/gateway structured channels + the af-evpn anchor nulls.
+evpn_prevent_readvertise_to_server: false
+# The SOO route-map attaches are written by the overlay generator itself
+# (ibgp+vtep+client gate, no input knob) and out-rank every ordinary
+# channel; only the CSC prefix — which merges last — can null them.
 # Guide sysids are node-id based (0000.0000.000N), not loopback-derived.
 isis_system_id_format: node_id
 isis_area_id: '49.1111'                            # NET: 49.1111.0000.0000.[NodeID].00
@@ -67,6 +75,9 @@ bgp_peer_groups:
     structured_config:
       send_community: null
       maximum_routes: null
+      # Guide has no SOO machinery on the local overlay.
+      route_map_in: null
+      route_map_out: null
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
     bfd: true
@@ -113,6 +124,10 @@ custom_vtep_dhcp_relay:
 
 custom_vtep_stp_root_super:
   spanning_tree:
+    # Guide dialect: global edge-port bpduguard default; no mst block.
+    edge_port:
+      bpduguard_default: true
+    mst_instances: null
     root_super: true
 
 custom_vtep_bgp_session_tracker:
@@ -140,6 +155,11 @@ custom_vtep_bgp_session_tracker:
 ###################################################
 
 custom_evpn_gw_bgp_config:
+  address_family_evpn:
+    peer_groups:
+      - name: LOCAL-EVPN-PEERS
+        route_map_in: null
+        route_map_out: null
   address_family_ipv4:
     peer_groups:
       - name: REMOTE-IPV4-PEERS
@@ -185,6 +205,12 @@ custom_evpn_gw_route_maps:
         type: permit
         match:
           - ip address prefix-list PL-GATEWAY-LOOP
+  # Suppress the generated SOO maps (empirical: entries merged with null
+  # sequence_numbers should render nothing).
+  - name: RM-EVPN-SOO-IN
+    sequence_numbers: null
+  - name: RM-EVPN-SOO-OUT
+    sequence_numbers: null
 
 b_leaf7_dci_bgp_peers:
   router_bgp:
@@ -248,6 +274,14 @@ csc_spine_multicast:
 # B_POD1 (B-LEAF1/2): VLANs 20, 40
 csc_b_pod1_leaf_features:
   router_bgp:
+    address_family_evpn:
+      peer_groups:
+        # The generator writes the SOO route-map attaches onto the af-evpn
+        # peer-group item unconditionally (ibgp+vtep+client); this channel
+        # merges by name after generation and null-removes them.
+        - name: LOCAL-EVPN-PEERS
+          route_map_in: null
+          route_map_out: null
     # OISM evpn-multicast sub-AF dialect: no native cli path for the
     # bare address-family ipv4/ipv6 blocks (only ipv4.transit exists),
     # so the three-line construct rides vrf eos_cli with the native
@@ -283,6 +317,14 @@ csc_b_pod1_leaf_features:
 # B_POD2 (B-LEAF3/4): VLANs 10, 40
 csc_b_pod2_leaf_features:
   router_bgp:
+    address_family_evpn:
+      peer_groups:
+        # The generator writes the SOO route-map attaches onto the af-evpn
+        # peer-group item unconditionally (ibgp+vtep+client); this channel
+        # merges by name after generation and null-removes them.
+        - name: LOCAL-EVPN-PEERS
+          route_map_in: null
+          route_map_out: null
     # OISM evpn-multicast sub-AF dialect: no native cli path for the
     # bare address-family ipv4/ipv6 blocks (only ipv4.transit exists),
     # so the three-line construct rides vrf eos_cli with the native
@@ -325,6 +367,14 @@ csc_b_pod2_leaf_features:
 # B_POD3 (B-LEAF5/6): VLANs 40, 80
 csc_b_pod3_leaf_features:
   router_bgp:
+    address_family_evpn:
+      peer_groups:
+        # The generator writes the SOO route-map attaches onto the af-evpn
+        # peer-group item unconditionally (ibgp+vtep+client); this channel
+        # merges by name after generation and null-removes them.
+        - name: LOCAL-EVPN-PEERS
+          route_map_in: null
+          route_map_out: null
     # OISM evpn-multicast sub-AF dialect: no native cli path for the
     # bare address-family ipv4/ipv6 blocks (only ipv4.transit exists),
     # so the three-line construct rides vrf eos_cli with the native
@@ -375,6 +425,7 @@ spine:
     bgp_as: 65200
     loopback_ipv4_pool: 10.0.2.0/24
     structured_config:
+      vlan_internal_order: null
       # Guide dialect: isis circuit-type level-2 on loopbacks too.
       loopback_interfaces:
         - name: Loopback0
@@ -625,6 +676,10 @@ l3leaf:
       filter:
         tags: ['GREEN', 'PURPLE']
       structured_config:
+        # Guide B pod leafs define no route-maps or ECLs at all —
+        # the generated SOO set is the only occupant; null wholesale.
+        route_maps: null
+        ip_extcommunity_lists: null
         # Sweep S2: null the emitted `switchport mode access` per guide dialect.
         # B3/4 Po7 deferred (rend-only, dies in the endpoints refresh).
         port_channel_interfaces:
@@ -674,6 +729,10 @@ l3leaf:
       # leaves the pod (HostB4 is BLUE). Node filter replaces group
       # filter, so each node lists its full set.
       structured_config:
+        # Guide B pod leafs define no route-maps or ECLs at all —
+        # the generated SOO set is the only occupant; null wholesale.
+        route_maps: null
+        ip_extcommunity_lists: null
         # Sweep S2: null the emitted `switchport mode access` per guide dialect.
         # B3/4 Po7 deferred (rend-only, dies in the endpoints refresh).
         port_channel_interfaces:
@@ -731,6 +790,10 @@ l3leaf:
       filter:
         tags: ['PURPLE', 'BLACK']
       structured_config:
+        # Guide B pod leafs define no route-maps or ECLs at all —
+        # the generated SOO set is the only occupant; null wholesale.
+        route_maps: null
+        ip_extcommunity_lists: null
         # ES/LACP style on the B-SW1 uplink Po (l2leaf parent side) —
         # same guide dialect as the endpoint profiles; pod-scoped since
         # the l2leaf uplink Po is generated, not adapter-driven.
@@ -799,6 +862,7 @@ l3leaf:
       filter:
         tags: ['BLUE', 'RED', 'BROWN']              # VLANs 10, 60 (local, HostB8), 70
       structured_config:
+        ip_extcommunity_lists: null
         # Sweep S2: null the emitted `switchport mode access` per guide dialect.
         # B3/4 Po7 deferred (rend-only, dies in the endpoints refresh).
         port_channel_interfaces:
@@ -830,6 +894,14 @@ l2leaf:
   defaults:
     platform: cEOS-LAB
     spanning_tree_mode: mstp
+    structured_config:
+      # Guide B-SW1 lacks the routed-default trio and mst block; carries
+      # the global bpduguard default.
+      mac_address_table: null
+      spanning_tree:
+        edge_port:
+          bpduguard_default: true
+        mst_instances: null
     uplink_switches: [B-LEAF5, B-LEAF6]
     uplink_interfaces: [Ethernet1, Ethernet2]         # B-SW1's own Et1/Et2 face the LEAFs
     uplink_type: port-channel                          # Single LACP trunk to both VTEPs

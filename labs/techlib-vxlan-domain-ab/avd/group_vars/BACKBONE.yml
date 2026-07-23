@@ -1,4 +1,11 @@
 ---
+# BB nodes opt out of the fleet routed-switchport CSC + arp aging input.
+custom_structured_configuration_switchport_default: null
+# The arp writer runs after every structured channel and re-applies the
+# schema default; only the CSC overlay (applied last) can null the leaf.
+custom_structured_configuration_arp:
+  aging:
+    timeout_default: null
 ###################################################
 # Backbone (BB1, BB2) — dedicated fabric for the DCI
 #
@@ -151,12 +158,14 @@ backbone_router:
     bgp_as: 65000
     loopback_ipv4_pool: 10.0.0.0/24                # Loopback0: 10.0.0.[NodeID]/32
     structured_config:
+      vlan_internal_order: null
       router_bgp: "{{ csc_backbone_rr_bgp.router_bgp }}"
   nodes:
     - name: BB1
       id: 1                                        # → Loopback0 = 10.0.0.1/32
       mgmt_ip: 172.100.100.101/22
       structured_config:
+        mac_address_table: null
         router_bgp:
           router_id: 1.1.0.1
           address_family_ipv4:
@@ -166,6 +175,7 @@ backbone_router:
       id: 2                                        # → Loopback0 = 10.0.0.2/32
       mgmt_ip: 172.100.100.102/22
       structured_config:
+        mac_address_table: null
         router_bgp:
           router_id: 1.1.0.2
           address_family_ipv4:

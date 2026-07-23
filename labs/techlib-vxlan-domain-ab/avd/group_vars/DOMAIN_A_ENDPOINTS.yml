@@ -14,7 +14,6 @@ port_profiles:
   - profile: PROF-BLUE-MLAG
     mode: access
     spanning_tree_portfast: edge
-    spanning_tree_bpduguard: true
     vlans: '10'
     port_channel:
       mode: active
@@ -22,7 +21,6 @@ port_profiles:
   - profile: PROF-ORANGE-MLAG
     mode: access
     spanning_tree_portfast: edge
-    spanning_tree_bpduguard: true
     vlans: '30'
     port_channel:
       mode: active
@@ -30,7 +28,6 @@ port_profiles:
   - profile: PROF-ORANGE-SINGLE-HOMED
     mode: access
     spanning_tree_portfast: edge
-    spanning_tree_bpduguard: true
     vlans: '30'
 
   #########################################
@@ -39,7 +36,6 @@ port_profiles:
   - profile: PROF-YELLOW-SINGLE-HOMED
     mode: access
     spanning_tree_portfast: edge
-    spanning_tree_bpduguard: true
     vlans: '50'
 
   # Endpoints refresh: HostA7 dual-homes on the POD3 pair per guide
@@ -54,7 +50,6 @@ port_profiles:
   - profile: PROF-BROWN-MLAG
     mode: access
     spanning_tree_portfast: edge
-    spanning_tree_bpduguard: true
     vlans: '70'
     port_channel:
       mode: active

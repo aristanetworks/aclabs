@@ -570,6 +570,7 @@ spine:
     bgp_as: 65100
     loopback_ipv4_pool: 10.0.1.0/24
     structured_config:
+      vlan_internal_order: null
       router_bfd: null
       router_multicast: "{{ csc_spine_multicast }}"
       # Class 7 — redistribute route-map re-attach (see the dialect block).
@@ -662,6 +663,8 @@ l3leaf:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
       structured_config:
         spanning_tree:
+          edge_port:
+            bpduguard_default: true
           no_spanning_tree_vlan: '3001,4093-4094'
         # Guide A carries no router-bfd tuning block.
         router_bfd: null
@@ -804,6 +807,8 @@ l3leaf:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
       structured_config:
         spanning_tree:
+          edge_port:
+            bpduguard_default: true
           no_spanning_tree_vlan: '3001-3002,4093-4094'
         # Guide A carries no router-bfd tuning block.
         router_bfd: null
@@ -960,6 +965,8 @@ l3leaf:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
       structured_config:
         spanning_tree:
+          edge_port:
+            bpduguard_default: true
           no_spanning_tree_vlan: '3002,4093-4094'
         # Guide A carries no router-bfd tuning block.
         router_bfd: null
@@ -1124,6 +1131,9 @@ l3leaf:
             ip_address: 10.0.0.2
             bgp_as: 65000
       structured_config:
+        spanning_tree:
+          edge_port:
+            bpduguard_default: true
         # Guide A carries no router-bfd tuning block.
         router_bfd: null
         # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode

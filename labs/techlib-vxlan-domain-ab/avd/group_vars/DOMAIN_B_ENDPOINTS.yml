@@ -147,13 +147,11 @@ port_profiles:
   - profile: PROF-PURPLE-ACCESS
     mode: access
     spanning_tree_portfast: edge
-    spanning_tree_bpduguard: true
     vlans: '40'
 
   - profile: PROF-BLACK-ACCESS
     mode: access
     spanning_tree_portfast: edge
-    spanning_tree_bpduguard: true
     vlans: '80'
 
 servers:

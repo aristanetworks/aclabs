@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **529** |
-| MISSING — in the guide, not yet rendered | 91 |
-| EXTRA — rendered, not in the guide | 438 |
+| **Residual total (non-exempt)** | **407** |
+| MISSING — in the guide, not yet rendered | 74 |
+| EXTRA — rendered, not in the guide | 333 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -29,11 +29,10 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (40 distinct)
+### MISSING — top exact lines (39 distinct)
 
 | count | line |
 |---|---|
-| 17× | `spanning-tree edge-port bpduguard default` |
 | 6× | `neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-OUT out` |
 | 6× | `route type ethernet-segment route-target auto` |
 | 4× | `no switchport` |
@@ -48,12 +47,12 @@ acceptance stays visible.
 | 2× | `vxlan vlan 10,50,70 vni 10010,10050,10070` |
 | 2× | `router bfd` |
 | 2× | `multihop interval 1000 min-rx 1000 multiplier 3` |
+| 2× | `vxlan vlan 20,40 vni 10020,10040` |
 
 ### MISSING — top shapes (digits→`#`)
 
 | count | line |
 |---|---|
-| 17× | `spanning-tree edge-port bpduguard default` |
 | 10× | `vxlan vlan #,# vni #,#` |
 | 10× | `vlan #,#` |
 | 8× | `network #.#.#.#/#` |
@@ -63,8 +62,9 @@ acceptance stays visible.
 | 4× | `no switchport` |
 | 3× | `ip address #.#.#.#/#` |
 | 3× | `switchport trunk allowed vlan #,#` |
+| 2× | `vlan #,#,#` |
 
-### EXTRA — top exact lines (136 distinct)
+### EXTRA — top exact lines (108 distinct)
 
 | count | line |
 |---|---|
@@ -72,17 +72,17 @@ acceptance stays visible.
 | 19× | `router multicast` |
 | 14× | `vrf PROD` |
 | 14× | `vrf DEV` |
-| 13× | `spanning-tree bpduguard enable` |
 | 10× | `vxlan vlan 10 vni 10010` |
-| 10× | `vlan internal order ascending range 1006 1199` |
-| 9× | `spanning-tree mst 0 priority 32768` |
 | 8× | `set origin incomplete` |
-| 8× | `route-map RM-EVPN-SOO-IN deny 10` |
-| 8× | `match extcommunity ECL-EVPN-SOO` |
-| 8× | `route-map RM-EVPN-SOO-IN permit 20` |
-| 8× | `route-map RM-EVPN-SOO-OUT permit 10` |
-| 8× | `neighbor LOCAL-EVPN-PEERS route-map RM-EVPN-SOO-IN in` |
-| 8× | `neighbor LOCAL-EVPN-PEERS route-map RM-EVPN-SOO-OUT out` |
+| 7× | `switchport mode access` |
+| 7× | `ipv4` |
+| 6× | `route-map RM-MLAG-PEER-IN permit 10` |
+| 6× | `neighbor MLAG-IPV4-PEER route-map RM-MLAG-PEER-IN in` |
+| 5× | `vxlan vlan 70 vni 10070` |
+| 4× | `vxlan vlan 30 vni 10030` |
+| 4× | `vxlan vlan 50 vni 10050` |
+| 4× | `interface Loopback101` |
+| 4× | `interface Loopback102` |
 
 ### EXTRA — top shapes (digits→`#`)
 
@@ -95,39 +95,39 @@ acceptance stays visible.
 | 14× | `vrf PROD` |
 | 14× | `ip address virtual source-nat vrf PROD address #.#.#.#` |
 | 14× | `vrf DEV` |
-| 13× | `spanning-tree bpduguard enable` |
 | 12× | `ip address virtual source-nat vrf DEV address #.#.#.#` |
 | 11× | `ip address #.#.#.#/#` |
+| 11× | `rd #.#.#.#:#` |
 
 ## Per-node residual
 
 | Node | missing | extra | total |
 |---|---|---|---|
-| A-LEAF1 | 4 | 13 | 17 |
-| A-LEAF2 | 5 | 14 | 19 |
-| A-LEAF3 | 4 | 18 | 22 |
-| A-LEAF4 | 5 | 19 | 24 |
-| A-LEAF5 | 5 | 12 | 17 |
-| A-LEAF6 | 5 | 12 | 17 |
-| A-LEAF7 | 5 | 33 | 38 |
-| A-LEAF8 | 5 | 33 | 38 |
-| A-SPINE1 | 0 | 1 | 1 |
-| A-SPINE2 | 0 | 1 | 1 |
-| A-SPINE3 | 0 | 1 | 1 |
-| A-SPINE4 | 0 | 1 | 1 |
-| B-LEAF1 | 4 | 17 | 21 |
-| B-LEAF2 | 4 | 17 | 21 |
-| B-LEAF3 | 4 | 23 | 27 |
-| B-LEAF4 | 4 | 23 | 27 |
-| B-LEAF5 | 5 | 21 | 26 |
-| B-LEAF6 | 5 | 21 | 26 |
-| B-LEAF7 | 7 | 48 | 55 |
-| B-LEAF8 | 7 | 48 | 55 |
-| B-SPINE1 | 0 | 1 | 1 |
-| B-SPINE2 | 0 | 1 | 1 |
-| B-SPINE3 | 0 | 1 | 1 |
-| B-SPINE4 | 0 | 1 | 1 |
-| B-SW1 | 7 | 20 | 27 |
-| BB1 | 3 | 19 | 22 |
-| BB2 | 3 | 19 | 22 |
-| **TOTAL** | **91** | **438** | **529** |
+| A-LEAF1 | 3 | 11 | 14 |
+| A-LEAF2 | 4 | 12 | 16 |
+| A-LEAF3 | 3 | 16 | 19 |
+| A-LEAF4 | 4 | 17 | 21 |
+| A-LEAF5 | 4 | 11 | 15 |
+| A-LEAF6 | 4 | 11 | 15 |
+| A-LEAF7 | 4 | 33 | 37 |
+| A-LEAF8 | 4 | 33 | 37 |
+| A-SPINE1 | 0 | 0 | 0 |
+| A-SPINE2 | 0 | 0 | 0 |
+| A-SPINE3 | 0 | 0 | 0 |
+| A-SPINE4 | 0 | 0 | 0 |
+| B-LEAF1 | 3 | 8 | 11 |
+| B-LEAF2 | 3 | 8 | 11 |
+| B-LEAF3 | 3 | 14 | 17 |
+| B-LEAF4 | 3 | 14 | 17 |
+| B-LEAF5 | 4 | 12 | 16 |
+| B-LEAF6 | 4 | 12 | 16 |
+| B-LEAF7 | 6 | 39 | 45 |
+| B-LEAF8 | 6 | 39 | 45 |
+| B-SPINE1 | 0 | 0 | 0 |
+| B-SPINE2 | 0 | 0 | 0 |
+| B-SPINE3 | 0 | 0 | 0 |
+| B-SPINE4 | 0 | 0 | 0 |
+| B-SW1 | 6 | 13 | 19 |
+| BB1 | 3 | 15 | 18 |
+| BB2 | 3 | 15 | 18 |
+| **TOTAL** | **74** | **333** | **407** |

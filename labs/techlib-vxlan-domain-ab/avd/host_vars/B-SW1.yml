@@ -1,0 +1,8 @@
+---
+# B-SW1 opts out of two fleet-wide defaults the guide omits here:
+# the CSC routed-switchport default (CSC merges last, so only a
+# same-channel null can beat it) and the global arp aging input.
+custom_structured_configuration_switchport_default: null
+custom_structured_configuration_arp:
+  aging:
+    timeout_default: null
