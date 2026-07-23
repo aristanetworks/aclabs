@@ -302,3 +302,45 @@ switchport mode access, edge-port bpduguard 17-node scope, autostate,
 source-nat, transceiver re-add x2, mtu leftovers, ipv6 enable style,
 RD/RT scheme) and the services/endpoints/host_vars refresh against
 the per-leaf tables in DESIGN.md. ANTA catalog rebuild last.
+
+## Session 6 — MACH 9000 (663 → 57, THE FLOOR)
+
+Nine commits, continuous run. Classes closed: B isis sysids + mlag
+domain/peer dialect, per-node Vlan4094 /30, router-bfd carry-map (guide
+A GATEWAYS carry it, BB does not), MLAG vrf-peering dialect, the full
+SOO siege (defs wholesale, gateway ECL surgical, attaches via af-evpn
+anchor name-merge nulls), bpduguard global-default swap, mst/vlan-
+internal/source-nat/ipv6-enable sweeps, RM-MLAG attach swap (guide
+attaches the OUT map and never defines IN), RM-CONN set-origin, vrf
+router-id ×26 (late anchors; services bgp.structured_config value-sets
+work but null-removes silently drop), mld members + full router-
+multicast blocks extraction-driven into host eos_cli (byte-exact by
+construction), vxlan ranged (vxlan_interface.vxlan1.vxlan.vlans null +
+eos_cli; A-POD3 untouched — the guide itself is per-vlan there; B3/4
+node scalars REPLACE group eos_cli, mcast lines travel), the gateway
+siege (plain rd/rt nulls via anchor vlans, per-neighbor remote-as
+nulls, af-ipv4 REMOTE-EVPN activate null, RED filter drop + Vlan60
+create-trap dodge, rr-client honestly reverted — spine RRs reflect
+client-to-client), BB baseline (input nulls + dns servers-only + mstp
+via structured + management-ssh MGMT), B7/8 af-ipv4 networks via DCI
+anchors, dhcp_relay.mlag_peerlink_requests_disabled, regexp-vs-plain
+ECL keys, the SW1 arc (l2leaf sources only l2vlans — vlan defs + both
+trunk sides pinned structured; endpoints remapped to guide ports;
+HostB7 unwired), the switchport dialect ledger (A members bare, B
+members no-switchport; mode-null bare side-effects suppressed with
+enabled:null), vtep_loopback_ipv4_address per-node (bare IP), and the
+vlan-50 rd secondary-anchor quirk.
+
+Incidents banked: the all.yml router-multicast CSC probe is LOAD-
+BEARING (+109 on removal, instant revert); B-SW1 builds via
+DOMAIN_B_L2_SWITCHES (stale renders through three passing builds);
+YAML parse death precedes the ansible recap (silent green — #19 now
+checks recap presence); intra-list duplicate primary keys rejected;
+a removal string ate a pre-existing structured_config header.
+
+**THE WALL (residual 57, miss 6 / extra 51):** router-multicast
+re-entry headers ×19 · gateway Loopback101/102 headers ×8 + IPs ×8
+(vtep_diagnostic has no node filter) · gateway rmc vrf lines ×8 ·
+af-evpn re-entry headers ×4 + domain-all dups ×4 (attach + DF-pref
+have no native 6.3 keys) · es-rt-auto ×6 (net-neutral only). Exit
+paths: AVD version bump, pyavd patch, or accept 57 as contract floor.
