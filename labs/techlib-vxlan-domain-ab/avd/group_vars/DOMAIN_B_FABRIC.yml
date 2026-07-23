@@ -722,7 +722,10 @@ l3leaf:
             eos_cli: mld
         vxlan_interface:
           vxlan1:
+            vxlan:
+              vlans: null
             eos_cli: |
+              vxlan vlan 20,40 vni 10020,10040
               vxlan vrf PROD multicast group overlay 239.0.20.101 encap 232.1.1.20 immediate
               vxlan multicast ipv6
         router_bgp: "{{ csc_b_pod1_leaf_features.router_bgp }}"
@@ -774,6 +777,8 @@ l3leaf:
             eos_cli: mld
         vxlan_interface:
           vxlan1:
+            vxlan:
+              vlans: null
             eos_cli: |
               vxlan vrf PROD multicast group overlay 239.0.20.101 encap 232.1.1.20 immediate
               vxlan multicast ipv6
@@ -785,6 +790,14 @@ l3leaf:
           # DEV SVI mld (node-scoped — pod scope would trap Vlan60
           # onto the sibling).
           structured_config:
+            # node eos_cli is a scalar and replaces the group string —
+            # the pod mcast lines ride here too.
+            vxlan_interface:
+              vxlan1:
+                eos_cli: |
+                  vxlan vlan 10,60 vni 10010,10060
+                  vxlan vrf PROD multicast group overlay 239.0.20.101 encap 232.1.1.20 immediate
+                  vxlan multicast ipv6
             vlan_interfaces:
               - name: Vlan60
                 ipv6_enable: null
@@ -798,6 +811,14 @@ l3leaf:
           # DEV SVI mld (node-scoped — pod scope would trap Vlan70
           # onto the sibling).
           structured_config:
+            # node eos_cli is a scalar and replaces the group string —
+            # the pod mcast lines ride here too.
+            vxlan_interface:
+              vxlan1:
+                eos_cli: |
+                  vxlan vlan 10,70 vni 10010,10070
+                  vxlan vrf PROD multicast group overlay 239.0.20.101 encap 232.1.1.20 immediate
+                  vxlan multicast ipv6
             vlan_interfaces:
               - name: Vlan70
                 ipv6_enable: null
@@ -848,7 +869,10 @@ l3leaf:
             eos_cli: mld
         vxlan_interface:
           vxlan1:
+            vxlan:
+              vlans: null
             eos_cli: |
+              vxlan vlan 40,80 vni 10040,10080
               vxlan vrf PROD multicast group overlay 239.0.20.101 encap 232.1.1.20 immediate
               vxlan multicast ipv6
         router_bgp: "{{ csc_b_pod3_leaf_features.router_bgp }}"
@@ -892,6 +916,12 @@ l3leaf:
       filter:
         tags: ['BLUE', 'RED', 'BROWN']              # VLANs 10, 60 (local, HostB8), 70
       structured_config:
+        vxlan_interface:
+          vxlan1:
+            vxlan:
+              vlans: null
+            eos_cli: |
+              vxlan vlan 10,70 vni 10010,10070
         # guide has no source-nat lines anywhere
         virtual_source_nat_vrfs: null
         vlan_interfaces:

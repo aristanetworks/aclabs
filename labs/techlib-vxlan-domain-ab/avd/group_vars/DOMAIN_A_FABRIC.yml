@@ -452,6 +452,8 @@ csc_pod1_leaf_features:
   vxlan_interface:
     vxlan1:
       vxlan:
+        # guide uses one ranged vlan/vni line; native per-vlan list nulled
+        vlans: null
         source_interface: Loopback1
         mlag_source_interface: Loopback2
         virtual_router_encapsulation_mac_address: mlag-system-id
@@ -460,6 +462,7 @@ csc_pod1_leaf_features:
       # headend_replication). Sibling of `vxlan:` — a mid-dict insert
       # here once swallowed the keys above into the literal (banked).
       eos_cli: |
+        vxlan vlan 10,30 vni 10010,10030
         vxlan multicast ipv6
   router_bgp:
     peer_groups:
@@ -498,6 +501,8 @@ csc_pod2_leaf_features:
   vxlan_interface:
     vxlan1:
       vxlan:
+        # guide uses one ranged vlan/vni line; native per-vlan list nulled
+        vlans: null
         source_interface: Loopback1
         mlag_source_interface: Loopback2
         virtual_router_encapsulation_mac_address: mlag-system-id
@@ -506,6 +511,7 @@ csc_pod2_leaf_features:
       # headend_replication). Sibling of `vxlan:` — a mid-dict insert
       # here once swallowed the keys above into the literal (banked).
       eos_cli: |
+        vxlan vlan 10,30,50 vni 10010,10030,10050
         vxlan multicast ipv6
   router_bgp:
     peer_groups:
@@ -1213,6 +1219,12 @@ l3leaf:
             ip_address: 10.0.0.2
             bgp_as: 65000
       structured_config:
+        vxlan_interface:
+          vxlan1:
+            vxlan:
+              vlans: null
+            eos_cli: |
+              vxlan vlan 10,50,70 vni 10010,10050,10070
         ip_extcommunity_lists: null   # generated evpn-imported ECL is a stray
         # guide has no source-nat lines anywhere
         virtual_source_nat_vrfs: null
