@@ -49,13 +49,8 @@ mgmt_interface_settings:
   vrf: MGMT
 default_mgmt_method: oob
 
-# Enable SSH for MGMT VRF
-ssh_settings:
-    vrfs:
-      - name: use_mgmt_interface_vrf
-        enabled: true
-
-# Set source interfaces
+# Set source interfaces (SSH server is enabled by default in EOS; no explicit
+# `management ssh` block needed. Tech-library omits the block entirely.)
 source_interfaces:
   http_client:
     mgmt_interface: true
@@ -75,6 +70,55 @@ ntp_settings:
 
 timezone: America/Detroit
 
+# ── Phase-2 rebuild foundation (PARITY-LEDGER classes 10/12/14/18) ──────────
+
+# Class 12: the guide writes `spanning-tree portfast edge` (modern syntax).
+# eos_config_future is an eos_cli_config_gen INPUT — it must travel inside
+# the structured config (the renderer only sees that document), hence CSC.
+custom_structured_configuration_eos_config_future:
+  render_spanning_tree_portfast_edge: true
+
+# Class 14: the guide's multihop BFD timers are 1000/1000/3 (AVD default 300).
+bfd_multihop:
+  interval: 1000
+  min_rx: 1000
+  multiplier: 3
+
+# Class 10: a switch never saves the default-config block. The two lines the
+# guide DOES keep from it are re-added explicitly:
+#   - `no aaa root`      -> aaa_root.disabled (27/27 nodes in the guide)
+#   - `service routing protocols model multi-agent` -> set natively by
+#     eos_designs for EVPN fabrics (verified to survive this kill)
+# `transceiver qsfp default-mode 4x10G` exists on only 2/27 guide nodes and
+# is re-added there (BACKBONE vars), not globally.
+# (Empirical: the default-config block's only live leak here is
+# `no enable password`, which actually renders from enable_password.disabled
+# set by eos_designs — nulled below. aaa_root stays explicit for `no aaa
+# root`, 27/27 in the guide.)
+custom_structured_configuration_aaa_root:
+  disabled: true
+custom_structured_configuration_enable_password:
+  disabled: null
+
+# Class 18 (partial), empirical CSC-null probe: eos_designs unconditionally
+# sets router_multicast.ipv4.software_forwarding=sfe on evpn_multicast nodes
+# (base/__init__.py:142, no knob) — the guide has the line on 0/27 nodes.
+# Null-merge clears the key if the merge+template honor it (this build is
+# the experiment; fallback documented in the ledger).
+custom_structured_configuration_router_multicast:
+  ipv4:
+    software_forwarding: null
+
+# eAPI: the guide runs https by EOS DEFAULT (block present, line omitted).
+# enable_https must be TRUE here because the arista.avd.anta_workflow
+# hard-gates every device on structured management_api_http enable_https/
+# enable_http (plugins/action/anta_workflow.py:474) — no override exists.
+# Cost: the explicit `protocol https` line renders (+27 config-diff
+# extras vs the guide) but is DEFAULT-SUPPRESSED in running-config —
+# the on-box delta is unchanged. Two-tier accounting in PARITY-LEDGER.
+custom_structured_configuration_management_api_http:
+  enable_https: true
+
 # Global IP MTU for Point-to-Point links (matches tech-library fabric interfaces)
 p2p_uplinks_mtu: 9114
 
@@ -87,6 +131,20 @@ p2p_uplinks_mtu: 9114
 # Default mode of "routed" interfaces
 custom_structured_configuration_switchport_default:
   mode: routed
+
+# cEOSLab-specific settings that tech-library renders on every node.
+custom_structured_configuration_system:
+  l1:
+    unsupported_speed_action: error
+    unsupported_error_correction_action: error
+
+custom_structured_configuration_load_interval:
+  default: 1
+
+# `no service interface inactive port-id allocation disabled` — no native
+# AVD 6.3 schema key. Applied via top-level eos_cli (renders at end of config).
+custom_structured_configuration_eos_cli: |
+  no service interface inactive port-id allocation disabled
 
 ansible_user: admin
 ansible_password: admin

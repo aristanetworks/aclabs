@@ -1,17 +1,42 @@
 ---
-
+# ANTA validation via the arista.avd.anta_workflow runner (AVD 6.3).
+#
+# Real role contract (the previous draft used imaginary vars and the role's
+# user_catalogs_enabled default is FALSE — the old catalog never ran):
+#   root_dir            -> inventory_dir (avd/)
+#   structured configs  <- avd/intended/structured_configs/   (AVD auto-catalog source)
+#   user catalogs       <- avd/anta/user_catalogs/*.yml       (merged, tag-scoped)
+#   generated catalogs  -> avd/anta/avd_catalogs/
+#   reports             -> avd/anta/reports/anta_report.{md,json,csv}
+#
+# Device tags come from the `anta_tags` hostvar (composed per group in
+# inventory.yml); user-catalog tests scope themselves with
+# `filters: {tags: [...]}` (OR semantics).
+#
+# Dry-run (generate everything, connect to nothing):
+#   ansible-playbook playbooks/validate.yml -i inventory.yml \
+#     -e target_hosts=FABRIC_ALL -e anta_dry_run=true
 - name: Validate Fabric with ANTA
   hosts: "{{ target_hosts }}"
   gather_facts: false
+  connection: local
 
   tasks:
-    - name: Run ANTA tests from the merged catalog dir
+    - name: Run the ANTA workflow (AVD auto-catalogs + user catalogs)
       ansible.builtin.import_role:
         name: arista.avd.anta_runner
       vars:
-        # The anta_runner role auto-merges every *.yml file in this directory
-        # into a single test catalog before dispatch.
-        anta_catalog_dir: "{{ playbook_dir }}/../anta"
-        # Save the ANTA report next to the intended configs.
-        anta_report_dir: "{{ playbook_dir }}/../intended/anta_reports"
-        anta_report_filename: "{{ inventory_hostname }}.txt"
+        user_catalogs_enabled: true
+        anta_runner_dry_run: "{{ anta_dry_run | default(false) | bool }}"
+        # Custom techlib tests (D-PATH / Type-4 / DF / MLD) live in an
+        # installable package: avd/anta/anta_techlib_tests
+        # (`pip install -e` once per controller venv; the catalog references
+        # them by module path).
+        # KNOWN WORKFLOW QUIRKS (observed in-sandbox, AVD 6.3 / anta 1.9):
+        #   * Reports are (re)written per batch — with the default
+        #     anta_runner_batch_size=5 the final report reflects the LAST
+        #     batch. For one consolidated report set the batch size to at
+        #     least the device count (-e anta_runner_batch_size=30).
+        #   * Dry-run result attribution is degenerate (all instances may
+        #     land under one device name). Scoping correctness is proven by
+        #     scripts/anta_audit.py gate 4 instead (source-exact semantics).

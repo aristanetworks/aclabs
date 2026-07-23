@@ -15,6 +15,48 @@
 fabric_name: DOMAIN_A_FABRIC
 
 ###################################################
+# Platform settings — cEOS-LAB (class 3 enabler)
+#
+# The models' platform string `cEOS-LAB` does NOT match AVD 6.3's built-in
+# CEOS entry (matcher: CEOS/cEOS/ceos/cEOSLab — no hyphen), so nodes fall
+# through to the `default` entry, whose feature_support leaves
+# evpn_gateway_all_active_multihoming at the schema default (False) and
+# the eos_designs gateway block raises. Renaming the platform is NOT an
+# option: the CEOS entry also sets bgp_update_wait_install: False, which
+# would suppress the guide's 24 `update wait-install` lines.
+#
+# This custom entry (matched before built-ins) mirrors the `default`
+# entry the fleet renders with today, PLUS the two gateway feature flags
+# the guide's design demonstrates, MINUS reload_delay (the guide renders
+# no reload-delay lines). B-side gets the identical entry when its
+# Gateway pair is converted.
+###################################################
+
+custom_platform_settings:
+  - platforms: ['cEOS-LAB']
+    feature_support:
+      queue_monitor_length_notify: false
+      evpn_gateway_all_active_multihoming: true
+      evpn_gateway_rd_rt_rewrite: true
+
+# PARITY-LEDGER class 16 — the guide's MLAG naming dialect: one trunk
+# group `MLAG_PEER` for all peering VLANs, and explicit VLAN names.
+# Descriptions are parity-exempt; only names/trunk-groups are set.
+trunk_groups:
+  mlag:
+    name: MLAG_PEER
+  mlag_l3:
+    name: MLAG_PEER
+mlag_peer_vlan_name: MLAG_PEER_SYNC
+mlag_peer_l3_vlan_name: MLAG_PEER_L3_UNDERLAY
+mlag_peer_l3_vrf_vlan_name: MLAG_PEER_VRF_{vrf}
+
+# Suppress the AVD-default `transceiver qsfp default-mode 4x10G` line on
+# spines/leafs. Tech-library doesn't render this on Domain A/B nodes
+# (only on BACKBONE where AVD's default is correct).
+custom_structured_configuration_transceiver_qsfp_default_mode_4x10: null
+
+###################################################
 # BGP knobs (fabric-wide)
 ###################################################
 
@@ -23,27 +65,59 @@ bgp_distance:
   internal_routes: 200
   local_routes: 200
 
-bgp_graceful_restart:
-  enabled: true
-  restart_time: 300
-
 bgp_peer_groups:
+  # PARITY-LEDGER class 8 — the guide's dialect: groups carry ONLY
+  # peer group / remote-as / update-source / bfd / route-reflector-client.
+  # CSC-null (via each role's structured_config, which merges under
+  # router_bgp.peer_groups[name=<name>] ONLY on nodes where eos_designs
+  # materializes the group) un-sets the hardcoded send-community /
+  # maximum-routes / description attributes. `neighbor default
+  # send-community` (global) replaces the per-group lines.
   ipv4_underlay_peers:
     name: LOCAL-IPV4-PEERS
-    password: DGMjRCIj8IZAFhehikpUIQ==
+    structured_config:
+      send_community: null
+      maximum_routes: null
   mlag_ipv4_underlay_peer:
     name: MLAG-IPV4-PEER
-    password: CRkxra9QRmU5k9/wECPlUA==
+    structured_config:
+      send_community: null
+      maximum_routes: null
+      description: null
   evpn_overlay_peers:
     name: LOCAL-EVPN-PEERS
-    password: WzKnNSduqwPYvUePYIh40g==
     bfd: true
+    structured_config:
+      send_community: null
+      maximum_routes: null
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
-    password: IO6gE/ln7Sp2wt33WX/Asg==
+    structured_config:
+      # Class 8 dialect for the core group too: the guide's
+      # REMOTE-EVPN-PEERS carries no send-community / maximum-routes /
+      # ebgp-multihop (multihop is unnecessary — Gateway loopbacks peer
+      # over directly-advertised /32s with update-source Loopback0).
+      send_community: null
+      maximum_routes: null
+      ebgp_multihop: null
 
 # ebgp-multihop is a fabric-level setting in AVD 6.3 (not per peer-group).
 evpn_ebgp_multihop: 3
+
+# PARITY-LEDGER class 8 — process-level dialect:
+#   `neighbor default send-community` (bare form — cli_config_gen renders
+#   it when the value is exactly "all"), and the guide's implicit ipv4-AF
+#   deactivation (`no bgp default ipv4-unicast` covers it; the explicit
+#   `no neighbor LOCAL-EVPN-PEERS activate` eos_designs emits is un-set
+#   with CSC-null merge-by-name). Safe at fabric-group scope: the
+#   router-bgp template renders nothing unless router_bgp.as is defined.
+custom_structured_configuration_router_bgp:
+  neighbor_default:
+    send_community: all
+  address_family_ipv4:
+    peer_groups:
+      - name: LOCAL-EVPN-PEERS
+        activate: null
 
 bgp_update_wait_install: true
 evpn_import_pruning: true
@@ -127,23 +201,46 @@ custom_vtep_route_maps:
 # bestpath, local-as trick to peer with BB in AS 65000) lives here.
 ###################################################
 custom_evpn_gw_bgp_config:
+  vlans:
+    # guide gateway MAC-VRFs keep only the domain-all rd/rt variants
+    - id: 10
+      rd: null
+      route_targets:
+        both: null
+    - id: 70
+      rd: null
+      route_targets:
+        both: null
+  neighbors:
+    # remote-as rides the peer group in the guide, not the neighbor
+    - ip_address: 10.0.0.1
+      remote_as: null
+    - ip_address: 10.0.0.2
+      remote_as: null
+  vrfs:
+    # guide has no vrf-level router-id lines
+    - name: PROD
+      router_id: null
+    - name: DEV
+      router_id: null
+  # Class 3 (crown jewel): domain identifiers + `bgp bestpath d-path` are
+  # now generated NATIVELY by evpn_gateway.d_path + all_active_multihoming
+  # (see POD4). The old hand-stitched keys (address_family_evpn domain ids,
+  # bgp.bestpath.d_path, REMOTE-IPV4-PEERS password/send-community) died
+  # with the swap — the guide's gateways carry none of them.
   address_family_ipv4:
     peer_groups:
+      - name: REMOTE-EVPN-PEERS
+        # guide leaves the EVPN group implicitly inactive in the ipv4 AF
+        activate: null
       - name: REMOTE-IPV4-PEERS
         activate: true
-  address_family_evpn:
-    domain_identifier: '1:1'
-    domain_identifier_remote: '99:99'
-  bgp:
-    bestpath:
-      d_path: true
   peer_groups:
     - name: REMOTE-IPV4-PEERS
-      password: dkvBq1jk4inJHsHfMjYRnQ==
       remote_as: 65000
       route_map_out: RM-AS65000-IPV4-OUT
-      send_community: all
     - name: REMOTE-EVPN-PEERS
+      remote_as: 65000
       local_as: 65000
       # Note: the REMOTE-EVPN-PEERS peer-group is created by evpn_gateway.remote_peers;
       # local_as is layered on top here so the AS 65107/65108 Gateway can peer with the
@@ -173,6 +270,14 @@ custom_evpn_gw_route_maps:
         type: permit
         match:
           - ip address prefix-list PL-GATEWAY-LOOP
+  # No MLAG peer on the gateways — the generated OUT map is a stray;
+  # RM-CONN-2-BGP drops the set-origin line (guide dialect).
+  - name: RM-MLAG-PEER-OUT
+    sequence_numbers: null
+  - name: RM-CONN-2-BGP
+    sequence_numbers:
+      - sequence: 10
+        set: null
 
 # Per-Gateway WAN-facing eBGP neighbors to BB1/BB2 in AS 65000.
 # Structured-config injected onto A-LEAF7 / A-LEAF8 via node-level structured_config
@@ -180,6 +285,26 @@ custom_evpn_gw_route_maps:
 a_leaf7_dci_bgp_peers:
   router_bgp:
     neighbors:
+      # remote-as dialect: kill the generated per-neighbor remote-as
+      # (group carries it). This anchor IS the node channel for the
+      # Gateways — a second structured_config key on the node entry
+      # is a DUPLICATE YAML KEY and silently loses (banked).
+      - ip_address: 192.168.0.12
+        remote_as: null
+      - ip_address: 192.168.0.28
+        remote_as: null
+      - ip_address: 192.168.0.44
+        remote_as: null
+      - ip_address: 192.168.0.60
+        remote_as: null
+      - ip_address: 10.0.1.201
+        remote_as: null
+      - ip_address: 10.0.1.202
+        remote_as: null
+      - ip_address: 10.0.1.203
+        remote_as: null
+      - ip_address: 10.0.1.204
+        remote_as: null
       - ip_address: 172.16.1.0
         peer_group: REMOTE-IPV4-PEERS
         description: BB1.IPV4
@@ -190,6 +315,26 @@ a_leaf7_dci_bgp_peers:
 a_leaf8_dci_bgp_peers:
   router_bgp:
     neighbors:
+      # remote-as dialect: kill the generated per-neighbor remote-as
+      # (group carries it). This anchor IS the node channel for the
+      # Gateways — a second structured_config key on the node entry
+      # is a DUPLICATE YAML KEY and silently loses (banked).
+      - ip_address: 192.168.0.14
+        remote_as: null
+      - ip_address: 192.168.0.30
+        remote_as: null
+      - ip_address: 192.168.0.46
+        remote_as: null
+      - ip_address: 192.168.0.62
+        remote_as: null
+      - ip_address: 10.0.1.201
+        remote_as: null
+      - ip_address: 10.0.1.202
+        remote_as: null
+      - ip_address: 10.0.1.203
+        remote_as: null
+      - ip_address: 10.0.1.204
+        remote_as: null
       - ip_address: 172.16.1.2
         peer_group: REMOTE-IPV4-PEERS
         description: BB1.IPV4
@@ -206,7 +351,73 @@ a_leaf8_dci_bgp_peers:
 csc_spine_multicast:
   ipv4:
     routing: true
-    software_forwarding: sfe   # required on cEOSLab; harmless on hardware
+    # NOTE: `software-forwarding sfe` under router multicast ipv4 was
+    # required on EOS < 4.36 for OISM. In 4.36+ it's implicit; tech-library
+    # omits the line entirely. Not rendered here to match.
+
+###################################################
+# Custom Structured Config — underlay redistribute dialect (class 7)
+#
+# The guide's A-side redistribute design, owned WHOLESALE here:
+#   ip prefix-list PL-LOOPBACKS      <- /16 supernets over ALL loopback
+#     seq 10: 10.0.0.0/16 eq 32         spaces (router-ids incl. BB + B),
+#     seq 20: 10.1.0.0/16 eq 32         VTEP loopbacks, and (leafs only,
+#     [seq 30: 10.2.0.0/16 eq 32]       via the POD groups) the Multi-VTEP
+#                                       MLAG shared-VTEP Loopback2 space.
+#   ip prefix-list PL-P2P-UNDERLAY   <- fabric p2p /31s
+#   route-map RM-CONN-2-BGP 10/20 + `redistribute connected route-map ...`
+#
+# underlay_filter_redistribute_connected: false kills the generator's
+# PL-LOOPBACKS-EVPN-OVERLAY list, its RM-CONN-2-BGP seq 10, AND detaches
+# the route-map from `redistribute connected` — all three are re-owned
+# below (the re-attach rides the node-type defaults' structured_config
+# router_bgp channel, which the gateway host_vars CSC shadowing cannot
+# touch). Merge-order note: the POD-level seq-30 contribution unions with
+# this group-level entry by (name, sequence) — order-independent.
+###################################################
+
+underlay_filter_redistribute_connected: false
+
+custom_structured_configuration_prefix_lists:
+  - name: PL-LOOPBACKS
+    sequence_numbers:
+      - sequence: 10
+        action: permit 10.0.0.0/16 eq 32
+      - sequence: 20
+        action: permit 10.1.0.0/16 eq 32
+  - name: PL-P2P-UNDERLAY
+    sequence_numbers:
+      - sequence: 10
+        action: permit 192.168.0.0/24 le 31
+
+custom_structured_configuration_route_maps:
+  - name: RM-CONN-2-BGP
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ip address prefix-list PL-LOOPBACKS
+      - sequence: 20
+        type: permit
+        match:
+          - ip address prefix-list PL-P2P-UNDERLAY
+
+# Re-attach for the redistribute line the knob detaches (see note above).
+csc_underlay_redistribute:
+  router_bgp:
+    redistribute:
+      connected:
+        route_map: RM-CONN-2-BGP
+
+# The leaf-only PL-LOOPBACKS seq 30 (Multi-VTEP MLAG shared-VTEP
+# Loopback2 space) — merged into the group-level entry by the POD
+# structured_configs. The Gateway pair (POD4) deliberately lacks it.
+csc_mlag_leaf_loopback_seq30:
+  prefix_lists:
+    - name: PL-LOOPBACKS
+      sequence_numbers:
+        - sequence: 30
+          action: permit 10.2.0.0/16 eq 32
 
 ###################################################
 # Custom Structured Config — peer-tag SPINES
@@ -219,10 +430,18 @@ csc_spine_multicast:
 csc_leaf_peer_tag_spines:
   router_bgp:
     peer_groups:
+      # Class: remote-as dialect — the guide sets remote-as on the peer
+      # GROUPS (all four uplinks target AS 65100 spines, so it groups);
+      # AVD emits per-neighbor remote-as instead. Group lines land here
+      # (same merge-by-name channel the peer tags already prove);
+      # per-neighbor kills live in each node entry (single-channel, no
+      # cross-channel list-merge ambiguity).
       - name: LOCAL-IPV4-PEERS
+        remote_as: '65100'
         peer_tag_in: SPINES
         peer_tag_out_discard: SPINES
       - name: LOCAL-EVPN-PEERS
+        remote_as: '65100'
         peer_tag_in: SPINES
         peer_tag_out_discard: SPINES
 
@@ -252,10 +471,34 @@ csc_pod1_leaf_features:
   vxlan_interface:
     vxlan1:
       vxlan:
+        # guide uses one ranged vlan/vni line; native per-vlan list nulled
+        vlans: null
         source_interface: Loopback1
         mlag_source_interface: Loopback2
         virtual_router_encapsulation_mac_address: mlag-system-id
+      # Class 4c: dual-stack overlay flooding — no native key or template
+      # path for this line in 6.3 (vxlan.multicast has only
+      # headend_replication). Sibling of `vxlan:` — a mid-dict insert
+      # here once swallowed the keys above into the literal (banked).
+      eos_cli: |
+        vxlan vlan 10,30 vni 10010,10030
+        vxlan multicast ipv6
   router_bgp:
+    peer_groups:
+      # Attach swap: guide runs the OUT map on the MLAG peer, no IN map.
+      - name: MLAG-IPV4-PEER
+        route_map_in: null
+        route_map_out: RM-MLAG-PEER-OUT
+    # OISM evpn-multicast sub-AF dialect (see Domain B note).
+    vrfs:
+      - name: PROD
+        router_id: null
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
     vlans:
       - id: 10
         redistribute_routes:
@@ -277,10 +520,42 @@ csc_pod2_leaf_features:
   vxlan_interface:
     vxlan1:
       vxlan:
+        # guide uses one ranged vlan/vni line; native per-vlan list nulled
+        vlans: null
         source_interface: Loopback1
         mlag_source_interface: Loopback2
         virtual_router_encapsulation_mac_address: mlag-system-id
+      # Class 4c: dual-stack overlay flooding — no native key or template
+      # path for this line in 6.3 (vxlan.multicast has only
+      # headend_replication). Sibling of `vxlan:` — a mid-dict insert
+      # here once swallowed the keys above into the literal (banked).
+      eos_cli: |
+        vxlan vlan 10,30,50 vni 10010,10030,10050
+        vxlan multicast ipv6
   router_bgp:
+    peer_groups:
+      # Attach swap: guide runs the OUT map on the MLAG peer, no IN map.
+      - name: MLAG-IPV4-PEER
+        route_map_in: null
+        route_map_out: RM-MLAG-PEER-OUT
+    # OISM evpn-multicast sub-AF dialect (see Domain B note).
+    vrfs:
+      - name: DEV
+        router_id: null
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
+      - name: PROD
+        router_id: null
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
     vlans:
       - id: 10
         redistribute_routes:
@@ -310,9 +585,33 @@ csc_pod3_leaf_features:
         source_interface: Loopback1
         mlag_source_interface: Loopback2
         virtual_router_encapsulation_mac_address: mlag-system-id
+      # Class 4c: dual-stack overlay flooding — no native key or template
+      # path for this line in 6.3 (vxlan.multicast has only
+      # headend_replication). Sibling of `vxlan:` — a mid-dict insert
+      # here once swallowed the keys above into the literal (banked).
+      eos_cli: |
+        vxlan multicast ipv6
   router_bgp:
+    peer_groups:
+      # Attach swap: guide runs the OUT map on the MLAG peer, no IN map.
+      - name: MLAG-IPV4-PEER
+        route_map_in: null
+        route_map_out: RM-MLAG-PEER-OUT
+    # OISM evpn-multicast sub-AF dialect (see Domain B note).
+    vrfs:
+      - name: DEV
+        router_id: null
+        evpn_multicast: null
+        eos_cli: |
+          evpn multicast
+             address-family ipv4
+             !
+             address-family ipv6
     vlans:
+      # guide quirk: the pair's vlan-50 rd anchors to the SECONDARY's
+      # vtep IP (.6) on both members.
       - id: 50
+        rd: '10.0.1.6:10050'
         redistribute_routes:
           - learned
           - router-mac next-hop vtep primary
@@ -332,20 +631,55 @@ spine:
     bgp_as: 65100
     loopback_ipv4_pool: 10.0.1.0/24
     structured_config:
+      vlan_internal_order: null
+      router_bfd: null
       router_multicast: "{{ csc_spine_multicast }}"
+      # Class 7 — redistribute route-map re-attach (see the dialect block).
+      router_bgp: "{{ csc_underlay_redistribute.router_bgp }}"
+      # Class 4b: the guide runs PIM sparse-mode on ALL spine downlinks,
+      # including Et7/8 toward the multicast-disabled Gateway pair (AVD
+      # skips those). Merge-by-name onto the generated entries.
+      ethernet_interfaces:
+        - name: Ethernet7
+          pim:
+            ipv4:
+              sparse_mode: true
+        - name: Ethernet8
+          pim:
+            ipv4:
+              sparse_mode: true
   nodes:
+    # Per-spine downlink_pools override AVD's default per-leaf offset
+    # assignment. Each spine gets a /28 (16 addresses = 8 /31 links,
+    # Et1..Et8). Matches tech-library scheme:
+    #   A-SPINE1 Et1..Et8 → 192.168.0.0/2/4/6/8/10/12/14 (0-14)
+    #   A-SPINE2 Et1..Et8 → 192.168.0.16/18/20/22/24/26/28/30
+    #   A-SPINE3 Et1..Et8 → 192.168.0.32/34/36/38/40/42/44/46
+    #   A-SPINE4 Et1..Et8 → 192.168.0.48/50/52/54/56/58/60/62
     - name: A-SPINE1
       id: 201
       mgmt_ip: 172.100.101.101/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.0/28
+          downlink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4, Ethernet5, Ethernet6, Ethernet7, Ethernet8]
     - name: A-SPINE2
       id: 202
       mgmt_ip: 172.100.101.102/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.16/28
+          downlink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4, Ethernet5, Ethernet6, Ethernet7, Ethernet8]
     - name: A-SPINE3
       id: 203
       mgmt_ip: 172.100.101.103/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.32/28
+          downlink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4, Ethernet5, Ethernet6, Ethernet7, Ethernet8]
     - name: A-SPINE4
       id: 204
       mgmt_ip: 172.100.101.104/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.48/28
+          downlink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4, Ethernet5, Ethernet6, Ethernet7, Ethernet8]
 
 ##################################################
 # DOMAIN A LEAFS
@@ -362,7 +696,8 @@ l3leaf:
     # + `vxlan mlag source-interface Loopback2` on Vxlan1.
     uplink_interfaces: [Ethernet1, Ethernet2, Ethernet3, Ethernet4]
     uplink_switches: [A-SPINE1, A-SPINE2, A-SPINE3, A-SPINE4]
-    uplink_ipv4_pool: 192.168.0.0/24
+    # No uplink_ipv4_pool — each spine defines its own downlink_pools that
+    # allocate exact tech-library IPs per interface.
     mlag_interfaces: [Ethernet5, Ethernet6]
     mlag_peer_ipv4_pool: 169.254.0.0/30
     mlag_peer_l3_ipv4_pool: 192.0.0.0/31
@@ -375,16 +710,92 @@ l3leaf:
       ip_dhcp_relay: "{{ custom_vtep_ip_dhcp_relay }}"
       ip_extcommunity_lists_regexp: "{{ custom_vtep_ext_community_lists }}"
       route_maps: "{{ custom_vtep_route_maps }}"
-      router_bgp: "{{ csc_leaf_peer_tag_spines.router_bgp }}"
+      # Class 7 — peer-tag anchor combined with the redistribute re-attach
+      # (recursive combine; the two dicts share no list-typed keys).
+      router_bgp: "{{ csc_leaf_peer_tag_spines.router_bgp | combine(csc_underlay_redistribute.router_bgp, recursive=True) }}"
   node_groups:
 ########################################################
 # DOMAIN A POD 1 — A-LEAF1/2 (PROD only, VLANs 10, 30)
 ########################################################
     - group: POD1
+      mlag_domain_id: '100'   # guide uses 100 on every pair
       bgp_as: 65101                    # Shared per MLAG pair
       filter:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
       structured_config:
+        # full router-multicast block now rides the host eos_cli verbatim
+        router_multicast: null
+        route_maps:
+          # Guide attaches RM-MLAG-PEER-OUT (defined identically to the
+          # render) and never defines the IN map; RM-CONN-2-BGP drops the
+          # set-origin line.
+          - name: RM-MLAG-PEER-IN
+            sequence_numbers: null
+          - name: RM-CONN-2-BGP
+            sequence_numbers:
+              - sequence: 10
+                set: null
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
+        spanning_tree:
+          edge_port:
+            bpduguard_default: true
+          no_spanning_tree_vlan: '3001,4093-4094'
+        # Guide A carries no router-bfd tuning block.
+        router_bfd: null
+        # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
+        # line (access is default; the guide doesn't save it). Null the
+        # emitted mode.
+        port_channel_interfaces:
+          - name: Port-Channel7
+            switchport:
+              mode: null
+          - name: Port-Channel8
+            switchport:
+              mode: null
+        # Sweep S1: guide keeps explicit `no switchport` on channel members and
+        # single-homed routed ports; AVD omits it on members. A5/6 Eth8
+        # deferred to the endpoints refresh (dual-homing gap).
+        ethernet_interfaces:
+          - name: Ethernet5
+            switchport:
+              enabled: false
+          - name: Ethernet6
+            switchport:
+              enabled: false
+          - name: Ethernet7
+            switchport:
+              enabled: false
+          - name: Ethernet8
+            switchport:
+              enabled: false
+        # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
+        prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
+        # Class 4b: the guide runs NO PIM on the MLAG L3 peer VLAN
+        # (Vlan4093); AVD enables sparse-mode there for VRF-default
+        # multicast. Pod-scoped (defaults-level would create-trap the
+        # empty interface onto the Gateway pair).
+        vlan_interfaces:
+          # vrf-peering SVI dialect: mtu 9014 + no autostate.
+          - name: Vlan3001
+            mtu: 9014
+            no_autostate: true
+          - name: Vlan4093
+            pim: null
+            no_autostate: true
+          # Class 4a: the guide's MLAG-leaf SVIs run `ip igmp` ALONGSIDE
+          # sparse-mode; AVD's OISM forks (vlan_interfaces.py:171) — MLAG
+          # leafs get sparse-mode only. Pod-scoped so the multicast-
+          # disabled Gateway pair (which carries some of these VLANs)
+          # stays igmp-free per the guide.
+          - name: Vlan10
+            ipv6_enable: null
+            ip_igmp: true
+            eos_cli: mld
+          - name: Vlan30
+            ipv6_enable: null
+            ip_igmp: true
+            eos_cli: mld
         loopback_interfaces: "{{ csc_pod1_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod1_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod1_leaf_features.router_bgp }}"
@@ -393,18 +804,165 @@ l3leaf:
           id: 1
           mgmt_ip: 172.100.101.105/22
           uplink_switch_interfaces: [Ethernet1, Ethernet1, Ethernet1, Ethernet1]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.1/30
+            mlag_configuration:
+              peer_address: 169.254.0.2
+            router_bgp:
+              vrfs:
+                - name: PROD
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.1
+                        activate: true
+              neighbors:
+                - ip_address: 192.168.0.0
+                  remote_as: null
+                - ip_address: 192.168.0.16
+                  remote_as: null
+                - ip_address: 192.168.0.32
+                  remote_as: null
+                - ip_address: 192.168.0.48
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
         - name: A-LEAF2
+          # guide gives MLAG secondaries their OWN VTEP loopback IP
+          vtep_loopback_ipv4_address: 10.1.1.2
           id: 2
           mgmt_ip: 172.100.101.106/22
           uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.2/30
+            mlag_configuration:
+              peer_address: 169.254.0.1
+            router_bgp:
+              vrfs:
+                - name: PROD
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.0
+                        activate: true
+              neighbors:
+                - ip_address: 192.168.0.2
+                  remote_as: null
+                - ip_address: 192.168.0.18
+                  remote_as: null
+                - ip_address: 192.168.0.34
+                  remote_as: null
+                - ip_address: 192.168.0.50
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
 ########################################################
 # DOMAIN A POD 2 — A-LEAF3/4 (PROD + DEV, VLANs 10, 30, 50)
 ########################################################
     - group: POD2
+      mlag_domain_id: '100'   # guide uses 100 on every pair
       bgp_as: 65103
       filter:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
       structured_config:
+        # full router-multicast block now rides the host eos_cli verbatim
+        router_multicast: null
+        route_maps:
+          # Guide attaches RM-MLAG-PEER-OUT (defined identically to the
+          # render) and never defines the IN map; RM-CONN-2-BGP drops the
+          # set-origin line.
+          - name: RM-MLAG-PEER-IN
+            sequence_numbers: null
+          - name: RM-CONN-2-BGP
+            sequence_numbers:
+              - sequence: 10
+                set: null
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
+        spanning_tree:
+          edge_port:
+            bpduguard_default: true
+          no_spanning_tree_vlan: '3001-3002,4093-4094'
+        # Guide A carries no router-bfd tuning block.
+        router_bfd: null
+        # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
+        # line (access is default; the guide doesn't save it). Null the
+        # emitted mode.
+        port_channel_interfaces:
+          - name: Port-Channel8
+            switchport:
+              mode: null
+        # Sweep S1: guide keeps explicit `no switchport` on channel members and
+        # single-homed routed ports; AVD omits it on members. A5/6 Eth8
+        # deferred to the endpoints refresh (dual-homing gap).
+        ethernet_interfaces:
+          - name: Ethernet5
+            switchport:
+              enabled: false
+          - name: Ethernet6
+            switchport:
+              enabled: false
+          - name: Ethernet8
+            switchport:
+              enabled: false
+          # Sweep S2: single-homed access port — guide saves no mode line.
+          - name: Ethernet7
+            switchport:
+              mode: null
+        # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
+        prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
+        # Class 4b: the guide runs NO PIM on the MLAG L3 peer VLAN
+        # (Vlan4093); AVD enables sparse-mode there for VRF-default
+        # multicast. Pod-scoped (defaults-level would create-trap the
+        # empty interface onto the Gateway pair).
+        vlan_interfaces:
+          # vrf-peering SVI dialect: mtu 9014 + no autostate.
+          - name: Vlan3001
+            mtu: 9014
+            no_autostate: true
+          - name: Vlan3002
+            mtu: 9014
+            no_autostate: true
+          - name: Vlan4093
+            pim: null
+            no_autostate: true
+          # Class 4a: the guide's MLAG-leaf SVIs run `ip igmp` ALONGSIDE
+          # sparse-mode; AVD's OISM forks (vlan_interfaces.py:171) — MLAG
+          # leafs get sparse-mode only. Pod-scoped so the multicast-
+          # disabled Gateway pair (which carries some of these VLANs)
+          # stays igmp-free per the guide.
+          - name: Vlan10
+            ipv6_enable: null
+            ip_igmp: true
+            eos_cli: mld
+          - name: Vlan30
+            ipv6_enable: null
+            ip_igmp: true
+            eos_cli: mld
+          - name: Vlan50
+            ipv6_enable: null
+            ip_igmp: true
+            eos_cli: mld
         loopback_interfaces: "{{ csc_pod2_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod2_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod2_leaf_features.router_bgp }}"
@@ -413,18 +971,172 @@ l3leaf:
           id: 3
           mgmt_ip: 172.100.101.107/22
           uplink_switch_interfaces: [Ethernet3, Ethernet3, Ethernet3, Ethernet3]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.1/30
+            mlag_configuration:
+              peer_address: 169.254.0.2
+            router_bgp:
+              vrfs:
+                - name: DEV
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.1
+                        activate: true
+                - name: PROD
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.1
+                        activate: true
+              neighbors:
+                - ip_address: 192.168.0.4
+                  remote_as: null
+                - ip_address: 192.168.0.20
+                  remote_as: null
+                - ip_address: 192.168.0.36
+                  remote_as: null
+                - ip_address: 192.168.0.52
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
         - name: A-LEAF4
+          # guide gives MLAG secondaries their OWN VTEP loopback IP
+          vtep_loopback_ipv4_address: 10.1.1.4
           id: 4
           mgmt_ip: 172.100.101.108/22
           uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.2/30
+            mlag_configuration:
+              peer_address: 169.254.0.1
+            router_bgp:
+              vrfs:
+                - name: DEV
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.0
+                        activate: true
+                - name: PROD
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.0
+                        activate: true
+              neighbors:
+                - ip_address: 192.168.0.6
+                  remote_as: null
+                - ip_address: 192.168.0.22
+                  remote_as: null
+                - ip_address: 192.168.0.38
+                  remote_as: null
+                - ip_address: 192.168.0.54
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
 ########################################################
 # DOMAIN A POD 3 — A-LEAF5/6 (DEV only, VLANs 50, 70)
 ########################################################
     - group: POD3
+      mlag_domain_id: '100'   # guide uses 100 on every pair
       bgp_as: 65105
       filter:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
       structured_config:
+        # full router-multicast block now rides the host eos_cli verbatim
+        router_multicast: null
+        route_maps:
+          # Guide attaches RM-MLAG-PEER-OUT (defined identically to the
+          # render) and never defines the IN map; RM-CONN-2-BGP drops the
+          # set-origin line.
+          - name: RM-MLAG-PEER-IN
+            sequence_numbers: null
+          - name: RM-CONN-2-BGP
+            sequence_numbers:
+              - sequence: 10
+                set: null
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
+        spanning_tree:
+          edge_port:
+            bpduguard_default: true
+          no_spanning_tree_vlan: '3002,4093-4094'
+        # Guide A carries no router-bfd tuning block.
+        router_bfd: null
+        # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
+        # line (access is default; the guide doesn't save it). Null the
+        # emitted mode.
+        port_channel_interfaces:
+          # S2 family: guide Po8 = access-vlan + bare switchport, no mode line
+          - name: Port-Channel8
+            switchport:
+              mode: null
+          - name: Port-Channel7
+            switchport:
+              mode: null
+        # Sweep S1: guide keeps explicit `no switchport` on channel members and
+        # single-homed routed ports; AVD omits it on members. A5/6 Eth8
+        # deferred to the endpoints refresh (dual-homing gap).
+        ethernet_interfaces:
+          # guide puts explicit no-switchport on the Po8 member
+          - name: Ethernet8
+            switchport:
+              enabled: false
+          - name: Ethernet5
+            switchport:
+              enabled: false
+          - name: Ethernet6
+            switchport:
+              enabled: false
+          - name: Ethernet7
+            switchport:
+              enabled: false
+        # Class 7 — leaf-only PL-LOOPBACKS seq 30 (unions by name+sequence).
+        prefix_lists: "{{ csc_mlag_leaf_loopback_seq30.prefix_lists }}"
+        # Class 4b: the guide runs NO PIM on the MLAG L3 peer VLAN
+        # (Vlan4093); AVD enables sparse-mode there for VRF-default
+        # multicast. Pod-scoped (defaults-level would create-trap the
+        # empty interface onto the Gateway pair).
+        vlan_interfaces:
+          # vrf-peering SVI dialect: mtu 9014 + no autostate.
+          - name: Vlan3002
+            mtu: 9014
+            no_autostate: true
+          - name: Vlan4093
+            pim: null
+            no_autostate: true
+          # Class 4a: the guide's MLAG-leaf SVIs run `ip igmp` ALONGSIDE
+          # sparse-mode; AVD's OISM forks (vlan_interfaces.py:171) — MLAG
+          # leafs get sparse-mode only. Pod-scoped so the multicast-
+          # disabled Gateway pair (which carries some of these VLANs)
+          # stays igmp-free per the guide.
+          - name: Vlan50
+            ipv6_enable: null
+            ip_igmp: true
+            eos_cli: mld
+          - name: Vlan70
+            ipv6_enable: null
+            ip_igmp: true
+            eos_cli: mld
         loopback_interfaces: "{{ csc_pod3_leaf_features.loopback_interfaces }}"
         vxlan_interface: "{{ csc_pod3_leaf_features.vxlan_interface }}"
         router_bgp: "{{ csc_pod3_leaf_features.router_bgp }}"
@@ -433,10 +1145,78 @@ l3leaf:
           id: 5
           mgmt_ip: 172.100.101.109/22
           uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.1/30
+            mlag_configuration:
+              peer_address: 169.254.0.2
+            router_bgp:
+              vrfs:
+                - name: DEV
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.1
+                        activate: true
+              neighbors:
+                - ip_address: 192.168.0.8
+                  remote_as: null
+                - ip_address: 192.168.0.24
+                  remote_as: null
+                - ip_address: 192.168.0.40
+                  remote_as: null
+                - ip_address: 192.168.0.56
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
         - name: A-LEAF6
+          # guide gives MLAG secondaries their OWN VTEP loopback IP
+          vtep_loopback_ipv4_address: 10.1.1.6
           id: 6
           mgmt_ip: 172.100.101.110/22
           uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
+          # remote-as rides the peer groups (anchor above).
+          structured_config:
+            # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
+            # global to both MLAG subnets and would break the /31 L3 pool.
+            vlan_interfaces:
+              - name: Vlan4094
+                ip_address: 169.254.0.2/30
+            mlag_configuration:
+              peer_address: 169.254.0.1
+            router_bgp:
+              vrfs:
+                - name: DEV
+                  address_family_ipv4:
+                    neighbors:
+                      - ip_address: 192.0.0.0
+                        activate: true
+              neighbors:
+                - ip_address: 192.168.0.10
+                  remote_as: null
+                - ip_address: 192.168.0.26
+                  remote_as: null
+                - ip_address: 192.168.0.42
+                  remote_as: null
+                - ip_address: 192.168.0.58
+                  remote_as: null
+                - ip_address: 10.0.1.201
+                  remote_as: null
+                - ip_address: 10.0.1.202
+                  remote_as: null
+                - ip_address: 10.0.1.203
+                  remote_as: null
+                - ip_address: 10.0.1.204
+                  remote_as: null
 ########################################################
 # DOMAIN A POD 4 — A-LEAF7/8 (EVPN Gateway pair, All-Active)
 #
@@ -450,13 +1230,23 @@ l3leaf:
       # Filter: BLUE (VLAN 10, multi-domain), YELLOW (VLAN 50, local, HostA8),
       # BROWN (VLAN 70, multi-domain). ORANGE (VLAN 30) is intentionally excluded —
       # VLAN 30 is scoped to POD1+POD2 only and does not appear on the Gateway pair.
+      mlag: false
       filter:
         tags: ['BLUE', 'YELLOW', 'BROWN']
       evpn_gateway:
+        all_active_multihoming:
+          enabled: true
+          evpn_ethernet_segment:
+            identifier: '0000:aaaa:0007:0008:0000'
+            rt_import: '00:aa:aa:07:08:00'
+        d_path:
+          local_domain_id: '1:1'
+          remote_domain_id: '99:99'
         evpn_l2:
           enabled: true
         evpn_l3:
           enabled: true
+          mode: rd-rt-rewrite
         remote_peers:
           - hostname: BB1
             ip_address: 10.0.0.1
@@ -465,6 +1255,44 @@ l3leaf:
             ip_address: 10.0.0.2
             bgp_as: 65000
       structured_config:
+        # A member dialect: guide A7/8 Ethernet9 carries bare `switchport`
+        # (unlike B's `no switchport` members).
+        ethernet_interfaces:
+          - name: Ethernet9
+            switchport:
+              enabled: true
+        vxlan_interface:
+          vxlan1:
+            vxlan:
+              vlans: null
+            eos_cli: |
+              vxlan vlan 10,50,70 vni 10010,10050,10070
+        ip_extcommunity_lists_regexp: null   # generated evpn-imported regexp ECL is a stray
+        dhcp_relay:
+          # the guide's dhcp relay block has no mlag peer-link line
+          mlag_peerlink_requests_disabled: null
+        # guide has no source-nat lines anywhere
+        virtual_source_nat_vrfs: null
+        vlan_interfaces:
+          - name: Vlan10
+            # guide SVIs carry ipv6 virtual without ipv6 enable
+            ipv6_enable: null
+          - name: Vlan50
+            # guide SVIs carry ipv6 virtual without ipv6 enable
+            ipv6_enable: null
+          - name: Vlan70
+            # guide SVIs carry ipv6 virtual without ipv6 enable
+            ipv6_enable: null
+        spanning_tree:
+          edge_port:
+            bpduguard_default: true
+        # Sweep S2: guide's access POs carry `switchport access vlan` with NO mode
+        # line (access is default; the guide doesn't save it). Null the
+        # emitted mode.
+        port_channel_interfaces:
+          - name: Port-Channel9
+            switchport:
+              mode: null
         router_bgp: "{{ custom_evpn_gw_bgp_config }}"
         prefix_lists: "{{ custom_evpn_gw_prefix_lists }}"
         route_maps: "{{ custom_evpn_gw_route_maps }}"

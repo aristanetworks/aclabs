@@ -1,0 +1,24 @@
+---
+###################################################
+# ANTA user catalog — baseline system health
+#
+# Runs on every fabric device. Rebuilt against the FINAL parity models
+# (missing-zero, Day 54 s6). Hardware/environment tests deliberately
+# omitted: cEOS-Lab containers report them as noise.
+# NTP is tag-scoped — the guide's BB nodes carry no NTP.
+###################################################
+
+anta.tests.system:
+  - VerifyReloadCause:
+  - VerifyCoredump:
+  - VerifyAgentLogs:
+  - VerifyCPUUtilization:
+  - VerifyMemoryUtilization:
+  - VerifyFileSystemUtilization:
+  - VerifyNTP:
+      filters:
+        tags: [ntp]
+
+anta.tests.configuration:
+  - VerifyZeroTouch:
+  - VerifyRunningConfigDiffs:

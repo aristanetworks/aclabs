@@ -1,0 +1,16 @@
+---
+###################################################
+# ANTA user catalog — OISM multicast (standard leafs only)
+#
+# Final-model census: the 12 standard leafs run the dual-stack OISM
+# stack (PIM on fabric links + SVIs, IGMP snooping, MLD snooping with
+# ranged members); the gateway pairs run evpn_multicast:false and carry
+# none of it. MLD state has no stock ANTA test — covered by the custom
+# VerifyMldSnoopingVlans in es_multidomain.yml's sibling module.
+###################################################
+
+anta.tests.multicast:
+  - VerifyIGMPSnoopingGlobal:
+      enabled: true
+      filters:
+        tags: [oism]

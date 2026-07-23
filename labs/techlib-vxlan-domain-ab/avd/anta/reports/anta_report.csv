@@ -1,0 +1,819 @@
+Device,Test Name,Test Status,Message(s),Test description,Test category
+A-SPINE1,VerifyBFDPeersHealth,unset,,Verifies the health of BFD peers across all VRFs.,BFD
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP peers.,BGP
+A-SPINE1,VerifyBGPPeersHealth,unset,,Verifies the health of BGP peers for given address families.,BGP
+A-SPINE1,VerifyEVPNType5Routes,unset,,Verifies EVPN Type-5 routes for given IP prefixes and VNIs.,BGP
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyRunningConfigDiffs,unset,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyZeroTouch,unset,,Verifies ZeroTouch is disabled.,Configuration
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+A-SPINE1,VerifyEVPNDPath,unset,,Assert D-PATH domain identifiers on a boundary-crossing prefix.,Evpn - Gateway
+A-SPINE1,VerifyEVPNDPath,unset,,Assert D-PATH domain identifiers on a boundary-crossing prefix.,Evpn - Gateway
+A-SPINE1,VerifyEVPNDFElection,unset,,Assert this device's DF verdict for one ES-bearing interface.,Evpn - Multihoming
+A-SPINE1,VerifyEVPNDFElection,unset,,Assert this device's DF verdict for one ES-bearing interface.,Evpn - Multihoming
+A-SPINE1,VerifyEVPNType4Routes,unset,,Expect at least `minimum` EVPN Type-4 (Ethernet Segment) routes.,Evpn - Multihoming
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentCooling,unset,,Verifies the status of power supply fans and all fan trays.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentPower,unset,,Verifies the power supplies state and input voltage.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyInventory,unset,,Verifies the physical hardware inventory of the device.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversManufacturers,unset,,Verifies if all the transceivers come from approved manufacturers.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyIllegalLACP,unset,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+A-SPINE1,VerifyL3MTU,unset,,Verifies the L3 MTU of routed interfaces.,Interfaces
+A-SPINE1,VerifyL3MTU,unset,,Verifies the L3 MTU of routed interfaces.,Interfaces
+A-SPINE1,VerifyLACPInterfacesStatus,unset,,Verifies the Link Aggregation Control Protocol (LACP) status of the interface.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyPortChannels,unset,,Verifies there are no inactive ports in port channels.,Interfaces
+A-SPINE1,VerifyISISNeighborState,unset,,Verifies the health of IS-IS neighbors.,ISIS
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyLoggingErrors,unset,,Verifies there are no syslog messages with a severity of ERRORS or higher.,Logging
+A-SPINE1,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+A-SPINE1,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+A-SPINE1,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+A-SPINE1,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+A-SPINE1,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+A-SPINE1,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+A-SPINE1,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+A-SPINE1,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+A-SPINE1,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+A-SPINE1,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+A-SPINE1,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+A-SPINE1,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+A-SPINE1,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+A-SPINE1,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+A-SPINE1,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
+A-SPINE1,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
+A-SPINE1,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
+A-SPINE1,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
+A-SPINE1,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
+A-SPINE1,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
+A-SPINE1,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
+A-SPINE1,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
+A-SPINE1,VerifyIGMPSnoopingGlobal,unset,,Verifies the IGMP snooping global status.,Multicast
+A-SPINE1,VerifyMldSnoopingVlans,unset,,MLD snooping globally enabled with at least `minimum_vlans` member VLANs.,Multicast - Oism
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
+A-SPINE1,VerifySTPMode,unset,,Verifies the configured STP mode for a provided list of VLAN(s).,STP
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+A-SPINE1,VerifyCPUUtilization,unset,,Verifies that the CPU utilization of the device is within the configured threshold.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMaintenance,unset,,Verifies that the device is not currently under or entering maintenance.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
+A-SPINE1,VerifyVxlan1Interface,unset,,Verifies the Vxlan1 interface status.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN
+A-SPINE1,VerifyVxlanConfigSanity,unset,,Verifies there are no VXLAN config-sanity inconsistencies.,VXLAN

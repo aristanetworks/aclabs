@@ -8,6 +8,14 @@ underlay_multicast_pim_sm: false
 
 b_leaf7_gateway_csc:
   router_bgp:
+    # PARITY-LEDGER class 8 — LANDMINE: this host_vars file defines
+    # custom_structured_configuration_router_bgp, which SHADOWS the
+    # group-level variable of the same name (Ansible host>group
+    # precedence — the group var is replaced wholesale, never merged).
+    # Any fabric-wide router_bgp dialect knob must therefore be
+    # repeated inside this anchor.
+    neighbor_default:
+      send_community: all
     neighbors:
       - ip_address: 172.16.2.0
         peer_group: REMOTE-IPV4-PEERS
@@ -18,21 +26,40 @@ b_leaf7_gateway_csc:
     peer_groups:
       - name: LOCAL-EVPN-PEERS
         session_tracker: TRACK-LOCAL-EVPN-PEERS
-    address_family_evpn:
-      route:
-        - type: ethernet-segment
-          route_target: auto
-      # Domain B uses ASN 65200 for both Gateway nodes; the `attach` D-PATH
-      # identifier is a per-Gateway *label* (not required to match router ASN).
-      # Convention: `65207:65207` on B-LEAF7 mirrors Domain A's numeric scheme
-      # where the last two digits track the leaf ID.
-      # VERIFY: Domain B's tech-library guide doesn't currently render an
-      # `attach` identifier line — check B-LEAF7.cfg to see if it's present.
-      # If not, remove this override.
-      domain_identifier_attach: '65207:65207'
+    eos_cli: |
+      !
+      address-family evpn
+         route type ethernet-segment route-target auto
+         domain identifier 65200:65200 attach
+         !
+         evpn ethernet-segment domain all
+            designated-forwarder election algorithm preference 2000
     session_trackers:
       - name: TRACK-LOCAL-EVPN-PEERS
         recovery_delay: 10
+    # Multi-domain MAC-VRFs on VLANs 10 and 70 (shared with Domain A).
+    vlans:
+      - id: 10
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.2.7:10010'
+        route_targets:
+          import_export_evpn_domains:
+            - domain: all
+              route_target: '10010:10010'
+      - id: 70
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.2.7:10070'
+        route_targets:
+          import_export_evpn_domains:
+            - domain: all
+              route_target: '10070:10070'
+    # Class 3: the IP-VRF domain-all overrides died with the native
+    # swap — evpn_l3.mode: rd-rt-rewrite covers L3. The MAC-VRF (VLAN)
+    # overrides above MUST stay: the mode is L3-only in 6.3.
+    # Also fixed with the swap: the D-PATH attach tag is 65200:65200
+    # (the shared fabric AS), not the per-node value used previously.
 
 b_leaf7_hostb8_csc:
   port_channel_interfaces:
@@ -40,6 +67,9 @@ b_leaf7_hostb8_csc:
       bgp:
         session_tracker: TRACK-LOCAL-EVPN-PEERS
 
-structured_config:
-  router_bgp: "{{ b_leaf7_gateway_csc.router_bgp }}"
-  port_channel_interfaces: "{{ b_leaf7_hostb8_csc.port_channel_interfaces }}"
+custom_structured_configuration_router_bgp: "{{ b_leaf7_gateway_csc.router_bgp }}"
+custom_structured_configuration_port_channel_interfaces: "{{ b_leaf7_hostb8_csc.port_channel_interfaces }}"
+
+# Shadow the fleet CSC router-multicast (host>group precedence replaces
+# wholesale) — this node's block rides the eos_cli verbatim / guide has none.
+custom_structured_configuration_router_multicast: {}

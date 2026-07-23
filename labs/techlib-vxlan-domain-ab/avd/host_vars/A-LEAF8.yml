@@ -11,6 +11,20 @@ underlay_multicast_pim_sm: false
 
 a_leaf8_gateway_csc:
   router_bgp:
+    # PARITY-LEDGER class 8 — LANDMINE: this host_vars file defines
+    # custom_structured_configuration_router_bgp, which SHADOWS the
+    # group-level variable of the same name (Ansible host>group
+    # precedence — the group var is replaced wholesale, never merged).
+    # Any fabric-wide router_bgp dialect knob must therefore be
+    # repeated inside this anchor.
+    neighbor_default:
+      send_community: all
+    # Class 8 (A gateway): un-set the explicit ipv4-AF deactivate —
+    # implicit via `no bgp default ipv4-unicast`, same as the fabric.
+    address_family_ipv4:
+      peer_groups:
+        - name: LOCAL-EVPN-PEERS
+          activate: null
     neighbors:
       - ip_address: 172.16.1.2
         peer_group: REMOTE-IPV4-PEERS
@@ -21,14 +35,39 @@ a_leaf8_gateway_csc:
     peer_groups:
       - name: LOCAL-EVPN-PEERS
         session_tracker: TRACK-EVPN-PEERS
-    address_family_evpn:
-      route:
-        - type: ethernet-segment
-          route_target: auto
-      domain_identifier_attach: '65108:65108'
+    eos_cli: |
+      !
+      address-family evpn
+         route type ethernet-segment route-target auto
+         domain identifier 65108:65108 attach
+         !
+         evpn ethernet-segment domain all
+            designated-forwarder election algorithm preference 1000
     session_trackers:
       - name: TRACK-EVPN-PEERS
         recovery_delay: 10
+    # Class 3: the IP-VRF `rd evpn domain all` + RT overrides died with
+    # the native swap — evpn_gateway.evpn_l3.mode: rd-rt-rewrite covers
+    # L3 (render-gated identical to the guide). The MAC-VRF (VLAN 10/70)
+    # domain-all overrides below MUST stay: the mode is L3-only; AVD has
+    # no native L2 domain-all rewrite in 6.3.
+    vlans:
+      - id: 10
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.1.8:10010'
+        route_targets:
+          import_export_evpn_domains:
+            - domain: all
+              route_target: '10010:10010'
+      - id: 70
+        rd_evpn_domain:
+          domain: all
+          rd: '10.0.1.8:10070'
+        route_targets:
+          import_export_evpn_domains:
+            - domain: all
+              route_target: '10070:10070'
 
 a_leaf8_hosta8_csc:
   port_channel_interfaces:
@@ -36,6 +75,9 @@ a_leaf8_hosta8_csc:
       bgp:
         session_tracker: TRACK-EVPN-PEERS
 
-structured_config:
-  router_bgp: "{{ a_leaf8_gateway_csc.router_bgp }}"
-  port_channel_interfaces: "{{ a_leaf8_hosta8_csc.port_channel_interfaces }}"
+custom_structured_configuration_router_bgp: "{{ a_leaf8_gateway_csc.router_bgp }}"
+custom_structured_configuration_port_channel_interfaces: "{{ a_leaf8_hosta8_csc.port_channel_interfaces }}"
+
+# Shadow the fleet CSC router-multicast (host>group precedence replaces
+# wholesale) — this node's block rides the eos_cli verbatim / guide has none.
+custom_structured_configuration_router_multicast: {}
