@@ -155,6 +155,22 @@ custom_vtep_bgp_session_tracker:
 ###################################################
 
 custom_evpn_gw_bgp_config:
+  vlans:
+    # guide gateway MAC-VRFs keep only the domain-all rd/rt variants
+    - id: 10
+      rd: null
+      route_targets:
+        both: null
+    - id: 70
+      rd: null
+      route_targets:
+        both: null
+  neighbors:
+    # remote-as rides the peer group in the guide, not the neighbor
+    - ip_address: 10.0.0.1
+      remote_as: null
+    - ip_address: 10.0.0.2
+      remote_as: null
   vrfs:
     # guide has no vrf-level router-id lines
     - name: PROD
@@ -170,6 +186,9 @@ custom_evpn_gw_bgp_config:
     peer_groups:
       - name: REMOTE-IPV4-PEERS
         activate: true
+      - name: REMOTE-EVPN-PEERS
+        # guide leaves the EVPN group implicitly inactive in the ipv4 AF
+        activate: null
       # Class 8: the Gateway keeps its ipv4 AF (REMOTE-IPV4-PEERS activate
       # above) but not the explicit LOCAL-EVPN deactivate — implicit via
       # `no bgp default ipv4-unicast`, same dialect as the rest of the fabric.
@@ -186,11 +205,11 @@ custom_evpn_gw_bgp_config:
       local_as: 65000
       remote_as: 65000
     - name: LOCAL-EVPN-PEERS
-      route_reflector_client: true
-      # Domain B's Gateway pair reflects local-EVPN-peer routes so the pair can
-      # exchange Type-1/Type-4 routes for their I-ESI (`0000:bbbb:0007:0008:0000`)
-      # without relying on the Spine RRs to reflect ES routes back to the
-      # originator. Standard iBGP+RR pattern for a pair of Gateways in the same AS.
+      # Guide gateways do NOT reflect for the local overlay — the Spine RRs
+      # already reflect client-to-client, which covers the pair's I-ESI
+      # Type-1/Type-4 exchange. (Earlier belt-and-suspenders rr-client here
+      # was a render-only extra vs the guide.)
+      route_reflector_client: null
 
 custom_evpn_gw_prefix_lists:
   - name: PL-GATEWAY-LOOP
@@ -220,6 +239,13 @@ custom_evpn_gw_route_maps:
 
 b_leaf7_dci_bgp_peers:
   router_bgp:
+    address_family_ipv4:
+      # guide gateways advertise the domain aggregates + own /32s
+      networks:
+        - prefix: 10.0.2.0/24
+        - prefix: 10.1.2.0/24
+        - prefix: 10.0.2.7/32
+        - prefix: 10.1.2.7/32
     # Tracker recovery dialect (guide: 10s; AVD auto-creates referenced
     # trackers with default 300 AFTER the defaults channel merges — the
     # node-group channel is the one that wins).
@@ -236,6 +262,13 @@ b_leaf7_dci_bgp_peers:
 
 b_leaf8_dci_bgp_peers:
   router_bgp:
+    address_family_ipv4:
+      # guide gateways advertise the domain aggregates + own /32s
+      networks:
+        - prefix: 10.0.2.0/24
+        - prefix: 10.1.2.0/24
+        - prefix: 10.0.2.8/32
+        - prefix: 10.1.2.8/32
     neighbors:
       - ip_address: 172.16.2.2
         peer_group: REMOTE-IPV4-PEERS
@@ -914,7 +947,7 @@ l3leaf:
             ip_address: 10.0.0.2
             bgp_as: 65000
       filter:
-        tags: ['BLUE', 'RED', 'BROWN']              # VLANs 10, 60 (local, HostB8), 70
+        tags: ['BLUE', 'BROWN']              # VLANs 10, 70 — guide gateways carry no VLAN 60
       structured_config:
         vxlan_interface:
           vxlan1:
@@ -926,9 +959,6 @@ l3leaf:
         virtual_source_nat_vrfs: null
         vlan_interfaces:
           - name: Vlan10
-            # guide SVIs carry ipv6 virtual without ipv6 enable
-            ipv6_enable: null
-          - name: Vlan60
             # guide SVIs carry ipv6 virtual without ipv6 enable
             ipv6_enable: null
           - name: Vlan70

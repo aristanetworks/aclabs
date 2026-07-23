@@ -201,6 +201,22 @@ custom_vtep_route_maps:
 # bestpath, local-as trick to peer with BB in AS 65000) lives here.
 ###################################################
 custom_evpn_gw_bgp_config:
+  vlans:
+    # guide gateway MAC-VRFs keep only the domain-all rd/rt variants
+    - id: 10
+      rd: null
+      route_targets:
+        both: null
+    - id: 70
+      rd: null
+      route_targets:
+        both: null
+  neighbors:
+    # remote-as rides the peer group in the guide, not the neighbor
+    - ip_address: 10.0.0.1
+      remote_as: null
+    - ip_address: 10.0.0.2
+      remote_as: null
   vrfs:
     # guide has no vrf-level router-id lines
     - name: PROD
@@ -214,6 +230,9 @@ custom_evpn_gw_bgp_config:
   # with the swap — the guide's gateways carry none of them.
   address_family_ipv4:
     peer_groups:
+      - name: REMOTE-EVPN-PEERS
+        # guide leaves the EVPN group implicitly inactive in the ipv4 AF
+        activate: null
       - name: REMOTE-IPV4-PEERS
         activate: true
   peer_groups:

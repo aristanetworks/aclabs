@@ -1,4 +1,10 @@
 ---
+# Guide BB nodes carry none of the fleet management baseline.
+event_monitor: null
+dns_settings: null
+ntp_settings: null
+timezone: null
+source_interfaces: null
 custom_structured_configuration_router_multicast: {}
 # BB nodes opt out of the fleet routed-switchport CSC + arp aging input.
 custom_structured_configuration_switchport_default: null
@@ -155,10 +161,18 @@ custom_structured_configuration_peer_filters:
 
 backbone_router:
   defaults:
+    spanning_tree_mode: mstp
     platform: cEOS-LAB
     bgp_as: 65000
     loopback_ipv4_pool: 10.0.0.0/24                # Loopback0: 10.0.0.[NodeID]/32
     structured_config:
+      spanning_tree:
+        mode: mstp   # input-level knob is ignored for this custom node type
+      # guide BB runs management ssh in the MGMT vrf
+      management_ssh:
+        vrfs:
+          - name: MGMT
+            enable: true
       vlan_internal_order: null
       router_bgp: "{{ csc_backbone_rr_bgp.router_bgp }}"
   nodes:
