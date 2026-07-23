@@ -1,0 +1,39 @@
+---
+###################################################
+# ANTA user catalog — EVPN overlay + VXLAN
+#
+# Peer-exact EVPN sessions come from the AVD auto-catalogs. This layer
+# asserts overlay data-plane plumbing and the tenant Type-5 surface
+# derived from the final models (SVIs 10/30/50/70 in A; 10/20/40/60/70/80
+# in B; VRFs PROD + DEV fleet-wide).
+###################################################
+
+anta.tests.vxlan:
+  - VerifyVxlan1Interface:
+      filters:
+        tags: [leaf]
+  - VerifyVxlanConfigSanity:
+      filters:
+        tags: [leaf]
+
+anta.tests.evpn:
+  # Type-5 IP-Prefix presence for every tenant subnet, checked at the
+  # gateways (the multi-domain vantage: both domains' prefixes must land).
+  - VerifyEVPNType5Routes:
+      prefixes:
+        - address: 10.10.10.0/24
+          vni: 50001
+        - address: 10.50.50.0/24
+          vni: 50001
+        - address: 10.20.20.0/24
+          vni: 50001
+        - address: 10.40.40.0/24
+          vni: 50001
+        - address: 10.70.70.0/24
+          vni: 50002
+        - address: 10.60.60.0/24
+          vni: 50002
+        - address: 10.80.80.0/24
+          vni: 50002
+      filters:
+        tags: [gateway]

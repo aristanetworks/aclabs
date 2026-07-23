@@ -1,0 +1,61 @@
+---
+###################################################
+# ANTA user catalog — underlay + interface state
+#
+# Peer-exact BGP/interface/LLDP coverage comes from the AVD auto-catalogs
+# (generated from the missing-zero structured configs). This file adds the
+# guide-level assertions the generator doesn't know about.
+###################################################
+
+anta.tests.interfaces:
+  - VerifyInterfaceErrors:
+  - VerifyInterfaceDiscards:
+  - VerifyInterfaceErrDisabled:
+  # Fabric L3 MTU census (final models): p2p 9114 on fabric nodes,
+  # 9214 on the backbone DCI links; SVIs run 9014 and are excluded.
+  - VerifyL3MTU:
+      mtu: 9114
+      ignored_interfaces: [Vlan, Loopback, Management, Vxlan]
+      filters:
+        tags: [spine, leaf]
+  - VerifyL3MTU:
+      mtu: 9214
+      ignored_interfaces: [Loopback, Management]
+      filters:
+        tags: [backbone]
+
+anta.tests.routing.generic:
+  - VerifyRoutingProtocolModel:
+      model: multi-agent
+      filters:
+        tags: [spine, leaf, backbone]
+
+anta.tests.routing.bgp:
+  - VerifyBGPPeersHealth:
+      address_families:
+        - afi: ipv4
+          safi: unicast
+        - afi: evpn
+      filters:
+        tags: [spine, leaf, backbone]
+
+# Domain B underlay is IS-IS (instance 100, L2 p2p); Domain A is eBGP.
+anta.tests.routing.isis:
+  - VerifyISISNeighborState:
+      filters:
+        tags: [isis]   # B spines + leafs only — domain_b alone would leak onto B-SW1
+
+# BFD census from the final models: all Domain B fabric nodes + the
+# A-side gateways carry the multihop block; A pods/spines and BB do not.
+anta.tests.bfd:
+  - VerifyBFDPeersHealth:
+      filters:
+        tags: [bfd]
+
+# STP census: mstp on leafs, l2leaf and backbone; spines run mode none.
+anta.tests.stp:
+  - VerifySTPMode:
+      mode: mstp
+      vlans: [1]   # default vlan exists everywhere; asserts the running mode
+      filters:
+        tags: [leaf, l2leaf, backbone]

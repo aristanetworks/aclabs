@@ -249,7 +249,7 @@ router bgp 65308
       redistribute learned
    !
    vlan 50
-      rd 3.3.0.8:10050
+      rd 10.0.3.8:10050
       route-target both 10050:10050
       redistribute learned
    !
@@ -262,7 +262,7 @@ router bgp 65308
    address-family evpn
       route type ethernet-segment route-target auto
       neighbor LOCAL-EVPN-PEERS activate
-      neighbor LOCAL-EVPN-PEERS encapsulation vxlan 
+      neighbor LOCAL-EVPN-PEERS encapsulation vxlan
       neighbor REMOTE-EVPN-MPLS-PEERS activate
       neighbor REMOTE-EVPN-MPLS-PEERS encapsulation mpls next-hop-self source-interface Loopback3
       neighbor REMOTE-EVPN-MPLS-PEERS domain remote

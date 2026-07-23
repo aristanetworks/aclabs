@@ -1,4 +1,22 @@
 ---
+# Guide BB nodes carry none of the fleet management baseline.
+event_monitor: null
+dns_settings:
+  # guide BB keeps the name-server, drops the domain + lookup lines
+  servers:
+    - ip_address: 8.8.8.8
+      vrf: MGMT
+ntp_settings: null
+timezone: null
+source_interfaces: null
+custom_structured_configuration_router_multicast: {}
+# BB nodes opt out of the fleet routed-switchport CSC + arp aging input.
+custom_structured_configuration_switchport_default: null
+# The arp writer runs after every structured channel and re-applies the
+# schema default; only the CSC overlay (applied last) can null the leaf.
+custom_structured_configuration_arp:
+  aging:
+    timeout_default: null
 ###################################################
 # Backbone (BB1, BB2) — dedicated fabric for the DCI
 #
@@ -17,6 +35,15 @@
 ###################################################
 
 fabric_name: BACKBONE
+
+# Backbone p2p links use MTU 9214 (larger than leaf-facing 9114 to
+# accommodate the fabric MTU headers on transit).
+p2p_uplinks_mtu: 9214
+
+# Global default MTU on backbone (tech-library BB1/BB2 have this so all
+# interfaces default to 9214 without needing per-interface overrides).
+custom_structured_configuration_interface_defaults:
+  mtu: 9214
 
 ###################################################
 # Custom node_type_keys — backbone_router
@@ -55,16 +82,17 @@ bgp_distance:
   internal_routes: 200
   local_routes: 200
 
-bgp_peer_groups:
-  ipv4_underlay_peers:
-    name: REMOTE-IPV4-PEERS
-    password: dkvBq1jk4inJHsHfMjYRnQ==
-  evpn_overlay_peers:
-    name: REMOTE-EVPN-PEERS
-    password: IO6gE/ln7Sp2wt33WX/Asg==
-    bfd: true
+# NOTE: no bgp_peer_groups here — the backbone_router custom node type
+# (default_underlay_routing_protocol: none) generates no eos_designs peer
+# groups; the RR peer groups are defined wholesale in csc_backbone_rr_bgp
+# below. A previous bgp_peer_groups block (with passwords) was inert input
+# and was removed with the listen-range rewrite.
 
-bgp_update_wait_install: true
+# PARITY-LEDGER class 8/20: the guide's BB1/BB2 do NOT carry
+# `update wait-install` (RRs converge on control-plane only; FIB install
+# gating is a VTEP concern). MUST be explicit false — the AVD 6.3.0
+# schema default is TRUE, so omission still renders the line.
+bgp_update_wait_install: false
 evpn_import_pruning: true
 
 router_id_loopback_description: "Globally Unique Address"
@@ -79,72 +107,57 @@ router_id_loopback_description: "Globally Unique Address"
 ###################################################
 
 csc_backbone_rr_bgp:
+  # The guide's backbone RR model (BB1 startup-config, verified line-set):
+  # DYNAMIC peering only — `bgp listen range` covers the Gateway loopbacks
+  # (10.0.0.0/8 + the 1.1.0.0/16 router-id space) into EVPN-GW-PEERS
+  # (iBGP AS 65000 via the Gateways' local-as trick) and the 172.16.0.0/16
+  # p2p transit space into IP-TRANSPORT-CLIENTS gated by the DC-ASN-RANGE
+  # peer filter (accepts AS 65100-65499). No static neighbors, no
+  # per-Gateway state on the RRs. cluster-id 1.1.0.0 shared by both BBs;
+  # router-id 1.1.0.[node] is set per node (deliberately NOT Loopback0).
+  # No `bgp bestpath d-path` here — D-PATH evaluation is the Gateways'
+  # job; the RRs reflect with next-hop-unchanged.
   router_bgp:
-    router_id: null  # will be set per-node via structured_config; AVD auto-derives from Loopback0
-    bgp_cluster_id: 10.0.0.100
-    bgp:
-      # bestpath.d_path is a per-BGP-process setting; enable so the RR
-      # evaluates D-PATH length in best-path selection.
-      bestpath:
-        d_path: true
-    peer_groups:
-      - name: REMOTE-IPV4-PEERS
-        remote_as: 65107    # Placeholder — per-neighbor remote_as override below
-        # NOTE: each Gateway pair has its own ASN, so we can't set a peer-group
-        # remote_as here. Use per-neighbor remote_as instead. AVD may prefer
-        # separate peer-groups per remote AS; verify during first render.
-        send_community: all
-      - name: REMOTE-EVPN-PEERS
+    bgp_cluster_id: 1.1.0.0
+    graceful_restart:
+      enabled: true
+      restart_time: 300
+    listen_ranges:
+      - prefix: 1.1.0.0/16
+        peer_group: EVPN-GW-PEERS
         remote_as: 65000
-        update_source: Loopback0
+      - prefix: 10.0.0.0/8
+        peer_group: EVPN-GW-PEERS
+        remote_as: 65000
+      - prefix: 172.16.0.0/16
+        peer_group: IP-TRANSPORT-CLIENTS
+        peer_filter: DC-ASN-RANGE
+    neighbor_default:
+      send_community: all
+    peer_groups:
+      - name: EVPN-GW-PEERS
         next_hop_unchanged: true
-        route_reflector_client: true
+        update_source: Loopback0
         bfd: true
-        send_community: all
-    neighbors:
-      # IPv4 underlay session with A-LEAF7 (Gateway loopbacks reachable
-      # via the direct /31 uplinks defined in DOMAIN_A_FABRIC.yml l3_edge)
-      - ip_address: 172.16.1.1
-        peer_group: REMOTE-IPV4-PEERS
-        remote_as: 65107
-        description: A-LEAF7.IPV4
-      - ip_address: 172.16.1.3
-        peer_group: REMOTE-IPV4-PEERS
-        remote_as: 65108
-        description: A-LEAF8.IPV4
-      # IPv4 underlay session with B-LEAF7 (Domain B Gateway pair)
-      - ip_address: 172.16.2.1
-        peer_group: REMOTE-IPV4-PEERS
-        remote_as: 65200
-        description: B-LEAF7.IPV4
-      - ip_address: 172.16.2.3
-        peer_group: REMOTE-IPV4-PEERS
-        remote_as: 65200
-        description: B-LEAF8.IPV4
-
-      # EVPN sessions with all four Gateway loopbacks (Loopback0 to Loopback0,
-      # over the IPv4 transit above). All in iBGP AS 65000 via local-as on the
-      # Gateway side.
-      - ip_address: 10.0.1.7
-        peer_group: REMOTE-EVPN-PEERS
-        description: A-LEAF7.EVPN
-      - ip_address: 10.0.1.8
-        peer_group: REMOTE-EVPN-PEERS
-        description: A-LEAF8.EVPN
-      - ip_address: 10.0.2.7
-        peer_group: REMOTE-EVPN-PEERS
-        description: B-LEAF7.EVPN
-      - ip_address: 10.0.2.8
-        peer_group: REMOTE-EVPN-PEERS
-        description: B-LEAF8.EVPN
+        route_reflector_client: true
+      - name: IP-TRANSPORT-CLIENTS
+        route_reflector_client: true
     address_family_evpn:
       peer_groups:
-        - name: REMOTE-EVPN-PEERS
+        - name: EVPN-GW-PEERS
           activate: true
     address_family_ipv4:
       peer_groups:
-        - name: REMOTE-IPV4-PEERS
+        - name: IP-TRANSPORT-CLIENTS
           activate: true
+
+# The AS-range gate for dynamic IPv4 transit clients (referenced by the
+# 172.16.0.0/16 listen range above).
+custom_structured_configuration_peer_filters:
+  - name: DC-ASN-RANGE
+    sequence_numbers:
+      - sequence: 10
+        match: as-range 65100-65499 result accept
 
 ###################################################
 # backbone_router node definitions
@@ -152,15 +165,132 @@ csc_backbone_rr_bgp:
 
 backbone_router:
   defaults:
+    spanning_tree_mode: mstp
     platform: cEOS-LAB
     bgp_as: 65000
     loopback_ipv4_pool: 10.0.0.0/24                # Loopback0: 10.0.0.[NodeID]/32
     structured_config:
+      spanning_tree:
+        mode: mstp   # input-level knob is ignored for this custom node type
+      # guide BB runs management ssh in the MGMT vrf
+      management_ssh:
+        vrfs:
+          - name: MGMT
+            enable: true
+      vlan_internal_order: null
       router_bgp: "{{ csc_backbone_rr_bgp.router_bgp }}"
   nodes:
     - name: BB1
       id: 1                                        # → Loopback0 = 10.0.0.1/32
       mgmt_ip: 172.100.100.101/22
+      structured_config:
+        router_bfd: null   # guide BB has no bfd tuning block
+        mac_address_table: null
+        router_bgp:
+          router_id: 1.1.0.1
+          address_family_ipv4:
+            networks:
+              - prefix: 10.0.0.1/32
     - name: BB2
       id: 2                                        # → Loopback0 = 10.0.0.2/32
       mgmt_ip: 172.100.100.102/22
+      structured_config:
+        router_bfd: null   # guide BB has no bfd tuning block
+        mac_address_table: null
+        router_bgp:
+          router_id: 1.1.0.2
+          address_family_ipv4:
+            networks:
+              - prefix: 10.0.0.2/32
+
+##########################################################
+# DCI Connectivity — BB1/BB2 to Domain A + Domain B Gateway pairs
+#
+# Duplicates the l3_edge.p2p_links from DOMAIN_A_FABRIC.yml and
+# DOMAIN_B_FABRIC.yml so the BB1/BB2 side of each link renders.
+# AVD's l3_edge is per-fabric — links defined in a domain fabric
+# don't cross the fabric boundary into BACKBONE.
+##########################################################
+
+l3_edge:
+  p2p_links:
+    # BB1↔A-LEAF7 (BB1 Et1 ↔ A-LEAF7 Et7)
+    - nodes: [A-LEAF7, BB1]
+      interfaces: [Ethernet7, Ethernet1]
+      subnet: 172.16.1.0/31
+      ip:
+        - 172.16.1.1/31
+        - 172.16.1.0/31
+      include_in_underlay_protocol: false
+
+    # BB2↔A-LEAF7 (BB2 Et1 ↔ A-LEAF7 Et8)
+    - nodes: [A-LEAF7, BB2]
+      interfaces: [Ethernet8, Ethernet1]
+      subnet: 172.16.1.4/31
+      ip:
+        - 172.16.1.5/31
+        - 172.16.1.4/31
+      include_in_underlay_protocol: false
+
+    # BB1↔A-LEAF8 (BB1 Et2 ↔ A-LEAF8 Et7)
+    - nodes: [A-LEAF8, BB1]
+      interfaces: [Ethernet7, Ethernet2]
+      subnet: 172.16.1.2/31
+      ip:
+        - 172.16.1.3/31
+        - 172.16.1.2/31
+      include_in_underlay_protocol: false
+
+    # BB2↔A-LEAF8 (BB2 Et2 ↔ A-LEAF8 Et8)
+    - nodes: [A-LEAF8, BB2]
+      interfaces: [Ethernet8, Ethernet2]
+      subnet: 172.16.1.6/31
+      ip:
+        - 172.16.1.7/31
+        - 172.16.1.6/31
+      include_in_underlay_protocol: false
+
+    # BB1↔B-LEAF7 (BB1 Et3 ↔ B-LEAF7 Et7)
+    - nodes: [B-LEAF7, BB1]
+      interfaces: [Ethernet7, Ethernet3]
+      subnet: 172.16.2.0/31
+      ip:
+        - 172.16.2.1/31
+        - 172.16.2.0/31
+      include_in_underlay_protocol: false
+
+    # BB2↔B-LEAF7 (BB2 Et3 ↔ B-LEAF7 Et8)
+    - nodes: [B-LEAF7, BB2]
+      interfaces: [Ethernet8, Ethernet3]
+      subnet: 172.16.2.4/31
+      ip:
+        - 172.16.2.5/31
+        - 172.16.2.4/31
+      include_in_underlay_protocol: false
+
+    # BB1↔B-LEAF8 (BB1 Et4 ↔ B-LEAF8 Et7)
+    - nodes: [B-LEAF8, BB1]
+      interfaces: [Ethernet7, Ethernet4]
+      subnet: 172.16.2.2/31
+      ip:
+        - 172.16.2.3/31
+        - 172.16.2.2/31
+      include_in_underlay_protocol: false
+
+    # BB2↔B-LEAF8 (BB2 Et4 ↔ B-LEAF8 Et8)
+    - nodes: [B-LEAF8, BB2]
+      interfaces: [Ethernet8, Ethernet4]
+      subnet: 172.16.2.6/31
+      ip:
+        - 172.16.2.7/31
+        - 172.16.2.6/31
+      include_in_underlay_protocol: false
+
+    # BB1↔BB2 direct link (BB1 Et5 ↔ BB2 Et5)
+    - nodes: [BB1, BB2]
+      interfaces: [Ethernet5, Ethernet5]
+      subnet: 172.16.255.0/31
+      ip:
+        - 172.16.255.0/31
+        - 172.16.255.1/31
+      include_in_underlay_protocol: false

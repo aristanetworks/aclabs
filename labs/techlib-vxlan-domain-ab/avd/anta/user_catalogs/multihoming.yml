@@ -1,0 +1,39 @@
+---
+###################################################
+# ANTA user catalog — MLAG (Domain A) + EVPN A/A multihoming
+#
+# MLAG census (final models): A-LEAF1..6 only — the gateway pairs run
+# mlag:false with EVPN all-active, and Domain B has no MLAG anywhere.
+# ES state (Type-4 import, DF election, D-PATH) is covered by the
+# custom techlib tests in es_multidomain.yml.
+###################################################
+
+anta.tests.mlag:
+  - VerifyMlagStatus:
+      filters:
+        tags: [mlag]
+  - VerifyMlagInterfaces:
+      filters:
+        tags: [mlag]
+  - VerifyMlagConfigSanity:
+      filters:
+        tags: [mlag]
+  - VerifyMlagReloadDelay:
+      reload_delay: 300
+      reload_delay_non_mlag: 330
+      filters:
+        tags: [mlag]
+
+anta.tests.interfaces:
+  # Every port-channel healthy (no inactive member ports) — per-pod member
+  # maps vary, so the fleet check is shape-agnostic; the uniform gateway
+  # pairs get the member-exact LACP assertion (Et9 -> Po9).
+  - VerifyPortChannels:
+      filters:
+        tags: [leaf, l2leaf]
+  - VerifyLACPInterfacesStatus:
+      interfaces:
+        - name: Ethernet9
+          portchannel: Port-Channel9
+      filters:
+        tags: [gateway]

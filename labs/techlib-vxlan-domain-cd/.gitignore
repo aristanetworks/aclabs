@@ -11,6 +11,12 @@
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
+# AVD build artifacts
+avd/intended/
+avd/reports/
+avd/documentation/
+avd_inventory/config_backup/
+
 # KDE directory preferences
 .directory
 
@@ -269,13 +275,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,macos,linux,ansible,python
-
-# Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
-
-# discard all config backups as we don't need them
-avd_inventory/config_backup/
 
 # ingnore images and other files not to be uploaded to GitHub
 .gitignored/*

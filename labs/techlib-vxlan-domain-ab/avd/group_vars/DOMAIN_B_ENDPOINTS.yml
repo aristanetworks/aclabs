@@ -15,8 +15,18 @@ port_profiles:
     mode: access
     spanning_tree_portfast: edge
     vlans: '10'
+    # ES/LACP style (guide dialect): EOS-native auto-LACP ESI +
+    # session tracker; the short_esi-derived static identifier and
+    # route-target die (route_target: null). lacp system-id is
+    # per-host — it rides each adapter's structured_config.
     port_channel:
       mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+          route_target: null
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
     ethernet_segment:
       short_esi: auto
 
@@ -24,17 +34,50 @@ port_profiles:
     mode: access
     spanning_tree_portfast: edge
     vlans: '20'
+    # ES/LACP style (guide dialect): EOS-native auto-LACP ESI +
+    # session tracker; the short_esi-derived static identifier and
+    # route-target die (route_target: null). lacp system-id is
+    # per-host — it rides each adapter's structured_config.
     port_channel:
       mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+          route_target: null
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
     ethernet_segment:
       short_esi: auto
+
+  # Endpoints refresh: B_POD2 hosts per guide — B3 and B5 are
+  # single-homed access hosts on the DEV VLANs (60 Red on B-LEAF3,
+  # 70 Brown on B-LEAF4); the dual-homed HostB4 rides BLUE, not PURPLE.
+  - profile: PROF-RED-SINGLE
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '60'
+
+  - profile: PROF-BROWN-SINGLE
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: '70'
 
   - profile: PROF-PURPLE-EVPN-AA
     mode: access
     spanning_tree_portfast: edge
     vlans: '40'
+    # ES/LACP style (guide dialect): EOS-native auto-LACP ESI +
+    # session tracker; the short_esi-derived static identifier and
+    # route-target die (route_target: null). lacp system-id is
+    # per-host — it rides each adapter's structured_config.
     port_channel:
       mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+          route_target: null
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
     ethernet_segment:
       short_esi: auto
 
@@ -42,8 +85,18 @@ port_profiles:
     mode: access
     spanning_tree_portfast: edge
     vlans: '60'
+    # ES/LACP style (guide dialect): EOS-native auto-LACP ESI +
+    # session tracker; the short_esi-derived static identifier and
+    # route-target die (route_target: null). lacp system-id is
+    # per-host — it rides each adapter's structured_config.
     port_channel:
       mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+          route_target: null
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
     ethernet_segment:
       short_esi: auto
 
@@ -51,8 +104,18 @@ port_profiles:
     mode: access
     spanning_tree_portfast: edge
     vlans: '70'
+    # ES/LACP style (guide dialect): EOS-native auto-LACP ESI +
+    # session tracker; the short_esi-derived static identifier and
+    # route-target die (route_target: null). lacp system-id is
+    # per-host — it rides each adapter's structured_config.
     port_channel:
       mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+          route_target: null
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
     ethernet_segment:
       short_esi: auto
 
@@ -63,8 +126,18 @@ port_profiles:
   - profile: PROF-CE-SWITCH-EVPN-AA
     mode: trunk
     vlans: '40,80'
+    # ES/LACP style (guide dialect): EOS-native auto-LACP ESI +
+    # session tracker; the short_esi-derived static identifier and
+    # route-target die (route_target: null). lacp system-id is
+    # per-host — it rides each adapter's structured_config.
     port_channel:
       mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+          route_target: null
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
     ethernet_segment:
       short_esi: auto
 
@@ -74,13 +147,11 @@ port_profiles:
   - profile: PROF-PURPLE-ACCESS
     mode: access
     spanning_tree_portfast: edge
-    spanning_tree_bpduguard: true
     vlans: '40'
 
   - profile: PROF-BLACK-ACCESS
     mode: access
     spanning_tree_portfast: edge
-    spanning_tree_bpduguard: true
     vlans: '80'
 
 servers:
@@ -96,6 +167,9 @@ servers:
         switch_ports: [Ethernet7, Ethernet7]
         switches: [B-LEAF1, B-LEAF2]
         profile: PROF-GREEN-EVPN-AA
+        port_channel:
+          structured_config:
+            lacp_id: c0d6.8200.0000
 
   - name: HostB2
     adapters:
@@ -103,23 +177,38 @@ servers:
         switch_ports: [Ethernet8, Ethernet8]
         switches: [B-LEAF1, B-LEAF2]
         profile: PROF-PURPLE-EVPN-AA
+        port_channel:
+          structured_config:
+            lacp_id: c0d6.8200.0000
 
   #########################################
   # B-LEAF3/B-LEAF4 pair — HostB3 (VLAN 10), HostB4 (VLAN 40)
   #########################################
   - name: HostB3
     adapters:
-      - endpoint_ports: [eth1, eth2]
-        switch_ports: [Ethernet7, Ethernet7]
-        switches: [B-LEAF3, B-LEAF4]
-        profile: PROF-BLUE-EVPN-AA
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [B-LEAF3]
+        profile: PROF-RED-SINGLE
 
   - name: HostB4
     adapters:
       - endpoint_ports: [eth1, eth2]
         switch_ports: [Ethernet8, Ethernet8]
         switches: [B-LEAF3, B-LEAF4]
-        profile: PROF-PURPLE-EVPN-AA
+        profile: PROF-BLUE-EVPN-AA
+        port_channel:
+          structured_config:
+            lacp_id: c0d6.8200.0034
+
+  # (Guide labels this host "B5" in its descriptions; HostB5 is taken
+  # by the B_POD3 pair host, and names are model-internal.)
+  - name: HostB9
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [B-LEAF4]
+        profile: PROF-BROWN-SINGLE
 
   #########################################
   # NOTE: B-LEAF5/B-LEAF6 uplink to B-SW1 is handled natively by AVD as
@@ -141,14 +230,16 @@ servers:
       - endpoint_ports: [eth1]
         switch_ports: [Ethernet4]
         switches: [B-SW1]
-        profile: PROF-PURPLE-ACCESS
+        profile: PROF-BLACK-ACCESS   # guide Et4 = access vlan 80
 
-  - name: HostB7
-    adapters:
-      - endpoint_ports: [eth1]
-        switch_ports: [Ethernet5]
-        switches: [B-SW1]
-        profile: PROF-BLACK-ACCESS
+  # HostB7 — the guide's B-SW1 carries no Ethernet5 host port; adapter
+  # removed for parity (container stays defined but unwired).
+  # - name: HostB7
+  #   adapters:
+  #     - endpoint_ports: [eth1]
+  #       switch_ports: [Ethernet5]
+  #       switches: [B-SW1]
+  #       profile: PROF-BLACK-ACCESS
 
   #########################################
   # HostB8 — locally attached to B-LEAF7/B-LEAF8 Gateway pair via EVPN A/A.
@@ -161,3 +252,6 @@ servers:
         switch_ports: [Ethernet9, Ethernet9]
         switches: [B-LEAF7, B-LEAF8]
         profile: PROF-RED-EVPN-AA
+        port_channel:
+          structured_config:
+            lacp_id: c0d6.8200.0008
