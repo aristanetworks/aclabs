@@ -395,12 +395,10 @@ csc_b_pod2_leaf_features:
     # Class 8: no router-bgp-level ipv4 AF on B standard leafs (see csc_spine_rr note).
     address_family_ipv4: null
     vlans:
+      # id 10 is pod-common; the DEV vlans differ per node (B3=60, B4=70)
+      # and ride the node entries below — a pod-level 60/70 would
+      # create-trap a bgp vlan block on the node that lacks it.
       - id: 10
-        redistribute_routes:
-          - learned
-          - router-mac next-hop vtep primary
-          - router-mac virtual-ip next-hop vtep primary
-      - id: 40
         redistribute_routes:
           - learned
           - router-mac next-hop vtep primary
@@ -793,16 +791,15 @@ l3leaf:
         # Sweep S2: null the emitted `switchport mode access` per guide dialect.
         # B3/4 Po7 deferred (rend-only, dies in the endpoints refresh).
         port_channel_interfaces:
-          # S2 family: guide ports carry no explicit mode line
-          - name: Port-Channel7
-            switchport:
-              mode: null
           - name: Port-Channel8
             switchport:
               mode: null
-        # Sweep S1: member-port `no switchport` per guide; B3/4 Eth7 deferred to the
-        # endpoints refresh (single-vs-dual-homing gap).
+        # S1: member-port `no switchport`; Et7 single-homed access hosts
+        # carry access-vlan without an explicit mode line (guide dialect).
         ethernet_interfaces:
+          - name: Ethernet7
+            switchport:
+              mode: null
           - name: Ethernet8
             switchport:
               enabled: false
@@ -827,6 +824,13 @@ l3leaf:
           # DEV SVI mld (node-scoped — pod scope would trap Vlan60
           # onto the sibling).
           structured_config:
+            router_bgp:
+              vlans:
+                - id: 60
+                  redistribute_routes:
+                      - learned
+                      - router-mac next-hop vtep primary
+                      - router-mac virtual-ip next-hop vtep primary
             # node eos_cli is a scalar and replaces the group string —
             # the pod mcast lines ride here too.
             vxlan_interface:
@@ -848,6 +852,13 @@ l3leaf:
           # DEV SVI mld (node-scoped — pod scope would trap Vlan70
           # onto the sibling).
           structured_config:
+            router_bgp:
+              vlans:
+                - id: 70
+                  redistribute_routes:
+                      - learned
+                      - router-mac next-hop vtep primary
+                      - router-mac virtual-ip next-hop vtep primary
             # node eos_cli is a scalar and replaces the group string —
             # the pod mcast lines ride here too.
             vxlan_interface:
@@ -885,6 +896,11 @@ l3leaf:
         # the l2leaf uplink Po is generated, not adapter-driven.
         port_channel_interfaces:
           - name: Port-Channel7
+            # l2leaf only sources l2vlans, so the SW1-facing trunk +
+            # the guide's bare `switchport` line ride structured/eos_cli.
+            switchport:
+              trunk:
+                allowed_vlan: '40,80'
             lacp_id: c0d6.8200.0506
             bgp:
               session_tracker: TRACK-LOCAL-EVPN-PEERS
@@ -1016,19 +1032,34 @@ l2leaf:
     uplink_switches: [B-LEAF5, B-LEAF6]
     uplink_interfaces: [Ethernet1, Ethernet2]         # B-SW1's own Et1/Et2 face the LEAFs
     uplink_type: port-channel                          # Single LACP trunk to both VTEPs
+    filter:
+      tags: ['PURPLE', 'BLACK']   # VLANs 40, 80 — node-level filter was silently dropped
   nodes:
     - name: B-SW1
-      filter:
-        tags: ['PURPLE', 'BLACK']   # VLANs 40, 80 — sources the defs + uplink trunks
       structured_config:
+        # l2leaf sources only l2vlans — the guide's SVI-backed vlans and
+        # the uplink trunk are pinned here directly.
+        vlans:
+          - id: 40
+            name: Purple
+          - id: 80
+            name: Black
+        port_channel_interfaces:
+          - name: Port-Channel1
+            switchport:
+              enabled: null
+              trunk:
+                allowed_vlan: '40,80'
         ip_routing: false   # guide SW1 carries explicit no ip routing
         ethernet_interfaces:
           # guide access ports carry no explicit mode line
           - name: Ethernet3
             switchport:
+              enabled: null
               mode: null
           - name: Ethernet4
             switchport:
+              enabled: null
               mode: null
       id: 100
       mgmt_ip: 172.100.102.113/22

@@ -835,6 +835,8 @@ l3leaf:
                 - ip_address: 10.0.1.204
                   remote_as: null
         - name: A-LEAF2
+          # guide gives MLAG secondaries their OWN VTEP loopback IP
+          vtep_loopback_ipv4_address: 10.1.1.2
           id: 2
           mgmt_ip: 172.100.101.106/22
           uplink_switch_interfaces: [Ethernet2, Ethernet2, Ethernet2, Ethernet2]
@@ -1005,6 +1007,8 @@ l3leaf:
                 - ip_address: 10.0.1.204
                   remote_as: null
         - name: A-LEAF4
+          # guide gives MLAG secondaries their OWN VTEP loopback IP
+          vtep_loopback_ipv4_address: 10.1.1.4
           id: 4
           mgmt_ip: 172.100.101.108/22
           uplink_switch_interfaces: [Ethernet4, Ethernet4, Ethernet4, Ethernet4]
@@ -1079,6 +1083,10 @@ l3leaf:
         # line (access is default; the guide doesn't save it). Null the
         # emitted mode.
         port_channel_interfaces:
+          # S2 family: guide Po8 = access-vlan + bare switchport, no mode line
+          - name: Port-Channel8
+            switchport:
+              mode: null
           - name: Port-Channel7
             switchport:
               mode: null
@@ -1136,6 +1144,12 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
           # remote-as rides the peer groups (anchor above).
           structured_config:
+            router_bgp:
+              vlans:
+                # guide quirk: the pair's vlan-50 rd anchors to the
+                # SECONDARY's vtep IP (.6) on both members
+                - id: 50
+                  rd: '10.0.1.6:10050'
             # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
             # global to both MLAG subnets and would break the /31 L3 pool.
             vlan_interfaces:
@@ -1168,6 +1182,8 @@ l3leaf:
                 - ip_address: 10.0.1.204
                   remote_as: null
         - name: A-LEAF6
+          # guide gives MLAG secondaries their OWN VTEP loopback IP
+          vtep_loopback_ipv4_address: 10.1.1.6
           id: 6
           mgmt_ip: 172.100.101.110/22
           uplink_switch_interfaces: [Ethernet6, Ethernet6, Ethernet6, Ethernet6]
@@ -1242,6 +1258,12 @@ l3leaf:
             ip_address: 10.0.0.2
             bgp_as: 65000
       structured_config:
+        # A member dialect: guide A7/8 Ethernet9 carries bare `switchport`
+        # (unlike B's `no switchport` members).
+        ethernet_interfaces:
+          - name: Ethernet9
+            switchport:
+              enabled: true
         vxlan_interface:
           vxlan1:
             vxlan:
