@@ -608,7 +608,10 @@ csc_pod3_leaf_features:
              !
              address-family ipv6
     vlans:
+      # guide quirk: the pair's vlan-50 rd anchors to the SECONDARY's
+      # vtep IP (.6) on both members.
       - id: 50
+        rd: '10.0.1.6:10050'
         redistribute_routes:
           - learned
           - router-mac next-hop vtep primary
@@ -1144,12 +1147,6 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet5, Ethernet5, Ethernet5, Ethernet5]
           # remote-as rides the peer groups (anchor above).
           structured_config:
-            router_bgp:
-              vlans:
-                # guide quirk: the pair's vlan-50 rd anchors to the
-                # SECONDARY's vtep IP (.6) on both members
-                - id: 50
-                  rd: '10.0.1.6:10050'
             # Guide MLAG peer link runs /30 (.1/.2); the fabric knob is
             # global to both MLAG subnets and would break the /31 L3 pool.
             vlan_interfaces:

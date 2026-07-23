@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **59** |
-| MISSING — in the guide, not yet rendered | 7 |
-| EXTRA — rendered, not in the guide | 52 |
+| **Residual total (non-exempt)** | **57** |
+| MISSING — in the guide, not yet rendered | 6 |
+| EXTRA — rendered, not in the guide | 51 |
 | Baseline at campaign start (round-11 models, same contract) | 2,943 |
 
 ## Accepted deviations (the exemption list, with today's absorbed counts)
@@ -29,21 +29,19 @@ acceptance stays visible.
 
 ## Remaining differences
 
-### MISSING — top exact lines (2 distinct)
+### MISSING — top exact lines (1 distinct)
 
 | count | line |
 |---|---|
 | 6× | `route type ethernet-segment route-target auto` |
-| 1× | `rd 10.0.1.6:10050` |
 
 ### MISSING — top shapes (digits→`#`)
 
 | count | line |
 |---|---|
 | 6× | `route type ethernet-segment route-target auto` |
-| 1× | `rd #.#.#.#:#` |
 
-### EXTRA — top exact lines (12 distinct)
+### EXTRA — top exact lines (11 distinct)
 
 | count | line |
 |---|---|
@@ -58,7 +56,6 @@ acceptance stays visible.
 | 2× | `ip address 10.102.102.7/32` |
 | 2× | `ip address 10.101.101.8/32` |
 | 2× | `ip address 10.102.102.8/32` |
-| 1× | `rd 10.0.1.5:10050` |
 
 ### EXTRA — top shapes (digits→`#`)
 
@@ -71,7 +68,6 @@ acceptance stays visible.
 | 4× | `vrf DEV` |
 | 4× | `address-family evpn` |
 | 4× | `evpn ethernet-segment domain all` |
-| 1× | `rd #.#.#.#:#` |
 
 ## Per-node residual
 
@@ -81,7 +77,7 @@ acceptance stays visible.
 | A-LEAF2 | 0 | 1 | 1 |
 | A-LEAF3 | 0 | 1 | 1 |
 | A-LEAF4 | 0 | 1 | 1 |
-| A-LEAF5 | 1 | 2 | 3 |
+| A-LEAF5 | 0 | 1 | 1 |
 | A-LEAF6 | 0 | 1 | 1 |
 | A-LEAF7 | 0 | 9 | 9 |
 | A-LEAF8 | 0 | 9 | 9 |
@@ -104,4 +100,4 @@ acceptance stays visible.
 | B-SW1 | 0 | 1 | 1 |
 | BB1 | 0 | 1 | 1 |
 | BB2 | 0 | 1 | 1 |
-| **TOTAL** | **7** | **52** | **59** |
+| **TOTAL** | **6** | **51** | **57** |
