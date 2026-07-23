@@ -344,3 +344,25 @@ re-entry headers ×19 · gateway Loopback101/102 headers ×8 + IPs ×8
 af-evpn re-entry headers ×4 + domain-all dups ×4 (attach + DF-pref
 have no native 6.3 keys) · es-rt-auto ×6 (net-neutral only). Exit
 paths: AVD version bump, pyavd patch, or accept 57 as contract floor.
+
+## Session 6 addendum — the outlier audit + functional patch (miss → 0)
+
+Per-line audit of the 57 with owners: the missing six
+(`route type ethernet-segment route-target auto`, B1-6) were
+FUNCTIONALLY REQUIRED — the ES blocks run `identifier auto lacp` with
+no static route-target import, so Type-4 ES-route import and DF
+election on every all-active segment depend on auto RT derivation.
+Shipped via router_bgp.eos_cli on the three B pod anchors (object-
+level eos_cli renders through the group channel). −6 miss / +6
+af-evpn re-entry headers → residual holds at 57, now **missing 0 /
+extra 57**: every guide line renders.
+
+Extras taxonomy, final: **41 of 57 are config-text artifacts that
+evaporate at EOS config load** (19 bare router-multicast headers, 8
+empty gw vrf contexts, 8+6 af-evpn/domain-all context re-entries —
+EOS merges re-entered stanzas and drops empty contexts; deployed
+running-config converges to guide-identical). **16 are real but
+benign**: gateway Loopback101/102 diag interfaces + IPs
+(vtep_diagnostic has no node filter; four /32s as Type-5s, zero
+protocol harm). Projected true on-box running-config delta: ~16
+lines. Verification path: deploy, `show run` diff per node.

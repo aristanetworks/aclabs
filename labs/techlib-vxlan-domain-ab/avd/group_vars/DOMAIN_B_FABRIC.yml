@@ -313,6 +313,16 @@ csc_spine_multicast:
 # B_POD1 (B-LEAF1/2): VLANs 20, 40
 csc_b_pod1_leaf_features:
   router_bgp:
+    # FUNCTIONAL REQUIREMENT (not just parity): the ES blocks run
+    # `identifier auto lacp` with no static route-target import — the
+    # ESI doesn't exist until LACP runs, so Type-4 ES-route import
+    # (and therefore DF election on every all-active segment) depends
+    # on auto RT derivation. No native 6.3 key; the af-evpn re-entry
+    # header is the accepted cost (EOS merges it at config load).
+    eos_cli: |
+      !
+      address-family evpn
+         route type ethernet-segment route-target auto
     address_family_evpn:
       peer_groups:
         # The generator writes the SOO route-map attaches onto the af-evpn
@@ -357,6 +367,16 @@ csc_b_pod1_leaf_features:
 # B_POD2 (B-LEAF3/4): VLANs 10, 40
 csc_b_pod2_leaf_features:
   router_bgp:
+    # FUNCTIONAL REQUIREMENT (not just parity): the ES blocks run
+    # `identifier auto lacp` with no static route-target import — the
+    # ESI doesn't exist until LACP runs, so Type-4 ES-route import
+    # (and therefore DF election on every all-active segment) depends
+    # on auto RT derivation. No native 6.3 key; the af-evpn re-entry
+    # header is the accepted cost (EOS merges it at config load).
+    eos_cli: |
+      !
+      address-family evpn
+         route type ethernet-segment route-target auto
     address_family_evpn:
       peer_groups:
         # The generator writes the SOO route-map attaches onto the af-evpn
@@ -407,6 +427,16 @@ csc_b_pod2_leaf_features:
 # B_POD3 (B-LEAF5/6): VLANs 40, 80
 csc_b_pod3_leaf_features:
   router_bgp:
+    # FUNCTIONAL REQUIREMENT (not just parity): the ES blocks run
+    # `identifier auto lacp` with no static route-target import — the
+    # ESI doesn't exist until LACP runs, so Type-4 ES-route import
+    # (and therefore DF election on every all-active segment) depends
+    # on auto RT derivation. No native 6.3 key; the af-evpn re-entry
+    # header is the accepted cost (EOS merges it at config load).
+    eos_cli: |
+      !
+      address-family evpn
+         route type ethernet-segment route-target auto
     address_family_evpn:
       peer_groups:
         # The generator writes the SOO route-map attaches onto the af-evpn
