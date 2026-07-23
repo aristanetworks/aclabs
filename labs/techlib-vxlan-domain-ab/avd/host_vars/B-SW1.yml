@@ -6,3 +6,7 @@ custom_structured_configuration_switchport_default: null
 custom_structured_configuration_arp:
   aging:
     timeout_default: null
+
+# Shadow the fleet CSC router-multicast (host>group precedence replaces
+# wholesale) — this node's block rides the eos_cli verbatim / guide has none.
+custom_structured_configuration_router_multicast: {}

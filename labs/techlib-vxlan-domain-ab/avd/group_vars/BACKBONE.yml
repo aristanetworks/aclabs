@@ -1,4 +1,5 @@
 ---
+custom_structured_configuration_router_multicast: {}
 # BB nodes opt out of the fleet routed-switchport CSC + arp aging input.
 custom_structured_configuration_switchport_default: null
 # The arp writer runs after every structured channel and re-applies the

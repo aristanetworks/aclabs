@@ -687,6 +687,8 @@ l3leaf:
       filter:
         tags: ['GREEN', 'PURPLE']
       structured_config:
+        # full router-multicast block now rides the host eos_cli verbatim
+        router_multicast: null
         # guide has no source-nat lines anywhere
         virtual_source_nat_vrfs: null
         # Guide B pod leafs define no route-maps or ECLs at all —
@@ -744,6 +746,8 @@ l3leaf:
       # leaves the pod (HostB4 is BLUE). Node filter replaces group
       # filter, so each node lists its full set.
       structured_config:
+        # full router-multicast block now rides the host eos_cli verbatim
+        router_multicast: null
         # guide has no source-nat lines anywhere
         virtual_source_nat_vrfs: null
         # Guide B pod leafs define no route-maps or ECLs at all —
@@ -810,6 +814,8 @@ l3leaf:
       filter:
         tags: ['PURPLE', 'BLACK']
       structured_config:
+        # full router-multicast block now rides the host eos_cli verbatim
+        router_multicast: null
         # guide has no source-nat lines anywhere
         virtual_source_nat_vrfs: null
         # Guide B pod leafs define no route-maps or ECLs at all —

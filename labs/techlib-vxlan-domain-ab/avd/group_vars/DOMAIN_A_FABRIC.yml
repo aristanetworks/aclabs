@@ -695,6 +695,8 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE']       # PROD VLANs 10 (BLUE), 30 (ORANGE)
       structured_config:
+        # full router-multicast block now rides the host eos_cli verbatim
+        router_multicast: null
         route_maps:
           # Guide attaches RM-MLAG-PEER-OUT (defined identically to the
           # render) and never defines the IN map; RM-CONN-2-BGP drops the
@@ -853,6 +855,8 @@ l3leaf:
       filter:
         tags: ['BLUE', 'ORANGE', 'YELLOW']   # PROD VLANs 10, 30 + DEV VLAN 50
       structured_config:
+        # full router-multicast block now rides the host eos_cli verbatim
+        router_multicast: null
         route_maps:
           # Guide attaches RM-MLAG-PEER-OUT (defined identically to the
           # render) and never defines the IN map; RM-CONN-2-BGP drops the
@@ -1026,6 +1030,8 @@ l3leaf:
       filter:
         tags: ['YELLOW', 'BROWN']      # DEV VLANs 50 (YELLOW), 70 (BROWN)
       structured_config:
+        # full router-multicast block now rides the host eos_cli verbatim
+        router_multicast: null
         route_maps:
           # Guide attaches RM-MLAG-PEER-OUT (defined identically to the
           # render) and never defines the IN map; RM-CONN-2-BGP drops the

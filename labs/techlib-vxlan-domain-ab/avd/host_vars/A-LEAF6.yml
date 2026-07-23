@@ -13,7 +13,18 @@
 custom_structured_configuration_eos_cli: |
   no service interface inactive port-id allocation disabled
   mld snooping
+     vlan 50,70
   router multicast
+     ipv4
+        routing
+     !
      vrf DEV
+        ipv4
+           routing
+        !
         ipv6
            routing
+
+# Shadow the fleet CSC router-multicast (host>group precedence replaces
+# wholesale) — this node's block rides the eos_cli verbatim / guide has none.
+custom_structured_configuration_router_multicast: {}

@@ -98,3 +98,7 @@ a_leaf7_hosta8_csc:
 
 custom_structured_configuration_router_bgp: "{{ a_leaf7_gateway_csc.router_bgp }}"
 custom_structured_configuration_port_channel_interfaces: "{{ a_leaf7_hosta8_csc.port_channel_interfaces }}"
+
+# Shadow the fleet CSC router-multicast (host>group precedence replaces
+# wholesale) — this node's block rides the eos_cli verbatim / guide has none.
+custom_structured_configuration_router_multicast: {}
