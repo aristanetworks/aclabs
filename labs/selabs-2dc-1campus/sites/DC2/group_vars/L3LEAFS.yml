@@ -1,0 +1,70 @@
+---
+
+# L3 Leaf switches
+
+type: l3leaf
+
+pod_name: DC2_POD
+
+l3leaf: # dynamic_key: node_type
+  defaults:
+    platform: 7050X3
+    bgp_as: 64100
+    loopback_ipv4_pool: 10.99.2.0/25
+    vtep_loopback_ipv4_pool: 10.102.2.0/24
+    mlag_peer_ipv4_pool: 10.102.255.0/31
+    mlag_peer_l3_ipv4_pool: 10.102.254.0/31
+    mlag_dual_primary_detection: true
+    uplink_ipv4_pool: 10.102.0.0/24
+    uplink_switches: ['dc2-spine1', 'dc2-spine2']
+    spanning_tree_mode: mstp
+    spanning_tree_priority: 4096
+    virtual_router_mac_address : 00:1c:73:00:00:99
+
+  node_groups:
+    - group: DC2_LEAF1
+      bgp_as: 64101
+      filter:
+        tenants: [all]
+        tags: [DC2]
+      nodes:
+        - name: dc2-leaf1
+          mgmt_ip: 192.168.0.22/24
+        - name: dc2-leaf2
+          mgmt_ip: 192.168.0.23/24
+    - group: DC2_LEAF2
+      bgp_as: 64102
+      filter:
+        tenants: [all]
+        tags: [DC2]
+      nodes:
+        - name: dc2-leaf3
+          mgmt_ip: 192.168.0.24/24
+        - name: dc2-leaf4
+          mgmt_ip: 192.168.0.25/24
+    - group: DC2_BORDER_LEAF1
+      platform: 7280R3
+      bgp_as: 64103
+      filter:
+        tenants: [all]
+        tags: [DC2]
+      evpn_gateway:
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+      nodes:
+        - name: dc2-brdr1
+          mgmt_ip: 192.168.0.200/24
+          evpn_gateway:
+            remote_peers:
+              - hostname: dc1-brdr1
+                bgp_as: 65103
+                ip_address: 10.99.1.1
+        - name: dc2-brdr2
+          mgmt_ip: 192.168.0.201/24
+          evpn_gateway:
+            remote_peers:
+              - hostname: dc1-brdr2
+                bgp_as: 65103
+                ip_address: 10.99.1.2

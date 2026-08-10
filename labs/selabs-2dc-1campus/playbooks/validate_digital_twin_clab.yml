@@ -1,0 +1,22 @@
+---
+- name: validate states on EOS devices
+  hosts: "{{ target }}"
+  connection: local
+  gather_facts: false
+  vars:
+    # anta variables
+    anta_user: 'cvpadmin'
+    anta_password: 'arista123'
+    avd_catalogs_filters:
+      - skip_tests: [VerifyLoggingErrors, VerifyNTP, VerifyInterfaceDiscards]
+    # Enable extra fabric-wide validation tests.
+    avd_catalogs_extra_fabric_validation: true
+    # point to the proper digital twin files
+    output_dir_name: "digital_twins/clab/intended"
+    # Validation Directory name
+    anta_dir_name: "anta_digital_twin/clab"
+
+  tasks:
+    - name: validate states on EOS devices
+      import_role:
+        name: arista.avd.anta_runner

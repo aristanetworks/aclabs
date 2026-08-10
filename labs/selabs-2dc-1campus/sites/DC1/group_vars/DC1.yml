@@ -1,0 +1,6 @@
+---
+#Fabric name
+fabric_name: DC1
+
+# DC variable
+dc_name: DC1

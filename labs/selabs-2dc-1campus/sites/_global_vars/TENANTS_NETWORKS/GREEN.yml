@@ -1,0 +1,37 @@
+---
+# Tenant GREEN Specific Information - VRFs / VLANs
+
+GREEN: # dynamic_key: network_services
+  - name: GREEN
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: GREEN
+        vrf_vni: 502
+        validate_bgp_peers: true
+        vtep_diagnostic:
+          loopback: 102
+          loopback_ip_range: 10.0.10.128/26
+        svis:
+          - id: 200
+            name: GREEN_VLAN_200
+            tags: [ DC1, DC2 ]
+            enabled: true
+            ip_address_virtual: 10.10.200.1/24
+          - id: 1001
+            name: DC_edge_Green
+            enabled: true
+            tags: [DC_edge]
+            ip_virtual_router_addresses: [172.16.254.12]
+            vxlan: False
+            nodes:
+              - node: dc1-brdr1
+                ip_address: 172.16.254.13/29
+              - node: dc1-brdr2
+                ip_address: 172.16.254.14/29
+        bgp_peers:
+          - ip_address: 172.16.254.10
+            remote_as: 63000
+            nodes: [dc1-brdr1, dc1-brdr2]
+          - ip_address: 172.16.254.11
+            remote_as: 63000
+            nodes: [dc1-brdr1, dc1-brdr2]

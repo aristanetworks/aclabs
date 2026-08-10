@@ -1,0 +1,46 @@
+---
+# Tenant BLUE Specific Information - VRFs / VLANs
+
+BLUE: # dynamic_key: network_services
+  - name: BLUE
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: BLUE
+        vrf_vni: 501
+        validate_bgp_peers: true
+        vtep_diagnostic:
+          loopback: 101
+          loopback_ip_range: 10.0.10.64/26
+
+        svis:
+          - id: 100
+            name: BLUE_VLAN_100
+            tags: [ DC1, DC2 ]
+            enabled: true
+            ip_address_virtual: 10.10.100.1/24
+          - id: 102
+            name: BLUE_VLAN_102
+            tags: [ DC1 ]
+            enabled: true
+            ip_address_virtual: 192.168.2.1/24
+          - id: 1000
+            name: DC_edge_Blue
+            tags: [DC_edge]
+            enabled: true
+            vxlan: False
+            ip_virtual_router_addresses: [172.16.254.4]
+            nodes:
+              - node: dc1-brdr1
+                ip_address: 172.16.254.5/29
+              - node: dc1-brdr2
+                ip_address: 172.16.254.6/29
+        bgp_peers:
+          - ip_address: 172.16.254.2
+            remote_as: 63000
+            nodes: [dc1-brdr1, dc1-brdr2]
+          - ip_address: 172.16.254.3
+            remote_as: 63000
+            nodes: [dc1-brdr1, dc1-brdr2]
+          # - ip_address: 10.34.12.2
+          #   remote_as: 65123
+          #   nodes: [dc1-brdr1, dc1-brdr2]

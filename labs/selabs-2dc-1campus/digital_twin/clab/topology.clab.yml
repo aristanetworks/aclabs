@@ -1,0 +1,588 @@
+name: arista_avd_demo
+prefix: ""
+mgmt:
+  network: clab_mgmt
+  ipv4-subnet: 192.168.0.0/24
+
+topology:
+  defaults:
+    env:
+      INTFTYPE: et
+  kinds:
+    ceos:
+      image: arista/ceos:latest
+    linux:
+      image: ghcr.io/aristanetworks/aclabs/host-ubuntu:rev1.2
+      binds:
+        - linux-user.sh:/tmp/init-user.sh
+
+  nodes:
+    dc1-brdr1:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc1-brdr1-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.100
+      startup-config: assets/basic.cfg
+    dc1-brdr2:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc1-brdr2-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.101
+      startup-config: assets/basic.cfg
+    dc1-l2leaf1:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc1-l2leaf1-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.16
+      startup-config: assets/basic.cfg
+    dc1-l2leaf2:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc1-l2leaf2-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.17
+      startup-config: assets/basic.cfg
+    dc1-leaf1:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc1-leaf1-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.12
+      startup-config: assets/basic.cfg
+    dc1-leaf2:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc1-leaf2-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.13
+      startup-config: assets/basic.cfg
+    dc1-leaf3:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc1-leaf3-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.14
+      startup-config: assets/basic.cfg
+    dc1-leaf4:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc1-leaf4-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.15
+      startup-config: assets/basic.cfg
+    dc1-spine1:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc1-spine1-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.10
+      startup-config: assets/basic.cfg
+    dc1-spine2:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc1-spine2-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.11
+      startup-config: assets/basic.cfg
+    dc2-brdr1:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc2-brdr1-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.200
+      startup-config: assets/basic.cfg
+    dc2-brdr2:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc2-brdr2-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.201
+      startup-config: assets/basic.cfg
+    dc2-leaf1:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc2-leaf1-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.22
+      startup-config: assets/basic.cfg
+    dc2-leaf2:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc2-leaf2-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.23
+      startup-config: assets/basic.cfg
+    dc2-leaf3:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc2-leaf3-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.24
+      startup-config: assets/basic.cfg
+    dc2-leaf4:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc2-leaf4-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.25
+      startup-config: assets/basic.cfg
+    dc2-spine1:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc2-spine1-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.20
+      startup-config: assets/basic.cfg
+    dc2-spine2:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/dc2-spine2-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.21
+      startup-config: assets/basic.cfg
+    campus-brdr1:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/campus-brdr1-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.36
+      startup-config: assets/basic.cfg
+    campus-brdr2:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/campus-brdr2-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.37
+      startup-config: assets/basic.cfg
+    campus-leaf1:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/campus-leaf1-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.32
+      startup-config: assets/basic.cfg
+    campus-leaf2:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/campus-leaf2-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.33
+      startup-config: assets/basic.cfg
+    campus-leaf3:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/campus-leaf3-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.34
+      startup-config: assets/basic.cfg
+    campus-leaf4:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/campus-leaf4-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.35
+      startup-config: assets/basic.cfg
+    campus-spine1:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/campus-spine1-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.30
+      startup-config: assets/basic.cfg
+    campus-spine2:
+      kind: ceos
+      binds:
+        - mymapping.json:/mnt/flash/EosIntfMapping.json:ro
+        - cvaas-onboarding-token.tok:/mnt/flash/cv-onboarding-token:ro
+        - assets/campus-spine2-ceos-config:/mnt/flash/ceos-config:ro
+      mgmt-ipv4: 192.168.0.31
+      startup-config: assets/basic.cfg
+# hosts
+    dc1-host1:
+      kind: linux
+      mgmt-ipv4: 192.168.0.128
+      exec:
+        - bash /tmp/init-user.sh
+        - systemctl stop NetworkManager || true
+        - while ! ip link show eth1 >/dev/null 2>&1 || ! ip link show eth2 >/dev/null 2>&1; do sleep 1; done
+        - ip link add bond0 type bond mode 802.3ad xmit_hash_policy layer3+4
+        - ip link set bond0 down
+        - ip link set eth1 down
+        - ip link set eth1 mtu 1500
+        - ip link set eth1 master bond0
+        - ip link set eth2 down
+        - ip link set eth2 mtu 1500
+        - ip link set eth2 master bond0
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip link set bond0 up
+        - ip addr add 10.10.100.10/24 dev bond0
+        - ip route add 10.0.0.0/8 via 10.10.100.1 dev bond0
+    dc1-host2:
+      kind: linux
+      mgmt-ipv4: 192.168.0.129
+      exec:
+        - bash /tmp/init-user.sh
+        - systemctl stop NetworkManager || true
+        - while ! ip link show eth1 >/dev/null 2>&1 || ! ip link show eth2 >/dev/null 2>&1; do sleep 1; done
+        - ip link add bond0 type bond mode 802.3ad xmit_hash_policy layer3+4
+        - ip link set bond0 down
+        - ip link set eth1 down
+        - ip link set eth1 mtu 1500
+        - ip link set eth1 master bond0
+        - ip link set eth2 down
+        - ip link set eth2 mtu 1500
+        - ip link set eth2 master bond0
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip link set bond0 up
+        - ip addr add 10.10.200.10/24 dev bond0
+        - ip route add 10.0.0.0/8 via 10.10.200.1 dev bond0
+    dc2-host1:
+      kind: linux
+      mgmt-ipv4: 192.168.0.130
+      exec:
+        - bash /tmp/init-user.sh
+        - systemctl stop NetworkManager || true
+        - while ! ip link show eth1 >/dev/null 2>&1 || ! ip link show eth2 >/dev/null 2>&1; do sleep 1; done
+        - ip link add bond0 type bond mode 802.3ad xmit_hash_policy layer3+4
+        - ip link set bond0 down
+        - ip link set eth1 down
+        - ip link set eth1 mtu 1500
+        - ip link set eth1 master bond0
+        - ip link set eth2 down
+        - ip link set eth2 mtu 1500
+        - ip link set eth2 master bond0
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip link set bond0 up
+        - ip addr add 10.10.100.11/24 dev bond0
+        - ip route add 10.0.0.0/8 via 10.10.100.1 dev bond0
+    dc2-host2:
+      kind: linux
+      mgmt-ipv4: 192.168.0.131
+      exec:
+        - bash /tmp/init-user.sh
+        - systemctl stop NetworkManager || true
+        - while ! ip link show eth1 >/dev/null 2>&1 || ! ip link show eth2 >/dev/null 2>&1; do sleep 1; done
+        - ip link add bond0 type bond mode 802.3ad xmit_hash_policy layer3+4
+        - ip link set bond0 down
+        - ip link set eth1 down
+        - ip link set eth1 mtu 1500
+        - ip link set eth1 master bond0
+        - ip link set eth2 down
+        - ip link set eth2 mtu 1500
+        - ip link set eth2 master bond0
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip link set bond0 up
+        - ip addr add 10.10.200.11/24 dev bond0
+        - ip route add 10.0.0.0/8 via 10.10.200.1 dev bond0
+    campus-host1:
+      kind: linux
+      mgmt-ipv4: 192.168.0.132
+      exec:
+        - bash /tmp/init-user.sh
+        - systemctl stop NetworkManager || true
+        - while ! ip link show eth1 >/dev/null 2>&1 || ! ip link show eth2 >/dev/null 2>&1; do sleep 1; done
+        - ip link add bond0 type bond mode 802.3ad xmit_hash_policy layer3+4
+        - ip link set bond0 down
+        - ip link set eth1 down
+        - ip link set eth1 mtu 1500
+        - ip link set eth1 master bond0
+        - ip link set eth2 down
+        - ip link set eth2 mtu 1500
+        - ip link set eth2 master bond0
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip link set bond0 up
+        - ip addr add 10.10.110.10/24 dev bond0
+        - ip route add 10.0.0.0/8 via 10.10.110.1 dev bond0
+    campus-host2:
+      kind: linux
+      mgmt-ipv4: 192.168.0.133
+      exec:
+        - bash /tmp/init-user.sh
+        - systemctl stop NetworkManager || true
+        - while ! ip link show eth1 >/dev/null 2>&1 || ! ip link show eth2 >/dev/null 2>&1; do sleep 1; done
+        - ip link add bond0 type bond mode 802.3ad xmit_hash_policy layer3+4
+        - ip link set bond0 down
+        - ip link set eth1 down
+        - ip link set eth1 mtu 1500
+        - ip link set eth1 master bond0
+        - ip link set eth2 down
+        - ip link set eth2 mtu 1500
+        - ip link set eth2 master bond0
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip link set bond0 up
+        - ip addr add 10.10.120.10/24 dev bond0
+        - ip route add 10.0.0.0/8 via 10.10.120.1 dev bond0
+    ansible:
+      kind: linux
+      mgmt-ipv4: 192.168.0.6
+
+
+  links:
+    - endpoints:
+      - dc1-brdr1:eth511
+      - dc1-brdr2:eth511
+    - endpoints:
+      - dc1-brdr1:eth521
+      - dc1-brdr2:eth521
+    - endpoints:
+      - dc1-brdr1:eth491
+      - dc1-spine1:eth101
+    - endpoints:
+      - dc1-brdr1:eth501
+      - dc1-spine2:eth101
+    - endpoints:
+      - dc1-brdr1:eth48
+      - dc2-brdr1:eth48
+    - endpoints:
+      - dc1-brdr2:eth491
+      - dc1-spine1:eth102
+    - endpoints:
+      - dc1-brdr2:eth501
+      - dc1-spine2:eth102
+    - endpoints:
+      - dc1-brdr2:eth48
+      - dc2-brdr2:eth48
+    - endpoints:
+      - dc1-l2leaf1:eth51
+      - dc1-l2leaf2:eth51
+    - endpoints:
+      - dc1-l2leaf1:eth52
+      - dc1-l2leaf2:eth52
+    - endpoints:
+      - dc1-l2leaf1:eth49
+      - dc1-leaf1:eth531
+    - endpoints:
+      - dc1-l2leaf1:eth50
+      - dc1-leaf2:eth531
+    - endpoints:
+      - dc1-host1:eth1
+      - dc1-l2leaf1:eth1
+    - endpoints:
+      - dc1-l2leaf2:eth49
+      - dc1-leaf1:eth541
+    - endpoints:
+      - dc1-l2leaf2:eth50
+      - dc1-leaf2:eth541
+    - endpoints:
+      - dc1-host1:eth2
+      - dc1-l2leaf2:eth1
+    - endpoints:
+      - dc1-leaf1:eth511
+      - dc1-leaf2:eth511
+    - endpoints:
+      - dc1-leaf1:eth521
+      - dc1-leaf2:eth521
+    - endpoints:
+      - dc1-leaf1:eth491
+      - dc1-spine1:eth103
+    - endpoints:
+      - dc1-leaf1:eth501
+      - dc1-spine2:eth103
+    - endpoints:
+      - dc1-leaf2:eth491
+      - dc1-spine1:eth104
+    - endpoints:
+      - dc1-leaf2:eth501
+      - dc1-spine2:eth104
+    - endpoints:
+      - dc1-leaf3:eth511
+      - dc1-leaf4:eth511
+    - endpoints:
+      - dc1-leaf3:eth521
+      - dc1-leaf4:eth521
+    - endpoints:
+      - dc1-leaf3:eth491
+      - dc1-spine1:eth105
+    - endpoints:
+      - dc1-leaf3:eth501
+      - dc1-spine2:eth105
+    - endpoints:
+      - dc1-host2:eth1
+      - dc1-leaf3:eth1
+    - endpoints:
+      - dc1-leaf4:eth491
+      - dc1-spine1:eth106
+    - endpoints:
+      - dc1-leaf4:eth501
+      - dc1-spine2:eth106
+    - endpoints:
+      - dc1-host2:eth2
+      - dc1-leaf4:eth1
+    - endpoints:
+      - dc2-brdr1:eth491
+      - dc2-spine1:eth101
+    - endpoints:
+      - dc2-brdr1:eth501
+      - dc2-spine2:eth101
+    - endpoints:
+      - dc2-brdr1:eth511
+      - dc2-brdr2:eth511
+    - endpoints:
+      - dc2-brdr1:eth521
+      - dc2-brdr2:eth521
+    - endpoints:
+      - dc2-brdr2:eth491
+      - dc2-spine1:eth102
+    - endpoints:
+      - dc2-brdr2:eth501
+      - dc2-spine2:eth102
+    - endpoints:
+      - dc2-leaf1:eth491
+      - dc2-spine1:eth103
+    - endpoints:
+      - dc2-leaf1:eth501
+      - dc2-spine2:eth103
+    - endpoints:
+      - dc2-leaf1:eth511
+      - dc2-leaf2:eth511
+    - endpoints:
+      - dc2-leaf1:eth521
+      - dc2-leaf2:eth521
+    - endpoints:
+      - dc2-leaf2:eth491
+      - dc2-spine1:eth104
+    - endpoints:
+      - dc2-leaf2:eth501
+      - dc2-spine2:eth104
+    - endpoints:
+      - dc2-leaf3:eth491
+      - dc2-spine1:eth105
+    - endpoints:
+      - dc2-leaf3:eth501
+      - dc2-spine2:eth105
+    - endpoints:
+      - dc2-leaf3:eth511
+      - dc2-leaf4:eth511
+    - endpoints:
+      - dc2-leaf3:eth521
+      - dc2-leaf4:eth521
+    - endpoints:
+      - dc2-leaf4:eth491
+      - dc2-spine1:eth106
+    - endpoints:
+      - dc2-leaf4:eth501
+      - dc2-spine2:eth106
+    - endpoints:
+      - dc2-host1:eth1
+      - dc2-leaf1:eth1
+    - endpoints:
+      - dc2-host1:eth2
+      - dc2-leaf2:eth1
+    - endpoints:
+      - dc2-host2:eth1
+      - dc2-leaf3:eth1
+    - endpoints:
+      - dc2-host2:eth2
+      - dc2-leaf4:eth1
+    - endpoints:
+      - campus-brdr1:eth511
+      - campus-brdr2:eth511
+    - endpoints:
+      - campus-brdr1:eth521
+      - campus-brdr2:eth521
+    - endpoints:
+      - campus-brdr1:eth491
+      - campus-spine1:eth101
+    - endpoints:
+      - campus-brdr1:eth501
+      - campus-spine2:eth101
+    - endpoints:
+      - campus-brdr2:eth491
+      - campus-spine1:eth102
+    - endpoints:
+      - campus-brdr2:eth501
+      - campus-spine2:eth102
+    - endpoints:
+      - campus-leaf1:eth51
+      - campus-leaf2:eth51
+    - endpoints:
+      - campus-leaf1:eth52
+      - campus-leaf2:eth52
+    - endpoints:
+      - campus-leaf1:eth49
+      - campus-spine1:eth103
+    - endpoints:
+      - campus-leaf1:eth50
+      - campus-spine2:eth103
+    - endpoints:
+      - campus-leaf2:eth49
+      - campus-spine1:eth104
+    - endpoints:
+      - campus-leaf2:eth50
+      - campus-spine2:eth104
+    - endpoints:
+      - campus-leaf3:eth51
+      - campus-leaf4:eth51
+    - endpoints:
+      - campus-leaf3:eth52
+      - campus-leaf4:eth52
+    - endpoints:
+      - campus-leaf3:eth49
+      - campus-spine1:eth105
+    - endpoints:
+      - campus-leaf3:eth50
+      - campus-spine2:eth105
+    - endpoints:
+      - campus-leaf4:eth49
+      - campus-spine1:eth106
+    - endpoints:
+      - campus-leaf4:eth50
+      - campus-spine2:eth106
+    - endpoints:
+      - campus-host1:eth1
+      - campus-leaf1:eth1
+    - endpoints:
+      - campus-host1:eth2
+      - campus-leaf2:eth1
+    - endpoints:
+      - campus-host2:eth1
+      - campus-leaf3:eth1
+    - endpoints:
+      - campus-host2:eth2
+      - campus-leaf4:eth1
+    - endpoints:
+      - dc1-brdr1:eth47
+      - campus-brdr1:eth48
+    - endpoints:
+      - dc1-brdr2:eth47
+      - campus-brdr2:eth48
+    - endpoints:
+      - campus-spine1:eth201
+      - campus-spine2:eth201
+    - endpoints:
+      - campus-spine1:eth202
+      - campus-spine2:eth202

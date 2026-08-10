@@ -1,0 +1,257 @@
+aaa_authorization:
+  exec:
+    default: local
+aaa_root:
+  disabled: true
+banners:
+  motd: '0 to Hero network
+
+    EOF
+
+    '
+clock:
+  timezone: EST
+config_end: true
+daemon_terminattr:
+  cvaddrs:
+  - apiserver.arista.io:443
+  cvauth:
+    method: token-secure
+    token_file: /tmp/cv-onboarding-token
+  cvsourceintf: Management1
+  cvvrf: MGMT
+  disable_aaa: true
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  sflowaddr: default/127.0.0.1:6343
+dns_domain: demo.lab
+enable_password:
+  disabled: true
+ethernet_interfaces:
+- name: Ethernet51
+  description: MLAG_campus-leaf2_Ethernet51
+  shutdown: false
+  channel_group:
+    id: 51
+    mode: active
+  metadata:
+    peer: campus-leaf2
+    peer_interface: Ethernet51
+    peer_type: mlag_peer
+- name: Ethernet52
+  description: MLAG_campus-leaf2_Ethernet52
+  shutdown: false
+  channel_group:
+    id: 51
+    mode: active
+  metadata:
+    peer: campus-leaf2
+    peer_interface: Ethernet52
+    peer_type: mlag_peer
+- name: Ethernet49
+  description: L2_campus-spine1_Ethernet1/3
+  shutdown: false
+  channel_group:
+    id: 49
+    mode: active
+  metadata:
+    peer: campus-spine1
+    peer_interface: Ethernet1/3
+    peer_type: l3spine
+- name: Ethernet50
+  description: L2_campus-spine2_Ethernet1/3
+  shutdown: false
+  channel_group:
+    id: 49
+    mode: active
+  metadata:
+    peer: campus-spine2
+    peer_interface: Ethernet1/3
+    peer_type: l3spine
+hostname: campus-leaf1
+ip_igmp_snooping:
+  globally_enabled: true
+ip_name_server:
+  vrfs:
+  - name: MGMT
+    servers:
+    - ip_address: 8.8.8.8
+    - ip_address: 8.8.4.4
+local_users:
+- name: cvpadmin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$vQGQxmJp16IINuqk$makfRsxIS8Das8bugela5cdUd0iSUzA0/nPRXWXmonGeQ/vuqWi.vrr1OINH4MZLCOux0tniArjvyJNJHe9Zt.
+management_api_http:
+  enable_https: true
+  enable_vrfs:
+  - name: MGMT
+management_interfaces:
+- name: Management1
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: MGMT
+  ip_address: 192.168.0.32/24
+  type: oob
+  gateway: 192.168.0.1
+metadata:
+  is_deployed: true
+  platform: vEOS-lab
+  fabric_name: CAMPUS
+  validate_hardware:
+    enabled: false
+  cv_tags:
+    device_tags:
+    - name: topology_hint_network_type
+      value: campusV2
+    - name: topology_hint_type
+      value: Leaf
+    - name: Role
+      value: Leaf
+    - name: Campus
+      value: CAMPUS
+    - name: Campus-Pod
+      value: POD1
+    - name: Access-Pod
+      value: CAMPUS-ACCESS-POD1
+    interface_tags:
+    - interface: Ethernet51
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: MLAG
+    - interface: Ethernet52
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: MLAG
+    - interface: Ethernet49
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: Uplink
+    - interface: Ethernet50
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: Uplink
+    - interface: Management1
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Management
+  digital_twin:
+    environment: act
+    node_type: veos
+    ip_addr: 192.168.0.32/24
+    version: 4.36.0.1F
+    username: cvpadmin
+    password: cvp123!
+mlag_configuration:
+  domain_id: POD1
+  local_interface: Vlan4094
+  peer_address: 10.101.255.1
+  peer_address_heartbeat:
+    peer_ip: 192.168.0.33
+    vrf: MGMT
+  dual_primary_detection_delay: 5
+  peer_link: Port-Channel51
+  reload_delay_mlag: '300'
+  reload_delay_non_mlag: '330'
+ntp:
+  local_interface:
+    name: Management1
+    vrf: MGMT
+  servers:
+  - name: 0.north-america.pool.ntp.org
+    preferred: true
+  - name: 1.north-america.pool.ntp.org
+  vrf: MGMT
+port_channel_interfaces:
+- name: Port-Channel51
+  description: MLAG_campus-leaf2_Port-Channel51
+  shutdown: false
+  sflow:
+    enable: true
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      groups:
+      - MLAG
+- name: Port-Channel49
+  description: L2_SPINES_Port-Channel13
+  shutdown: false
+  mlag: 49
+  sflow:
+    enable: true
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 1110,1120
+service_routing_protocols_model: multi-agent
+sflow:
+  sample: 10
+  polling_interval: 50
+  destinations:
+  - destination: 127.0.0.1
+    port: 6343
+  source_interface: Vlan4094
+  run: true
+spanning_tree:
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 32768
+  no_spanning_tree_vlan: '4094'
+static_routes:
+- vrf: MGMT
+  prefix: 0.0.0.0/0
+  next_hop: 192.168.0.1
+transceiver_qsfp_default_mode_4x10: true
+vlan_interfaces:
+- name: Vlan4094
+  description: MLAG
+  shutdown: false
+  ip_address: 10.101.255.0/31
+  mtu: 1500
+  no_autostate: true
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+vlans:
+- id: 4094
+  name: MLAG
+  trunk_groups:
+  - MLAG
+  metadata:
+    tenants:
+    - system
+- id: 1110
+  name: vlan_1110
+  metadata:
+    tenants:
+    - Campus
+- id: 1120
+  name: vlan_1120
+  metadata:
+    tenants:
+    - Campus
+vrfs:
+- name: MGMT
+  ip_routing: false

@@ -1,0 +1,48 @@
+---
+# L2 Leaf switches
+
+type: l2leaf
+
+l2leaf:
+  defaults:
+    platform: 720XP
+    mlag_peer_ipv4_pool: 10.101.255.0/31
+    mlag_dual_primary_detection: true
+    spanning_tree_mode: mstp
+    uplink_switches: [campus-spine1, campus-spine2]
+    filter:
+      tenants: [Campus]
+
+  node_groups:
+    - group: POD1
+      filter:
+        tags: [Campus]
+      nodes:
+        - name: campus-leaf1
+          mgmt_ip: 192.168.0.32/24
+        - name: campus-leaf2
+          mgmt_ip: 192.168.0.33/24
+    - group: POD2
+      filter:
+        tags: [Campus]
+      nodes:
+        - name: campus-leaf3
+          mgmt_ip: 192.168.0.34/24
+        - name: campus-leaf4
+          mgmt_ip: 192.168.0.35/24
+    - group: BORDER_POD
+      platform: 7280R3
+      filter:
+        tags: [Campus, DC_edge]
+      nodes:
+        - name: campus-brdr1
+          mgmt_ip: 192.168.0.36/24
+        - name: campus-brdr2
+          mgmt_ip: 192.168.0.37/24
+
+# quick action tags
+campus_access_pod: CAMPUS-ACCESS-POD1
+
+# flow source interface override
+custom_structured_configuration_sflow:
+  source_interface: Vlan4094

@@ -1,0 +1,38 @@
+---
+# DCI LINKS definition
+
+l3_edge:
+  p2p_links_ip_pools:
+    - name: WAN_pool
+      ipv4_pool: 172.16.255.0/24
+  p2p_links:
+    - id: 1
+      ip_pool: WAN_pool
+      nodes: [ dc1-brdr1, dc2-brdr1]
+      interfaces: [ Ethernet48,  Ethernet48 ]
+      as: [ 65103, 64103 ]
+      include_in_underlay_protocol: true
+      ethernet_structured_config:
+        metadata:
+          validate_state: true
+          validate_lldp: true
+    - id: 2
+      ip_pool: WAN_pool
+      nodes: [ dc1-brdr2, dc2-brdr2]
+      interfaces: [ Ethernet48,  Ethernet48 ]
+      as: [ 65103, 64103 ]
+      include_in_underlay_protocol: true
+      ethernet_structured_config:
+        metadata:
+          validate_state: true
+          validate_lldp: true
+    # - id: 3
+    #   ip_pool: WAN_pool
+    #   nodes: [ dc1-brdr1, ISP1]
+    #   interfaces: [ Ethernet44,  Ethernet1 ]
+    #   as: [ 65103, 65123 ]
+    #   include_in_underlay_protocol: true
+    #   ethernet_structured_config:
+    #     metadata:
+    #       validate_state: true
+    #       validate_lldp: true

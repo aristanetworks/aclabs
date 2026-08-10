@@ -1,0 +1,693 @@
+aaa_authorization:
+  exec:
+    default: local
+aaa_root:
+  disabled: true
+banners:
+  motd: '0 to Hero network
+
+    EOF
+
+    '
+clock:
+  timezone: EST
+config_end: true
+daemon_terminattr:
+  cvaddrs:
+  - apiserver.arista.io:443
+  cvauth:
+    method: token-secure
+    token_file: /tmp/cv-onboarding-token
+  cvsourceintf: Management1
+  cvvrf: MGMT
+  disable_aaa: true
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  sflowaddr: default/127.0.0.1:6343
+dns_domain: demo.lab
+enable_password:
+  disabled: true
+ethernet_interfaces:
+- name: Ethernet51/1
+  description: MLAG_dc1-brdr1_Ethernet51/1
+  shutdown: false
+  channel_group:
+    id: 511
+    mode: active
+  metadata:
+    peer: dc1-brdr1
+    peer_interface: Ethernet51/1
+    peer_type: mlag_peer
+- name: Ethernet52/1
+  description: MLAG_dc1-brdr1_Ethernet52/1
+  shutdown: false
+  channel_group:
+    id: 511
+    mode: active
+  metadata:
+    peer: dc1-brdr1
+    peer_interface: Ethernet52/1
+    peer_type: mlag_peer
+- name: Ethernet49/1
+  description: P2P_dc1-spine1_Ethernet1/2
+  shutdown: false
+  mtu: 1500
+  ip_address: 10.101.0.5/31
+  metadata:
+    peer: dc1-spine1
+    peer_interface: Ethernet1/2
+    peer_type: spine
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
+- name: Ethernet50/1
+  description: P2P_dc1-spine2_Ethernet1/2
+  shutdown: false
+  mtu: 1500
+  ip_address: 10.101.0.7/31
+  metadata:
+    peer: dc1-spine2
+    peer_interface: Ethernet1/2
+    peer_type: spine
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
+- name: Ethernet48
+  description: P2P_dc2-brdr2_Ethernet48
+  shutdown: false
+  mtu: 1500
+  ip_address: 172.16.255.2/31
+  metadata:
+    peer: dc2-brdr2
+    peer_interface: Ethernet48
+    peer_type: other
+    validate_state: true
+    validate_lldp: true
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
+- name: Ethernet47
+  description: campus-brdr2
+  shutdown: false
+  metadata:
+    peer: campus-brdr2
+    peer_interface: Ethernet48
+    peer_type: network_port
+    peer_key: network_ports
+    validate_state: true
+    validate_lldp: true
+  sflow:
+    enable: true
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 1000,1001
+hostname: dc1-brdr2
+ip_igmp_snooping:
+  globally_enabled: true
+ip_name_server:
+  vrfs:
+  - name: MGMT
+    servers:
+    - ip_address: 8.8.8.8
+    - ip_address: 8.8.4.4
+ip_routing: true
+ip_virtual_router_mac_address: 00:1c:73:00:00:99
+local_users:
+- name: cvpadmin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$vQGQxmJp16IINuqk$makfRsxIS8Das8bugela5cdUd0iSUzA0/nPRXWXmonGeQ/vuqWi.vrr1OINH4MZLCOux0tniArjvyJNJHe9Zt.
+loopback_interfaces:
+- name: Loopback0
+  description: ROUTER_ID
+  shutdown: false
+  ip_address: 10.99.1.2/32
+- name: Loopback1
+  description: VXLAN_TUNNEL_SOURCE
+  shutdown: false
+  ip_address: 10.101.1.1/32
+- name: Loopback101
+  description: DIAG_VRF_BLUE
+  shutdown: false
+  vrf: BLUE
+  ip_address: 10.0.10.66/32
+- name: Loopback102
+  description: DIAG_VRF_GREEN
+  shutdown: false
+  vrf: GREEN
+  ip_address: 10.0.10.130/32
+management_api_http:
+  enable_https: true
+  enable_vrfs:
+  - name: MGMT
+management_interfaces:
+- name: Management1
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: MGMT
+  ip_address: 192.168.0.101/24
+  type: oob
+  gateway: 192.168.0.1
+metadata:
+  is_deployed: true
+  platform: vEOS-lab
+  pod_name: DC1_POD
+  dc_name: DC1
+  fabric_name: DC1
+  validate_hardware:
+    enabled: false
+  cv_tags:
+    device_tags:
+    - name: topology_hint_datacenter
+      value: DC1
+    - name: topology_hint_fabric
+      value: DC1
+    - name: topology_hint_pod
+      value: DC1_POD
+    - name: topology_hint_type
+      value: leaf
+    - name: topology_hint_rack
+      value: DC1_BORDER_LEAF1
+  digital_twin:
+    environment: act
+    node_type: veos
+    ip_addr: 192.168.0.101/24
+    version: 4.36.0.1F
+    username: cvpadmin
+    password: cvp123!
+mlag_configuration:
+  domain_id: DC1_BORDER_LEAF1
+  local_interface: Vlan4094
+  peer_address: 10.101.255.0
+  peer_address_heartbeat:
+    peer_ip: 192.168.0.100
+    vrf: MGMT
+  dual_primary_detection_delay: 5
+  peer_link: Port-Channel511
+  reload_delay_mlag: '300'
+  reload_delay_non_mlag: '330'
+ntp:
+  local_interface:
+    name: Management1
+    vrf: MGMT
+  servers:
+  - name: 0.north-america.pool.ntp.org
+    preferred: true
+  - name: 1.north-america.pool.ntp.org
+  vrf: MGMT
+port_channel_interfaces:
+- name: Port-Channel511
+  description: MLAG_dc1-brdr1_Port-Channel511
+  shutdown: false
+  sflow:
+    enable: true
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      groups:
+      - MLAG
+prefix_lists:
+- name: PL-LOOPBACKS-EVPN-OVERLAY
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.99.1.0/25 eq 32
+  - sequence: 20
+    action: permit 10.101.1.0/24 eq 32
+- name: PL-MLAG-PEER-VRFS
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.101.254.0/31
+route_maps:
+- name: RM-MLAG-PEER-IN
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    description: Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
+    set:
+    - origin incomplete
+- name: RM-CONN-2-BGP
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+- name: RM-CONN-2-BGP-VRFS
+  sequence_numbers:
+  - sequence: 10
+    type: deny
+    match:
+    - ip address prefix-list PL-MLAG-PEER-VRFS
+  - sequence: 20
+    type: permit
+router_bfd:
+  multihop:
+    interval: 1200
+    min_rx: 1200
+    multiplier: 3
+router_bgp:
+  as: '65103'
+  router_id: 10.99.1.2
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  graceful_restart:
+    enabled: true
+    restart_time: 300
+  maximum_paths:
+    paths: 4
+  bgp:
+    default:
+      ipv4_unicast: false
+  peer_groups:
+  - name: MLAG-IPv4-UNDERLAY-PEER
+    metadata:
+      type: ipv4
+    remote_as: '65103'
+    description: dc1-brdr1
+    next_hop_self: true
+    send_community: all
+    maximum_routes: 256000
+    route_map_in: RM-MLAG-PEER-IN
+  - name: IPv4-UNDERLAY-PEERS
+    metadata:
+      type: ipv4
+    password: AQQvKeimxJu+uGQ/yYvv9w==
+    send_community: all
+    maximum_routes: 256000
+  - name: EVPN-OVERLAY-PEERS
+    metadata:
+      type: evpn
+    update_source: Loopback0
+    bfd: true
+    ebgp_multihop: 3
+    send_community: all
+    maximum_routes: 0
+  - name: EVPN-OVERLAY-CORE
+    metadata:
+      type: evpn
+    update_source: Loopback0
+    bfd: true
+    ebgp_multihop: 15
+    send_community: all
+    maximum_routes: 0
+  neighbors:
+  - ip_address: 10.101.254.0
+    peer_group: MLAG-IPv4-UNDERLAY-PEER
+    metadata:
+      peer: dc1-brdr1
+    description: dc1-brdr1_Vlan4093
+  - ip_address: 10.101.0.4
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65000'
+    metadata:
+      peer: dc1-spine1
+    description: dc1-spine1_Ethernet1/2
+    bfd: true
+  - ip_address: 10.101.0.6
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65000'
+    metadata:
+      peer: dc1-spine2
+    description: dc1-spine2_Ethernet1/2
+    bfd: true
+  - ip_address: 10.99.1.129
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65000'
+    metadata:
+      peer: dc1-spine1
+    description: dc1-spine1_Loopback0
+  - ip_address: 10.99.1.130
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65000'
+    metadata:
+      peer: dc1-spine2
+    description: dc1-spine2_Loopback0
+  - ip_address: 10.99.2.2
+    peer_group: EVPN-OVERLAY-CORE
+    remote_as: '64103'
+    metadata:
+      peer: dc2-brdr2
+    description: dc2-brdr2
+  - ip_address: 172.16.255.3
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '64103'
+    metadata:
+      peer: dc2-brdr2
+    description: dc2-brdr2
+  redistribute:
+    connected:
+      enabled: true
+      route_map: RM-CONN-2-BGP
+  vlans:
+  - id: 100
+    metadata:
+      tenants:
+      - BLUE
+    rd: 10.99.1.2:10100
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.99.1.2:10100
+    route_targets:
+      both:
+      - 10100:10100
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10100:10100
+    redistribute_routes:
+    - learned
+  - id: 102
+    metadata:
+      tenants:
+      - BLUE
+    rd: 10.99.1.2:10102
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.99.1.2:10102
+    route_targets:
+      both:
+      - 10102:10102
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10102:10102
+    redistribute_routes:
+    - learned
+  - id: 200
+    metadata:
+      tenants:
+      - GREEN
+    rd: 10.99.1.2:10200
+    rd_evpn_domain:
+      domain: remote
+      rd: 10.99.1.2:10200
+    route_targets:
+      both:
+      - 10200:10200
+      import_export_evpn_domains:
+      - domain: remote
+        route_target: 10200:10200
+    redistribute_routes:
+    - learned
+  address_family_evpn:
+    neighbor_default:
+      next_hop_self_received_evpn_routes:
+        enable: true
+        inter_domain: true
+    peer_groups:
+    - name: EVPN-OVERLAY-PEERS
+      activate: true
+    - name: EVPN-OVERLAY-CORE
+      activate: true
+      domain_remote: true
+  address_family_ipv4:
+    peer_groups:
+    - name: MLAG-IPv4-UNDERLAY-PEER
+      activate: true
+    - name: IPv4-UNDERLAY-PEERS
+      activate: true
+    - name: EVPN-OVERLAY-PEERS
+      activate: false
+    - name: EVPN-OVERLAY-CORE
+      activate: false
+  vrfs:
+  - name: BLUE
+    rd: 10.99.1.2:501
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 501:501
+      export:
+      - address_family: evpn
+        route_targets:
+        - 501:501
+    router_id: 10.99.1.2
+    neighbors:
+    - ip_address: 10.101.254.0
+      peer_group: MLAG-IPv4-UNDERLAY-PEER
+      description: dc1-brdr1_Vlan3500
+      metadata:
+        validate_state: true
+    - ip_address: 172.16.254.2
+      remote_as: '63000'
+      metadata:
+        validate_state: true
+    - ip_address: 172.16.254.3
+      remote_as: '63000'
+      metadata:
+        validate_state: true
+    redistribute:
+      connected:
+        enabled: true
+        route_map: RM-CONN-2-BGP-VRFS
+    address_family_ipv4:
+      neighbors:
+      - ip_address: 172.16.254.2
+        activate: true
+      - ip_address: 172.16.254.3
+        activate: true
+  - name: GREEN
+    rd: 10.99.1.2:502
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 502:502
+      export:
+      - address_family: evpn
+        route_targets:
+        - 502:502
+    router_id: 10.99.1.2
+    neighbors:
+    - ip_address: 10.101.254.0
+      peer_group: MLAG-IPv4-UNDERLAY-PEER
+      description: dc1-brdr1_Vlan3501
+      metadata:
+        validate_state: true
+    - ip_address: 172.16.254.10
+      remote_as: '63000'
+      metadata:
+        validate_state: true
+    - ip_address: 172.16.254.11
+      remote_as: '63000'
+      metadata:
+        validate_state: true
+    redistribute:
+      connected:
+        enabled: true
+        route_map: RM-CONN-2-BGP-VRFS
+    address_family_ipv4:
+      neighbors:
+      - ip_address: 172.16.254.10
+        activate: true
+      - ip_address: 172.16.254.11
+        activate: true
+service_routing_protocols_model: multi-agent
+sflow:
+  sample: 10
+  polling_interval: 50
+  destinations:
+  - destination: 127.0.0.1
+    port: 6343
+  source_interface: Loopback0
+  run: true
+spanning_tree:
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 4096
+  no_spanning_tree_vlan: 4093-4094
+static_routes:
+- vrf: MGMT
+  prefix: 0.0.0.0/0
+  next_hop: 192.168.0.1
+transceiver_qsfp_default_mode_4x10: true
+virtual_source_nat_vrfs:
+- name: BLUE
+  ip_address: 10.0.10.66
+- name: GREEN
+  ip_address: 10.0.10.130
+vlan_interfaces:
+- name: Vlan4093
+  description: MLAG_L3
+  shutdown: false
+  ip_address: 10.101.254.1/31
+  mtu: 1500
+- name: Vlan4094
+  description: MLAG
+  shutdown: false
+  ip_address: 10.101.255.1/31
+  mtu: 1500
+  no_autostate: true
+- name: Vlan100
+  description: BLUE_VLAN_100
+  shutdown: false
+  vrf: BLUE
+  ip_address_virtual: 10.10.100.1/24
+  metadata:
+    tenants:
+    - BLUE
+    tags:
+    - DC1
+    - DC2
+- name: Vlan102
+  description: BLUE_VLAN_102
+  shutdown: false
+  vrf: BLUE
+  ip_address_virtual: 192.168.2.1/24
+  metadata:
+    tenants:
+    - BLUE
+    tags:
+    - DC1
+- name: Vlan1000
+  description: DC_edge_Blue
+  shutdown: false
+  vrf: BLUE
+  ip_address: 172.16.254.6/29
+  ip_virtual_router_addresses:
+  - 172.16.254.4
+  metadata:
+    tenants:
+    - BLUE
+    tags:
+    - DC_edge
+- name: Vlan3500
+  description: MLAG_L3_VRF_BLUE
+  shutdown: false
+  vrf: BLUE
+  ip_address: 10.101.254.1/31
+  mtu: 1500
+  metadata:
+    tenants:
+    - BLUE
+    type: underlay_peering
+- name: Vlan200
+  description: GREEN_VLAN_200
+  shutdown: false
+  vrf: GREEN
+  ip_address_virtual: 10.10.200.1/24
+  metadata:
+    tenants:
+    - GREEN
+    tags:
+    - DC1
+    - DC2
+- name: Vlan1001
+  description: DC_edge_Green
+  shutdown: false
+  vrf: GREEN
+  ip_address: 172.16.254.14/29
+  ip_virtual_router_addresses:
+  - 172.16.254.12
+  metadata:
+    tenants:
+    - GREEN
+    tags:
+    - DC_edge
+- name: Vlan3501
+  description: MLAG_L3_VRF_GREEN
+  shutdown: false
+  vrf: GREEN
+  ip_address: 10.101.254.1/31
+  mtu: 1500
+  metadata:
+    tenants:
+    - GREEN
+    type: underlay_peering
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+vlans:
+- id: 4093
+  name: MLAG_L3
+  trunk_groups:
+  - MLAG
+  metadata:
+    tenants:
+    - system
+- id: 4094
+  name: MLAG
+  trunk_groups:
+  - MLAG
+  metadata:
+    tenants:
+    - system
+- id: 100
+  name: BLUE_VLAN_100
+  metadata:
+    tenants:
+    - BLUE
+- id: 102
+  name: BLUE_VLAN_102
+  metadata:
+    tenants:
+    - BLUE
+- id: 1000
+  name: DC_edge_Blue
+  metadata:
+    tenants:
+    - BLUE
+- id: 3500
+  name: MLAG_L3_VRF_BLUE
+  trunk_groups:
+  - MLAG
+  metadata:
+    tenants:
+    - BLUE
+- id: 200
+  name: GREEN_VLAN_200
+  metadata:
+    tenants:
+    - GREEN
+- id: 1001
+  name: DC_edge_Green
+  metadata:
+    tenants:
+    - GREEN
+- id: 3501
+  name: MLAG_L3_VRF_GREEN
+  trunk_groups:
+  - MLAG
+  metadata:
+    tenants:
+    - GREEN
+vrfs:
+- name: MGMT
+  ip_routing: false
+- name: BLUE
+  ip_routing: true
+  metadata:
+    tenants:
+    - BLUE
+- name: GREEN
+  ip_routing: true
+  metadata:
+    tenants:
+    - GREEN
+vxlan_interface:
+  vxlan1:
+    description: dc1-brdr2_VTEP
+    vxlan:
+      source_interface: Loopback1
+      udp_port: 4789
+      virtual_router_encapsulation_mac_address: mlag-system-id
+      vlans:
+      - id: 100
+        vni: 10100
+      - id: 102
+        vni: 10102
+      - id: 200
+        vni: 10200
+      vrfs:
+      - name: BLUE
+        vni: 501
+      - name: GREEN
+        vni: 502

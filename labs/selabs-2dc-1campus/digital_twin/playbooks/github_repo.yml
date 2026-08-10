@@ -1,0 +1,160 @@
+---
+# Initialize this project as a Git repository and publish it to GitHub.
+# Authenticate the GitHub CLI first, for example: gh auth login
+- name: Initialize and publish the GitHub repository
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - ../../_USER_INPUTS.yml
+
+  vars:
+    project_root: "{{ playbook_dir }}/../.."
+
+  tasks:
+    - name: Check whether the project is already a Git repository
+      ansible.builtin.command:
+        argv:
+          - git
+          - rev-parse
+          - --is-inside-work-tree
+      args:
+        chdir: "{{ project_root }}"
+      register: git_repository
+      changed_when: false
+      failed_when: false
+
+    - name: Initialize the local Git repository
+      ansible.builtin.command:
+        argv:
+          - git
+          - init
+      args:
+        chdir: "{{ project_root }}"
+      when: git_repository.rc != 0
+      changed_when: true
+
+    - name: Configure the Git commit author
+      ansible.builtin.command:
+        argv:
+          - git
+          - config
+          - user.name
+          - "{{ git_user }}"
+      args:
+        chdir: "{{ project_root }}"
+      changed_when: false
+
+    - name: Configure the Git commit email address
+      ansible.builtin.command:
+        argv:
+          - git
+          - config
+          - user.email
+          - "{{ git_email }}"
+      args:
+        chdir: "{{ project_root }}"
+      changed_when: false
+
+    - name: Configure the Git default branch name
+      ansible.builtin.command:
+        argv:
+          - git
+          - config
+          - init.defaultbranch
+          - main
+      args:
+        chdir: "{{ project_root }}"
+      changed_when: false
+
+    - name: Stage the project files
+      ansible.builtin.command:
+        argv:
+          - git
+          - add
+          - --all
+      args:
+        chdir: "{{ project_root }}"
+      changed_when: false
+
+    - name: Check for staged changes
+      ansible.builtin.command:
+        argv:
+          - git
+          - diff
+          - --cached
+          - --quiet
+      args:
+        chdir: "{{ project_root }}"
+      register: staged_changes
+      changed_when: false
+      failed_when: staged_changes.rc not in [0, 1]
+
+    - name: Create the initial commit
+      ansible.builtin.command:
+        argv:
+          - git
+          - commit
+          - -m
+          - Initial commit
+      args:
+        chdir: "{{ project_root }}"
+      when: staged_changes.rc == 1
+      changed_when: true
+
+    - name: Check GitHub CLI authentication status
+      ansible.builtin.command:
+        argv:
+          - gh
+          - auth
+          - status
+          - --hostname
+          - github.com
+      register: github_authentication
+      changed_when: false
+      failed_when: false
+
+    - name: Authenticate GitHub CLI through the browser
+      ansible.builtin.command:
+        argv:
+          - gh
+          - auth
+          - login
+          - --hostname
+          - github.com
+          - --git-protocol
+          - https
+          - --web
+      when: github_authentication.rc != 0
+      changed_when: true
+
+    - name: Check whether the GitHub repository already exists
+      ansible.builtin.command:
+        argv:
+          - gh
+          - repo
+          - view
+          - "{{ repo_name }}"
+      args:
+        chdir: "{{ project_root }}"
+      register: github_repository
+      changed_when: false
+      failed_when: false
+
+    - name: Create and push the private GitHub repository
+      ansible.builtin.command:
+        argv:
+          - gh
+          - repo
+          - create
+          - "{{ repo_name }}"
+          - --private
+          - --source
+          - .
+          - --remote
+          - origin
+          - --push
+      args:
+        chdir: "{{ project_root }}"
+      when: github_repository.rc != 0
+      changed_when: true

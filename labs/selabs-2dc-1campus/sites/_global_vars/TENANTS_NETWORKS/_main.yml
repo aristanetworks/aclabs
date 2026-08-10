@@ -1,0 +1,7 @@
+---
+# Tenant Networks (VRFs)
+network_services_keys:
+  - name: tenants # preserving default value
+  - name: BLUE
+  - name: GREEN
+  - name: CAMPUS

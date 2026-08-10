@@ -1,0 +1,17 @@
+---
+
+# Spine Switches
+
+type: spine
+
+spine:
+  defaults:
+    platform: 7500R3
+    bgp_as: 65000
+    loopback_ipv4_pool: 10.99.1.128/25
+
+  nodes:
+    - name: dc1-spine1
+      mgmt_ip: 192.168.0.10/24
+    - name: dc1-spine2
+      mgmt_ip: 192.168.0.11/24

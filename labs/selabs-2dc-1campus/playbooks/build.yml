@@ -1,0 +1,43 @@
+---
+# Production play to generate production fabric artifacts
+- name: Build Switch configuration and Document for Prod
+  hosts: "{{ target }}"
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: generate intended variables
+      import_role:
+        name: arista.avd.eos_designs
+    - name: generate device intended config and documentation
+      import_role:
+        name: arista.avd.eos_cli_config_gen
+
+# Digital twin play to generate clab artifacts
+- name: Build Configurations and Documentation for clab
+  hosts: "{{ target }}"
+  gather_facts: false
+  vars_files:
+    #ansible vault file
+    - "../vault.yml"
+    # clab variables override
+    - "../digital_twin/clab/VARS_OVERRIDE.yml"
+  vars:
+    # Adjust the output dirs to keep Digital Twin artifacts in a separate directory
+    output_dir_name: "digital_twins/clab/intended"
+    documentation_dir_name: "digital_twins/clab/documentation"
+    # Set this flag to True to enable Digital Twin mode
+    avd_digital_twin_mode: true
+    digital_twin:
+      environment: act
+      fabric:
+        act_os_version: 4.36.0.1F
+
+  tasks:
+    - name: Generate AVD Structured Configurations and Fabric Documentation
+      ansible.builtin.import_role:
+        name: arista.avd.eos_designs
+
+    - name: Generate Device Configurations and Documentation
+      ansible.builtin.import_role:
+        name: arista.avd.eos_cli_config_gen

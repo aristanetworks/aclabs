@@ -1,0 +1,29 @@
+---
+# L2 Leaf switches
+
+type: l2leaf
+
+pod_name: DC1_POD
+
+l2leaf:
+  defaults:
+    platform: 720XP
+    mlag_peer_ipv4_pool: 10.101.255.0/31
+    mlag_dual_primary_detection: true
+    spanning_tree_mode: mstp
+    uplink_switches: [dc1-leaf1, dc1-leaf2]
+
+  node_groups:
+    - group: DC1_L2LEAF12
+      filter:
+        tenants: [all]
+        tags: [DC1]
+      nodes:
+        - name: dc1-l2leaf1
+          mgmt_ip: 192.168.0.16/24
+        - name: dc1-l2leaf2
+          mgmt_ip: 192.168.0.17/24
+
+# flow source interface override
+custom_structured_configuration_sflow:
+  source_interface: Vlan4094

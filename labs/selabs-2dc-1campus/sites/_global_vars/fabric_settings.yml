@@ -1,0 +1,48 @@
+---
+#Platform UPLINK Standards
+default_interfaces:
+  - types: [spine]
+    platforms: ['755', '7500R3']
+    downlink_interfaces: [Ethernet1/1-48]
+  - types: [l3spine]
+    platforms: ['755']
+    downlink_interfaces: [Ethernet1/1-48]
+    mlag_interfaces: [Ethernet2/1, Ethernet2/2]
+  - types: [l2leaf]
+    platforms: [720XP]
+    uplink_interfaces: [Ethernet49, Ethernet50]
+    mlag_interfaces: [Ethernet51, Ethernet52]
+  - types: [l2leaf, l3leaf]
+    platforms: [7050X3, 7280R3]
+    uplink_interfaces: [Ethernet49/1, Ethernet50/1]
+    mlag_interfaces: [Ethernet51/1, Ethernet52/1]
+    downlink_interfaces: [Ethernet53/1, Ethernet54/1]
+
+# Reuse same IP for mlag L2 and L3 peering
+fabric_ip_addressing:
+  mlag:
+    algorithm: same_subnet
+
+# add BGP peer group password
+bgp_peer_groups:
+  ipv4_underlay_peers:
+    name: IPv4-UNDERLAY-PEERS
+    password: 'AQQvKeimxJu+uGQ/yYvv9w=='
+
+# BGP settings
+bgp_distance:
+  external_routes: 20
+  internal_routes: 200
+  local_routes: 200
+bgp_graceful_restart:
+  enabled: true
+  restart_time: 300
+
+# enable node id manager
+fabric_numbering:
+  node_id:
+    algorithm: pool_manager
+
+#generate CVP tags
+generate_cv_tags:
+  topology_hints: true

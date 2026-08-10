@@ -1,0 +1,169 @@
+Device,Test Name,Test Status,Message(s),Test description,Test category
+campus-brdr1,VerifyRunningConfigDiffs,success,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+campus-brdr1,VerifyZeroTouch,success,,Verifies ZeroTouch is disabled.,Configuration
+campus-brdr1,VerifyLLDPNeighbors,success,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+campus-brdr1,VerifyIllegalLACP,success,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+campus-brdr1,VerifyInterfaceErrDisabled,success,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+campus-brdr1,VerifyInterfaceErrors,success,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+campus-brdr1,VerifyInterfaceUtilization,success,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+campus-brdr1,VerifyInterfacesStatus,success,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+campus-brdr1,VerifyPortChannels,success,,Verifies there are no inactive ports in port channels.,Interfaces
+campus-brdr1,VerifyMlagConfigSanity,success,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+campus-brdr1,VerifyMlagInterfaces,success,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+campus-brdr1,VerifyMlagStatus,success,,Verifies the health status of the MLAG configuration.,MLAG
+campus-brdr1,VerifyRoutingProtocolModel,success,,Verifies the configured routing protocol model.,Routing
+campus-brdr1,VerifySTPCounters,success,,Verifies there is no errors in STP BPDU packets.,STP
+campus-brdr1,VerifyAgentLogs,success,,Verifies there are no agent crash reports.,System
+campus-brdr1,VerifyCoredump,success,,Verifies there are no core dump files.,System
+campus-brdr1,VerifyFileSystemUtilization,success,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+campus-brdr1,VerifyMaintenance,success,,Verifies that the device is not currently under or entering maintenance.,System
+campus-brdr1,VerifyMemoryUtilization,success,,Verifies whether the memory utilization is below 75%.,System
+campus-brdr1,VerifyReloadCause,success,,Verifies the last reload cause of the device.,System
+campus-brdr2,VerifyRunningConfigDiffs,success,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+campus-brdr2,VerifyZeroTouch,success,,Verifies ZeroTouch is disabled.,Configuration
+campus-brdr2,VerifyLLDPNeighbors,success,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+campus-brdr2,VerifyIllegalLACP,success,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+campus-brdr2,VerifyInterfaceErrDisabled,success,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+campus-brdr2,VerifyInterfaceErrors,success,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+campus-brdr2,VerifyInterfaceUtilization,success,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+campus-brdr2,VerifyInterfacesStatus,success,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+campus-brdr2,VerifyPortChannels,success,,Verifies there are no inactive ports in port channels.,Interfaces
+campus-brdr2,VerifyMlagConfigSanity,success,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+campus-brdr2,VerifyMlagInterfaces,success,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+campus-brdr2,VerifyMlagStatus,success,,Verifies the health status of the MLAG configuration.,MLAG
+campus-brdr2,VerifyRoutingProtocolModel,success,,Verifies the configured routing protocol model.,Routing
+campus-brdr2,VerifySTPCounters,success,,Verifies there is no errors in STP BPDU packets.,STP
+campus-brdr2,VerifyAgentLogs,success,,Verifies there are no agent crash reports.,System
+campus-brdr2,VerifyCoredump,success,,Verifies there are no core dump files.,System
+campus-brdr2,VerifyFileSystemUtilization,success,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+campus-brdr2,VerifyMaintenance,success,,Verifies that the device is not currently under or entering maintenance.,System
+campus-brdr2,VerifyMemoryUtilization,success,,Verifies whether the memory utilization is below 75%.,System
+campus-brdr2,VerifyReloadCause,success,,Verifies the last reload cause of the device.,System
+campus-leaf1,VerifyRunningConfigDiffs,success,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+campus-leaf1,VerifyZeroTouch,success,,Verifies ZeroTouch is disabled.,Configuration
+campus-leaf1,VerifyLLDPNeighbors,success,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+campus-leaf1,VerifyIllegalLACP,success,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+campus-leaf1,VerifyInterfaceErrDisabled,success,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+campus-leaf1,VerifyInterfaceErrors,success,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+campus-leaf1,VerifyInterfaceUtilization,success,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+campus-leaf1,VerifyInterfacesStatus,success,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+campus-leaf1,VerifyPortChannels,success,,Verifies there are no inactive ports in port channels.,Interfaces
+campus-leaf1,VerifyMlagConfigSanity,success,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+campus-leaf1,VerifyMlagInterfaces,success,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+campus-leaf1,VerifyMlagStatus,success,,Verifies the health status of the MLAG configuration.,MLAG
+campus-leaf1,VerifyRoutingProtocolModel,success,,Verifies the configured routing protocol model.,Routing
+campus-leaf1,VerifySTPCounters,success,,Verifies there is no errors in STP BPDU packets.,STP
+campus-leaf1,VerifyAgentLogs,success,,Verifies there are no agent crash reports.,System
+campus-leaf1,VerifyCoredump,success,,Verifies there are no core dump files.,System
+campus-leaf1,VerifyFileSystemUtilization,success,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+campus-leaf1,VerifyMaintenance,success,,Verifies that the device is not currently under or entering maintenance.,System
+campus-leaf1,VerifyMemoryUtilization,success,,Verifies whether the memory utilization is below 75%.,System
+campus-leaf1,VerifyReloadCause,success,,Verifies the last reload cause of the device.,System
+campus-leaf2,VerifyRunningConfigDiffs,success,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+campus-leaf2,VerifyZeroTouch,success,,Verifies ZeroTouch is disabled.,Configuration
+campus-leaf2,VerifyLLDPNeighbors,success,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+campus-leaf2,VerifyIllegalLACP,success,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+campus-leaf2,VerifyInterfaceErrDisabled,success,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+campus-leaf2,VerifyInterfaceErrors,success,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+campus-leaf2,VerifyInterfaceUtilization,success,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+campus-leaf2,VerifyInterfacesStatus,success,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+campus-leaf2,VerifyPortChannels,success,,Verifies there are no inactive ports in port channels.,Interfaces
+campus-leaf2,VerifyMlagConfigSanity,success,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+campus-leaf2,VerifyMlagInterfaces,success,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+campus-leaf2,VerifyMlagStatus,success,,Verifies the health status of the MLAG configuration.,MLAG
+campus-leaf2,VerifyRoutingProtocolModel,success,,Verifies the configured routing protocol model.,Routing
+campus-leaf2,VerifySTPCounters,success,,Verifies there is no errors in STP BPDU packets.,STP
+campus-leaf2,VerifyAgentLogs,success,,Verifies there are no agent crash reports.,System
+campus-leaf2,VerifyCoredump,success,,Verifies there are no core dump files.,System
+campus-leaf2,VerifyFileSystemUtilization,success,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+campus-leaf2,VerifyMaintenance,success,,Verifies that the device is not currently under or entering maintenance.,System
+campus-leaf2,VerifyMemoryUtilization,success,,Verifies whether the memory utilization is below 75%.,System
+campus-leaf2,VerifyReloadCause,success,,Verifies the last reload cause of the device.,System
+campus-leaf3,VerifyRunningConfigDiffs,success,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+campus-leaf3,VerifyZeroTouch,success,,Verifies ZeroTouch is disabled.,Configuration
+campus-leaf3,VerifyLLDPNeighbors,success,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+campus-leaf3,VerifyIllegalLACP,success,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+campus-leaf3,VerifyInterfaceErrDisabled,success,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+campus-leaf3,VerifyInterfaceErrors,success,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+campus-leaf3,VerifyInterfaceUtilization,success,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+campus-leaf3,VerifyInterfacesStatus,success,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+campus-leaf3,VerifyPortChannels,success,,Verifies there are no inactive ports in port channels.,Interfaces
+campus-leaf3,VerifyMlagConfigSanity,success,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+campus-leaf3,VerifyMlagInterfaces,success,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+campus-leaf3,VerifyMlagStatus,success,,Verifies the health status of the MLAG configuration.,MLAG
+campus-leaf3,VerifyRoutingProtocolModel,success,,Verifies the configured routing protocol model.,Routing
+campus-leaf3,VerifySTPCounters,success,,Verifies there is no errors in STP BPDU packets.,STP
+campus-leaf3,VerifyAgentLogs,success,,Verifies there are no agent crash reports.,System
+campus-leaf3,VerifyCoredump,success,,Verifies there are no core dump files.,System
+campus-leaf3,VerifyFileSystemUtilization,success,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+campus-leaf3,VerifyMaintenance,success,,Verifies that the device is not currently under or entering maintenance.,System
+campus-leaf3,VerifyMemoryUtilization,success,,Verifies whether the memory utilization is below 75%.,System
+campus-leaf3,VerifyReloadCause,success,,Verifies the last reload cause of the device.,System
+campus-leaf4,VerifyRunningConfigDiffs,success,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+campus-leaf4,VerifyZeroTouch,success,,Verifies ZeroTouch is disabled.,Configuration
+campus-leaf4,VerifyLLDPNeighbors,success,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+campus-leaf4,VerifyIllegalLACP,success,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+campus-leaf4,VerifyInterfaceErrDisabled,success,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+campus-leaf4,VerifyInterfaceErrors,success,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+campus-leaf4,VerifyInterfaceUtilization,success,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+campus-leaf4,VerifyInterfacesStatus,success,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+campus-leaf4,VerifyPortChannels,success,,Verifies there are no inactive ports in port channels.,Interfaces
+campus-leaf4,VerifyMlagConfigSanity,success,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+campus-leaf4,VerifyMlagInterfaces,success,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+campus-leaf4,VerifyMlagStatus,success,,Verifies the health status of the MLAG configuration.,MLAG
+campus-leaf4,VerifyRoutingProtocolModel,success,,Verifies the configured routing protocol model.,Routing
+campus-leaf4,VerifySTPCounters,success,,Verifies there is no errors in STP BPDU packets.,STP
+campus-leaf4,VerifyAgentLogs,success,,Verifies there are no agent crash reports.,System
+campus-leaf4,VerifyCoredump,success,,Verifies there are no core dump files.,System
+campus-leaf4,VerifyFileSystemUtilization,success,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+campus-leaf4,VerifyMaintenance,success,,Verifies that the device is not currently under or entering maintenance.,System
+campus-leaf4,VerifyMemoryUtilization,success,,Verifies whether the memory utilization is below 75%.,System
+campus-leaf4,VerifyReloadCause,success,,Verifies the last reload cause of the device.,System
+campus-spine1,VerifyBGPPeerSession,success,,Verifies the session state of BGP peers.,BGP
+campus-spine1,VerifyRunningConfigDiffs,success,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+campus-spine1,VerifyZeroTouch,success,,Verifies ZeroTouch is disabled.,Configuration
+campus-spine1,VerifyLLDPNeighbors,success,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+campus-spine1,VerifyReachability,success,,Verifies reachability to BGP neighbors.,Connectivity
+campus-spine1,VerifyIllegalLACP,success,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+campus-spine1,VerifyInterfaceErrDisabled,success,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+campus-spine1,VerifyInterfaceErrors,success,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+campus-spine1,VerifyInterfaceUtilization,success,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+campus-spine1,VerifyInterfacesStatus,success,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+campus-spine1,VerifyPortChannels,success,,Verifies there are no inactive ports in port channels.,Interfaces
+campus-spine1,VerifyMlagConfigSanity,success,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+campus-spine1,VerifyMlagInterfaces,success,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+campus-spine1,VerifyMlagStatus,success,,Verifies the health status of the MLAG configuration.,MLAG
+campus-spine1,VerifyOSPFMaxLSA,success,,Verifies all OSPF instances did not cross the maximum LSA threshold.,OSPF
+campus-spine1,VerifyOSPFNeighborState,success,,Verifies all OSPF neighbors are in FULL state.,OSPF
+campus-spine1,VerifyRoutingProtocolModel,success,,Verifies the configured routing protocol model.,Routing
+campus-spine1,VerifySTPCounters,success,,Verifies there is no errors in STP BPDU packets.,STP
+campus-spine1,VerifyAgentLogs,success,,Verifies there are no agent crash reports.,System
+campus-spine1,VerifyCoredump,success,,Verifies there are no core dump files.,System
+campus-spine1,VerifyFileSystemUtilization,success,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+campus-spine1,VerifyMaintenance,success,,Verifies that the device is not currently under or entering maintenance.,System
+campus-spine1,VerifyMemoryUtilization,success,,Verifies whether the memory utilization is below 75%.,System
+campus-spine1,VerifyReloadCause,success,,Verifies the last reload cause of the device.,System
+campus-spine2,VerifyBGPPeerSession,success,,Verifies the session state of BGP peers.,BGP
+campus-spine2,VerifyRunningConfigDiffs,success,,Verifies there is no difference between the running-config and the startup-config.,Configuration
+campus-spine2,VerifyZeroTouch,success,,Verifies ZeroTouch is disabled.,Configuration
+campus-spine2,VerifyLLDPNeighbors,success,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
+campus-spine2,VerifyReachability,success,,Verifies reachability to BGP neighbors.,Connectivity
+campus-spine2,VerifyIllegalLACP,success,,Verifies there are no illegal LACP packets in port channels.,Interfaces
+campus-spine2,VerifyInterfaceErrDisabled,success,,Verifies there are no interfaces in the errdisabled state.,Interfaces
+campus-spine2,VerifyInterfaceErrors,success,,Verifies that the interfaces error counters are equal to zero.,Interfaces
+campus-spine2,VerifyInterfaceUtilization,success,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
+campus-spine2,VerifyInterfacesStatus,success,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
+campus-spine2,VerifyPortChannels,success,,Verifies there are no inactive ports in port channels.,Interfaces
+campus-spine2,VerifyMlagConfigSanity,success,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+campus-spine2,VerifyMlagInterfaces,success,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+campus-spine2,VerifyMlagStatus,success,,Verifies the health status of the MLAG configuration.,MLAG
+campus-spine2,VerifyOSPFMaxLSA,success,,Verifies all OSPF instances did not cross the maximum LSA threshold.,OSPF
+campus-spine2,VerifyOSPFNeighborState,success,,Verifies all OSPF neighbors are in FULL state.,OSPF
+campus-spine2,VerifyRoutingProtocolModel,success,,Verifies the configured routing protocol model.,Routing
+campus-spine2,VerifySTPCounters,success,,Verifies there is no errors in STP BPDU packets.,STP
+campus-spine2,VerifyAgentLogs,success,,Verifies there are no agent crash reports.,System
+campus-spine2,VerifyCoredump,success,,Verifies there are no core dump files.,System
+campus-spine2,VerifyFileSystemUtilization,success,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+campus-spine2,VerifyMaintenance,success,,Verifies that the device is not currently under or entering maintenance.,System
+campus-spine2,VerifyMemoryUtilization,success,,Verifies whether the memory utilization is below 75%.,System
+campus-spine2,VerifyReloadCause,success,,Verifies the last reload cause of the device.,System

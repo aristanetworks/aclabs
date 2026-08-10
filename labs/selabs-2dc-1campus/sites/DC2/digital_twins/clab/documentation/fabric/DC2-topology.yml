@@ -1,0 +1,141 @@
+nodes:
+- dc2-brdr1:
+    node_type: veos
+    ip_addr: 192.168.0.200/24
+    version: 4.36.0.1F
+    ports:
+    - Ethernet48
+    - Ethernet49/1
+    - Ethernet50/1
+    - Ethernet51/1
+    - Ethernet52/1
+- dc2-brdr2:
+    node_type: veos
+    ip_addr: 192.168.0.201/24
+    version: 4.36.0.1F
+    ports:
+    - Ethernet48
+    - Ethernet49/1
+    - Ethernet50/1
+    - Ethernet51/1
+    - Ethernet52/1
+- dc2-leaf1:
+    node_type: veos
+    ip_addr: 192.168.0.22/24
+    version: 4.36.0.1F
+    ports:
+    - Ethernet1
+    - Ethernet49/1
+    - Ethernet50/1
+    - Ethernet51/1
+    - Ethernet52/1
+- dc2-leaf2:
+    node_type: veos
+    ip_addr: 192.168.0.23/24
+    version: 4.36.0.1F
+    ports:
+    - Ethernet1
+    - Ethernet49/1
+    - Ethernet50/1
+    - Ethernet51/1
+    - Ethernet52/1
+- dc2-leaf3:
+    node_type: veos
+    ip_addr: 192.168.0.24/24
+    version: 4.36.0.1F
+    ports:
+    - Ethernet1
+    - Ethernet49/1
+    - Ethernet50/1
+    - Ethernet51/1
+    - Ethernet52/1
+- dc2-leaf4:
+    node_type: veos
+    ip_addr: 192.168.0.25/24
+    version: 4.36.0.1F
+    ports:
+    - Ethernet1
+    - Ethernet49/1
+    - Ethernet50/1
+    - Ethernet51/1
+    - Ethernet52/1
+- dc2-spine1:
+    node_type: veos
+    ip_addr: 192.168.0.20/24
+    version: 4.36.0.1F
+    ports:
+    - Ethernet1/1
+    - Ethernet1/2
+    - Ethernet1/3
+    - Ethernet1/4
+    - Ethernet1/5
+    - Ethernet1/6
+- dc2-spine2:
+    node_type: veos
+    ip_addr: 192.168.0.21/24
+    version: 4.36.0.1F
+    ports:
+    - Ethernet1/1
+    - Ethernet1/2
+    - Ethernet1/3
+    - Ethernet1/4
+    - Ethernet1/5
+    - Ethernet1/6
+veos:
+  username: cvpadmin
+  password: cvp123!
+links:
+- connection:
+  - dc2-brdr1:Ethernet49/1
+  - dc2-spine1:Ethernet1/1
+- connection:
+  - dc2-brdr1:Ethernet50/1
+  - dc2-spine2:Ethernet1/1
+- connection:
+  - dc2-brdr1:Ethernet51/1
+  - dc2-brdr2:Ethernet51/1
+- connection:
+  - dc2-brdr1:Ethernet52/1
+  - dc2-brdr2:Ethernet52/1
+- connection:
+  - dc2-brdr2:Ethernet49/1
+  - dc2-spine1:Ethernet1/2
+- connection:
+  - dc2-brdr2:Ethernet50/1
+  - dc2-spine2:Ethernet1/2
+- connection:
+  - dc2-leaf1:Ethernet49/1
+  - dc2-spine1:Ethernet1/3
+- connection:
+  - dc2-leaf1:Ethernet50/1
+  - dc2-spine2:Ethernet1/3
+- connection:
+  - dc2-leaf1:Ethernet51/1
+  - dc2-leaf2:Ethernet51/1
+- connection:
+  - dc2-leaf1:Ethernet52/1
+  - dc2-leaf2:Ethernet52/1
+- connection:
+  - dc2-leaf2:Ethernet49/1
+  - dc2-spine1:Ethernet1/4
+- connection:
+  - dc2-leaf2:Ethernet50/1
+  - dc2-spine2:Ethernet1/4
+- connection:
+  - dc2-leaf3:Ethernet49/1
+  - dc2-spine1:Ethernet1/5
+- connection:
+  - dc2-leaf3:Ethernet50/1
+  - dc2-spine2:Ethernet1/5
+- connection:
+  - dc2-leaf3:Ethernet51/1
+  - dc2-leaf4:Ethernet51/1
+- connection:
+  - dc2-leaf3:Ethernet52/1
+  - dc2-leaf4:Ethernet52/1
+- connection:
+  - dc2-leaf4:Ethernet49/1
+  - dc2-spine1:Ethernet1/6
+- connection:
+  - dc2-leaf4:Ethernet50/1
+  - dc2-spine2:Ethernet1/6

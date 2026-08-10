@@ -1,0 +1,172 @@
+name: Deploy & test configurations in the digital twin
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  deploy-digital-twin:
+    env:
+      ANSIBLE_COLLECTIONS_PATH: /home/avd/.ansible/collections/ansible_collections
+    timeout-minutes: 15
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      output_dc1: ${{ steps.dc1-deploy.outcome }}
+      output_dc2: ${{ steps.dc2-deploy.outcome }}
+      output_campus: ${{ steps.campus-deploy.outcome }}
+    container:
+      image: "ghcr.io/aristanetworks/avd/universal:python3.13-avd-v6.3.0"
+      options: '--user=root' #required, only user allowed by github actions
+      env:
+        PYTHONPATH: "/home/avd/.local/lib/python3.13/site-packages"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: add the repo to git safe directory
+        run: "git config --global --add safe.directory $GITHUB_WORKSPACE"
+      
+      - name: Check DC1 paths for AVD variable changes
+        uses: dorny/paths-filter@v4
+        id: filter-dc1
+        with:
+          filters: |
+            workflows:
+              - 'sites/DC1/group_vars/**'
+              - 'sites/_global_vars/**'
+
+      - name: Check DC2 paths for AVD variable changes
+        uses: dorny/paths-filter@v4
+        id: filter-dc2
+        with:
+          filters: |
+            workflows:
+              - 'sites/DC2/group_vars/**'
+              - 'sites/_global_vars/**'
+
+      - name: Check Campus paths for AVD variable changes
+        uses: dorny/paths-filter@v4
+        id: filter-campus
+        with:
+          filters: |
+            workflows:
+              - 'sites/campus/group_vars/**'
+              - 'sites/_global_vars/**'
+
+      - name: Deploy configuration for the DC1 fabric
+        id: dc1-deploy
+        run: ansible-playbook playbooks/deploy_digital_twin_clab.yml -i sites/DC1/inventory.yml -e 'target=DC1, cv_submit_workspace=true, cv_run_change_control=true'
+        if: steps.filter-dc1.outputs.workflows == 'true'
+
+      - name: Deploy configuration for DC2 fabric
+        id: dc2-deploy
+        run:  ansible-playbook playbooks/deploy_digital_twin_clab.yml -i sites/DC2/inventory.yml -e 'target=DC2, cv_submit_workspace=true, cv_run_change_control=true'
+        if: steps.filter-dc2.outputs.workflows == 'true'
+
+      - name: Deploy configuration for the campus fabric
+        id: campus-deploy
+        run:  ansible-playbook playbooks/deploy_digital_twin_clab.yml -i sites/campus/inventory.yml -e 'target=CAMPUS, cv_submit_workspace=true, cv_run_change_control=true'
+        if: steps.filter-campus.outputs.workflows == 'true'
+
+  Network-validation-digital-twin:
+    if: ${{ needs.deploy-digital-twin.outputs.output_dc1 == 'success' || needs.deploy-digital-twin.outputs.output_dc2 == 'success' || needs.deploy-digital-twin.outputs.output_campus == 'success' }}
+    needs: deploy-digital-twin
+    env:
+      ANSIBLE_COLLECTIONS_PATH: /home/avd/.ansible/collections/ansible_collections
+    timeout-minutes: 15
+    runs-on: self-hosted
+    permissions:
+      contents: write
+      pull-requests: write
+    container:
+      image: "ghcr.io/aristanetworks/avd/universal:python3.13-avd-v6.3.0"
+      options: '--user=root' #root required, only user allowed by github actions
+      env:
+        PYTHONPATH: "/home/avd/.local/lib/python3.13/site-packages"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: add the repo to git safe directory
+        run: "git config --global --add safe.directory $GITHUB_WORKSPACE"
+
+      # temporary due to https://github.com/aristanetworks/anta/pull/1568
+      - name: upgrade ANTA
+        run: pip install anta --upgrade
+
+      - name: run DC1 validation
+        run: ansible-playbook playbooks/validate_digital_twin_clab.yml -i sites/DC1/inventory.yml -e 'target=DC1'
+        id: dc1-validation
+        if: needs.deploy-digital-twin.outputs.output_dc1 == 'success'
+        continue-on-error: true
+
+      - name: run DC2 validation
+        run: ansible-playbook playbooks/validate_digital_twin_clab.yml -i sites/DC2/inventory.yml -e 'target=DC2'
+        id: dc2-validation
+        if: needs.deploy-digital-twin.outputs.output_dc2 == 'success'
+        continue-on-error: true
+
+      - name: run campus validation
+        run: ansible-playbook playbooks/validate_digital_twin_clab.yml -i sites/campus/inventory.yml -e 'target=CAMPUS'
+        id: campus-validation
+        if: needs.deploy-digital-twin.outputs.output_campus == 'success'
+        continue-on-error: true
+
+      - name: commit the test catalogs and report to the repository
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git add --all
+            git commit -m "Automatic update of the validation report on digital twin for Processing Pull Request #${{ github.event.pull_request.number }} [skip ci]"
+            git pull --rebase origin ${{ github.head_ref }}
+            git push origin HEAD:${{ github.head_ref }}
+          else
+            echo "WARNING: No changes were detected. git commit push action aborted."
+          fi
+        shell: bash
+
+      - name: Prepare DC1 ANTA report
+        if: steps.dc1-validation.outcome == 'success' || steps.dc1-validation.outcome == 'failure'
+        run: |
+          echo "# DC1 - Digital Twin Network Validation Report" > /tmp/dc1-comment.md
+          echo "" >> /tmp/dc1-comment.md
+          cat sites/DC1/anta_digital_twin/clab/reports/anta_report.md >> /tmp/dc1-comment.md
+
+      - name: Post DC1 ANTA report as PR comment
+        if: steps.dc1-validation.outcome == 'success' || steps.dc1-validation.outcome == 'failure'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: dc1-anta-report
+          path: /tmp/dc1-comment.md
+
+      - name: Prepare DC2 ANTA report
+        if: steps.dc2-validation.outcome == 'success' || steps.dc2-validation.outcome == 'failure'
+        run: |
+          echo "# DC2 - Digital Twin Network Validation Report" > /tmp/dc2-comment.md
+          echo "" >> /tmp/dc2-comment.md
+          cat sites/DC2/anta_digital_twin/clab/reports/anta_report.md >> /tmp/dc2-comment.md
+
+      - name: Post DC2 ANTA report as PR comment
+        if: steps.dc2-validation.outcome == 'success' || steps.dc2-validation.outcome == 'failure'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: dc2-anta-report
+          path: /tmp/dc2-comment.md
+
+      - name: Prepare Campus ANTA report
+        if: steps.campus-validation.outcome == 'success' || steps.campus-validation.outcome == 'failure'
+        run: |
+          echo "# Campus - Digital Twin Network Validation Report" > /tmp/campus-comment.md
+          echo "" >> /tmp/campus-comment.md
+          cat sites/campus/anta_digital_twin/clab/reports/anta_report.md >> /tmp/campus-comment.md
+
+      - name: Post Campus ANTA report as PR comment
+        if: steps.campus-validation.outcome == 'success' || steps.campus-validation.outcome == 'failure'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: campus-anta-report
+          path: /tmp/campus-comment.md

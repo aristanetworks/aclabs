@@ -1,0 +1,25 @@
+---
+# Variable override for containerLab digital twin
+
+# Update p2p mtu 9000 -> 1500, MTU 9000 not supported in VEOS-LAB.
+p2p_uplinks_mtu: 1500
+
+# Adjust default bfd values, to avoid high CPU.  required for VEOS-LAB
+bfd_multihop:
+  interval: 1200
+  min_rx: 1200
+  multiplier: 3
+
+# Streaming agent configuration
+cv_settings:
+  # ContainerLab
+  cvaas:
+    enabled: true
+    clusters:
+      - name: cvaas
+        region: auto
+  terminattr:
+    disable_aaa: true
+
+# MGMT gateway
+mgmt_gateway: "192.168.0.1"

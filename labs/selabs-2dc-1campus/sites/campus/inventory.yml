@@ -1,0 +1,31 @@
+all:
+  children:
+# Fabric
+    CAMPUS:
+      children:
+        SPINES:
+          hosts:
+            campus-spine1:
+              ansible_host: 192.168.0.30
+            campus-spine2:
+              ansible_host: 192.168.0.31
+        LEAFS:
+          children:
+            POD1:
+              hosts:
+                campus-leaf1:
+                  ansible_host: 192.168.0.32
+                campus-leaf2:
+                  ansible_host: 192.168.0.33
+            POD2:
+              hosts:
+                campus-leaf3:
+                  ansible_host: 192.168.0.34
+                campus-leaf4:
+                  ansible_host: 192.168.0.35
+            BORDER_POD:
+              hosts:
+                campus-brdr1:
+                  ansible_host: 192.168.0.36
+                campus-brdr2:
+                  ansible_host: 192.168.0.37

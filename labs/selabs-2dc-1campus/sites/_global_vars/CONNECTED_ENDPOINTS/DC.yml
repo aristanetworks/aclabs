@@ -1,0 +1,44 @@
+---
+# DC ports
+servers:
+  #
+  - name: dc1-host1
+    rack: RackA
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet1, Ethernet1 ]
+        switches: [ dc1-l2leaf1, dc1-l2leaf2 ]
+        mode: access
+        vlans: 100
+        port_channel:
+          mode: active
+  - name: dc1-host2
+    rack: RackB
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet1, Ethernet1 ]
+        switches: [ dc1-leaf3, dc1-leaf4 ]
+        mode: access
+        vlans: 200
+        port_channel:
+          mode: active
+  - name: dc2-host1
+    rack: RackA
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet1, Ethernet1 ]
+        switches: [ dc2-leaf1, dc2-leaf2 ]
+        mode: access
+        vlans: 100
+        port_channel:
+          mode: active
+  - name: dc2-host2
+    rack: RackB
+    adapters:
+      - endpoint_ports: [ Ethernet1, Ethernet2 ]
+        switch_ports: [ Ethernet1, Ethernet1 ]
+        switches: [ dc2-leaf3, dc2-leaf4 ]
+        mode: access
+        vlans: 200
+        port_channel:
+          mode: active

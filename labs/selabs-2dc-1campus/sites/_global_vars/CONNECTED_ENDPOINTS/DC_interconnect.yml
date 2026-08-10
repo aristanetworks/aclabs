@@ -1,0 +1,46 @@
+# DC links
+network_ports:
+  - switches: [campus-brdr1]
+    switch_ports: [Ethernet48]
+    mode: trunk
+    vlans: 1000,1001
+    endpoint: dc1-brdr1
+    structured_config:
+      metadata:
+        peer_interface: Ethernet47
+        # Validation override for digital twin
+        validate_state: true
+        validate_lldp: true
+  - switches: [campus-brdr2]
+    switch_ports: [Ethernet48]
+    mode: trunk
+    vlans: 1000,1001
+    endpoint: dc1-brdr2
+    structured_config:
+      metadata:
+        peer_interface: Ethernet47
+        # Validation override for digital twin
+        validate_state: true
+        validate_lldp: true
+  - switches: [dc1-brdr1]
+    switch_ports: [Ethernet47]
+    mode: trunk
+    vlans: 1000,1001
+    endpoint: campus-brdr1
+    structured_config:
+      metadata:
+        peer_interface: Ethernet48
+        # Validation override for digital twin
+        validate_state: true
+        validate_lldp: true
+  - switches: [dc1-brdr2]
+    switch_ports: [Ethernet47]
+    mode: trunk
+    vlans: 1000,1001
+    endpoint: campus-brdr2
+    structured_config:
+      metadata:
+        peer_interface: Ethernet48
+        # Validation override for digital twin
+        validate_state: true
+        validate_lldp: true

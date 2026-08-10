@@ -1,0 +1,87 @@
+name: Build feature branch
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  Build:
+    timeout-minutes: 4
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install zsh
+        run: sudo apt install -y zsh
+
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.13.6'
+
+      - name: Install Python requirements
+        run: pip3 install -r requirements.txt
+
+      - name: Check DC1 paths for AVD variable changes
+        uses: dorny/paths-filter@v4
+        id: filter-dc1
+        with:
+          filters: |
+            workflows:
+              - 'sites/DC1/group_vars/**'
+              - 'sites/_global_vars/**'
+
+      - name: Check DC2 paths for AVD variable changes
+        uses: dorny/paths-filter@v4
+        id: filter-dc2
+        with:
+          filters: |
+            workflows:
+              - 'sites/DC2/group_vars/**'
+              - 'sites/_global_vars/**'
+
+      - name: Check Campus paths for AVD variable changes
+        uses: dorny/paths-filter@v4
+        id: filter-campus
+        with:
+          filters: |
+            workflows:
+              - 'sites/campus/group_vars/**'
+              - 'sites/_global_vars/**'
+
+      - name: Install collections
+        run: ansible-galaxy collection install -r requirements.yml
+        if: steps.filter-dc1.outputs.workflows == 'true' || steps.filter-dc2.outputs.workflows == 'true' || steps.filter-campus.outputs.workflows == 'true'
+
+      - name: Build configuration for DC1 fabric
+        run: ansible-playbook playbooks/build.yml -i sites/DC1/inventory.yml -e 'target=DC1'
+        id: build-dc1
+        if: steps.filter-dc1.outputs.workflows == 'true'
+
+      - name: Build configuration for DC2 fabric
+        run: 	ansible-playbook playbooks/build.yml -i sites/DC2/inventory.yml -e 'target=DC2'
+        id: build-dc2
+        if: steps.filter-dc2.outputs.workflows == 'true'
+
+      - name: Build configuration for the campus fabric
+        run: 	ansible-playbook playbooks/build.yml -i sites/campus/inventory.yml -e 'target=CAMPUS'
+        id: build-campus
+        if: steps.filter-campus.outputs.workflows == 'true'
+
+      - name: commit the changes if the build changed files
+        run: |
+          if [[ `git status --porcelain` ]]; then            
+            git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "github-actions[bot]"
+            git add --all
+            git commit -am "Build update from pipeline execution"
+            git push 
+          else
+            echo "WARNING: No changes were detected. git commit push action aborted."
+          fi
+        shell: bash
+        if: steps.filter-dc1.outputs.workflows == 'true' || steps.filter-dc2.outputs.workflows == 'true' || steps.filter-campus.outputs.workflows == 'true'

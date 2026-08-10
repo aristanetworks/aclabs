@@ -1,0 +1,323 @@
+aaa_authorization:
+  exec:
+    default: local
+aaa_root:
+  disabled: true
+banners:
+  motd: '0 to Hero network
+
+    EOF
+
+    '
+clock:
+  timezone: EST
+config_end: true
+daemon_terminattr:
+  cvaddrs:
+  - apiserver.cv-prod-na-northeast1-b.arista.io:443
+  cvauth:
+    method: token-secure
+    token_file: /tmp/cv-onboarding-token
+  cvsourceintf: Management0
+  cvvrf: MGMT
+  disable_aaa: true
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  sflowaddr: default/127.0.0.1:6343
+dns_domain: demo.lab
+enable_password:
+  disabled: true
+ethernet_interfaces:
+- name: Ethernet1/1
+  description: P2P_dc1-brdr1_Ethernet49/1
+  shutdown: false
+  mtu: 9214
+  ip_address: 10.101.0.0/31
+  metadata:
+    peer: dc1-brdr1
+    peer_interface: Ethernet49/1
+    peer_type: l3leaf
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
+- name: Ethernet1/2
+  description: P2P_dc1-brdr2_Ethernet49/1
+  shutdown: false
+  mtu: 9214
+  ip_address: 10.101.0.4/31
+  metadata:
+    peer: dc1-brdr2
+    peer_interface: Ethernet49/1
+    peer_type: l3leaf
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
+- name: Ethernet1/3
+  description: P2P_dc1-leaf1_Ethernet49/1
+  shutdown: false
+  mtu: 9214
+  ip_address: 10.101.0.8/31
+  metadata:
+    peer: dc1-leaf1
+    peer_interface: Ethernet49/1
+    peer_type: l3leaf
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
+- name: Ethernet1/4
+  description: P2P_dc1-leaf2_Ethernet49/1
+  shutdown: false
+  mtu: 9214
+  ip_address: 10.101.0.12/31
+  metadata:
+    peer: dc1-leaf2
+    peer_interface: Ethernet49/1
+    peer_type: l3leaf
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
+- name: Ethernet1/5
+  description: P2P_dc1-leaf3_Ethernet49/1
+  shutdown: false
+  mtu: 9214
+  ip_address: 10.101.0.16/31
+  metadata:
+    peer: dc1-leaf3
+    peer_interface: Ethernet49/1
+    peer_type: l3leaf
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
+- name: Ethernet1/6
+  description: P2P_dc1-leaf4_Ethernet49/1
+  shutdown: false
+  mtu: 9214
+  ip_address: 10.101.0.20/31
+  metadata:
+    peer: dc1-leaf4
+    peer_interface: Ethernet49/1
+    peer_type: l3leaf
+  sflow:
+    enable: true
+  switchport:
+    enabled: false
+hostname: dc1-spine1
+ip_name_server:
+  vrfs:
+  - name: MGMT
+    servers:
+    - ip_address: 8.8.8.8
+    - ip_address: 8.8.4.4
+ip_routing: true
+local_users:
+- name: cvpadmin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$vQGQxmJp16IINuqk$makfRsxIS8Das8bugela5cdUd0iSUzA0/nPRXWXmonGeQ/vuqWi.vrr1OINH4MZLCOux0tniArjvyJNJHe9Zt.
+loopback_interfaces:
+- name: Loopback0
+  description: ROUTER_ID
+  shutdown: false
+  ip_address: 10.99.1.129/32
+management_api_http:
+  enable_https: true
+  enable_vrfs:
+  - name: MGMT
+management_interfaces:
+- name: Management0
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: MGMT
+  ip_address: 192.168.0.10/24
+  type: oob
+metadata:
+  is_deployed: true
+  platform: 7500R3
+  dc_name: DC1
+  fabric_name: DC1
+  cv_tags:
+    device_tags:
+    - name: topology_hint_datacenter
+      value: DC1
+    - name: topology_hint_fabric
+      value: DC1
+    - name: topology_hint_type
+      value: spine
+ntp:
+  local_interface:
+    name: Management0
+    vrf: MGMT
+  servers:
+  - name: 0.north-america.pool.ntp.org
+    preferred: true
+  - name: 1.north-america.pool.ntp.org
+  vrf: MGMT
+prefix_lists:
+- name: PL-LOOPBACKS-EVPN-OVERLAY
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.99.1.128/25 eq 32
+route_maps:
+- name: RM-CONN-2-BGP
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+router_bfd:
+  multihop:
+    interval: 300
+    min_rx: 300
+    multiplier: 3
+router_bgp:
+  as: '65000'
+  router_id: 10.99.1.129
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  graceful_restart:
+    enabled: true
+    restart_time: 300
+  maximum_paths:
+    paths: 4
+  updates:
+    wait_install: true
+  bgp:
+    default:
+      ipv4_unicast: false
+  peer_groups:
+  - name: IPv4-UNDERLAY-PEERS
+    metadata:
+      type: ipv4
+    password: AQQvKeimxJu+uGQ/yYvv9w==
+    send_community: all
+    maximum_routes: 256000
+  - name: EVPN-OVERLAY-PEERS
+    metadata:
+      type: evpn
+    next_hop_unchanged: true
+    update_source: Loopback0
+    bfd: true
+    ebgp_multihop: 3
+    send_community: all
+    maximum_routes: 0
+  neighbors:
+  - ip_address: 10.101.0.1
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65103'
+    metadata:
+      peer: dc1-brdr1
+    description: dc1-brdr1_Ethernet49/1
+    bfd: true
+  - ip_address: 10.101.0.5
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65103'
+    metadata:
+      peer: dc1-brdr2
+    description: dc1-brdr2_Ethernet49/1
+    bfd: true
+  - ip_address: 10.101.0.9
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65101'
+    metadata:
+      peer: dc1-leaf1
+    description: dc1-leaf1_Ethernet49/1
+    bfd: true
+  - ip_address: 10.101.0.13
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65101'
+    metadata:
+      peer: dc1-leaf2
+    description: dc1-leaf2_Ethernet49/1
+    bfd: true
+  - ip_address: 10.101.0.17
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65102'
+    metadata:
+      peer: dc1-leaf3
+    description: dc1-leaf3_Ethernet49/1
+    bfd: true
+  - ip_address: 10.101.0.21
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65102'
+    metadata:
+      peer: dc1-leaf4
+    description: dc1-leaf4_Ethernet49/1
+    bfd: true
+  - ip_address: 10.99.1.1
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65103'
+    metadata:
+      peer: dc1-brdr1
+    description: dc1-brdr1_Loopback0
+  - ip_address: 10.99.1.2
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65103'
+    metadata:
+      peer: dc1-brdr2
+    description: dc1-brdr2_Loopback0
+  - ip_address: 10.99.1.3
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65101'
+    metadata:
+      peer: dc1-leaf1
+    description: dc1-leaf1_Loopback0
+  - ip_address: 10.99.1.4
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65101'
+    metadata:
+      peer: dc1-leaf2
+    description: dc1-leaf2_Loopback0
+  - ip_address: 10.99.1.5
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65102'
+    metadata:
+      peer: dc1-leaf3
+    description: dc1-leaf3_Loopback0
+  - ip_address: 10.99.1.6
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65102'
+    metadata:
+      peer: dc1-leaf4
+    description: dc1-leaf4_Loopback0
+  redistribute:
+    connected:
+      enabled: true
+      route_map: RM-CONN-2-BGP
+  address_family_evpn:
+    peer_groups:
+    - name: EVPN-OVERLAY-PEERS
+      activate: true
+  address_family_ipv4:
+    peer_groups:
+    - name: IPv4-UNDERLAY-PEERS
+      activate: true
+    - name: EVPN-OVERLAY-PEERS
+      activate: false
+service_routing_protocols_model: multi-agent
+sflow:
+  sample: 10
+  polling_interval: 50
+  destinations:
+  - destination: 127.0.0.1
+    port: 6343
+  source_interface: Loopback0
+  run: true
+spanning_tree:
+  mode: none
+tcam_profile:
+  system: vxlan-routing
+transceiver_qsfp_default_mode_4x10: true
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+vrfs:
+- name: MGMT
+  ip_routing: false

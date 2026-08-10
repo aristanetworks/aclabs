@@ -1,0 +1,44 @@
+---
+# Spine Switches
+
+type: l3spine
+
+l3spine: # dynamic_key: node_type
+  defaults:
+    platform: 755
+    loopback_ipv4_pool: 10.98.1.128/25
+    mlag_peer_ipv4_pool: 10.101.255.0/31
+    mlag_peer_l3_ipv4_pool: 10.101.254.0/31
+    mlag_dual_primary_detection: true
+    mlag_interfaces: [Ethernet2/1, Ethernet2/2]
+    spanning_tree_mode: mstp
+    spanning_tree_priority: 4096
+    virtual_router_mac_address: 00:1c:73:00:00:98
+    bgp_as: 63000
+    filter:
+      tenants: [Campus]
+  node_groups:
+    - group: SPINES
+      nodes:
+        - name: campus-spine1
+          mgmt_ip: 192.168.0.30/24
+        - name: campus-spine2
+          mgmt_ip: 192.168.0.31/24
+
+# Prefix-list for BGP with DC
+custom_structured_configuration_prefix_lists:
+- name: PL-CAMPUS-NETWORK
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.10.110.0/24
+  - sequence: 20
+    action: permit 10.10.120.0/24
+
+# Route-map for BGP with DC
+custom_structured_configuration_route_maps:
+- name: RM-CAMPUS-RT-OUT
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-CAMPUS-NETWORK

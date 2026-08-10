@@ -1,0 +1,17 @@
+---
+# this file provides lab specific inputs needed
+
+# CVaaS service account token
+cvaas_token: "cvaas service account token"
+
+# CVaaS 
+# This can be found on your CVaaS URL
+# example: www.cv-prod-us-4.arista.io
+cvaas_region: "region"
+
+# GitHum user name
+git_user: "GitHub User Name"
+
+# GitHub user email
+# Must match the GitHub account email
+git _user: "GitHub email"

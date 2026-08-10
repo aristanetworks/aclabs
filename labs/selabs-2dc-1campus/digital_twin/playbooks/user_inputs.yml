@@ -1,0 +1,51 @@
+---
+# Collect the lab-specific values and save them in _USER_INPUTS.yml file.
+- name: Collect lab user inputs
+  hosts: localhost
+  gather_facts: false
+
+  vars_prompt:
+    - name: user_input_cvaas_token
+      prompt: CVaaS service account token
+      private: false
+
+    - name: user_input_cvaas_region
+      prompt: CVaaS region (for example, www.cv-prod-us-4.arista.io)
+      private: false
+
+    - name: user_input_repo_name
+      prompt: GitHub repository name for this project
+      private: false
+
+    - name: user_input_git_email
+      prompt: GitHub email address, must match your GitHub account email
+      private: false
+
+    - name: user_input_git_user
+      prompt: Git username to use in commits
+      private: false
+
+  tasks:
+    - name: Update the CVaaS service account token
+      ansible.builtin.lineinfile:
+        path: "{{ playbook_dir }}/../../_USER_INPUTS.yml"
+        regexp: '^cvaas_token:'
+        line: "cvaas_token: {{ user_input_cvaas_token | to_json }}"
+      no_log: true
+
+    - name: Update the remaining lab inputs
+      ansible.builtin.lineinfile:
+        path: "{{ playbook_dir }}/../../_USER_INPUTS.yml"
+        regexp: "^{{ item.name }}:"
+        line: "{{ item.name }}: {{ item.value | to_json }}"
+      loop:
+        - name: cvaas_region
+          value: "{{ user_input_cvaas_region }}"
+        - name: repo_name
+          value: "{{ user_input_repo_name }}"
+        - name: git_email
+          value: "{{ user_input_git_email }}"
+        - name: git_user
+          value: "{{ user_input_git_user }}"
+      loop_control:
+        label: "{{ item.name }}"

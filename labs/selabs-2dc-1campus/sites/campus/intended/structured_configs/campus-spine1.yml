@@ -1,0 +1,482 @@
+aaa_authorization:
+  exec:
+    default: local
+aaa_root:
+  disabled: true
+banners:
+  motd: '0 to Hero network
+
+    EOF
+
+    '
+clock:
+  timezone: EST
+config_end: true
+daemon_terminattr:
+  cvaddrs:
+  - apiserver.cv-prod-na-northeast1-b.arista.io:443
+  cvauth:
+    method: token-secure
+    token_file: /tmp/cv-onboarding-token
+  cvsourceintf: Management0
+  cvvrf: MGMT
+  disable_aaa: true
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  sflowaddr: default/127.0.0.1:6343
+dns_domain: demo.lab
+enable_password:
+  disabled: true
+ethernet_interfaces:
+- name: Ethernet2/1
+  description: MLAG_campus-spine2_Ethernet2/1
+  shutdown: false
+  channel_group:
+    id: 21
+    mode: active
+  metadata:
+    peer: campus-spine2
+    peer_interface: Ethernet2/1
+    peer_type: mlag_peer
+- name: Ethernet2/2
+  description: MLAG_campus-spine2_Ethernet2/2
+  shutdown: false
+  channel_group:
+    id: 21
+    mode: active
+  metadata:
+    peer: campus-spine2
+    peer_interface: Ethernet2/2
+    peer_type: mlag_peer
+- name: Ethernet1/1
+  description: L2_campus-brdr1_Ethernet49/1
+  shutdown: false
+  channel_group:
+    id: 11
+    mode: active
+  metadata:
+    peer: campus-brdr1
+    peer_interface: Ethernet49/1
+    peer_type: l2leaf
+- name: Ethernet1/2
+  description: L2_campus-brdr2_Ethernet49/1
+  shutdown: false
+  channel_group:
+    id: 11
+    mode: active
+  metadata:
+    peer: campus-brdr2
+    peer_interface: Ethernet49/1
+    peer_type: l2leaf
+- name: Ethernet1/3
+  description: L2_campus-leaf1_Ethernet49
+  shutdown: false
+  channel_group:
+    id: 13
+    mode: active
+  metadata:
+    peer: campus-leaf1
+    peer_interface: Ethernet49
+    peer_type: l2leaf
+- name: Ethernet1/4
+  description: L2_campus-leaf2_Ethernet49
+  shutdown: false
+  channel_group:
+    id: 13
+    mode: active
+  metadata:
+    peer: campus-leaf2
+    peer_interface: Ethernet49
+    peer_type: l2leaf
+- name: Ethernet1/5
+  description: L2_campus-leaf3_Ethernet49
+  shutdown: false
+  channel_group:
+    id: 15
+    mode: active
+  metadata:
+    peer: campus-leaf3
+    peer_interface: Ethernet49
+    peer_type: l2leaf
+- name: Ethernet1/6
+  description: L2_campus-leaf4_Ethernet49
+  shutdown: false
+  channel_group:
+    id: 15
+    mode: active
+  metadata:
+    peer: campus-leaf4
+    peer_interface: Ethernet49
+    peer_type: l2leaf
+hostname: campus-spine1
+ip_igmp_snooping:
+  globally_enabled: true
+ip_name_server:
+  vrfs:
+  - name: MGMT
+    servers:
+    - ip_address: 8.8.8.8
+    - ip_address: 8.8.4.4
+ip_routing: true
+ip_virtual_router_mac_address: 00:1c:73:00:00:98
+local_users:
+- name: cvpadmin
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$vQGQxmJp16IINuqk$makfRsxIS8Das8bugela5cdUd0iSUzA0/nPRXWXmonGeQ/vuqWi.vrr1OINH4MZLCOux0tniArjvyJNJHe9Zt.
+loopback_interfaces:
+- name: Loopback0
+  description: ROUTER_ID
+  shutdown: false
+  ip_address: 10.98.1.129/32
+  ospf_area: 0.0.0.0
+management_api_http:
+  enable_https: true
+  enable_vrfs:
+  - name: MGMT
+management_interfaces:
+- name: Management0
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: MGMT
+  ip_address: 192.168.0.30/24
+  type: oob
+metadata:
+  is_deployed: true
+  platform: '755'
+  fabric_name: CAMPUS
+  cv_tags:
+    device_tags:
+    - name: topology_hint_network_type
+      value: campusV2
+    - name: topology_hint_type
+      value: Spine
+    - name: Role
+      value: Spine
+    - name: Campus
+      value: CAMPUS
+    interface_tags:
+    - interface: Ethernet2/1
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: MLAG
+    - interface: Ethernet2/2
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: MLAG
+    - interface: Ethernet1/1
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: Downlink
+    - interface: Ethernet1/2
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: Downlink
+    - interface: Ethernet1/3
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: Downlink
+    - interface: Ethernet1/4
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: Downlink
+    - interface: Ethernet1/5
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: Downlink
+    - interface: Ethernet1/6
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Fabric
+      - name: Link-Type
+        value: Downlink
+    - interface: Management0
+      tags:
+      - name: Link-Type
+        value: AVD-Managed
+      - name: Link-Type
+        value: Management
+mlag_configuration:
+  domain_id: SPINES
+  local_interface: Vlan4094
+  peer_address: 10.101.255.1
+  peer_address_heartbeat:
+    peer_ip: 192.168.0.31
+    vrf: MGMT
+  dual_primary_detection_delay: 5
+  peer_link: Port-Channel21
+  reload_delay_mlag: '300'
+  reload_delay_non_mlag: '330'
+ntp:
+  local_interface:
+    name: Management0
+    vrf: MGMT
+  servers:
+  - name: 0.north-america.pool.ntp.org
+    preferred: true
+  - name: 1.north-america.pool.ntp.org
+  vrf: MGMT
+port_channel_interfaces:
+- name: Port-Channel21
+  description: MLAG_campus-spine2_Port-Channel21
+  shutdown: false
+  sflow:
+    enable: true
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      groups:
+      - MLAG
+- name: Port-Channel11
+  description: L2_BORDER_POD_Port-Channel491
+  shutdown: false
+  mlag: 11
+  sflow:
+    enable: true
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 1000-1001,1110,1120
+- name: Port-Channel13
+  description: L2_POD1_Port-Channel49
+  shutdown: false
+  mlag: 13
+  sflow:
+    enable: true
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 1110,1120
+- name: Port-Channel15
+  description: L2_POD2_Port-Channel49
+  shutdown: false
+  mlag: 15
+  sflow:
+    enable: true
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 1110,1120
+prefix_lists:
+- name: PL-CAMPUS-NETWORK
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.10.110.0/24
+  - sequence: 20
+    action: permit 10.10.120.0/24
+route_maps:
+- name: RM-CAMPUS-RT-OUT
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-CAMPUS-NETWORK
+router_bgp:
+  as: '63000'
+  router_id: 10.98.1.129
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  graceful_restart:
+    enabled: true
+    restart_time: 300
+  maximum_paths:
+    paths: 4
+  updates:
+    wait_install: true
+  bgp:
+    default:
+      ipv4_unicast: false
+  neighbors:
+  - ip_address: 172.16.254.5
+    remote_as: '65103'
+    next_hop_self: true
+  - ip_address: 172.16.254.6
+    remote_as: '65103'
+    next_hop_self: true
+  - ip_address: 172.16.254.13
+    remote_as: '65103'
+    next_hop_self: true
+  - ip_address: 172.16.254.14
+    remote_as: '65103'
+    next_hop_self: true
+  address_family_ipv4:
+    neighbors:
+    - ip_address: 172.16.254.5
+      activate: true
+    - ip_address: 172.16.254.6
+      activate: true
+    - ip_address: 172.16.254.13
+      activate: true
+    - ip_address: 172.16.254.14
+      activate: true
+  vrfs:
+  - name: default
+    redistribute:
+      connected:
+        enabled: true
+      ospf:
+        enabled: true
+router_ospf:
+  process_ids:
+  - id: 100
+    passive_interface_default: true
+    router_id: 10.98.1.129
+    bfd_enable: false
+    no_passive_interfaces:
+    - Vlan4093
+    max_lsa: 12000
+    redistribute:
+      connected:
+        enabled: true
+    graceful_restart:
+      enabled: true
+service_routing_protocols_model: multi-agent
+sflow:
+  sample: 10
+  polling_interval: 50
+  destinations:
+  - destination: 127.0.0.1
+    port: 6343
+  source_interface: Loopback0
+  run: true
+spanning_tree:
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 4096
+  no_spanning_tree_vlan: 4093-4094
+transceiver_qsfp_default_mode_4x10: true
+vlan_interfaces:
+- name: Vlan4093
+  description: MLAG_L3
+  shutdown: false
+  ip_address: 10.101.254.0/31
+  ospf_network_point_to_point: true
+  ospf_area: 0.0.0.0
+- name: Vlan4094
+  description: MLAG
+  shutdown: false
+  ip_address: 10.101.255.0/31
+  no_autostate: true
+- name: Vlan1000
+  description: DC_edge_Blue
+  shutdown: false
+  ip_address: 172.16.254.2/29
+  ip_virtual_router_addresses:
+  - 172.16.254.1
+  metadata:
+    tenants:
+    - Campus
+    tags:
+    - DC_edge
+- name: Vlan1001
+  description: DC_edge_Green
+  shutdown: false
+  ip_address: 172.16.254.10/29
+  ip_virtual_router_addresses:
+  - 172.16.254.9
+  metadata:
+    tenants:
+    - Campus
+    tags:
+    - DC_edge
+- name: Vlan1110
+  description: vlan_1110
+  shutdown: false
+  ip_address: 10.10.110.2/24
+  ip_virtual_router_addresses:
+  - 10.10.110.1
+  metadata:
+    tenants:
+    - Campus
+    tags:
+    - Campus
+- name: Vlan1120
+  description: vlan_1120
+  shutdown: false
+  ip_address: 10.10.120.2/24
+  ip_virtual_router_addresses:
+  - 10.10.120.1
+  metadata:
+    tenants:
+    - Campus
+    tags:
+    - Campus
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+vlans:
+- id: 4093
+  name: MLAG_L3
+  trunk_groups:
+  - MLAG
+  metadata:
+    tenants:
+    - system
+- id: 4094
+  name: MLAG
+  trunk_groups:
+  - MLAG
+  metadata:
+    tenants:
+    - system
+- id: 1000
+  name: DC_edge_Blue
+  metadata:
+    tenants:
+    - Campus
+- id: 1001
+  name: DC_edge_Green
+  metadata:
+    tenants:
+    - Campus
+- id: 1110
+  name: vlan_1110
+  metadata:
+    tenants:
+    - Campus
+- id: 1120
+  name: vlan_1120
+  metadata:
+    tenants:
+    - Campus
+vrfs:
+- name: MGMT
+  ip_routing: false

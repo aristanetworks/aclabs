@@ -1,0 +1,13 @@
+---
+#Fabric name
+fabric_name: CAMPUS
+
+campus: CAMPUS
+
+underlay_routing_protocol: ospf
+
+#generate CVP tags
+generate_cv_tags:
+  topology_hints: true
+  # campus tags for quick actions
+  campus_fabric: true

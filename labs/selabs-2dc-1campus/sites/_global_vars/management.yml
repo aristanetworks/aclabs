@@ -1,0 +1,73 @@
+---
+#define local users
+aaa_settings:
+  local_users:
+    - name: cvpadmin
+      privilege: 15
+      role: network-admin
+      sha512_password: "$6$vQGQxmJp16IINuqk$makfRsxIS8Das8bugela5cdUd0iSUzA0/nPRXWXmonGeQ/vuqWi.vrr1OINH4MZLCOux0tniArjvyJNJHe9Zt."
+  authorization:
+    exec:
+      default: local
+
+# enable eAPIs
+management_eapi:
+  enabled: true
+  enable_https: true
+
+# Timezone
+custom_structured_configuration_clock:
+  timezone: EST
+
+# Streaming agent configuration
+cv_settings:
+  cvaas:
+    enabled: true
+    clusters:
+      - name: cvaas
+        region: "na-northeast1-b"
+  terminattr:
+    disable_aaa: true
+
+# DNS settings
+dns_settings:
+  domain: demo.lab
+  servers:
+    - ip_address: 8.8.8.8
+      vrf: use_default_mgmt_method_vrf
+    - ip_address: 8.8.4.4
+      vrf: use_default_mgmt_method_vrf
+  set_source_interfaces: false
+
+# NTP Servers
+ntp_settings:
+  server_vrf: use_default_mgmt_method_vrf
+  servers:
+  - name: 0.north-america.pool.ntp.org
+  - name: 1.north-america.pool.ntp.org
+
+# Sflow
+fabric_sflow:
+  uplinks: True
+  downlinks: True
+  endpoints: True
+  l3_edge: True
+  core_interfaces: True
+  mlag_interfaces: True
+  l3_interfaces: True
+sflow_settings:
+  polling_interval: 50
+  sample:
+    rate: 10
+  export_to_cloudvision:
+    enabled: true
+    vrf: default
+  vrfs:
+    - name: default
+      source_interface: Loopback0
+
+# Banner
+custom_structured_configuration_banners:
+  motd: |
+    0 to Hero network
+    EOF

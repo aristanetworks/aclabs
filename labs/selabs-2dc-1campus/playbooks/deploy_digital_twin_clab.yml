@@ -1,0 +1,17 @@
+---
+- name: Configuration deployment with CVP
+  hosts: "{{ target }}"
+  gather_facts: false
+  # load lab inputs
+  vars_files: ../_USER_INPUTS.yml
+  tasks:
+    - name: Deploy configurations and tags to CloudVision
+      ansible.builtin.import_role:
+        name: arista.avd.cv_deploy
+      vars:
+        cv_server: "{{cvaas_region}}"
+        cv_configlet_name_template: "AVD-${hostname}"
+        cv_verify_certs: false      # Verify Certificate for CloudVision (Always use valid certificates for production)
+        cv_token: "{{cvaas_token}}"
+        # point to the proper digital twin files
+        output_dir_name: "digital_twins/clab/intended"

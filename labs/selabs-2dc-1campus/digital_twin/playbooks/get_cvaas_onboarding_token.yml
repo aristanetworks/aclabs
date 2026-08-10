@@ -1,0 +1,34 @@
+---
+# This playbook generates an onboarding token on CVaaS and
+# saves it in digital_twin/clab/cvaas-token.tok
+- hosts: localhost
+  gather_facts: false
+  # load lab inputs
+  vars_files: ../../_USER_INPUTS.yml
+
+  tasks:
+# Generate token for CVaaS Canadian cluster
+  - name: "Generating TerminAttr onboarding token on CVaaS Canada"
+    ansible.builtin.uri:
+      url: "https://{{cvaas_region}}/api/v3/services/admin.Enrollment/AddEnrollmentToken"
+      method: POST
+      headers:
+        Accept: "application/json"
+        Cookie: "access_token={{ cvaas_token }}"
+      validate_certs: no
+      return_content: yes
+      body: '{"enrollmentToken": {"reenrollDevices": ["*"], "validFor": "2h"}}'
+    register: cv_onboarding_token
+    until: cv_onboarding_token.status == 200
+    retries: 10
+    delay: 2
+
+  # Writing cvaas token to file
+  - name: "Parsing CVaaS token"
+    set_fact:
+      cv_onboarding_token: "{{ cv_onboarding_token.content | from_json }}"
+
+  - name: "Writing CVaaS token to file"
+    copy:
+      content: "{{ cv_onboarding_token[0].enrollmentToken.token }}"
+      dest: "../clab/cvaas-onboarding-token.tok"

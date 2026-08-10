@@ -1,0 +1,243 @@
+{
+  "freeTextAnnotations": [],
+  "freeShapeAnnotations": [],
+  "trafficRateAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "dc1-brdr1",
+      "position": {
+        "x": 460,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc1-brdr2",
+      "position": {
+        "x": 600,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc1-l2leaf1",
+      "position": {
+        "x": 700,
+        "y": 680
+      }
+    },
+    {
+      "id": "dc1-l2leaf2",
+      "position": {
+        "x": 820,
+        "y": 680
+      }
+    },
+    {
+      "id": "dc1-leaf1",
+      "position": {
+        "x": 700,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc1-leaf2",
+      "position": {
+        "x": 820,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc1-leaf3",
+      "position": {
+        "x": 980,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc1-leaf4",
+      "position": {
+        "x": 1120,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc1-spine1",
+      "position": {
+        "x": 680,
+        "y": 320
+      }
+    },
+    {
+      "id": "dc1-spine2",
+      "position": {
+        "x": 840,
+        "y": 320
+      }
+    },
+    {
+      "id": "dc2-brdr1",
+      "position": {
+        "x": 140,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc2-brdr2",
+      "position": {
+        "x": 240,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc2-leaf1",
+      "position": {
+        "x": -340,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc2-leaf2",
+      "position": {
+        "x": -220,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc2-leaf3",
+      "position": {
+        "x": -80,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc2-leaf4",
+      "position": {
+        "x": 40,
+        "y": 540
+      }
+    },
+    {
+      "id": "dc2-spine1",
+      "position": {
+        "x": 40,
+        "y": 380
+      }
+    },
+    {
+      "id": "dc2-spine2",
+      "position": {
+        "x": -100,
+        "y": 380
+      }
+    },
+    {
+      "id": "campus-brdr1",
+      "position": {
+        "x": 720,
+        "y": 1000
+      }
+    },
+    {
+      "id": "campus-brdr2",
+      "position": {
+        "x": 600,
+        "y": 1000
+      }
+    },
+    {
+      "id": "campus-leaf1",
+      "position": {
+        "x": 180,
+        "y": 1000
+      }
+    },
+    {
+      "id": "campus-leaf2",
+      "position": {
+        "x": 280,
+        "y": 1000
+      }
+    },
+    {
+      "id": "campus-leaf3",
+      "position": {
+        "x": 380,
+        "y": 1000
+      }
+    },
+    {
+      "id": "campus-leaf4",
+      "position": {
+        "x": 480,
+        "y": 1000
+      }
+    },
+    {
+      "id": "campus-spine1",
+      "position": {
+        "x": 280,
+        "y": 860
+      }
+    },
+    {
+      "id": "campus-spine2",
+      "position": {
+        "x": 400,
+        "y": 860
+      }
+    },
+    {
+      "id": "dc1-host1",
+      "position": {
+        "x": 800,
+        "y": 800
+      }
+    },
+    {
+      "id": "dc1-host2",
+      "position": {
+        "x": 1040,
+        "y": 680
+      }
+    },
+    {
+      "id": "dc2-host1",
+      "position": {
+        "x": -300,
+        "y": 680
+      }
+    },
+    {
+      "id": "dc2-host2",
+      "position": {
+        "x": -20,
+        "y": 660
+      }
+    },
+    {
+      "id": "campus-host1",
+      "position": {
+        "x": 220,
+        "y": 1120
+      }
+    },
+    {
+      "id": "campus-host2",
+      "position": {
+        "x": 420,
+        "y": 1120
+      }
+    },
+    {
+      "id": "ansible",
+      "position": {
+        "x": 340,
+        "y": 220
+      }
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {}
+}

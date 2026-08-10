@@ -1,0 +1,22 @@
+---
+# Campus ports
+# Moved to Studios / quick actions
+# workstations:
+#   - name: campus-host1
+#     adapters:
+#       - endpoint_ports: [ Ethernet1, Ethernet2 ]
+#         switches: [ campus-leaf1, campus-leaf2 ]
+#         switch_ports: [ Ethernet1, Ethernet1 ]
+#         mode: access
+#         vlans: 1110
+#         port_channel:
+#           mode: active
+#   - name: campus-host2
+#     adapters:
+#       - endpoint_ports: [ Ethernet1, Ethernet2 ]
+#         switches: [ campus-leaf3, campus-leaf4 ]
+#         switch_ports: [ Ethernet1, Ethernet1 ]
+#         mode: access
+#         vlans: 1120
+#         port_channel:
+#           mode: active
