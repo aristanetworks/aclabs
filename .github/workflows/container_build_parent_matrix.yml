@@ -23,8 +23,8 @@ jobs:
     strategy:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
-        from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.1.0"]
-        clab_version: ["0.77.0"]
+        from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.3.0"]
+        clab_version: ["0.78.0"]
         user_id: ["1000", "1009"]
         include:
           - user_id: "1000"
@@ -106,4 +106,8 @@ jobs:
       # 2.6.8
       # - ContainerLab 0.77.0
       # - Set lab-base cLab extension to v0.26.0
-      container_revision: "2.6.8"
+      # 2.6.9
+      # - ContainerLab to 0.78.0
+      # - cLab extension to v0.26.2
+      # - AVD to 6.3.0
+      container_revision: "2.6.9"

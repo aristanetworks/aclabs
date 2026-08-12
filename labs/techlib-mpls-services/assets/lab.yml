@@ -22,7 +22,7 @@ display:
   # in the dashboard header.
   validated_with:
     cEOS: "4.35.2F"
-    AVD: "6.1.0"
+    AVD: "6.3.0"
     Containerlab: "0.74.3"
   # Recommended host resources. Rendered as a badge row in the dashboard header.
   resources:
