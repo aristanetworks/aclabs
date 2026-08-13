@@ -20,7 +20,7 @@ RUN chmod +x /bin/init_lab.py /bin/docs_generate.py
 COPY ./settings.json /home/${USERNAME}/.local/share/code-server/User
 RUN chown ${USERNAME} /home/${USERNAME}/.local/share/code-server/User/settings.json
 
-# Install the sandbox-dashboard extension.
+# Install the lab-dashboard extension. Version is hard coded to better control the environment and avoid unexpected changes.
 
 USER ${USERNAME}
 

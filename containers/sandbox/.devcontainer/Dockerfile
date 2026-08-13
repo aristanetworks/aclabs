@@ -18,8 +18,8 @@ RUN chown -R ${USERNAME}:${USERNAME} /opt/sandbox
 COPY ./settings.json /home/${USERNAME}/.local/share/code-server/User
 RUN chown ${USERNAME} /home/${USERNAME}/.local/share/code-server/User/settings.json
 
-# Install the sandbox-dashboard extension.
+# Install the sandbox-dashboard extension. Version is hard coded to better control the environment and avoid unexpected changes.
 
 USER ${USERNAME}
 
-RUN code-server --install-extension PacketAnglers.sandbox-dashboard@0.17.45 --force
+RUN code-server --install-extension PacketAnglers.sandbox-dashboard@0.17.53 --force
