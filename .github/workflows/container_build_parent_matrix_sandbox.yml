@@ -16,13 +16,11 @@ permissions:
 
 jobs:
   vars:
+    # GHCR paths must be lowercase.
     # strategy.matrix is evaluated BEFORE any step exists, so it can only
     # read the github / inputs / vars / needs contexts -- never steps.*.
     # This precursor job therefore carries the LOWERCASED repo owner as a
     # JOB OUTPUT, which the build matrix consumes via needs.*.
-    # Why lowercase at all: GHCR paths must be lowercase, Actions
-    # expressions have no toLower(), and mixed case is real in this very
-    # ecosystem (upstream is aristanetworks/acLabs -- capital L).
     if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
