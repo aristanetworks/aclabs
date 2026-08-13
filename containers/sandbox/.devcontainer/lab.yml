@@ -37,7 +37,7 @@ description: |
 components:
   ceos: 4.36.1F
   avd: 6.3.0
-  clab: 0.78.0
+  clab: 0.78.1
 
 resources:
   cpu: 16
