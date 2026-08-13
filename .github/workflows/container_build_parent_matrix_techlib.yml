@@ -15,14 +15,31 @@ permissions:
   packages: write
 
 jobs:
+  vars:
+    # strategy.matrix is evaluated BEFORE any step exists, so it can only
+    # read the github / inputs / vars / needs contexts -- never steps.*.
+    # This precursor job therefore carries the LOWERCASED repo owner as a
+    # JOB OUTPUT, which the build matrix consumes via needs.*.
+    # Why lowercase at all: GHCR paths must be lowercase, Actions
+    # expressions have no toLower(), and mixed case is real in this very
+    # ecosystem (upstream is aristanetworks/acLabs -- capital L).
+    if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      gh_org_lowercase: ${{ steps.org.outputs.gh_org_lowercase }}
+    steps:
+      - id: org
+        run: echo "gh_org_lowercase=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_OUTPUT"
+
   build-lab-containers:
+    needs: vars
     # fork - build container from any branch for testing
     # parent repo - build on main branch only
     if: github.repository != 'aristanetworks/acLabs' || github.ref == 'refs/heads/main'
     uses: ./.github/workflows/container_build_child.yml
     strategy:
       matrix:
-        from_image: ["ghcr.io/${{ github.repository_owner }}/aclabs/lab-base:python3.12-avd-v6.3.0-clab0.78.1-rev2.6.10-uid1009"]
+        from_image: ["ghcr.io/${{ needs.vars.outputs.gh_org_lowercase }}/aclabs/lab-base:python3.12-avd-v6.3.0-clab0.78.1-rev2.6.10-uid1009"]
         user_id: ["1009"]
 
     with:
