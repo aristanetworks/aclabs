@@ -34,7 +34,7 @@ dns domain aclabs.lab
 !
 spanning-tree mode mstp
 spanning-tree edge-port bpduguard default
-spanning-tree mst 0 priority 0
+spanning-tree root super
 !
 system l1
    unsupported speed action error
@@ -75,28 +75,32 @@ interface Ethernet1
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Ethernet2
    description D-SPINE2
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Ethernet3
    description D-SPINE3
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Ethernet4
    description D-SPINE4
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Ethernet7
    description BB1
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 address 2001:db8:bb1:d8::d8/64
@@ -105,7 +109,7 @@ interface Ethernet7
 !
 interface Ethernet8
    description BB2
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 address 2001:db8:bb2:d8::d8/64
@@ -117,7 +121,7 @@ interface Ethernet9
    channel-group 9 mode active
 !
 interface Loopback0
-   description Globally Unique Address (BGP router-id)
+   description Globally Unique Address (Local EVPN BGP source)
    ipv6 address 2001:db8:d0::8/128
 !
 interface Loopback1
@@ -140,19 +144,16 @@ interface Vlan10
    mtu 9014
    vrf PROD
    ip address virtual 10.10.10.1/24
-   ipv6 address virtual 2001:db8:10:10::1/64
 !
 interface Vlan60
    mtu 9014
    vrf DEV
    ip address virtual 10.60.60.1/24
-   ipv6 address virtual 2001:db8:60:60::1/64
 !
 interface Vlan70
    mtu 9014
    vrf DEV
    ip address virtual 10.70.70.1/24
-   ipv6 address virtual 2001:db8:70:70::1/64
 !
 interface Vxlan1
    vxlan source-interface Loopback1
@@ -166,7 +167,6 @@ mac address-table aging-time 1800
 !
 ip virtual-router mac-address 00:1c:73:00:00:01
 !
-ip routing
 ip routing vrf DEV
 no ip routing vrf MGMT
 ip routing vrf PROD
@@ -176,8 +176,6 @@ ipv6 prefix-list PL6-LOOPBACKS
    seq 20 permit 2001:db8:d1::/48 le 128
 !
 ipv6 unicast-routing
-ipv6 unicast-routing vrf DEV
-ipv6 unicast-routing vrf PROD
 !
 ip route vrf MGMT 0.0.0.0/0 172.100.100.1
 !
@@ -204,18 +202,16 @@ router bgp 65400
    update wait-install
    no bgp default ipv4-unicast
    distance bgp 20 200 200
-   maximum-paths 4 ecmp 4
+   maximum-paths 4
    bgp bestpath d-path
    neighbor default send-community
    neighbor LOCAL-EVPN-PEERS peer group
    neighbor LOCAL-EVPN-PEERS remote-as 65400
    neighbor LOCAL-EVPN-PEERS update-source Loopback0
    neighbor LOCAL-EVPN-PEERS bfd
-   neighbor LOCAL-EVPN-PEERS ebgp-multihop 3
    neighbor LOCAL-EVPN-PEERS session tracker TRACK-LOCAL-EVPN-PEERS
    neighbor LOCAL-IPV6-PEERS peer group
    neighbor LOCAL-IPV6-PEERS remote-as 65400
-   neighbor LOCAL-IPV6-PEERS bfd
    neighbor REMOTE-EVPN-MPLS-PEERS peer group
    neighbor REMOTE-EVPN-MPLS-PEERS remote-as 65000
    neighbor REMOTE-EVPN-MPLS-PEERS local-as 65000 no-prepend replace-as
@@ -233,7 +229,6 @@ router bgp 65400
    neighbor 2001:db8:d0::203 description D-SPINE3.EVPN
    neighbor 2001:db8:d0::204 peer group LOCAL-EVPN-PEERS
    neighbor 2001:db8:d0::204 description D-SPINE4.EVPN
-   redistribute connected route-map RM-CONN-2-BGP
    neighbor interface Ethernet1 peer-group LOCAL-IPV6-PEERS
    neighbor interface Ethernet2 peer-group LOCAL-IPV6-PEERS
    neighbor interface Ethernet3 peer-group LOCAL-IPV6-PEERS
@@ -265,9 +260,8 @@ router bgp 65400
       neighbor REMOTE-EVPN-MPLS-PEERS domain remote
       domain identifier 4:4
       domain identifier 99:99 remote
-      domain identifier 65408:65408 attach
+      domain identifier 65400:65400 attach
       route import match-failure action discard
-      layer-2 fec in-place update
       !
       evpn ethernet-segment domain local
          identifier 0000:dddd:0007:0008:0001
@@ -281,12 +275,7 @@ router bgp 65400
    !
    address-family ipv6
       neighbor LOCAL-IPV6-PEERS activate
-   !
-   address-family vpn-ipv4
-      neighbor REMOTE-EVPN-MPLS-PEERS activate
-   !
-   address-family vpn-ipv6
-      neighbor REMOTE-EVPN-MPLS-PEERS activate
+      redistribute connected route-map RM-CONN-2-BGP
    !
    vrf DEV
       rd evpn domain all 10.0.4.8:50002

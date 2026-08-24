@@ -75,28 +75,32 @@ interface Ethernet1
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Ethernet2
    description C-SPINE2
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Ethernet3
    description C-SPINE3
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Ethernet4
    description C-SPINE4
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Ethernet7
    description BB1
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 address 2001:db8:bb1:c8::c8/64
@@ -105,7 +109,7 @@ interface Ethernet7
 !
 interface Ethernet8
    description BB2
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 address 2001:db8:bb2:c8::c8/64
@@ -140,19 +144,16 @@ interface Vlan10
    mtu 9014
    vrf PROD
    ip address virtual 10.10.10.1/24
-   ipv6 address virtual 2001:db8:10:10::1/64
 !
 interface Vlan50
    mtu 9014
    vrf DEV
    ip address virtual 10.50.50.1/24
-   ipv6 address virtual 2001:db8:50:50::1/64
 !
 interface Vlan70
    mtu 9014
    vrf DEV
    ip address virtual 10.70.70.1/24
-   ipv6 address virtual 2001:db8:70:70::1/64
 !
 interface Vxlan1
    vxlan source-interface Loopback1
@@ -166,7 +167,6 @@ mac address-table aging-time 1800
 !
 ip virtual-router mac-address 00:1c:73:00:00:01
 !
-ip routing
 ip routing vrf DEV
 no ip routing vrf MGMT
 ip routing vrf PROD
@@ -176,8 +176,6 @@ ipv6 prefix-list PL6-LOOPBACKS
    seq 20 permit 2001:db8:c1::/48 le 128
 !
 ipv6 unicast-routing
-ipv6 unicast-routing vrf DEV
-ipv6 unicast-routing vrf PROD
 !
 ip route vrf MGMT 0.0.0.0/0 172.100.100.1
 !
@@ -216,7 +214,6 @@ router bgp 65308
    neighbor LOCAL-EVPN-PEERS peer-tag in SPINES
    neighbor LOCAL-EVPN-PEERS peer-tag out discard SPINES
    neighbor LOCAL-IPV6-PEERS peer group
-   neighbor LOCAL-IPV6-PEERS bfd
    neighbor LOCAL-IPV6-PEERS peer-tag in SPINES
    neighbor LOCAL-IPV6-PEERS peer-tag out discard SPINES
    neighbor REMOTE-EVPN-MPLS-PEERS peer group
@@ -236,7 +233,6 @@ router bgp 65308
    neighbor 2001:db8:c0::203 description C-SPINE3.EVPN
    neighbor 2001:db8:c0::204 peer group LOCAL-EVPN-PEERS
    neighbor 2001:db8:c0::204 description C-SPINE4.EVPN
-   redistribute connected route-map RM-CONN-2-BGP
    neighbor interface Ethernet1 peer-group LOCAL-IPV6-PEERS remote-as 65300
    neighbor interface Ethernet2 peer-group LOCAL-IPV6-PEERS remote-as 65300
    neighbor interface Ethernet3 peer-group LOCAL-IPV6-PEERS remote-as 65300
@@ -267,10 +263,9 @@ router bgp 65308
       neighbor REMOTE-EVPN-MPLS-PEERS encapsulation mpls next-hop-self source-interface Loopback3
       neighbor REMOTE-EVPN-MPLS-PEERS domain remote
       domain identifier 3:3
-      domain identifier 4:4 remote
-      domain identifier 65308:65308 attach
+      domain identifier 99:99 remote
+      domain identifier 65300:65300 attach
       route import match-failure action discard
-      layer-2 fec in-place update
       !
       evpn ethernet-segment domain local
          identifier 0000:cccc:0007:0008:0001
@@ -284,6 +279,7 @@ router bgp 65308
    !
    address-family ipv6
       neighbor LOCAL-IPV6-PEERS activate
+      redistribute connected route-map RM-CONN-2-BGP
    !
    vrf DEV
       rd evpn domain all 10.0.3.8:50002

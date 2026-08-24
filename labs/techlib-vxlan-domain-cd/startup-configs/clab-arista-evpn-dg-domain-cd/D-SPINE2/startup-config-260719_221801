@@ -29,8 +29,6 @@ ip domain lookup vrf MGMT source-interface Management0
 ip name-server vrf MGMT 8.8.8.8
 dns domain aclabs.lab
 !
-spanning-tree mode none
-!
 system l1
    unsupported speed action error
    unsupported error-correction action error
@@ -46,54 +44,56 @@ interface Ethernet1
    mtu 9114
    no switchport
    ipv6 enable
-   pim ipv6 sparse-mode
+   ipv6 nd ra interval 5
 !
 interface Ethernet2
    description D-LEAF2
    mtu 9114
    no switchport
    ipv6 enable
-   pim ipv6 sparse-mode
+   ipv6 nd ra interval 5
 !
 interface Ethernet3
    description D-LEAF3
    mtu 9114
    no switchport
    ipv6 enable
-   pim ipv6 sparse-mode
+   ipv6 nd ra interval 5
 !
 interface Ethernet4
    description D-LEAF4
    mtu 9114
    no switchport
    ipv6 enable
-   pim ipv6 sparse-mode
+   ipv6 nd ra interval 5
 !
 interface Ethernet5
    description D-LEAF5
    mtu 9114
    no switchport
    ipv6 enable
-   pim ipv6 sparse-mode
+   ipv6 nd ra interval 5
 !
 interface Ethernet6
    description D-LEAF6
    mtu 9114
    no switchport
    ipv6 enable
-   pim ipv6 sparse-mode
+   ipv6 nd ra interval 5
 !
 interface Ethernet7
    description D-LEAF7
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Ethernet8
    description D-LEAF8
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Loopback0
    description Globally Unique Address
@@ -106,7 +106,6 @@ interface Management0
 !
 mac address-table aging-time 1800
 !
-ip routing
 no ip routing vrf MGMT
 !
 ipv6 prefix-list PL6-LOOPBACKS
@@ -138,7 +137,8 @@ router bgp 65400
    update wait-install
    no bgp default ipv4-unicast
    distance bgp 20 200 200
-   maximum-paths 128
+   bgp cluster-id 10.0.4.205
+   maximum-paths 4
    neighbor default send-community
    neighbor LOCAL-EVPN-PEERS peer group
    neighbor LOCAL-EVPN-PEERS remote-as 65400
@@ -148,7 +148,6 @@ router bgp 65400
    neighbor LOCAL-IPV6-PEERS peer group
    neighbor LOCAL-IPV6-PEERS remote-as 65400
    neighbor LOCAL-IPV6-PEERS next-hop-self
-   neighbor LOCAL-IPV6-PEERS bfd
    neighbor LOCAL-IPV6-PEERS route-reflector-client
    neighbor 2001:db8:d0::1 peer group LOCAL-EVPN-PEERS
    neighbor 2001:db8:d0::1 description D-LEAF1.EVPN
@@ -181,13 +180,5 @@ router bgp 65400
    address-family ipv6
       neighbor LOCAL-IPV6-PEERS activate
       redistribute connected route-map RM-CONN-2-BGP
-!
-router multicast
-   ipv6
-      routing
-!
-router pim sparse-mode
-   ipv6
-      make-before-break disabled
 !
 end

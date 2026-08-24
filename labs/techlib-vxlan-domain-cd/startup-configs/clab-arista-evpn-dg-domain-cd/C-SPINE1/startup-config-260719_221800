@@ -29,8 +29,6 @@ ip domain lookup vrf MGMT source-interface Management0
 ip name-server vrf MGMT 8.8.8.8
 dns domain aclabs.lab
 !
-spanning-tree mode none
-!
 system l1
    unsupported speed action error
    unsupported error-correction action error
@@ -46,6 +44,7 @@ interface Ethernet1
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
    pim ipv6 sparse-mode
 !
 interface Ethernet2
@@ -53,6 +52,7 @@ interface Ethernet2
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
    pim ipv6 sparse-mode
 !
 interface Ethernet3
@@ -60,6 +60,7 @@ interface Ethernet3
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
    pim ipv6 sparse-mode
 !
 interface Ethernet4
@@ -67,6 +68,7 @@ interface Ethernet4
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
    pim ipv6 sparse-mode
 !
 interface Ethernet5
@@ -74,6 +76,7 @@ interface Ethernet5
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
    pim ipv6 sparse-mode
 !
 interface Ethernet6
@@ -81,6 +84,7 @@ interface Ethernet6
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
    pim ipv6 sparse-mode
 !
 interface Ethernet7
@@ -88,12 +92,14 @@ interface Ethernet7
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Ethernet8
    description C-LEAF8
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Loopback0
    description Globally Unique Address
@@ -106,7 +112,6 @@ interface Management0
 !
 mac address-table aging-time 1800
 !
-ip routing
 no ip routing vrf MGMT
 !
 ipv6 prefix-list PL6-LOOPBACKS
@@ -142,14 +147,14 @@ router bgp 65300
    update wait-install
    no bgp default ipv4-unicast
    distance bgp 20 200 200
-   maximum-paths 128
+   maximum-paths 4
    neighbor default send-community
    neighbor LOCAL-EVPN-PEERS peer group
+   neighbor LOCAL-EVPN-PEERS next-hop-unchanged
    neighbor LOCAL-EVPN-PEERS update-source Loopback0
    neighbor LOCAL-EVPN-PEERS bfd
    neighbor LOCAL-EVPN-PEERS ebgp-multihop 3
    neighbor LOCAL-IPV6-PEERS peer group
-   neighbor LOCAL-IPV6-PEERS bfd
    neighbor 2001:db8:c0::1 peer group LOCAL-EVPN-PEERS
    neighbor 2001:db8:c0::1 remote-as 65301
    neighbor 2001:db8:c0::1 description C-LEAF1.EVPN

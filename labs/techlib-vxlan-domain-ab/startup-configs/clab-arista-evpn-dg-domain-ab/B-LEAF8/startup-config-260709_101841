@@ -45,6 +45,9 @@ clock timezone America/Detroit
 vlan 10
    name Blue
 !
+vlan 60
+   name Red
+!
 vlan 70
    name Brown
 !
@@ -105,13 +108,13 @@ interface Ethernet4
 !
 interface Ethernet7
    description BB1
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 172.16.2.3/31
 !
 interface Ethernet8
    description BB2
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 172.16.2.7/31
 !
@@ -144,6 +147,12 @@ interface Vlan10
    ip address virtual 10.10.10.1/24
    ipv6 address virtual 2001:db8:10:10::1/64
 !
+interface Vlan60
+   mtu 9014
+   vrf DEV
+   ip address virtual 10.60.60.1/24
+   ipv6 address virtual 2001:db8:60:60::1/64
+!
 interface Vlan70
    mtu 9014
    vrf DEV
@@ -153,7 +162,7 @@ interface Vlan70
 interface Vxlan1
    vxlan source-interface Loopback1
    vxlan udp-port 4789
-   vxlan vlan 10,70 vni 10010,10070
+   vxlan vlan 10,60,70 vni 10010,10060,10070
    vxlan vrf DEV vni 50002
    vxlan vrf PROD vni 50001
 !
@@ -165,12 +174,6 @@ ip routing
 ip routing vrf DEV
 no ip routing vrf MGMT
 ip routing vrf PROD
-!
-ip prefix-list PL-GATEWAY-LOOP
-   seq 10 permit 10.0.2.7/32
-   seq 20 permit 10.0.2.8/32
-   seq 30 permit 10.1.2.7/32
-   seq 40 permit 10.1.2.8/32
 !
 ipv6 unicast-routing vrf DEV
 ipv6 unicast-routing vrf PROD
@@ -186,9 +189,6 @@ ntp local-interface vrf MGMT Management0
 ntp server vrf MGMT time.apple.com iburst
 ntp server vrf MGMT time.google.com prefer iburst
 ntp server vrf MGMT time.windows.com iburst
-!
-route-map RM-AS65000-IPV4-OUT permit 10
-   match ip address prefix-list PL-GATEWAY-LOOP
 !
 router bfd
    multihop interval 1000 min-rx 1000 multiplier 3
@@ -213,7 +213,6 @@ router bgp 65200
    neighbor REMOTE-EVPN-PEERS bfd
    neighbor REMOTE-IPV4-PEERS peer group
    neighbor REMOTE-IPV4-PEERS remote-as 65000
-   neighbor REMOTE-IPV4-PEERS route-map RM-AS65000-IPV4-OUT out
    neighbor 10.0.0.1 peer group REMOTE-EVPN-PEERS
    neighbor 10.0.0.1 description BB1.EVPN
    neighbor 10.0.0.2 peer group REMOTE-EVPN-PEERS
@@ -236,6 +235,11 @@ router bgp 65200
       route-target import export evpn domain all 10010:10010
       redistribute learned
    !
+   vlan 60
+      rd 10.0.2.8:10060
+      route-target both 10060:10060
+      redistribute learned
+   !
    vlan 70
       rd evpn domain all 10.0.2.8:10070
       route-target import export evpn domain all 10070:10070
@@ -254,15 +258,15 @@ router bgp 65200
       !
       evpn ethernet-segment domain all
          identifier 0000:bbbb:0007:0008:0000
-         designated-forwarder election algorithm preference 2000
+         designated-forwarder election algorithm preference 1000
          route-target import 00:bb:bb:07:08:00
    !
    address-family ipv4
       neighbor REMOTE-IPV4-PEERS activate
       network 10.0.2.8/32
-      network 10.0.2.0/24
       network 10.1.2.8/32
-      network 10.1.2.0/24
+      aggregate-address 10.0.2.0/24
+      aggregate-address 10.1.2.0/24
    !
    vrf DEV
       rd evpn domain all 10.0.2.8:50002
