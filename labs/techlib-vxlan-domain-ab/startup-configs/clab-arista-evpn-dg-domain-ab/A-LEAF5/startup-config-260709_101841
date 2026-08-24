@@ -161,6 +161,7 @@ interface Vlan50
    vrf DEV
    ip igmp
    mld
+   pim ipv6 sparse-mode
    pim ipv4 sparse-mode
    pim ipv4 local-interface Loopback102
    ip address virtual 10.50.50.1/24
@@ -171,6 +172,7 @@ interface Vlan70
    vrf DEV
    ip igmp
    mld
+   pim ipv6 sparse-mode
    pim ipv4 sparse-mode
    pim ipv4 local-interface Loopback102
    ip address virtual 10.70.70.1/24
@@ -272,7 +274,7 @@ router bgp 65105
    update wait-install
    no bgp default ipv4-unicast
    distance bgp 20 200 200
-   maximum-paths 128
+   maximum-paths 4
    neighbor default send-community
    neighbor LOCAL-EVPN-PEERS peer group
    neighbor LOCAL-EVPN-PEERS remote-as 65100
@@ -310,7 +312,7 @@ router bgp 65105
    redistribute connected route-map RM-CONN-2-BGP
    !
    vlan 50
-      rd 10.0.1.6:10050
+      rd 10.0.1.5:10050
       route-target both 10050:10050
       redistribute learned
       redistribute router-mac next-hop vtep primary

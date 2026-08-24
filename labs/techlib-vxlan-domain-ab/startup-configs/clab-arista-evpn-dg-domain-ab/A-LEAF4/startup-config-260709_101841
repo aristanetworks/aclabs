@@ -170,6 +170,7 @@ interface Vlan10
    vrf PROD
    ip igmp
    mld
+   pim ipv6 sparse-mode
    pim ipv4 sparse-mode
    pim ipv4 local-interface Loopback101
    ip address virtual 10.10.10.1/24
@@ -180,6 +181,7 @@ interface Vlan30
    vrf PROD
    ip igmp
    mld
+   pim ipv6 sparse-mode
    pim ipv4 sparse-mode
    pim ipv4 local-interface Loopback101
    ip address virtual 10.30.30.1/24
@@ -190,6 +192,7 @@ interface Vlan50
    vrf DEV
    ip igmp
    mld
+   pim ipv6 sparse-mode
    pim ipv4 sparse-mode
    pim ipv4 local-interface Loopback102
    ip address virtual 10.50.50.1/24
@@ -301,7 +304,7 @@ router bgp 65103
    update wait-install
    no bgp default ipv4-unicast
    distance bgp 20 200 200
-   maximum-paths 128
+   maximum-paths 4
    neighbor default send-community
    neighbor LOCAL-EVPN-PEERS peer group
    neighbor LOCAL-EVPN-PEERS remote-as 65100

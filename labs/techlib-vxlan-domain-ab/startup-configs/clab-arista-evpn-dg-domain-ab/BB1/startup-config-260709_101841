@@ -82,14 +82,11 @@ peer-filter DC-ASN-RANGE
    10 match as-range 65100-65499 result accept
 !
 router bgp 65000
-   router-id 1.1.0.1
+   router-id 10.0.0.1
    no bgp default ipv4-unicast
    distance bgp 20 200 200
-   graceful-restart restart-time 300
-   bgp cluster-id 1.1.0.0
-   graceful-restart
+   bgp cluster-id 10.0.0.0
    maximum-paths 4
-   bgp listen range 1.1.0.0/16 peer-group EVPN-GW-PEERS remote-as 65000
    bgp listen range 10.0.0.0/8 peer-group EVPN-GW-PEERS remote-as 65000
    bgp listen range 172.16.0.0/16 peer-group IP-TRANSPORT-CLIENTS peer-filter DC-ASN-RANGE
    neighbor default send-community

@@ -48,6 +48,7 @@ aaa authorization exec default local
 !
 interface Port-Channel1
    description Uplink to B-LEAF5 & B-LEAF6
+   switchport
    switchport trunk allowed vlan 40,80
    switchport mode trunk
 !
@@ -61,11 +62,13 @@ interface Ethernet2
 !
 interface Ethernet3
    description B6
+   switchport
    switchport access vlan 40
    spanning-tree portfast edge
 !
 interface Ethernet4
    description B7
+   switchport
    switchport access vlan 80
    spanning-tree portfast edge
 !

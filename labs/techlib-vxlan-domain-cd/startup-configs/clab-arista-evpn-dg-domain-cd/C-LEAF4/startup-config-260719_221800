@@ -95,6 +95,7 @@ interface Ethernet1
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
    pim ipv6 sparse-mode
 !
 interface Ethernet2
@@ -102,6 +103,7 @@ interface Ethernet2
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
    pim ipv6 sparse-mode
 !
 interface Ethernet3
@@ -109,6 +111,7 @@ interface Ethernet3
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
    pim ipv6 sparse-mode
 !
 interface Ethernet4
@@ -116,6 +119,7 @@ interface Ethernet4
    mtu 9114
    no switchport
    ipv6 enable
+   ipv6 nd ra interval 5
    pim ipv6 sparse-mode
 !
 interface Ethernet5
@@ -127,7 +131,7 @@ interface Ethernet6
    channel-group 1000 mode active
 !
 interface Ethernet7
-   description HostC3
+   description HostC7
    switchport access vlan 30
    switchport
    spanning-tree portfast edge
@@ -152,13 +156,11 @@ interface Loopback101
    description OISM PIM/IGMP Source (PROD)
    vrf PROD
    ip address 10.101.3.4/32
-   ipv6 address 2001:db8:c101::4/128
 !
 interface Loopback102
    description OISM PIM/IGMP Source (DEV)
    vrf DEV
    ip address 10.102.3.4/32
-   ipv6 address 2001:db8:c102::4/128
 !
 interface Management0
    description OOB_MANAGEMENT
@@ -169,34 +171,25 @@ interface Vlan10
    mtu 9014
    vrf PROD
    ip igmp
-   mld
    pim ipv4 sparse-mode
    pim ipv4 local-interface Loopback101
-   pim ipv6 sparse-mode
    ip address virtual 10.10.10.1/24
-   ipv6 address virtual 2001:db8:10:10::1/64
 !
 interface Vlan30
    mtu 9014
    vrf PROD
    ip igmp
-   mld
    pim ipv4 sparse-mode
    pim ipv4 local-interface Loopback101
-   pim ipv6 sparse-mode
    ip address virtual 10.30.30.1/24
-   ipv6 address virtual 2001:db8:30:30::1/64
 !
 interface Vlan50
    mtu 9014
    vrf DEV
    ip igmp
-   mld
    pim ipv4 sparse-mode
    pim ipv4 local-interface Loopback102
-   pim ipv6 sparse-mode
    ip address virtual 10.50.50.1/24
-   ipv6 address virtual 2001:db8:50:50::1/64
 !
 interface Vlan3001
    description MLAG iBGP Peer - VRF PROD
@@ -237,21 +230,20 @@ interface Vxlan1
    vxlan mlag source-interface Loopback2
    vxlan vrf DEV multicast group ff3e::2
    vxlan vrf PROD multicast group ff3e::1
-   vxlan multicast ipv6
 !
 mac address-table aging-time 1800
 !
 ip virtual-router mac-address 00:1c:73:00:00:01
 !
-ip routing ipv6 interfaces
 ip routing ipv6 interfaces vrf DEV
 no ip routing vrf MGMT
 ip routing ipv6 interfaces vrf PROD
 !
 ip extcommunity-list regexp evpn-imported permit RT.*
 !
-ip prefix-list PL-MLAG-PEER-VRFS
-   seq 10 permit 192.0.0.0/31
+ipv6 prefix-list PL6-MLAG-PEER-VRFS
+   seq 10 permit 2001:db8:3001::/64
+   seq 20 permit 2001:db8:3002::/64
 !
 ipv6 prefix-list PL6-LOOPBACKS
    seq 10 permit 2001:db8:c0::/48 le 128
@@ -259,17 +251,12 @@ ipv6 prefix-list PL6-LOOPBACKS
    seq 30 permit 2001:db8:c2::/48 le 128
 !
 ipv6 unicast-routing
-ipv6 unicast-routing vrf DEV
-ipv6 unicast-routing vrf PROD
 !
 mlag configuration
    domain-id 100
    local-interface Vlan4094
    peer-address 2001:db8:4094::1
    peer-link Port-Channel1000
-!
-mld snooping
-   vlan 10,30,50
 !
 ip route vrf MGMT 0.0.0.0/0 172.100.100.1
 !
@@ -287,7 +274,7 @@ route-map RM-CONN-2-BGP permit 10
    match ipv6 address prefix-list PL6-LOOPBACKS
 !
 route-map RM-CONN-2-BGP-VRFS deny 10
-   match ip address prefix-list PL-MLAG-PEER-VRFS
+   match ipv6 address prefix-list PL6-MLAG-PEER-VRFS
 !
 route-map RM-CONN-2-BGP-VRFS permit 20
 !
@@ -305,7 +292,7 @@ router bgp 65303
    update wait-install
    no bgp default ipv4-unicast
    distance bgp 20 200 200
-   maximum-paths 128
+   maximum-paths 4
    neighbor default send-community
    neighbor LOCAL-EVPN-PEERS peer group
    neighbor LOCAL-EVPN-PEERS remote-as 65300
@@ -315,7 +302,6 @@ router bgp 65303
    neighbor LOCAL-EVPN-PEERS peer-tag in SPINES
    neighbor LOCAL-EVPN-PEERS peer-tag out discard SPINES
    neighbor LOCAL-IPV6-PEERS peer group
-   neighbor LOCAL-IPV6-PEERS bfd
    neighbor LOCAL-IPV6-PEERS peer-tag in SPINES
    neighbor LOCAL-IPV6-PEERS peer-tag out discard SPINES
    neighbor MLAG-IPV6-PEER peer group
@@ -330,7 +316,6 @@ router bgp 65303
    neighbor 2001:db8:c0::203 description C-SPINE3.EVPN
    neighbor 2001:db8:c0::204 peer group LOCAL-EVPN-PEERS
    neighbor 2001:db8:c0::204 description C-SPINE4.EVPN
-   redistribute connected route-map RM-CONN-2-BGP
    neighbor interface Ethernet1 peer-group LOCAL-IPV6-PEERS remote-as 65300
    neighbor interface Ethernet2 peer-group LOCAL-IPV6-PEERS remote-as 65300
    neighbor interface Ethernet3 peer-group LOCAL-IPV6-PEERS remote-as 65300
@@ -369,6 +354,7 @@ router bgp 65303
    address-family ipv6
       neighbor LOCAL-IPV6-PEERS activate
       neighbor MLAG-IPV6-PEER activate
+      redistribute connected route-map RM-CONN-2-BGP
    !
    vrf DEV
       rd 10.0.3.4:50002
@@ -380,8 +366,6 @@ router bgp 65303
       !
       evpn multicast
          address-family ipv4
-         !
-         address-family ipv6
    !
    vrf PROD
       rd 10.0.3.4:50001
@@ -393,8 +377,6 @@ router bgp 65303
       !
       evpn multicast
          address-family ipv4
-         !
-         address-family ipv6
 !
 router multicast
    ipv6
@@ -403,15 +385,9 @@ router multicast
    vrf DEV
       ipv4
          routing
-      !
-      ipv6
-         routing
    !
    vrf PROD
       ipv4
-         routing
-      !
-      ipv6
          routing
 !
 router pim sparse-mode
