@@ -72,28 +72,28 @@ interface Port-Channel9
 !
 interface Ethernet1
    description C-SPINE1
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
 !
 interface Ethernet2
    description C-SPINE2
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
 !
 interface Ethernet3
    description C-SPINE3
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
 !
 interface Ethernet4
    description C-SPINE4
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5

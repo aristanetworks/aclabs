@@ -41,7 +41,7 @@ aaa authorization exec default local
 !
 interface Ethernet1
    description C-LEAF1
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
@@ -49,7 +49,7 @@ interface Ethernet1
 !
 interface Ethernet2
    description C-LEAF2
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
@@ -57,7 +57,7 @@ interface Ethernet2
 !
 interface Ethernet3
    description C-LEAF3
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
@@ -65,7 +65,7 @@ interface Ethernet3
 !
 interface Ethernet4
    description C-LEAF4
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
@@ -73,7 +73,7 @@ interface Ethernet4
 !
 interface Ethernet5
    description C-LEAF5
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
@@ -81,7 +81,7 @@ interface Ethernet5
 !
 interface Ethernet6
    description C-LEAF6
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
@@ -89,14 +89,14 @@ interface Ethernet6
 !
 interface Ethernet7
    description C-LEAF7
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
 !
 interface Ethernet8
    description C-LEAF8
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
