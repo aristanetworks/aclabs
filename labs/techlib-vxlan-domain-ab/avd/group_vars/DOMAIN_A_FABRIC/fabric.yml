@@ -44,20 +44,29 @@ general_settings:
     mlag_peerlink_requests_disabled: true
 
 # ── BGP ────────────────────────────────────────────────────────────────────
+# `maximum_routes: null` on every group: AVD writes a protective prefix
+# limit (0 = unlimited on the EVPN groups, 256000 on the IPv4 ones); the
+# guide sets none and leaves EOS at its own default.
 bgp_peer_groups:
   ipv4_underlay_peers:
     name: LOCAL-IPV4-PEERS
+    structured_config:
+      maximum_routes: null
   mlag_ipv4_underlay_peer:
     name: MLAG-IPV4-PEER
     structured_config:
+      maximum_routes: null
       # The guide filters EVPN-imported routes from the MLAG peer session
       # outbound (RM-MLAG-PEER-OUT) instead of AVD's inbound origin rewrite.
       route_map_out: RM-MLAG-PEER-OUT
   evpn_overlay_peers:
     name: LOCAL-EVPN-PEERS
+    structured_config:
+      maximum_routes: null
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
     structured_config:
+      maximum_routes: null
       # The Gateways present themselves to the backbone RRs as AS 65000, so
       # the session is iBGP from the backbone's point of view — no multihop.
       local_as: '65000'

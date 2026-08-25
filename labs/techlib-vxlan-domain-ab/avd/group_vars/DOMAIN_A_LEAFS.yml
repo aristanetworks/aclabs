@@ -26,3 +26,8 @@ custom_structured_configuration_vxlan_interface:
     vxlan:
       mlag_source_interface: Loopback2
     eos_cli: vxlan multicast ipv6
+
+# AVD pairs `vtep_diagnostic` with a virtual source-NAT entry so switch-
+# originated traffic on an anycast SVI is sourced from the VRF's OISM
+# loopback. The guide does not carry it.
+custom_structured_configuration_virtual_source_nat_vrfs: null

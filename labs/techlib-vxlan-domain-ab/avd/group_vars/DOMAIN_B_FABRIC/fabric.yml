@@ -58,12 +58,17 @@ general_settings:
     tunnel_requests_disabled: true
 
 # ── BGP ────────────────────────────────────────────────────────────────────
+# `maximum_routes: null`: AVD writes a protective prefix limit the guide
+# does not set (see DOMAIN_A_FABRIC/fabric.yml).
 bgp_peer_groups:
   evpn_overlay_peers:
     name: LOCAL-EVPN-PEERS
+    structured_config:
+      maximum_routes: null
   evpn_overlay_core:
     name: REMOTE-EVPN-PEERS
     structured_config:
+      maximum_routes: null
       # The Gateways present themselves to the backbone RRs as AS 65000, so
       # the session is iBGP from the backbone's point of view — no multihop.
       local_as: '65000'
@@ -170,6 +175,15 @@ l3leaf:
           <<: *unnumbered
         - name: Ethernet4
           <<: *unnumbered
+      # AVD's iBGP anti-readvertisement guard (RM-EVPN-SOO-IN/OUT +
+      # ECL-EVPN-SOO + a per-VTEP SOO stamp) is applied unconditionally to
+      # iBGP EVPN clients with no input knob. It never fires behind route
+      # reflectors — an RR does not reflect a route back to its originator —
+      # and the guide runs without it, so the generated objects are dropped
+      # and the peer-group attaches un-set. These are the only route-maps or
+      # extcommunity lists on a Domain B node, so both lists null wholesale.
+      route_maps: null
+      ip_extcommunity_lists: null
       router_bgp:
         # Every All-Active port-channel tracks the local EVPN sessions.
         peer_groups:
@@ -181,6 +195,10 @@ l3leaf:
         address_family_evpn:
           layer_2_fec_in_place_update:
             enabled: true
+          peer_groups:
+            - name: LOCAL-EVPN-PEERS
+              route_map_in: null
+              route_map_out: null
         # Auto-derived ES route-targets for the LACP-derived ESIs (no AVD key).
         eos_cli: |-
           address-family evpn
