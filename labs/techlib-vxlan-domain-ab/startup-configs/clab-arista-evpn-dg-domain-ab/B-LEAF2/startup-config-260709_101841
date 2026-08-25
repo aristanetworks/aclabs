@@ -78,7 +78,7 @@ interface Port-Channel8
 !
 interface Ethernet1
    description B-SPINE1
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode
@@ -88,7 +88,7 @@ interface Ethernet1
 !
 interface Ethernet2
    description B-SPINE2
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode
@@ -98,7 +98,7 @@ interface Ethernet2
 !
 interface Ethernet3
    description B-SPINE3
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode
@@ -108,7 +108,7 @@ interface Ethernet3
 !
 interface Ethernet4
    description B-SPINE4
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode

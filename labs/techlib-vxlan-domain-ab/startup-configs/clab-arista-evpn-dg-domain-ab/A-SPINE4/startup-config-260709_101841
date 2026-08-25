@@ -39,56 +39,56 @@ aaa authorization exec default local
 !
 interface Ethernet1
    description A-LEAF1
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.48/31
    pim ipv4 sparse-mode
 !
 interface Ethernet2
    description A-LEAF2
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.50/31
    pim ipv4 sparse-mode
 !
 interface Ethernet3
    description A-LEAF3
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.52/31
    pim ipv4 sparse-mode
 !
 interface Ethernet4
    description A-LEAF4
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.54/31
    pim ipv4 sparse-mode
 !
 interface Ethernet5
    description A-LEAF5
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.56/31
    pim ipv4 sparse-mode
 !
 interface Ethernet6
    description A-LEAF6
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.58/31
    pim ipv4 sparse-mode
 !
 interface Ethernet7
    description A-LEAF7
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.60/31
    pim ipv4 sparse-mode
 !
 interface Ethernet8
    description A-LEAF8
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.62/31
    pim ipv4 sparse-mode

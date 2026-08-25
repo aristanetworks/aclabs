@@ -74,25 +74,25 @@ interface Port-Channel9
 !
 interface Ethernet1
    description A-SPINE1
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.15/31
 !
 interface Ethernet2
    description A-SPINE2
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.31/31
 !
 interface Ethernet3
    description A-SPINE3
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.47/31
 !
 interface Ethernet4
    description A-SPINE4
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.63/31
 !
