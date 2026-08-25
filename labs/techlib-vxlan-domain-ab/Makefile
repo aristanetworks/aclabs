@@ -56,15 +56,3 @@ deploy-bb: ## Deploy Backbone (BB1/BB2) configs via eAPI
 
 .PHONY: deploy
 deploy: deploy-a deploy-b deploy-bb ## Deploy all configs (A + B + Backbone)
-
-##################################################
-# Config parity — rendered configs vs. the lab's startup-configs
-##################################################
-
-.PHONY: parity
-parity: ## Compare avd/intended/configs with startup-configs (writes avd/PARITY-STATUS.md)
-	python3 avd/scripts/parity_report.py
-
-.PHONY: parity-node
-parity-node: ## Full missing/extra listing for one node, e.g. make parity-node NODE=A-LEAF7
-	python3 avd/scripts/parity_report.py $(NODE)
