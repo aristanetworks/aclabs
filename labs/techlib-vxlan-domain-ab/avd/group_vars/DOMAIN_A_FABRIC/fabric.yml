@@ -26,7 +26,8 @@ evpn_import_pruning: true          # route import match-failure action discard
 evpn_multicast: true               # OISM — the Gateway group switches this off
 underlay_multicast_pim_sm: true    # pim ipv4 sparse-mode on fabric links
 
-p2p_uplinks_mtu: 9114
+# Underlay MTU on every fabric link (also drives the MLAG peering SVIs).
+p2p_uplinks_mtu: 9214
 
 mac_address_table:
   aging_time: 1800
