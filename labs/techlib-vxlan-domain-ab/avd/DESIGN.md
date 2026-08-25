@@ -159,20 +159,20 @@ The Gateways join the backbone as iBGP from the backbone's point of view
 
 ## Rendered vs target
 
-**The target is the lab's `startup-configs`, not the guide's published
-`full_configs`.** The two are the same configuration apart from two known
-divergences, both of which a diff against the guide will surface:
+**The target is the lab's `startup-configs`, and the guide's published
+`full_configs` track them.** Verified after the MTU change of aclabs #226:
+17 of the 27 nodes are identical bar the EOS version in the comment header,
+and the other ten differ by exactly one line each — the only deliberate
+divergence between the two:
 
-1. **Session-tracker recovery delay — deliberate.** The lab runs
-   `recovery delay 10 seconds` against the guide's `300 seconds`, on the ten
-   nodes that have a tracker (A-LEAF7/8, B-LEAF1..8), so a lab user is not
-   left waiting five minutes to watch a recovery complete. The models render
-   the lab value. Don't "fix" it.
-2. **Underlay MTU — the guide is behind.** The lab moved every fabric link
-   (and the MLAG peering SVIs that follow it) from `mtu 9114` to `mtu 9214`
-   in aclabs #226; the guide's published configs still show 9114 on those
-   140 lines. The models track the lab. If the guide has not been
-   republished since, it is the copy that needs updating.
+> **Session-tracker recovery delay.** The lab runs `recovery delay 10
+> seconds` against the guide's `300 seconds`, on the ten nodes that have a
+> tracker (A-LEAF7/8, B-LEAF1..8), so a lab user is not left waiting five
+> minutes to watch a recovery complete. The models render the lab value.
+> Don't "fix" it.
+
+Anything else showing up in a guide-vs-lab diff means one of the two has
+moved and the other has not — that is a signal, not noise.
 
 `make parity` compares the rendered configs with the startup-configs as
 content sets (ordering is never compared). Exempt as cosmetic: comment
