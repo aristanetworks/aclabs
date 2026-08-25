@@ -53,33 +53,19 @@ Additional information related to navigating the Topology Viewer UI can be found
 
 ### AVD
 
-The [AVD](https://avd.arista.com) data models used to render the configuration in the lab are included within the `avd` directory. The [AVD ansible galaxy collection](https://galaxy.ansible.com/ui/repo/published/arista/avd/) is pre-installed in the lab environment, and can be used to initiate a build, deploy, or validation of the topology.
+The [AVD](https://avd.arista.com) data models used to render the configuration in the lab are included within the `avd` directory. The [AVD ansible galaxy collection](https://galaxy.ansible.com/ui/repo/published/arista/avd/) is pre-installed in the lab environment, and can be used to build and deploy the topology.
 
 #### Build
 
 ```bash
 make build
 ```
+
 #### Deploy
 
 ```bash
 make deploy
 ```
-
-#### Validate
-
-```bash
-make validate
-```
-
-#### Compare with the lab's startup configs
-
-```bash
-make parity
-```
-
-The data models, the mechanisms behind each guide feature, and the list of
-accepted rendering differences are documented in [`avd/DESIGN.md`](avd/DESIGN.md).
 
 Happy Labbing! 🥳🧪
 
