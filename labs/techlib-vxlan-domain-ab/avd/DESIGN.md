@@ -159,6 +159,15 @@ The Gateways join the backbone as iBGP from the backbone's point of view
 
 ## Rendered vs target
 
+**The target is the lab's `startup-configs`, not the guide's published
+`full_configs`.** The two are the same configuration with one deliberate
+exception: the EVPN session tracker runs `recovery delay 10 seconds` in the
+lab against `300 seconds` in the guide, on the ten nodes that have a tracker
+(A-LEAF7/8, B-LEAF1..8). That is intentional — a lab user should not wait
+five minutes to watch a recovery complete — so the lab value is the one the
+models render, and a diff against the guide's published configs will show
+those ten lines. Don't "fix" them.
+
 `make parity` compares the rendered configs with the startup-configs as
 content sets (ordering is never compared). Exempt as cosmetic: comment
 lines, interface/host descriptions, BGP neighbor descriptions, explicit
