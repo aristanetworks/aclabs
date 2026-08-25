@@ -57,21 +57,6 @@ deploy-bb: ## Deploy Backbone (BB1/BB2) configs via eAPI
 .PHONY: deploy
 deploy: deploy-a deploy-b deploy-bb ## Deploy all configs (A + B + Backbone)
 
-.PHONY: validate-a
-validate-a: ## Run ANTA tests against Domain A
-	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml -e "target_hosts=DOMAIN_A_FABRIC"
-
-.PHONY: validate-b
-validate-b: ## Run ANTA tests against Domain B
-	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml -e "target_hosts=DOMAIN_B_FABRIC"
-
-.PHONY: validate-bb
-validate-bb: ## Run ANTA tests against Backbone (BB1/BB2)
-	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml -e "target_hosts=BACKBONE"
-
-.PHONY: validate
-validate: validate-a validate-b validate-bb ## Run ANTA tests against everything (A + B + Backbone)
-
 ##################################################
 # Config parity — rendered configs vs. the lab's startup-configs
 ##################################################

@@ -1,20 +1,4 @@
 ---
-# Inventory — techlib EVPN-VXLAN Deployment Guide, Domains A + B + Backbone
-#
-# Three AVD fabrics (each built with its own play — fabric_name must be
-# uniform per play):
-#   DOMAIN_A_FABRIC — eBGP underlay + eBGP EVPN, MLAG leafs, All-Active Gateway
-#   DOMAIN_B_FABRIC — IS-IS underlay + iBGP EVPN, All-Active everywhere
-#   BACKBONE        — BB1/BB2: IPv4 transport + EVPN route reflectors
-#
-# The role groups (SPINES / LEAFS / GATEWAYS / L2_SWITCHES) carry the AVD
-# node `type` and the ANTA tags here; role behaviour (OISM on/off, the
-# Gateway-only BFD timers, ...) lives in group_vars/<ROLE>.yml — vars set
-# inside the inventory file rank BELOW group_vars files in Ansible's
-# precedence, so they cannot override a fabric-level setting.
-#
-# DCI groups the three fabrics' Gateway/Backbone nodes so the inter-domain
-# point-to-point links are defined exactly once (group_vars/DCI.yml).
 
 all:
   children:
@@ -24,7 +8,6 @@ all:
         DOMAIN_A_SPINES:
           vars:
             type: spine
-            anta_tags: [domain_a, spine, ntp]
           hosts:
             A-SPINE1:
             A-SPINE2:
@@ -33,7 +16,6 @@ all:
         DOMAIN_A_LEAFS:
           vars:
             type: l3leaf
-            anta_tags: [domain_a, leaf, ntp, standard_leaf, mlag, oism]
           hosts:
             A-LEAF1:
             A-LEAF2:
@@ -44,8 +26,6 @@ all:
         DOMAIN_A_GATEWAYS:
           vars:
             type: l3leaf
-            anta_tags: "{{ ['domain_a', 'leaf', 'ntp', 'gateway', 'a_gateway', 'es', 'bfd', 'dci']
-              + (['df_primary'] if inventory_hostname == 'A-LEAF7' else ['df_secondary']) }}"
           hosts:
             A-LEAF7:
             A-LEAF8:
@@ -55,7 +35,6 @@ all:
         DOMAIN_B_SPINES:
           vars:
             type: spine
-            anta_tags: [domain_b, spine, ntp, bfd, isis]
           hosts:
             B-SPINE1:
             B-SPINE2:
@@ -64,7 +43,6 @@ all:
         DOMAIN_B_LEAFS:
           vars:
             type: l3leaf
-            anta_tags: [domain_b, leaf, ntp, bfd, es, isis, standard_leaf, oism]
           hosts:
             B-LEAF1:
             B-LEAF2:
@@ -75,22 +53,18 @@ all:
         DOMAIN_B_GATEWAYS:
           vars:
             type: l3leaf
-            anta_tags: "{{ ['domain_b', 'leaf', 'ntp', 'bfd', 'es', 'isis', 'gateway', 'b_gateway', 'dci']
-              + (['df_primary'] if inventory_hostname == 'B-LEAF7' else ['df_secondary']) }}"
           hosts:
             B-LEAF7:
             B-LEAF8:
         DOMAIN_B_L2_SWITCHES:
           vars:
             type: l2leaf
-            anta_tags: [domain_b, l2leaf, ntp]
           hosts:
             B-SW1:
 
     BACKBONE:
       vars:
         type: spine
-        anta_tags: [backbone, dci]
       hosts:
         BB1:
         BB2:
