@@ -1,0 +1,6 @@
+---
+# Domain D EVPN Gateway pair (D-LEAF7 / D-LEAF8) — role settings.
+#
+# The Gateways serve the fabric's VLANs and VRFs; `standard_leaf: false`
+# (the fabric default) keeps the standard-leaf-only additions off.
+standard_leaf: false

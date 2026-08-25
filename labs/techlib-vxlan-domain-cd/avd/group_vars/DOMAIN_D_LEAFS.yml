@@ -1,0 +1,7 @@
+---
+# Domain D standard leafs (D-LEAF1..6) — role settings.
+#
+# `standard_leaf` gates the standard-leaf-only additions (anycast vMAC/VIP
+# advertisement, in-place FEC updates) in DOMAIN_D_FABRIC/fabric.yml and
+# services.yml.
+standard_leaf: true

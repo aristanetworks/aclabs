@@ -1,100 +1,156 @@
 ---
+# Common to every node in the lab: how Ansible reaches the devices, the
+# cEOS-lab platform profile, and the management/baseline preamble that the
+# deployment guide applies uniformly (AAA, DNS, NTP, eAPI, timezone...).
+# Fabric design lives in the per-fabric group_vars; nothing here is
+# node-specific.
 
-# AAA settings
+# ── Ansible connectivity (eAPI over HTTPS, the lab's admin/admin) ──────────
+ansible_connection: ansible.netcommon.httpapi
+ansible_network_os: arista.eos.eos
+ansible_user: admin
+ansible_password: admin
+ansible_become: true
+ansible_become_method: enable
+ansible_httpapi_port: 443
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: false
+ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+# ── Platform profile: cEOS-lab, as the guide runs it ───────────────────────
+# AVD's built-in cEOS entry disables `update wait-install` (older cEOS
+# could not honour it). The guide runs it on every fabric node with cEOS
+# 4.36, so this entry repeats the built-in entry's feature_support flags
+# and re-enables it. (The built-in entry's errdisable/reload-delay settings
+# are not reproduced — nothing in this design renders them.)
+custom_platform_settings:
+  - platforms: [cEOSLab]
+    feature_support:
+      bgp_update_wait_install: true
+      bgp_update_wait_for_convergence: false
+      evpn_gateway_all_active_multihoming: true
+      evpn_gateway_rd_rt_rewrite: true
+      hardware_validation: false
+      interface_storm_control: false
+      per_interface_l2_mru: false
+      per_interface_l2_mtu: false
+      queue_monitor_length_notify: false
+      sflow_subinterfaces: false
+      subinterface_mtu: false
+    # EOS shows this default explicitly on cEOS; no AVD key for it.
+    raw_eos_cli: |-
+      no service interface inactive port-id allocation disabled
+
+# The two backbone EVPN-MPLS route reflectors, as the Gateway pairs'
+# `evpn_gateway` remote peers see them (BB1/BB2 Loopback0, IPv6). Defined
+# here rather than in DCI.yml because the fabric files that reference it are
+# evaluated for every host in the fabric, not only the Gateways. (The DCI
+# links themselves live in DCI.yml.)
+backbone_evpn_peers:
+  - hostname: BB1
+    ip_address: 2001:db8:bb::1
+    bgp_as: '65000'
+  - hostname: BB2
+    ip_address: 2001:db8:bb::2
+    bgp_as: '65000'
+
+# ── Management ─────────────────────────────────────────────────────────────
+mgmt_gateway: 172.100.100.1
+mgmt_interface_settings:
+  interface: Management0
+  vrf: MGMT
+  description: OOB_MANAGEMENT
+default_mgmt_method: oob
+
+management_eapi:
+  enabled: true
+  vrfs:
+    - name: use_mgmt_interface_vrf
+      enabled: true
+
 aaa_settings:
+  authentication:
+    policies:
+      local:
+        allow_nopassword: true
   authorization:
     exec:
       default: local
   local_users:
-    - name: arista
-      privilege: 15
-      role: network-admin
-      sha512_password: $6$Ap6u4I1WR/jMoNKe$LPLoHgIXFg5kiGPDWGF0w5lVVuOZZ4T15cIBbNxE2ykqh98uVvsi9jPdybkbTXBTZFzi3haaPJVaGVwnpuck40
     - name: admin
       privilege: 15
       role: network-admin
-      sha512_password: $6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/.
+      no_password: true
 
-# Global ARP Timer
-custom_structured_configuration_arp:
-  aging:
-    timeout_default: 1500
-
-# Stop build if validation error is encountered
-avd_data_validation_mode: error
-
-# DNS Settings
 dns_settings:
   domain: aclabs.lab
   servers:
-    - vrf: use_mgmt_interface_vrf
-      ip_address: 8.8.8.8
+    - ip_address: 8.8.8.8
+      vrf: use_mgmt_interface_vrf
 
-# Enable eAPI
-management_eapi:
-  enabled: true
-  enable_http: true
-  enable_https: true
-  vrfs:
-    - enabled: true
-      name: use_mgmt_interface_vrf
+ntp_settings:
+  server_vrf: use_mgmt_interface_vrf
+  servers:
+    # AVD marks the first server `prefer`
+    - name: time.google.com
+      iburst: true
+    - name: time.apple.com
+      iburst: true
+    - name: time.windows.com
+      iburst: true
 
-# Event Monitor in EOS
-event_monitor:
-  enabled: true
-
-# Global MAC Aging Timer
-mac_address_table:
-  aging_time: 1800
-
-# Out of Band Management
-mgmt_gateway: 172.100.100.1
-mgmt_interface: Management0
-mgmt_interface_vrf: MGMT
-default_mgmt_method: oob
-
-# Enable SSH for MGMT VRF
-ssh_settings:
-    vrfs:
-      - name: use_mgmt_interface_vrf
-        enabled: true
-
-# Set source interfaces
 source_interfaces:
   http_client:
     mgmt_interface: true
   ssh_client:
     mgmt_interface: true
 
-# NTP Servers
-ntp_settings:
-  server_vrf: use_mgmt_interface_vrf
-  servers:
-    - name: time.google.com
-      iburst: true
-    - name: time.windows.com
-      iburst: true
-    - name: time.apple.com
-      iburst: true
-
 timezone: America/Detroit
 
-# Global IP MTU for Point-to-Point links
-p2p_uplinks_mtu: 9214
+event_monitor:
+  enabled: true
 
-# Default mode of "routed" interfaces
-custom_structured_configuration_switchport_default:
-  mode: routed
+# ── Baseline knobs the guide sets on every node ────────────────────────────
+custom_structured_configuration_aaa_root:
+  disabled: true
 
-ansible_user: admin
-ansible_password: admin
-ansible_network_os: arista.eos.eos
-# Configure privilege escalation
-ansible_become: true
-ansible_become_method: enable
-# HTTPAPI configuration
-ansible_connection: ansible.netcommon.httpapi
-ansible_httpapi_port: 443
-ansible_httpapi_use_ssl: true
-ansible_httpapi_validate_certs: false
-ansible_python_interpreter: $(which python3)
+custom_structured_configuration_system:
+  l1:
+    unsupported_speed_action: error
+    unsupported_error_correction_action: error
+
+custom_structured_configuration_load_interval:
+  default: 1
+
+# The guide writes `spanning-tree portfast edge` (AVD's default is the older
+# `spanning-tree portfast`). eos_cli_config_gen input, so it rides the CSC.
+custom_structured_configuration_eos_config_future:
+  render_spanning_tree_portfast_edge: true
+
+# `distance bgp 20 200 200` on every BGP speaker.
+bgp_distance:
+  external_routes: 20
+  internal_routes: 200
+  local_routes: 200
+
+# The guide's BGP dialect: one global `neighbor default send-community`.
+# NOTE: `custom_structured_configuration_*` are ordinary Ansible variables —
+# a fabric-level redefinition REPLACES this one rather than merging, so
+# DOMAIN_C_FABRIC and DOMAIN_D_FABRIC (which extend the same key) repeat
+# these two lines; only BACKBONE inherits this copy.
+custom_structured_configuration_router_bgp:
+  neighbor_default:
+    send_community: all
+
+# Every BGP speaker in the lab runs the tuned BFD multihop timers.
+bfd_multihop:
+  interval: 1000
+  min_rx: 1000
+  multiplier: 3
+
+# AVD deactivates the IPv4 unicast address family per EVPN peer group even
+# when `no bgp default ipv4-unicast` already covers it. The fabric renders
+# that global opt-out on every BGP speaker (as the guide does), so the
+# per-group lines are pure noise.
+avd_design_future:
+  remove_redundant_ipv4_unicast_for_peer_groups: true

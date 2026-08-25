@@ -1,0 +1,11 @@
+---
+# D-SW1 — the L2-only switch carries none of the routed-node baseline
+# (`switchport default mode routed`, ARP and MAC aging) and states
+# `no ip routing` explicitly, as the guide does.
+custom_structured_configuration_switchport_default: {}
+custom_structured_configuration_arp: {}
+mac_address_table: {}
+custom_structured_configuration_ip_routing: false
+# ...nor the fabric's connected-redistribution objects (no BGP here).
+custom_structured_configuration_ipv6_prefix_lists: []
+custom_structured_configuration_route_maps: []

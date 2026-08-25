@@ -1,0 +1,101 @@
+---
+# Domain C — connected endpoints (see topology.clab.yml for the cabling)
+#
+#   HostC1  C-LEAF1/2  Po7  VLAN 10   MLAG
+#   HostC2  C-LEAF1/2  Po8  VLAN 30   MLAG
+#   HostC3  C-LEAF3    Et7  VLAN 50   single-homed
+#   HostC4  C-LEAF3/4  Po8  VLAN 10   MLAG
+#   HostC5  C-LEAF4    Et7  VLAN 30   single-homed
+#   HostC6  C-LEAF5/6  Po7  VLAN 70   MLAG
+#   HostC7  C-LEAF5/6  Po8  VLAN 50   MLAG
+#   HostC8  C-LEAF7/8  Po9  VLAN 50   EVPN All-Active (auto-LACP ESI)
+
+port_profiles:
+  - profile: HOST-MLAG
+    mode: access
+    spanning_tree_portfast: edge
+    port_channel:
+      mode: active
+
+  - profile: HOST-SINGLE
+    mode: access
+    spanning_tree_portfast: edge
+
+  # EVPN All-Active multihoming on the Gateway pair: LACP-derived ESI, the
+  # port-channel tracks the local EVPN sessions (no AVD 6.3 keys).
+  - profile: HOST-ES-AA
+    mode: access
+    spanning_tree_portfast: edge
+    port_channel:
+      mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+        lacp_id: c0d6.8200.0000
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
+
+servers:
+  - name: HostC1
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [C-LEAF1, C-LEAF2]
+        vlans: '10'
+        profile: HOST-MLAG
+
+  - name: HostC2
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [C-LEAF1, C-LEAF2]
+        vlans: '30'
+        profile: HOST-MLAG
+
+  - name: HostC3
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [C-LEAF3]
+        vlans: '50'
+        profile: HOST-SINGLE
+
+  - name: HostC4
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [C-LEAF3, C-LEAF4]
+        vlans: '10'
+        profile: HOST-MLAG
+
+  - name: HostC5
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [C-LEAF4]
+        vlans: '30'
+        profile: HOST-SINGLE
+
+  - name: HostC6
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [C-LEAF5, C-LEAF6]
+        vlans: '70'
+        profile: HOST-MLAG
+
+  - name: HostC7
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [C-LEAF5, C-LEAF6]
+        vlans: '50'
+        profile: HOST-MLAG
+
+  - name: HostC8
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet9, Ethernet9]
+        switches: [C-LEAF7, C-LEAF8]
+        vlans: '50'
+        profile: HOST-ES-AA
