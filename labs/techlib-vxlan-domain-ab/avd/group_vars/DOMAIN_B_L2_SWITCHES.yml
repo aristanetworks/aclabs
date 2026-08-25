@@ -1,6 +1,5 @@
 ---
-# B-SW1 — the L2-only switch keeps EOS defaults for the L3-switch knobs the
-# fabric applies elsewhere (routed default port mode, ARP/MAC aging).
+
 custom_structured_configuration_switchport_default: {}
 custom_structured_configuration_arp: {}
 mac_address_table: {}

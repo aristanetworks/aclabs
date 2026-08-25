@@ -1,8 +1,5 @@
 ---
-# Domain B Gateway pair (B-LEAF7/B-LEAF8) — role settings.
-#
-# The Gateways serve the same VLANs/VRFs as the standard leafs but do not
-# run OISM.
+
 standard_leaf: false
 evpn_multicast: false
 underlay_multicast_pim_sm: false

@@ -1,35 +1,17 @@
 ---
-# Domain A — tenant services
-#
-#   VRF PROD (L3VNI 50001): VLAN 10 Blue*, VLAN 30 Orange
-#   VRF DEV  (L3VNI 50002): VLAN 50 Yellow, VLAN 70 Brown*
-#   * = stretched across the domain boundary (multi-domain MAC-VRF)
-#
-# OISM: IPv4 PIM-SSM underlay groups 232.1.1.1 (PROD) / 232.1.1.2 (DEV),
-# PIM/IGMP sources on Loopback101/102 (allocated only to the `A-LEAFS` pod,
-# i.e. not on the Gateways), dual-stack (IPv4 + IPv6) in every VRF.
 
-# OISM-only additions with no AVD 6.3 model (IPv6 OISM, and the Multi-VTEP
-# MLAG router-MAC advertisement). Gated on `standard_leaf` so the Gateway
-# pair — which serves the same VLANs and VRFs without OISM — renders none.
 oism_svi_structured_config:
   ip_igmp: true
   eos_cli: |
     mld
     pim ipv6 sparse-mode
 
-# `redistribute_routes` is a free-form list in cli_config_gen, so these two
-# lines are structured config rather than raw CLI.
 oism_vlan_redistribute:
   redistribute_routes:
     - learned
     - router-mac next-hop vtep primary
     - router-mac virtual-ip next-hop vtep primary
 
-# The guide's per-VRF MLAG peering SVIs keep the tenant MTU and stay up when
-# the peer link drops (AVD writes no_autostate only on the MLAG sync VLAN).
-# Gated on standard_leaf: the Gateway pair has no MLAG SVI to merge onto, and
-# an unmatched entry would CREATE one.
 mlag_vrf_svi:
   PROD:
     vlan_interfaces:
@@ -52,8 +34,6 @@ svi_profiles:
   - profile: TENANT_SVI
     enabled: true
     mtu: 9014
-    # AVD adds `ipv6 enable` (an EUI-64 link-local) on every anycast-v6 SVI
-    # as an IPv6 best practice; the guide's validated configs do not carry it.
     ipv6_enable: false
     structured_config: "{{ oism_svi_structured_config if standard_leaf else {} }}"
     bgp:

@@ -1,16 +1,4 @@
 ---
-# Domain B — connected endpoints (see topology.clab.yml for the cabling)
-#
-#   HostB1  B-LEAF1/2  Po7  VLAN 20   EVPN All-Active
-#   HostB2  B-LEAF1/2  Po8  VLAN 40   EVPN All-Active
-#   HostB3  B-LEAF3    Et7  VLAN 60   single-homed
-#   HostB4  B-LEAF3/4  Po8  VLAN 10   EVPN All-Active (LACP system-id ...0034)
-#   HostB5  B-LEAF4    Et7  VLAN 70   single-homed
-#   HostB6  B-SW1      Et3  VLAN 40   single-homed (behind the L2 switch)
-#   HostB7  B-SW1      Et4  VLAN 80   single-homed (behind the L2 switch)
-#   HostB8  B-LEAF7/8  Po9  VLAN 60   EVPN All-Active (LACP system-id ...0008)
-#
-# The guide labels the host ports with the short host names (B1, B2, ...).
 
 port_profiles:
   - profile: HOST-SINGLE

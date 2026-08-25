@@ -1,22 +1,4 @@
 ---
-# Domain A — fabric shape
-#
-#   Underlay : eBGP, one ASN per MLAG pair (65101/65103/65105), spines 65100
-#   Overlay  : eBGP EVPN, Loopback0 peering to the spines
-#   Leafs    : MLAG pairs with Multi-VTEP MLAG (unique Loopback1 per leaf,
-#              shared Loopback2 per pair), OISM (IPv4 + IPv6)
-#   Gateway  : A-LEAF7/A-LEAF8 — EVPN All-Active Gateway (I-ESI + D-PATH)
-#              towards the backbone in AS 65000, no MLAG, no OISM
-#
-# Addressing
-#   Loopback0 10.0.1.<id>   Loopback1 10.1.1.<id>   Loopback2 10.2.1.<pair>
-#   Spine<->Leaf 192.168.0.0/24 (/31s, spine-major: spine n owns .(16*(n-1))/28)
-#   MLAG: peer link 169.254.0.0/30, L3 peering 192.0.0.0/31 (VLAN 4093 + per-VRF)
-#   OISM sources: Loopback101 10.101.101.<id> (PROD), Loopback102 10.102.102.<id> (DEV)
-#
-# Role switch: `standard_leaf` (group_vars/DOMAIN_A_LEAFS.yml = true,
-# DOMAIN_A_GATEWAYS.yml = false, everything else false) gates the OISM and
-# Multi-VTEP additions that have no AVD 6.3 data model.
 
 fabric_name: DOMAIN_A_FABRIC
 standard_leaf: false

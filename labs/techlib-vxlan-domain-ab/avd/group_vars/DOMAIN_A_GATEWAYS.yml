@@ -1,9 +1,5 @@
 ---
-# Domain A Gateway pair (A-LEAF7/A-LEAF8) — role settings.
-#
-# The Gateways serve the same VLANs/VRFs as the standard leafs but do not
-# run OISM, and they run the guide's tuned BFD multihop timers (the standard
-# leafs and spines use the EOS defaults).
+
 standard_leaf: false
 evpn_multicast: false
 underlay_multicast_pim_sm: false

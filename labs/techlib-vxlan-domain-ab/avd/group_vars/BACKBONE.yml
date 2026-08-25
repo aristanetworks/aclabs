@@ -1,15 +1,4 @@
 ---
-# Backbone — BB1/BB2
-#
-# IPv4 transport between the two domains' Gateway pairs, and EVPN route
-# reflectors in AS 65000 for the Gateways' inter-domain EVPN sessions. No
-# underlay IGP, no VXLAN, no tenants: the only interfaces are the DCI links
-# (group_vars/DCI.yml) and Loopback0 (10.0.0.<id>). Both peerings are
-# dynamic (`bgp listen range`), so the backbone carries no per-Gateway state.
-#
-# Modelled as AVD `spine` nodes with the underlay switched off. AVD only
-# materialises an RR peer group for statically known clients, so the two
-# dynamic peer groups are defined in structured config.
 
 fabric_name: BACKBONE
 
@@ -18,8 +7,6 @@ overlay_routing_protocol: ibgp
 bgp_as: '65000'
 bgp_update_wait_install: false
 
-# The backbone routers carry none of the fabric management preamble beyond
-# the name-server, and default to jumbo frames on every interface.
 dns_settings:
   servers:
     - ip_address: 8.8.8.8
@@ -38,7 +25,6 @@ custom_structured_configuration_management_ssh:
     - name: MGMT
       enable: true
 
-# AS-range gate for the dynamic IPv4 transport sessions from the Gateways.
 custom_structured_configuration_peer_filters:
   - name: DC-ASN-RANGE
     sequence_numbers:

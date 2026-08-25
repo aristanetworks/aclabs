@@ -21,9 +21,7 @@ port_profiles:
     mode: access
     spanning_tree_portfast: edge
 
-  # EVPN All-Active multihoming on the Gateway pair: LACP-derived ESI, the
-  # port-channel tracks the local EVPN sessions (no AVD 6.3 keys for
-  # `identifier auto lacp` or the session tracker — structured config).
+  # EVPN All-Active multihoming on the Gateway pair
   - profile: HOST-ES-AA
     mode: access
     spanning_tree_portfast: edge

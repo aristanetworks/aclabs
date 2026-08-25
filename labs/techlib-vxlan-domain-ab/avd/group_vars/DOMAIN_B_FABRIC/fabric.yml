@@ -1,22 +1,4 @@
 ---
-# Domain B — fabric shape
-#
-#   Underlay : IS-IS level-2 (instance 100), IPv4-unnumbered fabric links
-#   Overlay  : iBGP EVPN in AS 65200, route reflectors on the spines
-#   Leafs    : no MLAG — EVPN All-Active multihoming everywhere (LACP-derived
-#              ESIs), STP root super, OISM (IPv4 + IPv6)
-#   Gateway  : B-LEAF7/B-LEAF8 — EVPN All-Active Gateway (I-ESI + D-PATH)
-#              towards the backbone in AS 65000, no OISM
-#   B-SW1    : L2-only switch dual-homed (All-Active ES) to B-LEAF5/B-LEAF6
-#
-# Addressing
-#   Loopback0 10.0.2.<id>   Loopback1 10.1.2.<id>   NET 49.1111.0000.0000.<id>.00
-#   Spine<->Leaf: ip address unnumbered Loopback0 (no p2p subnets)
-#   OISM sources: Loopback101 10.101.101.<id> (PROD), Loopback102 10.102.102.<id> (DEV)
-#
-# Role switch: `standard_leaf` (group_vars/DOMAIN_B_LEAFS.yml = true,
-# everything else false) gates the OISM additions that have no AVD 6.3
-# data model.
 
 fabric_name: DOMAIN_B_FABRIC
 standard_leaf: false

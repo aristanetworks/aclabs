@@ -1,11 +1,4 @@
 ---
-# Inter-domain point-to-point links: each Gateway pair to BB1/BB2, plus
-# BB1<->BB2. Defined once here for the DCI group (both Gateway pairs +
-# Backbone); every fabric build renders its own end of each link.
-#
-# The links carry IPv4 only and stay out of the local underlay IGP — the
-# Gateways run explicit eBGP sessions to the backbone over them (see the
-# Gateway node groups in each fabric).
 
 l3_edge:
   p2p_links_profiles:
@@ -14,7 +7,6 @@ l3_edge:
       include_in_underlay_protocol: false
 
   p2p_links:
-    # Domain A Gateways <-> Backbone (172.16.1.0/24)
     - nodes: [A-LEAF7, BB1]
       interfaces: [Ethernet7, Ethernet1]
       ip: [172.16.1.1/31, 172.16.1.0/31]
@@ -32,7 +24,6 @@ l3_edge:
       ip: [172.16.1.7/31, 172.16.1.6/31]
       profile: DCI
 
-    # Domain B Gateways <-> Backbone (172.16.2.0/24)
     - nodes: [B-LEAF7, BB1]
       interfaces: [Ethernet7, Ethernet3]
       ip: [172.16.2.1/31, 172.16.2.0/31]
@@ -50,7 +41,6 @@ l3_edge:
       ip: [172.16.2.7/31, 172.16.2.6/31]
       profile: DCI
 
-    # Backbone interconnect
     - nodes: [BB1, BB2]
       interfaces: [Ethernet5, Ethernet5]
       ip: [172.16.255.0/31, 172.16.255.1/31]
