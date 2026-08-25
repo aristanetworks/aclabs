@@ -1,0 +1,10 @@
+---
+
+standard_leaf: false
+evpn_multicast: false
+underlay_multicast_pim_sm: false
+
+bfd_multihop:
+  interval: 1000
+  min_rx: 1000
+  multiplier: 3

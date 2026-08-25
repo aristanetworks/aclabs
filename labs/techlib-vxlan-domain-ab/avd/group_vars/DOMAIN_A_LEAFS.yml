@@ -1,0 +1,17 @@
+---
+
+standard_leaf: true
+
+pod_name: A-LEAFS
+
+custom_structured_configuration_router_multicast:
+  ipv4:
+    software_forwarding: null
+
+custom_structured_configuration_vxlan_interface:
+  vxlan1:
+    vxlan:
+      mlag_source_interface: Loopback2
+    eos_cli: vxlan multicast ipv6
+
+custom_structured_configuration_virtual_source_nat_vrfs: null

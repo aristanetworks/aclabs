@@ -1,0 +1,15 @@
+---
+
+standard_leaf: true
+
+pod_name: B-LEAFS
+
+custom_structured_configuration_router_multicast:
+  ipv4:
+    software_forwarding: null
+
+custom_structured_configuration_vxlan_interface:
+  vxlan1:
+    eos_cli: vxlan multicast ipv6
+
+custom_structured_configuration_virtual_source_nat_vrfs: null

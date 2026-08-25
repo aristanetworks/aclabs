@@ -1,0 +1,5 @@
+---
+
+standard_leaf: false
+evpn_multicast: false
+underlay_multicast_pim_sm: false

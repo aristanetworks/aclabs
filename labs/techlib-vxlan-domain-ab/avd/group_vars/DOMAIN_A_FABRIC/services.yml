@@ -1,0 +1,112 @@
+---
+
+oism_svi_structured_config:
+  ip_igmp: true
+  eos_cli: |
+    mld
+    pim ipv6 sparse-mode
+
+oism_vlan_redistribute:
+  redistribute_routes:
+    - learned
+    - router-mac next-hop vtep primary
+    - router-mac virtual-ip next-hop vtep primary
+
+mlag_vrf_svi:
+  PROD:
+    vlan_interfaces:
+      - name: Vlan3001
+        mtu: 9014
+        no_autostate: true
+  DEV:
+    vlan_interfaces:
+      - name: Vlan3002
+        mtu: 9014
+        no_autostate: true
+
+oism_vrf_bgp_cli: |-
+  evpn multicast
+     address-family ipv4
+     !
+     address-family ipv6
+
+svi_profiles:
+  - profile: TENANT_SVI
+    enabled: true
+    mtu: 9014
+    ipv6_enable: false
+    structured_config: "{{ oism_svi_structured_config if standard_leaf else {} }}"
+    bgp:
+      structured_config: "{{ oism_vlan_redistribute if standard_leaf else {} }}"
+
+tenants:
+  - name: DOMAIN_A
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: PROD
+        vrf_vni: 50001
+        vtep_diagnostic:
+          loopback: 101
+          loopback_description: OISM PIM/IGMP Source (PROD)
+          loopback_ip_pools:
+            - pod: A-LEAFS
+              ipv4_pool: 10.101.101.0/24
+        evpn_l3_multicast:
+          enabled: true
+          evpn_underlay_l3_multicast_group: 232.1.1.1
+        mlag_ibgp_peering_vlan: 3001
+        structured_config: "{{ mlag_vrf_svi.PROD if standard_leaf else {} }}"
+        bgp:
+          structured_config:
+            updates:
+              wait_install: true
+          raw_eos_cli: "{{ oism_vrf_bgp_cli if standard_leaf else none }}"
+        raw_eos_cli: "{{ 'router multicast\n   vrf PROD\n      ipv6\n         routing' if standard_leaf else none }}"
+        svis:
+          - id: 10
+            name: Blue
+            tags: [BLUE]
+            profile: TENANT_SVI
+            ip_address_virtual: 10.10.10.1/24
+            ipv6_address_virtuals: [2001:db8:10:10::1/64]
+          - id: 30
+            name: Orange
+            tags: [ORANGE]
+            profile: TENANT_SVI
+            evpn_l2_multi_domain: false
+            ip_address_virtual: 10.30.30.1/24
+            ipv6_address_virtuals: [2001:db8:30:30::1/64]
+
+      - name: DEV
+        vrf_vni: 50002
+        vtep_diagnostic:
+          loopback: 102
+          loopback_description: OISM PIM/IGMP Source (DEV)
+          loopback_ip_pools:
+            - pod: A-LEAFS
+              ipv4_pool: 10.102.102.0/24
+        evpn_l3_multicast:
+          enabled: true
+          evpn_underlay_l3_multicast_group: 232.1.1.2
+        mlag_ibgp_peering_vlan: 3002
+        structured_config: "{{ mlag_vrf_svi.DEV if standard_leaf else {} }}"
+        bgp:
+          structured_config:
+            updates:
+              wait_install: true
+          raw_eos_cli: "{{ oism_vrf_bgp_cli if standard_leaf else none }}"
+        raw_eos_cli: "{{ 'router multicast\n   vrf DEV\n      ipv6\n         routing' if standard_leaf else none }}"
+        svis:
+          - id: 50
+            name: Yellow
+            tags: [YELLOW]
+            profile: TENANT_SVI
+            evpn_l2_multi_domain: false
+            ip_address_virtual: 10.50.50.1/24
+            ipv6_address_virtuals: [2001:db8:50:50::1/64]
+          - id: 70
+            name: Brown
+            tags: [BROWN]
+            profile: TENANT_SVI
+            ip_address_virtual: 10.70.70.1/24
+            ipv6_address_virtuals: [2001:db8:70:70::1/64]

@@ -1,0 +1,92 @@
+---
+
+port_profiles:
+  - profile: HOST-SINGLE
+    mode: access
+    spanning_tree_portfast: edge
+
+  # EVPN All-Active multihoming: LACP-derived ESI, the port-channel tracks
+  # the local EVPN sessions (no AVD 6.3 keys for `identifier auto lacp` or
+  # the session tracker — structured config).
+  - profile: HOST-ES-AA
+    mode: access
+    spanning_tree_portfast: edge
+    port_channel:
+      mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+        lacp_id: c0d6.8200.0000
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
+
+servers:
+  - name: B1
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [B-LEAF1, B-LEAF2]
+        vlans: '20'
+        profile: HOST-ES-AA
+
+  - name: B2
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [B-LEAF1, B-LEAF2]
+        vlans: '40'
+        profile: HOST-ES-AA
+
+  - name: B3
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [B-LEAF3]
+        vlans: '60'
+        profile: HOST-SINGLE
+
+  - name: B4
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [B-LEAF3, B-LEAF4]
+        vlans: '10'
+        profile: HOST-ES-AA
+        port_channel:
+          structured_config:
+            lacp_id: c0d6.8200.0034
+
+  - name: B5
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [B-LEAF4]
+        vlans: '70'
+        profile: HOST-SINGLE
+
+  - name: B6
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet3]
+        switches: [B-SW1]
+        vlans: '40'
+        profile: HOST-SINGLE
+
+  - name: B7
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet4]
+        switches: [B-SW1]
+        vlans: '80'
+        profile: HOST-SINGLE
+
+  - name: B8
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet9, Ethernet9]
+        switches: [B-LEAF7, B-LEAF8]
+        vlans: '60'
+        profile: HOST-ES-AA
+        port_channel:
+          structured_config:
+            lacp_id: c0d6.8200.0008

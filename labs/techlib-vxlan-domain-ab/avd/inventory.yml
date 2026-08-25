@@ -1,14 +1,12 @@
 ---
+
 all:
   children:
-    #########################################################
-    # Domain A — eBGP + MLAG standard leafs + A/A Gateway
-    #########################################################
+
     DOMAIN_A_FABRIC:
       children:
         DOMAIN_A_SPINES:
           vars:
-            anta_tags: [domain_a, spine, ntp]
             type: spine
           hosts:
             A-SPINE1:
@@ -17,13 +15,7 @@ all:
             A-SPINE4:
         DOMAIN_A_LEAFS:
           vars:
-            anta_tags: "{{ ['domain_a', 'leaf', 'ntp']
-              + (['gateway', 'a_gateway', 'es', 'bfd', 'dci'] if inventory_hostname in ['A-LEAF7', 'A-LEAF8'] else ['standard_leaf', 'mlag', 'oism'])
-              + (['df_primary'] if inventory_hostname == 'A-LEAF7' else ['df_secondary'] if inventory_hostname == 'A-LEAF8' else []) }}"
             type: l3leaf
-            # PARITY-LEDGER class 20 — the guide's A leafs run
-            # `maximum-paths 128` (spines keep the 4 default).
-            bgp_maximum_paths: 128
           hosts:
             A-LEAF1:
             A-LEAF2:
@@ -31,23 +23,17 @@ all:
             A-LEAF4:
             A-LEAF5:
             A-LEAF6:
+        DOMAIN_A_GATEWAYS:
+          vars:
+            type: l3leaf
+          hosts:
             A-LEAF7:
             A-LEAF8:
-    DOMAIN_A_ENDPOINTS:
-      children:
-        DOMAIN_A_LEAFS:
-    DOMAIN_A_SERVICES:
-      children:
-        DOMAIN_A_LEAFS:
 
-    #########################################################
-    # Domain B — IS-IS underlay + iBGP + A/A everywhere
-    #########################################################
     DOMAIN_B_FABRIC:
       children:
         DOMAIN_B_SPINES:
           vars:
-            anta_tags: [domain_b, spine, ntp, bfd, isis]
             type: spine
           hosts:
             B-SPINE1:
@@ -56,11 +42,6 @@ all:
             B-SPINE4:
         DOMAIN_B_LEAFS:
           vars:
-            anta_tags: "{{ ['domain_b', 'leaf', 'ntp', 'bfd', 'es', 'isis']
-              + (['gateway', 'b_gateway', 'dci'] if inventory_hostname in ['B-LEAF7', 'B-LEAF8'] else ['standard_leaf', 'oism'])
-              + (['df_primary'] if inventory_hostname == 'B-LEAF7' else ['df_secondary'] if inventory_hostname == 'B-LEAF8' else []) }}"
-            # ^ B DF prefs tie at 2000/2000 (guide truth) — B-LEAF7 wins the
-            #   lowest-originator tiebreak, hence df_primary.
             type: l3leaf
           hosts:
             B-LEAF1:
@@ -69,29 +50,27 @@ all:
             B-LEAF4:
             B-LEAF5:
             B-LEAF6:
+        DOMAIN_B_GATEWAYS:
+          vars:
+            type: l3leaf
+          hosts:
             B-LEAF7:
             B-LEAF8:
         DOMAIN_B_L2_SWITCHES:
           vars:
-            anta_tags: [domain_b, l2leaf, ntp]
-            type: l2leaf              # AVD's L2-only leaf role — no BGP, no VXLAN
+            type: l2leaf
           hosts:
             B-SW1:
-    DOMAIN_B_ENDPOINTS:
-      children:
-        DOMAIN_B_LEAFS:
-        DOMAIN_B_L2_SWITCHES:
-    DOMAIN_B_SERVICES:
-      children:
-        DOMAIN_B_LEAFS:
 
-    #########################################################
-    # Backbone (BB1, BB2) — dedicated node_type for the DCI
-    #########################################################
     BACKBONE:
       vars:
-        anta_tags: [backbone, dci]
-        type: backbone_router          # Custom node_type_keys entry defined in BACKBONE.yml
+        type: spine
       hosts:
         BB1:
         BB2:
+
+    DCI:
+      children:
+        DOMAIN_A_GATEWAYS:
+        DOMAIN_B_GATEWAYS:
+        BACKBONE:

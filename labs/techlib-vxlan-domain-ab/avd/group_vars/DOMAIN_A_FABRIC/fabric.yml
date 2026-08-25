@@ -1,0 +1,426 @@
+---
+
+fabric_name: DOMAIN_A_FABRIC
+standard_leaf: false
+
+evpn_ebgp_multihop: 3
+evpn_import_pruning: true          # route import match-failure action discard
+evpn_multicast: true               # OISM — the Gateway group switches this off
+underlay_multicast_pim_sm: true    # pim ipv4 sparse-mode on fabric links
+
+# Underlay MTU on every fabric link (also drives the MLAG peering SVIs).
+p2p_uplinks_mtu: 9214
+
+mac_address_table:
+  aging_time: 1800
+
+custom_structured_configuration_arp:
+  aging:
+    timeout_default: 1500
+
+custom_structured_configuration_switchport_default:
+  mode: routed
+
+general_settings:
+  dhcp_relay:
+    tunnel_requests_disabled: true
+    mlag_peerlink_requests_disabled: true
+
+# ── BGP ────────────────────────────────────────────────────────────────────
+# `maximum_routes: null` on every group: AVD writes a protective prefix
+# limit (0 = unlimited on the EVPN groups, 256000 on the IPv4 ones); the
+# guide sets none and leaves EOS at its own default.
+bgp_peer_groups:
+  ipv4_underlay_peers:
+    name: LOCAL-IPV4-PEERS
+    structured_config:
+      maximum_routes: null
+  mlag_ipv4_underlay_peer:
+    name: MLAG-IPV4-PEER
+    structured_config:
+      maximum_routes: null
+      # The guide filters EVPN-imported routes from the MLAG peer session
+      # outbound (RM-MLAG-PEER-OUT) instead of AVD's inbound origin rewrite.
+      route_map_out: RM-MLAG-PEER-OUT
+  evpn_overlay_peers:
+    name: LOCAL-EVPN-PEERS
+    structured_config:
+      maximum_routes: null
+  evpn_overlay_core:
+    name: REMOTE-EVPN-PEERS
+    structured_config:
+      maximum_routes: null
+      # The Gateways present themselves to the backbone RRs as AS 65000, so
+      # the session is iBGP from the backbone's point of view — no multihop.
+      local_as: '65000'
+      ebgp_multihop: null
+
+# The guide's connected-redistribution: PL-LOOPBACKS spans every loopback
+# range (including the Multi-VTEP shared Loopback2, which AVD's generated
+# list would not know about) plus the p2p /31s. AVD's own loopback filter is
+# switched off and the objects are owned here.
+underlay_filter_redistribute_connected: false
+
+custom_structured_configuration_prefix_lists:
+  - name: PL-LOOPBACKS
+    sequence_numbers:
+      - sequence: 10
+        action: permit 10.0.0.0/16 eq 32
+      - sequence: 20
+        action: permit 10.1.0.0/16 eq 32
+      - sequence: 30
+        action: permit 10.2.0.0/16 eq 32
+  - name: PL-P2P-UNDERLAY
+    sequence_numbers:
+      - sequence: 10
+        action: permit 192.168.0.0/24 le 31
+
+# RM-MLAG-PEER-OUT + its extcommunity list exist only on the MLAG leafs.
+custom_structured_configuration_route_maps: "{{ redistribute_route_maps + (mlag_leaf_route_maps if standard_leaf else []) }}"
+custom_structured_configuration_ip_extcommunity_lists_regexp: "{{ mlag_leaf_ecl if standard_leaf else [] }}"
+
+redistribute_route_maps:
+  - name: RM-CONN-2-BGP
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ip address prefix-list PL-LOOPBACKS
+      - sequence: 20
+        type: permit
+        match:
+          - ip address prefix-list PL-P2P-UNDERLAY
+
+mlag_leaf_route_maps:
+  - name: RM-MLAG-PEER-OUT
+    sequence_numbers:
+      - sequence: 10
+        type: deny
+        match:
+          - extcommunity evpn-imported
+      - sequence: 20
+        type: permit
+        set:
+          - origin incomplete
+
+mlag_leaf_ecl:
+  - name: evpn-imported
+    entries:
+      - type: permit
+        regexp: RT.*
+
+# Redeclared (not merged) because this fabric extends the key — see all.yml.
+custom_structured_configuration_router_bgp:
+  neighbor_default:
+    send_community: all
+  redistribute:
+    connected:
+      enabled: true
+      route_map: RM-CONN-2-BGP
+
+# ── Naming (matches the guide; purely cosmetic) ────────────────────────────
+trunk_groups:
+  mlag:
+    name: MLAG_PEER
+  mlag_l3:
+    name: MLAG_PEER
+mlag_peer_vlan_name: MLAG_PEER_SYNC
+mlag_peer_l3_vlan_name: MLAG_PEER_L3_UNDERLAY
+mlag_peer_l3_vrf_vlan_name: MLAG_PEER_VRF_{vrf}
+fabric_ip_addressing:
+  mlag:
+    algorithm: same_subnet         # both leafs of every pair use the pool's first /31
+
+router_id_loopback_description: Globally Unique Address
+vtep_loopback_description: Unique VTEP IP
+default_underlay_p2p_ethernet_description: "{peer}"
+overlay_bgp_peer_description: "{peer}.EVPN"
+mlag_bgp_peer_description: "{mlag_peer}.IPV4"
+mlag_port_channel_description: MLAG PEER LINK
+mlag_peer_svi_description: MLAG PEER SYNC
+mlag_peer_l3_svi_description: MLAG UNDERLAY BGP PEER
+mlag_peer_l3_vrf_svi_description: MLAG iBGP Peer - VRF {vrf}
+default_connected_endpoints_description: "{endpoint}"
+default_connected_endpoints_port_channel_description: "{endpoint}"
+
+# Cabling rule, stated once: leaf <id> lands on Ethernet<id> of every spine.
+# AVD derives each leaf's `uplink_switch_interfaces` from this.
+default_interfaces:
+  - types: [spine]
+    platforms: [cEOSLab]
+    downlink_interfaces: [Ethernet1-8]
+  - types: [l3leaf]
+    platforms: [cEOSLab]
+    uplink_interfaces: [Ethernet1-4]
+    mlag_interfaces: [Ethernet5-6]
+
+# ── Spines ─────────────────────────────────────────────────────────────────
+spine:
+  defaults:
+    platform: cEOSLab
+    bgp_as: '65100'
+    loopback_ipv4_pool: 10.0.1.0/24
+    structured_config:
+      # Spines have no L2 services, so AVD turns spanning-tree off; the guide
+      # leaves EOS at its default (mstp).
+      spanning_tree:
+        mode: mstp
+      # The guide runs PIM on every spine downlink, including the two that
+      # face the (non-OISM) Gateway pair; AVD only enables it towards
+      # multicast-enabled leafs.
+      ethernet_interfaces:
+        - name: Ethernet7
+          pim:
+            ipv4:
+              sparse_mode: true
+        - name: Ethernet8
+          pim:
+            ipv4:
+              sparse_mode: true
+  nodes:
+    - name: A-SPINE1
+      id: 201
+      mgmt_ip: 172.100.101.101/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.0/28
+          downlink_interfaces: [Ethernet1-8]
+    - name: A-SPINE2
+      id: 202
+      mgmt_ip: 172.100.101.102/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.16/28
+          downlink_interfaces: [Ethernet1-8]
+    - name: A-SPINE3
+      id: 203
+      mgmt_ip: 172.100.101.103/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.32/28
+          downlink_interfaces: [Ethernet1-8]
+    - name: A-SPINE4
+      id: 204
+      mgmt_ip: 172.100.101.104/22
+      downlink_pools:
+        - ipv4_pool: 192.168.0.48/28
+          downlink_interfaces: [Ethernet1-8]
+
+# ── Leafs ──────────────────────────────────────────────────────────────────
+l3leaf:
+  defaults:
+    platform: cEOSLab
+    loopback_ipv4_pool: 10.0.1.0/24
+    vtep_loopback: Loopback1
+    vtep_loopback_ipv4_pool: 10.1.1.0/24
+    # One ASN per MLAG pair: the range is indexed by the node id (for an MLAG
+    # pair, the primary's id), giving 65101/65103/65105 per pod and
+    # 65107/65108 on the two standalone Gateways.
+    bgp_as: '65101-65108'
+    uplink_switches: [A-SPINE1, A-SPINE2, A-SPINE3, A-SPINE4]
+    mlag_domain_id: '100'
+    mlag_port_channel_id: 1000
+    mlag_peer_ipv4_pool: 169.254.0.0/30
+    mlag_peer_l3_ipv4_pool: 192.0.0.0/31
+    mlag_ibgp_origin_incomplete: false     # the guide uses RM-MLAG-PEER-OUT instead
+    underlay_multicast:
+      pim_sm:
+        mlag: false                        # no PIM on the MLAG L3 peering SVI
+    virtual_router_mac_address: 00:1c:73:00:00:01
+    spanning_tree_mode: mstp
+    spanning_tree_priority: 0
+    # The MLAG L3 peering SVI stays up when the peer link goes down (the
+    # guide's dialect on every MLAG SVI; AVD only writes it on Vlan4094).
+    mlag_peer_l3_vlan_structured_config:
+      no_autostate: true
+    structured_config:
+      spanning_tree:
+        edge_port:
+          bpduguard_default: true
+      ip_dhcp_relay:
+        information_option: true
+      vxlan_interface:
+        vxlan1:
+          vxlan:
+            # AVD's Multi-VTEP MLAG sources the unique VTEP from Loopback0
+            # and the shared one from the VTEP loopback; the guide keeps the
+            # unique VTEP on Loopback1. The pair's shared VTEP (Loopback2)
+            # is MLAG-only, so it rides the leaf role file.
+            source_interface: Loopback1
+      router_bgp:
+        # BGP peer tagging: routes learned from the spines are never
+        # advertised back to the spines.
+        peer_groups:
+          - name: LOCAL-IPV4-PEERS
+            peer_tag_in: SPINES
+            peer_tag_out_discard: SPINES
+          - name: LOCAL-EVPN-PEERS
+            peer_tag_in: SPINES
+            peer_tag_out_discard: SPINES
+
+  node_groups:
+    - group: POD1
+      filter:
+        tags: [BLUE, ORANGE]
+      # MLD snooping for IPv6 OISM — no AVD 6.3 key.
+      raw_eos_cli: |-
+        mld snooping
+           vlan 10,30
+      structured_config:
+        # AVD excludes the MLAG VLANs from spanning-tree; the guide also
+        # excludes the per-VRF MLAG peering VLANs.
+        spanning_tree:
+          no_spanning_tree_vlan: '3001,4093-4094'
+        loopback_interfaces:
+          - name: Loopback2
+            description: MLAG Shared VTEP IP
+            ip_address: 10.2.1.1/32
+      nodes:
+        - name: A-LEAF1
+          id: 1
+          mgmt_ip: 172.100.101.105/22
+          vtep_loopback_ipv4_address: 10.1.1.1
+        - name: A-LEAF2
+          id: 2
+          mgmt_ip: 172.100.101.106/22
+          vtep_loopback_ipv4_address: 10.1.1.2
+
+    - group: POD2
+      filter:
+        tags: [BLUE, ORANGE, YELLOW]
+      raw_eos_cli: |-
+        mld snooping
+           vlan 10,30,50
+      structured_config:
+        spanning_tree:
+          no_spanning_tree_vlan: '3001-3002,4093-4094'
+        loopback_interfaces:
+          - name: Loopback2
+            description: MLAG Shared VTEP IP
+            ip_address: 10.2.1.3/32
+      nodes:
+        - name: A-LEAF3
+          id: 3
+          mgmt_ip: 172.100.101.107/22
+          vtep_loopback_ipv4_address: 10.1.1.3
+        - name: A-LEAF4
+          id: 4
+          mgmt_ip: 172.100.101.108/22
+          vtep_loopback_ipv4_address: 10.1.1.4
+
+    - group: POD3
+      filter:
+        tags: [YELLOW, BROWN]
+      raw_eos_cli: |-
+        mld snooping
+           vlan 50,70
+      structured_config:
+        spanning_tree:
+          no_spanning_tree_vlan: '3002,4093-4094'
+        loopback_interfaces:
+          - name: Loopback2
+            description: MLAG Shared VTEP IP
+            ip_address: 10.2.1.5/32
+      nodes:
+        - name: A-LEAF5
+          id: 5
+          mgmt_ip: 172.100.101.109/22
+          vtep_loopback_ipv4_address: 10.1.1.5
+        - name: A-LEAF6
+          id: 6
+          mgmt_ip: 172.100.101.110/22
+          vtep_loopback_ipv4_address: 10.1.1.6
+
+    # EVPN All-Active Gateway pair. Distinct ASN per Gateway, no MLAG, no
+    # OISM (group_vars/DOMAIN_A_GATEWAYS.yml), All-Active I-ESI towards the
+    # backbone.
+    - group: GATEWAYS
+      mlag: false
+      filter:
+        tags: [BLUE, YELLOW, BROWN]
+      evpn_gateway:
+        remote_peers: "{{ backbone_evpn_peers }}"   # group_vars/DCI.yml
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+          mode: rd-rt-rewrite
+        d_path:
+          local_domain_id: '1:1'
+          remote_domain_id: '99:99'
+        all_active_multihoming:
+          enabled: true
+          evpn_ethernet_segment:
+            identifier: '0000:aaaa:0007:0008:0000'
+            rt_import: '00:aa:aa:07:08:00'
+      structured_config:
+        # Gateway loopbacks are the only prefixes advertised into the
+        # backbone's IPv4 transport.
+        prefix_lists:
+          - name: PL-GATEWAY-LOOP
+            sequence_numbers:
+              - sequence: 10
+                action: permit 10.0.1.7/32
+              - sequence: 20
+                action: permit 10.0.1.8/32
+              - sequence: 30
+                action: permit 10.1.1.7/32
+              - sequence: 40
+                action: permit 10.1.1.8/32
+        route_maps:
+          - name: RM-AS65000-IPV4-OUT
+            sequence_numbers:
+              - sequence: 10
+                type: permit
+                match:
+                  - ip address prefix-list PL-GATEWAY-LOOP
+        router_bgp:
+          peer_groups:
+            - name: REMOTE-IPV4-PEERS
+              remote_as: '65000'
+              route_map_out: RM-AS65000-IPV4-OUT
+            - name: LOCAL-EVPN-PEERS
+              session_tracker: TRACK-LOCAL-EVPN-PEERS
+          session_trackers:
+            - name: TRACK-LOCAL-EVPN-PEERS
+              recovery_delay: 10
+          address_family_ipv4:
+            peer_groups:
+              - name: REMOTE-IPV4-PEERS
+                activate: true
+          address_family_evpn:
+            layer_2_fec_in_place_update:
+              enabled: true
+          # Three lines with no AVD 6.3 keys: auto-derived ES route-targets
+          # for the LACP-derived ESIs, the local-domain D-PATH attach tag,
+          # and the deterministic DF preference on the I-ESI (A-LEAF7 wins).
+          # Rendered inside the node's own `router bgp <asn>` context.
+          eos_cli: |-
+            address-family evpn
+               route type ethernet-segment route-target auto
+               domain identifier 65100:65100 attach
+               !
+               evpn ethernet-segment domain all
+                  designated-forwarder election algorithm preference {{ 2000 if inventory_hostname == 'A-LEAF7' else 1000 }}
+      nodes:
+        - name: A-LEAF7
+          id: 7
+          mgmt_ip: 172.100.101.111/22
+          structured_config:
+            router_bgp:
+              neighbors:
+                - ip_address: 172.16.1.0
+                  peer_group: REMOTE-IPV4-PEERS
+                  description: BB1.IPV4
+                - ip_address: 172.16.1.4
+                  peer_group: REMOTE-IPV4-PEERS
+                  description: BB2.IPV4
+        - name: A-LEAF8
+          id: 8
+          mgmt_ip: 172.100.101.112/22
+          structured_config:
+            router_bgp:
+              neighbors:
+                - ip_address: 172.16.1.2
+                  peer_group: REMOTE-IPV4-PEERS
+                  description: BB1.IPV4
+                - ip_address: 172.16.1.6
+                  peer_group: REMOTE-IPV4-PEERS
+                  description: BB2.IPV4

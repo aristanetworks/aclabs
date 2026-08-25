@@ -1,0 +1,100 @@
+---
+# Domain A — connected endpoints (see topology.clab.yml for the cabling)
+#
+#   HostA1  A-LEAF1/2  Po7  VLAN 10   MLAG
+#   HostA2  A-LEAF1/2  Po8  VLAN 30   MLAG
+#   HostA3  A-LEAF3    Et7  VLAN 50   single-homed
+#   HostA4  A-LEAF3/4  Po8  VLAN 10   MLAG
+#   HostA5  A-LEAF4    Et7  VLAN 30   single-homed
+#   HostA6  A-LEAF5/6  Po7  VLAN 70   MLAG
+#   HostA7  A-LEAF5/6  Po8  VLAN 50   MLAG
+#   HostA8  A-LEAF7/8  Po9  VLAN 50   EVPN All-Active (auto-LACP ESI)
+
+port_profiles:
+  - profile: HOST-MLAG
+    mode: access
+    spanning_tree_portfast: edge
+    port_channel:
+      mode: active
+
+  - profile: HOST-SINGLE
+    mode: access
+    spanning_tree_portfast: edge
+
+  # EVPN All-Active multihoming on the Gateway pair
+  - profile: HOST-ES-AA
+    mode: access
+    spanning_tree_portfast: edge
+    port_channel:
+      mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+        lacp_id: c0d6.8200.0000
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
+
+servers:
+  - name: HostA1
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [A-LEAF1, A-LEAF2]
+        vlans: '10'
+        profile: HOST-MLAG
+
+  - name: HostA2
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [A-LEAF1, A-LEAF2]
+        vlans: '30'
+        profile: HOST-MLAG
+
+  - name: HostA3
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [A-LEAF3]
+        vlans: '50'
+        profile: HOST-SINGLE
+
+  - name: HostA4
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [A-LEAF3, A-LEAF4]
+        vlans: '10'
+        profile: HOST-MLAG
+
+  - name: HostA5
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [A-LEAF4]
+        vlans: '30'
+        profile: HOST-SINGLE
+
+  - name: HostA6
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [A-LEAF5, A-LEAF6]
+        vlans: '70'
+        profile: HOST-MLAG
+
+  - name: HostA7
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [A-LEAF5, A-LEAF6]
+        vlans: '50'
+        profile: HOST-MLAG
+
+  - name: HostA8
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet9, Ethernet9]
+        switches: [A-LEAF7, A-LEAF8]
+        vlans: '50'
+        profile: HOST-ES-AA

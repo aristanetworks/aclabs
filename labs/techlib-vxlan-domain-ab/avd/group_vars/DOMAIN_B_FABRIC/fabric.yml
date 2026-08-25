@@ -1,0 +1,345 @@
+---
+
+fabric_name: DOMAIN_B_FABRIC
+standard_leaf: false
+
+underlay_routing_protocol: isis
+underlay_isis_instance_name: '100'
+isis_area_id: '49.1111'
+isis_system_id_format: node_id
+isis_default_is_type: level-2
+isis_default_circuit_type: level-2
+
+overlay_routing_protocol: ibgp
+bgp_as: '65200'
+
+evpn_import_pruning: true          # route import match-failure action discard
+evpn_multicast: true               # OISM — the Gateway group switches this off
+underlay_multicast_pim_sm: true    # pim ipv4 sparse-mode on fabric links
+
+# Underlay MTU on every fabric link (also drives the MLAG peering SVIs).
+p2p_uplinks_mtu: 9214
+
+# Every Domain B BGP speaker runs the tuned BFD multihop timers.
+bfd_multihop:
+  interval: 1000
+  min_rx: 1000
+  multiplier: 3
+
+mac_address_table:
+  aging_time: 1800
+
+custom_structured_configuration_arp:
+  aging:
+    timeout_default: 1500
+
+custom_structured_configuration_switchport_default:
+  mode: routed
+
+general_settings:
+  dhcp_relay:
+    tunnel_requests_disabled: true
+
+# ── BGP ────────────────────────────────────────────────────────────────────
+# `maximum_routes: null`: AVD writes a protective prefix limit the guide
+# does not set (see DOMAIN_A_FABRIC/fabric.yml).
+bgp_peer_groups:
+  evpn_overlay_peers:
+    name: LOCAL-EVPN-PEERS
+    structured_config:
+      maximum_routes: null
+  evpn_overlay_core:
+    name: REMOTE-EVPN-PEERS
+    structured_config:
+      maximum_routes: null
+      # The Gateways present themselves to the backbone RRs as AS 65000, so
+      # the session is iBGP from the backbone's point of view — no multihop.
+      local_as: '65000'
+      ebgp_multihop: null
+
+# ── Naming (matches the guide; purely cosmetic) ────────────────────────────
+router_id_loopback_description: Globally Unique Address
+vtep_loopback_description: VTEP IP
+default_underlay_p2p_ethernet_description: "{peer}"
+overlay_bgp_peer_description: "{peer}.EVPN"
+default_connected_endpoints_description: "{endpoint}"
+default_connected_endpoints_port_channel_description: "{endpoint}"
+
+# Cabling rule, stated once: leaf <id> lands on Ethernet<id> of every spine.
+default_interfaces:
+  - types: [spine]
+    platforms: [cEOSLab]
+    downlink_interfaces: [Ethernet1-8]
+  - types: [l3leaf]
+    platforms: [cEOSLab]
+    uplink_interfaces: [Ethernet1-4]
+
+# AVD 6.3 has no IPv4-unnumbered option for fabric uplinks: the leafs carry a
+# placeholder uplink pool (never rendered) and every fabric interface is
+# overridden to `ip address unnumbered Loopback0` by name.
+unnumbered_fabric_interface: &unnumbered
+  ip_address: unnumbered Loopback0
+
+# ── Spines (EVPN route reflectors, cluster-id 10.0.2.205) ──────────────────
+spine:
+  defaults:
+    platform: cEOSLab
+    loopback_ipv4_pool: 10.0.2.0/24
+    isis_system_id_prefix: '0000.0000'
+    bgp_cluster_id: 10.0.2.205
+    structured_config:
+      # Spines have no L2 services, so AVD turns spanning-tree off; the guide
+      # leaves EOS at its default (mstp).
+      spanning_tree:
+        mode: mstp
+      ethernet_interfaces:
+        - name: Ethernet1
+          <<: *unnumbered
+        - name: Ethernet2
+          <<: *unnumbered
+        - name: Ethernet3
+          <<: *unnumbered
+        - name: Ethernet4
+          <<: *unnumbered
+        - name: Ethernet5
+          <<: *unnumbered
+        - name: Ethernet6
+          <<: *unnumbered
+        # The guide runs PIM on every spine downlink, including the two that
+        # face the (non-OISM) Gateway pair.
+        - name: Ethernet7
+          <<: *unnumbered
+          pim:
+            ipv4:
+              sparse_mode: true
+        - name: Ethernet8
+          <<: *unnumbered
+          pim:
+            ipv4:
+              sparse_mode: true
+  nodes:
+    - name: B-SPINE1
+      id: 201
+      mgmt_ip: 172.100.102.101/22
+    - name: B-SPINE2
+      id: 202
+      mgmt_ip: 172.100.102.102/22
+    - name: B-SPINE3
+      id: 203
+      mgmt_ip: 172.100.102.103/22
+    - name: B-SPINE4
+      id: 204
+      mgmt_ip: 172.100.102.104/22
+
+# ── Leafs ──────────────────────────────────────────────────────────────────
+l3leaf:
+  defaults:
+    platform: cEOSLab
+    loopback_ipv4_pool: 10.0.2.0/24
+    vtep_loopback: Loopback1
+    vtep_loopback_ipv4_pool: 10.1.2.0/24
+    uplink_ipv4_pool: 192.168.255.0/24        # placeholder — links are unnumbered
+    uplink_switches: [B-SPINE1, B-SPINE2, B-SPINE3, B-SPINE4]
+    isis_system_id_prefix: '0000.0000'
+    mlag: false
+    virtual_router_mac_address: 00:1c:73:00:00:01
+    spanning_tree_mode: mstp
+    spanning_tree_root_super: true
+    structured_config:
+      spanning_tree:
+        edge_port:
+          bpduguard_default: true
+      ethernet_interfaces:
+        - name: Ethernet1
+          <<: *unnumbered
+        - name: Ethernet2
+          <<: *unnumbered
+        - name: Ethernet3
+          <<: *unnumbered
+        - name: Ethernet4
+          <<: *unnumbered
+      # AVD's iBGP anti-readvertisement guard (RM-EVPN-SOO-IN/OUT +
+      # ECL-EVPN-SOO + a per-VTEP SOO stamp) is applied unconditionally to
+      # iBGP EVPN clients with no input knob. It never fires behind route
+      # reflectors — an RR does not reflect a route back to its originator —
+      # and the guide runs without it, so the generated objects are dropped
+      # and the peer-group attaches un-set. These are the only route-maps or
+      # extcommunity lists on a Domain B node, so both lists null wholesale.
+      route_maps: null
+      ip_extcommunity_lists: null
+      router_bgp:
+        # Every All-Active port-channel tracks the local EVPN sessions.
+        peer_groups:
+          - name: LOCAL-EVPN-PEERS
+            session_tracker: TRACK-LOCAL-EVPN-PEERS
+        session_trackers:
+          - name: TRACK-LOCAL-EVPN-PEERS
+            recovery_delay: 10
+        address_family_evpn:
+          layer_2_fec_in_place_update:
+            enabled: true
+          peer_groups:
+            - name: LOCAL-EVPN-PEERS
+              route_map_in: null
+              route_map_out: null
+        # Auto-derived ES route-targets for the LACP-derived ESIs (no AVD key).
+        eos_cli: |-
+          address-family evpn
+             route type ethernet-segment route-target auto
+
+  node_groups:
+    - group: B_POD1
+      filter:
+        tags: [GREEN, PURPLE]
+      # MLD snooping for IPv6 OISM — no AVD 6.3 key.
+      raw_eos_cli: |-
+        mld snooping
+           vlan 20,40
+      nodes:
+        - name: B-LEAF1
+          id: 1
+          mgmt_ip: 172.100.102.105/22
+        - name: B-LEAF2
+          id: 2
+          mgmt_ip: 172.100.102.106/22
+
+    # B-LEAF3/B-LEAF4 share the All-Active segment for HostB4 (VLAN 10) but
+    # each hosts a different DEV VLAN (60 Red on B-LEAF3, 70 Brown on B-LEAF4).
+    - group: B_POD2
+      nodes:
+        - name: B-LEAF3
+          id: 3
+          mgmt_ip: 172.100.102.107/22
+          filter:
+            tags: [BLUE, RED]
+          raw_eos_cli: |-
+            mld snooping
+               vlan 10,60
+        - name: B-LEAF4
+          id: 4
+          mgmt_ip: 172.100.102.108/22
+          filter:
+            tags: [BLUE, BROWN]
+          raw_eos_cli: |-
+            mld snooping
+               vlan 10,70
+
+    - group: B_POD3
+      filter:
+        tags: [PURPLE, BLACK]
+      raw_eos_cli: |-
+        mld snooping
+           vlan 40,80
+      nodes:
+        - name: B-LEAF5
+          id: 5
+          mgmt_ip: 172.100.102.109/22
+        - name: B-LEAF6
+          id: 6
+          mgmt_ip: 172.100.102.110/22
+
+    # EVPN All-Active Gateway pair. No OISM (group_vars/DOMAIN_B_GATEWAYS.yml),
+    # All-Active I-ESI towards the backbone, the fabric's loopback ranges
+    # aggregated into the backbone's IPv4 transport.
+    - group: GATEWAYS
+      filter:
+        tags: [BLUE, RED, BROWN]
+      evpn_gateway:
+        remote_peers: "{{ backbone_evpn_peers }}"   # group_vars/DCI.yml
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+          mode: rd-rt-rewrite
+        d_path:
+          local_domain_id: '2:2'
+          remote_domain_id: '99:99'
+        all_active_multihoming:
+          enabled: true
+          evpn_ethernet_segment:
+            identifier: '0000:bbbb:0007:0008:0000'
+            rt_import: '00:bb:bb:07:08:00'
+      structured_config:
+        router_bgp:
+          peer_groups:
+            - name: REMOTE-IPV4-PEERS
+              remote_as: '65000'
+          address_family_ipv4:
+            peer_groups:
+              - name: REMOTE-IPV4-PEERS
+                activate: true
+          aggregate_addresses:
+            - prefix: 10.0.2.0/24
+            - prefix: 10.1.2.0/24
+          # The leaf-wide eos_cli plus two Gateway-only lines with no AVD 6.3
+          # keys: the local-domain D-PATH attach tag and the deterministic DF
+          # preference on the I-ESI (B-LEAF7 wins). eos_cli is a string, so
+          # the leaf-wide line is repeated rather than merged.
+          eos_cli: |-
+            address-family evpn
+               route type ethernet-segment route-target auto
+               domain identifier 65200:65200 attach
+               !
+               evpn ethernet-segment domain all
+                  designated-forwarder election algorithm preference {{ 2000 if inventory_hostname == 'B-LEAF7' else 1000 }}
+      nodes:
+        - name: B-LEAF7
+          id: 7
+          mgmt_ip: 172.100.102.111/22
+          structured_config:
+            router_bgp:
+              neighbors:
+                - ip_address: 172.16.2.0
+                  peer_group: REMOTE-IPV4-PEERS
+                  description: BB1.IPV4
+                - ip_address: 172.16.2.4
+                  peer_group: REMOTE-IPV4-PEERS
+                  description: BB2.IPV4
+              address_family_ipv4:
+                networks:
+                  - prefix: 10.0.2.7/32
+                  - prefix: 10.1.2.7/32
+        - name: B-LEAF8
+          id: 8
+          mgmt_ip: 172.100.102.112/22
+          structured_config:
+            router_bgp:
+              neighbors:
+                - ip_address: 172.16.2.2
+                  peer_group: REMOTE-IPV4-PEERS
+                  description: BB1.IPV4
+                - ip_address: 172.16.2.6
+                  peer_group: REMOTE-IPV4-PEERS
+                  description: BB2.IPV4
+              address_family_ipv4:
+                networks:
+                  - prefix: 10.0.2.8/32
+                  - prefix: 10.1.2.8/32
+
+# ── B-SW1: L2 switch, All-Active dual-homed to B-LEAF5/B-LEAF6 ─────────────
+l2leaf:
+  defaults:
+    platform: cEOSLab
+    uplink_type: port-channel
+    uplink_switches: [B-LEAF5, B-LEAF6]
+    uplink_interfaces: [Ethernet1, Ethernet2]
+    uplink_switch_interfaces: [Ethernet7, Ethernet7]
+    spanning_tree_mode: mstp
+    filter:
+      tags: [PURPLE, BLACK]
+    # The leaf side of the uplink is an All-Active EVPN segment (LACP-derived
+    # ESI, tracked against the local EVPN sessions) — no AVD 6.3 keys.
+    uplink_switch_port_channel_structured_config:
+      evpn_ethernet_segment:
+        identifier: auto lacp
+      lacp_id: c0d6.8200.0506
+      bgp:
+        session_tracker: TRACK-LOCAL-EVPN-PEERS
+    structured_config:
+      spanning_tree:
+        edge_port:
+          bpduguard_default: true
+  nodes:
+    - name: B-SW1
+      id: 1
+      mgmt_ip: 172.100.102.113/22
