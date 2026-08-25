@@ -72,6 +72,15 @@ make deploy
 make validate
 ```
 
+#### Compare with the lab's startup configs
+
+```bash
+make parity
+```
+
+The data models, the mechanisms behind each guide feature, and the list of
+accepted rendering differences are documented in [`avd/DESIGN.md`](avd/DESIGN.md).
+
 Happy Labbing! 🥳🧪
 
 Last reviewed: April 14th, 2026

@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-"""Generate PARITY-STATUS.md — the running parity tally for the AVD rebuild.
+"""Render-vs-target report for the techlib domain-ab AVD models.
 
-Compares avd/intended/configs/*.cfg (rendered) against
-startup-configs/clab-arista-evpn-dg-domain-ab/*/startup-config (the guide),
-under the amended parity contract (content-set parity; see PARITY-LEDGER.md).
+Compares avd/intended/configs/*.cfg (rendered) with
+startup-configs/clab-arista-evpn-dg-domain-ab/*/startup-config (targets)
+as content SETS: every non-exempt line must appear on both sides, position
+is never compared. Exempt (cosmetic by agreement): comment lines,
+interface/host descriptions, BGP neighbor descriptions, `no shutdown`.
 
-Reports:
-  1. Scoreboard — residual non-exempt line count, per side.
-  2. Accepted deviations — each exemption with the line count it absorbs
-     TODAY (measured live, so the cost of every acceptance stays visible).
-  3. Remaining differences — top exact lines and digit-normalized shapes,
-     each side, plus a per-node residual table.
-
-Run from the lab root:  python3 avd/scripts/parity_report.py
+  python3 avd/scripts/parity_report.py            # summary -> avd/PARITY-STATUS.md + stdout
+  python3 avd/scripts/parity_report.py A-LEAF1    # full missing/extra listing for one node
+  python3 avd/scripts/parity_report.py --all      # full listing for every node
 """
 import re
+import sys
 from collections import Counter
 from datetime import date
 from pathlib import Path
@@ -28,17 +26,17 @@ EXEMPT_COUNTS = Counter()
 
 
 def classify_exempt(s: str) -> str | None:
-    if not s or s == "!":
-        return None  # structural blanks/bangs — not counted as deviations
+    if not s or s == "!" or s == "end":
+        return None
     if s.startswith("! "):
         return "comment lines"
     if s.startswith("description "):
         return "interface/host descriptions"
     if re.match(r"neighbor \S+ description ", s):
-        return "BGP neighbor descriptions (contract amended Day 54 s2)"
+        return "BGP neighbor descriptions"
     if s == "no shutdown":
-        return "explicit `no shutdown` (accepted AVD default)"
-    return ""  # not exempt
+        return "explicit `no shutdown` (AVD default)"
+    return ""
 
 
 def lines(p: Path) -> list[str]:
@@ -64,83 +62,99 @@ def top_table(counter: Counter, n: int) -> str:
     return "\n".join(["| count | line |", "|---|---|", *rows])
 
 
+def node_diff(name: str):
+    rc = RC / f"{name}.cfg"
+    a = Counter(lines(SC / name / "startup-config"))
+    b = Counter(lines(rc)) if rc.is_file() else Counter()
+    return a - b, b - a, rc.is_file()
+
+
+nodes = sorted(d.name for d in SC.iterdir() if d.is_dir())
+args = [a for a in sys.argv[1:]]
+
+if args and args != ["--all"]:
+    for name in args:
+        m, e, ok = node_diff(name)
+        print(f"===== {name} {'(NOT RENDERED)' if not ok else ''} missing={sum(m.values())} extra={sum(e.values())}")
+        print("--- MISSING (in target, not rendered)")
+        for ln, c in sorted(m.items()):
+            print(f"  {'x'+str(c)+' ' if c > 1 else ''}{ln}")
+        print("--- EXTRA (rendered, not in target)")
+        for ln, c in sorted(e.items()):
+            print(f"  {'x'+str(c)+' ' if c > 1 else ''}{ln}")
+    sys.exit(0)
+
 missing, extra = Counter(), Counter()
 per_node = []
-for d in sorted(SC.iterdir()):
-    rc = RC / f"{d.name}.cfg"
-    if not rc.is_file():
+for name in nodes:
+    m, e, ok = node_diff(name)
+    if not ok:
+        per_node.append((name, "-", "-"))
         continue
-    a = Counter(lines(d / "startup-config"))
-    b = Counter(lines(rc))
-    m, e = a - b, b - a
-    per_node.append((d.name, sum(m.values()), sum(e.values())))
+    per_node.append((name, sum(m.values()), sum(e.values())))
     missing.update(m)
     extra.update(e)
+    if args == ["--all"]:
+        print(f"===== {name} missing={sum(m.values())} extra={sum(e.values())}")
+        for ln, c in sorted(m.items()):
+            print(f"  - {'x'+str(c)+' ' if c > 1 else ''}{ln}")
+        for ln, c in sorted(e.items()):
+            print(f"  + {'x'+str(c)+' ' if c > 1 else ''}{ln}")
 
 m_total, e_total = sum(missing.values()), sum(extra.values())
-m_shapes = Counter()
+m_shapes, e_shapes = Counter(), Counter()
 for ln, c in missing.items():
     m_shapes[norm(ln)] += c
-e_shapes = Counter()
 for ln, c in extra.items():
     e_shapes[norm(ln)] += c
 
-report = f"""# PARITY-STATUS — running tally (auto-generated)
+report = f"""# PARITY-STATUS — rendered configs vs the lab's startup-configs (auto-generated)
 
 > Generated {date.today().isoformat()} by `avd/scripts/parity_report.py`.
-> Contract: **content-set parity** (line ordering exempt) — see
-> `PARITY-LEDGER.md` for the class taxonomy and capability verdicts.
+> Content-set comparison (ordering never compared). Exempt as cosmetic:
+> comments, descriptions, BGP neighbor descriptions, explicit `no shutdown`.
 
 ## Scoreboard
 
 | Metric | Lines |
 |---|---|
 | **Residual total (non-exempt)** | **{m_total + e_total}** |
-| MISSING — in the guide, not yet rendered | {m_total} |
-| EXTRA — rendered, not in the guide | {e_total} |
-| Baseline at campaign start (round-11 models, same contract) | 2,943 |
+| MISSING — in the target, not rendered | {m_total} |
+| EXTRA — rendered, not in the target | {e_total} |
 
-## Accepted deviations (the exemption list, with today's absorbed counts)
+## Exempt lines absorbed today
 
-These are the deliberate departures from strict line-for-line parity.
-Counts are measured live across both sides so the cost of each
-acceptance stays visible.
-
-| Accepted deviation | Lines absorbed today |
+| Exemption | Lines |
 |---|---|
-""" + "\n".join(
-    f"| {k} | {v} |" for k, v in sorted(EXEMPT_COUNTS.items())
-) + f"""
-| line ordering (positions never compared) | n/a — structural |
+""" + "\n".join(f"| {k} | {v} |" for k, v in sorted(EXEMPT_COUNTS.items())) + f"""
 
 ## Remaining differences
 
 ### MISSING — top exact lines ({len(missing)} distinct)
 
-{top_table(missing, 15)}
+{top_table(missing, 25)}
 
 ### MISSING — top shapes (digits→`#`)
 
-{top_table(m_shapes, 10)}
+{top_table(m_shapes, 15)}
 
 ### EXTRA — top exact lines ({len(extra)} distinct)
 
-{top_table(extra, 15)}
+{top_table(extra, 40)}
 
 ### EXTRA — top shapes (digits→`#`)
 
-{top_table(e_shapes, 10)}
+{top_table(e_shapes, 20)}
 
 ## Per-node residual
 
-| Node | missing | extra | total |
-|---|---|---|---|
-""" + "\n".join(
-    f"| {n} | {m} | {e} | {m + e} |" for n, m, e in per_node
-) + f"""
-| **TOTAL** | **{m_total}** | **{e_total}** | **{m_total + e_total}** |
+| Node | missing | extra |
+|---|---|---|
+""" + "\n".join(f"| {n} | {m} | {e} |" for n, m, e in per_node) + f"""
+| **TOTAL** | **{m_total}** | **{e_total}** |
 """
 
 OUT.write_text(report)
-print(f"PARITY-STATUS.md written — residual {m_total + e_total} "
-      f"(missing {m_total} / extra {e_total})")
+print(f"PARITY-STATUS.md written — residual {m_total + e_total} (missing {m_total} / extra {e_total})")
+for n, m, e in per_node:
+    print(f"  {n:10s} missing={m:>4} extra={e:>4}")

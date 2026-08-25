@@ -1,0 +1,124 @@
+---
+# Domain B — tenant services
+#
+#   VRF PROD (L3VNI 50001): VLAN 10 Blue*, VLAN 20 Green, VLAN 40 Purple
+#   VRF DEV  (L3VNI 50002): VLAN 60 Red, VLAN 70 Brown*, VLAN 80 Black
+#   * = stretched across the domain boundary (multi-domain MAC-VRF)
+#
+# OISM: IPv4 PIM-SSM underlay groups 232.1.1.1 (PROD) / 232.1.1.2 (DEV),
+# PIM/IGMP sources on Loopback101/102 (allocated only to the `B-LEAFS` pod,
+# i.e. not on the Gateways), dual-stack (IPv4 + IPv6) in every VRF.
+
+# OISM-only additions with no AVD 6.3 model (IPv6 OISM, and the router-MAC
+# advertisement with the primary VTEP next-hop). Gated on `standard_leaf` so
+# the Gateway pair — which serves the same VLANs and VRFs without OISM —
+# renders none.
+oism_svi_structured_config:
+  eos_cli: mld
+
+# `redistribute_routes` is a free-form list in cli_config_gen, so these two
+# lines are structured config rather than raw CLI.
+oism_vlan_redistribute:
+  redistribute_routes:
+    - learned
+    - router-mac next-hop vtep primary
+    - router-mac virtual-ip next-hop vtep primary
+
+oism_vrf_bgp_cli: |-
+  evpn multicast
+     address-family ipv4
+     !
+     address-family ipv6
+
+svi_profiles:
+  - profile: TENANT_SVI
+    enabled: true
+    mtu: 9014
+    # AVD adds `ipv6 enable` (an EUI-64 link-local) on every anycast-v6 SVI
+    # as an IPv6 best practice; the guide's validated configs do not carry it.
+    ipv6_enable: false
+    structured_config: "{{ oism_svi_structured_config if standard_leaf else {} }}"
+    bgp:
+      structured_config: "{{ oism_vlan_redistribute if standard_leaf else {} }}"
+
+tenants:
+  - name: DOMAIN_B
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: PROD
+        vrf_vni: 50001
+        vtep_diagnostic:
+          loopback: 101
+          loopback_description: OISM PIM/IGMP Source (PROD)
+          loopback_ip_pools:
+            - pod: B-LEAFS
+              ipv4_pool: 10.101.101.0/24
+        evpn_l3_multicast:
+          enabled: true
+          evpn_underlay_l3_multicast_group: 232.1.1.1
+        bgp:
+          structured_config:
+            updates:
+              wait_install: true
+          raw_eos_cli: "{{ oism_vrf_bgp_cli if standard_leaf else none }}"
+        raw_eos_cli: "{{ 'router multicast\n   vrf PROD\n      ipv6\n         routing' if standard_leaf else none }}"
+        svis:
+          - id: 10
+            name: Blue
+            tags: [BLUE]
+            profile: TENANT_SVI
+            ip_address_virtual: 10.10.10.1/24
+            ipv6_address_virtuals: [2001:db8:10:10::1/64]
+          - id: 20
+            name: Green
+            tags: [GREEN]
+            profile: TENANT_SVI
+            evpn_l2_multi_domain: false
+            ip_address_virtual: 10.20.20.1/24
+            ipv6_address_virtuals: [2001:db8:20:20::1/64]
+          - id: 40
+            name: Purple
+            tags: [PURPLE]
+            profile: TENANT_SVI
+            evpn_l2_multi_domain: false
+            ip_address_virtual: 10.40.40.1/24
+            ipv6_address_virtuals: [2001:db8:40:40::1/64]
+
+      - name: DEV
+        vrf_vni: 50002
+        vtep_diagnostic:
+          loopback: 102
+          loopback_description: OISM PIM/IGMP Source (DEV)
+          loopback_ip_pools:
+            - pod: B-LEAFS
+              ipv4_pool: 10.102.102.0/24
+        evpn_l3_multicast:
+          enabled: true
+          evpn_underlay_l3_multicast_group: 232.1.1.2
+        bgp:
+          structured_config:
+            updates:
+              wait_install: true
+          raw_eos_cli: "{{ oism_vrf_bgp_cli if standard_leaf else none }}"
+        raw_eos_cli: "{{ 'router multicast\n   vrf DEV\n      ipv6\n         routing' if standard_leaf else none }}"
+        svis:
+          - id: 60
+            name: Red
+            tags: [RED]
+            profile: TENANT_SVI
+            evpn_l2_multi_domain: false
+            ip_address_virtual: 10.60.60.1/24
+            ipv6_address_virtuals: [2001:db8:60:60::1/64]
+          - id: 70
+            name: Brown
+            tags: [BROWN]
+            profile: TENANT_SVI
+            ip_address_virtual: 10.70.70.1/24
+            ipv6_address_virtuals: [2001:db8:70:70::1/64]
+          - id: 80
+            name: Black
+            tags: [BLACK]
+            profile: TENANT_SVI
+            evpn_l2_multi_domain: false
+            ip_address_virtual: 10.80.80.1/24
+            ipv6_address_virtuals: [2001:db8:80:80::1/64]

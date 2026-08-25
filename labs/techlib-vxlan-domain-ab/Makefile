@@ -73,35 +73,13 @@ validate-bb: ## Run ANTA tests against Backbone (BB1/BB2)
 validate: validate-a validate-b validate-bb ## Run ANTA tests against everything (A + B + Backbone)
 
 ##################################################
-# Config parity check — diff rendered vs. tech-library reference
-#
-# TECHLIB env var must point at the tech-library repo root.
-# Example: `TECHLIB=~/repos/tech-library make diff-a`
+# Config parity — rendered configs vs. the lab's startup-configs
 ##################################################
 
-TECHLIB_CFG := $(TECHLIB)/docs/data_center/evpnvxlan/deployment_guide/domains_a_b/full_configs
-RENDERED    := $(CURRENT_DIR)/avd/intended/configs
+.PHONY: parity
+parity: ## Compare avd/intended/configs with startup-configs (writes avd/PARITY-STATUS.md)
+	python3 avd/scripts/parity_report.py
 
-.PHONY: diff-a
-diff-a: ## Diff Domain A rendered configs vs. tech-library reference (requires TECHLIB=...)
-	@for h in A-SPINE1 A-SPINE2 A-SPINE3 A-SPINE4 A-LEAF1 A-LEAF2 A-LEAF3 A-LEAF4 A-LEAF5 A-LEAF6 A-LEAF7 A-LEAF8; do \
-		echo "=== $$h ==="; \
-		diff -u $(RENDERED)/$$h.cfg $(TECHLIB_CFG)/$$h.cfg || true; \
-	done
-
-.PHONY: diff-b
-diff-b: ## Diff Domain B rendered configs vs. tech-library reference (requires TECHLIB=...)
-	@for h in B-SPINE1 B-SPINE2 B-SPINE3 B-SPINE4 B-LEAF1 B-LEAF2 B-LEAF3 B-LEAF4 B-LEAF5 B-LEAF6 B-LEAF7 B-LEAF8 B-SW1; do \
-		echo "=== $$h ==="; \
-		diff -u $(RENDERED)/$$h.cfg $(TECHLIB_CFG)/$$h.cfg || true; \
-	done
-
-.PHONY: diff-bb
-diff-bb: ## Diff Backbone rendered configs vs. tech-library reference (requires TECHLIB=...)
-	@for h in BB1 BB2; do \
-		echo "=== $$h ==="; \
-		diff -u $(RENDERED)/$$h.cfg $(TECHLIB_CFG)/$$h.cfg || true; \
-	done
-
-.PHONY: diff
-diff: diff-a diff-b diff-bb ## Diff everything vs. tech-library reference (requires TECHLIB=...)
+.PHONY: parity-node
+parity-node: ## Full missing/extra listing for one node, e.g. make parity-node NODE=A-LEAF7
+	python3 avd/scripts/parity_report.py $(NODE)

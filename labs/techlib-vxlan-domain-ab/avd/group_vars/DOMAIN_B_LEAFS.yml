@@ -1,0 +1,23 @@
+---
+# Domain B standard leafs (B-LEAF1..6) — role settings.
+#
+# `standard_leaf` gates the OISM additions that have no AVD 6.3 model (see
+# DOMAIN_B_FABRIC/services.yml and fabric.yml).
+standard_leaf: true
+
+# The OISM PIM/IGMP source loopbacks are allocated per pod
+# (vtep_diagnostic.loopback_ip_pools); the Gateway pair has no pod entry and
+# therefore gets none.
+pod_name: B-LEAFS
+
+# AVD adds `software-forwarding sfe` under `router multicast` on every OISM
+# node; the guide's lab does not run it. Removed so the multicast data plane
+# matches what the guide validated.
+custom_structured_configuration_router_multicast:
+  ipv4:
+    software_forwarding: null
+
+# IPv6 OISM on the VTEP — no AVD 6.3 key, and OISM-leaf-only.
+custom_structured_configuration_vxlan_interface:
+  vxlan1:
+    eos_cli: vxlan multicast ipv6
