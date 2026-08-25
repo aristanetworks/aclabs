@@ -78,28 +78,28 @@ interface Port-Channel8
 !
 interface Ethernet1
    description D-SPINE1
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
 !
 interface Ethernet2
    description D-SPINE2
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
 !
 interface Ethernet3
    description D-SPINE3
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
 !
 interface Ethernet4
    description D-SPINE4
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5

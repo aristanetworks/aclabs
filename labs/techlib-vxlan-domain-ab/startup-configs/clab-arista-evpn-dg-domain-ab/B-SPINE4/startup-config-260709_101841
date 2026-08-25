@@ -39,7 +39,7 @@ aaa authorization exec default local
 !
 interface Ethernet1
    description B-LEAF1
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode
@@ -49,7 +49,7 @@ interface Ethernet1
 !
 interface Ethernet2
    description B-LEAF2
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode
@@ -59,7 +59,7 @@ interface Ethernet2
 !
 interface Ethernet3
    description B-LEAF3
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode
@@ -69,7 +69,7 @@ interface Ethernet3
 !
 interface Ethernet4
    description B-LEAF4
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode
@@ -79,7 +79,7 @@ interface Ethernet4
 !
 interface Ethernet5
    description B-LEAF5
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode
@@ -89,7 +89,7 @@ interface Ethernet5
 !
 interface Ethernet6
    description B-LEAF6
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode
@@ -99,7 +99,7 @@ interface Ethernet6
 !
 interface Ethernet7
    description B-LEAF7
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode
@@ -109,7 +109,7 @@ interface Ethernet7
 !
 interface Ethernet8
    description B-LEAF8
-   mtu 9114
+   mtu 9214
    no switchport
    ip address unnumbered Loopback0
    pim ipv4 sparse-mode

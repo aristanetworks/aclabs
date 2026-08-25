@@ -94,28 +94,28 @@ interface Port-Channel1000
 !
 interface Ethernet1
    description A-SPINE1
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.5/31
    pim ipv4 sparse-mode
 !
 interface Ethernet2
    description A-SPINE2
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.21/31
    pim ipv4 sparse-mode
 !
 interface Ethernet3
    description A-SPINE3
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.37/31
    pim ipv4 sparse-mode
 !
 interface Ethernet4
    description A-SPINE4
-   mtu 9114
+   mtu 9214
    no switchport
    ip address 192.168.0.53/31
    pim ipv4 sparse-mode
@@ -214,13 +214,13 @@ interface Vlan3002
 !
 interface Vlan4093
    description MLAG UNDERLAY BGP PEER
-   mtu 9114
+   mtu 9214
    no autostate
    ip address 192.0.0.0/31
 !
 interface Vlan4094
    description MLAG PEER SYNC
-   mtu 9114
+   mtu 9214
    no autostate
    ip address 169.254.0.1/30
 !

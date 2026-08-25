@@ -92,7 +92,7 @@ interface Port-Channel1000
 !
 interface Ethernet1
    description C-SPINE1
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
@@ -100,7 +100,7 @@ interface Ethernet1
 !
 interface Ethernet2
    description C-SPINE2
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
@@ -108,7 +108,7 @@ interface Ethernet2
 !
 interface Ethernet3
    description C-SPINE3
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
@@ -116,7 +116,7 @@ interface Ethernet3
 !
 interface Ethernet4
    description C-SPINE4
-   mtu 9114
+   mtu 9214
    no switchport
    ipv6 enable
    ipv6 nd ra interval 5
@@ -209,13 +209,13 @@ interface Vlan3002
 !
 interface Vlan4093
    description MLAG UNDERLAY BGP PEER
-   mtu 9114
+   mtu 9214
    no autostate
    ipv6 enable
 !
 interface Vlan4094
    description MLAG PEER SYNC
-   mtu 9114
+   mtu 9214
    no autostate
    ipv6 address 2001:db8:4094::2/64
 !
