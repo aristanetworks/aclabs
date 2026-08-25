@@ -173,8 +173,9 @@ content sets (ordering is never compared). Exempt as cosmetic: comment
 lines, interface/host descriptions, BGP neighbor descriptions, explicit
 `no shutdown`. Everything else is listed below with its rationale. The
 current tally is in `PARITY-STATUS.md`; at the time of writing it is 137
-missing / 664 extra lines across 27 nodes, and every one belongs to a class
-below.
+missing / 536 extra lines across 27 nodes. Every one belongs to a class
+below, and every class is either cosmetic or functionally equivalent —
+there is no remaining AVD addition that changes what the switch does.
 
 ### In the target, not rendered (functionally equivalent)
 
@@ -213,14 +214,6 @@ Domain B fabric link (uniform, so no path changes); `maximum-paths 4` under
 `router bgp`; PL-LOOPBACKS `seq 30 permit 10.2.0.0/16 eq 32` on the spines
 and Gateways (nothing is connected in that range there).
 
-AVD additions with a (benign) footprint — the ones worth a decision:
-
-| Addition | Effect | To remove |
-|---|---|---|
-| `maximum-routes 0` on the EVPN peer groups, `maximum-routes 256000` on the IPv4/MLAG groups | Replaces the EOS default prefix limit (12000) with "no limit" / 256000. AVD's protective default; the guide sets none. | `structured_config: {maximum_routes: null}` on the `bgp_peer_groups` entries |
-| Domain B SOO machinery: `RM-EVPN-SOO-IN/OUT`, `ECL-EVPN-SOO`, `set extcommunity soo <vtep>:1 additive`, `route-map … in/out` on `LOCAL-EVPN-PEERS` (all B VTEPs incl. the Gateways) | AVD's iBGP anti-readvertisement guard, applied unconditionally to iBGP EVPN clients (no input knob): every EVPN route the VTEP sends to the RRs carries its own SOO, and routes carrying it are dropped inbound. Never fires with route reflectors (an RR does not reflect a route back to its originator); the extcommunity is visible on the routes, including across the DCI. | On `l3leaf.defaults.structured_config` (Domain B): `route_maps: null`, `ip_extcommunity_lists: null`, `router_bgp.address_family_evpn.peer_groups: [{name: LOCAL-EVPN-PEERS, route_map_in: null, route_map_out: null}]` |
-| `ip address virtual source-nat vrf <VRF> address 10.10x.10x.<id>` on OISM leafs | Sources the switch's own traffic from the anycast SVI via the OISM loopback (lets `ping` from the SVI work per leaf). | `virtual_source_nat_vrfs: null` in the leaf role's structured config |
-
 Render-only artefacts of raw CLI — the re-entered context headers
 (`address-family evpn`, `evpn ethernet-segment domain all`, `evpn
 multicast`, `router multicast`, `vrf <VRF>`): EOS merges re-entered stanzas
@@ -238,6 +231,9 @@ at config load, so the running config is identical.
 | `no neighbor <EVPN-GROUP> activate` under `address-family ipv4` (and the empty `address-family ipv4` stanza it created on the Domain B nodes) | Redundant with `no bgp default ipv4-unicast`, which every BGP speaker renders — as every target does. AVD writes the per-group deactivation because the EOS default is `bgp default ipv4-unicast`. | `avd_design_future.remove_redundant_ipv4_unicast_for_peer_groups: true` (all.yml) |
 | `ipv6 enable` on every dual-stack SVI | AVD adds an EUI-64 link-local as an IPv6 best practice; the guide's validated configs do not carry it. Suppressed to reproduce exactly what the lab runs — a maintainer may prefer AVD's default. | `ipv6_enable: false` on the `TENANT_SVI` profile |
 | `ip dhcp relay information option` on the spines | The option is a leaf concern (no relay agent runs on a spine). | Set on the leaf role's `structured_config.ip_dhcp_relay` instead of `general_settings` |
+| `maximum-routes 0` on the EVPN peer groups and `256000` on the IPv4/MLAG groups | AVD's protective prefix limit. The guide sets none, and `maximum-routes 0` would in fact *remove* the 12,000-prefix limit EOS applies by default. Not required. | `maximum_routes: null` on every `bgp_peer_groups` entry |
+| Domain B iBGP SOO guard — `RM-EVPN-SOO-IN/OUT`, `ECL-EVPN-SOO`, the per-VTEP `set extcommunity soo … additive`, and the peer-group attaches | AVD applies its anti-readvertisement guard unconditionally to iBGP EVPN clients (no input knob). It cannot fire behind route reflectors — an RR never reflects a route back to its originator — and the guide runs without it. Not required. | On the Domain B `l3leaf.defaults.structured_config`: `route_maps: null`, `ip_extcommunity_lists: null` (the SOO objects are the only occupants of both lists on a B node), plus `router_bgp.address_family_evpn.peer_groups[LOCAL-EVPN-PEERS]` with `route_map_in: null` / `route_map_out: null` |
+| `ip address virtual source-nat vrf … address …` on the OISM leafs | AVD pairs it with `vtep_diagnostic` so switch-originated traffic on an anycast SVI is sourced from the VRF's OISM loopback. The guide does not carry it. Not required. | `custom_structured_configuration_virtual_source_nat_vrfs: null` in the OISM-leaf role files |
 
 ## AVD 6.3.0 gaps this design works around
 

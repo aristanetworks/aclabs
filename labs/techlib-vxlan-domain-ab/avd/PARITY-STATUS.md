@@ -8,9 +8,9 @@
 
 | Metric | Lines |
 |---|---|
-| **Residual total (non-exempt)** | **801** |
+| **Residual total (non-exempt)** | **673** |
 | MISSING — in the target, not rendered | 137 |
-| EXTRA — rendered, not in the target | 664 |
+| EXTRA — rendered, not in the target | 536 |
 
 ## Exempt lines absorbed today
 
@@ -73,7 +73,7 @@
 | 4× | `neighbor REMOTE-EVPN-PEERS remote-as #` |
 | 4× | `aggregate-address #.#.#.#/#` |
 
-### EXTRA — top exact lines (147 distinct)
+### EXTRA — top exact lines (111 distinct)
 
 | count | line |
 |---|---|
@@ -83,13 +83,11 @@
 | 26× | `switchport mode access` |
 | 25× | `transceiver qsfp default-mode 4x10G` |
 | 24× | `neighbor LOCAL-EVPN-PEERS send-community` |
-| 24× | `neighbor LOCAL-EVPN-PEERS maximum-routes 0` |
 | 18× | `evpn multicast` |
 | 18× | `router multicast` |
 | 12× | `router bfd` |
 | 12× | `multihop interval 300 min-rx 300 multiplier 3` |
 | 12× | `neighbor LOCAL-IPV4-PEERS send-community` |
-| 12× | `neighbor LOCAL-IPV4-PEERS maximum-routes 256000` |
 | 12× | `maximum-paths 4` |
 | 10× | `vrf PROD` |
 | 10× | `vxlan vlan 10 vni 10010` |
@@ -102,21 +100,23 @@
 | 8× | `neighbor 10.0.1.204 remote-as 65100` |
 | 8× | `vrf DEV` |
 | 8× | `spanning-tree mode mstp` |
-| 8× | `route-map RM-EVPN-SOO-IN deny 10` |
-| 8× | `match extcommunity ECL-EVPN-SOO` |
-| 8× | `route-map RM-EVPN-SOO-IN permit 20` |
-| 8× | `route-map RM-EVPN-SOO-OUT permit 10` |
-| 8× | `neighbor LOCAL-EVPN-PEERS route-map RM-EVPN-SOO-IN in` |
-| 8× | `neighbor LOCAL-EVPN-PEERS route-map RM-EVPN-SOO-OUT out` |
 | 6× | `neighbor MLAG-IPV4-PEER send-community` |
-| 6× | `neighbor MLAG-IPV4-PEER maximum-routes 256000` |
 | 6× | `seq 30 permit 10.2.0.0/16 eq 32` |
 | 5× | `vxlan vlan 70 vni 10070` |
 | 4× | `vxlan vlan 30 vni 10030` |
 | 4× | `vxlan vlan 50 vni 10050` |
 | 4× | `neighbor REMOTE-EVPN-PEERS send-community` |
-| 4× | `neighbor REMOTE-EVPN-PEERS maximum-routes 0` |
 | 4× | `neighbor 10.0.0.1 remote-as 65000` |
+| 4× | `neighbor 10.0.0.2 remote-as 65000` |
+| 4× | `route-target both 10010:10010` |
+| 4× | `route-target import export evpn domain remote 10010:10010` |
+| 4× | `route-target both 10070:10070` |
+| 4× | `route-target import export evpn domain remote 10070:10070` |
+| 4× | `evpn ethernet-segment domain all` |
+| 4× | `vxlan vlan 40 vni 10040` |
+| 4× | `maximum-paths 4` |
+| 3× | `ip address 169.254.0.0/31` |
+| 3× | `peer-address 169.254.0.1` |
 
 ### EXTRA — top shapes (digits→`#`)
 
@@ -131,47 +131,47 @@
 | 26× | `router-id #.#.#.#` |
 | 25× | `transceiver qsfp default-mode #x#G` |
 | 24× | `neighbor LOCAL-EVPN-PEERS send-community` |
-| 24× | `neighbor LOCAL-EVPN-PEERS maximum-routes #` |
 | 18× | `evpn multicast` |
 | 18× | `router multicast` |
 | 12× | `router bfd` |
 | 12× | `multihop interval # min-rx # multiplier #` |
 | 12× | `neighbor LOCAL-IPV#-PEERS send-community` |
-| 12× | `neighbor LOCAL-IPV#-PEERS maximum-routes #` |
 | 12× | `maximum-paths #` |
 | 10× | `vrf PROD` |
-| 10× | `ip address virtual source-nat vrf PROD address #.#.#.#` |
 | 10× | `address-family evpn` |
+| 10× | `vlan internal order ascending range # #` |
+| 9× | `spanning-tree mst # priority #` |
+| 8× | `vrf DEV` |
 
 ## Per-node residual
 
 | Node | missing | extra |
 |---|---|---|
-| A-LEAF1 | 11 | 30 |
-| A-LEAF2 | 11 | 30 |
-| A-LEAF3 | 12 | 36 |
-| A-LEAF4 | 12 | 36 |
-| A-LEAF5 | 10 | 28 |
-| A-LEAF6 | 10 | 28 |
-| A-LEAF7 | 9 | 36 |
-| A-LEAF8 | 9 | 36 |
-| A-SPINE1 | 0 | 12 |
-| A-SPINE2 | 0 | 12 |
-| A-SPINE3 | 0 | 12 |
-| A-SPINE4 | 0 | 12 |
-| B-LEAF1 | 5 | 29 |
-| B-LEAF2 | 5 | 29 |
-| B-LEAF3 | 4 | 34 |
-| B-LEAF4 | 4 | 34 |
-| B-LEAF5 | 4 | 32 |
-| B-LEAF6 | 4 | 32 |
-| B-LEAF7 | 11 | 41 |
-| B-LEAF8 | 11 | 41 |
-| B-SPINE1 | 1 | 17 |
-| B-SPINE2 | 1 | 17 |
-| B-SPINE3 | 1 | 17 |
-| B-SPINE4 | 1 | 17 |
+| A-LEAF1 | 11 | 26 |
+| A-LEAF2 | 11 | 26 |
+| A-LEAF3 | 12 | 31 |
+| A-LEAF4 | 12 | 31 |
+| A-LEAF5 | 10 | 24 |
+| A-LEAF6 | 10 | 24 |
+| A-LEAF7 | 9 | 33 |
+| A-LEAF8 | 9 | 33 |
+| A-SPINE1 | 0 | 10 |
+| A-SPINE2 | 0 | 10 |
+| A-SPINE3 | 0 | 10 |
+| A-SPINE4 | 0 | 10 |
+| B-LEAF1 | 5 | 19 |
+| B-LEAF2 | 5 | 19 |
+| B-LEAF3 | 4 | 23 |
+| B-LEAF4 | 4 | 23 |
+| B-LEAF5 | 4 | 21 |
+| B-LEAF6 | 4 | 21 |
+| B-LEAF7 | 11 | 31 |
+| B-LEAF8 | 11 | 31 |
+| B-SPINE1 | 1 | 16 |
+| B-SPINE2 | 1 | 16 |
+| B-SPINE3 | 1 | 16 |
+| B-SPINE4 | 1 | 16 |
 | B-SW1 | 1 | 6 |
 | BB1 | 0 | 5 |
 | BB2 | 0 | 5 |
-| **TOTAL** | **137** | **664** |
+| **TOTAL** | **137** | **536** |
