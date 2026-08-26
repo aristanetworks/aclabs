@@ -1,0 +1,8 @@
+---
+
+custom_structured_configuration_switchport_default: {}
+custom_structured_configuration_arp: {}
+mac_address_table: {}
+custom_structured_configuration_ip_routing: false
+custom_structured_configuration_ipv6_prefix_lists: []
+custom_structured_configuration_route_maps: []

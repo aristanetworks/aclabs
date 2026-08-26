@@ -1,0 +1,89 @@
+---
+
+port_profiles:
+  - profile: HOST-SINGLE
+    mode: access
+    spanning_tree_portfast: edge
+
+  - profile: HOST-ES-AA
+    mode: access
+    spanning_tree_portfast: edge
+    port_channel:
+      mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+        lacp_id: c0d6.8200.0000
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
+
+servers:
+  - name: HostD1
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [D-LEAF1, D-LEAF2]
+        vlans: '20'
+        profile: HOST-ES-AA
+
+  - name: HostD2
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [D-LEAF1, D-LEAF2]
+        vlans: '40'
+        profile: HOST-ES-AA
+
+  - name: HostD3
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [D-LEAF3]
+        vlans: '60'
+        profile: HOST-SINGLE
+
+  - name: HostD4
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [D-LEAF3, D-LEAF4]
+        vlans: '10'
+        profile: HOST-ES-AA
+        port_channel:
+          structured_config:
+            lacp_id: c0d6.8200.0304
+
+  - name: HostD5
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [D-LEAF4]
+        vlans: '70'
+        profile: HOST-SINGLE
+
+  - name: HostD6
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet3]
+        switches: [D-SW1]
+        vlans: '40'
+        profile: HOST-SINGLE
+
+  - name: HostD7
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet4]
+        switches: [D-SW1]
+        vlans: '80'
+        profile: HOST-SINGLE
+
+  - name: HostD8
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet9, Ethernet9]
+        switches: [D-LEAF7, D-LEAF8]
+        vlans: '60'
+        profile: HOST-ES-AA
+        port_channel:
+          structured_config:
+            lacp_id: c0d6.8200.0008

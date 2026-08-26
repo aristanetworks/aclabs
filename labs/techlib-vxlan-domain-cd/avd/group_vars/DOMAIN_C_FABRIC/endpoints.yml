@@ -1,0 +1,89 @@
+---
+
+port_profiles:
+  - profile: HOST-MLAG
+    mode: access
+    spanning_tree_portfast: edge
+    port_channel:
+      mode: active
+
+  - profile: HOST-SINGLE
+    mode: access
+    spanning_tree_portfast: edge
+
+  - profile: HOST-ES-AA
+    mode: access
+    spanning_tree_portfast: edge
+    port_channel:
+      mode: active
+      structured_config:
+        evpn_ethernet_segment:
+          identifier: auto lacp
+        lacp_id: c0d6.8200.0000
+        bgp:
+          session_tracker: TRACK-LOCAL-EVPN-PEERS
+
+servers:
+  - name: HostC1
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [C-LEAF1, C-LEAF2]
+        vlans: '10'
+        profile: HOST-MLAG
+
+  - name: HostC2
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [C-LEAF1, C-LEAF2]
+        vlans: '30'
+        profile: HOST-MLAG
+
+  - name: HostC3
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [C-LEAF3]
+        vlans: '50'
+        profile: HOST-SINGLE
+
+  - name: HostC4
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [C-LEAF3, C-LEAF4]
+        vlans: '10'
+        profile: HOST-MLAG
+
+  - name: HostC5
+    adapters:
+      - endpoint_ports: [eth1]
+        switch_ports: [Ethernet7]
+        switches: [C-LEAF4]
+        vlans: '30'
+        profile: HOST-SINGLE
+
+  - name: HostC6
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet7, Ethernet7]
+        switches: [C-LEAF5, C-LEAF6]
+        vlans: '70'
+        profile: HOST-MLAG
+
+  - name: HostC7
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet8, Ethernet8]
+        switches: [C-LEAF5, C-LEAF6]
+        vlans: '50'
+        profile: HOST-MLAG
+
+  - name: HostC8
+    adapters:
+      - endpoint_ports: [eth1, eth2]
+        switch_ports: [Ethernet9, Ethernet9]
+        switches: [C-LEAF7, C-LEAF8]
+        vlans: '50'
+        profile: HOST-ES-AA

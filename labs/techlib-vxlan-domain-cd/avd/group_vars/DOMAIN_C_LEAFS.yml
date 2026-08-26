@@ -1,0 +1,19 @@
+---
+
+standard_leaf: true
+
+pod_name: C-LEAFS
+
+underlay_multicast_pim_sm: true
+
+custom_structured_configuration_router_multicast:
+  ipv4: null
+  ipv6:
+    routing: true
+
+custom_structured_configuration_vxlan_interface:
+  vxlan1:
+    vxlan:
+      mlag_source_interface: Loopback2
+
+custom_structured_configuration_virtual_source_nat_vrfs: null

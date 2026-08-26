@@ -1,0 +1,386 @@
+---
+
+fabric_name: DOMAIN_D_FABRIC
+standard_leaf: false
+
+underlay_routing_protocol: ebgp 
+underlay_ipv6: true
+underlay_ipv6_numbered: true
+underlay_filter_redistribute_connected: false 
+overlay_routing_protocol: ibgp
+bgp_as: '65400'      
+evpn_import_pruning: true   
+
+mac_address_table:
+  aging_time: 1800
+
+custom_structured_configuration_arp:
+  aging:
+    timeout_default: 1500
+
+custom_structured_configuration_switchport_default:
+  mode: routed
+
+custom_structured_configuration_ip_routing: null
+
+general_settings:
+  dhcp_relay:
+    tunnel_requests_disabled: true
+
+bgp_peer_groups:
+  evpn_overlay_peers:
+    name: LOCAL-EVPN-PEERS
+    structured_config:
+      maximum_routes: null
+  evpn_overlay_core:
+    name: REMOTE-EVPN-MPLS-PEERS
+    structured_config:
+      maximum_routes: null
+      local_as: '65000'
+      ebgp_multihop: null
+      update_source: Loopback3
+
+custom_structured_configuration_ipv6_prefix_lists:
+  - name: PL6-LOOPBACKS
+    sequence_numbers:
+      - sequence: 10
+        action: permit 2001:db8:d0::/48 le 128
+      - sequence: 20
+        action: permit 2001:db8:d1::/48 le 128
+
+custom_structured_configuration_route_maps:
+  - name: RM-CONN-2-BGP
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ipv6 address prefix-list PL6-LOOPBACKS
+
+custom_structured_configuration_router_bgp:
+  neighbor_default:
+    send_community: all
+  redistribute: null
+
+fabric_link: &fabric_link
+  mtu: 9214
+  switchport:
+    enabled: false
+  ipv6_enable: true
+  eos_cli: ipv6 nd ra interval 5
+
+spine_underlay_neighbors:
+  - name: Ethernet1
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+  - name: Ethernet2
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+  - name: Ethernet3
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+  - name: Ethernet4
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+  - name: Ethernet5
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+  - name: Ethernet6
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+  - name: Ethernet7
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+  - name: Ethernet8
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+
+leaf_underlay_neighbors:
+  - name: Ethernet1
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+  - name: Ethernet2
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+  - name: Ethernet3
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+  - name: Ethernet4
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65400'
+
+router_id_loopback_description: Globally Unique Address
+vtep_loopback_description: VTEP IP
+default_underlay_p2p_ethernet_description: "{peer}"
+overlay_bgp_peer_description: "{peer}.EVPN"
+default_connected_endpoints_description: "{endpoint}"
+default_connected_endpoints_port_channel_description: "{endpoint}"
+
+spine:
+  defaults:
+    platform: cEOSLab
+    loopback_ipv6_pool: 2001:db8:d0::/64
+    loopback_ipv6_offset: 312
+    router_id_pool: 10.0.4.0/24
+    bgp_cluster_id: 10.0.4.205
+    structured_config:
+      spanning_tree:
+        mode: mstp
+      ethernet_interfaces:
+        - name: Ethernet1
+          description: D-LEAF1
+          <<: *fabric_link
+        - name: Ethernet2
+          description: D-LEAF2
+          <<: *fabric_link
+        - name: Ethernet3
+          description: D-LEAF3
+          <<: *fabric_link
+        - name: Ethernet4
+          description: D-LEAF4
+          <<: *fabric_link
+        - name: Ethernet5
+          description: D-LEAF5
+          <<: *fabric_link
+        - name: Ethernet6
+          description: D-LEAF6
+          <<: *fabric_link
+        - name: Ethernet7
+          description: D-LEAF7
+          <<: *fabric_link
+        - name: Ethernet8
+          description: D-LEAF8
+          <<: *fabric_link
+      router_bgp:
+        peer_groups:
+          - name: LOCAL-IPV6-PEERS
+            remote_as: '65400'
+            next_hop_self: true
+            route_reflector_client: true
+        neighbor_interfaces: "{{ spine_underlay_neighbors }}"
+        address_family_ipv6:
+          peer_groups:
+            - name: LOCAL-IPV6-PEERS
+              activate: true
+          redistribute:
+            connected:
+              enabled: true
+              route_map: RM-CONN-2-BGP
+  nodes:
+    - name: D-SPINE1
+      id: 201
+      mgmt_ip: 172.100.102.101/22
+    - name: D-SPINE2
+      id: 202
+      mgmt_ip: 172.100.102.102/22
+    - name: D-SPINE3
+      id: 203
+      mgmt_ip: 172.100.102.103/22
+    - name: D-SPINE4
+      id: 204
+      mgmt_ip: 172.100.102.104/22
+
+l3leaf:
+  defaults:
+    platform: cEOSLab
+    loopback_ipv6_pool: 2001:db8:d0::/64
+    router_id_pool: 10.0.4.0/24
+    vtep_loopback: Loopback1
+    vtep_loopback_ipv6_pool: 2001:db8:d1::/64
+    vtep_loopback_ipv4_pool: 10.1.4.0/24
+    evpn_route_servers: [D-SPINE1, D-SPINE2, D-SPINE3, D-SPINE4]
+    mlag: false
+    virtual_router_mac_address: 00:1c:73:00:00:01
+    spanning_tree_mode: mstp
+    spanning_tree_root_super: true
+    structured_config:
+      spanning_tree:
+        edge_port:
+          bpduguard_default: true
+      ethernet_interfaces:
+        - name: Ethernet1
+          description: D-SPINE1
+          <<: *fabric_link
+        - name: Ethernet2
+          description: D-SPINE2
+          <<: *fabric_link
+        - name: Ethernet3
+          description: D-SPINE3
+          <<: *fabric_link
+        - name: Ethernet4
+          description: D-SPINE4
+          <<: *fabric_link
+      route_maps: null
+      ip_extcommunity_lists: null
+      router_bgp:
+        peer_groups:
+          - name: LOCAL-IPV6-PEERS
+            remote_as: '65400'
+          - name: LOCAL-EVPN-PEERS
+            session_tracker: TRACK-LOCAL-EVPN-PEERS
+        neighbor_interfaces: "{{ leaf_underlay_neighbors }}"
+        session_trackers:
+          - name: TRACK-LOCAL-EVPN-PEERS
+            recovery_delay: 10
+        address_family_ipv6:
+          peer_groups:
+            - name: LOCAL-IPV6-PEERS
+              activate: true
+          redistribute:
+            connected:
+              enabled: true
+              route_map: RM-CONN-2-BGP
+        address_family_evpn:
+          layer_2_fec_in_place_update: "{{ {'enabled': true} if standard_leaf else none }}"
+          peer_groups:
+            - name: LOCAL-EVPN-PEERS
+              route_map_in: null
+              route_map_out: null
+        eos_cli: |-
+          address-family evpn
+             route type ethernet-segment route-target auto
+
+  node_groups:
+    - group: D_POD1
+      filter:
+        tags: [GREEN, PURPLE]
+      nodes:
+        - name: D-LEAF1
+          id: 1
+          mgmt_ip: 172.100.102.105/22
+        - name: D-LEAF2
+          id: 2
+          mgmt_ip: 172.100.102.106/22
+
+    - group: D_POD2
+      nodes:
+        - name: D-LEAF3
+          id: 3
+          mgmt_ip: 172.100.102.107/22
+          filter:
+            tags: [BLUE, RED]
+        - name: D-LEAF4
+          id: 4
+          mgmt_ip: 172.100.102.108/22
+          filter:
+            tags: [BLUE, BROWN]
+
+    - group: D_POD3
+      filter:
+        tags: [PURPLE, BLACK]
+      nodes:
+        - name: D-LEAF5
+          id: 5
+          mgmt_ip: 172.100.102.109/22
+        - name: D-LEAF6
+          id: 6
+          mgmt_ip: 172.100.102.110/22
+
+    - group: GATEWAYS
+      filter:
+        tags: [BLUE, RED, BROWN]
+      evpn_gateway:
+        remote_peers: "{{ backbone_evpn_peers }}"
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+          mode: rd-rt-rewrite
+      structured_config:
+        mpls:
+          ip: true
+        loopback_interfaces:
+          - name: Loopback3
+            description: Globally Unique Address (MPLS source, IS-IS node)
+            isis_enable: BACKBONE
+            isis_passive: true
+        router_isis:
+          instance: BACKBONE
+          is_hostname: "{{ inventory_hostname }}"
+          is_type: level-2
+          log_adjacency_changes: true
+          address_family_ipv6:
+            enabled: true
+            fast_reroute_ti_lfa:
+              mode: node-protection
+          segment_routing_mpls:
+            enabled: true
+        router_bgp:
+          bgp:
+            bestpath:
+              d_path: true
+          address_family_evpn:
+            domain_identifier: '4:4'
+            domain_identifier_remote: '99:99'
+            peer_groups:
+              - name: LOCAL-EVPN-PEERS
+                encapsulation: vxlan
+              - name: REMOTE-EVPN-MPLS-PEERS
+                encapsulation: mpls
+                next_hop_self_source_interface: Loopback3
+            evpn_ethernet_segment:
+              - domain: local
+                identifier: '0000:dddd:0007:0008:0001'
+                route_target_import: 'dd:dd:dd:07:08:01'
+              - domain: remote
+                identifier: '0000:dddd:0007:0008:0002'
+                route_target_import: 'dd:dd:dd:07:08:02'
+          eos_cli: |-
+            address-family evpn
+               route type ethernet-segment route-target auto
+               domain identifier 65400:65400 attach
+               !
+               evpn ethernet-segment domain local
+                  designated-forwarder election algorithm preference {{ 2000 if inventory_hostname == 'D-LEAF7' else 1000 }}
+               !
+               evpn ethernet-segment domain remote
+                  designated-forwarder election algorithm preference {{ 2000 if inventory_hostname == 'D-LEAF7' else 1000 }}
+      nodes:
+        - name: D-LEAF7
+          id: 7
+          mgmt_ip: 172.100.102.111/22
+          structured_config:
+            loopback_interfaces:
+              - name: Loopback3
+                ipv6_addresses: [2001:db8:d3::407/128]
+                node_segment:
+                  ipv6_index: 407
+            router_isis:
+              net: 49.0000.0000.0000.0407.00
+              router_id: 10.0.4.7
+        - name: D-LEAF8
+          id: 8
+          mgmt_ip: 172.100.102.112/22
+          structured_config:
+            loopback_interfaces:
+              - name: Loopback3
+                ipv6_addresses: [2001:db8:d3::408/128]
+                node_segment:
+                  ipv6_index: 408
+            router_isis:
+              net: 49.0000.0000.0000.0408.00
+              router_id: 10.0.4.8
+
+l2leaf:
+  defaults:
+    platform: cEOSLab
+    uplink_type: port-channel
+    uplink_switches: [D-LEAF5, D-LEAF6]
+    uplink_interfaces: [Ethernet1, Ethernet2]
+    uplink_switch_interfaces: [Ethernet7, Ethernet7]
+    spanning_tree_mode: mstp
+    filter:
+      tags: [PURPLE, BLACK]
+    uplink_switch_port_channel_structured_config:
+      evpn_ethernet_segment:
+        identifier: auto lacp
+      lacp_id: c0d6.8200.0005
+      bgp:
+        session_tracker: TRACK-LOCAL-EVPN-PEERS
+    structured_config:
+      spanning_tree:
+        edge_port:
+          bpduguard_default: true
+  nodes:
+    - name: D-SW1
+      id: 1
+      mgmt_ip: 172.100.102.113/22

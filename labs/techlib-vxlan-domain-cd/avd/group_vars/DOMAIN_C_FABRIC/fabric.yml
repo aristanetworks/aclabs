@@ -1,0 +1,556 @@
+---
+
+fabric_name: DOMAIN_C_FABRIC
+standard_leaf: false
+
+underlay_routing_protocol: ebgp    # required by the IPv6 underlay; the links are below
+underlay_ipv6: true
+underlay_ipv6_numbered: true
+underlay_filter_redistribute_connected: false   # RM-CONN-2-BGP is owned below
+overlay_routing_protocol: ebgp
+evpn_ebgp_multihop: 3
+evpn_import_pruning: true          # route import match-failure action discard
+evpn_multicast: true               # OISM — the Gateway group switches this off
+
+p2p_uplinks_mtu: 9214              # the MLAG peering SVIs' MTU (the fabric links are stated below)
+
+mac_address_table:
+  aging_time: 1800
+
+custom_structured_configuration_arp:
+  aging:
+    timeout_default: 1500
+
+custom_structured_configuration_switchport_default:
+  mode: routed
+
+custom_structured_configuration_ip_routing: null
+
+general_settings:
+  dhcp_relay:
+    tunnel_requests_disabled: true
+    mlag_peerlink_requests_disabled: true
+
+bgp_peer_groups:
+  evpn_overlay_peers:
+    name: LOCAL-EVPN-PEERS
+    structured_config:
+      maximum_routes: null
+  evpn_overlay_core:
+    name: REMOTE-EVPN-MPLS-PEERS
+    structured_config:
+      maximum_routes: null
+      local_as: '65000'
+      ebgp_multihop: null
+      update_source: Loopback3
+  mlag_ipv4_underlay_peer:
+    name: MLAG-IPV6-PEER
+    structured_config:
+      maximum_routes: null
+      route_map_out: RM-MLAG-PEER-OUT
+
+custom_structured_configuration_ipv6_prefix_lists: "{{ loopback_prefix_lists + (mlag_leaf_prefix_lists if standard_leaf else []) }}"
+custom_structured_configuration_route_maps: "{{ redistribute_route_maps + (mlag_leaf_route_maps if standard_leaf else []) }}"
+custom_structured_configuration_ip_extcommunity_lists_regexp: "{{ mlag_leaf_ecl if standard_leaf else [] }}"
+
+loopback_prefix_lists:
+  - name: PL6-LOOPBACKS
+    sequence_numbers:
+      - sequence: 10
+        action: permit 2001:db8:c0::/48 le 128
+      - sequence: 20
+        action: permit 2001:db8:c1::/48 le 128
+      - sequence: 30
+        action: permit 2001:db8:c2::/48 le 128
+
+redistribute_route_maps:
+  - name: RM-CONN-2-BGP
+    sequence_numbers:
+      - sequence: 10
+        type: permit
+        match:
+          - ipv6 address prefix-list PL6-LOOPBACKS
+
+mlag_leaf_prefix_lists:
+  - name: PL6-MLAG-PEER-VRFS
+    sequence_numbers:
+      - sequence: 10
+        action: permit 2001:db8:3001::/64
+      - sequence: 20
+        action: permit 2001:db8:3002::/64
+
+mlag_leaf_route_maps:
+  - name: RM-CONN-2-BGP-VRFS
+    sequence_numbers:
+      - sequence: 10
+        type: deny
+        match:
+          - ipv6 address prefix-list PL6-MLAG-PEER-VRFS
+      - sequence: 20
+        type: permit
+  - name: RM-MLAG-PEER-OUT
+    sequence_numbers:
+      - sequence: 10
+        type: deny
+        match:
+          - extcommunity evpn-imported
+      - sequence: 20
+        type: permit
+        set:
+          - origin incomplete
+
+mlag_leaf_ecl:
+  - name: evpn-imported
+    entries:
+      - type: permit
+        regexp: RT.*
+
+custom_structured_configuration_router_bgp:
+  neighbor_default:
+    send_community: all
+  redistribute: null
+
+fabric_link: &fabric_link
+  mtu: 9214
+  switchport:
+    enabled: false
+  ipv6_enable: true
+  eos_cli: ipv6 nd ra interval 5
+
+oism_fabric_link: &oism_fabric_link
+  mtu: 9214
+  switchport:
+    enabled: false
+  ipv6_enable: true
+  eos_cli: |-
+    ipv6 nd ra interval 5
+    pim ipv6 sparse-mode
+
+leaf_fabric_links_oism:
+  - name: Ethernet1
+    description: C-SPINE1
+    <<: *oism_fabric_link
+  - name: Ethernet2
+    description: C-SPINE2
+    <<: *oism_fabric_link
+  - name: Ethernet3
+    description: C-SPINE3
+    <<: *oism_fabric_link
+  - name: Ethernet4
+    description: C-SPINE4
+    <<: *oism_fabric_link
+
+leaf_fabric_links_plain:
+  - name: Ethernet1
+    description: C-SPINE1
+    <<: *fabric_link
+  - name: Ethernet2
+    description: C-SPINE2
+    <<: *fabric_link
+  - name: Ethernet3
+    description: C-SPINE3
+    <<: *fabric_link
+  - name: Ethernet4
+    description: C-SPINE4
+    <<: *fabric_link
+
+leaf_underlay_neighbors:
+  - name: Ethernet1
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65300'
+  - name: Ethernet2
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65300'
+  - name: Ethernet3
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65300'
+  - name: Ethernet4
+    peer_group: LOCAL-IPV6-PEERS
+    remote_as: '65300'
+
+mlag_numbered_neighbor_kill:
+  - ip_address: '2001:db8:4093::1'
+    peer_group: null
+    description: null
+    metadata:
+      validate_state: false
+  - ip_address: '2001:db8:4093::2'
+    peer_group: null
+    description: null
+    metadata:
+      validate_state: false
+
+mlag_af_ipv4:
+  peer_groups:
+    - name: MLAG-IPV6-PEER
+      activate: true
+      next_hop:
+        address_family_ipv6:
+          enabled: true
+          originate: true
+
+pim_v6_underlay_cli: |-
+  router pim sparse-mode
+     ipv6
+        make-before-break disabled
+
+trunk_groups:
+  mlag:
+    name: MLAG_PEER
+  mlag_l3:
+    name: MLAG_PEER
+mlag_peer_vlan_name: MLAG_PEER_SYNC
+mlag_peer_l3_vlan_name: MLAG_PEER_L3_UNDERLAY
+mlag_peer_l3_vrf_vlan_name: MLAG_PEER_VRF_{vrf}
+fabric_ip_addressing:
+  mlag:
+    algorithm: same_subnet
+    ipv6_prefix_length: 64
+
+router_id_loopback_description: Globally Unique Address
+vtep_loopback_description: Unique VTEP IP
+default_underlay_p2p_ethernet_description: "{peer}"
+overlay_bgp_peer_description: "{peer}.EVPN"
+mlag_port_channel_description: MLAG PEER LINK
+mlag_peer_svi_description: MLAG PEER SYNC
+mlag_peer_l3_svi_description: MLAG UNDERLAY BGP PEER
+mlag_peer_l3_vrf_svi_description: MLAG iBGP Peer - VRF {vrf}
+default_connected_endpoints_description: "{endpoint}"
+default_connected_endpoints_port_channel_description: "{endpoint}"
+
+default_interfaces:
+  - types: [l3leaf]
+    platforms: [cEOSLab]
+    mlag_interfaces: [Ethernet5-6]
+
+spine:
+  defaults:
+    platform: cEOSLab
+    bgp_as: '65300'
+    loopback_ipv6_pool: 2001:db8:c0::/64
+    loopback_ipv6_offset: 312
+    router_id_pool: 10.0.3.0/24
+    raw_eos_cli: "{{ pim_v6_underlay_cli }}"
+    structured_config:
+      spanning_tree:
+        mode: mstp
+      router_multicast:
+        ipv6:
+          routing: true
+      ethernet_interfaces:
+        - name: Ethernet1
+          description: C-LEAF1
+          <<: *oism_fabric_link
+        - name: Ethernet2
+          description: C-LEAF2
+          <<: *oism_fabric_link
+        - name: Ethernet3
+          description: C-LEAF3
+          <<: *oism_fabric_link
+        - name: Ethernet4
+          description: C-LEAF4
+          <<: *oism_fabric_link
+        - name: Ethernet5
+          description: C-LEAF5
+          <<: *oism_fabric_link
+        - name: Ethernet6
+          description: C-LEAF6
+          <<: *oism_fabric_link
+        - name: Ethernet7
+          description: C-LEAF7
+          <<: *fabric_link
+        - name: Ethernet8
+          description: C-LEAF8
+          <<: *fabric_link
+      peer_filters:
+        - name: LEAF-AS-RANGE
+          sequence_numbers:
+            - sequence: 10
+              match: as-range 65301-65399 result accept
+      router_bgp:
+        peer_groups:
+          - name: LOCAL-IPV6-PEERS
+        neighbor_interfaces:
+          - name: Ethernet1
+            peer_group: LOCAL-IPV6-PEERS
+            peer_filter: LEAF-AS-RANGE
+          - name: Ethernet2
+            peer_group: LOCAL-IPV6-PEERS
+            peer_filter: LEAF-AS-RANGE
+          - name: Ethernet3
+            peer_group: LOCAL-IPV6-PEERS
+            peer_filter: LEAF-AS-RANGE
+          - name: Ethernet4
+            peer_group: LOCAL-IPV6-PEERS
+            peer_filter: LEAF-AS-RANGE
+          - name: Ethernet5
+            peer_group: LOCAL-IPV6-PEERS
+            peer_filter: LEAF-AS-RANGE
+          - name: Ethernet6
+            peer_group: LOCAL-IPV6-PEERS
+            peer_filter: LEAF-AS-RANGE
+          - name: Ethernet7
+            peer_group: LOCAL-IPV6-PEERS
+            peer_filter: LEAF-AS-RANGE
+          - name: Ethernet8
+            peer_group: LOCAL-IPV6-PEERS
+            peer_filter: LEAF-AS-RANGE
+        address_family_ipv6:
+          peer_groups:
+            - name: LOCAL-IPV6-PEERS
+              activate: true
+          redistribute:
+            connected:
+              enabled: true
+              route_map: RM-CONN-2-BGP
+  nodes:
+    - name: C-SPINE1
+      id: 201
+      mgmt_ip: 172.100.101.101/22
+    - name: C-SPINE2
+      id: 202
+      mgmt_ip: 172.100.101.102/22
+    - name: C-SPINE3
+      id: 203
+      mgmt_ip: 172.100.101.103/22
+    - name: C-SPINE4
+      id: 204
+      mgmt_ip: 172.100.101.104/22
+
+l3leaf:
+  defaults:
+    platform: cEOSLab
+    loopback_ipv6_pool: 2001:db8:c0::/64
+    router_id_pool: 10.0.3.0/24
+    vtep_loopback: Loopback1
+    vtep_loopback_ipv6_pool: 2001:db8:c1::/64
+    bgp_as: '65301-65308'
+    evpn_route_servers: [C-SPINE1, C-SPINE2, C-SPINE3, C-SPINE4]
+    mlag_domain_id: '100'
+    mlag_port_channel_id: 1000
+    mlag_peer_address_family: ipv6
+    mlag_peer_ipv6_pool: 2001:db8:4094::/64
+    mlag_peer_l3_ipv6_pool: 2001:db8:4093::/64
+    mlag_peer_l3_vlan_structured_config:
+      ipv6_addresses: null
+      ipv6_enable: true
+      no_autostate: true 
+      eos_cli: ipv6 nd ra interval 5 
+    mlag_ibgp_origin_incomplete: false    
+    underlay_multicast:
+      pim_sm:
+        mlag: false 
+    virtual_router_mac_address: 00:1c:73:00:00:01
+    spanning_tree_mode: mstp
+    spanning_tree_priority: 0
+    raw_eos_cli: "{{ pim_v6_underlay_cli if standard_leaf else none }}"
+    structured_config:
+      spanning_tree:
+        edge_port:
+          bpduguard_default: true
+      ethernet_interfaces: "{{ leaf_fabric_links_oism if standard_leaf else leaf_fabric_links_plain }}"
+      vxlan_interface:
+        vxlan1:
+          vxlan:
+            source_interface: Loopback1
+      router_bgp:
+        peer_groups:
+          - name: LOCAL-IPV6-PEERS
+            peer_tag_in: SPINES
+            peer_tag_out_discard: SPINES
+          - name: LOCAL-EVPN-PEERS
+            peer_tag_in: SPINES
+            peer_tag_out_discard: SPINES
+        neighbor_interfaces: "{{ leaf_underlay_neighbors }}"
+        neighbors: "{{ mlag_numbered_neighbor_kill if standard_leaf else [] }}"
+        address_family_ipv4: "{{ mlag_af_ipv4 if standard_leaf else none }}"
+        address_family_ipv6:
+          peer_groups:
+            - name: LOCAL-IPV6-PEERS
+              activate: true
+          redistribute:
+            connected:
+              enabled: true
+              route_map: RM-CONN-2-BGP
+
+  node_groups:
+    - group: POD1
+      filter:
+        tags: [BLUE, ORANGE]
+      structured_config:
+        router_bgp:
+          neighbor_interfaces:
+            - name: Vlan4093
+              peer_group: MLAG-IPV6-PEER
+              remote_as: '65301'
+        spanning_tree:
+          no_spanning_tree_vlan: '3001,4093-4094'
+        loopback_interfaces:
+          - name: Loopback2
+            description: MLAG Shared VTEP IP
+            ipv6_addresses: [2001:db8:c2::1/128]
+        vrfs:
+          - name: PROD
+            ip_routing_ipv6_interfaces: true
+      nodes:
+        - name: C-LEAF1
+          id: 1
+          mgmt_ip: 172.100.101.105/22
+          vtep_loopback_ipv6_address: 2001:db8:c1::1
+        - name: C-LEAF2
+          id: 2
+          mgmt_ip: 172.100.101.106/22
+          vtep_loopback_ipv6_address: 2001:db8:c1::2
+
+    - group: POD2
+      filter:
+        tags: [BLUE, ORANGE, YELLOW]
+      structured_config:
+        router_bgp:
+          neighbor_interfaces:
+            - name: Vlan4093
+              peer_group: MLAG-IPV6-PEER
+              remote_as: '65303'
+        spanning_tree:
+          no_spanning_tree_vlan: '3001-3002,4093-4094'
+        loopback_interfaces:
+          - name: Loopback2
+            description: MLAG Shared VTEP IP
+            ipv6_addresses: [2001:db8:c2::3/128]
+        vrfs:
+          - name: PROD
+            ip_routing_ipv6_interfaces: true
+          - name: DEV
+            ip_routing_ipv6_interfaces: true
+      nodes:
+        - name: C-LEAF3
+          id: 3
+          mgmt_ip: 172.100.101.107/22
+          vtep_loopback_ipv6_address: 2001:db8:c1::3
+        - name: C-LEAF4
+          id: 4
+          mgmt_ip: 172.100.101.108/22
+          vtep_loopback_ipv6_address: 2001:db8:c1::4
+
+    - group: POD3
+      filter:
+        tags: [YELLOW, BROWN]
+      structured_config:
+        router_bgp:
+          neighbor_interfaces:
+            - name: Vlan4093
+              peer_group: MLAG-IPV6-PEER
+              remote_as: '65305'
+        spanning_tree:
+          no_spanning_tree_vlan: '3002,4093-4094'
+        loopback_interfaces:
+          - name: Loopback2
+            description: MLAG Shared VTEP IP
+            ipv6_addresses: [2001:db8:c2::5/128]
+        vrfs:
+          - name: DEV
+            ip_routing_ipv6_interfaces: true
+      nodes:
+        - name: C-LEAF5
+          id: 5
+          mgmt_ip: 172.100.101.109/22
+          vtep_loopback_ipv6_address: 2001:db8:c1::5
+        - name: C-LEAF6
+          id: 6
+          mgmt_ip: 172.100.101.110/22
+          vtep_loopback_ipv6_address: 2001:db8:c1::6
+
+    - group: GATEWAYS
+      mlag: false
+      filter:
+        tags: [BLUE, YELLOW, BROWN]
+      evpn_gateway:
+        remote_peers: "{{ backbone_evpn_peers }}"  
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+          mode: rd-rt-rewrite
+      structured_config:
+        mpls:
+          ip: true
+        loopback_interfaces:
+          - name: Loopback3
+            description: Globally Unique Address (MPLS source, IS-IS node)
+            isis_enable: BACKBONE
+            isis_passive: true
+        router_isis:
+          instance: BACKBONE
+          is_hostname: "{{ inventory_hostname }}"
+          is_type: level-2
+          log_adjacency_changes: true
+          address_family_ipv6:
+            enabled: true
+            fast_reroute_ti_lfa:
+              mode: node-protection
+          segment_routing_mpls:
+            enabled: true
+        router_bgp:
+          maximum_paths:
+            paths: 4
+            ecmp: 4
+          bgp:
+            bestpath:
+              d_path: true
+          peer_groups:
+            - name: LOCAL-EVPN-PEERS
+              session_tracker: TRACK-LOCAL-EVPN-PEERS
+          session_trackers:
+            - name: TRACK-LOCAL-EVPN-PEERS
+              recovery_delay: 10
+          address_family_evpn:
+            domain_identifier: '3:3'
+            domain_identifier_remote: '99:99'
+            peer_groups:
+              - name: LOCAL-EVPN-PEERS
+                encapsulation: vxlan
+              - name: REMOTE-EVPN-MPLS-PEERS
+                encapsulation: mpls
+                next_hop_self_source_interface: Loopback3
+            evpn_ethernet_segment:
+              - domain: local
+                identifier: '0000:cccc:0007:0008:0001'
+                route_target_import: 'cc:cc:cc:07:08:01'
+              - domain: remote
+                identifier: '0000:cccc:0007:0008:0002'
+                route_target_import: 'cc:cc:cc:07:08:02'
+          eos_cli: |-
+            address-family evpn
+               route type ethernet-segment route-target auto
+               domain identifier 65300:65300 attach
+               !
+               evpn ethernet-segment domain local
+                  designated-forwarder election algorithm preference {{ 2000 if inventory_hostname == 'C-LEAF7' else 1000 }}
+               !
+               evpn ethernet-segment domain remote
+                  designated-forwarder election algorithm preference {{ 2000 if inventory_hostname == 'C-LEAF7' else 1000 }}
+      nodes:
+        - name: C-LEAF7
+          id: 7
+          mgmt_ip: 172.100.101.111/22
+          structured_config:
+            loopback_interfaces:
+              - name: Loopback3
+                ipv6_addresses: [2001:db8:c3::307/128]
+                node_segment:
+                  ipv6_index: 307
+            router_isis:
+              net: 49.0000.0000.0000.0307.00
+              router_id: 10.0.3.7
+        - name: C-LEAF8
+          id: 8
+          mgmt_ip: 172.100.101.112/22
+          structured_config:
+            loopback_interfaces:
+              - name: Loopback3
+                ipv6_addresses: [2001:db8:c3::308/128]
+                node_segment:
+                  ipv6_index: 308
+            router_isis:
+              net: 49.0000.0000.0000.0308.00
+              router_id: 10.0.3.8

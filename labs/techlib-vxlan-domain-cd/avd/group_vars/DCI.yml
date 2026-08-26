@@ -1,0 +1,52 @@
+---
+
+l3_edge:
+  p2p_links_profiles:
+    - name: DCI
+      mtu: 9214
+      include_in_underlay_protocol: false
+      mpls_ip: false     
+      ethernet_structured_config:
+        ipv6_enable: true
+        isis_enable: BACKBONE
+        isis_network_point_to_point: true
+
+  p2p_links:
+    - nodes: [C-LEAF7, BB1]
+      interfaces: [Ethernet7, Ethernet1]
+      ipv6: [2001:db8:bb1:c7::c7/64, 2001:db8:bb1:c7::bb1/64]
+      profile: DCI
+    - nodes: [C-LEAF8, BB1]
+      interfaces: [Ethernet7, Ethernet2]
+      ipv6: [2001:db8:bb1:c8::c8/64, 2001:db8:bb1:c8::bb1/64]
+      profile: DCI
+    - nodes: [C-LEAF7, BB2]
+      interfaces: [Ethernet8, Ethernet1]
+      ipv6: [2001:db8:bb2:c7::c7/64, 2001:db8:bb2:c7::bb2/64]
+      profile: DCI
+    - nodes: [C-LEAF8, BB2]
+      interfaces: [Ethernet8, Ethernet2]
+      ipv6: [2001:db8:bb2:c8::c8/64, 2001:db8:bb2:c8::bb2/64]
+      profile: DCI
+
+    - nodes: [D-LEAF7, BB1]
+      interfaces: [Ethernet7, Ethernet3]
+      ipv6: [2001:db8:bb1:d7::d7/64, 2001:db8:bb1:d7::bb1/64]
+      profile: DCI
+    - nodes: [D-LEAF8, BB1]
+      interfaces: [Ethernet7, Ethernet4]
+      ipv6: [2001:db8:bb1:d8::d8/64, 2001:db8:bb1:d8::bb1/64]
+      profile: DCI
+    - nodes: [D-LEAF7, BB2]
+      interfaces: [Ethernet8, Ethernet3]
+      ipv6: [2001:db8:bb2:d7::d7/64, 2001:db8:bb2:d7::bb2/64]
+      profile: DCI
+    - nodes: [D-LEAF8, BB2]
+      interfaces: [Ethernet8, Ethernet4]
+      ipv6: [2001:db8:bb2:d8::d8/64, 2001:db8:bb2:d8::bb2/64]
+      profile: DCI
+
+    - nodes: [BB1, BB2]
+      interfaces: [Ethernet5, Ethernet5]
+      ipv6: [2001:db8:bb1:bb2::bb1/64, 2001:db8:bb1:bb2::bb2/64]
+      profile: DCI
