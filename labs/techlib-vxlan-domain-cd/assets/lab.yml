@@ -21,7 +21,7 @@ display:
   # Software versions this lab was validated against. Rendered as a badge row
   # in the dashboard header.
   validated_with:
-    cEOS: "4.36.1F"
+    cEOS: "4.36.2F"
     AVD: "6.3.0"
     Containerlab: "0.78.1"
   # Recommended host resources. Rendered as a badge row in the dashboard header.
