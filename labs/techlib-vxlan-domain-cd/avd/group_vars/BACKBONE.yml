@@ -1,19 +1,7 @@
 ---
-# BB1 / BB2 — the IPv6 IS-IS SR-MPLS transport and the EVPN-MPLS route
-# reflectors for the four Gateways (AS 65000). Modelled as AVD `spine`
-# nodes with an ISIS-SR underlay (the DCI links carry the IS-IS interface
-# config from group_vars/DCI.yml) and an iBGP overlay whose only peers are
-# the Gateways — statically listed here, because AVD only materialises RR
-# peers it can see in the same fabric.
-#
-#   Loopback0 10.0.0.<id> + 2001:db8:bb::<id>, SR IPv6 node index <id>
-#   NET 49.0000.0000.0000.000<id>.00, IS-IS level-2, TI-LFA node protection
 
 fabric_name: BACKBONE
 
-# AVD's built-in `spine` type is not an MPLS label switch router, and every
-# SR/MPLS render (`mpls ip`, the node SID, `segment-routing mpls`) is gated on
-# that flag; the backbone's spines are.
 custom_node_type_keys:
   - key: spine
     type: spine
@@ -31,14 +19,11 @@ isis_ti_lfa:
 
 overlay_routing_protocol: ibgp
 bgp_as: '65000'
-# The guide runs `update wait-install` on the fabric nodes only; the custom
-# cEOSLab platform entry in all.yml would otherwise render it here too.
 bgp_update_wait_install: false
 
 router_id_loopback_description: Globally Unique Address
 default_underlay_p2p_ethernet_description: "{peer}"
 
-# The backbone carries the bare management preamble: name-server only.
 dns_settings:
   servers:
     - ip_address: 8.8.8.8
@@ -64,7 +49,7 @@ spine:
     loopback_ipv6_pool: 2001:db8:bb::/64
     isis_system_id_prefix: '0000.0000'
     isis_sr:
-      ipv6_node_sid_index_base: 0        # AVD's default base is 1000; the guide uses the node id
+      ipv6_node_sid_index_base: 0    
     bgp_cluster_id: 10.0.0.0
     structured_config:
       spanning_tree:
@@ -72,10 +57,9 @@ spine:
       loopback_interfaces:
         - name: Loopback0
           node_segment:
-            ipv4_index: null             # IPv6-only SR: no IPv4 node SID
+            ipv4_index: null   
       router_isis:
         is_hostname: "{{ inventory_hostname }}"
-        # The guide runs the IPv6 unicast topology only.
         address_family_ipv4: null
         address_family_ipv6:
           enabled: true
@@ -91,7 +75,6 @@ spine:
             update_source: Loopback0
             bfd: true
             route_reflector_client: true
-        # The Gateways' MPLS-side loopbacks (Loopback3).
         neighbors:
           - ip_address: 2001:db8:c3::307
             peer_group: EVPN-MPLS-GW-PEERS

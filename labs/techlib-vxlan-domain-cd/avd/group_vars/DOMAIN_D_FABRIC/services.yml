@@ -1,11 +1,4 @@
 ---
-# Domain D — tenant services
-#
-#   PROD (VNI 50001): VLAN 10 Blue (multi-domain), VLAN 20 Green, VLAN 40 Purple
-#   DEV  (VNI 50002): VLAN 60 Red, VLAN 70 Brown (multi-domain), VLAN 80 Black
-#
-# IPv4-only overlay IRB, no OISM. The standard leafs advertise the anycast
-# vMAC/VIP from their own VTEP; the Gateway pair does not (`standard_leaf`).
 
 standard_vlan_redistribute:
   redistribute_routes:

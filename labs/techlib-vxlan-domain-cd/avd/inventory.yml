@@ -1,23 +1,4 @@
 ---
-# Inventory — techlib EVPN-VXLAN Deployment Guide, Domains C + D + Backbone
-#
-# Three AVD fabrics (each built with its own play — fabric_name must be
-# uniform per play):
-#   DOMAIN_C_FABRIC — IPv6 link-local eBGP underlay + eBGP EVPN, MLAG leafs
-#                     with Multi-VTEP MLAG and IPv4 OISM, All-Active Gateway
-#   DOMAIN_D_FABRIC — IPv6 link-local iBGP underlay + iBGP EVPN (spine RRs),
-#                     EVPN All-Active multihoming everywhere, All-Active Gateway
-#   BACKBONE        — BB1/BB2: IPv6 IS-IS SR-MPLS transport + EVPN-MPLS
-#                     route reflectors for the four Gateways
-#
-# The role groups (SPINES / LEAFS / GATEWAYS / L2_SWITCHES) carry only the
-# AVD node `type`; role behaviour (OISM on/off, the MLAG peering, ...) lives
-# in group_vars/<ROLE>.yml — vars set inside the inventory file rank BELOW
-# group_vars files in Ansible's precedence, so they cannot override a
-# fabric-level setting.
-#
-# DCI groups the three fabrics' Gateway/Backbone nodes so the inter-domain
-# point-to-point links are defined exactly once (group_vars/DCI.yml).
 
 all:
   children:

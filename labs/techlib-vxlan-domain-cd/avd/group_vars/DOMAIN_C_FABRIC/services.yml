@@ -1,38 +1,14 @@
 ---
-# Domain C — tenant services
-#
-#   PROD (VNI 50001): VLAN 10 Blue (multi-domain), VLAN 30 Orange
-#   DEV  (VNI 50002): VLAN 50 Yellow, VLAN 70 Brown (multi-domain)
-#
-# IPv4-only overlay IRB; IPv4 OISM on the standard leafs with IPv6 underlay
-# SSM groups (ff3e::1 / ff3e::2). The Gateway pair serves the same VLANs and
-# VRFs without OISM or MLAG: every OISM/MLAG hook below is gated on
-# `standard_leaf`.
 
-# `ip igmp` on the tenant SVIs: AVD's OISM writes `pim ipv4 sparse-mode` on
-# MLAG leafs; the guide runs both.
 oism_svi_structured_config:
   ip_igmp: true
 
-# Anycast vMAC/VIP advertisement from every standard leaf's own VTEP.
 standard_vlan_redistribute:
   redistribute_routes:
     - learned
     - router-mac next-hop vtep primary
     - router-mac virtual-ip next-hop vtep primary
 
-# The per-VRF MLAG peering: the SVI keeps the guide's MTU, stays up when the
-# peer link is down and enables IPv6 explicitly; the iBGP neighbor is the
-# peer's address in the VRF peering subnet.
-#
-# AVD 6.3 derives that neighbor from the IPv4 peering-pool key even when only
-# the IPv6 pool is set (pyavd network_services/router_bgp.py), so it falls
-# back to the peer's Vlan4093 pool address. Both candidates are emptied out
-# (the list from fabric.yml) and the right one is added: AVD makes the first
-# node listed in a node group the MLAG primary and gives it ::1, so the
-# primary peers with ::2 and the secondary with ::1 — the only place the
-# model needs to know which side of a pair a node is, derived from the same
-# rule AVD uses.
 mlag_vrf_peer_host: "{{ 2 if inventory_hostname in (l3leaf.node_groups | map(attribute='nodes.0.name') | list) else 1 }}"
 
 mlag_vrf_svi:
@@ -57,9 +33,6 @@ mlag_vrf_svi:
         - name: DEV
           neighbors: "{{ mlag_numbered_neighbor_kill + [{'ip_address': '2001:db8:3002::' ~ mlag_vrf_peer_host, 'peer_group': 'MLAG-IPV6-PEER'}] }}"
 
-# VRF BGP: `update wait-install` everywhere; the MLAG leafs also filter the
-# peering subnet out of the redistributed connected routes (the guide's
-# RM-CONN-2-BGP-VRFS, owned in fabric.yml).
 vrf_bgp: &vrf_bgp
   updates:
     wait_install: true
@@ -71,7 +44,6 @@ vrf_bgp_mlag:
       enabled: true
       route_map: RM-CONN-2-BGP-VRFS
 
-# AVD writes `evpn multicast` under the VRF; the address family is raw CLI.
 oism_vrf_bgp_cli: |-
   evpn multicast
      address-family ipv4
@@ -87,8 +59,6 @@ svi_profiles:
 tenants:
   - name: DOMAIN_C
     mac_vrf_vni_base: 10000
-    # Keeps AVD's own peering-subnet filter (an `ip address` match against an
-    # IPv6 prefix-list) out of the render; the guide's filter is in fabric.yml.
     redistribute_mlag_ibgp_peering_vrfs: true
     vrfs:
       - name: PROD
@@ -118,7 +88,7 @@ tenants:
             name: Orange
             tags: [ORANGE]
             profile: TENANT_SVI
-            evpn_l2_multi_domain: false      # intent only — ORANGE is never filtered onto the Gateways
+            evpn_l2_multi_domain: false 
             ip_address_virtual: 10.30.30.1/24
 
       - name: DEV

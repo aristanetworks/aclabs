@@ -1,9 +1,5 @@
 ---
-# Domain C EVPN Gateway pair (C-LEAF7 / C-LEAF8) — role settings.
-#
-# The Gateways serve the fabric's VLANs and VRFs but run neither MLAG nor
-# OISM; `standard_leaf: false` (the fabric default) keeps every MLAG/OISM
-# hook off, and the two multicast switches keep AVD's OISM model off.
+
 standard_leaf: false
 evpn_multicast: false
 underlay_multicast_pim_sm: false

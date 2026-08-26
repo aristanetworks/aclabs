@@ -1,23 +1,11 @@
 ---
-# The nine inter-domain point-to-point links, defined once for the three
-# fabrics (each node renders its own end). IPv6 numbered, IS-IS BACKBONE
-# point-to-point on both ends.
-#
-#   2001:db8:bb<n>:<gw>::<host>/64 — the host suffix carries the node name
-#   (bb1 / c7 / d8 ...), so `show ipv6 route` reads like the diagram.
-#
-# `include_in_underlay_protocol: false` on purpose: the Gateway ends belong
-# to fabrics whose underlay is not IS-IS, and AVD refuses IPv6 p2p links in
-# the underlay protocol outside ISIS-SR. The IS-IS interface config is
-# therefore structured config on the profile — it lands on both ends of
-# every link (BB1/BB2 and the four Gateways alike).
 
 l3_edge:
   p2p_links_profiles:
     - name: DCI
       mtu: 9214
       include_in_underlay_protocol: false
-      mpls_ip: false        # the guide enables MPLS globally (`mpls ip`), not per interface
+      mpls_ip: false     
       ethernet_structured_config:
         ipv6_enable: true
         isis_enable: BACKBONE

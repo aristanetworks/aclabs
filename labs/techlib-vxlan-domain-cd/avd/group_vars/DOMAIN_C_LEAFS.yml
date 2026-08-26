@@ -1,39 +1,19 @@
 ---
-# Domain C standard leafs (C-LEAF1..6) — role settings.
-#
-# `standard_leaf` gates the MLAG and OISM additions that have no AVD 6.3
-# model (see DOMAIN_C_FABRIC/fabric.yml and services.yml).
+
 standard_leaf: true
 
-# The OISM PIM/IGMP source loopbacks are allocated per pod
-# (vtep_diagnostic.loopback_ip_pools); the Gateway pair has no pod entry and
-# therefore gets none.
 pod_name: C-LEAFS
 
-# AVD's OISM model insists on IPv4 PIM sparse-mode in the underlay. No PIM
-# renders from it here — there are no AVD uplinks and PIM is kept off the
-# MLAG peering SVI — while the real underlay multicast is PIMv6 on the
-# fabric links (fabric.yml); its only output, the global IPv4 multicast
-# routing block, is removed below. Kept in this role file rather than
-# fabric.yml on purpose: at fabric level it would put that block on the
-# spines as well.
 underlay_multicast_pim_sm: true
 
-# Multicast routing is IPv6 in the underlay (PIMv6 towards the spines) and
-# IPv4 inside the tenant VRFs. AVD writes a global IPv4 multicast routing
-# block (plus `software-forwarding sfe`) that the guide does not run.
 custom_structured_configuration_router_multicast:
   ipv4: null
   ipv6:
     routing: true
 
-# The pair's shared Multi-VTEP source (address per pod in fabric.yml).
 custom_structured_configuration_vxlan_interface:
   vxlan1:
     vxlan:
       mlag_source_interface: Loopback2
 
-# AVD pairs `vtep_diagnostic` with a virtual source-NAT entry so switch-
-# originated traffic on an anycast SVI is sourced from the VRF's OISM
-# loopback. The guide does not carry it.
 custom_structured_configuration_virtual_source_nat_vrfs: null
