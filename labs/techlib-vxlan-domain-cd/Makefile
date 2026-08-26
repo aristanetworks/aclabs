@@ -56,30 +56,3 @@ deploy-bb: ## Deploy Backbone (BB1/BB2) configs via eAPI
 
 .PHONY: deploy
 deploy: deploy-c deploy-d deploy-bb ## Deploy all configs (C + D + Backbone)
-
-.PHONY: validate-c
-validate-c: ## Run ANTA tests against Domain C
-	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml -e "target_hosts=DOMAIN_C_FABRIC"
-
-.PHONY: validate-d
-validate-d: ## Run ANTA tests against Domain D
-	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml -e "target_hosts=DOMAIN_D_FABRIC"
-
-.PHONY: validate-bb
-validate-bb: ## Run ANTA tests against Backbone (BB1/BB2)
-	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml -e "target_hosts=BACKBONE"
-
-.PHONY: validate
-validate: validate-c validate-d validate-bb ## Run ANTA tests against everything (C + D + Backbone)
-
-##################################################
-# Config parity — rendered configs vs. the lab's startup-configs
-##################################################
-
-.PHONY: parity
-parity: ## Compare avd/intended/configs with startup-configs (writes avd/PARITY-STATUS.md)
-	python3 avd/scripts/parity_report.py
-
-.PHONY: parity-node
-parity-node: ## Full missing/extra listing for one node, e.g. make parity-node NODE=C-LEAF7
-	python3 avd/scripts/parity_report.py $(NODE)
