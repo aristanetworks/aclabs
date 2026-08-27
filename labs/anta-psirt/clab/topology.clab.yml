@@ -8,15 +8,14 @@ mgmt:
 
 topology:
   defaults:
-    kind: arista_ceos
+    kind: ceos
 
   kinds:
-    arista_ceos:
+    ceos:
       image: arista/ceos:latest
       enforce-startup-config: true
-      env:
-        CLAB_MGMT_VRF: MGMT
-        INTFTYPE: et
+      binds:
+        - interface_mapping.json:/mnt/flash/EosIntfMapping.json:ro
 
   nodes:
     eos1:
@@ -34,13 +33,13 @@ topology:
 
   links:
     # Double links within each switch pair.
-    - endpoints: ["eos1:et1", "eos2:et1"]
-    - endpoints: ["eos1:et2", "eos2:et2"]
-    - endpoints: ["eos3:et1", "eos4:et1"]
-    - endpoints: ["eos3:et2", "eos4:et2"]
+    - endpoints: ["eos1:eth1", "eos2:eth1"]
+    - endpoints: ["eos1:eth2", "eos2:eth2"]
+    - endpoints: ["eos3:eth1", "eos4:eth1"]
+    - endpoints: ["eos3:eth2", "eos4:eth2"]
 
     # Cross-connect every switch in the first pair to both in the second pair.
-    - endpoints: ["eos1:et3", "eos3:et3"]
-    - endpoints: ["eos1:et4", "eos4:et3"]
-    - endpoints: ["eos2:et3", "eos3:et4"]
-    - endpoints: ["eos2:et4", "eos4:et4"]
+    - endpoints: ["eos1:eth3", "eos3:eth3"]
+    - endpoints: ["eos1:eth4", "eos4:eth3"]
+    - endpoints: ["eos2:eth3", "eos3:eth4"]
+    - endpoints: ["eos2:eth4", "eos4:eth4"]
