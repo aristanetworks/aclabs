@@ -17,7 +17,7 @@
         "memory": "16gb",
         "storage": "32gb"
     },
-    "onCreateCommand": "chmod +x /anta-psirt/addAliases.sh; /anta-psirt/addAliases.sh",
+    "onCreateCommand": "pip install --user 'anta[cli]' && chmod +x /anta-psirt/addAliases.sh && /anta-psirt/addAliases.sh",
     "postCreateCommand": "/bin/entrypoint",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/anta-psirt",
