@@ -1,0 +1,45 @@
+---
+name: anta-psirt
+prefix: ""
+
+mgmt:
+  network: anta-psirt-mgmt
+  ipv4-subnet: 172.100.100.0/24
+
+topology:
+  defaults:
+    kind: ceos
+
+  kinds:
+    ceos:
+      image: arista/ceos:latest
+      enforce-startup-config: true
+      binds:
+        - interface_mapping.json:/mnt/flash/EosIntfMapping.json:ro
+
+  nodes:
+    eos1:
+      mgmt-ipv4: 172.100.100.11
+      startup-config: init-configs/eos1.cfg
+    eos2:
+      mgmt-ipv4: 172.100.100.12
+      startup-config: init-configs/eos2.cfg
+    eos3:
+      mgmt-ipv4: 172.100.100.13
+      startup-config: init-configs/eos3.cfg
+    eos4:
+      mgmt-ipv4: 172.100.100.14
+      startup-config: init-configs/eos4.cfg
+
+  links:
+    # Double links within each switch pair.
+    - endpoints: ["eos1:eth1", "eos2:eth1"]
+    - endpoints: ["eos1:eth2", "eos2:eth2"]
+    - endpoints: ["eos3:eth1", "eos4:eth1"]
+    - endpoints: ["eos3:eth2", "eos4:eth2"]
+
+    # Cross-connect every switch in the first pair to both in the second pair.
+    - endpoints: ["eos1:eth3", "eos3:eth3"]
+    - endpoints: ["eos1:eth4", "eos4:eth3"]
+    - endpoints: ["eos2:eth3", "eos3:eth4"]
+    - endpoints: ["eos2:eth4", "eos4:eth4"]
