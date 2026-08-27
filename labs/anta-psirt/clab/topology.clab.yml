@@ -21,16 +21,16 @@ topology:
   nodes:
     eos1:
       mgmt-ipv4: 172.100.100.11
-      startup-config: clab/init-configs/eos1.cfg
+      startup-config: init-configs/eos1.cfg
     eos2:
       mgmt-ipv4: 172.100.100.12
-      startup-config: clab/init-configs/eos2.cfg
+      startup-config: init-configs/eos2.cfg
     eos3:
       mgmt-ipv4: 172.100.100.13
-      startup-config: clab/init-configs/eos3.cfg
+      startup-config: init-configs/eos3.cfg
     eos4:
       mgmt-ipv4: 172.100.100.14
-      startup-config: clab/init-configs/eos4.cfg
+      startup-config: init-configs/eos4.cfg
 
   links:
     # Double links within each switch pair.
