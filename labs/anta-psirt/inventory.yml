@@ -1,0 +1,15 @@
+---
+anta_inventory:
+  hosts:
+    - host: 172.100.100.11
+      name: eos1
+      tags: [anta-psirt]
+    - host: 172.100.100.12
+      name: eos2
+      tags: [anta-psirt]
+    - host: 172.100.100.13
+      name: eos3
+      tags: [anta-psirt]
+    - host: 172.100.100.14
+      name: eos4
+      tags: [anta-psirt]
