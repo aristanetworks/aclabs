@@ -37,7 +37,7 @@ jobs:
     uses: ./.github/workflows/container_build_child.yml
     strategy:
       matrix:
-        from_image: ["ghcr.io/${{ needs.vars.outputs.gh_org_lowercase }}/aclabs/lab-base:python3.12-avd-v6.3.0-clab0.78.1-rev2.6.10-uid1009"]
+        from_image: ["ghcr.io/${{ needs.vars.outputs.gh_org_lowercase }}/aclabs/lab-base:python3.12-avd-v6.3.0-clab0.79.0-rev2.6.11-uid1009"]
         user_id: ["1009"]
 
     with:
@@ -52,4 +52,6 @@ jobs:
       # - Set `from_image` to use lab-base container rev 2.6.9
       # 1.0.3:
       # - Set `from_image` to use lab-base container rev 2.6.10
-      container_revision: "1.0.3"
+      # 1.0.4:
+      # - Set `from_image` to use lab-base container rev 2.6.11
+      container_revision: "1.0.4"
