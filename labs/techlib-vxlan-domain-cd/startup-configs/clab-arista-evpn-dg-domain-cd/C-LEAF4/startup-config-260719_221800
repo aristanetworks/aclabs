@@ -212,6 +212,7 @@ interface Vlan4093
    mtu 9214
    no autostate
    ipv6 enable
+   ipv6 nd ra interval 5
 !
 interface Vlan4094
    description MLAG PEER SYNC

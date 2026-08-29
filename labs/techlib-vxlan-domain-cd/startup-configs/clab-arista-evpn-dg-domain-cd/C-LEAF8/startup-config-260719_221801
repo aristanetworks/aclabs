@@ -266,6 +266,7 @@ router bgp 65308
       domain identifier 99:99 remote
       domain identifier 65300:65300 attach
       route import match-failure action discard
+      layer-2 fec in-place update
       !
       evpn ethernet-segment domain local
          identifier 0000:cccc:0007:0008:0001
