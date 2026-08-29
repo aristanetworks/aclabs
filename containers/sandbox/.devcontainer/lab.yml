@@ -35,9 +35,9 @@ description: |
   Happy labbing! 🧪
 
 components:
-  ceos: 4.36.1F
+  ceos: 4.36.2F
   avd: 6.3.0
-  clab: 0.78.1
+  clab: 0.79.0
 
 resources:
   cpu: 16
