@@ -84,14 +84,12 @@ interface Ethernet7
    mtu 9214
    no switchport
    ip address 192.168.0.12/31
-   pim ipv4 sparse-mode
 !
 interface Ethernet8
    description A-LEAF8
    mtu 9214
    no switchport
    ip address 192.168.0.14/31
-   pim ipv4 sparse-mode
 !
 interface Loopback0
    description Globally Unique Address
@@ -110,6 +108,7 @@ no ip routing vrf MGMT
 ip prefix-list PL-LOOPBACKS
    seq 10 permit 10.0.0.0/16 eq 32
    seq 20 permit 10.1.0.0/16 eq 32
+   seq 30 permit 10.2.0.0/16 eq 32
 !
 ip prefix-list PL-P2P-UNDERLAY
    seq 10 permit 192.168.0.0/24 le 31
