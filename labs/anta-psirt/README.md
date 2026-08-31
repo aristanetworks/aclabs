@@ -24,8 +24,16 @@ make inspect
 make stop
 ```
 
-Run ANTA against the inventory with credentials supplied on the command line:
+Run ANTA PSIRT assessment and build a markdown report.
 
 ```shell
-anta --username "$LABUSERNAME" --password "$LABPASSPHRASE" --insecure --inventory inventory.yml nrfu
+# Runs `anta psirt --ignore-error --ignore-status --username $(ANTA_USERNAME) --password $(ANTA_PASSWORD) --inventory inventory.yml md-report --md-output psirt-report.md`
+make psirt-report
+```
+
+Run ANTA PSIRT assessment and build a CSV report.
+
+```shell
+# Runs `anta psirt --ignore-error --ignore-status --username $(ANTA_USERNAME) --password $(ANTA_PASSWORD) --inventory inventory.yml csv --csv-output psirt-report.csv`
+make psirt-csv
 ```
