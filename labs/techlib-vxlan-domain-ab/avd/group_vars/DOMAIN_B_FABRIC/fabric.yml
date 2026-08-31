@@ -105,18 +105,10 @@ spine:
           <<: *unnumbered
         - name: Ethernet6
           <<: *unnumbered
-        # The guide runs PIM on every spine downlink, including the two that
-        # face the (non-OISM) Gateway pair.
         - name: Ethernet7
           <<: *unnumbered
-          pim:
-            ipv4:
-              sparse_mode: true
         - name: Ethernet8
           <<: *unnumbered
-          pim:
-            ipv4:
-              sparse_mode: true
   nodes:
     - name: B-SPINE1
       id: 201
