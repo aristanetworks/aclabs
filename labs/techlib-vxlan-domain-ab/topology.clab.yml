@@ -294,8 +294,6 @@ topology:
       startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-
-      startup-delay: 30
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     B-LEAF2:
@@ -304,8 +302,6 @@ topology:
       startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-
-      startup-delay: 30
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     B-LEAF3:
@@ -314,8 +310,6 @@ topology:
       startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-
-      startup-delay: 30
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     B-LEAF4:
@@ -324,8 +318,6 @@ topology:
       startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-
-      startup-delay: 30
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
 
     B-LEAF5:
