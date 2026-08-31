@@ -11,18 +11,11 @@ links fully cross-connect the two pairs.
 
 ![network diagram](assets/img/anta-psirt.png)
 
-## Credentials
+## Running ANTA
 
-- Username: `arista`
-- Password: `arista`
+Open a terminal by clicking the three horizontal lines on the top left, select "Terminal" and then click "New Terminal".
 
-## Commands
-
-```shell
-make start
-make inspect
-make stop
-```
+![open terminal](assets/img/vscode-terminal.png)
 
 Run ANTA PSIRT assessment and build a markdown report.
 
@@ -36,4 +29,17 @@ Run ANTA PSIRT assessment and build a CSV report.
 ```shell
 # Runs `anta psirt --ignore-error --ignore-status --username $(ANTA_USERNAME) --password $(ANTA_PASSWORD) --inventory inventory.yml csv --csv-output psirt-report.csv`
 make psirt-csv
+```
+
+## Credentials
+
+- Username: `arista`
+- Password: `arista`
+
+## Other Commands
+
+```shell
+make start
+make inspect
+make stop
 ```
