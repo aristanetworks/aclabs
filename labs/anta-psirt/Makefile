@@ -24,6 +24,11 @@ psirt-report: ## Run ANTA PSIRT assessment and build a markdown report.
 	@anta psirt --ignore-error --ignore-status --username $(ANTA_USERNAME) --password $(ANTA_PASSWORD) --inventory inventory.yml md-report --md-output psirt-report.md
 	@/usr/lib/code-server/lib/vscode/bin/remote-cli/code-server -r psirt-report.md
 
+.PHONY: psirt-report-expanded
+psirt-report-expanded: ## Run ANTA PSIRT assessment and build an expanded markdown report.
+	@anta psirt --ignore-error --ignore-status --username $(ANTA_USERNAME) --password $(ANTA_PASSWORD) --inventory inventory.yml md-report --md-output psirt-report-expanded.md --expand
+	@/usr/lib/code-server/lib/vscode/bin/remote-cli/code-server -r psirt-report-expanded.md
+
 .PHONY: psirt-csv
 psirt-csv: ## Run ANTA PSIRT assessment and build a CSV report.
 	@anta psirt --ignore-error --ignore-status --username $(ANTA_USERNAME) --password $(ANTA_PASSWORD) --inventory inventory.yml csv --csv-output psirt-report.csv

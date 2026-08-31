@@ -24,6 +24,13 @@ Run ANTA PSIRT assessment and build a markdown report.
 make psirt-report
 ```
 
+Run ANTA PSIRT assessment and build an expanded markdown report.
+
+```shell
+# Runs `anta psirt --ignore-error --ignore-status --username $(ANTA_USERNAME) --password $(ANTA_PASSWORD) --inventory inventory.yml md-report --md-output psirt-report-expanded.md` --expand
+make psirt-report-expanded
+```
+
 Run ANTA PSIRT assessment and build a CSV report.
 
 ```shell
