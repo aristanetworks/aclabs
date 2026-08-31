@@ -506,6 +506,10 @@ l3leaf:
           address_family_evpn:
             domain_identifier: '3:3'
             domain_identifier_remote: '99:99'
+            # In-place FEC updates apply to the VXLAN-side FECs on the
+            # dual-encap Gateway (the standard C leafs do not carry this).
+            layer_2_fec_in_place_update:
+              enabled: true
             peer_groups:
               - name: LOCAL-EVPN-PEERS
                 encapsulation: vxlan

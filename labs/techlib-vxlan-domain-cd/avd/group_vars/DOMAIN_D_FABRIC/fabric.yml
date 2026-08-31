@@ -230,7 +230,10 @@ l3leaf:
               enabled: true
               route_map: RM-CONN-2-BGP
         address_family_evpn:
-          layer_2_fec_in_place_update: "{{ {'enabled': true} if standard_leaf else none }}"
+          # Every D leaf carries this, the dual-encap Gateways included —
+          # in-place FEC updates apply to the Gateway's VXLAN-side FECs.
+          layer_2_fec_in_place_update:
+            enabled: true
           peer_groups:
             - name: LOCAL-EVPN-PEERS
               route_map_in: null
