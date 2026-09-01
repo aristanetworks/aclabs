@@ -40,7 +40,7 @@ boot:
   per_node_timeout: 420
   probe_port: 22
   preflight_notes:
-    - "First boot: cEOS + startup-config typically takes 5 minutes for a fabric this size"
+    - "First boot: cEOS + startup-config typically takes 10 minutes for a fabric this size"
   roles:
     C-LEAF7: EVPN Gateway
     C-LEAF8: EVPN Gateway
