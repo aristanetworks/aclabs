@@ -54,4 +54,6 @@ jobs:
       # - Set `from_image` to use lab-base container rev 2.6.10
       # 1.0.4:
       # - Set `from_image` to use lab-base container rev 2.6.11
-      container_revision: "1.0.4"
+      # 1.0.5:
+      # - init_lab.py: raise DEFAULT_PER_NODE_TIMEOUT from 420s (7 min) to 600s (10 min)
+      container_revision: "1.0.5"
