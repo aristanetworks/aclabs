@@ -77,6 +77,7 @@ topology:
     C-LEAF1:
       kind: arista_ceos
       mgmt-ipv4: 172.100.101.105
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -84,6 +85,7 @@ topology:
     C-LEAF2:
       kind: arista_ceos
       mgmt-ipv4: 172.100.101.106
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -91,6 +93,7 @@ topology:
     C-LEAF3:
       kind: arista_ceos
       mgmt-ipv4: 172.100.101.107
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -98,6 +101,7 @@ topology:
     C-LEAF4:
       kind: arista_ceos
       mgmt-ipv4: 172.100.101.108
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -105,6 +109,7 @@ topology:
     C-LEAF5:
       kind: arista_ceos
       mgmt-ipv4: 172.100.101.109
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -112,6 +117,7 @@ topology:
     C-LEAF6:
       kind: arista_ceos
       mgmt-ipv4: 172.100.101.110
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -119,6 +125,7 @@ topology:
     C-LEAF7:
       kind: arista_ceos
       mgmt-ipv4: 172.100.101.111
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -126,6 +133,7 @@ topology:
     C-LEAF8:
       kind: arista_ceos
       mgmt-ipv4: 172.100.101.112
+      startup-delay: 30
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -137,6 +145,7 @@ topology:
     HostC1:
       kind: linux
       mgmt-ipv4: 172.100.101.201
+      startup-delay: 60
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
@@ -150,6 +159,7 @@ topology:
     HostC2:
       kind: linux
       mgmt-ipv4: 172.100.101.202
+      startup-delay: 60
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
@@ -163,6 +173,7 @@ topology:
     HostC3:
       kind: linux
       mgmt-ipv4: 172.100.101.203
+      startup-delay: 60
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
@@ -175,6 +186,7 @@ topology:
     HostC4:
       kind: linux
       mgmt-ipv4: 172.100.101.204
+      startup-delay: 60
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
@@ -188,6 +200,7 @@ topology:
     HostC5:
       kind: linux
       mgmt-ipv4: 172.100.101.205
+      startup-delay: 60
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
       env:
@@ -200,6 +213,7 @@ topology:
     HostC6:
       kind: linux
       mgmt-ipv4: 172.100.101.206
+      startup-delay: 60
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
@@ -213,6 +227,7 @@ topology:
     HostC7:
       kind: linux
       mgmt-ipv4: 172.100.101.207
+      startup-delay: 60
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
@@ -226,6 +241,7 @@ topology:
     HostC8:
       kind: linux
       mgmt-ipv4: 172.100.101.208
+      startup-delay: 60
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
       env:
@@ -255,7 +271,7 @@ topology:
     D-SPINE1:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.101
-      startup-delay: 30
+      startup-delay: 90
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -263,7 +279,7 @@ topology:
     D-SPINE2:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.102
-      startup-delay: 30
+      startup-delay: 90
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -271,7 +287,7 @@ topology:
     D-SPINE3:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.103
-      startup-delay: 30
+      startup-delay: 90
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -279,7 +295,7 @@ topology:
     D-SPINE4:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.104
-      startup-delay: 30
+      startup-delay: 90
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -291,7 +307,7 @@ topology:
     D-LEAF1:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.105
-      startup-delay: 30
+      startup-delay: 120
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -299,7 +315,7 @@ topology:
     D-LEAF2:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.106
-      startup-delay: 30
+      startup-delay: 120
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -307,7 +323,7 @@ topology:
     D-LEAF3:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.107
-      startup-delay: 30
+      startup-delay: 120
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -315,7 +331,7 @@ topology:
     D-LEAF4:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.108
-      startup-delay: 30
+      startup-delay: 120
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -323,7 +339,7 @@ topology:
     D-LEAF5:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.109
-      startup-delay: 30
+      startup-delay: 120
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -331,7 +347,7 @@ topology:
     D-LEAF6:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.110
-      startup-delay: 30
+      startup-delay: 120
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -343,7 +359,7 @@ topology:
     D-LEAF7:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.111
-      startup-delay: 30
+      startup-delay: 120
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -351,7 +367,7 @@ topology:
     D-LEAF8:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.112
-      startup-delay: 30
+      startup-delay: 120
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -359,7 +375,7 @@ topology:
     D-SW1:
       kind: arista_ceos
       mgmt-ipv4: 172.100.102.113
-      startup-delay: 30
+      startup-delay: 120
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
@@ -373,7 +389,7 @@ topology:
       mgmt-ipv4: 172.100.102.201
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
-      startup-delay: 45
+      startup-delay: 150
       env:
         TMODE: lacp
         IPV4: 10.20.20.101/24
@@ -387,7 +403,7 @@ topology:
       mgmt-ipv4: 172.100.102.202
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
-      startup-delay: 45
+      startup-delay: 150
       env:
         TMODE: lacp
         IPV4: 10.40.40.101/24
@@ -401,7 +417,7 @@ topology:
       mgmt-ipv4: 172.100.102.203
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
-      startup-delay: 45
+      startup-delay: 150
       env:
         IPV4: 10.60.60.101/24
         STATIC_ROUTE: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
@@ -414,7 +430,7 @@ topology:
       mgmt-ipv4: 172.100.102.204
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
-      startup-delay: 45
+      startup-delay: 150
       env:
         TMODE: lacp
         IPV4: 10.10.10.103/24
@@ -428,7 +444,7 @@ topology:
       mgmt-ipv4: 172.100.102.205
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
-      startup-delay: 45
+      startup-delay: 150
       env:
         IPV4: 10.70.70.102/24
         STATIC_ROUTE: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
@@ -441,7 +457,7 @@ topology:
       mgmt-ipv4: 172.100.102.206
       binds:
         - assets/prod_hosts.txt:/home/admin/hosts.txt
-      startup-delay: 45
+      startup-delay: 150
       env:
         IPV4: 10.40.40.102/24
         STATIC_ROUTE: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
@@ -454,7 +470,7 @@ topology:
       mgmt-ipv4: 172.100.102.207
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
-      startup-delay: 45
+      startup-delay: 150
       env:
         IPV4: 10.80.80.101/24
         STATIC_ROUTE: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
@@ -467,7 +483,7 @@ topology:
       mgmt-ipv4: 172.100.102.208
       binds:
         - assets/dev_hosts.txt:/home/admin/hosts.txt
-      startup-delay: 45
+      startup-delay: 150
       env:
         IPV4: 10.60.60.102/24
         IPV6: 2001:db8:60:60::102/64
@@ -483,6 +499,7 @@ topology:
     BB1:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.101
+      startup-delay: 180
       binds:
         - sn/BB1.txt:/mnt/flash/ceos-config:ro
       # was: startup-config: init-configs/BB1.cfg (replaced by Sandbox Dashboard 2026-06-25)
@@ -491,6 +508,7 @@ topology:
     BB2:
       kind: arista_ceos
       mgmt-ipv4: 172.100.100.102
+      startup-delay: 180
       binds:
         - sn/BB2.txt:/mnt/flash/ceos-config:ro
       # was: startup-config: init-configs/BB2.cfg (replaced by Sandbox Dashboard 2026-06-25)

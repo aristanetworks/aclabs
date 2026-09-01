@@ -165,18 +165,6 @@ spine:
       # leaves EOS at its default (mstp).
       spanning_tree:
         mode: mstp
-      # The guide runs PIM on every spine downlink, including the two that
-      # face the (non-OISM) Gateway pair; AVD only enables it towards
-      # multicast-enabled leafs.
-      ethernet_interfaces:
-        - name: Ethernet7
-          pim:
-            ipv4:
-              sparse_mode: true
-        - name: Ethernet8
-          pim:
-            ipv4:
-              sparse_mode: true
   nodes:
     - name: A-SPINE1
       id: 201
