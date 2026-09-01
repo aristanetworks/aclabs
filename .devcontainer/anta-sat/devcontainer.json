@@ -19,7 +19,7 @@
     },
     "postCreateCommand": "/bin/entrypoint",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
-    "workspaceFolder": "/anta-psirt",
+    "workspaceFolder": "/anta-sat",
     "containerUser": "avd",
     "runArgs": ["--env-file", "${localWorkspaceFolder}/labs/${containerWorkspaceFolder}/.vscode/lab_vars.public.env"]
 }

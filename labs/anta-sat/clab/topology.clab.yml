@@ -1,9 +1,9 @@
 ---
-name: anta-psirt
+name: anta-sat
 prefix: ""
 
 mgmt:
-  network: anta-psirt-mgmt
+  network: anta-sat-mgmt
   ipv4-subnet: 172.100.100.0/24
 
 topology:
