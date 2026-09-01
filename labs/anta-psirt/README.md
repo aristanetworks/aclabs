@@ -11,21 +11,42 @@ links fully cross-connect the two pairs.
 
 ![network diagram](assets/img/anta-psirt.png)
 
+## Running ANTA
+
+Open a terminal by clicking the three horizontal lines on the top left, select "Terminal" and then click "New Terminal".
+
+![open terminal](assets/img/vscode-terminal.png)
+
+Run ANTA PSIRT assessment and build a markdown report.
+
+```shell
+# Runs `anta psirt --ignore-error --ignore-status --username $(ANTA_USERNAME) --password $(ANTA_PASSWORD) --inventory inventory.yml md-report --md-output psirt-report.md`
+make psirt-report
+```
+
+Run ANTA PSIRT assessment and build an expanded markdown report.
+
+```shell
+# Runs `anta psirt --ignore-error --ignore-status --username $(ANTA_USERNAME) --password $(ANTA_PASSWORD) --inventory inventory.yml md-report --md-output psirt-report-expanded.md` --expand
+make psirt-report-expanded
+```
+
+Run ANTA PSIRT assessment and build a CSV report.
+
+```shell
+# Runs `anta psirt --ignore-error --ignore-status --username $(ANTA_USERNAME) --password $(ANTA_PASSWORD) --inventory inventory.yml csv --csv-output psirt-report.csv`
+make psirt-csv
+```
+
 ## Credentials
 
 - Username: `arista`
 - Password: `arista`
 
-## Commands
+## Other Commands
 
 ```shell
 make start
 make inspect
 make stop
-```
-
-Run ANTA against the inventory with credentials supplied on the command line:
-
-```shell
-anta --username "$LABUSERNAME" --password "$LABPASSPHRASE" --insecure --inventory inventory.yml nrfu
 ```
