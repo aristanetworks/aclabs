@@ -76,7 +76,7 @@ from rich.theme import Theme
 # Defaults
 # ─────────────────────────────────────────────────────────────────────────────
 
-DEFAULT_PER_NODE_TIMEOUT = 600      # 10 min — generous for cold cEOS + startup-config
+DEFAULT_PER_NODE_TIMEOUT = 900      # 15 min — generous for cold cEOS + startup-config
 DEFAULT_PROBE_PORT = 22
 DEFAULT_PROBE_INTERVAL = 2.0        # seconds between probe attempts
 DEFAULT_CONNECT_TIMEOUT = 2.0       # seconds per TCP connect attempt
