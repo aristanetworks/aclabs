@@ -17,7 +17,7 @@ display:
   #   type: warning
   #   message: "This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated."
   # Optional external documentation link. Rendered as the first Quick Action button.
-  documentation_url: "https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domain_ab/"
+  documentation_url: "https://tech-library.arista.com/data_center/evpnvxlan/deployment_guide/domains_a_b/overview/"
   # Software versions this lab was validated against. Rendered as a badge row
   # in the dashboard header.
   validated_with:
@@ -39,7 +39,7 @@ credentials:
 boot:
   probe_port: 22
   preflight_notes:
-    - "First boot: cEOS + startup-config typically takes 10 minutes for a fabric this size"
+    - "First boot: cEOS + startup-config typically takes 15-20 minutes for a fabric this size"
   roles:
     A-LEAF7: EVPN Gateway
     A-LEAF8: EVPN Gateway
