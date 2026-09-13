@@ -1,0 +1,57 @@
+# Canonical metadata for this lab. Consumed by:
+#   * assets/init_lab.py              — boot TUI + LAB-READY.md generation
+#   * assets/docs_generate.py         — README.md regeneration
+#   * PacketAnglers/lab-dashboard ext — LAB-READY.md rendering
+#
+# Schema is nested by concern (display / credentials / boot / dashboard).
+# Everything is optional — sensible defaults apply when absent.
+
+# ── Lab identity ─────────────────────────────────────────────────────────
+display:
+  name: "Arista Flex-Algo Solution Guide"
+  subtitle: "Tech Library Solution Guide"
+  # Optional banner rendered as a GitHub alert at the top of the README.
+  # Type must be one of: note, tip, important, warning, caution.
+  # Omit the `banner:` field entirely for no banner (e.g., GA labs).
+  # banner:
+  #   type: warning
+  #   message: "This lab is in preview. It's fully functional, but breaking changes can happen. We are working hard on building the best lab collection and your feedback is always appreciated."
+  # Optional external documentation link. Rendered as the first Quick Action button.
+  documentation_url: "https://tech-library.arista.com/solution_guides/flex_algo/"
+  # Software versions this lab was validated against. Rendered as a badge row
+  # in the dashboard header.
+  validated_with:
+    cEOS: "4.36.2F"
+    AVD: "6.3.0"
+    Containerlab: "0.79.0"
+  # Recommended host resources. Rendered as a badge row in the dashboard header.
+  resources:
+    CPUs: 16
+    Memory: "64 GB"
+    Storage: "64 GB"
+
+# ── Credentials surfaced in the dashboard + boot TUI ─────────────────────
+credentials:
+  username: admin
+  password: admin
+
+# ── Boot-time behavior ───────────────────────────────────────────────────
+boot:
+  probe_port: 22
+  preflight_notes:
+    - "First boot: cEOS + startup-config typically takes 5 minutes for a fabric this size"
+  roles:
+    P1: P Node
+    P2: P Node
+    P3: P Node
+    PE1: PE Node
+    PE2: PE Node
+  # skip_nodes: []
+
+# ── Dashboard content ────────────────────────────────────────────────────
+dashboard:
+  auto_open: true
+  tips:
+    - "Run `pingcheck.sh` on any of the Linux endhosts to validate IPv4 and IPv6 unicast reachability."
+    - "Run `mcast-send` and `mcast-receive` on any of the Linux endhosts to validate IPv4 and IPv6 multicast transport."
+    - "Refer to `README.md` for AVD operations (build / deploy / validate)."

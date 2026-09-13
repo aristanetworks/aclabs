@@ -1,0 +1,67 @@
+{
+  "freeTextAnnotations": [],
+  "freeShapeAnnotations": [],
+  "trafficRateAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "ceos1",
+      "position": {
+        "x": 380,
+        "y": 360
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "ceos2",
+      "position": {
+        "x": 600,
+        "y": 360
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "PE1",
+      "position": {
+        "x": 300,
+        "y": 300
+      }
+    },
+    {
+      "id": "PE2",
+      "position": {
+        "x": 680,
+        "y": 300
+      }
+    },
+    {
+      "id": "P1",
+      "position": {
+        "x": 480,
+        "y": 180
+      }
+    },
+    {
+      "id": "P2",
+      "position": {
+        "x": 480,
+        "y": 300
+      }
+    },
+    {
+      "id": "P3",
+      "position": {
+        "x": 480,
+        "y": 420
+      }
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {}
+}

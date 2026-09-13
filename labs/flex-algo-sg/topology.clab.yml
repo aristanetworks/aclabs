@@ -1,0 +1,39 @@
+name: sandbox-template
+prefix: ""
+
+mgmt:
+  network: custom_mgmt
+  ipv4-subnet: 172.100.100.0/24
+
+topology:
+
+  defaults:
+    kind: arista_ceos
+
+  kinds:
+    arista_ceos:
+      enforce-startup-config: true
+      image: arista/ceos:latest
+      env:
+        CLAB_MGMT_VRF: MGMT
+        INTFTYPE: et
+
+  nodes:
+    PE1: 
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
+    PE2: 
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
+    P1:
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
+    P2:
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
+    P3: 
+      startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
+ 
+  links:
+    - endpoints: [ "PE2:et1", "P3:et2" ]
+    - endpoints: [ "P2:et2", "PE2:et2" ]
+    - endpoints: [ "P1:et2", "PE2:et3" ]
+    - endpoints: [ "P1:et1", "PE1:et1" ]
+    - endpoints: [ "P2:et1", "PE1:et2" ]
+    - endpoints: [ "P3:et1", "PE1:et3" ]
