@@ -111,4 +111,8 @@ router isis IGP
       flex-algo MIN_DELAY level-2 advertised
       flex-algo TE_METRIC level-2 advertised
 !
+management ssh
+   vrf MGMT
+      no shutdown
+!
 end

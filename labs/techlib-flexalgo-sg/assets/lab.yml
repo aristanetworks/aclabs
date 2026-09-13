@@ -54,4 +54,3 @@ dashboard:
   tips:
     - "Run `pingcheck.sh` on any of the Linux endhosts to validate IPv4 and IPv6 unicast reachability."
     - "Run `mcast-send` and `mcast-receive` on any of the Linux endhosts to validate IPv4 and IPv6 multicast transport."
-    - "Refer to `README.md` for AVD operations (build / deploy / validate)."
