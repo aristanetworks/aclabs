@@ -33,6 +33,8 @@ management api netconf
    transport ssh default
       vrf MGMT
 !
+aaa authorization exec default local
+!
 interface Ethernet1
    description to_PE1
    no switchport
