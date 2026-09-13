@@ -20,7 +20,6 @@
         "memory": "64gb",
         "storage": "64gb"
     },
-    "onCreateCommand": "chmod +x /techlib-flexalgo-sg/addAliases.sh; /techlib-flexalgo-sg/addAliases.sh",
     "postCreateCommand": "/bin/entrypoint",
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/techlib-flexalgo-sg",
