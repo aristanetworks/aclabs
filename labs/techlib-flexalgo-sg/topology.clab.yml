@@ -20,31 +20,31 @@ topology:
   nodes:
     PE1:
       kind: arista_ceos
-      mgmt-ipv4: 172.100.101.201
+      mgmt-ipv4: 172.100.100.201
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-    PE2: 
+    PE2:
       kind: arista_ceos
-      mgmt-ipv4: 172.100.101.202
+      mgmt-ipv4: 172.100.100.202
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
     P1:
       kind: arista_ceos
-      mgmt-ipv4: 172.100.101.101
+      mgmt-ipv4: 172.100.100.101
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
     P2:
       kind: arista_ceos
-      mgmt-ipv4: 172.100.101.102
+      mgmt-ipv4: 172.100.100.102
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro
-    P3: 
+    P3:
       kind: arista_ceos
-      mgmt-ipv4: 172.100.101.103
+      mgmt-ipv4: 172.100.100.103
       startup-config: startup-configs/__clabLabName__/__clabNodeName__/startup-config
       binds:
         - sn/__clabNodeName__.txt:/mnt/flash/ceos-config:ro

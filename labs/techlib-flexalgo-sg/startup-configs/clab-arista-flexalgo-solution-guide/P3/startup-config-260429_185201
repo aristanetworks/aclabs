@@ -68,7 +68,7 @@ interface Loopback0
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.3/24
+   ip address 172.100.100.103/24
 !
 ip routing
 no ip routing vrf MGMT

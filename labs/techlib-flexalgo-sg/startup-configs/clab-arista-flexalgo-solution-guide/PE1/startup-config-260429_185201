@@ -102,7 +102,7 @@ interface Loopback103
 !
 interface Management0
    vrf MGMT
-   ip address 172.100.100.2/24
+   ip address 172.100.100.201/24
 !
 ip routing
 ip routing vrf BLUE
