@@ -1,0 +1,121 @@
+! Startup-config last modified at Wed Apr 29 18:52:01 2026 by root
+! device: P3 (cEOSLab, EOS-4.35.2F-46221466.4352F (engineering build))
+!
+no aaa root
+aaa authentication policy local allow-nopassword-remote-login
+!
+username admin privilege 15 role network-admin nopassword
+!
+management api http-commands
+   no shutdown
+   !
+   vrf MGMT
+      no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+service routing protocols model multi-agent
+!
+hostname P3
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+vrf instance MGMT
+!
+management api gnmi
+   transport grpc default
+      vrf MGMT
+!
+management api netconf
+   transport ssh default
+      vrf MGMT
+!
+aaa authorization exec default local
+!
+interface Ethernet1
+   description to_PE1
+   no switchport
+   ip address 10.10.3.0/31
+   isis enable IGP
+   isis metric 10
+   isis network point-to-point
+   traffic-engineering
+   traffic-engineering administrative-group Fourhund
+   traffic-engineering metric 10000
+   traffic-engineering min-delay static 10000 microseconds
+!
+interface Ethernet2
+   description to_PE2
+   no switchport
+   ip address 10.10.12.0/31
+   isis enable IGP
+   isis metric 10
+   isis network point-to-point
+   traffic-engineering
+   traffic-engineering administrative-group Fourhund
+   traffic-engineering metric 10000
+   traffic-engineering min-delay static 10000 microseconds
+!
+interface Loopback0
+   ip address 10.0.0.5/32
+   node-segment ipv4 index 5
+   node-segment ipv4 index 105 flex-algo MIN_DELAY
+   node-segment ipv4 index 205 flex-algo TE_METRIC
+   node-segment ipv4 index 305 flex-algo FourhundG
+   isis enable IGP
+   isis metric 0
+!
+interface Management0
+   vrf MGMT
+   ip address 172.100.100.103/24
+!
+ip routing
+no ip routing vrf MGMT
+!
+ip route vrf MGMT 0.0.0.0/0 172.100.100.1
+!
+mpls ip
+!
+router traffic-engineering
+   segment-routing
+      rib system-colored-tunnel-rib
+   router-id ipv4 10.0.0.5
+   administrative-group alias Fourhund group 32
+   !
+   flex-algo
+      flex-algo 128 MIN_DELAY
+         metric min-delay
+         color 128
+      !
+      flex-algo 129 TE_METRIC
+         metric te-metric
+         color 129
+      !
+      flex-algo 130 FourhundG
+         administrative-group include all Fourhund
+         color 130
+!
+router isis IGP
+   net 49.0001.0000.0000.0005.00
+   is-hostname P3
+   is-type level-2
+   timers local-convergence-delay protected-prefixes
+   !
+   address-family ipv4 unicast
+      fast-reroute ti-lfa mode node-protection
+   !
+   segment-routing mpls
+      no shutdown
+      flex-algo FourhundG level-2 advertised
+      flex-algo MIN_DELAY level-2 advertised
+      flex-algo TE_METRIC level-2 advertised
+!
+management ssh
+   vrf MGMT
+      no shutdown
+!
+end

@@ -1,0 +1,94 @@
+{
+  "freeTextAnnotations": [],
+  "freeShapeAnnotations": [],
+  "trafficRateAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "ceos1",
+      "position": {
+        "x": 380,
+        "y": 360
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "ceos2",
+      "position": {
+        "x": 600,
+        "y": 360
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 0
+    },
+    {
+      "id": "PE1",
+      "position": {
+        "x": 240,
+        "y": 280
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 25
+    },
+    {
+      "id": "PE2",
+      "position": {
+        "x": 720,
+        "y": 280
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 25
+    },
+    {
+      "id": "P1",
+      "position": {
+        "x": 480,
+        "y": 120
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 25
+    },
+    {
+      "id": "P2",
+      "position": {
+        "x": 480,
+        "y": 280
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 25
+    },
+    {
+      "id": "P3",
+      "position": {
+        "x": 480,
+        "y": 440
+      },
+      "icon": "pe",
+      "iconColor": "#16325b",
+      "iconCornerRadius": 25
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {
+    "style": "default",
+    "linkLabelMode": "show-all",
+    "lastNonTelemetryLinkLabelMode": "show-all",
+    "telemetryNodeSizePx": 40,
+    "telemetryInterfaceSizePercent": 100,
+    "showRateLabels": false,
+    "autoCreateTrafficRateAnnotations": false,
+    "gridLineWidth": 0.5,
+    "gridStyle": "quadratic",
+    "gridColor": null,
+    "gridBgColor": null
+  }
+}
