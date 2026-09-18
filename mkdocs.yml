@@ -51,22 +51,28 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      accent: red
+      primary: blue
+      accent: blue
       toggle:
         icon: material/weather-sunny
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      accent: amber
+      primary: blue
+      accent: light blue
       toggle:
         icon: material/weather-night
         name: Switch to light mode
 
 markdown_extensions:
+  - abbr
   - attr_list
   - admonition
   - footnotes
   - pymdownx.details
+  - pymdownx.snippets:
+      base_path: [docs]
+      check_paths: true
   - pymdownx.superfences
   - pymdownx.critic
   - pymdownx.caret
@@ -140,4 +146,10 @@ nav:
   - ATD Labs:
       - ATD Dual DC: atd-atd-dual-dc.md
   - Telemetry:
-      gNMIc Prometheus Grafana Lab: telemetry.md
+      - gNMIc Prometheus Grafana Lab: telemetry.md
+      - Deployment Guide:
+          - gnmic-deployment-guide/index.md
+          - Fabric Configuration: gnmic-deployment-guide/fabric-configuration.md
+          - Telemetry Stack: gnmic-deployment-guide/telemetry-stack.md
+          - Exploring the Lab: gnmic-deployment-guide/exploring-the-lab.md
+          - Troubleshooting: gnmic-deployment-guide/troubleshooting.md

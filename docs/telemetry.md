@@ -1,5 +1,11 @@
 # Telemetry labs
 
+!!! tip "New: Deployment Guide"
+
+    A full deployment guide for this lab is now available — covering the fabric design, gNMIc collector configuration, event processors, dashboards, and hands-on RPC/stream-mode walkthroughs.
+
+    [Open the Deployment Guide :octicons-book-16:](gnmic-deployment-guide/index.md){ .md-button .md-button--primary }
+
 ## gNMIc Prometheus Grafana Lab
 
 !!! Info "Lab Details"

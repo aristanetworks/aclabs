@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" font-family="Roboto, Arial, sans-serif" font-size="12">
+  <defs>
+    <style>
+      .title      { font-weight: 700; font-size: 15px; fill: #1a2733; }
+      .row-lbl    { fill: #1a2733; font-weight: 600; font-size: 12px; }
+      .axis       { stroke: #999; stroke-width: 1; fill: none; }
+      .axis-tick  { stroke: #999; stroke-width: 1; }
+      .tick-lbl   { fill: #666; font-size: 10px; text-anchor: middle; }
+      .event      { fill: #d64545; }
+      .event-lbl  { fill: #d64545; font-size: 11px; font-weight: 600; text-anchor: middle; }
+      .push       { fill: #2e86ab; }
+      .push-hb    { fill: #6f9654; }
+      .push-sample{ fill: #f18f01; }
+      .push-tgt   { fill: #a23b72; }
+      .row-bg     { fill: #f4f6f8; }
+      .row-note   { fill: #666; font-size: 10px; font-style: italic; }
+      .caption    { fill: #666; font-size: 11px; text-anchor: middle; font-style: italic; }
+    </style>
+  </defs>
+  <text x="480" y="24" text-anchor="middle" class="title">Stream Modes — same path, four subscription shapes, one link flap</text>
+
+  <!-- Event markers (link goes DOWN at t=10s, UP at t=25s) -->
+  <line x1="240" y1="60" x2="240" y2="410" stroke="#d64545" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="480" y1="60" x2="480" y2="410" stroke="#d64545" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="240" y="55" class="event-lbl">link DOWN @ t=10s</text>
+  <text x="480" y="55" class="event-lbl">link UP @ t=25s</text>
+
+  <!-- Time axis at bottom -->
+  <line x1="120" y1="405" x2="920" y2="405" class="axis"/>
+  <g>
+    <line x1="120" y1="405" x2="120" y2="410" class="axis-tick"/><text x="120" y="425" class="tick-lbl">0s</text>
+    <line x1="200" y1="405" x2="200" y2="410" class="axis-tick"/><text x="200" y="425" class="tick-lbl">5</text>
+    <line x1="280" y1="405" x2="280" y2="410" class="axis-tick"/><text x="280" y="425" class="tick-lbl">10</text>
+    <line x1="360" y1="405" x2="360" y2="410" class="axis-tick"/><text x="360" y="425" class="tick-lbl">15</text>
+    <line x1="440" y1="405" x2="440" y2="410" class="axis-tick"/><text x="440" y="425" class="tick-lbl">20</text>
+    <line x1="520" y1="405" x2="520" y2="410" class="axis-tick"/><text x="520" y="425" class="tick-lbl">25</text>
+    <line x1="600" y1="405" x2="600" y2="410" class="axis-tick"/><text x="600" y="425" class="tick-lbl">30</text>
+    <line x1="680" y1="405" x2="680" y2="410" class="axis-tick"/><text x="680" y="425" class="tick-lbl">35</text>
+    <line x1="760" y1="405" x2="760" y2="410" class="axis-tick"/><text x="760" y="425" class="tick-lbl">40</text>
+    <line x1="840" y1="405" x2="840" y2="410" class="axis-tick"/><text x="840" y="425" class="tick-lbl">45s</text>
+  </g>
+
+  <!-- Row: SAMPLE (every 5s) -->
+  <rect x="115" y="75" width="810" height="60" rx="4" class="row-bg"/>
+  <text x="10" y="95" class="row-lbl">SAMPLE</text>
+  <text x="10" y="112" class="row-note">every 5s</text>
+  <text x="10" y="127" class="row-note">regardless of change</text>
+  <g class="push-sample">
+    <circle cx="120" cy="105" r="6"/>
+    <circle cx="200" cy="105" r="6"/>
+    <circle cx="280" cy="105" r="6"/>
+    <circle cx="360" cy="105" r="6"/>
+    <circle cx="440" cy="105" r="6"/>
+    <circle cx="520" cy="105" r="6"/>
+    <circle cx="600" cy="105" r="6"/>
+    <circle cx="680" cy="105" r="6"/>
+    <circle cx="760" cy="105" r="6"/>
+    <circle cx="840" cy="105" r="6"/>
+  </g>
+  <text x="920" y="110" class="row-note">10 pushes</text>
+
+  <!-- Row: ON_CHANGE -->
+  <rect x="115" y="145" width="810" height="60" rx="4" class="row-bg"/>
+  <text x="10" y="170" class="row-lbl">ON_CHANGE</text>
+  <text x="10" y="185" class="row-note">only when value</text>
+  <text x="10" y="198" class="row-note">actually changes</text>
+  <g class="push">
+    <circle cx="120" cy="175" r="6"/>
+    <circle cx="240" cy="175" r="6"/>
+    <circle cx="480" cy="175" r="6"/>
+  </g>
+  <text x="920" y="180" class="row-note">3 pushes</text>
+  <text x="120" y="145" class="tick-lbl">sync</text>
+
+  <!-- Row: ON_CHANGE + heartbeat 20s -->
+  <rect x="115" y="215" width="810" height="60" rx="4" class="row-bg"/>
+  <text x="10" y="238" class="row-lbl">ON_CHANGE</text>
+  <text x="10" y="252" class="row-lbl">+ heartbeat 20s</text>
+  <text x="10" y="268" class="row-note">change + keepalive</text>
+  <g class="push">
+    <circle cx="120" cy="245" r="6"/>
+    <circle cx="240" cy="245" r="6"/>
+    <circle cx="480" cy="245" r="6"/>
+  </g>
+  <g class="push-hb">
+    <circle cx="440" cy="245" r="5"/>
+    <circle cx="680" cy="245" r="5"/>
+    <circle cx="880" cy="245" r="5"/>
+  </g>
+  <text x="920" y="250" class="row-note">3 + 3 pushes</text>
+
+  <!-- Row: TARGET_DEFINED -->
+  <rect x="115" y="285" width="810" height="90" rx="4" class="row-bg"/>
+  <text x="10" y="308" class="row-lbl">TARGET_</text>
+  <text x="10" y="323" class="row-lbl">DEFINED</text>
+  <text x="10" y="340" class="row-note">EOS auto-splits:</text>
+  <text x="10" y="353" class="row-note">state → on_change,</text>
+  <text x="10" y="366" class="row-note">counters → sample</text>
+  <!-- oper-status on_change events -->
+  <g class="push">
+    <circle cx="120" cy="308" r="6"/>
+    <circle cx="240" cy="308" r="6"/>
+    <circle cx="480" cy="308" r="6"/>
+  </g>
+  <text x="480" y="298" class="tick-lbl">/state/oper-status → on_change</text>
+  <!-- counters sample events -->
+  <g class="push-sample">
+    <circle cx="120" cy="350" r="6"/>
+    <circle cx="200" cy="350" r="6"/>
+    <circle cx="280" cy="350" r="6"/>
+    <circle cx="360" cy="350" r="6"/>
+    <circle cx="440" cy="350" r="6"/>
+    <circle cx="520" cy="350" r="6"/>
+    <circle cx="600" cy="350" r="6"/>
+    <circle cx="680" cy="350" r="6"/>
+    <circle cx="760" cy="350" r="6"/>
+    <circle cx="840" cy="350" r="6"/>
+  </g>
+  <text x="480" y="378" class="tick-lbl">/state/counters/* → sample @ 5s</text>
+
+  <!-- Legend -->
+  <g transform="translate(120,438)" font-size="10" fill="#666">
+    <circle cx="0" cy="0" r="5" class="push-sample"/><text x="10" y="4">SAMPLE push</text>
+    <circle cx="130" cy="0" r="5" class="push"/><text x="140" y="4">ON_CHANGE push</text>
+    <circle cx="270" cy="0" r="5" class="push-hb"/><text x="280" y="4">heartbeat</text>
+    <line x1="360" y1="-4" x2="360" y2="4" stroke="#d64545"/><text x="368" y="4">link transition</text>
+  </g>
+</svg>
