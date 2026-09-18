@@ -109,6 +109,13 @@ subscriptions:
     stream-mode: sample
     sample-interval: 60s
 
+  isis_adjacencies:
+    paths:
+      - /network-instances/network-instance[name=default]/protocols/protocol[name=EVPN_UNDERLAY]/isis
+    mode: stream
+    stream-mode: sample
+    sample-interval: 10s
+
   mac_table:
     paths:
       - network-instances/network-instance[name=default]/fdb/mac-table/entries/entry

@@ -22,6 +22,18 @@
     "links": [],
     "panels": [
       {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 10,
+        "title": "BGP",
+        "type": "row"
+      },
+      {
         "datasource": {
           "default": false,
           "type": "prometheus",
@@ -108,7 +120,7 @@
           "h": 10,
           "w": 6,
           "x": 0,
-          "y": 0
+          "y": 1
         },
         "id": 3,
         "options": {
@@ -190,7 +202,7 @@
           "h": 5,
           "w": 4,
           "x": 6,
-          "y": 0
+          "y": 1
         },
         "id": 4,
         "options": {
@@ -262,7 +274,7 @@
           "h": 5,
           "w": 4,
           "x": 6,
-          "y": 5
+          "y": 6
         },
         "id": 5,
         "options": {
@@ -342,7 +354,7 @@
           "h": 10,
           "w": 14,
           "x": 10,
-          "y": 0
+          "y": 1
         },
         "id": 6,
         "options": {
@@ -422,7 +434,7 @@
           "h": 10,
           "w": 24,
           "x": 0,
-          "y": 10
+          "y": 11
         },
         "id": 7,
         "options": {
@@ -670,7 +682,7 @@
           "h": 8,
           "w": 12,
           "x": 0,
-          "y": 20
+          "y": 21
         },
         "id": 8,
         "options": {
@@ -773,7 +785,7 @@
           "h": 8,
           "w": 12,
           "x": 12,
-          "y": 20
+          "y": 21
         },
         "id": 9,
         "options": {
@@ -827,6 +839,1336 @@
         ],
         "title": "IPv4 Unicast Prefixes Over Time",
         "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "default": false,
+          "type": "prometheus",
+          "uid": "PBFA97CFB590B2093"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 29
+        },
+        "id": 25,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "sum by (source) (gnmic_bgp_neighbors_input{job=\"gnmic\", source=~\"$Device\"})",
+            "fullMetaSearch": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "{{source}} input",
+            "range": true,
+            "refId": "A",
+            "useBackend": false
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "sum by (source) (gnmic_bgp_neighbors_output{job=\"gnmic\", source=~\"$Device\"})",
+            "fullMetaSearch": false,
+            "hide": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "{{source}} output",
+            "range": true,
+            "refId": "B",
+            "useBackend": false
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "sum by (source) (gnmic_bgp_neighbors_UPDATE{job=\"gnmic\", source=~\"$Device\"})",
+            "fullMetaSearch": false,
+            "hide": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "{{source}} UPDATE",
+            "range": true,
+            "refId": "C",
+            "useBackend": false
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "disableTextWrap": false,
+            "editorMode": "code",
+            "expr": "sum by (source) (gnmic_bgp_neighbors_NOTIFICATION{job=\"gnmic\", source=~\"$Device\"})",
+            "fullMetaSearch": false,
+            "hide": false,
+            "includeNullMetadata": true,
+            "instant": false,
+            "legendFormat": "{{source}} NOTIFICATION",
+            "range": true,
+            "refId": "D",
+            "useBackend": false
+          }
+        ],
+        "title": "BGP Messages Over Time",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 29
+        },
+        "id": 11,
+        "title": "IS-IS",
+        "type": "row",
+        "panels": [
+      {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  }
+                },
+                "mappings": []
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "UP"
+                  },
+                  "properties": [
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "green",
+                        "mode": "fixed"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "DOWN"
+                  },
+                  "properties": [
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "red",
+                        "mode": "fixed"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "INIT"
+                  },
+                  "properties": [
+                    {
+                      "id": "color",
+                      "value": {
+                        "fixedColor": "yellow",
+                        "mode": "fixed"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 6,
+              "x": 0,
+              "y": 30
+            },
+            "id": 12,
+            "options": {
+              "displayLabels": [
+                "value",
+                "percent"
+              ],
+              "legend": {
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true,
+                "values": [
+                  "value",
+                  "percent"
+                ]
+              },
+              "pieType": "donut",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "count by (adjacency_state) (gnmic_isis_adjacencies_adjacency_state{job=\"gnmic\", source=~\"$Device\"})",
+                "format": "time_series",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "{{adjacency_state}}",
+                "range": false,
+                "refId": "A",
+                "useBackend": false
+              }
+            ],
+            "title": "IS-IS Adjacency States",
+            "type": "piechart"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 6,
+              "x": 6,
+              "y": 30
+            },
+            "id": 13,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "count(gnmic_isis_adjacencies_adjacency_state{job=\"gnmic\", adjacency_state=\"UP\", source=~\"$Device\"})",
+                "format": "time_series",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "UP",
+                "range": false,
+                "refId": "A",
+                "useBackend": false
+              }
+            ],
+            "title": "IS-IS Adjacencies UP",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 6,
+              "x": 6,
+              "y": 35
+            },
+            "id": 14,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "count(gnmic_isis_adjacencies_adjacency_state{job=\"gnmic\", source=~\"$Device\"})",
+                "format": "time_series",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "Total",
+                "range": false,
+                "refId": "A",
+                "useBackend": false
+              }
+            ],
+            "title": "Total IS-IS Adjacencies",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "cellOptions": {
+                    "type": "color-text"
+                  },
+                  "inspect": false
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 10,
+              "w": 24,
+              "x": 0,
+              "y": 40
+            },
+            "id": 16,
+            "options": {
+              "cellHeight": "sm",
+              "footer": {
+                "countRows": false,
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": false,
+                  "displayName": "Hostname"
+                }
+              ]
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "label_join(gnmic_isis_adjacencies_adjacency_state{job=\"gnmic\", interface_interface_id=~\"Ethernet.*\", source=~\"$Device\"}, \"join_key\", \"-\", \"source\", \"interface_interface_id\")",
+                "format": "table",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "__auto",
+                "range": false,
+                "refId": "A",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "label_join(gnmic_isis_adjacencies_neighbor_ipv4_address{job=\"gnmic\", interface_interface_id=~\"Ethernet.*\", source=~\"$Device\"}, \"join_key\", \"-\", \"source\", \"interface_interface_id\")",
+                "format": "table",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "__auto",
+                "range": false,
+                "refId": "B",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "label_join(gnmic_isis_adjacencies_metric{job=\"gnmic\", af_afi_name=\"IPV4\", level_level_number=\"2\", interface_interface_id=~\"Ethernet.*\", source=~\"$Device\"}, \"join_key\", \"-\", \"source\", \"interface_interface_id\")",
+                "format": "table",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "__auto",
+                "range": false,
+                "refId": "C",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "label_join(gnmic_isis_adjacencies_adj_changes{job=\"gnmic\", interface_interface_id=~\"Ethernet.*\", level_level_number=\"2\", source=~\"$Device\"}, \"join_key\", \"-\", \"source\", \"interface_interface_id\")",
+                "format": "table",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "__auto",
+                "range": false,
+                "refId": "D",
+                "useBackend": false
+              }
+            ],
+            "title": "IS-IS Neighbors Detail",
+            "transformations": [
+              {
+                "id": "seriesToColumns",
+                "options": {
+                  "byField": "join_key"
+                }
+              },
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time 1": true,
+                    "Time 2": true,
+                    "Time 3": true,
+                    "__name__": true,
+                    "__name__ 1": true,
+                    "__name__ 2": true,
+                    "instance": true,
+                    "instance 1": true,
+                    "instance 2": true,
+                    "job": true,
+                    "job 1": true,
+                    "job 2": true,
+                    "join_key": true,
+                    "Value #A": true,
+                    "Value #B": true,
+                    "subscription_name": true,
+                    "subscription_name 1": true,
+                    "subscription_name 2": true,
+                    "protocol_identifier": true,
+                    "protocol_identifier 1": true,
+                    "protocol_identifier 2": true,
+                    "protocol_name": true,
+                    "protocol_name 1": true,
+                    "protocol_name 2": true,
+                    "source 2": true,
+                    "source 3": true,
+                    "interface_interface_id 2": true,
+                    "interface_interface_id 3": true,
+                    "level_level_number 2": true,
+                    "level_level_number 3": true,
+                    "network_instance_name 2": true,
+                    "network_instance_name 3": true,
+                    "adjacency_system_id 2": true,
+                    "af_afi_name": true,
+                    "af_safi_name": true,
+                    "level_level_number 4": true,
+                    "source 4": true,
+                    "interface_interface_id 4": true,
+                    "network_instance_name 4": true,
+                    "protocol_identifier 3": true,
+                    "protocol_identifier 4": true,
+                    "protocol_name 3": true,
+                    "protocol_name 4": true,
+                    "subscription_name 3": true,
+                    "subscription_name 4": true,
+                    "instance 3": true,
+                    "instance 4": true,
+                    "job 3": true,
+                    "job 4": true,
+                    "__name__ 3": true,
+                    "__name__ 4": true,
+                    "Time 4": true
+                  },
+                  "includeByName": {},
+                  "indexByName": {
+                    "source 1": 0,
+                    "interface_interface_id 1": 1,
+                    "adjacency_system_id": 2,
+                    "adjacency_system_id 1": 2,
+                    "neighbor_ipv4_address": 3,
+                    "level_level_number": 4,
+                    "level_level_number 1": 4,
+                    "adjacency_state": 5,
+                    "Value #C": 6,
+                    "Value #D": 7,
+                    "network_instance_name": 8,
+                    "network_instance_name 1": 8
+                  },
+                  "renameByName": {
+                    "source 1": "Hostname",
+                    "interface_interface_id 1": "Interface",
+                    "adjacency_system_id": "Neighbor System ID",
+                    "adjacency_system_id 1": "Neighbor System ID",
+                    "neighbor_ipv4_address": "Neighbor IP",
+                    "level_level_number": "Level",
+                    "level_level_number 1": "Level",
+                    "adjacency_state": "State",
+                    "Value #C": "Metric",
+                    "Value #D": "Adj Changes",
+                    "network_instance_name": "VRF",
+                    "network_instance_name 1": "VRF"
+                  }
+                }
+              }
+            ],
+            "type": "table"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "stepAfter",
+                  "lineWidth": 2,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 50
+            },
+            "id": 17,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "gnmic_isis_adjacencies_adj_changes{job=\"gnmic\", source=~\"$Device\"}",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": false,
+                "legendFormat": "{{source}} -> {{adjacency_system_id}} ({{interface_interface_id}})",
+                "range": true,
+                "refId": "A",
+                "useBackend": false
+              }
+            ],
+            "title": "IS-IS Adjacency Flaps Over Time",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "purple",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 12,
+              "y": 30
+            },
+            "id": 18,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum(gnmic_isis_adjacencies_total_lsps{job=\"gnmic\", level_level_number=\"2\", source=~\"$Device\"})",
+                "format": "time_series",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "Total LSPs",
+                "range": false,
+                "refId": "A",
+                "useBackend": false
+              }
+            ],
+            "title": "Total LSPs (L2)",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "orange",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 16,
+              "y": 30
+            },
+            "id": 20,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum(gnmic_isis_adjacencies_spf_runs{job=\"gnmic\", level_level_number=\"2\", source=~\"$Device\"})",
+                "format": "time_series",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "SPF Runs",
+                "range": false,
+                "refId": "A",
+                "useBackend": false
+              }
+            ],
+            "title": "SPF Runs (L2)",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 20,
+              "y": 30
+            },
+            "id": 21,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum(gnmic_isis_adjacencies_rejected_adj{job=\"gnmic\", source=~\"$Device\"})",
+                "format": "time_series",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "Rejected",
+                "range": false,
+                "refId": "A",
+                "useBackend": false
+              }
+            ],
+            "title": "Rejected Adj",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "yellow",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 12,
+              "y": 35
+            },
+            "id": 22,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum(gnmic_isis_adjacencies_own_lsp_purges{job=\"gnmic\", source=~\"$Device\"})",
+                "format": "time_series",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "LSP Purges",
+                "range": false,
+                "refId": "A",
+                "useBackend": false
+              }
+            ],
+            "title": "LSP Purges",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 16,
+              "y": 35
+            },
+            "id": 23,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum(gnmic_isis_adjacencies_corrupted_lsps{job=\"gnmic\", source=~\"$Device\"})",
+                "format": "time_series",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "Corrupted",
+                "range": false,
+                "refId": "A",
+                "useBackend": false
+              }
+            ],
+            "title": "Corrupted LSPs",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 4,
+              "x": 20,
+              "y": 35
+            },
+            "id": 24,
+            "options": {
+              "colorMode": "value",
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            },
+            "pluginVersion": "11.2.0",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "sum(gnmic_isis_adjacencies_database_overloads{job=\"gnmic\", source=~\"$Device\"})",
+                "format": "time_series",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": true,
+                "legendFormat": "Overloads",
+                "range": false,
+                "refId": "A",
+                "useBackend": false
+              }
+            ],
+            "title": "DB Overloads",
+            "type": "stat"
+          },
+          {
+            "datasource": {
+              "default": false,
+              "type": "prometheus",
+              "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 10,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 50
+            },
+            "id": 19,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "displayMode": "table",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "gnmic_isis_adjacencies_sent{job=\"gnmic\", level_level_number=\"2\", source=~\"$Device\"}",
+                "fullMetaSearch": false,
+                "includeNullMetadata": true,
+                "instant": false,
+                "legendFormat": "{{source}} {{interface_interface_id}} sent",
+                "range": true,
+                "refId": "A",
+                "useBackend": false
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "PBFA97CFB590B2093"
+                },
+                "disableTextWrap": false,
+                "editorMode": "code",
+                "expr": "gnmic_isis_adjacencies_received{job=\"gnmic\", level_level_number=\"2\", source=~\"$Device\"}",
+                "fullMetaSearch": false,
+                "hide": false,
+                "includeNullMetadata": true,
+                "instant": false,
+                "legendFormat": "{{source}} {{interface_interface_id}} rcvd",
+                "range": true,
+                "refId": "B",
+                "useBackend": false
+              }
+            ],
+            "title": "IS-IS Packets Sent/Received Over Time",
+            "type": "timeseries"
+          }
+        ]
       }
     ],
     "schemaVersion": 39,

@@ -17,8 +17,12 @@ inspect: ## Inspect ceos lab
 	@sudo containerlab inspect --topo $(CURRENT_DIR)/clab/topology.clab.yml
 	@echo ""
 	@echo "You can check the lab status, hostnames and management addresses above."
-	@echo "To connect to a lab device use \`ssh admin@<hostname>\` and password \`admin\`."
+	@echo "To connect to a lab device use \`ssh arista@<hostname>\` and password \`arista\`."
 
 .PHONY: deploy
-deploy: ## Deploy the configuration for the Network
-	ansible-playbook playbooks/fabric-deploy-config.yaml -i inventory.yaml
+deploy: ## Deploy fabric configs with eBGP underlay (default)
+	ansible-playbook playbooks/fabric-deploy-config.yaml
+
+.PHONY: deploy-isis
+deploy-isis: ## Deploy fabric configs with IS-IS underlay
+	ansible-playbook playbooks/fabric-deploy-config.yaml -e underlay_routing_protocol=isis
