@@ -23,6 +23,12 @@ bgp_distance:
   internal_routes: 200
   local_routes: 200
 
+# ISIS underlay settings (active when underlay_routing_protocol: isis)
+# Ignored by AVD when underlay is ebgp.
+isis_default_is_type: level-2
+isis_area_id: "49.0001"
+isis_advertise_passive_only: false
+
 spine:
   defaults:
     platform: cEOS-LAB

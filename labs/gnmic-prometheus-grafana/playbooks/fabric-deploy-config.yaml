@@ -1,4 +1,4 @@
-- name: Build cEOS EVPN VXLAN All-active Multi-homing IRB Fabric (eBGP Overlay and eBGP Underlay)
+- name: "Build cEOS EVPN VXLAN All-active Multi-homing IRB Fabric (eBGP Overlay, {{ underlay_routing_protocol | default('ebgp') }} Underlay)"
   hosts: OM_FABRIC
   tasks:
     # - name: Generate EOS configuration Snapshots
