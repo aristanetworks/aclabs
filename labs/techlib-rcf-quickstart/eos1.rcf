@@ -1,0 +1,91 @@
+code unit DEFAULT_ROUTE
+########################################################################################
+# Called function: Evaluate if prefix is an IPv4 or IPv6 Default Route
+########################################################################################
+function DEFAULT_ROUTE() {
+    return prefix is 0.0.0.0/0 or prefix is ::/0;
+}
+EOF
+code unit DIA_CUSTOMER_COMMUNITIES_ARE_PRESENT
+########################################################################################
+# Called function: Evaluate if Standard Communities used for Cust peering are present
+########################################################################################
+function DIA_CUSTOMER_COMMUNITIES_ARE_PRESENT() {
+    return community has_any {100:4000, 100:4001, 100:4002, 100:4003};
+}
+EOF
+code unit INVALID_PREFIX_LENGTH
+########################################################################################
+# Called function: Evaluate if Prefix length is less than /8 or greater than /24
+########################################################################################
+function INVALID_PREFIX_LENGTH() {
+    return prefix.length < 8 or prefix.length > 24;
+}
+EOF
+code unit LOCAL_PREF_COMMUNITY
+########################################################################################
+# Called function: Evaluate if the 100:$ARG Local Pref Community is Present
+########################################################################################
+function LOCAL_PREF_COMMUNITY( int_type $lp_value ) {
+    return community has_any { 100:$lp_value };
+}
+EOF
+code unit DIA_DEFAULT_ONLY_OUTBOUND
+########################################################################################
+# Point of Attachment Function: Outbound to "Default-Only" Customers
+########################################################################################
+function DIA_DEFAULT_ONLY_OUTBOUND() {
+    if DEFAULT_ROUTE() {
+        return true;
+    } else {
+        return false;
+    }
+}
+EOF
+code unit DIA_PARTIAL_ROUTES_OUTBOUND
+########################################################################################
+# Point of Attachment Function: Outbound to "Default+Customer Routes" DIA Customer
+########################################################################################
+function DIA_PARTIAL_ROUTES_OUTBOUND() {
+    if DEFAULT_ROUTE() or DIA_CUSTOMER_COMMUNITIES_ARE_PRESENT() {
+        return true;
+    } else {
+        return false;
+    }
+}
+EOF
+code unit DIA_INBOUND
+########################################################################################
+# Point of Attachment Function: Inbound policy for DIA Customers
+########################################################################################
+function DIA_INBOUND( prefix_list_type $prefixlist, community_list_type $community_list ) {
+    if prefix match $prefixlist and not INVALID_PREFIX_LENGTH() {
+        community add $community_list;
+        if LOCAL_PREF_COMMUNITY(50) {
+            local_preference = 50;
+        } else if LOCAL_PREF_COMMUNITY(75) {
+            local_preference = 75;
+        } else if LOCAL_PREF_COMMUNITY(125) {
+            local_preference = 125;
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+EOF
+code unit TRANSIT_PEERING_IN
+########################################################################################
+# Point of Attachment Function: Transit Peering Policy
+########################################################################################
+function TRANSIT_PEERING_IN() {
+    if ( as_path.origin_as is 300 and ( as_path has_none { 200 } or prefix covered_by 3.1.0.0/16 ) ) {
+        local_preference += 100;
+        community add { 100:999 };
+    }
+    if input.community is empty {
+        community add { 100:1000 };
+    }
+    return true;
+}
+EOF
