@@ -496,11 +496,11 @@ At this point, you should be able to ping between hosts within a site but not be
 
 ## Step 5 - Connect Sites to DCI Network
 
-The DCI Network is defined by the `l3_edge` data model. Full data model documentation is located **[here](https://avd.arista.com/5.7/ansible_collections/arista/avd/roles/eos_designs/docs/input-variables.html#l3-edge-and-dci-settings){:target="_blank"}**.
+The DCI Network is defined by the `l3_edge` data model. Full data model documentation is located **[here](https://avd.arista.com/5.7/ansible_collections/arista/avd/roles/eos_designs/docs/input-variables.html#l3-edge-and-dci-settings)**.
 
 The data model defines P2P links (`/31s`) on the border leafs by using a combination of the ipv4_pool and the node id in the p2p_links section. See details in the graphic below. Each border leaf has a single link to its peer on interface `Ethernet4`.  In the data model, you will notice the parameter for **include_in_underlay_protocol**, which is set to ***true***.  This tells AVD to render the appropriate BGP configurations for route peering.
 
-![Core Interfaces](../assets/l3ls_dci.png)
+![Core Interfaces](images/l3ls_dci.png)
 
 ### Add P2P Links for DCI connectivity for Site 1 and 2
 
@@ -977,7 +977,7 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
 > If all your peerings are established and you have the correct IMET routes in the EVPN table, then your EVPN gateways are functioning!  Lets move on to a final connectivity test.
 
-## Final Fabric Test
+## TODO: Migrate to custom ANTA catalog, Final Fabric Test
 
 At this point your full Layer 3 Leaf Spine with EVPN VXLAN and EVPN gateway functionality should be ready to go. Lets perform some final tests to verify everything is working.
 

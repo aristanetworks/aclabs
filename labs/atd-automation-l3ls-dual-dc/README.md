@@ -16,8 +16,8 @@ This lab is tested for:
 Last reviewed: 22/11/2025  
 
 > Lab Credentials  
-&nbsp;&nbsp;&nbsp;&nbsp;Username: arista  
-&nbsp;&nbsp;&nbsp;&nbsp;Password: arista  
+> Username: arista  
+> Password: arista  
 
 Please check the lab materials:
 

@@ -1,7 +1,7 @@
 ---
 # Credentials for EOS Switches
 ansible_user: arista
-ansible_password: "{{ (lookup('file', '/home/coder/.config/code-server/config.yaml', errors='ignore') | from_yaml).password | default(lookup('ansible.builtin.env', 'LABPASSPHRASE')) }}"
+ansible_password: "{{ (lookup('file', '../config.yml') | from_yaml).password }}"
 ansible_network_os: arista.eos.eos
 # Configure privilege escalation
 ansible_become: true
@@ -19,21 +19,6 @@ custom_platform_settings:
       - cEOS
     management_interface: Management0
 
-# arista.avd.cv_deploy role parameters
-# Export token using 'export CV_TOKEN=<generated token here>'
-cv_token: "{{ lookup('env', 'CV_TOKEN') }}"
-cv_server: cvp
-cv_verify_certs: false
-
-# TerminAttr settings
-cv_settings:
-  onprem_clusters:
-    - name: atd-cvp
-      servers:
-        - name: 192.168.0.5
-  terminattr:
-    disable_aaa: true
-
 # AAA settings and local users
 aaa_settings:
   authorization:
@@ -44,11 +29,11 @@ aaa_settings:
       privilege: 15
       role: network-admin
       cleartext_password: "{{ ansible_password }}"
-      ssh_key: "{{ lookup('ansible.builtin.file', '~/.ssh/id_rsa.pub') }}"
 
 # OOB Management network default gateway.
 mgmt_gateway: 192.168.0.1
-mgmt_interface_vrf: default
+mgmt_interface_settings:
+  vrf: default
 
 # NTP Servers IP or DNS name, first NTP server will be preferred, and sourced from Management VRF
 ntp_settings:
