@@ -1,0 +1,16 @@
+---
+- name: Deploy WAN & Host configurations
+  hosts: "{{ target_hosts }}"
+  gather_facts: false
+
+  tasks:
+
+    - name: Import Global Vars
+      ansible.builtin.include_vars: "{{ item }}"
+      with_items:
+        - "../global_vars/global_dc_vars.yml"
+
+    - name: load configuration from file
+      arista.eos.eos_config:
+        src: ../extra_configs/{{inventory_hostname}}.cfg
+        replace: line
