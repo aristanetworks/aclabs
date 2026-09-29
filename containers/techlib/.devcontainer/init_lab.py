@@ -1206,7 +1206,7 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
     return "\n".join(lines)
 
 
-def write_and_open_dashboard(cfg: LabConfig, total_elapsed: float, console: Console) -> Optional[Path]:
+def write_and_open_dashboard(cfg: LabConfig, total_elapsed: float) -> tuple[Optional[Path], Optional[str]]:
     """
     Write the dashboard to <lab_root>/LAB-READY.md.
 
@@ -1214,15 +1214,16 @@ def write_and_open_dashboard(cfg: LabConfig, total_elapsed: float, console: Cons
     watches for this file and auto-opens it in its custom webview, which
     renders the markdown with clickable command: URIs.
 
-    Returns the dashboard path on success, None on write failure.
+    Returns (path, None) on success, (None, error text) on write failure.
+    Never touches the console: run() calls this while Live is open, and a
+    console write from the event loop could block on a paused terminal.
     """
     dashboard_path = cfg.lab_root / DASHBOARD_FILENAME
     try:
         dashboard_path.write_text(build_dashboard_markdown(cfg, total_elapsed))
     except Exception as exc:
-        console.print(f"[warning]Failed to write dashboard:[/warning] {exc}")
-        return None
-    return dashboard_path
+        return None, str(exc)
+    return dashboard_path, None
 
 
 def build_ready_panel(cfg: LabConfig, total_elapsed: float, dashboard_path: Optional[Path] = None) -> RenderableType:
@@ -1384,28 +1385,40 @@ async def run(cfg: LabConfig, console: Console) -> int:
         tasks = [asyncio.create_task(watch_node(n, cfg), name=f"watch:{n.name}") for n in cfg.nodes]
         await asyncio.wait(tasks)
 
-    # Surface any unexpected exceptions from watcher tasks.
-    for t in tasks:
-        if t.cancelled():
-            continue
-        exc = t.exception()
-        if exc is not None:
-            # Map back to the node if we can.
-            name = t.get_name().removeprefix("watch:")
-            for n in cfg.nodes:
-                if n.name == name:
-                    n.status = NodeStatus.ERROR
-                    n.last_error = f"{type(exc).__name__}: {exc}"
-                    break
+        # Surface any unexpected exceptions from watcher tasks. Node state
+        # only — nothing here writes to the console.
+        for t in tasks:
+            if t.cancelled():
+                continue
+            exc = t.exception()
+            if exc is not None:
+                # Map back to the node if we can.
+                name = t.get_name().removeprefix("watch:")
+                for n in cfg.nodes:
+                    if n.name == name:
+                        n.status = NodeStatus.ERROR
+                        n.last_error = f"{type(exc).__name__}: {exc}"
+                        break
 
-    total_elapsed = time.monotonic() - started_at
-    all_ready = all(n.status == NodeStatus.READY for n in cfg.nodes)
+        # Invariant: LAB-READY.md is written the moment every node is READY,
+        # before any terminal write. The file is the ready signal the
+        # lab-dashboard extension watches for, so it must not queue behind
+        # Live's final frame or the ready panel: with a paused terminal those
+        # writes block until the tab drains again, and the file would be
+        # minutes late for a lab that has been up all along. Written exactly
+        # once, here, with the elapsed time as of this moment; any write
+        # error is reported below, after Live has released the terminal.
+        total_elapsed = time.monotonic() - started_at
+        all_ready = all(n.status == NodeStatus.READY for n in cfg.nodes)
+        dashboard_path: Optional[Path] = None
+        dashboard_error: Optional[str] = None
+        if all_ready and cfg.auto_open_dashboard:
+            dashboard_path, dashboard_error = write_and_open_dashboard(cfg, total_elapsed)
 
     console.print()
     if all_ready:
-        dashboard_path = None
-        if cfg.auto_open_dashboard:
-            dashboard_path = write_and_open_dashboard(cfg, total_elapsed, console)
+        if dashboard_error is not None:
+            console.print(f"[warning]Failed to write dashboard:[/warning] {dashboard_error}")
         console.print(build_ready_panel(cfg, total_elapsed, dashboard_path=dashboard_path))
         return 0
     console.print(build_failure_panel(cfg, total_elapsed))
