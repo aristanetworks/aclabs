@@ -166,6 +166,7 @@ class LabConfig:
                                            # topology_path: the two supported layouts place the
                                            # topology at different depths (see find_topology()).
     nodes: list[Node]
+    prefix: Optional[str] = None           # topology `prefix:` key as written; None when absent
 
     # ── Display (from lab.yml `display:`) ─────────────────────────────────
     display_name: Optional[str] = None     # human-friendly name
@@ -192,6 +193,19 @@ class LabConfig:
     def heading(self) -> str:
         """Prefer the human-friendly display name; fall back to clab topology name."""
         return self.display_name or self.name
+
+    def container_name(self, node_name: str) -> str:
+        """
+        The docker container name containerlab gives a node, per the topology's
+        top-level `prefix:` key: absent → clab-<lab>-<node>; "" → <node>;
+        "__lab-name" → <lab>-<node>; any other value P → P-<lab>-<node>.
+        """
+        prefix = "clab" if self.prefix is None else self.prefix
+        if prefix == "":
+            return node_name
+        if prefix == "__lab-name":
+            return f"{self.name}-{node_name}"
+        return f"{prefix}-{self.name}-{node_name}"
 
 
 # Role inference — purely heuristic, overridable via lab.yml
@@ -366,6 +380,7 @@ def load_lab_config(lab_dir: Optional[Path] = None) -> LabConfig:
         topo = yaml.safe_load(f)
 
     lab_name = topo.get("name", "unnamed-lab")
+    prefix = topo.get("prefix")  # "" is a real value (no prefix); None means absent
     nodes_dict = topo.get("topology", {}).get("nodes", {}) or {}
 
     overrides = load_lab_overrides(lab_root)
@@ -394,6 +409,7 @@ def load_lab_config(lab_dir: Optional[Path] = None) -> LabConfig:
         topology_path=topology_path,
         lab_root=lab_root,
         nodes=nodes,
+        prefix=None if prefix is None else str(prefix),
         # display
         display_name=display.get("name"),
         subtitle=display.get("subtitle"),
@@ -1291,7 +1307,7 @@ def build_failure_panel(cfg: LabConfig, total_elapsed: float) -> RenderableType:
         topo_display = cfg.topology_path
     body.append(Text(f"  → sudo containerlab inspect --topo {topo_display}", style=""))
     for n in failed[:3]:  # cap the per-node suggestions to keep the panel tight
-        body.append(Text(f"  → docker logs clab-{cfg.name}-{n.name}", style=""))
+        body.append(Text(f"  → docker logs {cfg.container_name(n.name)}", style=""))
     if len(failed) > 3:
         body.append(Text(f"  → …and similar for the other {len(failed) - 3} failing node(s)", style="muted"))
     body.append(Text("  → make stop && make start    # nuke and pave", style=""))
