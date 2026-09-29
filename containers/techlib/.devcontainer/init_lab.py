@@ -40,6 +40,14 @@ Design choices:
   * ~/.ssh/config for user-facing hostname ergonomics; probes use IP for
     reliability. Two layers, neither fighting Docker's /etc/hosts.
   * Stdlib + rich + pyyaml + system ssh/sshpass — all present in lab-base.
+  * The event loop never waits on terminal output. The TUI runs in a
+    code-server terminal rendered by xterm.js in a browser tab. Once that
+    tab has been hidden past the browser's grace period, the renderer's
+    flow-control acks reach VS Code's pty host only about once a minute,
+    the pty host pauses the pty, and the next write() to it blocks. Rich's
+    own refresh thread does every write while the probes run (Live pulls
+    the layout via get_renderable), so a paused terminal freezes only the
+    display — never the probes or their timers.
 
 Author: Mitch & Claude, morning coffee edition ☕
 """
@@ -59,7 +67,7 @@ import urllib.parse
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 import yaml
 from rich.align import Align
@@ -662,6 +670,10 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
     Both phases probe by management IP. Hostname-based reachability is a
     user-facing concern handled separately by populate_ssh_config writing
     aliases to ~/.ssh/config.
+
+    Never writes to the console: while Live runs, stdout/stderr are
+    redirected into it, and any write from the event loop could block on a
+    paused terminal (see run()). State goes on the Node; Live displays it.
     """
     node.status = NodeStatus.PROBING_TCP
     node.started_at = time.monotonic()
@@ -683,8 +695,10 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
         node.last_error = f"{probe_target}: {err}"
 
         if time.monotonic() >= deadline:
-            node.status = NodeStatus.TIMEOUT
+            # ready_at before status: the refresh thread reads both, and a
+            # terminal status must never be seen with a still-ticking clock.
             node.ready_at = time.monotonic()
+            node.status = NodeStatus.TIMEOUT
             return
 
         await asyncio.sleep(DEFAULT_PROBE_INTERVAL)
@@ -701,15 +715,15 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
             probe_target, cfg.username, cfg.password, node.kind, DEFAULT_SSH_TIMEOUT
         )
         if err is None:
-            node.status = NodeStatus.READY
             node.ready_at = time.monotonic()
+            node.status = NodeStatus.READY
             return
 
         node.last_error = f"{probe_target}: {err}"
 
         if time.monotonic() >= deadline:
-            node.status = NodeStatus.TIMEOUT
             node.ready_at = time.monotonic()
+            node.status = NodeStatus.TIMEOUT
             return
 
         await asyncio.sleep(DEFAULT_PROBE_INTERVAL)
@@ -918,6 +932,33 @@ def build_live_layout(cfg: LabConfig, started_at: float) -> RenderableType:
         build_status_table(cfg),
         build_footer(cfg, started_at),
     )
+
+
+def guarded_live_layout(cfg: LabConfig, started_at: float) -> Callable[[], RenderableType]:
+    """
+    The get_renderable callable handed to Live.
+
+    Rich calls it from its refresh thread for every frame. An exception that
+    escapes there kills the refresh thread silently — the display just stops
+    moving while the probes carry on — so nothing may escape: on error, return
+    the last layout that built with the error shown underneath it.
+
+    This guards the layout build only. A fault while Rich renders the returned
+    renderables (inside __rich_console__) is not caught here; it would still
+    stop the display, but never the probes.
+    """
+    last_good: RenderableType = Text("")
+
+    def render() -> RenderableType:
+        nonlocal last_good
+        try:
+            last_good = build_live_layout(cfg, started_at)
+            return last_good
+        except Exception as exc:
+            err = Text(f"\n  ⚠ display error: {type(exc).__name__}: {exc}", style="critical")
+            return Group(last_good, err)
+
+    return render
 
 
 def _build_command_uri(command_id: str, *args: object) -> str:
@@ -1311,21 +1352,37 @@ async def run(cfg: LabConfig, console: Console) -> int:
         except Exception as exc:
             console.print(f"[warning]Could not regenerate README: {exc}[/warning]")
 
-    # Launch one watcher per node.
-    tasks = [asyncio.create_task(watch_node(n, cfg), name=f"watch:{n.name}") for n in cfg.nodes]
-
+    # Invariant: the event loop never waits on terminal output.
+    #
+    # Live pulls the layout itself, from its own refresh thread, through
+    # get_renderable; the loop only awaits the watchers. It must not call
+    # live.update() or refresh(): both take Live's lock, and the refresh
+    # thread holds that lock while it write()s a frame. The watchers are
+    # created inside the Live block, after Live.start() has done its one
+    # write on this thread (hiding the cursor), so no watcher exists while
+    # the loop can still block on the terminal. In the field the
+    # terminal is a code-server pty rendered by xterm.js in a browser tab.
+    # Once the tab has been hidden past the browser's grace period, the
+    # renderer's flow-control acks reach VS Code's pty host only about once
+    # a minute (Chromium aligns a hidden page's timer wake-ups to one per
+    # minute), the pty host pauses the pty, and the refresh thread blocks
+    # inside write() holding the lock. A loop waiting on that lock would
+    # freeze every probe and every wait_for timer for as long as the tab
+    # stays hidden, then time out nodes that were up all along: the field
+    # capture shows the main thread blocked for 13 minutes with ~1 s thaws
+    # once a minute. With no console write on the loop, a paused terminal
+    # pauses only the display. Live.stop() renders one last frame from the
+    # same callable, so the final statuses still reach the terminal without
+    # an update() from here.
     with Live(
-        build_live_layout(cfg, started_at),
+        get_renderable=guarded_live_layout(cfg, started_at),
         console=console,
         refresh_per_second=DEFAULT_REFRESH_HZ,
         transient=False,
-    ) as live:
-        # Poll-based update loop — lets us drive the spinner + elapsed timers.
-        while not all(t.done() for t in tasks):
-            live.update(build_live_layout(cfg, started_at))
-            await asyncio.sleep(1 / DEFAULT_REFRESH_HZ)
-        # Final render of live layout before we move on.
-        live.update(build_live_layout(cfg, started_at))
+    ):
+        # Launch one watcher per node.
+        tasks = [asyncio.create_task(watch_node(n, cfg), name=f"watch:{n.name}") for n in cfg.nodes]
+        await asyncio.wait(tasks)
 
     # Surface any unexpected exceptions from watcher tasks.
     for t in tasks:
