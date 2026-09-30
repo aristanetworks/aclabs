@@ -56,4 +56,6 @@ jobs:
       # - Set `from_image` to use lab-base container rev 2.6.11
       # 1.0.5:
       # - init_lab.py: raise DEFAULT_PER_NODE_TIMEOUT from 420s (7 min) to 600s (10 min)
-      container_revision: "1.0.5"
+      # 1.0.6:
+      # - init_lab.py: fix event loop never waiting on terminal output (no more false TIMEOUT behind a paused browser terminal)
+      container_revision: "1.0.6"

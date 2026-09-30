@@ -40,6 +40,14 @@ Design choices:
   * ~/.ssh/config for user-facing hostname ergonomics; probes use IP for
     reliability. Two layers, neither fighting Docker's /etc/hosts.
   * Stdlib + rich + pyyaml + system ssh/sshpass — all present in lab-base.
+  * The event loop never waits on terminal output. The TUI runs in a
+    code-server terminal rendered by xterm.js in a browser tab. Once that
+    tab has been hidden past the browser's grace period, the renderer's
+    flow-control acks reach VS Code's pty host only about once a minute,
+    the pty host pauses the pty, and the next write() to it blocks. Rich's
+    own refresh thread does every write while the probes run (Live pulls
+    the layout via get_renderable), so a paused terminal freezes only the
+    display — never the probes or their timers.
 
 Author: Mitch & Claude, morning coffee edition ☕
 """
@@ -59,7 +67,7 @@ import urllib.parse
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 import yaml
 from rich.align import Align
@@ -158,6 +166,7 @@ class LabConfig:
                                            # topology_path: the two supported layouts place the
                                            # topology at different depths (see find_topology()).
     nodes: list[Node]
+    prefix: Optional[str] = None           # topology `prefix:` key as written; None when absent
 
     # ── Display (from lab.yml `display:`) ─────────────────────────────────
     display_name: Optional[str] = None     # human-friendly name
@@ -184,6 +193,19 @@ class LabConfig:
     def heading(self) -> str:
         """Prefer the human-friendly display name; fall back to clab topology name."""
         return self.display_name or self.name
+
+    def container_name(self, node_name: str) -> str:
+        """
+        The docker container name containerlab gives a node, per the topology's
+        top-level `prefix:` key: absent → clab-<lab>-<node>; "" → <node>;
+        "__lab-name" → <lab>-<node>; any other value P → P-<lab>-<node>.
+        """
+        prefix = "clab" if self.prefix is None else self.prefix
+        if prefix == "":
+            return node_name
+        if prefix == "__lab-name":
+            return f"{self.name}-{node_name}"
+        return f"{prefix}-{self.name}-{node_name}"
 
 
 # Role inference — purely heuristic, overridable via lab.yml
@@ -358,6 +380,7 @@ def load_lab_config(lab_dir: Optional[Path] = None) -> LabConfig:
         topo = yaml.safe_load(f)
 
     lab_name = topo.get("name", "unnamed-lab")
+    prefix = topo.get("prefix")  # "" is a real value (no prefix); None means absent
     nodes_dict = topo.get("topology", {}).get("nodes", {}) or {}
 
     overrides = load_lab_overrides(lab_root)
@@ -386,6 +409,7 @@ def load_lab_config(lab_dir: Optional[Path] = None) -> LabConfig:
         topology_path=topology_path,
         lab_root=lab_root,
         nodes=nodes,
+        prefix=None if prefix is None else str(prefix),
         # display
         display_name=display.get("name"),
         subtitle=display.get("subtitle"),
@@ -662,6 +686,10 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
     Both phases probe by management IP. Hostname-based reachability is a
     user-facing concern handled separately by populate_ssh_config writing
     aliases to ~/.ssh/config.
+
+    Never writes to the console: while Live runs, stdout/stderr are
+    redirected into it, and any write from the event loop could block on a
+    paused terminal (see run()). State goes on the Node; Live displays it.
     """
     node.status = NodeStatus.PROBING_TCP
     node.started_at = time.monotonic()
@@ -683,8 +711,10 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
         node.last_error = f"{probe_target}: {err}"
 
         if time.monotonic() >= deadline:
-            node.status = NodeStatus.TIMEOUT
+            # ready_at before status: the refresh thread reads both, and a
+            # terminal status must never be seen with a still-ticking clock.
             node.ready_at = time.monotonic()
+            node.status = NodeStatus.TIMEOUT
             return
 
         await asyncio.sleep(DEFAULT_PROBE_INTERVAL)
@@ -701,15 +731,15 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
             probe_target, cfg.username, cfg.password, node.kind, DEFAULT_SSH_TIMEOUT
         )
         if err is None:
-            node.status = NodeStatus.READY
             node.ready_at = time.monotonic()
+            node.status = NodeStatus.READY
             return
 
         node.last_error = f"{probe_target}: {err}"
 
         if time.monotonic() >= deadline:
-            node.status = NodeStatus.TIMEOUT
             node.ready_at = time.monotonic()
+            node.status = NodeStatus.TIMEOUT
             return
 
         await asyncio.sleep(DEFAULT_PROBE_INTERVAL)
@@ -918,6 +948,33 @@ def build_live_layout(cfg: LabConfig, started_at: float) -> RenderableType:
         build_status_table(cfg),
         build_footer(cfg, started_at),
     )
+
+
+def guarded_live_layout(cfg: LabConfig, started_at: float) -> Callable[[], RenderableType]:
+    """
+    The get_renderable callable handed to Live.
+
+    Rich calls it from its refresh thread for every frame. An exception that
+    escapes there kills the refresh thread silently — the display just stops
+    moving while the probes carry on — so nothing may escape: on error, return
+    the last layout that built with the error shown underneath it.
+
+    This guards the layout build only. A fault while Rich renders the returned
+    renderables (inside __rich_console__) is not caught here; it would still
+    stop the display, but never the probes.
+    """
+    last_good: RenderableType = Text("")
+
+    def render() -> RenderableType:
+        nonlocal last_good
+        try:
+            last_good = build_live_layout(cfg, started_at)
+            return last_good
+        except Exception as exc:
+            err = Text(f"\n  ⚠ display error: {type(exc).__name__}: {exc}", style="critical")
+            return Group(last_good, err)
+
+    return render
 
 
 def _build_command_uri(command_id: str, *args: object) -> str:
@@ -1165,7 +1222,7 @@ def build_dashboard_markdown(cfg: LabConfig, total_elapsed: float) -> str:
     return "\n".join(lines)
 
 
-def write_and_open_dashboard(cfg: LabConfig, total_elapsed: float, console: Console) -> Optional[Path]:
+def write_and_open_dashboard(cfg: LabConfig, total_elapsed: float) -> tuple[Optional[Path], Optional[str]]:
     """
     Write the dashboard to <lab_root>/LAB-READY.md.
 
@@ -1173,15 +1230,16 @@ def write_and_open_dashboard(cfg: LabConfig, total_elapsed: float, console: Cons
     watches for this file and auto-opens it in its custom webview, which
     renders the markdown with clickable command: URIs.
 
-    Returns the dashboard path on success, None on write failure.
+    Returns (path, None) on success, (None, error text) on write failure.
+    Never touches the console: run() calls this while Live is open, and a
+    console write from the event loop could block on a paused terminal.
     """
     dashboard_path = cfg.lab_root / DASHBOARD_FILENAME
     try:
         dashboard_path.write_text(build_dashboard_markdown(cfg, total_elapsed))
     except Exception as exc:
-        console.print(f"[warning]Failed to write dashboard:[/warning] {exc}")
-        return None
-    return dashboard_path
+        return None, str(exc)
+    return dashboard_path, None
 
 
 def build_ready_panel(cfg: LabConfig, total_elapsed: float, dashboard_path: Optional[Path] = None) -> RenderableType:
@@ -1249,7 +1307,7 @@ def build_failure_panel(cfg: LabConfig, total_elapsed: float) -> RenderableType:
         topo_display = cfg.topology_path
     body.append(Text(f"  → sudo containerlab inspect --topo {topo_display}", style=""))
     for n in failed[:3]:  # cap the per-node suggestions to keep the panel tight
-        body.append(Text(f"  → docker logs clab-{cfg.name}-{n.name}", style=""))
+        body.append(Text(f"  → docker logs {cfg.container_name(n.name)}", style=""))
     if len(failed) > 3:
         body.append(Text(f"  → …and similar for the other {len(failed) - 3} failing node(s)", style="muted"))
     body.append(Text("  → make stop && make start    # nuke and pave", style=""))
@@ -1311,44 +1369,72 @@ async def run(cfg: LabConfig, console: Console) -> int:
         except Exception as exc:
             console.print(f"[warning]Could not regenerate README: {exc}[/warning]")
 
-    # Launch one watcher per node.
-    tasks = [asyncio.create_task(watch_node(n, cfg), name=f"watch:{n.name}") for n in cfg.nodes]
-
+    # Invariant: the event loop never waits on terminal output.
+    #
+    # Live pulls the layout itself, from its own refresh thread, through
+    # get_renderable; the loop only awaits the watchers. It must not call
+    # live.update() or refresh(): both take Live's lock, and the refresh
+    # thread holds that lock while it write()s a frame. The watchers are
+    # created inside the Live block, after Live.start() has done its one
+    # write on this thread (hiding the cursor), so no watcher exists while
+    # the loop can still block on the terminal. In the field the
+    # terminal is a code-server pty rendered by xterm.js in a browser tab.
+    # Once the tab has been hidden past the browser's grace period, the
+    # renderer's flow-control acks reach VS Code's pty host only about once
+    # a minute (Chromium aligns a hidden page's timer wake-ups to one per
+    # minute), the pty host pauses the pty, and the refresh thread blocks
+    # inside write() holding the lock. A loop waiting on that lock would
+    # freeze every probe and every wait_for timer for as long as the tab
+    # stays hidden, then time out nodes that were up all along: the field
+    # capture shows the main thread blocked for 13 minutes with ~1 s thaws
+    # once a minute. With no console write on the loop, a paused terminal
+    # pauses only the display. Live.stop() renders one last frame from the
+    # same callable, so the final statuses still reach the terminal without
+    # an update() from here.
     with Live(
-        build_live_layout(cfg, started_at),
+        get_renderable=guarded_live_layout(cfg, started_at),
         console=console,
         refresh_per_second=DEFAULT_REFRESH_HZ,
         transient=False,
-    ) as live:
-        # Poll-based update loop — lets us drive the spinner + elapsed timers.
-        while not all(t.done() for t in tasks):
-            live.update(build_live_layout(cfg, started_at))
-            await asyncio.sleep(1 / DEFAULT_REFRESH_HZ)
-        # Final render of live layout before we move on.
-        live.update(build_live_layout(cfg, started_at))
+    ):
+        # Launch one watcher per node.
+        tasks = [asyncio.create_task(watch_node(n, cfg), name=f"watch:{n.name}") for n in cfg.nodes]
+        await asyncio.wait(tasks)
 
-    # Surface any unexpected exceptions from watcher tasks.
-    for t in tasks:
-        if t.cancelled():
-            continue
-        exc = t.exception()
-        if exc is not None:
-            # Map back to the node if we can.
-            name = t.get_name().removeprefix("watch:")
-            for n in cfg.nodes:
-                if n.name == name:
-                    n.status = NodeStatus.ERROR
-                    n.last_error = f"{type(exc).__name__}: {exc}"
-                    break
+        # Surface any unexpected exceptions from watcher tasks. Node state
+        # only — nothing here writes to the console.
+        for t in tasks:
+            if t.cancelled():
+                continue
+            exc = t.exception()
+            if exc is not None:
+                # Map back to the node if we can.
+                name = t.get_name().removeprefix("watch:")
+                for n in cfg.nodes:
+                    if n.name == name:
+                        n.status = NodeStatus.ERROR
+                        n.last_error = f"{type(exc).__name__}: {exc}"
+                        break
 
-    total_elapsed = time.monotonic() - started_at
-    all_ready = all(n.status == NodeStatus.READY for n in cfg.nodes)
+        # Invariant: LAB-READY.md is written the moment every node is READY,
+        # before any terminal write. The file is the ready signal the
+        # lab-dashboard extension watches for, so it must not queue behind
+        # Live's final frame or the ready panel: with a paused terminal those
+        # writes block until the tab drains again, and the file would be
+        # minutes late for a lab that has been up all along. Written exactly
+        # once, here, with the elapsed time as of this moment; any write
+        # error is reported below, after Live has released the terminal.
+        total_elapsed = time.monotonic() - started_at
+        all_ready = all(n.status == NodeStatus.READY for n in cfg.nodes)
+        dashboard_path: Optional[Path] = None
+        dashboard_error: Optional[str] = None
+        if all_ready and cfg.auto_open_dashboard:
+            dashboard_path, dashboard_error = write_and_open_dashboard(cfg, total_elapsed)
 
     console.print()
     if all_ready:
-        dashboard_path = None
-        if cfg.auto_open_dashboard:
-            dashboard_path = write_and_open_dashboard(cfg, total_elapsed, console)
+        if dashboard_error is not None:
+            console.print(f"[warning]Failed to write dashboard:[/warning] {dashboard_error}")
         console.print(build_ready_panel(cfg, total_elapsed, dashboard_path=dashboard_path))
         return 0
     console.print(build_failure_panel(cfg, total_elapsed))
