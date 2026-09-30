@@ -30,7 +30,11 @@ Behavior:
        PROBING_SSH  — actually log in and run a no-op command to verify
                       auth works (kind-aware: cEOS gets `!`, Linux gets
                       `true`; both authenticated via sshpass).
-  3. On success: render a LAB-READY.md dashboard that the PacketAnglers
+  3. A node whose container is running but keeps refusing port 22 while the
+     rest of the lab comes up is restarted once (`containerlab restart
+     --node`), then probed again with a fresh budget — a wedged cEOS boot,
+     not a slow one.
+  4. On success: render a LAB-READY.md dashboard that the PacketAnglers
      lab-dashboard extension auto-opens in a webview.
 
 Design choices:
@@ -93,6 +97,17 @@ DEFAULT_SSH_TIMEOUT = 5.0           # seconds for an SSH handshake+auth probe; s
                                     # to respond once it first accepts a connection
 DEFAULT_REFRESH_HZ = 8              # Rich Live refresh rate
 
+# Stuck-node restart. A cEOS container can come up "running" and never start
+# its agents — port 22 stays closed while every peer boots around it. Seen in
+# the field (techlib-vxlan-domain-cd: D-LEAF1 refused port 22 for 20 min while
+# its slowest peer was ready at 7m52s; a restart of that node fixed it in a minute).
+DEFAULT_RESTART_AFTER = 600         # seconds of continuous port-22 refusal, with the
+                                    # container running, before init_lab restarts it —
+                                    # once per node; 0 disables (lab.yml boot.restart_after)
+RESTART_PEER_FRACTION = 0.5         # ...and only once this share of the lab is READY,
+                                    # so a slow host never triggers restarts
+CLAB_CMD_TIMEOUT = 90.0             # seconds for a containerlab inspect/restart call
+
 # Footer-diagnostic tunables. The diagnostic is the "why is my node stuck?"
 # message we surface in real-time during boot to save the operator from
 # having to wait for the failure panel.
@@ -146,6 +161,9 @@ class Node:
     ready_at: Optional[float] = None
     attempts: int = 0
     last_error: Optional[str] = None
+    restarted_at: Optional[float] = None       # set once a stuck-node restart was attempted
+    restarted: bool = False                    # ...and True when it was actually issued
+    restart_note: Optional[str] = None         # what happened, for the panels
 
     @property
     def elapsed(self) -> float:
@@ -181,6 +199,7 @@ class LabConfig:
 
     # ── Boot behavior (from lab.yml `boot:`) ──────────────────────────────
     per_node_timeout: int = DEFAULT_PER_NODE_TIMEOUT
+    restart_after: int = DEFAULT_RESTART_AFTER
     probe_port: int = DEFAULT_PROBE_PORT
     preflight_notes: list[str] = field(default_factory=list)
     skip_nodes: set[str] = field(default_factory=set)
@@ -421,6 +440,7 @@ def load_lab_config(lab_dir: Optional[Path] = None) -> LabConfig:
         password=os.getenv("LABPASSPHRASE", creds.get("password", "admin")),
         # boot
         per_node_timeout=int(boot.get("per_node_timeout", DEFAULT_PER_NODE_TIMEOUT)),
+        restart_after=int(boot.get("restart_after", DEFAULT_RESTART_AFTER)),
         probe_port=int(boot.get("probe_port", DEFAULT_PROBE_PORT)),
         preflight_notes=list(boot.get("preflight_notes", []) or []),
         skip_nodes=skip,
@@ -671,6 +691,110 @@ async def ssh_probe(
         return f"{type(exc).__name__}: {exc}"
 
 
+async def _containerlab(args: list[str], timeout: float) -> tuple[Optional[int], str, str]:
+    """
+    Run `sudo containerlab ...` from the event loop without blocking it —
+    the same invocation the lab Makefiles use (passwordless sudo in the lab
+    container). Returns (returncode, stdout, stderr); returncode None when
+    the binary is missing or the call timed out — callers treat that as
+    "unknown".
+    """
+    try:
+        proc = await asyncio.create_subprocess_exec(
+            "sudo", "-n", "containerlab", *args,
+            stdin=asyncio.subprocess.DEVNULL,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
+    except (FileNotFoundError, OSError):
+        return None, "", "containerlab not available"
+    try:
+        out, err = await asyncio.wait_for(proc.communicate(), timeout=timeout)
+    except asyncio.TimeoutError:
+        try:
+            proc.kill()
+        except ProcessLookupError:
+            pass
+        await proc.wait()
+        return None, "", f"containerlab {args[0]} timed out after {timeout:.0f}s"
+    return proc.returncode, out.decode("utf-8", "replace").strip(), err.decode("utf-8", "replace").strip()
+
+
+async def container_state(cfg: LabConfig, container: str) -> Optional[str]:
+    """
+    The container's state as containerlab reports it ("running", "exited",
+    ...), read from `containerlab inspect --format json` for this topology
+    ({"<lab>": [{name, state, ...}, ...]}). None when the container is not
+    in the lab (never created) or containerlab cannot be asked.
+    """
+    rc, out, _ = await _containerlab(
+        ["inspect", "--topo", str(cfg.topology_path), "--format", "json"], CLAB_CMD_TIMEOUT
+    )
+    if rc != 0 or not out:
+        return None
+    try:
+        data = json.loads(out)
+    except ValueError:
+        return None
+    items: list = []
+    if isinstance(data, dict):
+        for v in data.values():
+            if isinstance(v, list):
+                items.extend(v)
+    elif isinstance(data, list):
+        items = data
+    for c in items:
+        if isinstance(c, dict) and c.get("name") == container:
+            return str(c.get("state") or "") or None
+    return None
+
+
+def _ready_fraction(cfg: LabConfig) -> float:
+    total = len(cfg.nodes)
+    if not total:
+        return 0.0
+    return sum(1 for n in cfg.nodes if n.status == NodeStatus.READY) / total
+
+
+async def restart_stuck_node(node: Node, cfg: LabConfig) -> bool:
+    """
+    A node whose container is running but whose port 22 has been refused for
+    cfg.restart_after seconds, while most of the lab is already READY, has a
+    wedged boot — not a slow one. Restart the node once via
+    `containerlab restart --node` (a lifecycle-aware stop+start of that node
+    only). Returns True when the restart was issued (the caller grants the
+    node a fresh deadline); False when it was not (container missing or not
+    running, containerlab unusable, or the restart itself failed). In every
+    case node.restart_note says why, and node.restarted_at is set so this
+    runs at most once per node.
+    """
+    node.restarted_at = time.monotonic()
+    container = cfg.container_name(node.name)
+    ready = sum(1 for n in cfg.nodes if n.status == NodeStatus.READY)
+    since = _fmt_elapsed(node.elapsed).strip()
+    state = await container_state(cfg, container)
+    if state != "running":
+        node.restart_note = (
+            f"not restarted at {since}: container {container} is "
+            f"{state or 'missing (not deployed, or containerlab unreachable)'}"
+        )
+        return False
+    rc, _, err = await _containerlab(
+        ["restart", "--topo", str(cfg.topology_path), "--node", node.name], CLAB_CMD_TIMEOUT
+    )
+    if rc != 0:
+        node.restart_note = (
+            f"restart of {node.name} at {since} failed: "
+            f"{(err.splitlines() or ['containerlab exit ' + str(rc)])[-1][:160]}"
+        )
+        return False
+    node.restarted = True
+    node.restart_note = (
+        f"restarted at {since}: port 22 refused while {ready}/{len(cfg.nodes)} nodes were up"
+    )
+    return True
+
+
 async def watch_node(node: Node, cfg: LabConfig) -> None:
     """
     Two-phase readiness watcher.
@@ -682,6 +806,13 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
 
     Both phases share the single per-node timeout budget. If the whole thing
     takes longer than cfg.per_node_timeout, the node is marked TIMEOUT.
+
+    Stuck-node restart (Phase 1 only): a container that is running but has
+    refused port 22 for cfg.restart_after seconds while at least half the
+    lab is READY is restarted once (see restart_stuck_node); the node then
+    gets a fresh per-node budget and probing continues. Only the closed-port
+    case is treated this way — it is the failure seen in the field, and a
+    node that has opened port 22 is booting, however slowly.
 
     Both phases probe by management IP. Hostname-based reachability is a
     user-facing concern handled separately by populate_ssh_config writing
@@ -709,6 +840,17 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
         if err is None:
             break  # port is open — advance to Phase 2
         node.last_error = f"{probe_target}: {err}"
+
+        # Stuck-node restart: once, when the port has stayed closed for
+        # restart_after seconds and the rest of the lab is largely up.
+        if (
+            node.restarted_at is None
+            and cfg.restart_after > 0
+            and time.monotonic() - node.started_at >= cfg.restart_after
+            and _ready_fraction(cfg) >= RESTART_PEER_FRACTION
+        ):
+            if await restart_stuck_node(node, cfg):
+                deadline = time.monotonic() + cfg.per_node_timeout
 
         if time.monotonic() >= deadline:
             # ready_at before status: the refresh thread reads both, and a
@@ -829,6 +971,8 @@ def _status_label(node: Node) -> Text:
         NodeStatus.ERROR:           ("error",            "status.error"),
     }
     text, style = label_map[node.status]
+    if node.restarted:
+        text = f"↻ {text}"  # this node was restarted once by init_lab
     return Text(text, style=style)
 
 
@@ -896,6 +1040,10 @@ def build_footer(cfg: LabConfig, started_at: float) -> RenderableType:
     if timeout:
         t.append("   Timeout ", style="muted")
         t.append(str(timeout), style="status.timeout")
+    restarted = sum(1 for n in cfg.nodes if n.restarted)
+    if restarted:
+        t.append("   Restarted ", style="muted")
+        t.append(str(restarted), style="warning")
     t.append("   Elapsed ", style="muted")
     t.append(_fmt_elapsed(elapsed), style="bold")
 
@@ -1258,6 +1406,16 @@ def build_ready_panel(cfg: LabConfig, total_elapsed: float, dashboard_path: Opti
     creds.append(f"   (password: {cfg.password})", style="muted")
     body.append(creds)
 
+    restarted = [n for n in cfg.nodes if n.restarted]
+    if restarted:
+        body.append(Text(""))
+        for n in restarted:
+            line = Text()
+            line.append("↻ ", style="warning")
+            line.append(f"{n.name} ", style="bold")
+            line.append(n.restart_note, style="muted")
+            body.append(line)
+
     if dashboard_path is not None:
         body.append(Text(""))
         dash = Text()
@@ -1295,6 +1453,8 @@ def build_failure_panel(cfg: LabConfig, total_elapsed: float) -> RenderableType:
         if n.last_error:
             line.append(f" — last error: {n.last_error}", style="muted")
         body.append(line)
+        if n.restart_note:
+            body.append(Text(f"      ↻ {n.restart_note}", style="muted"))
 
     body.append(Text(""))
     body.append(Text("Remediation:", style="info"))
@@ -1308,6 +1468,10 @@ def build_failure_panel(cfg: LabConfig, total_elapsed: float) -> RenderableType:
     body.append(Text(f"  → sudo containerlab inspect --topo {topo_display}", style=""))
     for n in failed[:3]:  # cap the per-node suggestions to keep the panel tight
         body.append(Text(f"  → docker logs {cfg.container_name(n.name)}", style=""))
+        if n.last_error and "refused" in n.last_error.lower():
+            # Port 22 closed on a running container: the boot wedged before
+            # sshd came up. A restart is the fix that worked in the field.
+            body.append(Text(f"  → sudo containerlab restart --topo {topo_display} --node {n.name}    # container up, SSH never answered", style=""))
     if len(failed) > 3:
         body.append(Text(f"  → …and similar for the other {len(failed) - 3} failing node(s)", style="muted"))
     body.append(Text("  → make stop && make start    # nuke and pave", style=""))
