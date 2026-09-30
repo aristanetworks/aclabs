@@ -25,7 +25,10 @@ Behavior:
      can't reliably populate /etc/hosts in a Docker container — it's
      bind-mounted from the runtime layer — but ~/.ssh/config is a normal
      file that ssh honors at the application layer.
-  2. For each node, run a two-phase probe:
+  2. For each node, wait for containerlab to list its container (the
+     deploy may still be creating it; lab-deploy.sh's .lab/deploy.status
+     says whether it is still trying, done, or failed), then run a
+     two-phase probe:
        PROBING_TCP  — wait for port 22 to accept connections
        PROBING_SSH  — actually log in and run a no-op command to verify
                       auth works (kind-aware: cEOS gets `!`, Linux gets
@@ -108,6 +111,15 @@ RESTART_PEER_FRACTION = 0.5         # ...and only once this share of the lab is 
                                     # so a slow host never triggers restarts
 CLAB_CMD_TIMEOUT = 90.0             # seconds for a containerlab inspect/restart call
 
+# Deploy awareness. lab-deploy.sh (the techlib Makefiles' `make start`) writes
+# <lab>/.lab/deploy.status while it runs; containerlab inspect says which
+# containers exist. A node is probed only once its container exists — before
+# that it is "waiting for deploy", and a deploy that ends without creating it
+# makes the node "not deployed" with the deploy's own error, instead of a
+# 20-minute probe of an address nothing listens on.
+DEPLOY_STATUS_FILE = ".lab/deploy.status"
+INSPECT_INTERVAL = 5.0              # seconds between containerlab inspect polls
+
 # Footer-diagnostic tunables. The diagnostic is the "why is my node stuck?"
 # message we surface in real-time during boot to save the operator from
 # having to wait for the failure panel.
@@ -143,10 +155,12 @@ THEME = Theme({
 
 class NodeStatus(str, Enum):
     PENDING = "pending"                        # not yet probed
+    WAITING_DEPLOY = "waiting_deploy"          # container not created yet — deploy in progress
     PROBING_TCP = "probing_tcp"                # waiting for port 22 to accept connections
     PROBING_SSH = "probing_ssh"                # port open; waiting for SSH handshake + auth offer
     READY = "ready"                            # SSH login succeeded — node truly ready for the user
     TIMEOUT = "timeout"                        # exceeded per-node budget
+    NOT_DEPLOYED = "not_deployed"              # the deploy ended without creating the container
     ERROR = "error"                            # unexpected exception
 
 
@@ -207,6 +221,11 @@ class LabConfig:
     # ── Dashboard (from lab.yml `dashboard:`) ─────────────────────────────
     auto_open_dashboard: bool = True
     tips: list[str] = field(default_factory=list)
+
+    # ── Runtime (written by lab_inspector(), read by the watchers) ─────────
+    container_states: dict[str, str] = field(default_factory=dict)  # container name → state
+    inspect_available: Optional[bool] = None   # None until the first inspect has answered
+    deploy_status: dict[str, str] = field(default_factory=dict)     # .lab/deploy.status, parsed
 
     @property
     def heading(self) -> str:
@@ -720,20 +739,21 @@ async def _containerlab(args: list[str], timeout: float) -> tuple[Optional[int],
     return proc.returncode, out.decode("utf-8", "replace").strip(), err.decode("utf-8", "replace").strip()
 
 
-async def container_state(cfg: LabConfig, container: str) -> Optional[str]:
+async def inspect_states(cfg: LabConfig) -> Optional[dict[str, str]]:
     """
-    The container's state as containerlab reports it ("running", "exited",
-    ...), read from `containerlab inspect --format json` for this topology
-    ({"<lab>": [{name, state, ...}, ...]}). None when the container is not
-    in the lab (never created) or containerlab cannot be asked.
+    Every container containerlab knows for this topology, name → state
+    ("running", "exited", ...), from `containerlab inspect --format json`
+    ({"<lab>": [{name, state, ...}, ...]}). None when containerlab cannot be
+    asked (missing, sudo refused, timed out, unparsable) — "unknown", which
+    callers never confuse with "no containers".
     """
     rc, out, _ = await _containerlab(
         ["inspect", "--topo", str(cfg.topology_path), "--format", "json"], CLAB_CMD_TIMEOUT
     )
-    if rc != 0 or not out:
+    if rc != 0:
         return None
     try:
-        data = json.loads(out)
+        data = json.loads(out or "{}")
     except ValueError:
         return None
     items: list = []
@@ -743,10 +763,102 @@ async def container_state(cfg: LabConfig, container: str) -> Optional[str]:
                 items.extend(v)
     elif isinstance(data, list):
         items = data
+    states: dict[str, str] = {}
     for c in items:
-        if isinstance(c, dict) and c.get("name") == container:
-            return str(c.get("state") or "") or None
-    return None
+        if isinstance(c, dict) and c.get("name"):
+            states[str(c["name"])] = str(c.get("state") or "")
+    return states
+
+
+async def container_state(cfg: LabConfig, container: str) -> Optional[str]:
+    """One container's state, from a fresh inspect; None when absent or unknown."""
+    states = await inspect_states(cfg)
+    if states is None:
+        return None
+    return states.get(container) or None
+
+
+def read_deploy_status(lab_root: Path) -> dict[str, str]:
+    """
+    lab-deploy.sh's status file as a dict (key=value per line), {} when the
+    lab was not deployed through it (older image, manual containerlab).
+    """
+    path = lab_root / DEPLOY_STATUS_FILE
+    try:
+        text = path.read_text()
+    except OSError:
+        return {}
+    status: dict[str, str] = {}
+    for line in text.splitlines():
+        if "=" in line:
+            k, _, v = line.partition("=")
+            status[k.strip()] = v.strip()
+    return status
+
+
+def deploy_verdict(status: dict[str, str]) -> str:
+    """
+    What the deploy status means for a node that has no container yet:
+      "none"        — no status file: nothing is known, wait for the container
+      "in_progress" — lab-deploy.sh is running (deploying/retrying, pid alive)
+      "ok"          — it finished and reported every node running
+      "failed"      — it gave up, was killed, or its lab was destroyed
+    A deploying/retrying status whose pid is gone means the script died
+    before it could write its verdict (a killed terminal, a crashed boot).
+    """
+    state = status.get("state", "")
+    if not state:
+        return "none"
+    if state in ("deploying", "retrying", "destroying"):
+        pid = status.get("pid", "")
+        try:
+            os.kill(int(pid), 0)
+            return "in_progress"
+        except (ValueError, ProcessLookupError):
+            return "failed"
+        except PermissionError:
+            return "in_progress"  # alive, owned by someone else
+    if state == "ok":
+        return "ok"
+    return "failed"  # failed, destroyed, anything unexpected
+
+
+def deploy_summary(status: dict[str, str]) -> Optional[str]:
+    """One line about the deploy for the pre-flight panel, None when there is nothing to say."""
+    if not status:
+        return None
+    verdict = deploy_verdict(status)
+    attempt = status.get("attempt", "?")
+    attempts = status.get("attempts", "?")
+    running = status.get("running", "?")
+    expected = status.get("expected", "?")
+    error = status.get("error", "")
+    if verdict == "in_progress":
+        what = "retrying" if status.get("state") == "retrying" else status.get("state", "running")
+        return f"containerlab deploy {what}: attempt {attempt} of {attempts}"
+    if verdict == "ok":
+        return f"containerlab deploy ok: {running}/{expected} nodes running (attempt {attempt} of {attempts})"
+    if status.get("state") in ("deploying", "retrying") :
+        return f"containerlab deploy died mid-run (attempt {attempt} of {attempts}) — see .lab/deploy.log"
+    return f"containerlab deploy {status.get('state', 'failed')}: {error or 'see .lab/deploy.log'}"
+
+
+async def lab_inspector(cfg: LabConfig) -> None:
+    """
+    The one place that asks containerlab and reads the deploy status, every
+    INSPECT_INTERVAL seconds, for all watchers (43 watchers must not each run
+    their own inspect). Publishes cfg.container_states / inspect_available /
+    deploy_status; a transient inspect failure keeps the last good states.
+    """
+    while True:
+        cfg.deploy_status = read_deploy_status(cfg.lab_root)
+        states = await inspect_states(cfg)
+        if states is not None:
+            cfg.container_states = states
+            cfg.inspect_available = True
+        elif cfg.inspect_available is None:
+            cfg.inspect_available = False  # never answered: probe blind, as before
+        await asyncio.sleep(INSPECT_INTERVAL)
 
 
 def _ready_fraction(cfg: LabConfig) -> float:
@@ -807,6 +919,14 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
     Both phases share the single per-node timeout budget. If the whole thing
     takes longer than cfg.per_node_timeout, the node is marked TIMEOUT.
 
+    Phase 0 (WAITING_DEPLOY): until containerlab lists the node's container,
+    nothing is probed — the deploy is still creating it. If the deploy ends
+    (lab-deploy.sh's status says failed/destroyed, or ok without this
+    container, or the script died) the node becomes NOT_DEPLOYED with the
+    deploy's own error. Without any deploy status the wait is bounded by the
+    per-node budget. When containerlab cannot be asked at all, Phase 0 is
+    skipped and the node is probed blind, as before.
+
     Stuck-node restart (Phase 1 only): a container that is running but has
     refused port 22 for cfg.restart_after seconds while at least half the
     lab is READY is restarted once (see restart_stuck_node); the node then
@@ -822,6 +942,42 @@ async def watch_node(node: Node, cfg: LabConfig) -> None:
     redirected into it, and any write from the event loop could block on a
     paused terminal (see run()). State goes on the Node; Live displays it.
     """
+    # ── Phase 0: wait for the container to exist ──────────────────────────
+    node.status = NodeStatus.WAITING_DEPLOY
+    container = cfg.container_name(node.name)
+    wait_start = time.monotonic()
+    while True:
+        if cfg.inspect_available is False:
+            break  # containerlab unusable: nothing to wait on, probe as before
+        if container in cfg.container_states:
+            break  # created — the boot clock starts now
+        # No verdict before containerlab has answered once: an empty
+        # container list means "not asked yet", never "nothing exists".
+        verdict = deploy_verdict(cfg.deploy_status) if cfg.inspect_available else "none"
+        gave_up = (
+            verdict in ("failed", "ok")
+            or (cfg.inspect_available and time.monotonic() - wait_start >= cfg.per_node_timeout)
+        )
+        if gave_up:
+            status = cfg.deploy_status
+            error = status.get("error", "")
+            if verdict == "ok":
+                reason = "deploy reported ok but containerlab does not list this container"
+            elif verdict == "none":
+                reason = f"no container after {_fmt_elapsed(time.monotonic() - wait_start).strip()} and no deploy status"
+            elif status.get("state") in ("deploying", "retrying", "destroying"):
+                reason = (
+                    f"deploy died mid-run (attempt {status.get('attempt', '?')} of "
+                    f"{status.get('attempts', '?')}) — see .lab/deploy.log"
+                )
+            else:
+                reason = f"deploy {status.get('state', 'failed')}: {error or 'see .lab/deploy.log'}"
+            node.last_error = reason
+            node.ready_at = time.monotonic()
+            node.status = NodeStatus.NOT_DEPLOYED
+            return
+        await asyncio.sleep(DEFAULT_PROBE_INTERVAL)
+
     node.status = NodeStatus.PROBING_TCP
     node.started_at = time.monotonic()
     deadline = node.started_at + cfg.per_node_timeout
@@ -933,6 +1089,15 @@ def build_preflight_panel(cfg: LabConfig) -> RenderableType:
     for note in cfg.preflight_notes:
         lines.append(Text(f"• {note}", style="warning"))
 
+    deploy_line = deploy_summary(cfg.deploy_status)
+    if deploy_line:
+        verdict = deploy_verdict(cfg.deploy_status)
+        style = "info" if verdict in ("in_progress", "ok") else "critical"
+        dl = Text()
+        dl.append("Deploy: ", style="info")
+        dl.append(deploy_line, style=style)
+        lines.append(dl)
+
     return Panel(
         Group(*lines),
         title="[info]Pre-flight[/info]",
@@ -948,12 +1113,13 @@ _STATUS_GLYPH = {
     NodeStatus.PENDING:          Text("○", style="status.pending"),
     NodeStatus.READY:            Text("●", style="status.ready"),
     NodeStatus.TIMEOUT:          Text("✗", style="status.timeout"),
+    NodeStatus.NOT_DEPLOYED:     Text("✗", style="status.timeout"),
     NodeStatus.ERROR:            Text("!", style="status.error"),
 }
 
 
 def _status_cell(node: Node) -> RenderableType:
-    if node.status in (NodeStatus.PROBING_TCP, NodeStatus.PROBING_SSH):
+    if node.status in (NodeStatus.WAITING_DEPLOY, NodeStatus.PROBING_TCP, NodeStatus.PROBING_SSH):
         return _PROBING_SPINNER
     return _STATUS_GLYPH[node.status]
 
@@ -964,10 +1130,12 @@ def _status_label(node: Node) -> Text:
     # sshd isn't letting me in yet" — different root causes, different fixes.
     label_map = {
         NodeStatus.PENDING:         ("pending",          "status.pending"),
+        NodeStatus.WAITING_DEPLOY:  ("WAITING FOR DEPLOY", "status.pending"),
         NodeStatus.PROBING_TCP:     ("PROBING TCP 22",   "status.probing"),
         NodeStatus.PROBING_SSH:     ("VERIFY SSH LOGIN", "status.probing"),
         NodeStatus.READY:           ("ready",            "status.ready"),
         NodeStatus.TIMEOUT:         ("timeout",          "status.timeout"),
+        NodeStatus.NOT_DEPLOYED:    ("not deployed",     "status.timeout"),
         NodeStatus.ERROR:           ("error",            "status.error"),
     }
     text, style = label_map[node.status]
@@ -1040,6 +1208,14 @@ def build_footer(cfg: LabConfig, started_at: float) -> RenderableType:
     if timeout:
         t.append("   Timeout ", style="muted")
         t.append(str(timeout), style="status.timeout")
+    waiting = sum(1 for n in cfg.nodes if n.status == NodeStatus.WAITING_DEPLOY)
+    if waiting:
+        t.append("   Waiting for deploy ", style="muted")
+        t.append(str(waiting), style="info")
+    not_deployed = sum(1 for n in cfg.nodes if n.status == NodeStatus.NOT_DEPLOYED)
+    if not_deployed:
+        t.append("   Not deployed ", style="muted")
+        t.append(str(not_deployed), style="status.timeout")
     restarted = sum(1 for n in cfg.nodes if n.restarted)
     if restarted:
         t.append("   Restarted ", style="muted")
@@ -1450,7 +1626,9 @@ def build_failure_panel(cfg: LabConfig, total_elapsed: float) -> RenderableType:
         line = Text()
         line.append(f"  • {n.name}", style="bold")
         line.append(f" ({n.role}, {n.kind})", style="muted")
-        if n.last_error:
+        if n.status == NodeStatus.NOT_DEPLOYED:
+            line.append(f" — never created: {n.last_error}", style="muted")
+        elif n.last_error:
             line.append(f" — last error: {n.last_error}", style="muted")
         body.append(line)
         if n.restart_note:
@@ -1466,6 +1644,9 @@ def build_failure_panel(cfg: LabConfig, total_elapsed: float) -> RenderableType:
     except ValueError:  # outside lab_root — shouldn't happen, but stay honest
         topo_display = cfg.topology_path
     body.append(Text(f"  → sudo containerlab inspect --topo {topo_display}", style=""))
+    if any(n.status == NodeStatus.NOT_DEPLOYED for n in failed):
+        body.append(Text("  → cat .lab/deploy.log    # the containerlab deploy's own output", style=""))
+        body.append(Text("  → make start    # deploy again (retries once on its own)", style=""))
     for n in failed[:3]:  # cap the per-node suggestions to keep the panel tight
         body.append(Text(f"  → docker logs {cfg.container_name(n.name)}", style=""))
         if n.last_error and "refused" in n.last_error.lower():
@@ -1561,9 +1742,17 @@ async def run(cfg: LabConfig, console: Console) -> int:
         refresh_per_second=DEFAULT_REFRESH_HZ,
         transient=False,
     ):
-        # Launch one watcher per node.
+        # One inspector for the lab (containerlab inspect + deploy status),
+        # then one watcher per node. The inspector is cancelled once every
+        # watcher has finished.
+        inspector = asyncio.create_task(lab_inspector(cfg), name="inspector")
         tasks = [asyncio.create_task(watch_node(n, cfg), name=f"watch:{n.name}") for n in cfg.nodes]
         await asyncio.wait(tasks)
+        inspector.cancel()
+        try:
+            await inspector
+        except asyncio.CancelledError:
+            pass
 
         # Surface any unexpected exceptions from watcher tasks. Node state
         # only — nothing here writes to the console.
