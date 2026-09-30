@@ -124,3 +124,9 @@ cEOS-lab-*
 
 # do NOT ignore public lab env variables
 !.vscode/*.public.env
+
+### techlib lab runtime state (generated at boot, never tracked) ###
+# lab-deploy.sh: deploy log, per-attempt logs, deploy.status, lock
+.lab/
+# init_lab.py: the dashboard the lab-dashboard extension opens on readiness
+LAB-READY.md
