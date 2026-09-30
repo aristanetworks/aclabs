@@ -58,4 +58,6 @@ jobs:
       # - init_lab.py: raise DEFAULT_PER_NODE_TIMEOUT from 420s (7 min) to 600s (10 min)
       # 1.0.6:
       # - init_lab.py: fix event loop never waiting on terminal output (no more false TIMEOUT behind a paused browser terminal)
-      container_revision: "1.0.6"
+      # 1.0.7:
+      # - lab-deploy.sh: `make start`/`make stop` wrap containerlab with a bounded retry (one redeploy on a partial or failed deploy), a log (.lab/deploy.log) and a status file (.lab/deploy.status)
+      container_revision: "1.0.7"

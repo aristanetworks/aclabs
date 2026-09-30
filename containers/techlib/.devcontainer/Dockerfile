@@ -6,14 +6,13 @@ ARG USERNAME
 
 USER root
 
-# Bundled lab scripts. These are the canonical versions used by every
-# techlib lab; the lab-dashboard extension resolves /bin/init_lab.py
-# before falling back to <workspace>/assets/init_lab.py. init_lab.py
-# invokes its sibling docs_generate.py via Path(__file__).parent so
-# the pair stays atomic.
+# Bundled lab scripts.
+
 COPY ./init_lab.py /bin/init_lab.py
 COPY ./docs_generate.py /bin/docs_generate.py
-RUN chmod +x /bin/init_lab.py /bin/docs_generate.py
+
+COPY ./lab-deploy.sh /bin/lab-deploy.sh
+RUN chmod +x /bin/init_lab.py /bin/docs_generate.py /bin/lab-deploy.sh
 
 # Bake User-level code-server settings into the container image.
 

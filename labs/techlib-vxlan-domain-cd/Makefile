@@ -8,17 +8,32 @@ help: ## Display help message
 # Containerlab
 ##################################################
 
+# The topology path is the one thing that differs between techlib labs
+# (legacy labs keep it under clab/); the targets below are identical
+# across the fleet. start/stop go through /bin/lab-deploy.sh when the
+# techlib image provides it (a bounded retry, .lab/deploy.log and
+# .lab/deploy.status), and fall back to bare containerlab otherwise.
+TOPOLOGY := $(CURRENT_DIR)/topology.clab.yml
+
 .PHONY: start
-start: ## Deploy ceos lab
-	sudo containerlab deploy --debug --topo $(CURRENT_DIR)/topology.clab.yml --max-workers 10 --timeout 5m --reconfigure
+start: ## Deploy the lab (retries once on a partial deploy; log in .lab/deploy.log)
+	@if [ -x /bin/lab-deploy.sh ]; then \
+		/bin/lab-deploy.sh deploy $(TOPOLOGY); \
+	else \
+		sudo containerlab deploy --debug --topo $(TOPOLOGY) --max-workers 10 --timeout 5m --reconfigure; \
+	fi
 
 .PHONY: stop
-stop: ## Destroy ceos lab
-	sudo containerlab destroy --debug --topo $(CURRENT_DIR)/topology.clab.yml --cleanup
+stop: ## Destroy the lab
+	@if [ -x /bin/lab-deploy.sh ]; then \
+		/bin/lab-deploy.sh destroy $(TOPOLOGY); \
+	else \
+		sudo containerlab destroy --debug --topo $(TOPOLOGY) --cleanup; \
+	fi
 
 .PHONY: inspect
-inspect: ## Inspect ceos lab
-	@sudo containerlab inspect --topo $(CURRENT_DIR)/topology.clab.yml
+inspect: ## Inspect the lab
+	@sudo containerlab inspect --topo $(TOPOLOGY)
 	@echo ""
 	@echo "You can check the lab status, hostnames and management addresses above."
 	@echo "To connect to a lab device use \`ssh admin@<hostname>\` and password \`admin\`."
