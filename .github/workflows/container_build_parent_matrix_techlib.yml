@@ -60,4 +60,7 @@ jobs:
       # - init_lab.py: fix event loop never waiting on terminal output (no more false TIMEOUT behind a paused browser terminal)
       # 1.0.7:
       # - lab-deploy.sh: `make start`/`make stop` wrap containerlab with a bounded retry (one redeploy on a partial or failed deploy), a log (.lab/deploy.log) and a status file (.lab/deploy.status)
-      container_revision: "1.0.7"
+      # 1.0.8:
+      # - init_lab.py: a node whose container runs but never opens SSH is restarted once (`containerlab restart --node`) after boot.restart_after (600s) while most of the lab is READY
+      # - init_lab.py: a node is probed only once containerlab lists its container ("WAITING FOR DEPLOY"); a deploy that ends without creating it reads "not deployed" with the deploy's error from .lab/deploy.status
+      container_revision: "1.0.8"
