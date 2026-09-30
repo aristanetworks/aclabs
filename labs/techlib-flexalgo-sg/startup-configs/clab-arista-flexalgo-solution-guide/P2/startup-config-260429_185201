@@ -99,7 +99,7 @@ router traffic-engineering
 !
 router isis IGP
    net 49.0001.0000.0000.0004.00
-   is-hostname P1
+   is-hostname P2
    is-type level-2
    timers local-convergence-delay protected-prefixes
    !
