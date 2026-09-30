@@ -71,44 +71,9 @@ Throughout this section, we will use the following dual data center topology.
 
 ![L3LS Dual DC Topology](images/l3ls_topo_overview.png)
 
-## Basic EOS Switch Configuration
-
-Basic connectivity between the Ansible controller host and the switches must be established before Ansible can be used to deploy configurations. The following should be configured on all switches:
-
-- Switch Hostname
-- IP enabled interface
-- Username and Password defined
-- Management eAPI enabled
-
-???+ info
-
-    In the ATD environment, cEOS virtual switches use `Management0` in the default VRF. When using actual hardware or vEOS switches, `Management1` is used. The included basic switch configurations may need to be adjusted for your environment.
-
-Below is an example basic configuration file for s1-spine1:
-
-``` text
-!
-no aaa root
-!
-username admin privilege 15 role network-admin secret sha512 $6$eucN5ngreuExDgwS$xnD7T8jO..GBDX0DUlp.hn.W7yW94xTjSanqgaQGBzPIhDAsyAl9N4oScHvOMvf07uVBFI4mKMxwdVEUVKgY/.
-!
-hostname s1-spine1
-!
-management api http-commands
-   no shutdown
-!
-interface Management0
-   ip address 192.168.0.10/24
-!
-ip routing
-!
-ip route vrf MGMT 0.0.0.0/0 192.168.0.1
-!
-```
-
 ## Ansible Inventory
 
-Our lab L3LS topology contains two sites, `Site 1` and `Site 2`. We need to create the Ansible inventory for each site. We have created two separate directories for each site under the `sites` sub-directory in our repo.
+Our lab L3LS topology contains two sites, `Site 1` and `Site 2`. We need an Ansible inventory for each site. We have created two separate directories for each site under the `sites` sub-directory in our repo.
 
 ``` text
 ├── sites/
@@ -365,7 +330,7 @@ paths = ../../global_vars
 ---
 # Credentials for EOS Switches
 ansible_user: arista
-ansible_password: "{{ (lookup('file', '/home/coder/.config/code-server/config.yaml', errors='ignore') | from_yaml).password | default(lookup('ansible.builtin.env', 'LABPASSPHRASE')) }}"
+ansible_password: "{{ (lookup('file', '../config.yml') | from_yaml).password }}"
 ansible_network_os: arista.eos.eos
 # Configure privilege escalation
 ansible_become: true
@@ -376,7 +341,12 @@ ansible_httpapi_port: 443
 ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
 ansible_python_interpreter: $(which python3)
-avd_data_validation_mode: error
+
+# AVD 6.0 defaults to Management1 for cEOS, override
+custom_platform_settings:
+  - platforms:
+      - cEOS
+    management_interface: Management0
 
 # AAA settings and local users
 aaa_settings:
@@ -387,13 +357,12 @@ aaa_settings:
     - name: arista
       privilege: 15
       role: network-admin
-      sha512_password: "{{ ansible_password | password_hash('sha512', salt='arista', rounds=5000) }}"
-      ssh_key: "{{ lookup('ansible.builtin.file', '~/.ssh/id_rsa.pub') }}"
+      cleartext_password: "{{ ansible_password }}"
 
 # OOB Management network default gateway.
 mgmt_gateway: 192.168.0.1
-mgmt_interface_vrf: default
-mgmt_interface: Management0
+mgmt_interface_settings:
+  vrf: default
 
 # NTP Servers IP or DNS name, first NTP server will be preferred, and sourced from Management VRF
 ntp_settings:
@@ -607,7 +576,7 @@ tenants:
 
 The Fabric must define ports for southbound interfaces toward connected endpoints such as servers, appliances, firewalls, and other networking devices in the data center. This section uses port profiles and connected endpoints called `servers`. Documentation for [port_profiles](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#port-profiles-settings) and [connected endpoints](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#connected-endpoints-keys-settings) are available to see all the options available.
 
-The following data model defined two port profiles: PP-VLAN10 and PP-VLAN20. They define an access port profile for VLAN `10` and `20`, respectively. In addition, two server endpoints (s1-host1 and s1-host2) are created to use these port profiles. There are optional and required fields. The optional fields are used for port descriptions in the EOS intended configurations.
+The following data model defines two port profiles: PP-VLAN10 and PP-VLAN20. They define an access port profile for VLAN `10` and `20`, respectively. In addition, two server endpoints (s1-host1 and s1-host2) are created to use these port profiles. There are optional and required fields. The optional fields are used for port descriptions in the EOS intended configurations.
 
 ``` yaml
 ---
@@ -659,7 +628,7 @@ servers:
 
 ## The Playbooks
 
-Two playbooks, `build.yml` and `deploy.yml` are used in our lab.
+Three playbooks, `build.yml`, `deploy.yml`, and `validate.yml`, are used in our lab.
 
 `build.yml`
 
@@ -695,6 +664,22 @@ Two playbooks, `build.yml` and `deploy.yml` are used in our lab.
         name: arista.avd.eos_config_deploy_eapi
 ```
 
+`validate.yml`
+
+```yaml
+---
+- name: Validate Network State
+  hosts: "{{ target_hosts }}"
+  connection: httpapi
+  gather_facts: false
+
+  tasks:
+
+    - name: validate states on EOS devices
+      ansible.builtin.import_role:
+        name: arista.avd.anta_runner
+```
+
 To make our lives easier, we use a `Makefile` to create aliases to run the playbooks and provide the needed options. This eliminates mistakes and typing long commands.
 
 `Makefile`
@@ -716,6 +701,10 @@ build-site-1: ## Build Configs
 deploy-site-1: ## Deploy Configs via eAPI
     ansible-playbook playbooks/deploy.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
 
+.PHONY: validate-site-1
+validate-site-1: ## Validate network state
+	ansible-playbook playbooks/validate.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+
 ########################################################
 # Site 2
 ########################################################
@@ -727,9 +716,13 @@ build-site-2: ## Build Configs
 .PHONY: deploy-site-2
 deploy-site-2: ## Deploy Configs via eAPI
     ansible-playbook playbooks/deploy.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+
+.PHONY: validate-site-2
+validate-site-2: ## Validate network state
+	ansible-playbook playbooks/validate.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
 ```
 
-For example, if we wanted to run a playbook to build configs for Site 1, we could enter the following command.
+For example, if we wanted to run a playbook to build configurations for Site 1, we could enter the following command.
 
 ``` bash
 ansible-playbook playbooks/build.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
@@ -749,7 +742,7 @@ Now, you can type the following to issue the same ansible-playbook command.
 make build-site-1
 ```
 
-In the upcoming lab, we will use the following `make` commands several times. First, review the above `Makefile` to see what each entry does. Then, try building some custom entries.
+In the upcoming lab, we will use the following `make` commands several times. First, review the above `Makefile` to see what each entry does.
 
 Build configurations
 

@@ -2,9 +2,9 @@
 
 ## AVD Lab Guide Overview
 
-The AVD Lab Guide is a follow-along set of instructions to deploy a dual data center L3LS EVPN VXLAN fabric design. The data model overview and details can be found [here](overview.md). In the following steps, we will explore updating the data models to add services, ports, and DCI links to our fabrics and test traffic between sites.
+The AVD Lab Guide is a follow-along set of instructions to deploy a dual data center L3LS EVPN VXLAN fabric design. The data model overview and details can be found [here](README.md). In the following steps, we will explore updating the data models to add services, ports, and DCI links to our fabrics and test traffic between sites.
 
-In this example, the ATD lab is used to create the L3LS Dual Data Center topology below. The DCI Network cloud (orange area) is pre-provisioned and is comprised of the core nodes in the ATD topology. Our focus will be creating the L3LS AVD data models to build and deploy configurations for Site 1 and Site 2 (blue areas) and connect them to the DCI Network.
+In this example, the lab is used to create the L3LS Dual Data Center topology below. The DCI Network cloud (orange area) is pre-provisioned and is comprised of the core nodes in the ATD topology. Our focus will be creating the L3LS AVD data models to build and deploy configurations for Site 1 and Site 2 (blue areas) and connect them to the DCI Network.
 
 ![Dual DC Topology](images/l3ls_dualdc_topo.png)
 
@@ -17,12 +17,14 @@ In this example, the ATD lab is used to create the L3LS Dual Data Center topolog
 | s2-host1 | 10.10.10.200 |
 | s2-host2 | 10.20.20.200 |
 
-## Step 1 - Prepare Lab Environment
+## Step 1 - Initialize Git
 
-### TODO: Access the ATD Lab and Git Initialization 
+We will start by opening a new terminal
 
+To open the integrated terminal:
 
-Connect to your ATD Lab and start the Programmability IDE. Next, open a new Terminal.
+1. <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> on Windows
+2. <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> on Mac.
 
 Initialize Git and configure your global Git settings.
 
@@ -38,14 +40,22 @@ git config --global user.name "FirstName LastName"
 git config --global user.email "name@example.com"
 ```
 
-### TODO: Reword, already configured on startup, Prepare DCI Network and Test Hosts
+### Validate Pre-configured Hosts
 
-The last step in preparing your lab is to push pre-defined configurations to the DCI Network (cloud) and the four hosts used to test traffic. The border leafs from each site will connect to their specified peer with P2P links. The hosts (two per site) have port-channels to the leaf pairs and are pre-configured with an IP address and route to reach the other hosts.
+The Core and Host nodes are preconfigured on lab startup. You can verify this by connecting to host1 and viewing the baseline configuration.
 
-Run the following to push the configs.
+The border leafs from each site will connect to their specified peer with P2P links. The hosts (two per site) have port-channels to the leaf pairs and are pre-configured with an IP address and route to reach the other hosts.
 
-``` bash
-make preplab
+```text
+ssh s1-host1
+s1-host1#show ip int b
+                                                                                       Address
+Interface           IP Address            Status       Protocol                 MTU    Owner  
+------------------- --------------------- ------------ -------------------- ---------- -------
+Management0         192.168.0.16/24       up           up                      1500           
+Port-Channel1       10.10.10.100/24       down         lowerlayerdown          1500           
+
+s1-host1#
 ```
 
 ## Step 2 - Deployment Overview
@@ -81,7 +91,7 @@ At this point, we can build our initial configurations for the topology.
 make build-site-1
 ```
 
-> Feel free to run `git add` and `git commit` to create a snapshot of the current build state. This will help you view the differences between steps in the workshop..
+> Run `git add` and `git commit` to create a snapshot of the current build state. This will help you view the differences between steps in the workshop..
 
 ``` bash
 git add .
@@ -102,10 +112,7 @@ make deploy-site-1
 
 Now, lets login to some switches to verify the current configs (`show run`) match the ones created in `intended/configs` folder. We can also check the current state for MLAG, interfaces, BGP peerings for IPv4 underlay, and BGP EVPN overlay peerings.
 
-You can connect to devices in two ways:
-
-- Clicking a node in the ATD lab topology image.
-- Running `ssh arista@s1-spine1` or entering `s1-spine1` directly from the terminal.
+You can connect to devices by running `ssh arista@s1-spine1` or entering `s1-spine1` directly from the terminal.
 
 These outputs were taken from `s1-leaf1`:
 
@@ -113,7 +120,7 @@ These outputs were taken from `s1-leaf1`:
 
     **Command**
 
-    ``` bash
+    ``` text
     show mlag
     ```
 
@@ -150,7 +157,7 @@ These outputs were taken from `s1-leaf1`:
 
     **Command**
 
-    ``` bash
+    ``` text
     show ip interface brief
     ```
 
@@ -174,7 +181,7 @@ These outputs were taken from `s1-leaf1`:
 
     **Commands**
 
-    ``` bash
+    ``` text
     show ip bgp summary
     ```
 
@@ -195,7 +202,7 @@ These outputs were taken from `s1-leaf1`:
 
     **Commands**
 
-    ``` bash
+    ``` text
     show bgp evpn summary
     ```
 
@@ -211,7 +218,7 @@ These outputs were taken from `s1-leaf1`:
       s1-spine2                10.250.1.2 4 65100              5         6    0    0 00:01:40 Estab   0      0
     ```
 
-> The basic fabric with MLAG peers, P2P routed links between leaf and spines, eBGP/iBGP IPv4 underlay peerings, and eBGP/iBGP EVPN overlay peerings is now created. Next up, we will add VLAN and SVI services to the fabric.
+    > The basic fabric with MLAG peers, P2P routed links between leaf and spines, eBGP/iBGP IPv4 underlay peerings, and eBGP/iBGP EVPN overlay peerings is now created. Next up, we will add VLAN and SVI services to the fabric.
 
 ### Add Services to the Fabric
 
@@ -219,7 +226,7 @@ The next step is to add VLANs and SVIs to the fabric. The services data model fi
 
 Open `sites/site_1/group_vars/SITE1_NETWORK_SERVICES.yml` and uncomment lines 1-16, then run the build & deploy process again.
 
-> In VS Code, you can toggle comments on/off by selecting the text and pressing `ctrl + /` or `cmd + /`.
+> In VS Code, you can toggle comments on/off by selecting the text and pressing <kbd>Ctrl</kbd> + <kbd>/</kbd> or  <kbd>Cmd</kbd> + <kbd>/</kbd>.
 
 **Build the Configs**
 
@@ -248,88 +255,69 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist, their IP addr
     **Expected Output**
 
     ``` text
-    s1-leaf1#show ip interface brief
-                                                                                Address
-    Interface         IP Address            Status       Protocol            MTU    Owner
+    s1-leaf1#show ip int b
+                                                                                    Address
+    Interface         IP Address            Status       Protocol            MTU    Owner  
     ----------------- --------------------- ------------ -------------- ----------- -------
-    Ethernet2         172.16.1.1/31         up           up                 1500
-    Ethernet3         172.16.1.3/31         up           up                 1500
-    Loopback0         10.250.1.3/32         up           up                65535
-    Loopback1         10.255.1.3/32         up           up                65535
-    Management0       192.168.0.12/24       up           up                 1500
-    Vlan10            10.10.10.1/24         up           up                 1500
-    Vlan20            10.20.20.1/24         up           up                 1500
-    Vlan1199          unassigned            up           up                 9164
-    Vlan3009          10.252.1.0/31         up           up                 1500
-    Vlan4093          10.252.1.0/31         up           up                 1500
-    Vlan4094          10.251.1.0/31         up           up                 1500
+    Ethernet2         172.16.1.1/31         up           up                 1500           
+    Ethernet3         172.16.1.3/31         up           up                 1500           
+    Loopback0         10.250.1.3/32         up           up                65535           
+    Loopback1         10.255.1.3/32         up           up                65535           
+    Management0       192.168.0.12/24       up           up                 1500           
+    Vlan10            10.10.10.1/24         up           up                 1500           
+    Vlan20            10.20.20.1/24         up           up                 1500           
+    Vlan3009          10.252.1.0/31         up           up                 1500           
+    Vlan4093          10.252.1.0/31         up           up                 1500           
+    Vlan4094          10.251.1.0/31         up           up                 1500           
+    Vlan4097          unassigned            up           up                 9164  
     ```
 
-    ???+ abstract "Where did those VLANs come from?"
-        You should notice some VLANs that we didn't define anywhere in the `_NETWORK_SERVICES.yml` data model which aren't related to **MLAG**.  Specifically, these will be VLAN SVIs ***Vlan1199*** and ***Vlan3009***.
+    > You should notice some VLANs that we didn't define anywhere in the `_NETWORK_SERVICES.yml` data model which aren't related to **MLAG**. The additional VLANs will be used for underlay and overlay MLAG peering.
 
-        ***Vlan1199*** is dynamically created and assigned for the **OVERLAY** vrf to VNI mapping under the VXLAN interface.  You can verify this by looking at the **show interface vxlan 1** output.  Remember, we defined **VNI 10** as the `vrf_vni` in our data model.
-        ``` text
-        Dynamic VLAN to VNI mapping for 'evpn' is
-        [1199, 10]
-        ```
-
-        ***Vlan3009*** was also auto-configured by AVD for an iBGP peering between `s1-leaf1` and `s1-leaf2` in the **OVERLAY** vrf.  You can verify this by looking at the interface configuration, and BGP peering for that vrf.
-
-        **Interface Configuration**
-        ``` text
-        s1-leaf1#show run interface vlan 3009
-        interface Vlan3009
-          description MLAG_PEER_L3_iBGP: vrf OVERLAY
-          mtu 1500
-          vrf OVERLAY
-          ip address 10.252.1.0/31
-        ```
-
-        **Overlay vrf BGP Peering**
-        ``` text
-        s1-leaf1#show ip bgp summary vrf OVERLAY
-        BGP summary information for VRF OVERLAY
-        Router identifier 10.250.1.3, local AS number 65101
-        Neighbor Status Codes: m - Under maintenance
-          Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-          s1-leaf2                 10.252.1.1 4 65101             19        20    0    0 00:11:30 Estab   5      5
-        ```
+**Overlay vrf BGP Peering**
+``` text
+s1-leaf1#show ip bgp summary vrf OVERLAY 
+BGP summary information for VRF OVERLAY
+Router identifier 10.250.1.3, local AS number 65101
+Neighbor Status Codes: m - Under maintenance
+  Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
+  s1-leaf2_Vlan3009        10.252.1.1 4 65101             19        20    0    0 00:12:38 Estab   2      2      2
+```
 
 2. Verify VLANs **10** and **20**, and vrf **OVERLAY** are now mapped to the appropriate VNIs under the `vxlan1` interface.
 
-    ^^Command^^
+    **Command**
 
-    ``` text
+    ```text
     show run interface vxlan 1
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="7-9"
-    s1-leaf1#show run int vxlan 1
-    interface Vxlan1
-      description s1-leaf1_VTEP
-      vxlan source-interface Loopback1
-      vxlan virtual-router encapsulation mac-address mlag-system-id
-      vxlan udp-port 4789
-      vxlan vlan 10 vni 10010
-      vxlan vlan 20 vni 10020
-      vxlan vrf OVERLAY vni 10
-    ```
+      ```text
+      s1-leaf1#show run int vxlan 1
+      interface Vxlan1
+        description s1-leaf1_VTEP
+        vxlan source-interface Loopback1
+        vxlan virtual-router encapsulation mac-address mlag-system-id
+        vxlan udp-port 4789
+        vxlan vlan 10 vni 10010
+        vxlan vlan 20 vni 10020
+        vxlan vrf OVERLAY vni 10
+      ```
 
 3. Verify we are flooding to the correct remote VTEPs based on what we have learned across the EVPN overlay.
 
-    ^^Command^^
+    **Command**
 
-    ``` text
+    ```text
     show interface vxlan1
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="19 20"
-    s1-leaf1#show int vxlan 1
+    ```text
+    s1-leaf1#show interfaces vxlan 1
     Vxlan1 is up, line protocol is up (connected)
       Hardware is Vxlan
       Description: s1-leaf1_VTEP
@@ -338,34 +326,31 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist, their IP addr
       Replication/Flood Mode is headend with Flood List Source: EVPN
       Remote MAC learning via EVPN
       VNI mapping to VLANs
-      Static VLAN to VNI mapping is
-        [10, 10010]       [20, 10020]
+      Static VLAN to VNI mapping is 
+        [10, 10010]       [20, 10020]      
       Dynamic VLAN to VNI mapping for 'evpn' is
-        [1199, 10]
+        [4097, 10]       
       Note: All Dynamic VLANs used by VCS are internal VLANs.
             Use 'show vxlan vni' for details.
-      Static VRF to VNI mapping is
+      Static VRF to VNI mapping is 
       [OVERLAY, 10]
       Headend replication flood vtep list is:
-        10 10.255.1.5      10.255.1.7
-        20 10.255.1.5      10.255.1.7
-      MLAG Shared Router MAC is 021c.73c0.c612
+        10 10.255.1.7      10.255.1.5     
+        20 10.255.1.7      10.255.1.5     
+      MLAG Shared Router MAC is 021c.7301.2391
     ```
 
-4. Finally, lets verify we have **IMET** (1) routes for each VLAN and VTEP in the EVPN overlay.
-    { .annotate }
+4. Finally, lets verify we have **IMET** routes for each VLAN and VTEP in the EVPN overlay.  IMET, or Type-3 routes are required for Broadcast, Unknown Unicast and Multicast (BUM) traffic delivery across EVPN networks.
 
-    1. IMET, or Type-3 routes are required for Broadcast, Unknown Unicast and Multicast (BUM) traffic delivery across EVPN networks.
+    **Command**
 
-    ^^Command^^
-
-    ``` text
+    ```text
     show bgp evpn route-type imet
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text
+    ```text
     s1-leaf1#show bgp evpn route-type imet
     BGP routing table information for VRF default
     Router identifier 10.250.1.3, local AS number 65101
@@ -415,37 +400,33 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist, their IP addr
 
 You can verify the recent configuration session was created.
 
-???+ info
-    When the configuration is applied via a configuration session, EOS will create a "checkpoint" of the configuration. This checkpoint is a snapshot
-    of the device's running configuration as it was **prior** to the configuration session being committed.
+When the configuration is applied via a configuration session, EOS will create a "checkpoint" of the configuration. This checkpoint is a snapshot of the device's running configuration as it was **prior** to the configuration session being committed.
 
-``` bash
+``` text
 show clock
 ```
 
-``` bash
+``` text
 show configuration sessions detail
 ```
 
 List the recent checkpoints.
 
-``` bash
+``` text
 show config checkpoints
 ```
 
 View the contents of the latest checkpoint file.
 
-``` bash
+``` text
 more checkpoint:< filename >
 ```
 
 See the difference between the running config and the latest checkpoint file.
 
-???+ tip
-    This will show the differences between the current device configuration
-    and the configuration before we did our `make deploy` command.
+> This will show the differences between the current device configuration and the configuration before we did our `make deploy` command.
 
-``` bash
+``` text
 diff checkpoint:< filename > running-config
 ```
 
@@ -465,9 +446,18 @@ make deploy-site-1
 
 At this point, hosts should be able to ping each other across the fabric.
 
+```text
+s1-host1#show ip interface brief 
+                                                                                 Address
+Interface           IP Address            Status       Protocol           MTU    Owner  
+------------------- --------------------- ------------ -------------- ---------- -------
+Management0         192.168.0.16/24       up           up                1500           
+Port-Channel1       10.10.10.100/24       up           up                1500  
+```
+
 From `s1-host1`, run a ping to `s1-host2`.
 
-``` bash
+``` text
 ping 10.20.20.100
 ```
 
@@ -480,8 +470,7 @@ PING 10.20.20.100 (10.20.20.100) 72(100) bytes of data.
 80 bytes from 10.20.20.100: icmp_seq=5 ttl=63 time=26.2 ms
 ```
 
-???+ success "Success"
-    Site 1 fabric is now complete.
+> Site 1 fabric is now complete.
 
 ## Step 4 - Site 2
 
@@ -496,7 +485,7 @@ At this point, you should be able to ping between hosts within a site but not be
 
 ## Step 5 - Connect Sites to DCI Network
 
-The DCI Network is defined by the `l3_edge` data model. Full data model documentation is located **[here](https://avd.arista.com/5.7/ansible_collections/arista/avd/roles/eos_designs/docs/input-variables.html#l3-edge-and-dci-settings)**.
+The DCI Network is defined by the `l3_edge` data model. Full data model documentation is located **[here](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#l3-edge-and-dci-settings)**.
 
 The data model defines P2P links (`/31s`) on the border leafs by using a combination of the ipv4_pool and the node id in the p2p_links section. See details in the graphic below. Each border leaf has a single link to its peer on interface `Ethernet4`.  In the data model, you will notice the parameter for **include_in_underlay_protocol**, which is set to ***true***.  This tells AVD to render the appropriate BGP configurations for route peering.
 
@@ -537,8 +526,7 @@ l3_edge:
 make all
 ```
 
-???+ tip
-    The `make all` command will run the build and deploy steps in one command.
+> The `make all` command will run the build and deploy steps in one command.
 
 ### Verification
 
@@ -555,15 +543,15 @@ Now lets verify the underlay connectivity and routing across the DCI network.
 
 1. From `s1-brdr1`, check the IPv4 underlay peering to its neighbor at Site 2, `s2-brdr1`.
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show ip bgp summary
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="9"
+    ``` text
     s1-brdr1#show ip bgp summary
     BGP summary information for VRF default
     Router identifier 10.250.1.7, local AS number 65103
@@ -577,15 +565,15 @@ Now lets verify the underlay connectivity and routing across the DCI network.
 
 2. From `s1-brdr1`, check its routing table in the default VRF and look for any prefixes learned from peer `172.16.255.1` via interface `Ethernet4`.  We will be looking for anything with a third octet of **.2** which signifies Site 2.
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show ip route
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="42-57 70-75"
+    ``` text
     s1-brdr1#show ip route
 
     VRF: default
@@ -673,15 +661,15 @@ Now lets verify the underlay connectivity and routing across the DCI network.
 
 3. From `s1-brdr2`, check the IPv4 underlay peering to its neighbor at Site 2, `s2-brdr2`.
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show ip bgp summary
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="9"
+    ``` text
     s1-brdr2#show ip bgp summary
     BGP summary information for VRF default
     Router identifier 10.250.1.8, local AS number 65103
@@ -693,9 +681,7 @@ Now lets verify the underlay connectivity and routing across the DCI network.
       s2-brdr2                 172.16.255.3 4 65203             36        36    0    0 00:22:45 Estab   11     11
     ```
 
-???+ success "DCI Underlay Complete"
-
-    If your BGP peerings match above and you have the correct routes in your routing table, the DCI network is successfully connected!
+   > If your BGP peerings match above and you have the correct routes in your routing table, the DCI network is successfully connected!
 
 ## Step 6 - Enable EVPN Gateway Functionality
 
@@ -705,73 +691,71 @@ In order to do this, we will need to uncomment the necessary data model to enabl
 
 Below you will see the data model snippets from `sites/site_1/group_vars/SITE1_FABRIC.yml` and `sites/site_2/group_vars/SITE2_FABRIC.yml`, for the `S1_BRDR` and `S2_BRDR` node groups. To enable EVPN gateway functionality you will need to modify the `SITE1_FABRIC.yml` vars file, and uncomment the below highlighted sections.  Uncomment the same sections from the `SITE2_FABRIC.yml` vars file.
 
-=== "SITE1_FABRIC.yml"
+**SITE1_FABRIC.yml**
 
-    ``` yaml hl_lines="3-8 14-18 23-27"
-    - group: S1_BRDR
-      bgp_as: 65103
+``` yaml
+- group: S1_BRDR
+  bgp_as: 65103
+  # evpn_gateway:
+  #   evpn_l2:
+  #     enabled: true
+  #   evpn_l3:
+  #     enabled: true
+  #     inter_domain: true
+  nodes:
+    - name: s1-brdr1
+      id: 5
+      mgmt_ip: 192.168.0.100/24
+      uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
       # evpn_gateway:
-      #   evpn_l2:
-      #     enabled: true
-      #   evpn_l3:
-      #     enabled: true
-      #     inter_domain: true
-      nodes:
-        - name: s1-brdr1
-          id: 5
-          mgmt_ip: 192.168.0.100/24
-          uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
-          # evpn_gateway:
-          #   remote_peers:
-          #     - hostname: s2-brdr1
-          #       bgp_as: 65203
-          #       ip_address: 10.250.2.7
-        - name: s1-brdr2
-          id: 6
-          mgmt_ip: 192.168.0.101/24
-          uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
-          # evpn_gateway:
-          #   remote_peers:
-          #     - hostname: s2-brdr2
-          #       bgp_as: 65203
-          #       ip_address: 10.250.2.8
-    ```
-
-=== "SITE2_FABRIC.yml"
-
-    ``` yaml hl_lines="3-8 14-18 23-27"
-    - group: S2_BRDR
-      bgp_as: 65203
+      #   remote_peers:
+      #     - hostname: s2-brdr1
+      #       bgp_as: 65203
+      #       ip_address: 10.250.2.7
+    - name: s1-brdr2
+      id: 6
+      mgmt_ip: 192.168.0.101/24
+      uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
       # evpn_gateway:
-      #   evpn_l2:
-      #     enabled: true
-      #   evpn_l3:
-      #     enabled: true
-      #     inter_domain: true
-      nodes:
-        - name: s2-brdr1
-          id: 5
-          mgmt_ip: 192.168.0.200/24
-          uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
-          # evpn_gateway:
-          #   remote_peers:
-          #     - hostname: s1-brdr1
-          #       bgp_as: 65103
-          #       ip_address: 10.250.1.7
-        - name: s2-brdr2
-          id: 6
-          mgmt_ip: 192.168.0.201/24
-          uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
-          # evpn_gateway:
-          #   remote_peers:
-          #     - hostname: s1-brdr2
-          #       bgp_as: 65103
-          #       ip_address: 10.250.1.8
-    ```
+      #   remote_peers:
+      #     - hostname: s2-brdr2
+      #       bgp_as: 65203
+      #       ip_address: 10.250.2.8
+```
 
-???+ note "Unified Fabric"
+**SITE2_FABRIC.yml**
 
-    If deploying a multi-site fabric with AVD, and using a single inventory file to contain all sites, the **evpn_gateway/remote_peers** vars for `bgp_as` and `ip_address` do **NOT** need to be populated. Since AVD will know about all these nodes from the single inventory file, it will know those variables and be able to use them to render the configuration.  Since we have split the sites for complexity sake, we do have to define them here.
+``` yaml hl_lines="3-8 14-18 23-27"
+- group: S2_BRDR
+  bgp_as: 65203
+  # evpn_gateway:
+  #   evpn_l2:
+  #     enabled: true
+  #   evpn_l3:
+  #     enabled: true
+  #     inter_domain: true
+  nodes:
+    - name: s2-brdr1
+      id: 5
+      mgmt_ip: 192.168.0.200/24
+      uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
+      # evpn_gateway:
+      #   remote_peers:
+      #     - hostname: s1-brdr1
+      #       bgp_as: 65103
+      #       ip_address: 10.250.1.7
+    - name: s2-brdr2
+      id: 6
+      mgmt_ip: 192.168.0.201/24
+      uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
+      # evpn_gateway:
+      #   remote_peers:
+      #     - hostname: s1-brdr2
+      #       bgp_as: 65103
+      #       ip_address: 10.250.1.8
+```
+
+> If deploying a multi-site fabric with AVD, and using a single inventory file to contain all sites, the **evpn_gateway/remote_peers** vars for `bgp_as` and `ip_address` do **NOT** need to be populated. Since AVD will know about all these nodes from the single inventory file, it will know those variables and be able to use them to render the configuration.  Since we have split the sites for complexity sake, we do have to define them here.
 
 ### Build and Deploy Changes for EVPN Gateway Functionality
 
@@ -779,17 +763,16 @@ Below you will see the data model snippets from `sites/site_1/group_vars/SITE1_F
 make all
 ```
 
-!!! note
-    `make all` is a shortcut to run the build and deploy playbooks for both sites in one command. Once again, the make entries will run sequentially.
+> `make all` is a shortcut to run the build and deploy playbooks for both sites in one command. Once again, the make entries will run sequentially.
 
-    ``` bash
-    ########################################################
-    # Build and deploy all sites
-    ########################################################
+``` bash
+########################################################
+# Build and deploy all sites
+########################################################
 
-    .PHONY: all
-    all: build-site-1 build-site-2 deploy-site-1 deploy-site-2
-    ```
+.PHONY: all
+all: build-site-1 build-site-2 deploy-site-1 deploy-site-2
+```
 
 ### Verification
 
@@ -799,7 +782,7 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
 1. Verify the new BGP configurations were rendered and applied for the remote gateways.
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show run section bgp
@@ -807,75 +790,75 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
     Look for the below new configurations relevant to the EVPN gateways.
 
-    === "s1-brdr1"
+    **s1-brdr1**
 
-        ``` text
-        router bgp 65103
+    ``` text
+    router bgp 65103
+      ...
+      neighbor EVPN-OVERLAY-CORE peer group
+      neighbor EVPN-OVERLAY-CORE update-source Loopback0
+      neighbor EVPN-OVERLAY-CORE bfd
+      neighbor EVPN-OVERLAY-CORE ebgp-multihop 15
+      neighbor EVPN-OVERLAY-CORE send-community
+      neighbor EVPN-OVERLAY-CORE maximum-routes 0
+      ...
+      neighbor 10.255.2.7 peer group EVPN-OVERLAY-CORE
+      neighbor 10.255.2.7 remote-as 65203
+      neighbor 10.255.2.7 description s2-brdr1
+      ...
+      vlan 10
           ...
-          neighbor EVPN-OVERLAY-CORE peer group
-          neighbor EVPN-OVERLAY-CORE update-source Loopback0
-          neighbor EVPN-OVERLAY-CORE bfd
-          neighbor EVPN-OVERLAY-CORE ebgp-multihop 15
-          neighbor EVPN-OVERLAY-CORE send-community
-          neighbor EVPN-OVERLAY-CORE maximum-routes 0
+          route-target import export evpn domain remote 10010:10010
           ...
-          neighbor 10.255.2.7 peer group EVPN-OVERLAY-CORE
-          neighbor 10.255.2.7 remote-as 65203
-          neighbor 10.255.2.7 description s2-brdr1
+      !
+      vlan 20
           ...
-          vlan 10
-              ...
-              route-target import export evpn domain remote 10010:10010
-              ...
-          !
-          vlan 20
-              ...
-              route-target import export evpn domain remote 10020:10020
-              ...
-          !
-          address-family evpn
-              neighbor EVPN-OVERLAY-CORE activate
-              neighbor EVPN-OVERLAY-CORE domain remote
-              ...
-              neighbor default next-hop-self received-evpn-routes route-type ip-prefix inter-domain
-        ```
+          route-target import export evpn domain remote 10020:10020
+          ...
+      !
+      address-family evpn
+          neighbor EVPN-OVERLAY-CORE activate
+          neighbor EVPN-OVERLAY-CORE domain remote
+          ...
+          neighbor default next-hop-self received-evpn-routes route-type ip-prefix inter-domain
+    ```
 
-    === "s1-brdr2"
+    **s1-brdr2**
 
-        ``` text
-        router bgp 65103
+    ``` text
+    router bgp 65103
+      ...
+      neighbor EVPN-OVERLAY-CORE peer group
+      neighbor EVPN-OVERLAY-CORE update-source Loopback0
+      neighbor EVPN-OVERLAY-CORE bfd
+      neighbor EVPN-OVERLAY-CORE ebgp-multihop 15
+      neighbor EVPN-OVERLAY-CORE send-community
+      neighbor EVPN-OVERLAY-CORE maximum-routes 0
+      ...
+      neighbor 10.255.2.8 peer group EVPN-OVERLAY-CORE
+      neighbor 10.255.2.8 remote-as 65203
+      neighbor 10.255.2.8 description s2-brdr2
+      ...
+      vlan 10
           ...
-          neighbor EVPN-OVERLAY-CORE peer group
-          neighbor EVPN-OVERLAY-CORE update-source Loopback0
-          neighbor EVPN-OVERLAY-CORE bfd
-          neighbor EVPN-OVERLAY-CORE ebgp-multihop 15
-          neighbor EVPN-OVERLAY-CORE send-community
-          neighbor EVPN-OVERLAY-CORE maximum-routes 0
+          route-target import export evpn domain remote 10010:10010
           ...
-          neighbor 10.255.2.8 peer group EVPN-OVERLAY-CORE
-          neighbor 10.255.2.8 remote-as 65203
-          neighbor 10.255.2.8 description s2-brdr2
+      !
+      vlan 20
           ...
-          vlan 10
-              ...
-              route-target import export evpn domain remote 10010:10010
-              ...
-          !
-          vlan 20
-              ...
-              route-target import export evpn domain remote 10020:10020
-              ...
-          !
-          address-family evpn
-              neighbor EVPN-OVERLAY-CORE activate
-              neighbor EVPN-OVERLAY-CORE domain remote
-              ...
-              neighbor default next-hop-self received-evpn-routes route-type ip-prefix inter-domain
-        ```
+          route-target import export evpn domain remote 10020:10020
+          ...
+      !
+      address-family evpn
+          neighbor EVPN-OVERLAY-CORE activate
+          neighbor EVPN-OVERLAY-CORE domain remote
+          ...
+          neighbor default next-hop-self received-evpn-routes route-type ip-prefix inter-domain
+    ```
 
 2. Verify the EVPN overlay peerings to Site 2.
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show bgp evpn summary
@@ -883,43 +866,43 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
     Look for the peerings to the corresponding Site 2 node.
 
-    === "s1-brdr1"
+    **s1-brdr1**
 
-        ``` text hl_lines="8"
-        s1-brdr1#show bgp evpn summ
-        BGP summary information for VRF default
-        Router identifier 10.250.1.7, local AS number 65103
-        Neighbor Status Codes: m - Under maintenance
-          Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-          s1-spine1                10.250.1.1 4 65100            151       150    0    0 01:37:10 Estab   20     20
-          s1-spine2                10.250.1.2 4 65100            152       151    0    0 01:37:11 Estab   20     20
-          s2-brdr1                 10.250.2.7 4 65203             14        14    0    0 00:00:08 Estab   19     19
-        ```
+    ``` text
+    s1-brdr1#show bgp evpn summ
+    BGP summary information for VRF default
+    Router identifier 10.250.1.7, local AS number 65103
+    Neighbor Status Codes: m - Under maintenance
+      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+      s1-spine1                10.250.1.1 4 65100            151       150    0    0 01:37:10 Estab   20     20
+      s1-spine2                10.250.1.2 4 65100            152       151    0    0 01:37:11 Estab   20     20
+      s2-brdr1                 10.250.2.7 4 65203             14        14    0    0 00:00:08 Estab   19     19
+    ```
 
-    === "s1-brdr2"
+    **s1-brdr2**
 
-        ``` text hl_lines="8"
-        s1-brdr2#show bgp evpn summary
-        BGP summary information for VRF default
-        Router identifier 10.250.1.8, local AS number 65103
-        Neighbor Status Codes: m - Under maintenance
-          Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-          s1-spine1                10.250.1.1 4 65100            158       152    0    0 01:38:37 Estab   20     20
-          s1-spine2                10.250.1.2 4 65100            156       147    0    0 01:38:37 Estab   20     20
-          s2-brdr2                 10.250.2.8 4 65203             15        15    0    0 00:01:35 Estab   19     19
-        ```
+    ``` text
+    s1-brdr2#show bgp evpn summary
+    BGP summary information for VRF default
+    Router identifier 10.250.1.8, local AS number 65103
+    Neighbor Status Codes: m - Under maintenance
+      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+      s1-spine1                10.250.1.1 4 65100            158       152    0    0 01:38:37 Estab   20     20
+      s1-spine2                10.250.1.2 4 65100            156       147    0    0 01:38:37 Estab   20     20
+      s2-brdr2                 10.250.2.8 4 65203             15        15    0    0 00:01:35 Estab   19     19
+    ```
 
 3. Finally, lets verify which routes we are seeing in the EVPN table from Site 2.  If you recall when we checked this within each site, we had an **IMET** route per VLAN, from each VTEP.  In this instance, since we are using EVPN gateway functionality to summarize the routes from the other site, we should only see 1 **IMET** route per VLAN to the remote EVPN gateway.
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show bgp evpn route-type imet
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="50-53"
+    ``` text
     s1-brdr1#show bgp evpn route-type imet
     BGP routing table information for VRF default
     Router identifier 10.250.1.7, local AS number 65103
@@ -975,7 +958,7 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
                                     10.255.2.7            -       100     0       65203 i
     ```
 
-> If all your peerings are established and you have the correct IMET routes in the EVPN table, then your EVPN gateways are functioning!  Lets move on to a final connectivity test.
+    > If all your peerings are established and you have the correct IMET routes in the EVPN table, then your EVPN gateways are functioning!  Lets move on to a final connectivity test.
 
 ## TODO: Migrate to custom ANTA catalog, Final Fabric Test
 
@@ -983,12 +966,12 @@ At this point your full Layer 3 Leaf Spine with EVPN VXLAN and EVPN gateway func
 
 From `s1-host1` ping both `s2-host1` & `s2-host2`.
 
-``` bash
+``` text
 # s2-host1
 ping 10.10.10.200
 ```
 
-``` bash
+``` text
 # s2-host2
 ping 10.20.20.200
 ```

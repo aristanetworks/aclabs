@@ -33,7 +33,7 @@ Now we're ready to start working on our changes :sunglasses:.
 ## Login Banner
 
 When we initially deployed our multi-site topology, we should have included a login banner on all our switches.
-Let's take a look at the **[AVD documentation site](https://avd.arista.com/5.7/ansible_collections/arista/avd/roles/eos_cli_config_gen/docs/input-variables.html#banners){:target="_blank"}** to see what the
+Let's take a look at the **[AVD documentation site](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#other-management-settings)** to see what the
 data model is for this configuration.
 
 The banner on all of our switches will be the same. After reviewing the AVD documentation, we know we can accomplish this by defining the `banners` input variable
@@ -42,16 +42,10 @@ in our `global_vars/global_dc_vars.yml` file.
 Add the code block below to `global_vars/global_dc_vars.yml`.
 
 ``` yaml
-# Login Banner
-custom_structured_configuration_banners:
-  motd: |
-    You shall not pass. Unless you are authorized. Then you shall pass.
-    EOF
+management_settings:
+  banners:
+    motd: You shall not pass. Unless you are authorized. Then you shall pass.
 ```
-
-???+ danger "Yes, that "EOF" is important!"
-    Ensure the entire code snippet above is copied; including the `EOF`. This must be present for the configuration to be
-    considered valid
 
 Next, let's build the configurations and documentation associated with this change.
 
@@ -68,11 +62,9 @@ git add .
 git commit -m 'add banner'
 ```
 
-So far, so good! Before we publish our branch and create a Pull Request though, we have some more work to do...
-
 ## Syslog Server
 
-Our next Day 2 change is adding a syslog server configuration to all of our switches. Once again, we'll take a look at the `logging_settings` within the **[management settings](https://avd.arista.com/5.7/ansible_collections/arista/avd/roles/eos_designs/docs/input-variables.html#management-settings){:target="_blank"}** data models.
+Our next Day 2 change is adding a syslog server configuration to all of our switches. Once again, we'll take a look at the `logging_settings` within the **[management settings](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#logging)** data models.
 
 Like our banner operation, the syslog server configuration will be consistent on all our switches. Because of this, we can also put this into
 our `global_vars/global_dc_vars.yml` file.
@@ -101,8 +93,7 @@ of our work.
 TODO: Remove upstream push
 
 At this point, we have our Banner and Syslog configurations in place. The configurations look good,
-and we're ready to share this with our team for review. In other words, **it's time to publish our branch
-to the remote origin** (our forked repo on GitHub) and create the Pull Request (PR)!
+and we're ready to merge our branch to the main branch. Merging allows us to incorporate features or updates we are testing into our main branch.
 
 There are a few ways to publish the `banner-syslog` branch to our forked repository. The commands below will
 accomplish this via the CLI:
@@ -110,30 +101,11 @@ accomplish this via the CLI:
 ``` bash
 git add .
 git commit -m 'add syslog'
-git push --set-upstream origin banner-syslog
-```
-
-On our forked repository, let's create the Pull Request.
-
-When creating the PR, ensure that the `base repository` is the **main** branch of **your fork**. This can
-be selected via the dropdown as shown below:
-
-![PR Base Repository Selection](../assets/pr_open_request.png){: style="width:800px"}
-
-Take a minute to review the contents of the PR. Assuming all looks good, let's earn the **YOLO** GitHub badge
-by approving and merging your PR!
-
-???+ tip
-    Remember to delete the **banner-syslog** branch after performing the merge - Keep that repo clean!
-
-Once merged, let's switch back to our `main` branch and pull down our merged changes.
-
-``` bash
 git switch main
-git pull
+git merge banner-syslog
 ```
 
-Then, let's delete our now defunct **banner-syslog** branch.
+We can now delete our now defunct **banner-syslog** branch.
 
 ``` bash
 git branch -D banner-syslog
@@ -152,7 +124,7 @@ should also have our newly defined syslog servers.
 
 One of the many benefits of AVD is the ability to deploy new services very quickly and efficiently by modifying a small amount of data model. Lets add some new VLANs to our fabric.
 
-For this we will need to modify the two `_NETWORK_SERVICES.yml` data model vars files. To keep things simple we will add two new VLANs, **30** and **40**.
+For this we will need to modify the two `NETWORK_SERVICES.yml` data model vars files. To keep things simple we will add two new VLANs, **30** and **40**.
 
 Copy the following pieces of data model, and paste right below the last VLAN entry, in both `SITE1_NETWORK_SERVICES.yml` and `SITE2_NETWORK_SERVICES.yml`.  Ensure the `-id:` entries all line up.
 
@@ -208,15 +180,15 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
 1. Check that the VLAN SVIs were configured.
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show ip interface brief
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="12 13"
+    ``` text
     s1-leaf1#show ip interface brief
                                                                                     Address
     Interface         IP Address            Status       Protocol            MTU    Owner
@@ -238,15 +210,15 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
 2. Lets check the `VXLAN 1` interface and see what changes were made there.
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show run interface vxlan 1
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="9 10"
+    ``` text
     s1-leaf1#show run interface vxlan 1
     interface Vxlan1
       description s1-leaf1_VTEP
@@ -260,15 +232,15 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
       vxlan vrf OVERLAY vni 10
     ```
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show interface vxlan 1
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="11 22 23"
+    ``` text
     s1-leaf1#show interface vxlan 1
     Vxlan1 is up, line protocol is up (connected)
       Hardware is Vxlan
@@ -297,13 +269,13 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
 3. Now, lets check the EVPN table. We can filter the routes to only the new VLANs by specifying the new VNIs, **10030** and **10040**.
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show bgp evpn vni 10030
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
     ``` text
     s1-leaf1#sho bgp evpn vni 10030
@@ -335,13 +307,13 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
                                     10.255.1.7            -       100     0       65100 65103 i
     ```
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show bgp evpn vni 10040
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
     ``` text
     s1-leaf1#sho bgp evpn vni 10040
@@ -375,15 +347,15 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
 4. Finally, lets check from `s1-brdr1` for the remote EVPN gateway.
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show bgp evpn vni 10030
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="30 31"
+    ``` text
     s1-brdr1#  sho bgp evpn vni 10030
     BGP routing table information for VRF default
     Router identifier 10.250.1.7, local AS number 65103
@@ -417,15 +389,15 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
                                     10.255.2.7            -       100     0       65203 i
     ```
 
-    ^^Command^^
+    **Command**
 
     ``` text
     show bgp evpn vni 10040
     ```
 
-    ^^Expected Output^^
+    **Expected Output**
 
-    ``` text hl_lines="30 31"
+    ``` text
     s1-brdr1#  sho bgp evpn vni 10040
     BGP routing table information for VRF default
     Router identifier 10.250.1.7, local AS number 65103
@@ -468,6 +440,8 @@ are ready to be provisioned, so let's get to it.
 
 Before jumping in, let's create a new branch for our work. We'll call this branch **add-leafs**.
 
+If you have pending changes to be committed, run `git add .` and `git commit` to save another snapshot.
+
 ``` bash
 git switch -c add-leafs
 ```
@@ -488,39 +462,38 @@ Add the following two lines under `s1-brdr2` in `sites/site_1/inventory.yml`.
 
 The `sites/site_1/inventory.yml` file should now look like the example below:
 
-??? eos-config annotate "sites/site_1/inventory.yml"
-    ``` yaml hl_lines="21-22"
-    ---
-    SITE1:
+``` yaml hl_lines="21-22"
+---
+SITE1:
+  children:
+    CVP:
+      hosts:
+        cvp:
+    SITE1_FABRIC:
       children:
-        CVP:
+        SITE1_SPINES:
           hosts:
-            cvp:
-        SITE1_FABRIC:
-          children:
-            SITE1_SPINES:
-              hosts:
-                s1-spine1:
-                s1-spine2:
-            SITE1_LEAFS:
-              hosts:
-                s1-leaf1:
-                s1-leaf2:
-                s1-leaf3:
-                s1-leaf4:
-                s1-brdr1:
-                s1-brdr2:
-                s1-leaf5:
-                s1-leaf6:
-        SITE1_NETWORK_SERVICES:
-          children:
-            SITE1_SPINES:
-            SITE1_LEAFS:
-        SITE1_CONNECTED_ENDPOINTS:
-          children:
-            SITE1_SPINES:
-            SITE1_LEAFS:
-    ```
+            s1-spine1:
+            s1-spine2:
+        SITE1_LEAFS:
+          hosts:
+            s1-leaf1:
+            s1-leaf2:
+            s1-leaf3:
+            s1-leaf4:
+            s1-brdr1:
+            s1-brdr2:
+            s1-leaf5:
+            s1-leaf6:
+    SITE1_NETWORK_SERVICES:
+      children:
+        SITE1_SPINES:
+        SITE1_LEAFS:
+    SITE1_CONNECTED_ENDPOINTS:
+      children:
+        SITE1_SPINES:
+        SITE1_LEAFS:
+```
 
 Next, let's add our new Leaf switches into `sites/site_1/group_vars/SITE1_FABRIC.yml`.
 
@@ -549,103 +522,102 @@ Add the following code block after the border nodes in `sites/site_1/group_vars/
 
 The `sites/site_1/group_vars/SITE1_FABRIC.yml` file should now look like the example below:
 
-??? eos-config annotate "sites/site_1/group_vars/SITE1_FABRIC.yml"
-    ``` yaml hl_lines="84-94"
-    ---
-    fabric_name: SITE1_FABRIC
+``` yaml
+---
+fabric_name: SITE1_FABRIC
 
-    # Spine Switches
-    spine:
-      defaults:
-        platform: cEOS
-        loopback_ipv4_pool: 10.250.1.0/24
-        bgp_as: 65100
+# Spine Switches
+spine:
+  defaults:
+    platform: cEOS
+    loopback_ipv4_pool: 10.250.1.0/24
+    bgp_as: 65100
+  nodes:
+    - name: s1-spine1
+      id: 1
+      mgmt_ip: 192.168.0.10/24
+    - name: s1-spine2
+      id: 2
+      mgmt_ip: 192.168.0.11/24
+
+# Leaf Switches
+l3leaf:
+  defaults:
+    platform: cEOS
+    spanning_tree_priority: 4096
+    spanning_tree_mode: mstp
+    loopback_ipv4_pool: 10.250.1.0/24
+    loopback_ipv4_offset: 2
+    vtep_loopback_ipv4_pool: 10.255.1.0/24
+    uplink_switches: [ s1-spine1, s1-spine2 ]
+    uplink_interfaces: [ Ethernet2, Ethernet3 ]
+    uplink_ipv4_pool: 172.16.1.0/24
+    mlag_interfaces: [ Ethernet1, Ethernet6 ]
+    mlag_peer_ipv4_pool: 10.251.1.0/24
+    mlag_peer_l3_ipv4_pool: 10.252.1.0/24
+    virtual_router_mac_address: 00:1c:73:00:00:99
+  node_groups:
+    - group: S1_RACK1
+      bgp_as: 65101
       nodes:
-        - name: s1-spine1
+        - name: s1-leaf1
           id: 1
-          mgmt_ip: 192.168.0.10/24
-        - name: s1-spine2
+          mgmt_ip: 192.168.0.12/24
+          uplink_switch_interfaces: [ Ethernet2, Ethernet2 ]
+        - name: s1-leaf2
           id: 2
-          mgmt_ip: 192.168.0.11/24
-
-    # Leaf Switches
-    l3leaf:
-      defaults:
-        platform: cEOS
-        spanning_tree_priority: 4096
-        spanning_tree_mode: mstp
-        loopback_ipv4_pool: 10.250.1.0/24
-        loopback_ipv4_offset: 2
-        vtep_loopback_ipv4_pool: 10.255.1.0/24
-        uplink_switches: [ s1-spine1, s1-spine2 ]
-        uplink_interfaces: [ Ethernet2, Ethernet3 ]
-        uplink_ipv4_pool: 172.16.1.0/24
-        mlag_interfaces: [ Ethernet1, Ethernet6 ]
-        mlag_peer_ipv4_pool: 10.251.1.0/24
-        mlag_peer_l3_ipv4_pool: 10.252.1.0/24
-        virtual_router_mac_address: 00:1c:73:00:00:99
-      node_groups:
-        - group: S1_RACK1
-          bgp_as: 65101
-          nodes:
-            - name: s1-leaf1
-              id: 1
-              mgmt_ip: 192.168.0.12/24
-              uplink_switch_interfaces: [ Ethernet2, Ethernet2 ]
-            - name: s1-leaf2
-              id: 2
-              mgmt_ip: 192.168.0.13/24
-              uplink_switch_interfaces: [ Ethernet3, Ethernet3 ]
-        - group: S1_RACK2
-          bgp_as: 65102
-          nodes:
-            - name: s1-leaf3
-              id: 3
-              mgmt_ip: 192.168.0.14/24
-              uplink_switch_interfaces: [ Ethernet4, Ethernet4 ]
-            - name: s1-leaf4
-              id: 4
-              mgmt_ip: 192.168.0.15/24
-              uplink_switch_interfaces: [ Ethernet5, Ethernet5 ]
-        - group: S1_BRDR
-          bgp_as: 65103
+          mgmt_ip: 192.168.0.13/24
+          uplink_switch_interfaces: [ Ethernet3, Ethernet3 ]
+    - group: S1_RACK2
+      bgp_as: 65102
+      nodes:
+        - name: s1-leaf3
+          id: 3
+          mgmt_ip: 192.168.0.14/24
+          uplink_switch_interfaces: [ Ethernet4, Ethernet4 ]
+        - name: s1-leaf4
+          id: 4
+          mgmt_ip: 192.168.0.15/24
+          uplink_switch_interfaces: [ Ethernet5, Ethernet5 ]
+    - group: S1_BRDR
+      bgp_as: 65103
+      evpn_gateway:
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+          inter_domain: true
+      nodes:
+        - name: s1-brdr1
+          id: 5
+          mgmt_ip: 192.168.0.100/24
+          uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
           evpn_gateway:
-            evpn_l2:
-              enabled: true
-            evpn_l3:
-              enabled: true
-              inter_domain: true
-          nodes:
-            - name: s1-brdr1
-              id: 5
-              mgmt_ip: 192.168.0.100/24
-              uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
-              evpn_gateway:
-                remote_peers:
-                  - hostname: s2-brdr1
-                    bgp_as: 65203
-                    ip_address: 10.255.2.7
-            - name: s1-brdr2
-              id: 6
-              mgmt_ip: 192.168.0.101/24
-              uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
-              evpn_gateway:
-                remote_peers:
-                  - hostname: s2-brdr2
-                    bgp_as: 65203
-                    ip_address: 10.255.2.8
-        - group: S1_RACK4
-          bgp_as: 65104
-          nodes:
-            - name: s1-leaf5
-              id: 7
-              mgmt_ip: 192.168.0.28/24
-              uplink_switch_interfaces: [ Ethernet9, Ethernet9 ]
-            - name: s1-leaf6
-              id: 8
-              mgmt_ip: 192.168.0.29/24
-              uplink_switch_interfaces: [ Ethernet10, Ethernet10 ]
-    ```
+            remote_peers:
+              - hostname: s2-brdr1
+                bgp_as: 65203
+                ip_address: 10.255.2.7
+        - name: s1-brdr2
+          id: 6
+          mgmt_ip: 192.168.0.101/24
+          uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
+          evpn_gateway:
+            remote_peers:
+              - hostname: s2-brdr2
+                bgp_as: 65203
+                ip_address: 10.255.2.8
+    - group: S1_RACK4
+      bgp_as: 65104
+      nodes:
+        - name: s1-leaf5
+          id: 7
+          mgmt_ip: 192.168.0.28/24
+          uplink_switch_interfaces: [ Ethernet9, Ethernet9 ]
+        - name: s1-leaf6
+          id: 8
+          mgmt_ip: 192.168.0.29/24
+          uplink_switch_interfaces: [ Ethernet10, Ethernet10 ]
+```
 
 Next - Let's build the configuration!
 
@@ -653,19 +625,15 @@ Next - Let's build the configuration!
 make build-site-1
 ```
 
-???+ danger "Important"
-    Interfaces `Ethernet9` and `Ethernet10` do not exist on the Spines. Because of this, we
-    will **not** run a deploy command since it would fail.
+> Interfaces `Ethernet9` and `Ethernet10` do not exist on the Spines. Because of this, we will **not** run a deploy command since it would fail.
 
 Please take a moment and review the results of our changes via the source control functionality in VS Code.
 
-Finally, we'll commit our changes and publish our branch. Again, we can use the VS Code Source Control GUI for this,
-or via the CLI using the commands below:
+Finally, we'll commit our changes to save the snapshot.
 
 ``` bash
 git add .
 git commit -m 'add leafs'
-git push --set-upstream origin add-leafs
 ```
 
 ## Backing Out Changes
@@ -679,7 +647,4 @@ git switch main
 git branch -D add-leafs
 ```
 
-Finally, we can go out to our forked copy of the repository and delete the **add-leafs** branch.
-
-???+ success "Great Success!"
-    Congratulations. You have now successfully completed initial fabric builds and day 2 operational changes without interacting with any switch CLI!
+Congratulations. You have now successfully completed initial fabric builds and day 2 operational changes with AVD.
