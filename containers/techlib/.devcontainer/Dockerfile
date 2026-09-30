@@ -13,7 +13,11 @@ USER root
 # the pair stays atomic.
 COPY ./init_lab.py /bin/init_lab.py
 COPY ./docs_generate.py /bin/docs_generate.py
-RUN chmod +x /bin/init_lab.py /bin/docs_generate.py
+# lab-deploy.sh wraps `containerlab deploy` with a bounded retry, a log
+# (<lab>/.lab/deploy.log) and a status file (<lab>/.lab/deploy.status);
+# every techlib lab's `make start` / `make stop` calls it when present.
+COPY ./lab-deploy.sh /bin/lab-deploy.sh
+RUN chmod +x /bin/init_lab.py /bin/docs_generate.py /bin/lab-deploy.sh
 
 # Bake User-level code-server settings into the container image.
 
