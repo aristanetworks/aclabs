@@ -57,8 +57,5 @@ jobs:
       # 1.0.5:
       # - init_lab.py: raise DEFAULT_PER_NODE_TIMEOUT from 420s (7 min) to 600s (10 min)
       # 1.0.6:
-      # - init_lab.py: the event loop never waits on terminal output (no more false TIMEOUT behind a paused browser terminal)
-      # - init_lab.py: LAB-READY.md is written the moment every node is READY, before any terminal write
-      # - init_lab.py: failure-panel `docker logs` hint names the container per the topology `prefix`
-      # - note: the 1.0.5 tag was re-published without a bump by #242 (900s) and #244 (1200s); 1.0.6 maps unambiguously to 1200s
+      # - init_lab.py: fix event loop never waiting on terminal output (no more false TIMEOUT behind a paused browser terminal)
       container_revision: "1.0.6"
