@@ -1,29 +1,8 @@
-# ATD Dual DC
+# Dual DC L3LS
 
-> [!WARNING]
-> This lab is in preview. It's fully functional, but breaking changes can happen.
-> We are working hard on building the best lab collection and your feedback is always  appreciated.
-
-This lab is tested for:  
-
-  cEOS-lab version: 4.34.2F  
-  Containerlab Version: 0.71.1  
-  Codespace Container Size  
-    CPUs: 16  
-    memory: 64 GB  
-    storage: 128 GB  
-
-Last reviewed: 22/11/2025  
-
-> Lab Credentials  
-> Username: arista  
-> Password: arista  
-
-Please check the lab materials:
-
-- [Lab Documentation](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/atd-atd-dual-dc/)
-- [HTML Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/slides/atd-atd-dual-dc.html)
-- [PDF Slides](https://{{gh.org_name}}.github.io/{{gh.repo_name}}/pdfs/atd-atd-dual-dc.pdf)
+> Lab Credentials
+> Username: arista
+> Password: arista
 
 ## Lab Inventory
 

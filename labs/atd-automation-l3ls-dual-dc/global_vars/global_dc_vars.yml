@@ -1,7 +1,7 @@
 ---
 # Credentials for EOS Switches
-ansible_user: arista
-ansible_password: "{{ (lookup('file', '../config.yml') | from_yaml).password }}"
+ansible_user: "{{ default(lookup('ansible.builtin.env', 'LABUSERNAME')) | default('arista') }}"
+ansible_password: "{{ default(lookup('ansible.builtin.env', 'LABPASSPHRASE')) | default('arista') }}"
 ansible_network_os: arista.eos.eos
 # Configure privilege escalation
 ansible_become: true
