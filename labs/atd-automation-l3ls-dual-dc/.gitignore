@@ -119,3 +119,6 @@ cEOS-lab-*
 # ingnore images and other files not to be uploaded to GitHub
 .gitignored/*
 !.gitignored/.gitkeep
+
+# do NOT ignore public lab env variables
+!.vscode/*.public.env
