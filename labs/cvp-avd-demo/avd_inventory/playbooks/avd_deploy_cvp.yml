@@ -11,3 +11,4 @@
       vars:
         cv_server: "{{ lookup('ansible.builtin.env', 'CVURL', default='www.cv-staging.corp.arista.io') }}"
         cv_token: "{{ lookup('ansible.builtin.env', 'CV_API_TOKEN') }}"
+        cv_verify_certs: false
