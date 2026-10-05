@@ -24,4 +24,4 @@ RUN chown ${USERNAME} /home/${USERNAME}/.local/share/code-server/User/settings.j
 USER ${USERNAME}
 
 RUN code-server --install-extension PacketAnglers.lab-dashboard@0.15.4 --force
-RUN code-server --install-extension PacketAnglers.eos-linter@0.5.5 --force
+RUN code-server --install-extension PacketAnglers.eos-linter@0.5.6 --force
