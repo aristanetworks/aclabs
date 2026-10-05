@@ -23,6 +23,8 @@ STATE_DIR = Path("/tmp/aclabs-lab-start")
 STATE_PATH = STATE_DIR / "state.json"
 LOCK_PATH = STATE_DIR / "startup.lock"
 CVP_URL_PLACEHOLDER = "{{aclabs.cvp_url}}"
+LAB_USERNAME_PLACEHOLDER = "{{aclabs.lab_username}}"
+LAB_PASSWORD_PLACEHOLDER = "{{aclabs.lab_password}}"
 CVP_WAITING_LINE_PREFIX = "Waiting for the CloudVision API at "
 CVP_LOGIN_SUCCEEDED = "CloudVision login succeeded."
 CVP_ONBOARD_TIMEOUT_SECONDS = 1380
@@ -67,6 +69,23 @@ def update_readme_with_cvp_url(workspace: Path) -> None:
             readme.replace(CVP_URL_PLACEHOLDER, cvp_url),
             encoding="utf-8",
         )
+    except OSError as error:
+        raise LabStartError(f"Failed to update {readme_path}.") from error
+
+
+def update_readme_with_lab_credentials(workspace: Path) -> None:
+    readme_path = workspace / "README.md"
+    try:
+        readme = readme_path.read_text(encoding="utf-8")
+        readme = readme.replace(
+            LAB_USERNAME_PLACEHOLDER,
+            DEVICE_USERNAME,
+        )
+        readme = readme.replace(
+            LAB_PASSWORD_PLACEHOLDER,
+            DEVICE_PASSWORD,
+        )
+        readme_path.write_text(readme, encoding="utf-8")
     except OSError as error:
         raise LabStartError(f"Failed to update {readme_path}.") from error
 
@@ -389,6 +408,7 @@ def main() -> int:
 
             write_state("STARTING", "Automatic lab startup has begun.")
             verify_ceos_image(workspace)
+            update_readme_with_lab_credentials(workspace)
             onboard_cloudvision(workspace)
             commit_onboarding_changes(workspace)
             start_lab(workspace)
