@@ -16,7 +16,12 @@ import time
 from typing import Any
 
 import paramiko
+import requests # TODO: change controller architecture and remove
+import urllib3 # TODO: change controller architecture and remove
 import yaml
+
+# TODO: change controller architecture and remove
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 STATE_DIR = Path("/tmp/aclabs-lab-start")
@@ -31,6 +36,7 @@ CVP_ONBOARD_TIMEOUT_SECONDS = 1380
 LAB_START_TIMEOUT_SECONDS = 600
 DEVICE_READY_TIMEOUT_SECONDS = 300
 DEVICE_POLL_INTERVAL_SECONDS = 5
+STREAMING_READY_TIMEOUT_SECONDS = 300 # TODO: change controller architecture and remove
 DEVICE_USERNAME = os.environ.get("LABUSERNAME") or "arista"
 DEVICE_PASSWORD = os.environ.get("LABPASSPHRASE") or "arista"
 
@@ -372,6 +378,87 @@ def wait_for_nodes(workspace: Path) -> None:
         + ", ".join(sorted(unavailable))
     )
 
+# TODO: change controller architecture and remove
+def cloudvision_session(base_url: str) -> requests.Session:
+    session = requests.Session()
+    response = session.post(
+        f"{base_url}/cvpservice/login/authenticate.do",
+        json={
+            "userId": DEVICE_USERNAME,
+            "password": DEVICE_PASSWORD,
+        },
+        timeout=(2, 6),
+        verify=False,
+    )
+    response.raise_for_status()
+    session_id = response.json().get("sessionId", "")
+    if not session_id:
+        raise ValueError("CloudVision login response did not contain a session ID.")
+    session.cookies.set("access_token", session_id)
+    return session
+
+# TODO: change controller architecture and remove
+def active_streaming_hostnames(
+    session: requests.Session,
+    base_url: str,
+) -> set[str]:
+    response = session.get(
+        f"{base_url}/cvpservice/inventory/devices",
+        headers={"accept": "application/json"},
+        timeout=(2, 6),
+        verify=False,
+    )
+    response.raise_for_status()
+    devices = response.json()
+    if not isinstance(devices, list):
+        raise ValueError("CloudVision inventory response is not a list.")
+
+    return {
+        device["hostname"]
+        for device in devices
+        if isinstance(device, dict)
+        and isinstance(device.get("hostname"), str)
+        and device.get("streamingStatus") == "active"
+    }
+
+# TODO: change controller architecture and remove
+def wait_for_cloudvision_streaming(workspace: Path) -> None:
+    if not cloudvision_onboarding_enabled():
+        return
+
+    topology_hostnames = set(topology_nodes(workspace))
+    base_url = f"https://{os.environ['CVURL']}"
+    deadline = time.monotonic() + STREAMING_READY_TIMEOUT_SECONDS
+    session: requests.Session | None = None
+
+    write_state(
+        "VERIFYING",
+        "Devices are reachable; waiting for CloudVision streaming...",
+    )
+    while time.monotonic() < deadline:
+        try:
+            if session is None:
+                session = cloudvision_session(base_url)
+            streaming_hostnames = active_streaming_hostnames(session, base_url)
+            lab_streaming_hostnames = topology_hostnames & streaming_hostnames
+            if lab_streaming_hostnames:
+                print(
+                    "CloudVision streaming is active for lab device(s): "
+                    + ", ".join(sorted(lab_streaming_hostnames)),
+                    flush=True,
+                )
+                return
+        except (requests.RequestException, ValueError, AttributeError):
+            session = None
+
+        time.sleep(DEVICE_POLL_INTERVAL_SECONDS)
+
+    raise LabStartError(
+        "No device from the containerlab topology reported active CloudVision "
+        f"streaming within {STREAMING_READY_TIMEOUT_SECONDS} seconds: "
+        + ", ".join(sorted(topology_hostnames))
+    )
+
 
 def start_lab(workspace: Path) -> None:
     write_state("DEPLOYING", "Startup prerequisites are ready; starting the lab...")
@@ -413,6 +500,7 @@ def main() -> int:
             commit_onboarding_changes(workspace)
             start_lab(workspace)
             wait_for_nodes(workspace)
+            wait_for_cloudvision_streaming(workspace)
             write_state("READY", "Lab is ready!")
             return 0
         except (LabStartError, OSError, subprocess.SubprocessError) as error:
