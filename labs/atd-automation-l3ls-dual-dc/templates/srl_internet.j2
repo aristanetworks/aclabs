@@ -1,0 +1,51 @@
+{%- set srl_intf = "ethernet-1/1" -%}
+{%- set vrf_name = "OVERLAY" -%}
+{%- set arista_asn = arista_config.router_bgp.as -%}
+{%- set ext = namespace(srl_ip=none, srl_asn=none, arista_ip=none) -%}
+{%- for vrf in arista_config.router_bgp.vrfs | default([]) -%}
+  {%- if vrf.name == vrf_name -%}
+    {%- for neighbor in vrf.neighbors | default([]) -%}
+      {%- if neighbor.description == "SRL_INTERNET_PEER" -%}
+        {%- set ext.srl_ip = neighbor.ip_address -%}
+        {%- set ext.srl_asn = neighbor.remote_as -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- for intf in arista_config.ethernet_interfaces | default([]) -%}
+  {%- if intf.description == "UPLINK_TO_SRL_INTERNET" -%}
+    {%- set ext.arista_ip = intf.ip_address | split('/') | first -%}
+  {%- endif -%}
+{%- endfor -%}
+enter candidate
+set /interface system0 admin-state enable
+set /interface system0 subinterface 0 ipv4 admin-state enable
+set /interface system0 subinterface 0 ipv4 address 8.8.8.8/32
+set /interface {{ srl_intf }} admin-state enable
+set /interface {{ srl_intf }} subinterface 0 ipv4 admin-state enable
+set /interface {{ srl_intf }} subinterface 0 ipv4 address {{ ext.srl_ip }}/31
+set /network-instance default type default
+set /network-instance default interface system0.0
+set /network-instance default interface {{ srl_intf }}.0
+set /network-instance default next-hop-groups group DEFAULT-DISCARD blackhole
+set /network-instance default static-routes route 0.0.0.0/0 next-hop-group DEFAULT-DISCARD
+set /network-instance default static-routes route 0.0.0.0/0 admin-state enable
+set /routing-policy prefix-set INTERNET prefix 8.8.8.8/32 mask-length-range 32..32
+set /routing-policy policy EXPORT-INTERNET default-action policy-result reject
+set /routing-policy policy EXPORT-INTERNET statement 10 match protocol bgp
+set /routing-policy policy EXPORT-INTERNET statement 10 action policy-result accept
+set /routing-policy policy EXPORT-INTERNET statement 15 match prefix prefix-set INTERNET
+set /routing-policy policy EXPORT-INTERNET statement 15 action policy-result accept
+set /routing-policy policy EXPORT-INTERNET statement 20 match protocol static
+set /routing-policy policy EXPORT-INTERNET statement 20 action policy-result accept
+set /network-instance default protocols bgp admin-state enable
+set /network-instance default protocols bgp afi-safi ipv4-unicast admin-state enable
+set /network-instance default protocols bgp autonomous-system {{ ext.srl_asn }}
+set /network-instance default protocols bgp router-id {{ ext.srl_ip }}
+set /network-instance default protocols bgp ebgp-default-policy import-reject-all false
+set /network-instance default protocols bgp ebgp-default-policy export-reject-all false
+set /network-instance default protocols bgp group TO-ARISTA-FABRIC export-policy [ EXPORT-INTERNET ]
+set /network-instance default protocols bgp group TO-ARISTA-FABRIC peer-as {{ arista_asn }}
+set /network-instance default protocols bgp neighbor {{ ext.arista_ip }} peer-group TO-ARISTA-FABRIC
+set /network-instance default protocols bgp group TO-ARISTA-FABRIC admin-state enable
+commit now
