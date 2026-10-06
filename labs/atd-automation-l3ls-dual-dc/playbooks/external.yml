@@ -1,0 +1,23 @@
+---
+- name: Configure External SR Linux Internet Node
+  hosts: ext-srl1
+  gather_facts: false
+  vars:
+    ansible_user: admin
+    ansible_password: NokiaSrl1!
+    ansible_network_os: nokia.srlinux.srlinux
+  tasks:
+    - name: Load Arista Border Leaf (s1-brdr1) AVD structured config
+      ansible.builtin.set_fact:
+        arista_config: "{{ lookup('file', playbook_dir + '/../sites/site_1/intended/structured_configs/s1-brdr1.yml') | from_yaml }}"
+
+    - name: Render SR Linux Configuration Template
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/../templates/srl_internet.j2"
+        dest: "{{ playbook_dir }}/../sites/site_1/intended/configs/{{ inventory_hostname }}.cfg"
+
+    - name: Push configuration to SR Linux
+      nokia.srlinux.cli:
+        commands: "{{ query('lines', 'cat ' + playbook_dir + '/../sites/site_1/intended/configs/' + inventory_hostname + '.cfg') }}"
+        output_format: text
+      register: srl_deploy_result

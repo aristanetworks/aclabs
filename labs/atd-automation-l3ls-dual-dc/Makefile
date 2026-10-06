@@ -35,6 +35,10 @@ deploy-site-1: ## Deploy Configs via eAPI
 validate-site-1: ## Validate network state
 	ansible-playbook playbooks/validate.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
 
+.PHONY: external
+external: ## Validate network state
+	ansible-playbook playbooks/external.yml -i sites/site_1/inventory.yml
+
 ########################################################
 # Site 2
 ########################################################
