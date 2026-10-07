@@ -33,7 +33,7 @@ aaa_settings:
 # OOB Management network default gateway.
 mgmt_gateway: 192.168.0.1
 mgmt_interface_settings:
-  vrf: default
+  vrf: MGMT
 
 # NTP Servers IP or DNS name, first NTP server will be preferred, and sourced from Management VRF
 ntp_settings:

@@ -50,10 +50,10 @@ The border leafs from each site will connect to their specified peer with P2P li
 ssh s1-host1
 s1-host1#show ip int b
                                                                                        Address
-Interface           IP Address            Status       Protocol                 MTU    Owner  
+Interface           IP Address            Status       Protocol                 MTU    Owner
 ------------------- --------------------- ------------ -------------------- ---------- -------
-Management0         192.168.0.16/24       up           up                      1500           
-Port-Channel1       10.10.10.100/24       down         lowerlayerdown          1500           
+Management0         192.168.0.16/24       up           up                      1500
+Port-Channel1       10.10.10.100/24       down         lowerlayerdown          1500
 
 s1-host1#
 ```
@@ -224,7 +224,7 @@ These outputs were taken from `s1-leaf1`:
 
 The next step is to add VLANs and SVIs to the fabric. The services data model file `SITE1_NETWORK_SERVICES.yml` is pre-populated with VLANs and SVIs `10` and `20` in the **OVERLAY** VRF.
 
-Open `sites/site_1/group_vars/SITE1_NETWORK_SERVICES.yml` and uncomment lines 1-16, then run the build & deploy process again.
+Open [SITE1_NETWORK_SERVICES.yml](sites/site_1/group_vars/SITE1_NETWORK_SERVICES.yml) and uncomment lines 1-16, then run the build & deploy process again.
 
 > In VS Code, you can toggle comments on/off by selecting the text and pressing <kbd>Ctrl</kbd> + <kbd>/</kbd> or  <kbd>Cmd</kbd> + <kbd>/</kbd>.
 
@@ -257,26 +257,26 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist, their IP addr
     ``` text
     s1-leaf1#show ip int b
                                                                                     Address
-    Interface         IP Address            Status       Protocol            MTU    Owner  
+    Interface         IP Address            Status       Protocol            MTU    Owner
     ----------------- --------------------- ------------ -------------- ----------- -------
-    Ethernet2         172.16.1.1/31         up           up                 1500           
-    Ethernet3         172.16.1.3/31         up           up                 1500           
-    Loopback0         10.250.1.3/32         up           up                65535           
-    Loopback1         10.255.1.3/32         up           up                65535           
-    Management0       192.168.0.12/24       up           up                 1500           
-    Vlan10            10.10.10.1/24         up           up                 1500           
-    Vlan20            10.20.20.1/24         up           up                 1500           
-    Vlan3009          10.252.1.0/31         up           up                 1500           
-    Vlan4093          10.252.1.0/31         up           up                 1500           
-    Vlan4094          10.251.1.0/31         up           up                 1500           
-    Vlan4097          unassigned            up           up                 9164  
+    Ethernet2         172.16.1.1/31         up           up                 1500
+    Ethernet3         172.16.1.3/31         up           up                 1500
+    Loopback0         10.250.1.3/32         up           up                65535
+    Loopback1         10.255.1.3/32         up           up                65535
+    Management0       192.168.0.12/24       up           up                 1500
+    Vlan10            10.10.10.1/24         up           up                 1500
+    Vlan20            10.20.20.1/24         up           up                 1500
+    Vlan3009          10.252.1.0/31         up           up                 1500
+    Vlan4093          10.252.1.0/31         up           up                 1500
+    Vlan4094          10.251.1.0/31         up           up                 1500
+    Vlan4097          unassigned            up           up                 9164
     ```
 
     > You should notice some VLANs that we didn't define anywhere in the `_NETWORK_SERVICES.yml` data model which aren't related to **MLAG**. The additional VLANs will be used for underlay and overlay MLAG peering.
 
 **Overlay vrf BGP Peering**
 ``` text
-s1-leaf1#show ip bgp summary vrf OVERLAY 
+s1-leaf1#show ip bgp summary vrf OVERLAY
 BGP summary information for VRF OVERLAY
 Router identifier 10.250.1.3, local AS number 65101
 Neighbor Status Codes: m - Under maintenance
@@ -326,17 +326,17 @@ Neighbor Status Codes: m - Under maintenance
       Replication/Flood Mode is headend with Flood List Source: EVPN
       Remote MAC learning via EVPN
       VNI mapping to VLANs
-      Static VLAN to VNI mapping is 
-        [10, 10010]       [20, 10020]      
+      Static VLAN to VNI mapping is
+        [10, 10010]       [20, 10020]
       Dynamic VLAN to VNI mapping for 'evpn' is
-        [4097, 10]       
+        [4097, 10]
       Note: All Dynamic VLANs used by VCS are internal VLANs.
             Use 'show vxlan vni' for details.
-      Static VRF to VNI mapping is 
+      Static VRF to VNI mapping is
       [OVERLAY, 10]
       Headend replication flood vtep list is:
-        10 10.255.1.7      10.255.1.5     
-        20 10.255.1.7      10.255.1.5     
+        10 10.255.1.7      10.255.1.5
+        20 10.255.1.7      10.255.1.5
       MLAG Shared Router MAC is 021c.7301.2391
     ```
 
@@ -434,7 +434,7 @@ diff checkpoint:< filename > running-config
 
 Let's configure port-channels to our hosts (`s1-host1` and `s1-host2`).
 
-Open `SITE1_CONNECTED_ENDPOINTS.yml` and uncomment lines 17-45, then run the build & deploy process again.
+Open [SITE1_CONNECTED_ENDPOINTS.yml](sites/site_1/group_vars/SITE1_CONNECTED_ENDPOINTS.yml) and uncomment lines 17-45, then run the build & deploy process again.
 
 ``` bash
 make build-site-1
@@ -447,12 +447,12 @@ make deploy-site-1
 At this point, hosts should be able to ping each other across the fabric.
 
 ```text
-s1-host1#show ip interface brief 
+s1-host1#show ip interface brief
                                                                                  Address
-Interface           IP Address            Status       Protocol           MTU    Owner  
+Interface           IP Address            Status       Protocol           MTU    Owner
 ------------------- --------------------- ------------ -------------- ---------- -------
-Management0         192.168.0.16/24       up           up                1500           
-Port-Channel1       10.10.10.100/24       up           up                1500  
+Management0         192.168.0.16/24       up           up                1500
+Port-Channel1       10.10.10.100/24       up           up                1500
 ```
 
 From `s1-host1`, run a ping to `s1-host2`.
@@ -493,7 +493,7 @@ The data model defines P2P links (`/31s`) on the border leafs by using a combina
 
 ### Add P2P Links for DCI connectivity for Site 1 and 2
 
-Enable the `l3_edge` dictionary (shown below) by uncommenting it from the `global_vars/global_dc_vars.yml`:
+Enable the `l3_edge` dictionary (shown below) by uncommenting it from the [global_vars/global_dc_vars.yml](global_vars/global_dc_vars.yml):
 
 ``` yaml
 # L3 Edge port definitions. This can be any port in the entire Fabric, where IP interfaces are defined.
@@ -689,7 +689,7 @@ Now that we have built and deployed our fabrics for both data centers, Site 1 an
 
 In order to do this, we will need to uncomment the necessary data model to enable EVPN gateway for the border leafs.
 
-Below you will see the data model snippets from `sites/site_1/group_vars/SITE1_FABRIC.yml` and `sites/site_2/group_vars/SITE2_FABRIC.yml`, for the `S1_BRDR` and `S2_BRDR` node groups. To enable EVPN gateway functionality you will need to modify the `SITE1_FABRIC.yml` vars file, and uncomment the below highlighted sections.  Uncomment the same sections from the `SITE2_FABRIC.yml` vars file.
+Below you will see the data model snippets from `SITE1_FABRIC.yml` and `SITE2_FABRIC.yml`, for the `S1_BRDR` and `S2_BRDR` node groups. To enable EVPN gateway functionality you will need to modify the [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml) vars file, and uncomment the below highlighted sections.  Uncomment the same sections from the [SITE2_FABRIC.yml](sites/site_2/group_vars/SITE2_FABRIC.yml) vars file.
 
 **SITE1_FABRIC.yml**
 
@@ -725,7 +725,7 @@ Below you will see the data model snippets from `sites/site_1/group_vars/SITE1_F
 
 **SITE2_FABRIC.yml**
 
-``` yaml hl_lines="3-8 14-18 23-27"
+``` yaml
 - group: S2_BRDR
   bgp_as: 65203
   # evpn_gateway:
