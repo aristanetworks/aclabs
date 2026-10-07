@@ -14,13 +14,3 @@
 #             name: 'Twenty'
 #             enabled: true
 #             ip_address_virtual: 10.20.20.1/24
-#         l3_interfaces:
-#           - nodes: [ s1-brdr1 ]
-#             interfaces: [ Ethernet7 ]
-#             ip_addresses: [198.51.100.0/31]
-#             description: UPLINK_TO_SRL_INTERNET
-#         bgp_peers:
-#           - nodes: [ s1-brdr1 ]
-#             ip_address: 198.51.100.1
-#             remote_as: 65535
-#             description: SRL_INTERNET_PEER

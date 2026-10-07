@@ -308,8 +308,8 @@ paths = ../../global_vars
 ``` yaml
 ---
 # Credentials for EOS Switches
-ansible_user: arista
-ansible_password: "{{ (lookup('file', '../config.yml') | from_yaml).password }}"
+ansible_user: "{{ default(lookup('ansible.builtin.env', 'LABUSERNAME')) | default('arista') }}"
+ansible_password: "{{ default(lookup('ansible.builtin.env', 'LABPASSPHRASE')) | default('arista') }}"
 ansible_network_os: arista.eos.eos
 # Configure privilege escalation
 ansible_become: true
@@ -341,7 +341,7 @@ aaa_settings:
 # OOB Management network default gateway.
 mgmt_gateway: 192.168.0.1
 mgmt_interface_settings:
-  vrf: default
+  vrf: MGMT
 
 # NTP Servers IP or DNS name, first NTP server will be preferred, and sourced from Management VRF
 ntp_settings:
@@ -357,6 +357,10 @@ dns_settings:
 
 # Point to Point Links MTU Override for Lab
 p2p_uplinks_mtu: 1500
+
+# eAPI must be explicitly enabled in AVD 6.0.0
+management_eapi:
+  enabled: true
 
 # Set IPv4 Underlay Routing and EVPN Overlay Routing to use eBGP
 underlay_routing_protocol: ebgp
