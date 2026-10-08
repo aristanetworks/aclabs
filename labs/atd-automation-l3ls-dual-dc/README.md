@@ -346,7 +346,7 @@ mgmt_interface_settings:
 # NTP Servers IP or DNS name, first NTP server will be preferred, and sourced from Management VRF
 ntp_settings:
   servers:
-    - name: 192.168.0.1
+    - name: time.google.com
       iburst: true
 
 # DNS settings
