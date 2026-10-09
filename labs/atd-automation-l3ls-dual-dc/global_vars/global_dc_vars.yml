@@ -13,12 +13,6 @@ ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
 ansible_python_interpreter: $(which python3)
 
-# AVD 6.0 defaults to Management1 for cEOS, override
-custom_platform_settings:
-  - platforms:
-      - cEOS
-    management_interface: Management0
-
 # AAA settings and local users
 aaa_settings:
   authorization:
