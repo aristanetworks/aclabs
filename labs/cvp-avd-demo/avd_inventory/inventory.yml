@@ -1,0 +1,45 @@
+---
+all:
+  children:
+
+    CV_SERVERS:
+      hosts:
+        lab_cv_instance:
+          ansible_host: "www.cv-staging.corp.arista.io"
+
+    AVD_FABRIC:
+      children:
+
+        AVD_FABRIC_SPINES:
+          vars:
+            type: spine
+          hosts:
+            s01:
+              ansible_host: 10.0.1.1
+            s02:
+              ansible_host: 10.0.1.2
+
+        AVD_FABRIC_LEAFS:
+          vars:
+            type: l3leaf
+          children:
+            pod0:
+              hosts:
+                l01:
+                  ansible_host: 10.0.2.1
+                l02:
+                  ansible_host: 10.0.2.2
+            pod1:
+              hosts:
+                l03:
+                  ansible_host: 10.0.2.3
+                l04:
+                  ansible_host: 10.0.2.4
+
+    AVD_FABRIC_ENDPOINTS:
+      children:
+        AVD_FABRIC_LEAFS:
+
+    AVD_FABRIC_TENANTS:
+      children:
+        AVD_FABRIC_LEAFS:

@@ -81,41 +81,6 @@ if ${CODESPACES}; then
     fi
 fi
 
-# update URL in clab init configs if set
-if [ "${CVURL}" ]; then
-    # check if CVURL starts with www.
-    if [[ "${CVURL}" == www* ]]; then
-        # set URL without prefix. It will be used in the initial configs for onboarding
-        CVURL_NO_PREFIX="${CVURL#www.}"
-    else
-        echo "ERROR: CVURL must start with www."
-        exit 1
-    fi
-    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL}"'@g'
-    grep -rl '{{cv_url_no_prefix}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"${CVURL_NO_PREFIX}"'@g'
-    # replace all lines where cv-staging is hardcoded
-    grep -rl 'cv-staging.corp.arista.io' . --exclude-dir .git | xargs sed -i 's@cv-staging.corp.arista.io@'"${CVURL_NO_PREFIX}"'@g'
-else
-    # set defaul url to staging if nothing is defined
-    grep -rl '{{cv_url}}' . --exclude-dir .git | xargs sed -i 's@{{cv_url}}@'"cv-staging.corp.arista.io"'@g'
-fi
-
-if [ "${CV_API_TOKEN}" ]; then
-    if [ "${CVURL}" ]; then
-        CVTOKEN=$(curl -H "Authorization: Bearer ${CV_API_TOKEN}" "https://${CVURL}/api/v3/services/admin.Enrollment/AddEnrollmentToken" -d '{"enrollmentToken":{"reenrollDevices":["*"],"validFor":"24h"}}' | sed -n 's|.*"token":"\([^"]*\)".*|\1|p')
-    else
-        CVTOKEN=$(curl -H "Authorization: Bearer ${CV_API_TOKEN}" "https://www.cv-staging.corp.arista.io/api/v3/services/admin.Enrollment/AddEnrollmentToken" -d '{"enrollmentToken":{"reenrollDevices":["*"],"validFor":"24h"}}' | sed -n 's|.*"token":"\([^"]*\)".*|\1|p')
-    fi
-    if [ "${CVTOKEN}" ]; then
-        echo "$CVTOKEN" > ${CONTAINERWSF}/clab/cv-onboarding-token
-    else
-        echo "ERROR: failed to generate onboarding token!"
-    fi
-else
-    # add default to avoid clab failing due to missing file
-    echo "CAFECAFE" > ${CONTAINERWSF}/clab/cv-onboarding-token
-fi
-
 if [ -f "${CONTAINERWSF}/postCreate.sh" ]; then
     chmod +x ${CONTAINERWSF}/postCreate.sh
     ${CONTAINERWSF}/postCreate.sh
@@ -142,15 +107,10 @@ if [ -z "${CODE_SERVER_BIND_ADDR}" ]; then
 fi
 code-server --bind-addr ${CODE_SERVER_BIND_ADDR} --auth password --disable-telemetry --disable-update-check --disable-workspace-trust "${CONTAINERWSF}" &
 
-# check if image is still missing and print a warning
-if [ -z "$(${CONTAINER_ENGINE} image ls | grep 'arista/ceos')" ]; then
-    echo "WARNING: cEOS-lab image download failed. Try to upload and import it manually."
-    echo "         Please make sure that image is imported with a correct name - arista/ceos:latest"
-    echo "         The lab will not auto start! Run 'make start' when image is ready."
-else
-    cd ${CONTAINERWSF}
-    make start
-fi
+# Run onboarding, deployment, and readiness checks without blocking code-server.
+mkdir -p "/tmp/aclabs-lab-start"
+touch "/tmp/aclabs-lab-start/startup.log"
+nohup /bin/lab_start_controller.py >> "/tmp/aclabs-lab-start/startup.log" 2>&1 &
 
 # on Codespaces this will not work correctly
 if ! ${CODESPACES:-false}; then

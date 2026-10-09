@@ -35,9 +35,11 @@ COPY ./entrypoint.sh /bin/entrypoint
 RUN chmod +x /bin/entrypoint
 ENTRYPOINT [ "/bin/entrypoint" ]
 
-# copy tasks.json scripts
+# copy asynchronous lab startup scripts
+COPY ./cv_onboard.py /bin/cv_onboard.py
+COPY ./lab_start_controller.py /bin/lab_start_controller.py
 COPY ./lab_start_task.py /bin/lab_start_task.py
-RUN chmod +x /bin/lab_start_task.py
+RUN chmod +x /bin/cv_onboard.py /bin/lab_start_controller.py /bin/lab_start_task.py
 
 USER ${USERNAME}
 

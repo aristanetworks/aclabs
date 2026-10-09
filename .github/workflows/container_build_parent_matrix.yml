@@ -115,4 +115,7 @@ jobs:
       # 2.6.11
       # - ContainerLab to 0.79.0
       # - ContainerLab extension to v0.26.3
-      container_revision: "2.6.11"
+      # 2.7.0
+      # - asynchronous lab startup and on-prem CloudVision onboarding
+      # - shared Python startup package and CloudVision streaming readiness check
+      container_revision: "2.7.0"

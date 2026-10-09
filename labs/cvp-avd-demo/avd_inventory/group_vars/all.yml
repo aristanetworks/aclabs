@@ -1,0 +1,61 @@
+---
+mgmt_gateway: 10.0.0.1
+mgmt_interface: Management1
+
+dns_settings:
+  domain: avd.lab
+  servers:
+    - ip_address: 8.8.8.8
+      vrf: MGMT
+
+management_eapi:
+  enabled: true
+  enable_http: false
+  enable_https: true
+  vrfs:
+    - name: MGMT
+      enabled: true
+
+# NTP servers
+ntp_settings:
+  server_vrf: use_mgmt_interface_vrf
+  servers:
+    - name: time.google.com
+    - name: time.windows.com
+    - name: time.apple.com
+
+aaa_settings:
+  # Local Users
+  local_users:
+    - name: "{{ lookup('ansible.builtin.env', 'LABUSERNAME', default='arista') }}"
+      privilege: 15
+      role: network-admin
+      sha512_password: "{{ ansible_password | password_hash(rounds=5000, salt=1) }}"
+  # AAA Authorization Settings
+  authorization:
+    exec:
+      default: local
+
+ansible_user: "{{ lookup('ansible.builtin.env', 'LABUSERNAME', default='arista') }}"
+ansible_password: "{{ lookup('ansible.builtin.env', 'LABPASSPHRASE', default='arista') }}"
+ansible_network_os: arista.eos.eos
+# Configure privilege escalation
+ansible_become: true
+ansible_become_method: enable
+# HTTPAPI configuration
+ansible_connection: httpapi
+ansible_httpapi_port: 443
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: false
+ansible_python_interpreter: $(which python3)
+
+cv_settings:
+  onprem_clusters:
+    - name: cvp
+      servers:
+        - name: "{{ lookup('ansible.builtin.env', 'CVURL') }}"
+          port: 9910
+      vrf: MGMT
+      token_file: "/mnt/flash/cv-onboarding-token"
+  terminattr:
+    disable_aaa: true
