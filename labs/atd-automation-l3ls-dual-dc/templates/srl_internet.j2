@@ -1,0 +1,103 @@
+{%- set srl_intf = "ethernet-1/1" -%}
+{%- set vrf_name = "OVERLAY" -%}
+{%- set arista_asn = arista_config.router_bgp.as -%}
+{%- set ext = namespace(srl_ip=none, srl_asn=none, arista_ip=none) -%}
+{%- for vrf in arista_config.router_bgp.vrfs | default([]) -%}
+  {%- if vrf.name == vrf_name -%}
+    {%- for neighbor in vrf.neighbors | default([]) -%}
+      {%- if neighbor.description == "SRL_INTERNET_PEER" -%}
+        {%- set ext.srl_ip = neighbor.ip_address -%}
+        {%- set ext.srl_asn = neighbor.remote_as -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- for intf in arista_config.ethernet_interfaces | default([]) -%}
+  {%- if intf.description == "UPLINK_TO_SRL_INTERNET" -%}
+    {%- set ext.arista_ip = intf.ip_address | split('/') | first -%}
+  {%- endif -%}
+{%- endfor -%}
+
+- path: /interface[name=system0]
+  value:
+    admin-state: enable
+    subinterface:
+      - index: 0
+        ipv4:
+          admin-state: enable
+          address:
+            - ip-prefix: 8.8.8.8/32
+
+- path: /interface[name={{ srl_intf }}]
+  value:
+    admin-state: enable
+    subinterface:
+      - index: 0
+        ipv4:
+          admin-state: enable
+          address:
+            - ip-prefix: {{ ext.srl_ip }}/31
+
+- path: /routing-policy
+  value:
+    prefix-set:
+      - name: INTERNET
+        prefix:
+          - ip-prefix: 8.8.8.8/32
+            mask-length-range: 32..32
+    policy:
+      - name: EXPORT-INTERNET
+        default-action:
+          policy-result: reject
+        statement:
+          - name: "10"
+            match:
+              protocol: bgp
+            action:
+              policy-result: accept
+          - name: "15"
+            match:
+              prefix:
+                prefix-set: INTERNET
+            action:
+              policy-result: accept
+          - name: "20"
+            match:
+              protocol: static
+            action:
+              policy-result: accept
+
+- path: /network-instance[name=default]
+  value:
+    type: default
+    interface:
+      - name: system0.0
+      - name: {{ srl_intf }}.0
+    next-hop-groups:
+      group:
+        - name: DEFAULT-DISCARD
+          blackhole: {}
+    static-routes:
+      route:
+        - prefix: 0.0.0.0/0
+          next-hop-group: DEFAULT-DISCARD
+          admin-state: enable
+    protocols:
+      bgp:
+        admin-state: enable
+        afi-safi:
+          - afi-safi-name: ipv4-unicast
+            admin-state: enable
+        autonomous-system: {{ ext.srl_asn }}
+        router-id: {{ ext.srl_ip }}
+        ebgp-default-policy:
+          import-reject-all: false
+          export-reject-all: false
+        group:
+          - group-name: TO-ARISTA-FABRIC
+            admin-state: enable
+            export-policy: [ EXPORT-INTERNET ]
+            peer-as: {{ arista_asn }}
+        neighbor:
+          - peer-address: {{ ext.arista_ip }}
+            peer-group: TO-ARISTA-FABRIC
