@@ -56,14 +56,6 @@ validate-site-2: ## Validate network state
 	ansible-playbook playbooks/validate.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
 
 ########################################################
-# WAN & Hosts - Lab Prep
-########################################################
-
-.PHONY: preplab
-preplab: ## Deploy Configs via eAPI
-	ansible-playbook playbooks/preplab.yml -i extra_configs/inventory.yml -e "target_hosts=LAB"
-
-########################################################
 # Build and deploy all sites
 ########################################################
 
