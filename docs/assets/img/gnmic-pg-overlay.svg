@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" font-family="Roboto, Arial, sans-serif" font-size="12">
+  <defs>
+    <style>
+      .role-spine { fill: #f18f01; stroke: #b96e00; stroke-width: 1.5; }
+      .role-leaf  { fill: #2e86ab; stroke: #1f5a75; stroke-width: 1.5; }
+      .evpn       { stroke: #a23b72; stroke-width: 2; fill: none; stroke-dasharray: 6 3; }
+      .vxlan      { stroke: #6f9654; stroke-width: 2.5; fill: none; }
+      .nodelbl    { fill: #fff; font-weight: 600; text-anchor: middle; }
+      .vtep-lbl   { fill: #333; text-anchor: middle; font-size: 10px; }
+      .title      { font-weight: 700; font-size: 15px; fill: #1a2733; }
+      .caption    { fill: #555; font-size: 12px; text-anchor: middle; }
+      .badge      { fill: #6f9654; stroke: #4a6738; }
+    </style>
+  </defs>
+  <text x="450" y="24" text-anchor="middle" class="title">EVPN Overlay — eBGP L2VPN-EVPN peerings, VXLAN data plane</text>
+
+  <!-- Spines: RR-like role (transit for EVPN) -->
+  <rect x="230" y="70" width="140" height="55" rx="6" class="role-spine"/>
+  <text x="300" y="90" class="nodelbl">spine1</text>
+  <text x="300" y="108" class="nodelbl" font-size="10" font-weight="400">EVPN transit • next-hop-unchanged</text>
+
+  <rect x="530" y="70" width="140" height="55" rx="6" class="role-spine"/>
+  <text x="600" y="90" class="nodelbl">spine2</text>
+  <text x="600" y="108" class="nodelbl" font-size="10" font-weight="400">EVPN transit • next-hop-unchanged</text>
+
+  <!-- Leaves as VTEPs -->
+  <g>
+    <rect x="40"  y="290" width="180" height="65" rx="6" class="role-leaf"/>
+    <text x="130" y="310" class="nodelbl">pe11 (VTEP)</text>
+    <text x="130" y="328" class="nodelbl" font-size="10" font-weight="400">Lo1 192.168.254.3</text>
+    <text x="130" y="343" class="nodelbl" font-size="10" font-weight="400">VNI 10110, 10111</text>
+
+    <rect x="240" y="290" width="180" height="65" rx="6" class="role-leaf"/>
+    <text x="330" y="310" class="nodelbl">pe12 (VTEP)</text>
+    <text x="330" y="328" class="nodelbl" font-size="10" font-weight="400">Lo1 192.168.254.4</text>
+    <text x="330" y="343" class="nodelbl" font-size="10" font-weight="400">VNI 10110, 10111</text>
+
+    <rect x="480" y="290" width="180" height="65" rx="6" class="role-leaf"/>
+    <text x="570" y="310" class="nodelbl">pe21 (VTEP)</text>
+    <text x="570" y="328" class="nodelbl" font-size="10" font-weight="400">Lo1 192.168.254.5</text>
+    <text x="570" y="343" class="nodelbl" font-size="10" font-weight="400">VNI 10110, 10111</text>
+
+    <rect x="680" y="290" width="180" height="65" rx="6" class="role-leaf"/>
+    <text x="770" y="310" class="nodelbl">pe22 (VTEP)</text>
+    <text x="770" y="328" class="nodelbl" font-size="10" font-weight="400">Lo1 192.168.254.6</text>
+    <text x="770" y="343" class="nodelbl" font-size="10" font-weight="400">VNI 10110, 10111</text>
+  </g>
+
+  <!-- EVPN peerings (leaf<->spine, dashed) -->
+  <g>
+    <line x1="290" y1="125" x2="130" y2="290" class="evpn"/>
+    <line x1="300" y1="125" x2="330" y2="290" class="evpn"/>
+    <line x1="315" y1="125" x2="570" y2="290" class="evpn"/>
+    <line x1="330" y1="125" x2="770" y2="290" class="evpn"/>
+
+    <line x1="570" y1="125" x2="130" y2="290" class="evpn"/>
+    <line x1="585" y1="125" x2="330" y2="290" class="evpn"/>
+    <line x1="600" y1="125" x2="570" y2="290" class="evpn"/>
+    <line x1="615" y1="125" x2="770" y2="290" class="evpn"/>
+  </g>
+
+  <!-- VXLAN tunnels (leaf<->leaf, solid) -->
+  <g>
+    <path d="M 130 355 Q 200 420, 330 355" class="vxlan"/>
+    <path d="M 330 355 Q 450 440, 570 355" class="vxlan"/>
+    <path d="M 570 355 Q 640 420, 770 355" class="vxlan"/>
+    <path d="M 130 355 Q 450 460, 770 355" class="vxlan"/>
+  </g>
+
+  <!-- Caption / legend -->
+  <text x="450" y="420" class="caption">Dashed magenta: L2VPN-EVPN AFI/SAFI peerings sourced from Loopback0, `ebgp-multihop 3`.</text>
+  <text x="450" y="438" class="caption">Green: VXLAN data plane between VTEPs (Loopback1), UDP/4789, one VNI per tenant VLAN.</text>
+  <text x="450" y="470" class="caption" font-style="italic">Multi-homed clients advertise MAC/IP via Type-2 routes tagged with the pair's ESI (Type-1 A-D routes for split-horizon).</text>
+</svg>
