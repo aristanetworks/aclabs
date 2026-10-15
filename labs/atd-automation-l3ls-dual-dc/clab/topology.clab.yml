@@ -120,10 +120,6 @@ topology:
     s2-core2:
       mgmt-ipv4: 192.168.0.203
       startup-config: init-configs/s2-core2.cfg
-    ext-srl1:
-      mgmt-ipv4: 192.168.0.250
-      image: ghcr.io/nokia/srlinux:26.7.2
-      kind: nokia_srlinux
 
   links:
     - endpoints: [ "s1-leaf1:eth2", "s1-spine1:eth2" ]
@@ -188,4 +184,3 @@ topology:
     - endpoints: [ "s2-core1:eth6", "s2-core2:eth6" ]
     - endpoints: [ "s1-core1:eth4", "s2-core1:eth4" ]
     - endpoints: [ "s1-core2:eth4", "s2-core2:eth4" ]
-    - endpoints: [ "ext-srl1:e1-1", "s1-brdr1:eth7" ]
