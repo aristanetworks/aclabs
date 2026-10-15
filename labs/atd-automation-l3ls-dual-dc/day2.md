@@ -193,7 +193,7 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
     Ethernet3         172.16.1.3/31         up           up                 1500
     Loopback0         10.250.1.3/32         up           up                65535
     Loopback1         10.255.1.3/32         up           up                65535
-    Management0       192.168.0.12/24       up           up                 1500
+    Management1       192.168.0.12/24       up           up                 1500
     Vlan10            10.10.10.1/24         up           up                 1500
     Vlan20            10.20.20.1/24         up           up                 1500
     Vlan30            10.30.30.1/24         up           up                 1500
@@ -491,7 +491,7 @@ Ethernet2         172.16.1.1/31         up           up                 1500
 Ethernet3         172.16.1.3/31         up           up                 1500
 Loopback0         10.250.1.3/32         up           up                65535
 Loopback1         10.255.1.3/32         up           up                65535
-Management0       192.168.0.12/24       up           up                 1500
+Management1       192.168.0.12/24       up           up                 1500
 Vlan10            10.10.10.1/24         up           up                 1500
 Vlan3009          10.252.1.0/31         up           up                 1500
 Vlan4093          10.252.1.0/31         up           up                 1500
@@ -575,7 +575,7 @@ Ethernet2         172.16.1.9/31         up           up                 1500
 Ethernet3         172.16.1.11/31        up           up                 1500
 Loopback0         10.250.1.5/32         up           up                65535
 Loopback1         10.255.1.5/32         up           up                65535
-Management0       192.168.0.14/24       up           up                 1500
+Management1       192.168.0.14/24       up           up                 1500
 Vlan20            10.20.20.1/24         up           up                 1500
 Vlan3009          10.252.1.4/31         up           up                 1500
 Vlan4093          10.252.1.4/31         up           up                 1500
@@ -585,7 +585,7 @@ Vlan4097          unassigned            up           up                 9164
 s1-leaf3#
 ```
 
-We can see VLAN 20 is the only defined SVI that was provisioined for s1-leaf3 since there is an endpoint with that service defined in our connected endpoints file.
+We can see VLAN 20 is the only defined SVI that was provisioned for s1-leaf3 since there is an endpoint with that service defined in our connected endpoints file.
 
 ```yaml
   - name: s1-host2                                      # Server name

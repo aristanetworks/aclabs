@@ -52,7 +52,7 @@ s1-host1#show ip int b
                                                                                        Address
 Interface           IP Address            Status       Protocol                 MTU    Owner
 ------------------- --------------------- ------------ -------------------- ---------- -------
-Management0         192.168.0.16/24       up           up                      1500
+Management1         192.168.0.16/24       up           up                      1500
 Port-Channel1       10.10.10.100/24       down         lowerlayerdown          1500
 
 s1-host1#
@@ -172,7 +172,7 @@ These outputs were taken from `s1-leaf1`:
     Ethernet3         172.16.1.3/31         up           up                 1500
     Loopback0         10.250.1.3/32         up           up                65535
     Loopback1         10.255.1.3/32         up           up                65535
-    Management0       192.168.0.12/24       up           up                 1500
+    Management1       192.168.0.12/24       up           up                 1500
     Vlan4093          10.252.1.0/31         up           up                 1500
     Vlan4094          10.251.1.0/31         up           up                 1500
     ```
@@ -263,7 +263,7 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist, their IP addr
     Ethernet3         172.16.1.3/31         up           up                 1500
     Loopback0         10.250.1.3/32         up           up                65535
     Loopback1         10.255.1.3/32         up           up                65535
-    Management0       192.168.0.12/24       up           up                 1500
+    Management1       192.168.0.12/24       up           up                 1500
     Vlan10            10.10.10.1/24         up           up                 1500
     Vlan20            10.20.20.1/24         up           up                 1500
     Vlan3009          10.252.1.0/31         up           up                 1500
@@ -451,7 +451,7 @@ s1-host1#show ip interface brief
                                                                                  Address
 Interface           IP Address            Status       Protocol           MTU    Owner
 ------------------- --------------------- ------------ -------------- ---------- -------
-Management0         192.168.0.16/24       up           up                1500
+Management1         192.168.0.16/24       up           up                1500
 Port-Channel1       10.10.10.100/24       up           up                1500
 ```
 
@@ -593,7 +593,7 @@ Now lets verify the underlay connectivity and routing across the DCI network.
 
     Gateway of last resort:
     S        0.0.0.0/0 [1/0]
-              via 192.168.0.1, Management0
+              via 192.168.0.1, Management1
 
     B E      10.250.1.1/32 [200/0]
               via 172.16.1.16, Ethernet2
@@ -656,7 +656,7 @@ Now lets verify the underlay connectivity and routing across the DCI network.
     C        172.16.255.0/31
               directly connected, Ethernet4
     C        192.168.0.0/24
-              directly connected, Management0
+              directly connected, Management1
     ```
 
 3. From `s1-brdr2`, check the IPv4 underlay peering to its neighbor at Site 2, `s2-brdr2`.
