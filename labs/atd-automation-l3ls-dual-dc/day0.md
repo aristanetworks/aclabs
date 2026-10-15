@@ -479,7 +479,7 @@ Repeat the previous three steps for Site 2.
 - Add Services
 - Add Ports
 - Build and Deploy Configs
-- Verify ping traffic between hosts `s2-host1` and `s2-host2`
+- Verify ping traffic between hosts `s2-host1` and `s2-host2` (10.20.20.200)
 
 At this point, you should be able to ping between hosts within a site but not between sites. For this, we need to build connectivity to the `DCI Network`. This is covered in the next section.
 
