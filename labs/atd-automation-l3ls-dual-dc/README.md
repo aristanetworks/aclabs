@@ -48,7 +48,7 @@ This section will cover the following:
 
 Throughout this section, we will use the following dual data center topology.
 
-![L3LS Dual DC Topology](images/l3ls_topo_overview.png)
+<img src="images/l3ls_topo_overview.png" alt="L3LS Dual DC Topology" width="70%">
 
 ## Ansible Inventory
 
@@ -62,7 +62,7 @@ Our lab L3LS topology contains two sites, `Site 1` and `Site 2`. We need an Ansi
 
 The following is a graphical representation of the Ansible inventory groups and naming scheme used for `Site 1` in this example. This is replicated for `Site 2`.
 
-![Ansible Groups](images/l3ls_ansible_groups.png)
+<img src="images/l3ls_ansible_groups.png" alt="Ansible Groups" width="70%">
 
 ## AVD Fabric Variables
 
@@ -524,7 +524,7 @@ l3_edge:
 
 The following diagram shows the P2P links between the four border leafs. The DCI Network is pre-configured in our lab with the interfaces facing the border leafs as access ports in VLAN 1000. The l3_edge interfaces for the border leafs in `Site 1` and `Site 2` are configured and deployed with AVD.
 
-![Core Interfaces](images/l3ls_dci.png)
+<img src="images/l3ls_dci.png" alt="Core Interfaces" width="70%">
 
 ### Network Services
 

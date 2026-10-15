@@ -6,7 +6,7 @@ The AVD Lab Guide is a follow-along set of instructions to deploy a dual data ce
 
 In this example, the lab is used to create the L3LS Dual Data Center topology below. The DCI Network cloud (orange area) is pre-provisioned and is comprised of the core nodes in the ATD topology. Our focus will be creating the L3LS AVD data models to build and deploy configurations for Site 1 and Site 2 (blue areas) and connect them to the DCI Network.
 
-![Dual DC Topology](images/l3ls_dualdc_topo.png)
+<img src="images/l3ls_dualdc_topo.png" alt="Dual DC Topology" width="70%">
 
 ### Host Addresses
 
@@ -100,7 +100,7 @@ git commit -m "saving snapshot"
 
 AVD creates a separate markdown and EOS configuration file per switch. In addition, you can review the files in the `documentation` and `intended` folders per site.
 
-![Docs and Configs](images/docs-configs.png)
+<img src="images/docs-configs.png" alt="Docs and Configs" width="70%">
 
 Now, deploy the configurations to Site 1 switches.
 
@@ -489,7 +489,7 @@ The DCI Network is defined by the `l3_edge` data model. Full data model document
 
 The data model defines P2P links (`/31s`) on the border leafs by using a combination of the ipv4_pool and the node id in the p2p_links section. See details in the graphic below. Each border leaf has a single link to its peer on interface `Ethernet4`.  In the data model, you will notice the parameter for **include_in_underlay_protocol**, which is set to ***true***.  This tells AVD to render the appropriate BGP configurations for route peering.
 
-![Core Interfaces](images/l3ls_dci.png)
+<img src="images/l3ls_dci.png" alt="Core Interfaces" width="70%">
 
 ### Add P2P Links for DCI connectivity for Site 1 and 2
 
