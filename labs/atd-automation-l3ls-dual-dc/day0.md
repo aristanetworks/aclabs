@@ -19,7 +19,7 @@ In this example, the lab is used to create the L3LS Dual Data Center topology be
 
 ## Step 1 - Initialize Git
 
-We will start by opening a new terminal
+We will start by opening a new terminal.
 
 To open the integrated terminal:
 
@@ -91,7 +91,7 @@ At this point, we can build our initial configurations for the topology.
 make build-site-1
 ```
 
-> Run `git add` and `git commit` to create a snapshot of the current build state. This will help you view the differences between steps in the workshop..
+> Run `git add` and `git commit` to create a snapshot of the current build state. This will help you view the differences between steps in the workshop.
 
 ``` bash
 git add .
@@ -110,7 +110,7 @@ make deploy-site-1
 
 #### Verification
 
-Now, lets login to some switches to verify the current configs (`show run`) match the ones created in `intended/configs` folder. We can also check the current state for MLAG, interfaces, BGP peerings for IPv4 underlay, and BGP EVPN overlay peerings.
+Now, let's log in to some switches to verify the current configs (`show run`) match the ones created in the `intended/configs` folder. We can also check the current state for MLAG, interfaces, BGP peerings for IPv4 underlay, and BGP EVPN overlay peerings.
 
 You can connect to devices by running `ssh arista@s1-spine1` or entering `s1-spine1` directly from the terminal.
 
@@ -218,7 +218,7 @@ These outputs were taken from `s1-leaf1`:
       s1-spine2                10.250.1.2 4 65100              5         6    0    0 00:01:40 Estab   0      0
     ```
 
-    > The basic fabric with MLAG peers, P2P routed links between leaf and spines, eBGP/iBGP IPv4 underlay peerings, and eBGP/iBGP EVPN overlay peerings is now created. Next up, we will add VLAN and SVI services to the fabric.
+    > The basic fabric with MLAG peers, P2P routed links between leaf nodes and spines, eBGP/iBGP IPv4 underlay peerings, and eBGP/iBGP EVPN overlay peerings is now created. Next up, we will add VLAN and SVI services to the fabric.
 
 ### Add Services to the Fabric
 
@@ -242,7 +242,7 @@ make deploy-site-1
 
 #### Verification
 
-Now lets go back to node `s1-leaf1` and verify the new SVIs exist, their IP addresses, any changes to the EVPN overlay and corresponding VXLAN configurations, as well as the EVPN control-plane now that we have some layer 3 data interfaces.
+Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their IP addresses, any changes to the EVPN overlay and corresponding VXLAN configurations, as well as the EVPN control-plane now that we have some layer 3 data interfaces.
 
 1. Verify VLAN SVIs **10** and **20** exist.
 
@@ -340,7 +340,7 @@ Neighbor Status Codes: m - Under maintenance
       MLAG Shared Router MAC is 021c.7301.2391
     ```
 
-4. Finally, lets verify we have **IMET** routes for each VLAN and VTEP in the EVPN overlay.  IMET, or Type-3 routes are required for Broadcast, Unknown Unicast and Multicast (BUM) traffic delivery across EVPN networks.
+4. Finally, lets verify we have **IMET** routes for each VLAN and VTEP in the EVPN overlay.  IMET (Type-3) routes are required for Broadcast, Unknown Unicast and Multicast (BUM) traffic delivery across EVPN networks.
 
     **Command**
 
@@ -491,7 +491,7 @@ The data model defines P2P links (`/31s`) on the border leafs by using a combina
 
 <img src="images/l3ls_dci.png" alt="Core Interfaces" width="70%">
 
-### Add P2P Links for DCI connectivity for Site 1 and 2
+### Add P2P Links for DCI connectivity for Sites 1 and 2
 
 Enable the `l3_edge` dictionary (shown below) by uncommenting it from the [global_vars/global_dc_vars.yml](global_vars/global_dc_vars.yml):
 
@@ -530,7 +530,7 @@ make all
 
 ### Verification
 
-Now that we have built and deployed our configurations for our DCI IPv4 underlay connectivity, lets see what was done. Looking at the data model above, we see we only defined a pool of IP addresses with a **/24** mask which AVD will use to auto-alllocated a subnet per connection.  Additionally, we can see that `s1-brdr1` connects to its peer `s2-brdr1` via interface `Ethernet4`, and `s1-brdr2` connects to its peer `s2-brdr2` via interface `Ethernet5`.  Using that data model, here is what we expect to see configured.  You can verify this by logging into each border leaf and checking with **show ip interface brief**.
+Now that we have built and deployed our configurations for our DCI IPv4 underlay connectivity, lets see what was done. Looking at the data model above, we see we only defined a pool of IP addresses with a **/24** mask which AVD will use to automatically alllocate a subnet per connection.  Additionally, we can see that `s1-brdr1` connects to its peer `s2-brdr1` via interface `Ethernet4`, and `s1-brdr2` connects to its peer `s2-brdr2` via interface `Ethernet5`.  Using that data model, here is what we expect to see configured.  You can verify this by logging into each border leaf and checking with **show ip interface brief**.
 
 | Host     |  Interface   |   IP Address      |
 |:--------:|:------------:|:-----------------:|
@@ -681,7 +681,7 @@ Now lets verify the underlay connectivity and routing across the DCI network.
       s2-brdr2                 172.16.255.3 4 65203             36        36    0    0 00:22:45 Estab   11     11
     ```
 
-   > If your BGP peerings match above and you have the correct routes in your routing table, the DCI network is successfully connected!
+   > If your BGP peerings match those shown above and you have the correct routes in your routing table, the DCI network is successfully connected!
 
 ## Step 6 - Enable EVPN Gateway Functionality
 
@@ -689,7 +689,7 @@ Now that we have built and deployed our fabrics for both data centers, Site 1 an
 
 In order to do this, we will need to uncomment the necessary data model to enable EVPN gateway for the border leafs.
 
-Below you will see the data model snippets from `SITE1_FABRIC.yml` and `SITE2_FABRIC.yml`, for the `S1_BRDR` and `S2_BRDR` node groups. To enable EVPN gateway functionality you will need to modify the [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml) vars file, and uncomment the below highlighted sections.  Uncomment the same sections from the [SITE2_FABRIC.yml](sites/site_2/group_vars/SITE2_FABRIC.yml) vars file.
+Below you will see the data model snippets from `SITE1_FABRIC.yml` and `SITE2_FABRIC.yml`, for the `S1_BRDR` and `S2_BRDR` node groups. To enable EVPN gateway functionality you will need to modify the [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml) variable file, and uncomment the below highlighted sections.  Uncomment the same sections from the [SITE2_FABRIC.yml](sites/site_2/group_vars/SITE2_FABRIC.yml) variables file.
 
 **SITE1_FABRIC.yml**
 
@@ -755,7 +755,7 @@ Below you will see the data model snippets from `SITE1_FABRIC.yml` and `SITE2_FA
       #       ip_address: 10.250.1.8
 ```
 
-> If deploying a multi-site fabric with AVD, and using a single inventory file to contain all sites, the **evpn_gateway/remote_peers** vars for `bgp_as` and `ip_address` do **NOT** need to be populated. Since AVD will know about all these nodes from the single inventory file, it will know those variables and be able to use them to render the configuration.  Since we have split the sites for complexity sake, we do have to define them here.
+> If deploying a multi-site fabric with AVD, and using a single inventory file to contain all sites, the **evpn_gateway/remote_peers** variables for `bgp_as` and `ip_address` do **NOT** need to be populated. Since AVD will know about all these nodes from the single inventory file, it will know those variables and be able to use them to render the configuration.  Since we have split the sites for complexity's sake, we do have to define them here.
 
 ### Build and Deploy Changes for EVPN Gateway Functionality
 
@@ -776,7 +776,7 @@ all: build-site-1 build-site-2 deploy-site-1 deploy-site-2
 
 ### Verification
 
-Now lets check and make sure the correct configurations were build and applied, and the EVPN gateways are functioning.
+Now lets check and make sure the correct configurations were built and applied, and the EVPN gateways are functioning.
 
 From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
@@ -976,9 +976,8 @@ ping 10.10.10.200
 ping 10.20.20.200
 ```
 
-???+ success "Great Success!"
-    You have built a multi-site L3LS network with an EVPN/VXLAN overlay and EVPN Gateway functionality without touching the CLI on a single switch!
+> You have built a multi-site L3LS network with an EVPN/VXLAN overlay and EVPN Gateway functionality!
 
-## Onto Day 2 Operations
+## Day 2 Operations
 
 [Continue to Day 2 Operations Guide](day2.md)

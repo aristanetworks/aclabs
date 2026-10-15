@@ -1,6 +1,6 @@
 # Day 2 Operations
 
-Our multi-site L3Ls network is working great. But, before too long, it will be time to change
+Our multi-site L3LS network is working great. But, before too long, it will be time to change
 our configurations. Lucky for us, that time is today!
 
 ## Cleaning Up
@@ -118,11 +118,11 @@ should also have our newly defined syslog servers.
 
 ## Adding additional VLANs
 
-One of the many benefits of AVD is the ability to deploy new services very quickly and efficiently by modifying a small amount of data model. Lets add some new VLANs to our fabric.
+One of the many benefits of AVD is the ability to deploy new services very quickly and efficiently by modifying a small part of the data model. Lets add some new VLANs to our fabric.
 
-For this we will need to modify the two `NETWORK_SERVICES.yml` data model vars files. To keep things simple we will add two new VLANs, **30** and **40**.
+For this we will need to modify the two `NETWORK_SERVICES.yml` data model variable files. To keep things simple we will add two new VLANs, **30** and **40**.
 
-Copy the following pieces of data model, and paste right below the last VLAN entry, in both [SITE1_NETWORK_SERVICES.yml](sites/site_1/group_vars/SITE1_NETWORK_SERVICES.yml) and [SITE2_NETWORK_SERVICES.yml](sites/site_2/group_vars/SITE2_NETWORK_SERVICES.yml).  Ensure the `-id:` entries all line up.
+Copy the following data model entries and paste them directly below the last VLAN entry, in both [SITE1_NETWORK_SERVICES.yml](sites/site_1/group_vars/SITE1_NETWORK_SERVICES.yml) and [SITE2_NETWORK_SERVICES.yml](sites/site_2/group_vars/SITE2_NETWORK_SERVICES.yml).  Ensure the `-id:` entries all line up.
 
 ``` yaml
           - id: 30
@@ -135,7 +135,7 @@ Copy the following pieces of data model, and paste right below the last VLAN ent
             ip_address_virtual: 10.40.40.1/24
 ```
 
-When complete, your vars file should look like this.
+When complete, your variable files should look like this.
 
 ``` yaml
 ---
@@ -427,11 +427,11 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
                                     10.255.2.7            -       100     0       65203 i
     ```
 
-## Filtering VLANS with Filter Tags
+## Filtering VLANs with Filter Tags
 
-At the moment, any VLANs defined within network services will be configured to all relevant nodes. We can control where VLANs are deployed by leveraging filter tags. We can try and filter out VLANs 30 and 40 from being deployed to s1-leaf1.
+At the moment, any VLANs defined within network services will be configured on all relevant nodes. We can control where VLANs are deployed by leveraging filter tags. We can try and filter out VLANs 30 and 40 from being deployed to s1-leaf1.
 
-We can start by assigning a tag to s1-leaf1, add the following under the s1-leaf1 definition within [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml)
+We can start by assigning a tag to s1-leaf1. Add the following under the s1-leaf1 definition within [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml):
 
 ```yaml
   node_groups:
@@ -446,7 +446,7 @@ We can start by assigning a tag to s1-leaf1, add the following under the s1-leaf
             tags: [ "allow_ten" ]
 ```
 
-We can then add `allow_ten` tag to VLAN 10 within the [SITE1_NETWORK_SERVICES.yml](sites/site_1/group_vars/SITE1_NETWORK_SERVICES.yml) file
+We can then add the `allow_ten` tag to VLAN 10 within the [SITE1_NETWORK_SERVICES.yml](sites/site_1/group_vars/SITE1_NETWORK_SERVICES.yml) file:
 
 ```yaml
 ---
@@ -601,27 +601,27 @@ We can see VLAN 20 is the only defined SVI that was provisioned for s1-leaf3 sin
 
 ## Provisioning new Switches
 
-Our network is gaining popularity, and it's time to add a new Leaf pair into the environment! **s1-leaf5** and **s1-leaf6**
+Our network is gaining popularity, and it's time to add a new Leaf pair into the environment! s1-leaf5 and s1-leaf6
 are ready to be provisioned, so let's get to it.
 
 ### Branch Time
 
 Before jumping in, let's create a new branch for our work. We'll call this branch **add-leafs**.
 
-If you have pending changes to be committed, run `git add .` and `git commit` to save another snapshot.
-
 ``` bash
+git add .
+git commit -m "saving latest updates"
 git switch -c add-leafs
 ```
 
-Now that we have our branch created let's get to work!
+Now that we have our branch created, let's get to work!
 
 ### Inventory Update
 
-First, we'll want to add our new switches, named **s1-leaf5** and **s1-leaf6**, into our inventory file. We'll add them
+First, we'll want to add our new switches, named s1-leaf5 and s1-leaf6, into our inventory file. We'll add them
 as members of the `SITE1_LEAFS` group.
 
-Add the following two lines under `s1-brdr2` in `sites/site_1/inventory.yml`.
+Add the following two lines under s1-brdr2 in [sites/site_1/inventory.yml](sites/site_1/inventory.yml).
 
 ``` yaml
             s1-leaf5:
@@ -670,10 +670,10 @@ Next, let's add our new Leaf switches into [SITE1_FABRIC.yml](sites/site_1/group
 
 These new switches will go into **S1_RACK4**, leverage MLAG for multi-homing and use BGP ASN# **65104**.
 
-Just like the other Leaf switches, interfaces `Ethernet2` and `Ethernet3` will be used to connect to the spines.
+As on the other leaf switches, interfaces `Ethernet2` and `Ethernet3` will be used to connect to the spines.
 
-On the spines, interface `Ethernet9` will be used to connect to `s1-leaf5`, while `Ethernet10`
-will be used to connect to `s1-leaf6`.
+On the spines, interface `Ethernet9` will be used to connect to s1-leaf5, while `Ethernet10`
+will be used to connect to s1-leaf6.
 
 Add the following code block after the border nodes in `sites/site_1/group_vars/SITE1_FABRIC.yml`.
 

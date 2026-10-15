@@ -6,7 +6,7 @@
 
 ## Lab Inventory
 
-This lab has following devices:
+This lab has the following devices:
 
 | Hostname | Type | OS | Management Address | Username | Password |
 | -------- | ---- | -- | ------------------ | -------- | -------- |
@@ -52,7 +52,7 @@ Throughout this section, we will use the following dual data center topology.
 
 ## Ansible Inventory
 
-Our lab L3LS topology contains two sites, `Site 1` and `Site 2`. We need an Ansible inventory for each site. We have created two separate directories for each site under the `sites` sub-directory in our repo.
+Our lab L3LS topology contains two sites, `Site 1` and `Site 2`. We need an Ansible inventory for each site. We have created a separate directory for each site under the `sites` sub-directory in our repo.
 
 ``` text
 ├── sites/
@@ -78,7 +78,7 @@ To apply AVD variables to the nodes in the fabric, we make use of Ansible group_
 
 ### SITE1_FABRIC
 
-At the Fabric level (SITE1_FABRIC), the following variables are defined in **group_vars/SITE1_FABRIC.yml**. The fabric name, node type defaults, interface links, and EVPN gateway functionality are defined at this level. Being a Layer 3 Leaf Spine topology, the leaf nodes will require more variables than the spines. The variables needed for the spines include:
+At the Fabric level (SITE1_FABRIC), the following variables are defined in **group_vars/SITE1_FABRIC.yml**. The fabric name, node type defaults, interface links, and EVPN gateway functionality are defined at this level. Because this is a Layer 3 Leaf Spine topology, the leaf nodes will require more variables than the spines. The variables needed for the spines include:
 
 - loopback_ipv4_pool
 - bgp_as
@@ -206,7 +206,7 @@ type: l3leaf
 
 ### SITE1_NETWORK_SERVICES
 
-You add VLANs, VRFS, and EVPN specific parameters to the Fabric by updating the **group_vars/SITE1_NETWORK_SERVICES.yml**. Within the main tenant we will be configuring, we will supply a **mac_vrf_vni_base** value, which will be used for the VLAN to VNI mapping under the VXLAN interface. We will then define a VRF our VLANs will be part of and give that a VNI value for the VRF to VNI mapping. Finally, each VLAN SVI will be configured, given a name, and a single virtual IP address which will end up being configured on all `l3leaf` nodes.
+You add VLANs, VRFs, and EVPN specific parameters to the Fabric by updating the **group_vars/SITE1_NETWORK_SERVICES.yml**. Within the main tenant we will be configuring, we will supply a **mac_vrf_vni_base** value, which will be used for the VLAN to VNI mapping under the VXLAN interface. We will then define a VRF our VLANs will be part of and give that a VNI value for the VRF to VNI mapping. Finally, each VLAN SVI will be configured with a name and a single virtual IP address which will end up being configured on all `l3leaf` nodes.
 
 ``` yaml
 ---
@@ -300,8 +300,7 @@ paths = ../../global_vars
 
 > If a folder is used as in the example above, all files in the folder will be parsed in alphabetical order.
 
-### Example Global Vars File
-
+### Example Global Variables File
 
 `global_vars/global_dc_vars.yml`
 
@@ -395,7 +394,7 @@ l3_edge:
 
 ## Data Models
 
-AVD provides a network-wide data model and is typically broken into multiple group_vars files to simplify and categorize variables with their respective functions. We break the data model into three categories: topology, services, and ports.
+AVD provides a network-wide data model that is typically broken into multiple group_vars files to simplify and categorize variables with their respective functions. We break the data model into three categories: topology, services, and ports.
 
 ### Fabric Topology
 
@@ -495,7 +494,7 @@ l3leaf:
 
 #### L3 Edge Interfaces
 
-Inside the same global_dc_vars file, we define how each site is linked to each other through their respective border leafs. In our example, the `core` switches are simply configured with layer 2 interfaces so each border leaf connects to its peer in a point-to-point manner. The `l3_edge` data model for both sites follows.
+Inside the same global_dc_vars file, we define how the sites are linked to each other through their respective border leafs. In our example, the `core` switches are simply configured with layer 2 interfaces so each border leaf connects to its peer in a point-to-point manner. The `l3_edge` data model for both sites follows.
 
 ``` yaml
 # L3 Edge port definitions. This can be any port in the entire Fabric, where IP interfaces are defined.
@@ -551,9 +550,9 @@ tenants:
 
 ### Connected Endpoints
 
-The Fabric must define ports for southbound interfaces toward connected endpoints such as servers, appliances, firewalls, and other networking devices in the data center. This section uses port profiles and connected endpoints called `servers`. Documentation for [port_profiles](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#port-profiles-settings) and [connected endpoints](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#connected-endpoints-keys-settings) are available to see all the options available.
+The Fabric must define ports for southbound interfaces toward connected endpoints such as servers, appliances, firewalls, and other networking devices in the data center. This section uses port profiles and connected endpoints called `servers`. Documentation for [port_profiles](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#port-profiles-settings) and [connected endpoints](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#connected-endpoints-keys-settings) is available to see all the options available.
 
-The following data model defines two port profiles: PP-VLAN10 and PP-VLAN20. They define an access port profile for VLAN `10` and `20`, respectively. In addition, two server endpoints (s1-host1 and s1-host2) are created to use these port profiles. There are optional and required fields. The optional fields are used for port descriptions in the EOS intended configurations.
+The following data model defines two port profiles: PP-VLAN10 and PP-VLAN20. They define an access port profile for VLANs `10` and `20`, respectively. In addition, two server endpoints (s1-host1 and s1-host2) are created to use these port profiles. There are optional and required fields. The optional fields are used for port descriptions in the EOS intended configurations.
 
 ``` yaml
 ---
