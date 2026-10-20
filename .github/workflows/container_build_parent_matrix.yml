@@ -23,8 +23,8 @@ jobs:
     strategy:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
-        from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.3.0"]
-        clab_version: ["0.79.0"]
+        from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.4.0"]
+        clab_version: ["0.81.1"]
         user_id: ["1000", "1009"]
         include:
           - user_id: "1000"
@@ -118,4 +118,7 @@ jobs:
       # 2.7.0
       # - asynchronous lab startup and on-prem CloudVision onboarding
       # - shared Python startup package and CloudVision streaming readiness check
-      container_revision: "2.7.0"
+      # 2.7.1
+      # - ContainerLab to 0.81.1
+      # - AVD to 6.4.0
+      container_revision: "2.7.1"

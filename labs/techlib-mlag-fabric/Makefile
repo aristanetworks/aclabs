@@ -38,14 +38,24 @@ inspect: ## Inspect the lab
 	@echo "You can check the lab status, hostnames and management addresses above."
 	@echo "To connect to a lab device use \`ssh admin@<hostname>\` and password \`admin\`."
 
+.PHONY: build-a
+build-a: ## Build Configs for Fabric A
+	ansible-playbook avd/playbooks/build.yml -i avd/inventory.yml -e "target_hosts=FABRIC_A"
+
+.PHONY: build-b
+build-b: ## Build Configs for Fabric B
+	ansible-playbook avd/playbooks/build.yml -i avd/inventory.yml -e "target_hosts=FABRIC_B"
+
 .PHONY: build
-build: ## Build Configs
-	ansible-playbook avd/playbooks/build.yml -i avd/inventory.yml -e "target_hosts=DOMAIN_A_FABRIC"
+build: build-a build-b ## Build Configs for Fabrics A and B
+
+.PHONY: deploy-a
+deploy-a: ## Deploy Configs via eAPI to Fabric A
+	ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml -e "target_hosts=FABRIC_A"
+
+.PHONY: deploy-b
+deploy-b: ## Deploy Configs via eAPI to Fabric B
+	ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml -e "target_hosts=FABRIC_B"
 
 .PHONY: deploy
-deploy: ## Deploy Configs via eAPI
-	ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml -e "target_hosts=DOMAIN_A_FABRIC"
-
-.PHONY: validate
-validate: ## Validate Fabric
-	ansible-playbook avd/playbooks/validate.yml -i avd/inventory.yml -e "target_hosts=DOMAIN_A_FABRIC"
+deploy: deploy-a deploy-b ## Deploy Configs via eAPI to Fabrics A and B
