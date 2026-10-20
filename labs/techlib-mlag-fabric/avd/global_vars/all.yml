@@ -45,9 +45,12 @@ mac_address_table:
   aging_time: 1800
 
 # Out of Band Management
+mgmt_interface_settings:
+  vrf: MGMT
+  interface: Management0
+
 mgmt_gateway: 172.100.100.1
-mgmt_interface: Management0
-mgmt_interface_vrf: MGMT
+
 default_mgmt_method: oob
 
 # Enable SSH for MGMT VRF
