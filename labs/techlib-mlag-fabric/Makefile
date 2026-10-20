@@ -58,5 +58,4 @@ deploy-b: ## Deploy Configs via eAPI to Fabric B
 	ansible-playbook avd/playbooks/deploy.yml -i avd/inventory.yml -e "target_hosts=FABRIC_B"
 
 .PHONY: deploy
-deploy: ## Deploy Configs via eAPI to Fabrics A and B
-	deploy-a deploy-b
+deploy: deploy-a deploy-b ## Deploy Configs via eAPI to Fabrics A and B
