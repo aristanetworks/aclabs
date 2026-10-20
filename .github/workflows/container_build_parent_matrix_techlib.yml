@@ -37,7 +37,7 @@ jobs:
     uses: ./.github/workflows/container_build_child.yml
     strategy:
       matrix:
-        from_image: ["ghcr.io/${{ needs.vars.outputs.gh_org_lowercase }}/aclabs/lab-base:python3.12-avd-v6.3.0-clab0.79.0-rev2.6.11-uid1009"]
+        from_image: ["ghcr.io/${{ needs.vars.outputs.gh_org_lowercase }}/aclabs/lab-base:python3.12-avd-v6.4.0-clab0.81.1-rev2.7.1-uid1009"]
         user_id: ["1009"]
 
     with:
@@ -63,4 +63,6 @@ jobs:
       # 1.0.8:
       # - init_lab.py: a node whose container runs but never opens SSH is restarted once (`containerlab restart --node`) after boot.restart_after (600s) while most of the lab is READY
       # - init_lab.py: a node is probed only once containerlab lists its container ("WAITING FOR DEPLOY"); a deploy that ends without creating it reads "not deployed" with the deploy's error from .lab/deploy.status
-      container_revision: "1.0.8"
+      # 1.0.9
+      # - Set base from_image to lab-base:python3.12-avd-v6.4.0-clab0.81.1-rev2.7.1-uid1009
+      container_revision: "1.0.9"
