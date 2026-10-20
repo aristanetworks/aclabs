@@ -619,7 +619,10 @@ Now that we have our branch created, let's get to work!
 ### Inventory Update
 
 First, we'll want to add our new switches, named s1-leaf5 and s1-leaf6, into our inventory file. We'll add them
-as members of the `SITE1_LEAFS` group.
+as members of the `SITE1_LEAFS` group. This also includes them in the
+`SITE1_FABRIC` group targeted by the build, deployment, and validation playbooks.
+Custom reachability tests continue to run on the leaves selected by their
+hostname tags.
 
 Add the following two lines under s1-brdr2 in [sites/site_1/inventory.yml](sites/site_1/inventory.yml).
 
@@ -634,9 +637,6 @@ The `sites/site_1/inventory.yml` file should now look like the example below:
 ---
 SITE1:
   children:
-    CVP:
-      hosts:
-        cvp:
     SITE1_FABRIC:
       children:
         SITE1_SPINES:
@@ -661,9 +661,6 @@ SITE1:
       children:
         SITE1_SPINES:
         SITE1_LEAFS:
-    EXTERNAL:
-      hosts:
-        ext-srl1:
 ```
 
 Next, let's add our new Leaf switches into [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml).

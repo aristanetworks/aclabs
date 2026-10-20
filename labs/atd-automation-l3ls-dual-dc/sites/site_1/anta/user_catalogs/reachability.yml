@@ -1,0 +1,17 @@
+anta.tests.connectivity:
+  - VerifyReachability:
+      filters:
+        tags: [s1-leaf1]
+      hosts:
+        - destination: 10.10.10.100
+          source: Vlan10
+          vrf: OVERLAY
+          repeat: 5
+  - VerifyReachability:
+      filters:
+        tags: [s1-leaf3]
+      hosts:
+        - destination: 10.20.20.100
+          source: Vlan20
+          vrf: OVERLAY
+          repeat: 5

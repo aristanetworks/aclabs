@@ -46,6 +46,11 @@ The Core and Host nodes are preconfigured on lab startup. You can verify this by
 
 The border leafs from each site will connect to their specified peer with P2P links. The hosts (two per site) have port-channels to the leaf pairs and are pre-configured with an IP address and route to reach the other hosts.
 
+The preconfigured hosts are outside the Ansible inventories. Build, deployment,
+and validation commands target each site's fabric group. User-defined ANTA
+reachability tests run from leaf SVIs in the `OVERLAY` VRF to check the host
+attachments after the services and host-facing ports are enabled.
+
 ```text
 ssh s1-host1
 s1-host1#show ip int b
@@ -470,6 +475,48 @@ PING 10.20.20.100 (10.20.20.100) 72(100) bytes of data.
 80 bytes from 10.20.20.100: icmp_seq=5 ttl=63 time=26.2 ms
 ```
 
+### Validate Site 1 with ANTA
+
+Run the validation playbook after deploying the services and host-facing ports.
+It combines tests generated from the AVD structured configurations with the
+user-defined catalog in
+[sites/site_1/anta/user_catalogs/reachability.yml](sites/site_1/anta/user_catalogs/reachability.yml):
+
+```yaml
+anta.tests.connectivity:
+  - VerifyReachability:
+      filters:
+        tags: [s1-leaf1]
+      hosts:
+        - destination: 10.10.10.100
+          source: Vlan10
+          vrf: OVERLAY
+          repeat: 5
+  - VerifyReachability:
+      filters:
+        tags: [s1-leaf3]
+      hosts:
+        - destination: 10.20.20.100
+          source: Vlan20
+          vrf: OVERLAY
+          repeat: 5
+```
+
+The hostname tags select the leaf that originates each probe. These tests check
+reachability from `s1-leaf1` to `s1-host1` and from `s1-leaf3` to `s1-host2` in
+their respective VLANs. The host-to-host ping above checks inter-VLAN routing.
+
+From the lab directory, run:
+
+```bash
+make validate-site-1
+```
+
+Review `sites/site_1/anta/reports/anta_report.md`, or the CSV and JSON reports in
+the same directory. The Markdown report expands individual checks. Confirm that
+both custom probes ran and received all five replies, alongside the generated
+fabric tests. Allow ARP and MAC learning to settle before the measured run.
+
 > Site 1 fabric is now complete.
 
 ## Step 4 - Site 2
@@ -480,6 +527,24 @@ Repeat the previous three steps for Site 2.
 - Add Ports
 - Build and Deploy Configs
 - Verify ping traffic between hosts `s2-host1` and `s2-host2` (10.20.20.200)
+
+For equivalent custom tests in Site 2, copy the Site 1 reachability catalog to
+`sites/site_2/anta/user_catalogs/reachability.yml`, creating the directory if
+needed. Update the hostname tags and destinations as follows:
+
+| Originating leaf tag | Source SVI | VRF | Destination |
+| -------------------- | ---------- | --- | ----------- |
+| s2-leaf1 | Vlan10 | OVERLAY | 10.10.10.200 (s2-host1) |
+| s2-leaf3 | Vlan20 | OVERLAY | 10.20.20.200 (s2-host2) |
+
+Run the generated fabric tests and the Site 2 custom probes:
+
+```bash
+make validate-site-2
+```
+
+Review `sites/site_2/anta/reports/anta_report.md` for the expanded results.
+Site 2 has no user-defined catalog until you add it; the generated tests still run.
 
 At this point, you should be able to ping between hosts within a site but not between sites. For this, we need to build connectivity to the `DCI Network`. This is covered in the next section.
 
@@ -960,11 +1025,23 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
     > If all your peerings are established and you have the correct IMET routes in the EVPN table, then your EVPN gateways are functioning!  Lets move on to a final connectivity test.
 
-## TODO: Migrate to custom ANTA catalog, Final Fabric Test
+## Final Fabric Test
 
-At this point your full Layer 3 Leaf Spine with EVPN VXLAN and EVPN gateway functionality should be ready to go. Lets perform some final tests to verify everything is working.
+At this point, your Layer 3 leaf-spine fabric with EVPN/VXLAN and EVPN gateway
+functionality should be ready for end-to-end connectivity tests.
 
-From `s1-host1` ping both `s2-host1` & `s2-host2`.
+Rerun validation for both fabrics after deploying the DCI and EVPN gateway
+configuration:
+
+```bash
+make validate-site-1 validate-site-2
+```
+
+Review the results in each site's `anta/reports/` directory. The custom catalogs
+described above verify local leaf-to-host reachability. To verify stretched VLAN
+connectivity and inter-DC routing, also run host-to-host pings across the DCI.
+
+From `s1-host1`, ping both `s2-host1` and `s2-host2`:
 
 ``` text
 # s2-host1
@@ -974,6 +1051,13 @@ ping 10.10.10.200
 ``` text
 # s2-host2
 ping 10.20.20.200
+```
+
+From `s2-host1`, check connectivity to both Site 1 hosts:
+
+```text
+ping 10.10.10.100
+ping 10.20.20.100
 ```
 
 > You have built a multi-site L3LS network with an EVPN/VXLAN overlay and EVPN Gateway functionality!

@@ -9,3 +9,6 @@
     - name: validate states on EOS devices
       ansible.builtin.import_role:
         name: arista.avd.anta_runner
+      vars:
+        user_catalogs_enabled: true
+        anta_report_expand_results: true

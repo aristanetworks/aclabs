@@ -55,10 +55,29 @@ Throughout this section, we will use the following dual data center topology.
 Our lab L3LS topology contains two sites, `Site 1` and `Site 2`. We need an Ansible inventory for each site. We have created a separate directory for each site under the `sites` sub-directory in our repo.
 
 ``` text
-├── sites/
-  ├── site_1/
-  ├── site_2/
+sites/
+├── site_1/
+│   ├── inventory.yml
+│   └── group_vars/
+└── site_2/
+    ├── inventory.yml
+    └── group_vars/
 ```
+
+Build, deployment, and validation playbooks target `SITE1_FABRIC` or
+`SITE2_FABRIC`. Each fabric group contains its site's spine, leaf, and border
+switches. Select one inventory per run and confirm the group membership:
+
+```bash
+ansible-inventory -i sites/site_1/inventory.yml --graph SITE1_FABRIC
+ansible-inventory -i sites/site_2/inventory.yml --graph SITE2_FABRIC
+```
+
+The `SITE1_CONNECTED_ENDPOINTS` and `SITE2_CONNECTED_ENDPOINTS` groups apply
+host-facing port settings to fabric switches. The `servers` data model in their
+variable files describes the endpoint attachments. The preconfigured cEOS hosts
+are outside the Ansible inventories; user-defined ANTA tests run on selected leaf
+switches to check reachability to those hosts.
 
 The following is a graphical representation of the Ansible inventory groups and naming scheme used for `Site 1` in this example. This is replicated for `Site 2`.
 
@@ -617,11 +636,11 @@ Three playbooks, `build.yml`, `deploy.yml`, and `validate.yml`, are used in our 
   tasks:
 
     - name: Generate Structured Variables per Device
-      import_role:
+      ansible.builtin.import_role:
         name: arista.avd.eos_designs
 
     - name: Generate Intended Config and Documentation
-      import_role:
+      ansible.builtin.import_role:
         name: arista.avd.eos_cli_config_gen
 ```
 
@@ -636,7 +655,7 @@ Three playbooks, `build.yml`, `deploy.yml`, and `validate.yml`, are used in our 
   tasks:
 
     - name: Deploy Configuration to Device
-      import_role:
+      ansible.builtin.import_role:
         name: arista.avd.eos_config_deploy_eapi
 ```
 
@@ -654,7 +673,30 @@ Three playbooks, `build.yml`, `deploy.yml`, and `validate.yml`, are used in our 
     - name: validate states on EOS devices
       ansible.builtin.import_role:
         name: arista.avd.anta_runner
+      vars:
+        user_catalogs_enabled: true
+        anta_report_expand_results: true
 ```
+
+The validation playbook combines AVD-generated tests with user-defined ANTA
+catalogs. AVD catalog generation remains enabled by default and uses the site's
+`intended/structured_configs/` files from the build. Run validation after building
+and deploying the current fabric configuration.
+
+Store user-defined catalogs in `sites/site_1/anta/user_catalogs/` or
+`sites/site_2/anta/user_catalogs/`. The role merges them with the generated tests
+for the selected inventory. Use hostname tags such as `s1-leaf1` to select the
+switch that originates each custom test.
+
+The Site 1 reachability catalog probes `s1-host1` from `s1-leaf1` using `Vlan10`
+and `s1-host2` from `s1-leaf3` using `Vlan20`. Both probes use the `OVERLAY` VRF.
+See [Validate Site 1 with ANTA](day0.md#validate-site-1-with-anta) for the catalog
+and the corresponding Site 2 setup.
+
+Generated catalogs are stored in each site's `anta/avd_catalogs/` directory.
+Reports are written to `anta/reports/` as Markdown, CSV, and JSON. The
+`anta_report_expand_results: true` setting expands individual checks in the
+Markdown report.
 
 To make our lives easier, we use a `Makefile` to create aliases to run the playbooks and provide the needed options. This eliminates mistakes and typing long commands.
 
@@ -679,7 +721,7 @@ deploy-site-1: ## Deploy Configs via eAPI
 
 .PHONY: validate-site-1
 validate-site-1: ## Validate network state
-	ansible-playbook playbooks/validate.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+    ansible-playbook playbooks/validate.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
 
 ########################################################
 # Site 2
@@ -739,6 +781,21 @@ make deploy-site-1
 # Deploy configs for Site 2
 make deploy-site-2
 ```
+
+Validate network state after deploying each site's configuration. Enable the
+services and host-facing ports before running the custom reachability tests:
+
+```bash
+# Site 1: generated fabric tests and custom leaf-to-host tests
+make validate-site-1
+
+# Site 2: add its custom catalog to include leaf-to-host tests
+make validate-site-2
+```
+
+Both targets run the validation playbook against their site's fabric group. See
+the [final fabric test](day0.md#final-fabric-test) for the inter-DC connectivity
+checks.
 
 ## Next Steps
 
