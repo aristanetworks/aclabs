@@ -52,7 +52,7 @@ reachability tests run from leaf SVIs in the `OVERLAY` VRF to check the host
 attachments after the services and host-facing ports are enabled.
 
 ```text
-ssh s1-host1
+ssh arista@s1-host1
 s1-host1#show ip int b
                                                                                        Address
 Interface           IP Address            Status       Protocol                 MTU    Owner
