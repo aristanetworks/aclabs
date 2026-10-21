@@ -1,9 +1,9 @@
 {
-    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/aclabs/lab-base:python3.12-avd-v6.3.0-clab0.79.0-rev2.6.11",
+    "image": "ghcr.io/${localEnv:GITHUB_REPOSITORY}/lab-base:python3.12-avd-v6.4.0-clab0.81.1-rev2.7.1",
     // containerEnv set the variables applied to entire container
     "containerEnv": {
         "ARISTA_TOKEN": "${localEnv:ARTOKEN}",
-        "CEOS_LAB_VERSION": "4.35.1F",
+        "CEOS_LAB_VERSION": "4.36.2F",
         "CONTAINERWSF": "${containerWorkspaceFolder}",
         "GITHUB_REPOSITORY": "${localEnv:GITHUB_REPOSITORY}",
         "LABPASSPHRASE": "arista",
