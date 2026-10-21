@@ -326,8 +326,8 @@ paths = ../../global_vars
 ``` yaml
 ---
 # Credentials for EOS Switches
-ansible_user: "{{ default(lookup('ansible.builtin.env', 'LABUSERNAME')) | default('arista') }}"
-ansible_password: "{{ default(lookup('ansible.builtin.env', 'LABPASSPHRASE')) | default('arista') }}"
+ansible_user: "{{ lookup('ansible.builtin.env', 'LABUSERNAME')) | default('arista', true) }}"
+ansible_password: "{{ lookup('ansible.builtin.env', 'LABPASSPHRASE')) | default('arista', true) }}"
 ansible_network_os: arista.eos.eos
 # Configure privilege escalation
 ansible_become: true
