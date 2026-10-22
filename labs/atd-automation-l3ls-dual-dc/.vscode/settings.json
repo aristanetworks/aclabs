@@ -12,6 +12,7 @@
     "chat.agentSessionsViewLocation": "disabled",
     "chat.agent.enabled": false,
     "chat.disableAIFeatures": true,
+    "markdown.preview.doubleClickToSwitchToEditor": false,
     "terminal.integrated.suggest.enabled": true,
-    "markdown.preview.doubleClickToSwitchToEditor": false
+    "workbench.colorTheme": "Tomorrow Night Blue"
 }
