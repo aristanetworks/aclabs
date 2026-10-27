@@ -1,15 +1,7 @@
 {
-    "containerlab": {
-        "showWelcomePage": false,
-        "skipUpdateCheck": true,
-        "node": {
-            "sshUserMapping": {
-                "ceos": "arista"
-            }
-        }
-    },
-    "chat.commandCenter.enabled": false,
-    "chat.agentSessionsViewLocation": "disabled",
+    "containerlab.node.sshUserMapping": {"arista_ceos": "arista"},
+    "containerlab.showWelcomePage": false,
+    "containerlab.skipUpdateCheck": false,
     "chat.agent.enabled": false,
     "chat.disableAIFeatures": true,
     "markdown.preview.doubleClickToSwitchToEditor": false,
