@@ -5,6 +5,7 @@
     "chat.agent.enabled": false,
     "chat.disableAIFeatures": true,
     "markdown.preview.doubleClickToSwitchToEditor": false,
+    "redhat.telemetry.enabled": false,
     "terminal.integrated.suggest.enabled": true,
     "workbench.colorTheme": "Tomorrow Night Blue"
 }

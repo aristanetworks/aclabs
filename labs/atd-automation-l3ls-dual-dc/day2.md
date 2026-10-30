@@ -116,7 +116,7 @@ make deploy-site-1 deploy-site-2
 Once completed, we should see our banner when logging into any switch. The output of the `show logging` command
 should also have our newly defined syslog servers.
 
-## Adding additional VLANs
+## Adding Additional VLANs
 
 One of the many benefits of AVD is the ability to deploy new services very quickly and efficiently by modifying a small part of the data model. Lets add some new VLANs to our fabric.
 
@@ -599,7 +599,7 @@ We can see VLAN 20 is the only defined SVI that was provisioned for s1-leaf3 sin
           mode: active
 ```
 
-## Provisioning new Switches
+## Provisioning New Switches
 
 Our network is gaining popularity, and it's time to add a new Leaf pair into the environment! s1-leaf5 and s1-leaf6
 are ready to be provisioned, so let's get to it.

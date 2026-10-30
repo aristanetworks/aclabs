@@ -556,7 +556,7 @@ The data model defines P2P links (`/31s`) on the border leafs by using a combina
 
 <img src="images/l3ls_dci.png" alt="Core Interfaces" width="70%">
 
-### Add P2P Links for DCI connectivity for Sites 1 and 2
+### Add P2P Links for DCI Connectivity for Sites 1 and 2
 
 Enable the `l3_edge` dictionary (shown below) by uncommenting it from the [global_vars/global_dc_vars.yml](global_vars/global_dc_vars.yml):
 
