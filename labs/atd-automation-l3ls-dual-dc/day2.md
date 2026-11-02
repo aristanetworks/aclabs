@@ -14,22 +14,6 @@ git add .
 git commit -m 'Your message here'
 ```
 
-## Branching Out
-
-Before jumping in and modifying our files, we'll create a branch named **banner-syslog** in our
-forked repository to work on our changes. We can create our branch in multiple ways, but we'll use
-the `git switch` command with the `-c` parameter to create our new branch.
-
-``` bash
-git switch -c banner-syslog
-```
-
-After entering this command, we should see our new branch name reflected in the terminal. It will also be
-reflected in the status bar in the lower left-hand corner of our VS Code window (you may need to click the refresh icon
-before this is shown).
-
-Now we're ready to start working on our changes :sunglasses:.
-
 ## Login Banner
 
 When we initially deployed our multi-site topology, we should have included a login banner on all our switches.
@@ -88,23 +72,11 @@ make build-site-1 build-site-2
 Take a minute, using the source control feature in VS Code, to review what has changed as a result
 of our work.
 
-At this point, we have our Banner and Syslog configurations in place. The configurations look good,
-and we're ready to merge our branch to the main branch. Merging allows us to incorporate features or updates we are testing into our main branch.
-
-There are a few ways to publish the `banner-syslog` branch to our forked repository. The commands below will
-accomplish this via the CLI:
+At this point, our banner and syslog configurations are in place. Commit these changes before deploying them:
 
 ``` bash
 git add .
 git commit -m 'add syslog'
-git switch main
-git merge banner-syslog
-```
-
-We can now delete our now defunct **banner-syslog** branch.
-
-``` bash
-git branch -D banner-syslog
 ```
 
 Finally, let's deploy our changes.
@@ -599,220 +571,107 @@ We can see VLAN 20 is the only defined SVI that was provisioned for s1-leaf3 sin
           mode: active
 ```
 
-## Provisioning New Switches
+## Introducing IPv6 in the Underlay with RFC 5549
 
-Our network is gaining popularity, and it's time to add a new Leaf pair into the environment! s1-leaf5 and s1-leaf6
-are ready to be provisioned, so let's get to it.
+During our next design review, the network architect has a request: simplify addressing on the leaf-to-spine links and introduce IPv6 into the underlay. As the fabric grows, assigning an IPv4 subnet to every point-to-point link adds work. The architect would like us to use **RFC 5549** so these links can use IPv6 link-local addresses while continuing to advertise IPv4 routes.
 
-### Branch Time
+With AVD's RFC 5549 design, the underlay eBGP sessions use IPv6 link-local addresses, and IPv4 routes are advertised with IPv6 next hops. Our router-ID and VTEP loopbacks keep their IPv4 addresses, and the EVPN overlay continues to use its existing IPv4 peers. Let's use AVD to make this change across both sites.
 
-Before jumping in, let's create a new branch for our work. We'll call this branch **add-leafs**.
+### Update the Global Variables
+
+Open [global_vars/global_dc_vars.yml](global_vars/global_dc_vars.yml) and add `underlay_rfc5549: true` immediately below the underlay and overlay routing protocol settings. Keep all three keys at the top level:
+
+``` yaml
+underlay_routing_protocol: ebgp
+overlay_routing_protocol: ebgp
+underlay_rfc5549: true
+```
+
+Because this file is shared, the setting applies to the spines, leaves, and border leaves in both sites. The existing eBGP underlay meets the requirement for this AVD setting. IPv6 link-local addresses are generated automatically, so we do not need to define an IPv6 address pool for these links.
+
+### Build and Review Both Sites
+
+Generate the configurations before deploying the change:
+
+``` bash
+make build-site-1 build-site-2
+```
+
+Use VS Code Source Control to review the changes in both sites' `intended/configs/` directories. Start with [s1-leaf1.cfg](sites/site_1/intended/configs/s1-leaf1.cfg). Its `Ethernet2` and `Ethernet3` uplinks should now use `ipv6 enable` in place of their IPv4 `/31` addresses. For example:
+
+``` text
+interface Ethernet2
+   description P2P_s1-spine1_Ethernet2
+   no shutdown
+   mtu 1500
+   no switchport
+   ipv6 enable
+```
+
+The BGP configuration should now define the underlay peers by interface. Under the IPv4 address family, AVD enables IPv6 next hops. The relevant excerpt from `s1-leaf1.cfg` should look like this:
+
+``` text
+router bgp 65101
+   neighbor interface Ethernet2 peer-group IPv4-UNDERLAY-PEERS remote-as 65100
+   neighbor interface Ethernet3 peer-group IPv4-UNDERLAY-PEERS remote-as 65100
+   !
+   address-family ipv4
+      neighbor IPv4-UNDERLAY-PEERS activate
+      neighbor IPv4-UNDERLAY-PEERS next-hop address-family ipv6 originate
+```
+
+The peer-group name remains `IPv4-UNDERLAY-PEERS` because these peers exchange IPv4 routes. Check the corresponding spine configurations and the Site 2 configurations as well. Confirm that the IPv4 router-ID and VTEP loopbacks are still present.
+
+### Deploy the Change
+
+Once the generated configurations look correct, deploy both sites:
+
+``` bash
+make deploy-site-1 deploy-site-2
+```
+
+The underlay sessions will reestablish as the switches transition to interface-based IPv6 peering. Expect a brief interruption while the peers at both ends of each link are updated.
+
+### Verify IPv6 Peering and IPv4 Reachability
+
+Connect to `s1-leaf1` and check the uplinks and their IPv6 neighbors:
+
+``` text
+show ipv6 interface Ethernet2
+show ipv6 interface Ethernet3
+show ipv6 neighbors
+```
+
+Both uplinks should have IPv6 link-local addresses beginning with `fe80::`. The neighbor table should show the attached spine neighbors on these interfaces. The exact link-local addresses depend on the devices.
+
+Next, check the IPv4 BGP address family and a route to the remote VTEP on the other leaf pair:
+
+``` text
+show ip bgp summary
+show ip route 10.255.1.5
+```
+
+The underlay BGP peers should be established over IPv6 link-local addresses. The route to `10.255.1.5/32` should use IPv6 link-local next hops through the spine uplinks. This is the key result: an IPv4 destination is reachable through IPv6 next hops.
+
+Check that the EVPN overlay has also recovered:
+
+``` text
+show bgp evpn summary
+```
+
+The EVPN sessions to `10.250.1.1` and `10.250.1.2` should be established. Repeat these checks on `s2-leaf1`, using `10.255.2.5` for the remote VTEP route and `10.250.2.1` and `10.250.2.2` for the EVPN peers.
+
+Finally, run the existing ANTA validation for both sites to check the deployed fabric and endpoint reachability:
+
+``` bash
+make validate-site-1 validate-site-2
+```
+
+Review the reports, then save the completed scenario:
 
 ``` bash
 git add .
-git commit -m "saving latest updates"
-git switch -c add-leafs
-```
-
-Now that we have our branch created, let's get to work!
-
-### Inventory Update
-
-First, we'll want to add our new switches, named s1-leaf5 and s1-leaf6, into our inventory file. We'll add them
-as members of the `SITE1_LEAFS` group. This also includes them in the
-`SITE1_FABRIC` group targeted by the build, deployment, and validation playbooks.
-Custom reachability tests continue to run on the leaves selected by their
-hostname tags.
-
-Add the following two lines under s1-brdr2 in [sites/site_1/inventory.yml](sites/site_1/inventory.yml).
-
-``` yaml
-            s1-leaf5:
-            s1-leaf6:
-```
-
-The `sites/site_1/inventory.yml` file should now look like the example below:
-
-``` yaml
----
-SITE1:
-  children:
-    SITE1_FABRIC:
-      children:
-        SITE1_SPINES:
-          hosts:
-            s1-spine1:
-            s1-spine2:
-        SITE1_LEAFS:
-          hosts:
-            s1-leaf1:
-            s1-leaf2:
-            s1-leaf3:
-            s1-leaf4:
-            s1-brdr1:
-            s1-brdr2:
-            s1-leaf5:
-            s1-leaf6:
-    SITE1_NETWORK_SERVICES:
-      children:
-        SITE1_SPINES:
-        SITE1_LEAFS:
-    SITE1_CONNECTED_ENDPOINTS:
-      children:
-        SITE1_SPINES:
-        SITE1_LEAFS:
-```
-
-Next, let's add our new Leaf switches into [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml).
-
-These new switches will go into **S1_RACK4**, leverage MLAG for multi-homing and use BGP ASN# **65104**.
-
-As on the other leaf switches, interfaces `Ethernet2` and `Ethernet3` will be used to connect to the spines.
-
-On the spines, interface `Ethernet9` will be used to connect to s1-leaf5, while `Ethernet10`
-will be used to connect to s1-leaf6.
-
-Add the following code block after the border nodes in `sites/site_1/group_vars/SITE1_FABRIC.yml`.
-
-``` yaml
-    - group: S1_RACK4
-      bgp_as: 65104
-      nodes:
-        - name: s1-leaf5
-          id: 7
-          mgmt_ip: 192.168.0.28/24
-          uplink_switch_interfaces: [ Ethernet9, Ethernet9 ]
-        - name: s1-leaf6
-          id: 8
-          mgmt_ip: 192.168.0.29/24
-          uplink_switch_interfaces: [ Ethernet10, Ethernet10 ]
-```
-
-The [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml) file should now look like the example below:
-
-``` yaml
----
-fabric_name: SITE1_FABRIC
-
-# Spine Switches
-spine:
-  defaults:
-    platform: cEOS
-    loopback_ipv4_pool: 10.250.1.0/24
-    bgp_as: 65100
-  nodes:
-    - name: s1-spine1
-      id: 1
-      mgmt_ip: 192.168.0.10/24
-    - name: s1-spine2
-      id: 2
-      mgmt_ip: 192.168.0.11/24
-
-# Leaf Switches
-l3leaf:
-  defaults:
-    platform: cEOS
-    spanning_tree_priority: 4096
-    spanning_tree_mode: mstp
-    loopback_ipv4_pool: 10.250.1.0/24
-    loopback_ipv4_offset: 2
-    vtep_loopback_ipv4_pool: 10.255.1.0/24
-    uplink_switches: [ s1-spine1, s1-spine2 ]
-    uplink_interfaces: [ Ethernet2, Ethernet3 ]
-    uplink_ipv4_pool: 172.16.1.0/24
-    mlag_interfaces: [ Ethernet1, Ethernet6 ]
-    mlag_peer_ipv4_pool: 10.251.1.0/24
-    mlag_peer_l3_ipv4_pool: 10.252.1.0/24
-    virtual_router_mac_address: 00:1c:73:00:00:99
-  node_groups:
-    - group: S1_RACK1
-      bgp_as: 65101
-      nodes:
-        - name: s1-leaf1
-          id: 1
-          mgmt_ip: 192.168.0.12/24
-          uplink_switch_interfaces: [ Ethernet2, Ethernet2 ]
-        - name: s1-leaf2
-          id: 2
-          mgmt_ip: 192.168.0.13/24
-          uplink_switch_interfaces: [ Ethernet3, Ethernet3 ]
-    - group: S1_RACK2
-      bgp_as: 65102
-      nodes:
-        - name: s1-leaf3
-          id: 3
-          mgmt_ip: 192.168.0.14/24
-          uplink_switch_interfaces: [ Ethernet4, Ethernet4 ]
-        - name: s1-leaf4
-          id: 4
-          mgmt_ip: 192.168.0.15/24
-          uplink_switch_interfaces: [ Ethernet5, Ethernet5 ]
-    - group: S1_BRDR
-      bgp_as: 65103
-      evpn_gateway:
-        evpn_l2:
-          enabled: true
-        evpn_l3:
-          enabled: true
-          inter_domain: true
-      nodes:
-        - name: s1-brdr1
-          id: 5
-          mgmt_ip: 192.168.0.100/24
-          uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
-          evpn_gateway:
-            remote_peers:
-              - hostname: s2-brdr1
-                bgp_as: 65203
-                ip_address: 10.255.2.7
-        - name: s1-brdr2
-          id: 6
-          mgmt_ip: 192.168.0.101/24
-          uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
-          evpn_gateway:
-            remote_peers:
-              - hostname: s2-brdr2
-                bgp_as: 65203
-                ip_address: 10.255.2.8
-    - group: S1_RACK4
-      bgp_as: 65104
-      nodes:
-        - name: s1-leaf5
-          id: 7
-          mgmt_ip: 192.168.0.28/24
-          uplink_switch_interfaces: [ Ethernet9, Ethernet9 ]
-        - name: s1-leaf6
-          id: 8
-          mgmt_ip: 192.168.0.29/24
-          uplink_switch_interfaces: [ Ethernet10, Ethernet10 ]
-```
-
-Next - Let's build the configuration!
-
-``` bash
-make build-site-1
-```
-
-> Interfaces `Ethernet9` and `Ethernet10` do not exist on the Spines. Because of this, we will **not** run a deploy command since it would fail.
-
-Please take a moment and review the results of our changes via the source control functionality in VS Code.
-
-Finally, we'll commit our changes to save the snapshot.
-
-``` bash
-git add .
-git commit -m 'add leafs'
-```
-
-## Backing Out Changes
-
-Ruh Roh. As it turns out, we should have added these leaf switches to an entirely new site. Oops! No worries, because
-we used our **add-leafs** branch, we can switch back to our main branch and then delete our local copy of the **add-leafs**
-branch. No harm or confusion related to this change ever hit the main branch!
-
-``` bash
-git switch main
-git branch -D add-leafs
+git commit -m 'enable RFC 5549 underlay'
 ```
 
 Congratulations. You have now successfully completed initial fabric builds and day 2 operational changes with AVD.
