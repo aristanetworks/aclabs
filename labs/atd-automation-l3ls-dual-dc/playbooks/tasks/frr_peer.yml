@@ -1,0 +1,116 @@
+---
+- name: Read one border's AVD structured configuration
+  ansible.builtin.include_vars:
+    file: "{{ frr_border_file }}"
+    name: frr_eos
+  no_log: true
+
+- name: Find the EOS interface and BGP neighbor facing FRR
+  ansible.builtin.set_fact:
+    frr_eos_interfaces: >-
+      {{ frr_eos.ethernet_interfaces | default([])
+         | selectattr('metadata.peer', 'defined')
+         | selectattr('metadata.peer', 'equalto', frr_node) | list }}
+    frr_eos_neighbors: >-
+      {{ frr_eos.router_bgp.neighbors | default([])
+         | selectattr('metadata.peer', 'defined')
+         | selectattr('metadata.peer', 'equalto', frr_node) | list }}
+  no_log: true
+
+- name: Require exactly one FRR handoff on this border
+  ansible.builtin.assert:
+    that:
+      - frr_eos_interfaces | length == 1
+      - frr_eos_neighbors | length == 1
+      - frr_eos.hostname == frr_border_file | basename | splitext | first
+    fail_msg: "{{ frr_border_file | basename }} must describe one interface and BGP neighbor facing {{ frr_node }}."
+
+- name: Select the handoff and required loopback interfaces
+  ansible.builtin.set_fact:
+    frr_eos_interface: "{{ frr_eos_interfaces | first }}"
+    frr_eos_neighbor: "{{ frr_eos_neighbors | first }}"
+    frr_eos_loopback_names:
+      - Loopback0
+      - "{{ frr_eos.vxlan_interface.vxlan1.vxlan.source_interface }}"
+  no_log: true
+
+- name: Read inherited BGP settings and the handoff subnet
+  ansible.builtin.set_fact:
+    frr_eos_peer_group: >-
+      {{ (frr_eos.router_bgp.peer_groups | default([])
+          | selectattr('name', 'equalto', frr_eos_neighbor.peer_group | default(''))
+          | first) | default({}) }}
+    frr_peer_subnet: "{{ frr_eos_interface.ip_address | ansible.utils.ipaddr('subnet') }}"
+    frr_peer_loopbacks: >-
+      {{ frr_eos.loopback_interfaces | default([])
+         | selectattr('name', 'in', frr_eos_loopback_names) | list }}
+    frr_eos_clab_interfaces: >-
+      {{ frr_interface_mapping.EthernetIntf | dict2items
+         | selectattr('value', 'equalto', frr_eos_interface.name) | map(attribute='key') | list }}
+  no_log: true
+
+- name: Validate the routed handoff and its gateway loopbacks
+  ansible.builtin.assert:
+    that:
+      - not (frr_eos_interface.shutdown | default(false))
+      - not (frr_eos_neighbor.shutdown | default(false))
+      - not (frr_eos_interface.switchport.enabled | default(true))
+      - frr_eos_interface.vrf | default('default') == 'default'
+      - frr_eos_interface.ip_address | ansible.utils.ipaddr('prefix') == 31
+      - frr_peer_subnet not in frr_subnets
+      - (frr_eos_neighbor.ip_address | ansible.utils.ipaddr(frr_peer_subnet)) is not false
+      - frr_eos_neighbor.ip_address != frr_eos_interface.ip_address | ansible.utils.ipaddr('address')
+      - frr_eos_interface.metadata.peer_interface is match('^eth[1-9][0-9]*$')
+      - frr_eos_clab_interfaces | length == 1
+      - frr_peer_loopbacks | map(attribute='name') | sort == frr_eos_loopback_names | unique | sort
+      - >-
+        (frr_eos_neighbor.remote_as | default(frr_eos_peer_group.remote_as | default('')) | string)
+        is match('^[0-9]+$')
+    fail_msg: "{{ frr_eos.hostname }} needs an enabled default-VRF handoff, a unique /31, valid FRR ASN, and both gateway loopbacks."
+
+- name: Check the AVD interface metadata against the physical cabling
+  ansible.builtin.assert:
+    that:
+      - >-
+        ([frr_node ~ ':' ~ frr_eos_interface.metadata.peer_interface,
+          frr_eos.hostname ~ ':' ~ (frr_eos_clab_interfaces | first)] | sort)
+        in (frr_topology.topology.links | map(attribute='endpoints') | map('sort') | list)
+    fail_msg: "{{ frr_eos.hostname }} AVD peer metadata does not match Containerlab cabling."
+
+- name: Require host routes for control-plane and VXLAN source addresses
+  ansible.builtin.assert:
+    that:
+      - item.ip_address | ansible.utils.ipaddr('prefix') == 32
+    fail_msg: Gateway loopbacks must use /32 addresses.
+  loop: "{{ frr_peer_loopbacks }}"
+  loop_control:
+    label: "{{ frr_eos.hostname }} {{ item.name }}"
+
+- name: Reverse the EOS local and remote values for the FRR side
+  ansible.builtin.set_fact:
+    frr_asns: "{{ frr_asns + [frr_eos_neighbor.remote_as | default(frr_eos_peer_group.remote_as | default('')) | string] }}"
+    frr_subnets: "{{ frr_subnets + [frr_peer_subnet] }}"
+    frr_peers: "{{ frr_peers + [frr_peer] }}"
+    frr_peer_summaries: "{{ frr_peer_summaries + [frr_summary] }}"
+  vars:
+    frr_secret: "{{ frr_eos_neighbor.password | default(frr_eos_peer_group.password | default(''), true) }}"
+    frr_secret_key: "{{ frr_eos_neighbor.ip_address if frr_eos_neighbor.password | default('') else frr_eos_peer_group.name | default('') }}"
+    frr_peer:
+      name: "{{ frr_eos.hostname }}"
+      interface: "{{ frr_eos_interface.metadata.peer_interface }}"
+      endpoint: "{{ frr_node }}:{{ frr_eos_interface.metadata.peer_interface }}"
+      eos_interface: "{{ frr_eos_interface.name }}"
+      address: "{{ frr_eos_neighbor.ip_address }}/31"
+      neighbor: "{{ frr_eos_interface.ip_address | ansible.utils.ipaddr('address') }}"
+      remote_as: "{{ frr_eos_neighbor.local_as | default(frr_eos.router_bgp.as, true) | string }}"
+      mtu: "{{ frr_eos_interface.mtu | default(1500) }}"
+      bfd: "{{ frr_eos_neighbor.bfd | default(frr_eos_peer_group.bfd | default(false)) }}"
+      password: "{{ (frr_secret | arista.avd.decrypt(passwd_type='bgp', key=frr_secret_key)) if frr_secret else '' }}"
+      prefixes: "{{ frr_peer_loopbacks | map(attribute='ip_address') | unique | sort }}"
+    frr_summary:
+      border: "{{ frr_peer.name }}"
+      frr_interface: "{{ frr_peer.interface }}"
+      frr_address: "{{ frr_peer.address }}"
+      eos_neighbor: "{{ frr_peer.neighbor }}"
+      eos_as: "{{ frr_peer.remote_as }}"
+  no_log: true

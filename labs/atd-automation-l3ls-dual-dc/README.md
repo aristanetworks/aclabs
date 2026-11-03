@@ -50,6 +50,11 @@ Throughout this section, we will use the following dual data center topology.
 
 <img src="images/l3ls_topo_overview.png" alt="L3LS Dual DC Topology" width="70%">
 
+The current Containerlab topology connects the four border switches through
+`frr-core1`. See [FRR transport between the data centers](frr-dci.md) for the
+AVD 6.4.0 handoffs, FRR configuration generation from AVD structured outputs,
+and build, deployment, and verification commands.
+
 ## Ansible Inventory
 
 Our lab L3LS topology contains two sites, `Site 1` and `Site 2`. We need an Ansible inventory for each site. We have created a separate directory for each site under the `sites` sub-directory in our repo.
@@ -193,7 +198,7 @@ l3leaf:
               remote_peers:
                 - hostname: s2-brdr1
                   bgp_as: 65203
-                  ip_address: 10.255.2.7
+                  ip_address: 10.250.2.7
         - name: s1-brdr2
           id: 6
           mgmt_ip: 192.168.0.101/24
@@ -202,7 +207,7 @@ l3leaf:
               remote_peers:
                 - hostname: s2-brdr2
                   bgp_as: 65203
-                  ip_address: 10.255.2.8
+                  ip_address: 10.250.2.8
 ```
 
 ### SITE1_SPINES
@@ -387,28 +392,39 @@ bgp_peer_groups:
   mlag_ipv4_underlay_peer:
     password: 4b21pAdCvWeAqpcKDFMdWw==
 
-# L3 Edge port definitions. This can be any port in the entire Fabric, where IP interfaces are defined.
+# FRR provides IPv4 transport between the EVPN gateways. It is external to AVD.
 l3_edge:
-  # Define a new IP pool that will be used to assign IP addresses to L3 Edge interfaces.
   p2p_links_ip_pools:
-    - name: S1_to_S2_IP_pool
+    - name: DCI
       ipv4_pool: 172.16.255.0/24
-  # Define a new link profile which will match the IP pool, the used ASNs and include the defined interface into underlay routing
+      prefix_size: 31
   p2p_links_profiles:
-    - name: S1_to_S2_profile
-      ip_pool: S1_to_S2_IP_pool
-      as: [ 65103, 65203 ]
+    - name: DCI
+      ip_pool: DCI
       include_in_underlay_protocol: true
-  # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
+      mtu: 1500
+      bfd: true
   p2p_links:
     - id: 1
-      nodes: [ s1-brdr1, s2-brdr1 ]
-      interfaces: [ Ethernet4, Ethernet4 ]
-      profile: S1_to_S2_profile
+      nodes: [ s1-brdr1, frr-core1 ]
+      interfaces: [ Ethernet4, eth1 ]
+      as: [ 65103, 65000 ]
+      profile: DCI
     - id: 2
-      nodes: [ s1-brdr2, s2-brdr2 ]
-      interfaces: [ Ethernet5, Ethernet5 ]
-      profile: S1_to_S2_profile
+      nodes: [ s1-brdr2, frr-core1 ]
+      interfaces: [ Ethernet4, eth2 ]
+      as: [ 65103, 65000 ]
+      profile: DCI
+    - id: 3
+      nodes: [ s2-brdr1, frr-core1 ]
+      interfaces: [ Ethernet4, eth3 ]
+      as: [ 65203, 65000 ]
+      profile: DCI
+    - id: 4
+      nodes: [ s2-brdr2, frr-core1 ]
+      interfaces: [ Ethernet4, eth4 ]
+      as: [ 65203, 65000 ]
+      profile: DCI
 ```
 
 ## Data Models
@@ -499,7 +515,7 @@ l3leaf:
             remote_peers:
               - hostname: s2-brdr1
                 bgp_as: 65203
-                ip_address: 10.255.2.7
+                ip_address: 10.250.2.7
         - name: s1-brdr2
           id: 6
           mgmt_ip: 192.168.0.101/24
@@ -508,41 +524,19 @@ l3leaf:
             remote_peers:
               - hostname: s2-brdr2
                 bgp_as: 65203
-                ip_address: 10.255.2.8
+                ip_address: 10.250.2.8
 ```
 
 #### L3 Edge Interfaces
 
-Inside the same global_dc_vars file, we define how the sites are linked to each other through their respective border leafs. In our example, the `core` switches are simply configured with layer 2 interfaces so each border leaf connects to its peer in a point-to-point manner. The `l3_edge` data model for both sites follows.
+The shared `global_vars/global_dc_vars.yml` file defines four routed links
+between the border leaves and `frr-core1` using `l3_edge`. Each border uses
+`Ethernet4`; FRR uses `eth1` through `eth4`. FRR peers with Site 1's AS 65103
+and Site 2's AS 65203 from AS 65000 and carries the border loopback routes.
 
-``` yaml
-# L3 Edge port definitions. This can be any port in the entire Fabric, where IP interfaces are defined.
-l3_edge:
-  # Define a new IP pool that will be used to assign IP addresses to L3 Edge interfaces.
-  p2p_links_ip_pools:
-    - name: S1_to_S2_IP_pool
-      ipv4_pool: 172.16.255.0/24
-  # Define a new link profile which will match the IP pool, the used ASNs and include the defined interface into underlay routing
-  p2p_links_profiles:
-    - name: S1_to_S2_profile
-      ip_pool: S1_to_S2_IP_pool
-      as: [ 65103, 65203 ]
-      include_in_underlay_protocol: true
-  # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
-  p2p_links:
-    - id: 1
-      nodes: [ s1-brdr1, s2-brdr1 ]
-      interfaces: [ Ethernet4, Ethernet4 ]
-      profile: S1_to_S2_profile
-    - id: 2
-      nodes: [ s1-brdr2, s2-brdr2 ]
-      interfaces: [ Ethernet5, Ethernet5 ]
-      profile: S1_to_S2_profile
-```
-
-The following diagram shows the P2P links between the four border leafs. The DCI Network is pre-configured in our lab with the interfaces facing the border leafs as access ports in VLAN 1000. The l3_edge interfaces for the border leafs in `Site 1` and `Site 2` are configured and deployed with AVD.
-
-<img src="images/l3ls_dci.png" alt="Core Interfaces" width="70%">
+Run `make build-dci` to build both sites and generate FRR's configuration from
+the resulting AVD structured YAML. See [FRR transport between the data
+centers](frr-dci.md) for the topology, route policy, deployment, and validation.
 
 ### Network Services
 

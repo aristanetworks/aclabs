@@ -1,0 +1,16 @@
+---
+# File paths identify the AVD artifacts to read; routing values come from AVD.
+frr_project_dir: "{{ playbook_dir }}/.."
+frr_node: frr-core1
+frr_output_dir: "{{ frr_project_dir }}/clab/intended"
+frr_config_file: "{{ frr_output_dir }}/{{ frr_node }}.conf"
+frr_border_configs:
+  - "{{ frr_project_dir }}/sites/site_1/intended/structured_configs/s1-brdr1.yml"
+  - "{{ frr_project_dir }}/sites/site_1/intended/structured_configs/s1-brdr2.yml"
+  - "{{ frr_project_dir }}/sites/site_2/intended/structured_configs/s2-brdr1.yml"
+  - "{{ frr_project_dir }}/sites/site_2/intended/structured_configs/s2-brdr2.yml"
+
+# These playbooks run on the Containerlab host, independently of EOS inventories.
+ansible_connection: local
+ansible_become: false
+ansible_python_interpreter: "{{ ansible_playbook_python }}"

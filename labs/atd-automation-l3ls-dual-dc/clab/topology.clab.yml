@@ -16,6 +16,7 @@ topology:
     frr:
       image: quay.io/frrouting/frr:containerlab-10.7.1
       daemons:
+        - bgpd
         - bfdd
   defaults:
     kind: arista_ceos
@@ -127,6 +128,8 @@ topology:
     frr-core1:
       kind: frr
       mgmt-ipv4: 192.168.0.250
+      startup-config: intended/frr-core1.conf
+      enforce-startup-config: true
 
   links:
     - endpoints: [ "s1-leaf1:eth2", "s1-spine1:eth2" ]

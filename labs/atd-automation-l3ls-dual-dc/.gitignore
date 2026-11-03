@@ -107,6 +107,9 @@ $RECYCLE.BIN/
 clab-*
 *.bak
 
+# Generated FRR configuration contains the BGP authentication secret.
+/clab/intended/
+
 # ignore cv onboarding token
 clab/cv-onboarding-token
 
