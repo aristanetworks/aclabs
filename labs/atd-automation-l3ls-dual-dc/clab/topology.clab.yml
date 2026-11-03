@@ -113,18 +113,6 @@ topology:
     s2-host2:
       mgmt-ipv4: 192.168.0.27
       startup-config: init-configs/s2-host2.cfg
-    # s1-core1:
-    #   mgmt-ipv4: 192.168.0.102
-    #   startup-config: init-configs/s1-core1.cfg
-    # s1-core2:
-    #   mgmt-ipv4: 192.168.0.103
-    #   startup-config: init-configs/s1-core2.cfg
-    # s2-core1:
-    #   mgmt-ipv4: 192.168.0.202
-    #   startup-config: init-configs/s2-core1.cfg
-    # s2-core2:
-    #   mgmt-ipv4: 192.168.0.203
-    #   startup-config: init-configs/s2-core2.cfg
     frr-core1:
       kind: frr
       mgmt-ipv4: 192.168.0.250
@@ -180,20 +168,6 @@ topology:
     - endpoints: [ "s2-host1:eth2", "s2-leaf2:eth4" ]
     - endpoints: [ "s2-host2:eth1", "s2-leaf3:eth4" ]
     - endpoints: [ "s2-host2:eth2", "s2-leaf4:eth4" ]
-    # - endpoints: [ "s1-core1:eth2", "s1-brdr1:eth4" ]
-    # - endpoints: [ "s1-core1:eth3", "s1-brdr2:eth4" ]
-    # - endpoints: [ "s1-core2:eth2", "s1-brdr1:eth5" ]
-    # - endpoints: [ "s1-core2:eth3", "s1-brdr2:eth5" ]
-    # - endpoints: [ "s1-core1:eth1", "s1-core2:eth1" ]
-    # - endpoints: [ "s1-core1:eth6", "s1-core2:eth6" ]
-    # - endpoints: [ "s2-core1:eth2", "s2-brdr1:eth4" ]
-    # - endpoints: [ "s2-core1:eth3", "s2-brdr2:eth4" ]
-    # - endpoints: [ "s2-core2:eth2", "s2-brdr1:eth5" ]
-    # - endpoints: [ "s2-core2:eth3", "s2-brdr2:eth5" ]
-    # - endpoints: [ "s2-core1:eth1", "s2-core2:eth1" ]
-    # - endpoints: [ "s2-core1:eth6", "s2-core2:eth6" ]
-    # - endpoints: [ "s1-core1:eth4", "s2-core1:eth4" ]
-    # - endpoints: [ "s1-core2:eth4", "s2-core2:eth4" ]
     - endpoints: [ "frr-core1:eth1", "s1-brdr1:eth4" ]
     - endpoints: [ "frr-core1:eth2", "s1-brdr2:eth4" ]
     - endpoints: [ "frr-core1:eth3", "s2-brdr1:eth4" ]
