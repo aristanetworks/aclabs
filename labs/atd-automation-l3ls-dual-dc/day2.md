@@ -571,6 +571,126 @@ We can see VLAN 20 is the only defined SVI that was provisioned for s1-leaf3 sin
           mode: active
 ```
 
+## Changing EVPN RD/RT Values with mac_vrf_vni_base
+
+Our network architect has another request: move the tenant's Layer 2 service identifiers into the **20000** range so they follow the organization's allocation plan. We will change `mac_vrf_vni_base` and see how AVD updates the Route Distinguishers (RDs), Route Targets (RTs), and VXLAN VNIs across both sites.
+
+An **RD** makes an EVPN route unique, while an **RT** controls which EVPN instances import that route. In this lab, AVD derives each VLAN's MAC-VRF VNI by adding the VLAN ID to `mac_vrf_vni_base`. With our existing default RD/RT settings and no overrides, AVD also uses that result for the RD's second field and both fields of the RT:
+
+``` text
+MAC-VRF VNI = mac_vrf_vni_base + VLAN ID
+RD          = router ID:MAC-VRF VNI
+RT          = MAC-VRF VNI:MAC-VRF VNI
+```
+
+Changing this base updates the Layer 2 VNIs as well as the VLAN RD/RT values. The `OVERLAY` VRF's Layer 3 VNI remains `10` because its `vrf_vni` setting is separate.
+
+### Prepare the VLANs for This Exercise
+
+If you completed the `only_vlans_in_use` exercise, set `l3leaf.defaults.filter.only_vlans_in_use` to `false` in [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml), or remove that filter. This restores all defined VLANs on the Site 1 leaves and border leaves so we can compare their generated configurations. The earlier tag filter should already have been removed.
+
+### Update Both Network Services Files
+
+In [SITE1_NETWORK_SERVICES.yml](sites/site_1/group_vars/SITE1_NETWORK_SERVICES.yml), change the existing tenant's `mac_vrf_vni_base` from `10000` to `20000`:
+
+``` yaml
+tenants:
+  - name: S1_FABRIC
+    mac_vrf_vni_base: 20000
+    # Keep the existing VRFs and SVIs below this line.
+```
+
+Make the same change in [SITE2_NETWORK_SERVICES.yml](sites/site_2/group_vars/SITE2_NETWORK_SERVICES.yml):
+
+``` yaml
+tenants:
+  - name: S2_FABRIC
+    mac_vrf_vni_base: 20000
+    # Keep the existing VRFs and SVIs below this line.
+```
+
+Edit only the existing base value in each tenant; retain the VLANs, SVI addresses, and `vrf_vni: 10`. Both sites need matching RTs and VNI mappings for the services we extend between them.
+
+For VLAN 10 on `s1-leaf1`, the expected changes are:
+
+| Setting | Before | After |
+| --- | --- | --- |
+| Layer 2 VNI | `10010` | `20010` |
+| RD | `10.250.1.3:10010` | `10.250.1.3:20010` |
+| Import/export RT | `10010:10010` | `20010:20010` |
+
+VLANs 20, 30, and 40 will similarly use `20020`, `20030`, and `20040` for their Layer 2 VNIs and RD suffixes. Their RTs become `20020:20020`, `20030:20030`, and `20040:20040`. Each switch retains its own router ID in the RD.
+
+### Build and Compare the Configurations
+
+Build both sites:
+
+``` bash
+make build-site-1 build-site-2
+```
+
+Use VS Code Source Control to review the differences. In [s1-leaf1.cfg](sites/site_1/intended/configs/s1-leaf1.cfg), the VLAN 10 section under `router bgp 65101` should now contain:
+
+``` text
+   vlan 10
+      rd 10.250.1.3:20010
+      route-target both 20010:20010
+      redistribute learned
+```
+
+Under `interface Vxlan1`, check the updated VLAN mappings:
+
+``` text
+   vxlan vlan 10 vni 20010
+   vxlan vlan 20 vni 20020
+   vxlan vlan 30 vni 20030
+   vxlan vlan 40 vni 20040
+   vxlan vrf OVERLAY vni 10
+```
+
+Review the Site 2 configurations as well. For example, `s2-leaf1` should have RD `10.250.2.3:20010` and RT `20010:20010` for VLAN 10. The RDs identify routes from different switches, while the matching RT allows the same service to import them.
+
+On [s1-brdr1.cfg](sites/site_1/intended/configs/s1-brdr1.cfg), also check the VLAN 10 RT used by the EVPN gateway's remote domain:
+
+``` text
+      route-target import export evpn domain remote 20010:20010
+```
+
+Check the corresponding remote-domain RTs on the other border leaves. The `OVERLAY` VRF's RD suffix, RT, and Layer 3 VNI should retain their original values based on `vrf_vni: 10`.
+
+### Deploy and Verify the New Values
+
+Once both sites' generated configurations agree, deploy the change:
+
+``` bash
+make deploy-site-1 deploy-site-2
+```
+
+Expect an interruption to the affected services while the switches transition to the new RTs and VNIs. The services can use the new identifiers once the participating switches in both sites have been updated and EVPN has converged.
+
+Connect to `s1-leaf1` and inspect the deployed configuration and EVPN routes:
+
+``` text
+show running-config section router bgp
+show running-config interface Vxlan1
+show bgp evpn vni 20010 detail
+```
+
+Confirm that VLAN 10 maps to VNI `20010`, the local VLAN 10 RD is `10.250.1.3:20010`, and the RT is `20010:20010`. The EVPN routes should show the new RD suffixes and RTs; routes originated by other switches will have their own router IDs in the RDs. Repeat these checks on `s2-leaf1`, then check the remote-domain RTs on the border leaves.
+
+Finally, validate both sites and review endpoint reachability:
+
+``` bash
+make validate-site-1 validate-site-2
+```
+
+After reviewing the validation reports, save the change:
+
+``` bash
+git add .
+git commit -m 'update tenant MAC-VRF VNI base and RD/RT values'
+```
+
 ## Introducing IPv6 in the Underlay with RFC 5549
 
 During our next design review, the network architect has a request: simplify addressing on the leaf-to-spine links and introduce IPv6 into the underlay. As the fabric grows, assigning an IPv4 subnet to every point-to-point link adds work. The architect would like us to use **RFC 5549** so these links can use IPv6 link-local addresses while continuing to advertise IPv4 routes.
