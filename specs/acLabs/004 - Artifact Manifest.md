@@ -182,69 +182,61 @@ no special image handling.
 
 The launcher MUST use storage configuration supplied through trusted host-side
 configuration. The lab repository, manifest, devcontainer configuration, container
-environment, and user-supplied `runArgs` MUST NOT add storage roots, change lookup
+environment, and user-supplied `runArgs` MUST NOT add storage sources, change lookup
 rules, grant access, or provide storage credentials for this feature.
 
-The initial allowlist of storage types is:
+Every storage source MUST be explicitly approved and configured by the operator.
+Reachability or possession of valid credentials alone MUST NOT make a source
+eligible. Its configuration and access policy MUST remain outside the lab's
+control. The launcher MUST verify that resolved artifacts belong to an approved
+source and MUST NOT substitute another source when the approved one is unavailable.
 
-| Storage type | Allowed behavior |
-| --- | --- |
-| Local directory | Read regular files beneath an explicitly configured host directory. |
-| Host-mounted NFS directory | Read regular files beneath an explicitly configured directory on an operator-managed NFS mount. |
-
-An arbitrary directory is not approved merely because it is readable. Every root
-MUST be explicitly configured, and its contents and permissions MUST be managed
-outside the lab's control. NFS roots MUST be verified as the expected mounted
-storage; an absent mount MUST fail rather than fall back to a local directory
-under the mount point. The launcher does not establish NFS mounts from manifest
-data.
-
-HTTP(S), S3, Git repositories, SSH/SCP, arbitrary network shares, and other backends
-are unsupported in this initial contract. A future backend requires explicit
-operator enablement and a defined resolver and access policy. No backend may be
-enabled solely by placing a location in the manifest.
+This specification does not prescribe a storage provider, backend type, protocol,
+storage layout, or client implementation. Those choices belong to the deployment.
+Regardless of implementation, sources must satisfy the authorization, isolation,
+integrity, and failure requirements in this document. A manifest cannot enable or
+select an otherwise unapproved source.
 
 ### Per-environment access
 
-Approval of a storage root does not authorize every lab to receive every file in
-it. Before reading source contents, the launcher MUST confirm that the requested
+Approval of a storage source does not authorize every lab to receive every artifact
+in it. Before reading source contents, the launcher MUST confirm that the requested
 artifact is permitted for the selected lab and execution context. Access to the
 repository or the presence of a declaration alone MUST NOT establish entitlement.
 
-Policy MAY use an approved artifact catalog, explicit filename grants, or storage
-roots scoped to an authorized deployment profile. The policy format is outside
-this specification. The selected policy and deployment identity MUST originate
+Policy MUST identify which artifacts the selected lab and execution context may
+receive. How those permissions are represented is outside this specification.
+The selected policy and deployment identity MUST originate
 from trusted orchestration, not from fields controlled by the lab.
 
-For illustration, an operator could authorize a particular environment to read
-`my-extension-1.2.3.vsix` from a local extension directory and the named SA178 SWIX
-from an NFS directory. Another file on either storage root remains unavailable
-unless the policy authorizes it. This does not require a particular storage layout.
+For illustration, an operator could authorize a particular environment to receive
+`my-extension-1.2.3.vsix` and the named SA178 SWIX. Other artifacts in the approved
+storage remain unavailable unless the policy authorizes them.
 
 Missing policy, unavailable approved storage, and denied access MUST fail closed.
-The launcher MUST NOT fall back to the host filesystem, another unapproved source,
-an internet download, or a registry search.
+The launcher MUST NOT fall back to an unapproved source or acquisition mechanism.
 
 ### Source resolution
 
 For each filename, the launcher MUST:
 
-1. Restrict lookup to the roots and artifacts permitted by the effective policy.
-2. Resolve the exact filename directly beneath a configured root, or through a
-   trusted operator-maintained catalog. Do not recursively search arbitrary trees
-   or use wildcard or case-insensitive matching.
+1. Restrict lookup to the storage sources and artifacts permitted by the effective
+   policy.
+2. Resolve the exact filename using operator-configured lookup rules. Do not use
+   wildcard or case-insensitive matching, or search unapproved storage.
 3. Require an unambiguous source. Multiple eligible matches MUST fail, even if
-   their contents match. Manifest authors cannot select a host root to resolve
-   ambiguity; the operator must correct the catalog or policy.
-4. Require a regular file. Reject directories, symlinks, FIFOs, sockets, device
-   files, and paths traversing symlinked source components.
-5. Verify containment beneath the approved root using race-resistant filesystem
-   operations. Validation followed by an unguarded path reopen is insufficient.
+   their contents match. Manifest authors cannot select a storage location to
+   resolve ambiguity; the operator must correct the lookup configuration or policy.
+4. Retrieve only the selected artifact's file contents. Do not interpret the source
+   as a directory, executable instruction, or reference granting access to another
+   resource. The delivered artifact MUST be a regular file.
+5. Preserve the approved source and artifact identity throughout retrieval. Source
+   aliases, redirection, or concurrent changes MUST NOT bypass authorization or
+   replace the bytes selected for verification and delivery.
 
-Storage roots MUST NOT be writable by lab workloads. Operator controls MUST also
-prevent privileged source aliases, including hard links to unauthorized host files,
-from being introduced into an approved root. Filesystem containment alone does not
-establish the provenance of a hard-linked file.
+Lab workloads MUST NOT be able to modify approved storage or its lookup and access
+configuration through this mechanism. The storage integration MUST enforce the
+same access boundary regardless of how an artifact is represented internally.
 
 The launcher MUST NOT mount the artifact collection into the lab, copy the entire
 collection, or pass its credentials to the container. It MUST transfer only the
@@ -313,7 +305,7 @@ source bytes with the expected digest before publishing the destination file.
 A mismatch MUST fail creation; there is no automatic bypass. The transferred
 destination bytes MUST also be verified against that same expected digest before
 staging succeeds. The implementation MUST copy from the verified snapshot rather
-than reopen a potentially changed source pathname.
+than retrieve a potentially changed source again.
 
 When `sha256` is absent, the launcher MUST still ensure the destination bytes match
 the staged source snapshot. It MAY compute an internal digest for that transfer
@@ -404,14 +396,15 @@ An implementation must demonstrate the following behaviors:
    workspace-relative paths, including creating required parent directories.
 3. A supplied correct checksum succeeds; an incorrect or malformed checksum fails.
    Files without a checksum are supported, with transfer correctness checked.
-4. Unlisted source files, storage roots, and storage credentials remain unavailable
+4. Unlisted source files, storage sources, and storage credentials remain unavailable
    to the lab through this mechanism.
-5. A manifest cannot introduce storage roots, URLs, credentials, shell operations,
+5. A manifest cannot introduce storage sources, URLs, credentials, shell operations,
    or access grants. Unsupported fields fail rather than being ignored.
-6. Missing sources, denied artifacts, ambiguous matches, and absent NFS mounts
-   fail before dependent initialization; none triggers an alternate download.
-7. Absolute paths, traversal, symlink escapes, non-regular sources, destination
-   conflicts, existing final files, and unsafe nested mounts are rejected.
+6. Missing artifacts, denied access, ambiguous matches, and unavailable approved
+   storage fail before dependent initialization; none triggers an unapproved fallback.
+7. Absolute paths, traversal, symlink escapes, source references that bypass
+   authorization, destination conflicts, existing final files, and unsafe nested
+   mounts are rejected.
 8. Source and destination mutation attempts cannot redirect reads or writes outside
    their approved boundaries or replace verified bytes undetected.
 9. Duplicate YAML keys, unsupported YAML constructs, incorrectly typed image
