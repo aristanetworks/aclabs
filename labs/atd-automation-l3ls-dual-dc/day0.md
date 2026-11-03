@@ -550,10 +550,10 @@ At this point, you should be able to ping between hosts within a site but not be
 
 ## Step 5 - Connect Sites to DCI Network
 
-`frr-core1` is already configured when the lab starts. It provides IPv4
-transport between the two fabrics using AS 65000. Its BGP sessions are waiting
-for us to configure the border handoffs with AVD. Each border uses `Ethernet4`;
-FRR uses `eth1` through `eth4`.
+The preconfigured `frr-core1` node provides DCI transport and demonstrates
+interoperability between FRRouting and Arista EOS. Configure the border
+handoffs with AVD to connect both sites to FRR in AS 65000. Each border uses
+`Ethernet4`; FRR uses `eth1` through `eth4`.
 
 ### Enable the border handoffs
 
@@ -640,10 +640,8 @@ The FRR neighbor on `s1-brdr1` is `172.16.255.1` in AS 65000. On FRR, the
 same session has neighbor `172.16.255.0` in AS 65103. Compare the EOS and FRR
 configuration syntax: the protocol and addressing must agree on both sides.
 
-FRR carries the border Loopback0 and VXLAN source /32s. This establishes the
-transport path. Next, enable EVPN peering between the Arista borders to carry
-tenant traffic. See [Preconfigured FRR transport](frr-dci.md) for the complete
-handoff table and expected checkpoints.
+The transport path is now in place. Next, enable EVPN peering between the
+Arista borders to carry tenant traffic.
 
 ## Step 6 - Enable EVPN Gateway Functionality
 
