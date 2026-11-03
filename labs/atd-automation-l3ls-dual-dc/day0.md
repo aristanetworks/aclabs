@@ -561,6 +561,8 @@ Uncomment the `l3_edge` block in
 [global_dc_vars.yml](global_vars/global_dc_vars.yml). The completed block
 should match the example below. The /31 pool and link IDs allocate the border
 addresses expected by the fixed FRR startup configuration.
+The explicit `routing_protocol: ebgp` keeps these handoffs numbered IPv4 when
+RFC 5549 is enabled inside the fabrics.
 
 ```yaml
 l3_edge:
@@ -572,6 +574,7 @@ l3_edge:
     - name: DCI
       ip_pool: DCI
       include_in_underlay_protocol: true
+      routing_protocol: ebgp
       mtu: 1500
       bfd: true
   p2p_links:

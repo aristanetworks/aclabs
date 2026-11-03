@@ -400,6 +400,7 @@ l3_edge:
     - name: DCI
       ip_pool: DCI
       include_in_underlay_protocol: true
+      routing_protocol: ebgp
       mtu: 1500
       bfd: true
   p2p_links:
