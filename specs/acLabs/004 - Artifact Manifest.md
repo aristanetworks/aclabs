@@ -41,9 +41,10 @@ files:
   - filename: my-extension-1.2.3.vsix
     path: my-extension-1.2.3.vsix
 
-  - filename: sa178-SecurityAdvisory178_CVE-2026-73440.swix
-    path: containerlab/assets/sa178-SecurityAdvisory178_CVE-2026-73440.swix
-    sha256: "da9388362250db73fd8721e6889c0f90c8f548b25baee16e64621424200f24c6"
+  - filename: example-package.swix
+    path: containerlab/assets/example-package.swix
+    # Illustrative checksum; replace with the actual file's SHA-256.
+    sha256: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 ```
 
 | File field | Required | Meaning |
