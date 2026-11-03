@@ -67,6 +67,13 @@ handling is outside scope; it does not fail file staging or trigger image lookup
 syntax or availability checks, registry access, copying, or import. Image archives
 listed under `files` are ordinary opaque files.
 
+```yaml
+images:
+  - arista/ceos:4.35.5M
+
+files: []
+```
+
 ### Storage and access
 
 The launcher MUST resolve files exclusively through operator-approved storage and
@@ -158,14 +165,3 @@ entries and relative destinations but MUST NOT expose credentials, file contents
 storage listings, or private source locations to lab users. Staging completion
 means files were delivered, not that extensions, images, devices, or the lab are
 ready.
-
-## Future capabilities
-
-- Image acquisition, copying, import, and availability checks require a separate
-  decision about approved sources, identity, and target runtime. Host images are
-  not necessarily available to a separate DinD daemon, whose import phase may
-  need to occur after startup.
-- Per-lab artifact entitlements may be introduced separately if deployments need
-  different access scopes.
-
-Neither capability is required by this decision.
