@@ -61,36 +61,37 @@ bgp_peer_groups:
   mlag_ipv4_underlay_peer:
     password: 4b21pAdCvWeAqpcKDFMdWw==
 
-# FRR provides IPv4 transport between the EVPN gateways. It is external to AVD.
-l3_edge:
-  p2p_links_ip_pools:
-    - name: DCI
-      ipv4_pool: 172.16.255.0/24
-      prefix_size: 31
-  p2p_links_profiles:
-    - name: DCI
-      ip_pool: DCI
-      include_in_underlay_protocol: true
-      mtu: 1500
-      bfd: true
-  p2p_links:
-    - id: 1
-      nodes: [ s1-brdr1, frr-core1 ]
-      interfaces: [ Ethernet4, eth1 ]
-      as: [ 65103, 65000 ]
-      profile: DCI
-    - id: 2
-      nodes: [ s1-brdr2, frr-core1 ]
-      interfaces: [ Ethernet4, eth2 ]
-      as: [ 65103, 65000 ]
-      profile: DCI
-    - id: 3
-      nodes: [ s2-brdr1, frr-core1 ]
-      interfaces: [ Ethernet4, eth3 ]
-      as: [ 65203, 65000 ]
-      profile: DCI
-    - id: 4
-      nodes: [ s2-brdr2, frr-core1 ]
-      interfaces: [ Ethernet4, eth4 ]
-      as: [ 65203, 65000 ]
-      profile: DCI
+# Student exercise: uncomment this block in Day 0, Step 5.
+# FRR is already configured at startup; AVD configures the border handoffs.
+# l3_edge:
+#   p2p_links_ip_pools:
+#     - name: DCI
+#       ipv4_pool: 172.16.255.0/24
+#       prefix_size: 31
+#   p2p_links_profiles:
+#     - name: DCI
+#       ip_pool: DCI
+#       include_in_underlay_protocol: true
+#       mtu: 1500
+#       bfd: true
+#   p2p_links:
+#     - id: 1
+#       nodes: [ s1-brdr1, frr-core1 ]
+#       interfaces: [ Ethernet4, eth1 ]
+#       as: [ 65103, 65000 ]
+#       profile: DCI
+#     - id: 2
+#       nodes: [ s1-brdr2, frr-core1 ]
+#       interfaces: [ Ethernet4, eth2 ]
+#       as: [ 65103, 65000 ]
+#       profile: DCI
+#     - id: 3
+#       nodes: [ s2-brdr1, frr-core1 ]
+#       interfaces: [ Ethernet4, eth3 ]
+#       as: [ 65203, 65000 ]
+#       profile: DCI
+#     - id: 4
+#       nodes: [ s2-brdr2, frr-core1 ]
+#       interfaces: [ Ethernet4, eth4 ]
+#       as: [ 65203, 65000 ]
+#       profile: DCI

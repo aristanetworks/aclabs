@@ -550,48 +550,109 @@ At this point, you should be able to ping between hosts within a site but not be
 
 ## Step 5 - Connect Sites to DCI Network
 
-The current lab uses `frr-core1` as IPv4 transport between the two fabrics.
-The four `l3_edge` links are already enabled in
-[global_dc_vars.yml](global_vars/global_dc_vars.yml). Each border uses
-`Ethernet4` and peers with FRR in AS 65000. FRR uses `eth1` through `eth4`.
+`frr-core1` is already configured when the lab starts. It provides IPv4
+transport between the two fabrics using AS 65000. Its BGP sessions are waiting
+for us to configure the border handoffs with AVD. Each border uses `Ethernet4`;
+FRR uses `eth1` through `eth4`.
 
-Follow [FRR transport between the data centers](frr-dci.md) to review the
-address plan, build both sites, and generate FRR configuration from the
-AVD structured outputs. For an already running lab:
+### Enable the border handoffs
+
+Uncomment the `l3_edge` block in
+[global_dc_vars.yml](global_vars/global_dc_vars.yml). The completed block
+should match the example below. The /31 pool and link IDs allocate the border
+addresses expected by the fixed FRR startup configuration.
+
+```yaml
+l3_edge:
+  p2p_links_ip_pools:
+    - name: DCI
+      ipv4_pool: 172.16.255.0/24
+      prefix_size: 31
+  p2p_links_profiles:
+    - name: DCI
+      ip_pool: DCI
+      include_in_underlay_protocol: true
+      mtu: 1500
+      bfd: true
+  p2p_links:
+    - id: 1
+      nodes: [ s1-brdr1, frr-core1 ]
+      interfaces: [ Ethernet4, eth1 ]
+      as: [ 65103, 65000 ]
+      profile: DCI
+    - id: 2
+      nodes: [ s1-brdr2, frr-core1 ]
+      interfaces: [ Ethernet4, eth2 ]
+      as: [ 65103, 65000 ]
+      profile: DCI
+    - id: 3
+      nodes: [ s2-brdr1, frr-core1 ]
+      interfaces: [ Ethernet4, eth3 ]
+      as: [ 65203, 65000 ]
+      profile: DCI
+    - id: 4
+      nodes: [ s2-brdr2, frr-core1 ]
+      interfaces: [ Ethernet4, eth4 ]
+      as: [ 65203, 65000 ]
+      profile: DCI
+```
+
+The `as` list follows the order in `nodes`: the border ASN comes first and
+FRR's ASN comes second. `include_in_underlay_protocol: true` adds the eBGP
+neighbor to the existing IPv4 underlay peer group, including its authentication.
+FRR already has the matching lab BGP key and BFD configuration.
+
+### Build and deploy both sites
 
 ```bash
-make build-dci
-make check-frr
-make deploy-frr
+make build-site-1 build-site-2
+```
+
+Review the four generated border configurations under each site's
+`intended/configs/` directory. Each border should have a routed Ethernet4
+interface and an IPv4 BGP neighbor in AS 65000. Then deploy:
+
+```bash
 make deploy-site-1 deploy-site-2
 ```
 
-Review the generated configurations and the `check-frr` preview before applying
-changes. On FRR, verify all four BGP sessions and the learned gateway routes:
+### Verify the multivendor underlay
+
+On the Containerlab host, check FRR:
 
 ```bash
 docker exec frr-core1 vtysh -c 'show bgp ipv4 unicast summary'
 docker exec frr-core1 vtysh -c 'show ip route bgp'
+docker exec frr-core1 vtysh -c 'show bfd peers'
 ```
 
-From `s1-brdr1`, verify the remote gateway's control-plane reachability:
+Expect four established BGP sessions and routes to the border loopbacks.
+From `s1-brdr1`, check the other side of the BGP session and remote gateway
+reachability:
 
 ```text
+show ip bgp summary
 show ip route 10.250.2.7
 ping 10.250.2.7 source Loopback0
 ```
 
-FRR carries the border Loopback0 and VXLAN source /32s. EVPN sessions run
-between the Arista borders; FRR does not participate in EVPN.
+The FRR neighbor on `s1-brdr1` is `172.16.255.1` in AS 65000. On FRR, the
+same session has neighbor `172.16.255.0` in AS 65103. Compare the EOS and FRR
+configuration syntax: the protocol and addressing must agree on both sides.
+
+FRR carries the border Loopback0 and VXLAN source /32s. This establishes the
+transport path. Next, enable EVPN peering between the Arista borders to carry
+tenant traffic. See [Preconfigured FRR transport](frr-dci.md) for the complete
+handoff table and expected checkpoints.
 
 ## Step 6 - Enable EVPN Gateway Functionality
 
-The checked-in border groups already enable EVPN L2 and L3 gateway
-functionality. Review the `evpn_gateway` definitions in
+Uncomment the `evpn_gateway` definitions on the border node groups and
+individual border nodes in
 [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml) and
-[SITE2_FABRIC.yml](sites/site_2/group_vars/SITE2_FABRIC.yml) against the following
-snippets. Remote EVPN peers use Loopback0 addresses; VXLAN tunnel sources use
-separate loopback addresses.
+[SITE2_FABRIC.yml](sites/site_2/group_vars/SITE2_FABRIC.yml). The completed
+sections should match the following snippets. Remote EVPN peers use Loopback0
+addresses; VXLAN tunnel sources use separate loopback addresses.
 
 **SITE1_FABRIC.yml**
 
@@ -665,9 +726,9 @@ separate loopback addresses.
 make all
 ```
 
-`make all` builds both AVD fabrics and FRR, then deploys FRR and each site's
-EOS configurations in sequence. Use it against the running lab after reviewing
-the intended changes.
+`make all` builds and deploys both AVD fabrics. FRR is already configured
+from startup. Use this command against the running lab after reviewing the
+intended changes.
 
 ### Verification
 

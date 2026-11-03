@@ -51,9 +51,9 @@ Throughout this section, we will use the following dual data center topology.
 <img src="images/l3ls_topo_overview.png" alt="L3LS Dual DC Topology" width="70%">
 
 The current Containerlab topology connects the four border switches through
-`frr-core1`. See [FRR transport between the data centers](frr-dci.md) for the
-AVD 6.4.0 handoffs, FRR configuration generation from AVD structured outputs,
-and build, deployment, and verification commands.
+`frr-core1`, which loads a complete configuration at startup. See
+[Preconfigured FRR transport](frr-dci.md) for its address plan and the student
+checkpoints for connecting the sites with AVD 6.4.0.
 
 ## Ansible Inventory
 
@@ -534,9 +534,12 @@ between the border leaves and `frr-core1` using `l3_edge`. Each border uses
 `Ethernet4`; FRR uses `eth1` through `eth4`. FRR peers with Site 1's AS 65103
 and Site 2's AS 65203 from AS 65000 and carries the border loopback routes.
 
-Run `make build-dci` to build both sites and generate FRR's configuration from
-the resulting AVD structured YAML. See [FRR transport between the data
-centers](frr-dci.md) for the topology, route policy, deployment, and validation.
+FRR loads its complete configuration from `clab/init-configs/frr-core1.conf`
+at startup. The checked-in `l3_edge` block is commented out for the
+[Day 0, Step 5 exercise](day0.md#step-5---connect-sites-to-dci-network).
+Students enable the border handoffs, build and deploy both sites with Ansible,
+then enable the EVPN gateways in Step 6. See
+[Preconfigured FRR transport](frr-dci.md) for the route policy and verification.
 
 ### Network Services
 
