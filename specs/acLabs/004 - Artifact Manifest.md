@@ -10,7 +10,7 @@ licensed software, SWIX packages, private VS Code extensions, or lab data. The
 host has access to artifact storage, but a lab container and its users must
 not receive direct access to that storage collection or its credentials.
 
-The launcher must deliver only the selected lab's authorized inputs into its
+The launcher must deliver only the selected lab's declared inputs into its
 workspace. A manifest describes those inputs independently of storage layout and
 the mechanism used to copy them. This also permits other deployment workflows to
 consume the same manifest without depending on devcontainers.
@@ -29,6 +29,7 @@ requirements within this draft.
    locations or credentials.
 3. Trusted host orchestration resolves sources exclusively through operator-approved
    storage and applies authorization independently of repository declarations.
+   Authorization applies to launcher access to storage, not to individual labs.
 4. Stage files in the host-side workspace and deliver the prepared workspace before
    the container starts. Do not repeat staging on ordinary restart or attach.
 5. Only regular-file delivery is in scope. Image acquisition, copying, import, and
@@ -176,82 +177,91 @@ An image archive explicitly declared under `files` can still be copied as an
 ordinary opaque file. Its contents are not inspected or imported, and it receives
 no special image handling.
 
-## Approved storage and authorization
+## Approved storage and access
 
-### Storage policy belongs to the host operator
+### Storage configuration belongs to the host operator
 
 The launcher MUST use storage configuration supplied through trusted host-side
 configuration. The lab repository, manifest, devcontainer configuration, container
 environment, and user-supplied `runArgs` MUST NOT add storage sources, change lookup
 rules, grant access, or provide storage credentials for this feature.
 
+The launcher MUST be authorized to read artifacts from the configured storage.
+The operator establishes that authorization independently of repository
+declarations. A manifest requests delivery; it does not grant storage access.
+This storage-level authorization is required even though no per-lab artifact
+authorization policy is applied.
+
 Every storage source MUST be explicitly approved and configured by the operator.
 Reachability or possession of valid credentials alone MUST NOT make a source
-eligible. Its configuration and access policy MUST remain outside the lab's
+eligible. Its configuration and storage credentials MUST remain outside the lab's
 control. The launcher MUST verify that resolved artifacts belong to an approved
 source and MUST NOT substitute another source when the approved one is unavailable.
 
 This specification does not prescribe a storage provider, backend type, protocol,
 storage layout, or client implementation. Those choices belong to the deployment.
-Regardless of implementation, sources must satisfy the authorization, isolation,
+Regardless of implementation, sources must satisfy the source approval, isolation,
 integrity, and failure requirements in this document. A manifest cannot enable or
 select an otherwise unapproved source.
 
-### Per-environment access
+### Initial access model
 
-Approval of a storage source does not authorize every lab to receive every artifact
-in it. Before reading source contents, the launcher MUST confirm that the requested
-artifact is permitted for the selected lab and execution context. Access to the
-repository or the presence of a declaration alone MUST NOT establish entitlement.
+All labs MAY receive any artifact available through the operator-approved storage
+sources by listing its filename under `files`. The implementation has no
+per-lab artifact allowlist, entitlement check, or deployment-identity policy.
+A valid manifest entry is sufficient to request delivery from approved storage.
 
-Policy MUST identify which artifacts the selected lab and execution context may
-receive. How those permissions are represented is outside this specification.
-The selected policy and deployment identity MUST originate
-from trusted orchestration, not from fields controlled by the lab.
+For example, any lab may request `my-extension-1.2.3.vsix` or the named SA178 SWIX
+if those artifacts are available in approved storage. The launcher copies only
+the files listed in that lab's selected manifest; unlisted artifacts are not
+delivered.
 
-For illustration, an operator could authorize a particular environment to receive
-`my-extension-1.2.3.vsix` and the named SA178 SWIX. Other artifacts in the approved
-storage remain unavailable unless the policy authorizes them.
+The operator MUST therefore treat artifacts exposed through approved storage as
+available to every lab using this launcher. Keeping storage credentials and direct
+storage access outside the container limits the delivery mechanism; it does not
+restrict which approved artifacts a lab may request.
 
-Missing policy, unavailable approved storage, and denied access MUST fail closed.
+Missing storage configuration, unavailable approved storage, and storage access
+failures MUST fail closed. No separate per-lab policy is required for creation.
 The launcher MUST NOT fall back to an unapproved source or acquisition mechanism.
 
 ### Source resolution
 
 For each filename, the launcher MUST:
 
-1. Restrict lookup to the storage sources and artifacts permitted by the effective
-   policy.
+1. Restrict lookup to operator-approved storage sources and the filenames declared
+   in the manifest.
 2. Resolve the exact filename using operator-configured lookup rules. Do not use
    wildcard or case-insensitive matching, or search unapproved storage.
 3. Require an unambiguous source. Multiple eligible matches MUST fail, even if
    their contents match. Manifest authors cannot select a storage location to
-   resolve ambiguity; the operator must correct the lookup configuration or policy.
+   resolve ambiguity; the operator must correct the lookup configuration.
 4. Retrieve only the selected artifact's file contents. Do not interpret the source
    as a directory, executable instruction, or reference granting access to another
    resource. The delivered artifact MUST be a regular file.
 5. Preserve the approved source and artifact identity throughout retrieval. Source
-   aliases, redirection, or concurrent changes MUST NOT bypass authorization or
+   aliases, redirection, or concurrent changes MUST NOT escape approved storage or
    replace the bytes selected for verification and delivery.
 
-Lab workloads MUST NOT be able to modify approved storage or its lookup and access
+Lab workloads MUST NOT be able to modify approved storage or its lookup and source
 configuration through this mechanism. The storage integration MUST enforce the
 same access boundary regardless of how an artifact is represented internally.
 
-The launcher MUST NOT mount the artifact collection into the lab, copy the entire
-collection, or pass its credentials to the container. It MUST transfer only the
-authorized files explicitly listed under `files` in the selected manifest.
+The launcher MUST NOT mount the artifact collection into the lab, copy unlisted
+artifacts, or pass storage credentials to the container. It MUST transfer only
+files explicitly listed under `files` in the selected manifest.
 
 ## Creation lifecycle
 
 The required sequence is:
 
 1. Resolve the selected lab, effective workspace root, manifest reference, and
-   trusted deployment policy.
+   trusted storage configuration.
 2. Read and validate the complete manifest, check destination conflicts and
    launcher resource limits, and report nonempty image metadata as outside scope.
-3. Authorize and resolve every required source. Read sources into launcher-owned
-   temporary staging, enforce size limits, and verify supplied checksums.
+3. Resolve every required source within approved storage. Read sources into
+   launcher-owned temporary staging, enforce size limits, and verify supplied
+   checksums.
 4. Prepare the host-side workspace and copy verified file bytes to their declared
    relative destinations with the containment, collision, ownership, and permission
    rules below.
@@ -265,8 +275,8 @@ The required sequence is:
 The implementation MAY reorder independent preparation operations, but MUST NOT
 start the container or execute repository-provided hooks before staging and
 workspace delivery succeed. The container entrypoint and `postCreateCommand` run
-only after that boundary. Copying artifacts after `devcontainer up` has started
-the container does not satisfy this ordering.
+only after that boundary. Copying artifacts after the container has started
+does not satisfy this ordering.
 
 During staging and workspace delivery, users and untrusted workloads MUST NOT be
 able to mutate the destination workspace. Editor access begins only after the
@@ -360,8 +370,8 @@ workspace; otherwise use a fresh workspace or explicit operator remediation.
 
 ## Resource limits and observability
 
-Trusted launcher policy MUST bound manifest size, list entry counts, individual
-file size, aggregate transfer size, and operation duration. Implementations MUST
+Trusted launcher configuration MUST bound manifest size, list entry counts,
+individual file size, aggregate transfer size, and operation duration. Implementations MUST
 document their defaults and enforce limits while reading, not only from initial
 filesystem metadata. The manifest cannot raise these limits.
 
@@ -369,15 +379,14 @@ Progress and failure reports MUST distinguish at least:
 
 - Invalid or missing manifest and unsupported requirements.
 - Nonempty image metadata accepted without image handling.
-- Authorization denial, unavailable storage, missing source, and ambiguous lookup.
+- Storage access failure, unavailable storage, missing source, and ambiguous lookup.
 - Invalid or escaping paths, unsupported file types, and destination collisions.
 - Resource limits, transfer failures, and checksum mismatches.
 - Successful completion of artifact staging for the creation attempt.
 
 Logs SHOULD identify the manifest entry and destination relative to the workspace.
 They MUST NOT expose credentials, artifact contents, unrestricted storage listings,
-or private absolute source paths to lab users. Public-facing authorization errors
-SHOULD NOT reveal whether an unauthorized artifact exists. Operator-only diagnostics
+or private absolute source paths to lab users. Operator-only diagnostics
 MAY include additional source information under the host's normal access controls.
 
 Staging completion means the required files have been delivered. It MUST NOT be
@@ -392,18 +401,19 @@ An implementation must demonstrate the following behaviors:
 
 1. With no `artifactManifest`, existing launches perform no new staging or implicit
    manifest discovery.
-2. A selected manifest copies only listed, authorized files to the exact declared
-   workspace-relative paths, including creating required parent directories.
+2. A selected manifest copies only listed files from approved storage to the
+   declared workspace-relative paths, including creating required parent directories.
 3. A supplied correct checksum succeeds; an incorrect or malformed checksum fails.
    Files without a checksum are supported, with transfer correctness checked.
-4. Unlisted source files, storage sources, and storage credentials remain unavailable
-   to the lab through this mechanism.
+4. Unlisted source files are not delivered. Storage credentials and direct access
+   to artifact storage are not exposed to the lab through this mechanism.
 5. A manifest cannot introduce storage sources, URLs, credentials, shell operations,
    or access grants. Unsupported fields fail rather than being ignored.
-6. Missing artifacts, denied access, ambiguous matches, and unavailable approved
-   storage fail before dependent initialization; none triggers an unapproved fallback.
+6. Missing artifacts, storage access failures, ambiguous matches, and unavailable
+   approved storage fail before dependent initialization; none triggers an
+   unapproved fallback.
 7. Absolute paths, traversal, symlink escapes, source references that bypass
-   authorization, destination conflicts, existing final files, and unsafe nested
+   storage boundaries, destination conflicts, existing final files, and unsafe nested
    mounts are rejected.
 8. Source and destination mutation attempts cannot redirect reads or writes outside
    their approved boundaries or replace verified bytes undetected.
@@ -424,6 +434,15 @@ An implementation must demonstrate the following behaviors:
 15. Artifacts are staged in the host-side workspace and delivered into the stopped
     container before startup. A staging or workspace delivery failure prevents
     container startup, entrypoint execution, and repository-provided hooks.
+16. Different labs can request the same or any other artifact in approved storage
+    without a separate per-lab entitlement or access policy. Only manifest entries
+    and the configured source, validation, and resource limits govern delivery.
+
+## Possible future capability: per-lab artifact access
+
+A future revision could introduce artifact entitlements or per-lab access rules
+if deployments require different labs to receive different subsets of storage.
+Such a policy is not required or implemented by the initial access model.
 
 ## Possible future capability: image handling
 
@@ -432,7 +451,7 @@ delivery, runtime import, or availability checks. None of these operations is pa
 of the current implementation contract, and this document defines no enablement
 flag, image catalog, archive naming scheme, or runtime selection interface.
 
-Such a revision would need to define approved sources, per-lab authorization,
+Such a revision would need to define approved sources, the applicable access model,
 image identity and integrity, and the target container runtime. Images imported
 on the host are not necessarily available to a separate Docker-in-Docker daemon.
 The revision would also need to reconcile image delivery and import with the
@@ -446,7 +465,7 @@ Artifact delivery is one operation within workspace preparation under
 [002 — Environment setup](002%20-%20Environment%20Setup.md). A future `arlab`
 integration SHOULD preserve the service boundaries described in
 [0001 — arlab CLI and architecture](../arlab/0001%20-%20CLI%20and%20architecture.md):
-policy resolution, manifest validation, source access, copying, and progress
+configuration resolution, manifest validation, source access, copying, and progress
 publication must not depend on parsing human-readable CLI output.
 
 The manifest format follows the separately proposed advisory-lab ADR-0004
@@ -457,6 +476,11 @@ the same declarations with independent orchestration and storage implementations
 The advisory format requires an `images` list. This acLabs consumer makes that key
 optional and accepts its contents only as metadata; image handling is outside the
 current scope.
+
+The advisory storage proposal also describes per-lab artifact access restrictions.
+This acLabs specification deliberately uses a simpler initial model: every lab
+may request any artifact in approved storage. It does not adopt those per-lab
+restrictions.
 
 The tool-specific namespace uses the devcontainer specification's
 [customizations mechanism](https://containers.dev/implementors/json_reference/#tool-specific-properties).
