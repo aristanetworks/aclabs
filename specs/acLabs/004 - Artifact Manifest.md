@@ -14,7 +14,8 @@ This draft defines intended behavior, not an implemented feature.
 
 ### Configuration and manifest
 
-The acLabs launcher MUST process `customizations.aristaLabs.artifactManifest`:
+Declare `customizations.aristaLabs.artifactManifest` in the lab's
+`devcontainer.json`. The acLabs launcher MUST process this property:
 
 ```json
 {
