@@ -17,4 +17,5 @@ to their contracts. Numbers are scoped to each component directory.
 ## Specifications
 
 - [001 — acLabs lifecycle](acLabs/001%20-%20Lifecycle.md) — Draft
+- [004 — Artifact manifest and creation-time file staging](acLabs/004%20-%20Artifact%20Manifest.md) — Draft
 - [0001 — arlab CLI and architecture](arlab/0001%20-%20CLI%20and%20architecture.md) — Draft

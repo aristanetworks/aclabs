@@ -25,5 +25,10 @@
     "workspaceMount": "source=${localWorkspaceFolder}/labs/${containerWorkspaceFolder},target=/${containerWorkspaceFolder},type=bind",
     "workspaceFolder": "/atd-automation-l3ls-dual-dc",
     "containerUser": "avd",
-    "runArgs": ["--env-file", "${localWorkspaceFolder}/labs/${containerWorkspaceFolder}/.vscode/lab_vars.public.env"]
+    "runArgs": ["--env-file", "${localWorkspaceFolder}/labs/${containerWorkspaceFolder}/.vscode/lab_vars.public.env"],
+    "customizations": {
+        "aristaLabs": {
+            "copyOnCreate": ["arista-avd-yaml-0.0.9.vsix"]
+        }
+    }
 }
