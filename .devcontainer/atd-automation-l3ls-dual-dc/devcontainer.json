@@ -27,8 +27,8 @@
     "containerUser": "avd",
     "runArgs": ["--env-file", "${localWorkspaceFolder}/labs/${containerWorkspaceFolder}/.vscode/lab_vars.public.env"],
     "customizations": {
-    "aristaLabs": {
-        "copyOnCreate": ["arista-avd-yaml-0.0.9.vsix"]
+        "aristaLabs": {
+            "copyOnCreate": ["arista-avd-yaml-0.0.9.vsix"]
         }
     }
 }
