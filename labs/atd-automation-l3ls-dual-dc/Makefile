@@ -56,16 +56,17 @@ validate-site-2: ## Validate network state
 ########################################################
 
 .PHONY: build-frr
-build-frr: ## Build FRR config from both sites' border structured configs
-	ansible-playbook playbooks/build-frr.yml -i localhost,
+build-frr: ## Build FRR config from its AVD structured configuration
+	ansible-playbook playbooks/build-frr.yml -i sites/core/frr-inv.yml -e "target_hosts=CORE"
 
 .PHONY: deploy-frr
-deploy-frr: ## Build and provision FRR in the running lab
-	ansible-playbook playbooks/deploy-frr.yml -i localhost,
+FRR_ANSIBLE_ARGS ?=
+deploy-frr: ## Install the rendered FRR config over SSH and reload FRR
+	ansible-playbook playbooks/deploy-frr.yml -i sites/core/frr-inv.yml -e "target_hosts=CORE" $(FRR_ANSIBLE_ARGS)
 
 ########################################################
 # Build and deploy all sites and FRR
 ########################################################
 
 .PHONY: all
-all: build-site-1 build-site-2 deploy-site-1 deploy-site-2 deploy-frr
+all: build-site-1 build-site-2 build-frr deploy-site-1 deploy-site-2 deploy-frr

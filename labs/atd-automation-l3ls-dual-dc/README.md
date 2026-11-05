@@ -52,8 +52,8 @@ Throughout this section, we will use the following dual data center topology.
 
 The `frr-core1` node provides DCI transport between the two data centers,
 demonstrating interoperability between FRRouting and Arista EOS. Ansible and a
-Jinja template build its configuration from the four border leaves' AVD
-structured configurations in [Day 0, Step 5](day0.md#step-5---connect-sites-to-dci-network).
+Jinja template build its configuration from its own AVD structured configuration
+in [Day 0, Step 5](day0.md#step-5---connect-sites-to-dci-network).
 
 ## Ansible Inventory
 
@@ -61,6 +61,9 @@ Our lab L3LS topology contains two sites, `Site 1` and `Site 2`. We need an Ansi
 
 ``` text
 sites/
+├── core/
+│   ├── frr-inv.yml
+│   └── group_vars/
 ├── site_1/
 │   ├── inventory.yml
 │   └── group_vars/
@@ -77,6 +80,11 @@ switches. Select one inventory per run and confirm the group membership:
 ansible-inventory -i sites/site_1/inventory.yml --graph SITE1_FABRIC
 ansible-inventory -i sites/site_2/inventory.yml --graph SITE2_FABRIC
 ```
+
+FRR has a separate inventory, [frr-inv.yml](sites/core/frr-inv.yml), with
+`frr-core1` in the `CORE` group. Its AVD node definition is in
+[group_vars/CORE.yml](sites/core/group_vars/CORE.yml). FRR build and
+deployment commands use this inventory and target `CORE`.
 
 The `SITE1_CONNECTED_ENDPOINTS` and `SITE2_CONNECTED_ENDPOINTS` groups apply
 host-facing port settings to fabric switches. The `servers` data model in their
@@ -546,28 +554,46 @@ make build-site-1 build-site-2
 make build-frr
 ```
 
-[build-frr.yml](playbooks/build-frr.yml) reads `s1-brdr1.yml`, `s1-brdr2.yml`,
-`s2-brdr1.yml`, and `s2-brdr2.yml` from the sites' `intended/structured_configs/`
-directories. It passes those YAML dictionaries to
-[frr-core1.conf.j2](templates/frr-core1.conf.j2) as `border_configs` and writes
-`clab/intended/frr-core1.conf`.
+[build-frr.yml](playbooks/build-frr.yml) runs `arista.avd.eos_designs` for the
+`CORE` group. The node definition and shared `l3_edge` inputs generate
+`sites/core/intended/structured_configs/frr-core1.yml`. The playbook loads that
+file and renders [frr.conf.j2](templates/frr.conf.j2) to
+`sites/core/intended/configs/frr-core1.cfg`. The FRR build does not read either
+site's generated border configurations.
 
-The template finds each DCI interface using `metadata.peer: frr-core1`.
-These fields describe the connection from the border's perspective:
+The template uses these fields from FRR's structured configuration:
 
-| Structured configuration field | Use in the FRR configuration |
+| Structured configuration field | Use when provisioning FRR |
 | ------------------------------ | ---------------------------- |
-| `hostname` | Neighbor descriptions and inbound route-map names |
-| `ethernet_interfaces[].metadata.peer_interface` | FRR interface name, such as `eth1` |
-| `ethernet_interfaces[].ip_address` | BGP neighbor address; the other address in the /31 becomes FRR's interface address |
-| `ethernet_interfaces[].mtu` | Interface MTU |
-| `router_bgp.as` | Neighbor ASN |
-| DCI neighbor's `router_bgp.neighbors[].remote_as` | FRR's local ASN |
-| `loopback_interfaces` entries for `Loopback0` and `Loopback1` | Router-ID and VTEP prefixes permitted by the route filters |
+| `hostname` | FRR hostname |
+| `ethernet_interfaces[]` | Interface names, descriptions, addresses, and shutdown state |
+| `ethernet_interfaces[].mtu` | Linux interface MTU, set by Ansible with `ip link` |
+| `loopback_interfaces` entry for `Loopback0` | Address and description on Linux `lo` |
+| `router_bgp.as` and `router_bgp.router_id` | Local ASN and BGP router ID |
+| `router_bgp.peer_groups[]` | Peer groups, passwords, community settings, and route limits |
+| `router_bgp.neighbors[]` | Neighbor addresses, ASNs, peer groups, descriptions, and BFD |
+| `router_bgp.address_family_ipv4` | IPv4 neighbor and peer-group activation |
+| `router_bgp.maximum_paths.paths` | Maximum number of ECMP paths |
 
-The lab hostname, router ID `192.168.0.250`, password `arista`, BFD settings,
-and maximum paths remain explicit in the template. The file paths in the
-playbook identify the four border leaves, so no additional inventory is needed.
+The current inputs generate router ID `10.251.1.1` and four ECMP paths. The
+template decrypts EOS BGP passwords with `arista.avd.decrypt` for FRR. BGP
+neighbors with `bfd: true` create their BFD sessions dynamically.
+
+FRR exchanges eligible IPv4 routes learned from the borders without prefix
+lists, route maps, or connected-route redistribution. The template sets
+`no bgp ebgp-requires-policy` so this works with `frr defaults traditional`.
+The AVD-generated prefix lists and redistribution settings are not rendered
+into the FRR configuration. FRR's own loopback is configured locally but is not
+advertised into BGP.
+
+Deployment uses SSH as `root`, whose shell in the Containerlab FRR image is a
+Linux shell. Containerlab installs the deployment host's public SSH keys for
+this user. Ensure your key was present when the lab started and verify SSH
+access before deploying:
+
+```bash
+ssh root@192.168.0.250 true
+```
 
 Review the generated file, then provision the running container:
 
@@ -575,12 +601,33 @@ Review the generated file, then provision the running container:
 make deploy-frr
 ```
 
-[deploy-frr.yml](playbooks/deploy-frr.yml) rebuilds the file, copies it into
-`frr-core1`, applies it with `frr-reload.py`, and saves the running configuration.
-Run it on the Containerlab host, where `sudo docker` is available. Rerun it after
-changing the border handoffs or loopbacks and rebuilding both sites, and after
-recreating the lab with `make start`. `make all` also provisions FRR after
-building and deploying both fabrics; enable the DCI handoffs before using it.
+[deploy-frr.yml](playbooks/deploy-frr.yml) uses `ansible.builtin.template` to
+install the reviewed `.cfg` file at `/etc/frr/frr.conf`, owned by `frr:frr`
+with mode `0640`. It validates the candidate with `vtysh --dryrun` before
+replacing the destination. Ansible reads the intended MTUs from FRR's structured
+configuration and applies changes with `ip link`, since FRR does not support
+`ip mtu`.
+
+When the configuration file changes, a handler runs
+`/usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf` to reconcile the running
+configuration, including removing obsolete settings. Installing the file alone
+does not apply it, and `write memory` only saves the running configuration.
+The rendered configuration is already stored at FRR's startup path, so a separate
+save is unnecessary.
+
+Deployment uses the existing build artifacts; run `make build-frr` and review
+the result first. Run deployment from a host that can reach FRR's management
+address. It uses SSH and does not require Docker commands or sudo on the control
+host. To select a different private key, use:
+
+```bash
+make deploy-frr FRR_ANSIBLE_ARGS='--private-key /path/to/private_key'
+```
+
+You can also pass `FRR_ANSIBLE_ARGS` to `make all`. Rebuild and deploy affected
+devices after changing the shared handoffs or FRR inputs. Reapply FRR's
+configuration after recreating the lab with `make start`. `make all` builds both
+fabrics and FRR, then deploys all three; enable the DCI handoffs before using it.
 
 ### Network Services
 

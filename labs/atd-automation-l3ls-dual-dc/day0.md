@@ -4,7 +4,7 @@
 
 The AVD Lab Guide is a follow-along set of instructions to deploy a dual data center L3LS EVPN VXLAN fabric design. The data model overview and details can be found [here](README.md). In the following steps, we will explore updating the data models to add services, ports, and DCI links to our fabrics and test traffic between sites.
 
-In this example, the lab is used to create the L3LS Dual Data Center topology below. We will build and deploy configurations for Site 1 and Site 2 (blue areas) with AVD, then use their border-leaf structured configurations to provision the FRR node in the DCI Network cloud (orange area).
+In this example, the lab is used to create the L3LS Dual Data Center topology below. We will build and deploy configurations for Site 1 and Site 2 (blue areas) with AVD, then generate FRR's own structured configuration and provision the FRR node in the DCI Network cloud (orange area).
 
 <img src="images/l3ls_dualdc_topo.png" alt="Dual DC Topology" width="70%">
 
@@ -42,7 +42,7 @@ git config --global user.email "name@example.com"
 
 ### Validate Pre-configured Hosts
 
-The Core and Host nodes are preconfigured on lab startup. You can verify this by connecting to host1 and viewing the baseline configuration.
+The host nodes are preconfigured on lab startup. FRR starts with a minimal configuration and is provisioned in Step 5. You can verify the host configuration by connecting to host1 and viewing its baseline configuration.
 
 The border leaves connect to `frr-core1` over routed point-to-point links. The hosts (two per site) have port-channels to the leaf pairs and are pre-configured with an IP address and route to reach the other hosts.
 
@@ -552,16 +552,16 @@ At this point, you should be able to ping between hosts within a site but not be
 
 The `frr-core1` node provides DCI transport and demonstrates interoperability
 between FRRouting and Arista EOS. Configure the border handoffs with AVD, then
-use Ansible and Jinja to provision FRR from the border-leaf structured
-configurations. Each border uses `Ethernet4`; FRR uses `eth1` through `eth4`
-and AS 65000.
+use the `CORE` inventory to generate FRR's own AVD structured configuration and
+render its FRR configuration. Each border uses `Ethernet4`; FRR uses `eth1`
+through `eth4` and AS 65000.
 
 ### Enable the border handoffs
 
-Uncomment the `l3_edge` block in
-[global_dc_vars.yml](global_vars/global_dc_vars.yml). The completed block
-should match the example below. The /31 pool and link IDs allocate the border
-addresses; the FRR template uses the other address in each /31 for its side.
+Enable the `l3_edge` block in
+[global_dc_vars.yml](global_vars/global_dc_vars.yml), uncommenting it if needed.
+The completed block should match the example below. The /31 pool and link IDs
+let AVD allocate addresses for both the borders and FRR.
 The explicit `routing_protocol: ebgp` keeps these handoffs numbered IPv4 when
 RFC 5549 is enabled inside the fabrics.
 
@@ -604,7 +604,8 @@ l3_edge:
 The `as` list follows the order in `nodes`: the border ASN comes first and
 FRR's ASN comes second. `include_in_underlay_protocol: true` adds the eBGP
 neighbor to the existing IPv4 underlay peer group, including its authentication.
-The FRR template includes the matching lab BGP key and enables BFD.
+The FRR template reads its peer-group password and neighbor BFD settings from
+FRR's structured configuration.
 
 ### Build and deploy both sites
 
@@ -622,18 +623,33 @@ make deploy-site-1 deploy-site-2
 
 ### Build and provision FRR
 
-Generate FRR's configuration from the four border-leaf structured configurations:
+Build FRR using [its inventory](sites/core/frr-inv.yml) and
+[node definition](sites/core/group_vars/CORE.yml). The shared `l3_edge`
+inputs describe FRR's links to both sites:
 
 ```bash
 make build-frr
 ```
 
-Open [the Jinja template](templates/frr-core1.conf.j2) and compare it with
-`sites/site_1/intended/structured_configs/s1-brdr1.yml` and the generated
-`clab/intended/frr-core1.conf`. For example, the border's Ethernet4 address
-`172.16.255.0/31` becomes a BGP neighbor on FRR, while FRR's `eth1` receives
-`172.16.255.1/31`. The border's local ASN becomes FRR's remote ASN. Loopback0
-and Loopback1 supply the prefixes allowed by the route filters.
+Open [the Jinja template](templates/frr.conf.j2) and compare it with
+`sites/core/intended/structured_configs/frr-core1.yml` and the generated
+`sites/core/intended/configs/frr-core1.cfg`. FRR's `eth1` address
+`172.16.255.1/31` comes from `ethernet_interfaces`, and neighbor `172.16.255.0`
+in AS 65103 comes from `router_bgp.neighbors`. Its router ID `10.251.1.1`,
+four ECMP paths, authentication, and BFD settings also come from this data.
+
+The template configures `Loopback0` on Linux `lo`. It omits prefix lists, route
+maps, and connected redistribution, and uses `no bgp ebgp-requires-policy` to
+allow eligible IPv4 routes to pass between the borders. FRR's own loopback is
+not advertised into BGP.
+
+The Containerlab FRR image supports SSH as `root` with a Linux shell and the
+public keys collected when Containerlab starts the lab. Verify access from the
+host running Ansible:
+
+```bash
+ssh root@192.168.0.250 true
+```
 
 After reviewing the generated file, apply it to the running container:
 
@@ -641,10 +657,28 @@ After reviewing the generated file, apply it to the running container:
 make deploy-frr
 ```
 
-The playbook rebuilds the file, copies it into `frr-core1`, reloads FRR, and
-saves the running configuration. Run it on the Containerlab host with access to
-`sudo docker`. Repeat this step after rebuilding changes to the border handoffs
-or loopbacks, or after recreating the lab with `make start`.
+The playbook uses `ansible.builtin.template` over SSH to install the reviewed
+`.cfg` file at `/etc/frr/frr.conf` with owner `frr:frr` and mode `0640`.
+`vtysh --dryrun` validates the candidate before replacing the file. The playbook
+also applies Linux interface MTUs from FRR's structured configuration using
+`ip link` because FRR has no `ip mtu` command.
+
+A handler applies configuration changes with
+`/usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf`. This updates the running
+configuration and removes obsolete settings. The file is already at FRR's
+startup path; a separate `write memory` is unnecessary and would only save the
+running configuration.
+
+Deployment does not rebuild the file or use Docker commands and sudo on the
+control host. To use a different SSH key, run:
+
+```bash
+make deploy-frr FRR_ANSIBLE_ARGS='--private-key /path/to/private_key'
+```
+
+The same option works with `make all`. Rebuild and review FRR's configuration
+before deploying changes to its inputs. Reapply it after recreating the lab
+with `make start`.
 
 ### Verify the multivendor underlay
 
@@ -754,9 +788,9 @@ addresses; VXLAN tunnel sources use separate loopback addresses.
 make all
 ```
 
-`make all` builds and deploys both AVD fabrics, then builds and provisions FRR
-from the border structured configurations. Use this command against the running
-lab after reviewing the intended changes.
+`make all` builds both AVD fabrics and FRR, then deploys their configurations.
+FRR deployment uses its own rendered configuration and connects over SSH.
+Use this command against the running lab after reviewing the intended changes.
 
 ### Verification
 

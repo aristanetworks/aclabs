@@ -1,46 +1,37 @@
 ---
-- name: Build the FRR configuration before deploying it
-  ansible.builtin.import_playbook: build-frr.yml
-
-- name: Provision the FRR Containerlab node
-  hosts: localhost
-  connection: local
+- name: Deploy the rendered FRR configuration
+  hosts: "{{ target_hosts | default('CORE') }}"
   gather_facts: false
-  become: false
   vars:
-    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+    # The Containerlab FRR image gives root a Linux shell and key-based SSH.
+    # Override the EOS connection settings inherited from global_vars.
+    ansible_connection: ssh
+    ansible_user: root
+    ansible_password: null
+    ansible_become: false
+    ansible_python_interpreter: /usr/bin/python3
 
   tasks:
-    - name: Copy the rendered configuration into the container
-      ansible.builtin.command:
-        argv:
-          - sudo
-          - docker
-          - cp
-          - "{{ playbook_dir }}/../clab/intended/frr-core1.conf"
-          - frr-core1:/tmp/frr-core1.conf
-      changed_when: true
+    - name: Load the FRR structured configuration
+      ansible.builtin.include_vars:
+        file: "{{ inventory_dir }}/intended/structured_configs/{{ inventory_hostname }}.yml"
+        name: frr_config
 
-    - name: Apply the configuration with FRR reload
+    - name: Install and validate the rendered FRR configuration
+      ansible.builtin.template:
+        src: "{{ inventory_dir }}/intended/configs/{{ inventory_hostname }}.cfg"
+        dest: /etc/frr/frr.conf
+        owner: frr
+        group: frr
+        mode: '0640'
+        validate: /usr/bin/vtysh --dryrun -f %s
+      notify: Reload FRR configuration
+
+  handlers:
+    - name: Reload FRR configuration
       ansible.builtin.command:
         argv:
-          - sudo
-          - docker
-          - exec
-          - frr-core1
           - /usr/lib/frr/frr-reload.py
           - --reload
-          - /tmp/frr-core1.conf
-      changed_when: true
-
-    - name: Save the running configuration for container restarts
-      ansible.builtin.command:
-        argv:
-          - sudo
-          - docker
-          - exec
-          - frr-core1
-          - vtysh
-          - -c
-          - write memory
+          - /etc/frr/frr.conf
       changed_when: true
