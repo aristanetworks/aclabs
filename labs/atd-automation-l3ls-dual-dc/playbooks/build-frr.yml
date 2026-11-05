@@ -1,0 +1,61 @@
+---
+- name: Build FRR configuration from the border leaves
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  vars:
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+    frr_config_dir: "{{ playbook_dir }}/../clab/intended"
+    border_config_files:
+      - "{{ playbook_dir }}/../sites/site_1/intended/structured_configs/s1-brdr1.yml"
+      - "{{ playbook_dir }}/../sites/site_1/intended/structured_configs/s1-brdr2.yml"
+      - "{{ playbook_dir }}/../sites/site_2/intended/structured_configs/s2-brdr1.yml"
+      - "{{ playbook_dir }}/../sites/site_2/intended/structured_configs/s2-brdr2.yml"
+
+  tasks:
+    - name: Read the four AVD structured configurations
+      ansible.builtin.set_fact:
+        border_configs: "{{ border_configs | default([]) + [lookup('ansible.builtin.file', item) | from_yaml] }}"
+      loop: "{{ border_config_files }}"
+      loop_control:
+        label: "{{ item | basename }}"
+
+    - name: Check that each border has a numbered DCI handoff
+      ansible.builtin.assert:
+        that:
+          - dci_interfaces | length == 1
+          - dci_interfaces[0].ip_address.endswith('/31')
+          - dci_neighbors | length == 1
+          - dci_neighbors[0].ip_address == (dci_interfaces[0].ip_address | ansible.utils.ipaddr('peer'))
+          - dci_neighbors[0].remote_as == first_dci_neighbor.remote_as
+        quiet: true
+        fail_msg: >-
+          Enable the l3_edge handoffs in global_vars/global_dc_vars.yml,
+          then run make build-site-1 build-site-2 before building FRR.
+          Each border needs one /31 link to frr-core1, with the same FRR ASN.
+      vars:
+        dci_interfaces: >-
+          {{ item.ethernet_interfaces | selectattr('metadata.peer', 'defined')
+             | selectattr('metadata.peer', 'equalto', 'frr-core1') | list }}
+        dci_neighbors: >-
+          {{ item.router_bgp.neighbors | selectattr('metadata.peer', 'defined')
+             | selectattr('metadata.peer', 'equalto', 'frr-core1') | list }}
+        first_dci_neighbor: >-
+          {{ border_configs[0].router_bgp.neighbors | selectattr('metadata.peer', 'defined')
+             | selectattr('metadata.peer', 'equalto', 'frr-core1') | first }}
+      loop: "{{ border_configs }}"
+      loop_control:
+        label: "{{ item.hostname }}"
+
+    - name: Create the FRR output directory
+      ansible.builtin.file:
+        path: "{{ frr_config_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Render the FRR configuration
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/../templates/frr-core1.conf.j2"
+        dest: "{{ frr_config_dir }}/frr-core1.conf"
+        mode: "0644"

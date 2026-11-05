@@ -106,6 +106,7 @@ $RECYCLE.BIN/
 # ignore clab files
 clab-*
 *.bak
+clab/intended/
 
 # ignore cv onboarding token
 clab/cv-onboarding-token

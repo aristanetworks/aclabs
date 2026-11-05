@@ -4,7 +4,7 @@
 
 The AVD Lab Guide is a follow-along set of instructions to deploy a dual data center L3LS EVPN VXLAN fabric design. The data model overview and details can be found [here](README.md). In the following steps, we will explore updating the data models to add services, ports, and DCI links to our fabrics and test traffic between sites.
 
-In this example, the lab is used to create the L3LS Dual Data Center topology below. The DCI Network cloud (orange area) is pre-provisioned and is comprised of the core nodes in the ATD topology. Our focus will be creating the L3LS AVD data models to build and deploy configurations for Site 1 and Site 2 (blue areas) and connect them to the DCI Network.
+In this example, the lab is used to create the L3LS Dual Data Center topology below. We will build and deploy configurations for Site 1 and Site 2 (blue areas) with AVD, then use their border-leaf structured configurations to provision the FRR node in the DCI Network cloud (orange area).
 
 <img src="images/l3ls_dualdc_topo.png" alt="Dual DC Topology" width="70%">
 
@@ -550,17 +550,18 @@ At this point, you should be able to ping between hosts within a site but not be
 
 ## Step 5 - Connect Sites to DCI Network
 
-The preconfigured `frr-core1` node provides DCI transport and demonstrates
-interoperability between FRRouting and Arista EOS. Configure the border
-handoffs with AVD to connect both sites to FRR in AS 65000. Each border uses
-`Ethernet4`; FRR uses `eth1` through `eth4`.
+The `frr-core1` node provides DCI transport and demonstrates interoperability
+between FRRouting and Arista EOS. Configure the border handoffs with AVD, then
+use Ansible and Jinja to provision FRR from the border-leaf structured
+configurations. Each border uses `Ethernet4`; FRR uses `eth1` through `eth4`
+and AS 65000.
 
 ### Enable the border handoffs
 
 Uncomment the `l3_edge` block in
 [global_dc_vars.yml](global_vars/global_dc_vars.yml). The completed block
 should match the example below. The /31 pool and link IDs allocate the border
-addresses expected by the fixed FRR startup configuration.
+addresses; the FRR template uses the other address in each /31 for its side.
 The explicit `routing_protocol: ebgp` keeps these handoffs numbered IPv4 when
 RFC 5549 is enabled inside the fabrics.
 
@@ -603,7 +604,7 @@ l3_edge:
 The `as` list follows the order in `nodes`: the border ASN comes first and
 FRR's ASN comes second. `include_in_underlay_protocol: true` adds the eBGP
 neighbor to the existing IPv4 underlay peer group, including its authentication.
-FRR already has the matching lab BGP key and BFD configuration.
+The FRR template includes the matching lab BGP key and enables BFD.
 
 ### Build and deploy both sites
 
@@ -618,6 +619,32 @@ interface and an IPv4 BGP neighbor in AS 65000. Then deploy:
 ```bash
 make deploy-site-1 deploy-site-2
 ```
+
+### Build and provision FRR
+
+Generate FRR's configuration from the four border-leaf structured configurations:
+
+```bash
+make build-frr
+```
+
+Open [the Jinja template](templates/frr-core1.conf.j2) and compare it with
+`sites/site_1/intended/structured_configs/s1-brdr1.yml` and the generated
+`clab/intended/frr-core1.conf`. For example, the border's Ethernet4 address
+`172.16.255.0/31` becomes a BGP neighbor on FRR, while FRR's `eth1` receives
+`172.16.255.1/31`. The border's local ASN becomes FRR's remote ASN. Loopback0
+and Loopback1 supply the prefixes allowed by the route filters.
+
+After reviewing the generated file, apply it to the running container:
+
+```bash
+make deploy-frr
+```
+
+The playbook rebuilds the file, copies it into `frr-core1`, reloads FRR, and
+saves the running configuration. Run it on the Containerlab host with access to
+`sudo docker`. Repeat this step after rebuilding changes to the border handoffs
+or loopbacks, or after recreating the lab with `make start`.
 
 ### Verify the multivendor underlay
 
@@ -727,9 +754,9 @@ addresses; VXLAN tunnel sources use separate loopback addresses.
 make all
 ```
 
-`make all` builds and deploys both AVD fabrics. FRR is already configured
-from startup. Use this command against the running lab after reviewing the
-intended changes.
+`make all` builds and deploys both AVD fabrics, then builds and provisions FRR
+from the border structured configurations. Use this command against the running
+lab after reviewing the intended changes.
 
 ### Verification
 

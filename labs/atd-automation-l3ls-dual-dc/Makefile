@@ -52,8 +52,20 @@ validate-site-2: ## Validate network state
 	ansible-playbook playbooks/validate.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
 
 ########################################################
-# Build and deploy all sites
+# FRR DCI transport
+########################################################
+
+.PHONY: build-frr
+build-frr: ## Build FRR config from both sites' border structured configs
+	ansible-playbook playbooks/build-frr.yml -i localhost,
+
+.PHONY: deploy-frr
+deploy-frr: ## Build and provision FRR in the running lab
+	ansible-playbook playbooks/deploy-frr.yml -i localhost,
+
+########################################################
+# Build and deploy all sites and FRR
 ########################################################
 
 .PHONY: all
-all: build-site-1 build-site-2 deploy-site-1 deploy-site-2
+all: build-site-1 build-site-2 deploy-site-1 deploy-site-2 deploy-frr

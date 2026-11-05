@@ -50,8 +50,10 @@ Throughout this section, we will use the following dual data center topology.
 
 <img src="images/l3ls_topo_overview.png" alt="L3LS Dual DC Topology" width="70%">
 
-The preconfigured `frr-core1` node provides DCI transport between the two data
-centers, demonstrating interoperability between FRRouting and Arista EOS.
+The `frr-core1` node provides DCI transport between the two data centers,
+demonstrating interoperability between FRRouting and Arista EOS. Ansible and a
+Jinja template build its configuration from the four border leaves' AVD
+structured configurations in [Day 0, Step 5](day0.md#step-5---connect-sites-to-dci-network).
 
 ## Ansible Inventory
 
@@ -529,9 +531,56 @@ l3leaf:
 #### L3 Edge Interfaces
 
 The `l3_edge` block in `global_vars/global_dc_vars.yml` defines the border
-connections to the preconfigured FRR DCI node. Students enable these links in
+connections to the FRR DCI node. Students enable these links and provision FRR in
 [Day 0, Step 5](day0.md#step-5---connect-sites-to-dci-network), then enable the
 EVPN gateways in Step 6.
+
+### FRR Configuration
+
+FRR starts with a minimal configuration so that the lab can start before the
+border handoffs are enabled. After enabling `l3_edge`, build both sites and
+generate the FRR configuration:
+
+```bash
+make build-site-1 build-site-2
+make build-frr
+```
+
+[build-frr.yml](playbooks/build-frr.yml) reads `s1-brdr1.yml`, `s1-brdr2.yml`,
+`s2-brdr1.yml`, and `s2-brdr2.yml` from the sites' `intended/structured_configs/`
+directories. It passes those YAML dictionaries to
+[frr-core1.conf.j2](templates/frr-core1.conf.j2) as `border_configs` and writes
+`clab/intended/frr-core1.conf`.
+
+The template finds each DCI interface using `metadata.peer: frr-core1`.
+These fields describe the connection from the border's perspective:
+
+| Structured configuration field | Use in the FRR configuration |
+| ------------------------------ | ---------------------------- |
+| `hostname` | Neighbor descriptions and inbound route-map names |
+| `ethernet_interfaces[].metadata.peer_interface` | FRR interface name, such as `eth1` |
+| `ethernet_interfaces[].ip_address` | BGP neighbor address; the other address in the /31 becomes FRR's interface address |
+| `ethernet_interfaces[].mtu` | Interface MTU |
+| `router_bgp.as` | Neighbor ASN |
+| DCI neighbor's `router_bgp.neighbors[].remote_as` | FRR's local ASN |
+| `loopback_interfaces` entries for `Loopback0` and `Loopback1` | Router-ID and VTEP prefixes permitted by the route filters |
+
+The lab hostname, router ID `192.168.0.250`, password `arista`, BFD settings,
+and maximum paths remain explicit in the template. The file paths in the
+playbook identify the four border leaves, so no additional inventory is needed.
+
+Review the generated file, then provision the running container:
+
+```bash
+make deploy-frr
+```
+
+[deploy-frr.yml](playbooks/deploy-frr.yml) rebuilds the file, copies it into
+`frr-core1`, applies it with `frr-reload.py`, and saves the running configuration.
+Run it on the Containerlab host, where `sudo docker` is available. Rerun it after
+changing the border handoffs or loopbacks and rebuilding both sites, and after
+recreating the lab with `make start`. `make all` also provisions FRR after
+building and deploying both fabrics; enable the DCI handoffs before using it.
 
 ### Network Services
 

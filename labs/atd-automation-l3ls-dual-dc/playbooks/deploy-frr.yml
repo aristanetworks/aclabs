@@ -1,0 +1,46 @@
+---
+- name: Build the FRR configuration before deploying it
+  ansible.builtin.import_playbook: build-frr.yml
+
+- name: Provision the FRR Containerlab node
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  vars:
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+  tasks:
+    - name: Copy the rendered configuration into the container
+      ansible.builtin.command:
+        argv:
+          - sudo
+          - docker
+          - cp
+          - "{{ playbook_dir }}/../clab/intended/frr-core1.conf"
+          - frr-core1:/tmp/frr-core1.conf
+      changed_when: true
+
+    - name: Apply the configuration with FRR reload
+      ansible.builtin.command:
+        argv:
+          - sudo
+          - docker
+          - exec
+          - frr-core1
+          - /usr/lib/frr/frr-reload.py
+          - --reload
+          - /tmp/frr-core1.conf
+      changed_when: true
+
+    - name: Save the running configuration for container restarts
+      ansible.builtin.command:
+        argv:
+          - sudo
+          - docker
+          - exec
+          - frr-core1
+          - vtysh
+          - -c
+          - write memory
+      changed_when: true

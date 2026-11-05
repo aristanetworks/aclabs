@@ -61,7 +61,7 @@ bgp_peer_groups:
   mlag_ipv4_underlay_peer:
     password: 4b21pAdCvWeAqpcKDFMdWw==
 
-# FRR is already configured at startup; AVD configures the border handoffs.
+# Enable the border handoffs, build both sites, then run make deploy-frr.
 # l3_edge:
 #   p2p_links_ip_pools:
 #     - name: DCI
