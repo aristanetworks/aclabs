@@ -65,7 +65,11 @@ topology:
       image: ghcr.io/openconfig/gnmic:latest
       binds:
         - ./gnmic.yml:/gnmic.yml:ro
-      cmd: --config gnmic.yml --log subscribe
+        - ./gnmic-dialout.yml:/gnmic-dialout.yml:ro
+        - ./gnmic-start.sh:/gnmic-start.sh:ro
+        - ./gnmic-mode:/gnmic-mode
+      entrypoint: /bin/sh
+      cmd: /gnmic-start.sh
       group: gpromg
     prometheus:
       kind: linux

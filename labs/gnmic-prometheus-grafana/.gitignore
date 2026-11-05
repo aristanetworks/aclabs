@@ -107,6 +107,9 @@ $RECYCLE.BIN/
 clab-*
 *.bak
 
+# runtime gNMIc dial-in/dial-out flag (make start writes dial-in if missing)
+clab/gnmic-mode
+
 # ignore cv onboarding token
 clab/cv-onboarding-token
 
