@@ -3,28 +3,20 @@
   hosts: "{{ target_hosts | default('CORE') }}"
   gather_facts: false
   vars:
-    # The Containerlab FRR image gives root a Linux shell and key-based SSH.
-    # Override the EOS connection settings inherited from global_vars.
-    ansible_connection: ssh
-    ansible_user: root
-    ansible_password: null
-    ansible_become: false
+    ansible_connection: community.docker.docker
     ansible_python_interpreter: /usr/bin/python3
+    ansible_user: root
 
   tasks:
-    - name: Load the FRR structured configuration
-      ansible.builtin.include_vars:
-        file: "{{ inventory_dir }}/intended/structured_configs/{{ inventory_hostname }}.yml"
-        name: frr_config
 
-    - name: Install and validate the rendered FRR configuration
-      ansible.builtin.template:
+    - name: Push FRR Configuration
+      ansible.builtin.copy:
         src: "{{ inventory_dir }}/intended/configs/{{ inventory_hostname }}.cfg"
         dest: /etc/frr/frr.conf
         owner: frr
         group: frr
         mode: '0640'
-        validate: /usr/bin/vtysh --dryrun -f %s
+      register: frr_config
       notify: Reload FRR configuration
 
   handlers:

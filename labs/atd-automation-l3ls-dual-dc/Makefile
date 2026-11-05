@@ -62,7 +62,7 @@ build-frr: ## Build FRR config from its AVD structured configuration
 .PHONY: deploy-frr
 FRR_ANSIBLE_ARGS ?=
 deploy-frr: ## Install the rendered FRR config over SSH and reload FRR
-	ansible-playbook playbooks/deploy-frr.yml -i sites/core/frr-inv.yml -e "target_hosts=CORE" $(FRR_ANSIBLE_ARGS)
+	ansible-playbook playbooks/deploy-frr.yml -i sites/core/frr-inv.yml -e "target_hosts=CORE"
 
 ########################################################
 # Build and deploy all sites and FRR
