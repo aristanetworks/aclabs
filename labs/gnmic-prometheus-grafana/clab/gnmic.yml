@@ -1,3 +1,5 @@
+# gNMIc dial-in (default). Collector connects to each switch on :6030.
+# Dial-out counterpart: gnmic-dialout.yml (gRPC tunnel server on :30000).
 username: arista
 password: arista
 port: 6030

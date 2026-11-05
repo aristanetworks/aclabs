@@ -47,6 +47,20 @@ custom_structured_configuration_management_security:
       cipher_list: 'HIGH:!eNULL:!aNULL:!MD5:!ADH:!ANULL'
 
 # Management GNMI | Optional
+# Dial-in (transport grpc :6030) is always rendered. Dial-out adds a grpc-tunnel
+# toward the gnmic collector when gnmi_dialout=true (make deploy-dialout).
+gnmi_dialout: false
+_gnmi_dialout_tunnels:
+  - name: gnmic
+    shutdown: false
+    vrf: MGMT
+    destination:
+      address: 172.144.100.200
+      port: 30000
+    target:
+      target_ids:
+        - "{{ inventory_hostname }}"
+
 custom_structured_configuration_management_api_gnmi:
   provider: "eos-native"
   transport:
@@ -56,6 +70,7 @@ custom_structured_configuration_management_api_gnmi:
       notification_timestamp: "send-time"
     - name: default
       notification_timestamp: "send-time"
+    grpc_tunnels: "{{ _gnmi_dialout_tunnels if (gnmi_dialout | default(false) | bool) else [] }}"
 
 
 custom_structured_configuration_monitor_connectivity:

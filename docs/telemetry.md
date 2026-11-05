@@ -26,6 +26,8 @@ To add configurations to the switches, such as configuring EVPN, we can use AVD 
   ansible-playbook playbooks/fabric-deploy-config.yaml -i inventory.yaml
   ```
 
+The collector defaults to gNMI dial-in. To use dial-out (each switch opens a gRPC tunnel to the collector), run `make deploy-dialout`.
+
 ### Lab details
 
 Looking at the [gnmic.yml file](../labs/gnmic-prometheus-grafana/clab/gnmic.yml) we can see that we're going to use `gnmic` to subscribe to several OpenConfig and EOS native paths
