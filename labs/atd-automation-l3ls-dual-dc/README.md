@@ -1,8 +1,10 @@
 # Dual DC L3LS
 
 > Lab Credentials
-> Username: arista
-> Password: arista
+>
+> EOS nodes: username `arista`, password `arista`.
+>
+> FRR node: username `admin`, password `admin`.
 
 ## Lab Inventory
 
@@ -30,6 +32,7 @@ This lab has the following devices:
 | s1-host2 | host | cEOS-lab, 4.36.2F | 192.168.0.17 | arista | arista |
 | s2-host1 | host | cEOS-lab, 4.36.2F | 192.168.0.26 | arista | arista |
 | s2-host2 | host | cEOS-lab, 4.36.2F | 192.168.0.27 | arista | arista |
+| frr-core1 | router | FRRouting | 192.168.0.250 | admin | admin |
 
 > To access any device, use `ssh <username>@<hostname>` or simply type `<hostname>` to use the SSH alias.
 
@@ -567,7 +570,6 @@ The template uses these fields from FRR's structured configuration:
 | ------------------------------ | ---------------------------- |
 | `hostname` | FRR hostname |
 | `ethernet_interfaces[]` | Interface names, descriptions, addresses, and shutdown state |
-| `ethernet_interfaces[].mtu` | Linux interface MTU, set by Ansible with `ip link` |
 | `loopback_interfaces` entry for `Loopback0` | Address and description on Linux `lo` |
 | `router_bgp.as` and `router_bgp.router_id` | Local ASN and BGP router ID |
 | `router_bgp.peer_groups[]` | Peer groups, passwords, community settings, and route limits |
@@ -586,13 +588,23 @@ The AVD-generated prefix lists and redistribution settings are not rendered
 into the FRR configuration. FRR's own loopback is configured locally but is not
 advertised into BGP.
 
-Deployment uses SSH as `root`, whose shell in the Containerlab FRR image is a
-Linux shell. Containerlab installs the deployment host's public SSH keys for
-this user. Ensure your key was present when the lab started and verify SSH
-access before deploying:
+FRR deployment requires the `community.docker` Ansible collection for the
+[`community.docker.docker` connection plugin](https://docs.ansible.com/ansible/latest/collections/community/docker/docker_connection.html).
+Install it in the same environment where you run `ansible-playbook`, such as the
+lab devcontainer, and confirm it is available:
 
 ```bash
-ssh root@192.168.0.250 true
+ansible-galaxy collection install community.docker
+ansible-galaxy collection list community.docker
+```
+
+Run deployment on the Containerlab host with the Docker CLI installed. The user
+running Ansible must have access to the Docker daemon and the running FRR
+container. The connection plugin uses `docker exec` as `root` inside the
+container. Check access before deploying:
+
+```bash
+docker exec --user root frr-core1 true
 ```
 
 Review the generated file, then provision the running container:
@@ -601,12 +613,10 @@ Review the generated file, then provision the running container:
 make deploy-frr
 ```
 
-[deploy-frr.yml](playbooks/deploy-frr.yml) uses `ansible.builtin.template` to
-install the reviewed `.cfg` file at `/etc/frr/frr.conf`, owned by `frr:frr`
-with mode `0640`. It validates the candidate with `vtysh --dryrun` before
-replacing the destination. Ansible reads the intended MTUs from FRR's structured
-configuration and applies changes with `ip link`, since FRR does not support
-`ip mtu`.
+[deploy-frr.yml](playbooks/deploy-frr.yml) uses `ansible.builtin.copy` over the
+Docker connection to install the reviewed `.cfg` file at `/etc/frr/frr.conf`,
+owned by `frr:frr` with mode `0640`. Interface MTUs are Linux settings and are
+not changed by this playbook.
 
 When the configuration file changes, a handler runs
 `/usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf` to reconcile the running
@@ -616,18 +626,10 @@ The rendered configuration is already stored at FRR's startup path, so a separat
 save is unnecessary.
 
 Deployment uses the existing build artifacts; run `make build-frr` and review
-the result first. Run deployment from a host that can reach FRR's management
-address. It uses SSH and does not require Docker commands or sudo on the control
-host. To select a different private key, use:
-
-```bash
-make deploy-frr FRR_ANSIBLE_ARGS='--private-key /path/to/private_key'
-```
-
-You can also pass `FRR_ANSIBLE_ARGS` to `make all`. Rebuild and deploy affected
-devices after changing the shared handoffs or FRR inputs. Reapply FRR's
-configuration after recreating the lab with `make start`. `make all` builds both
-fabrics and FRR, then deploys all three; enable the DCI handoffs before using it.
+the result first. Rebuild and deploy affected devices after changing the shared
+handoffs or FRR inputs. Reapply FRR's configuration after recreating the lab with
+`make start`. `make all` builds both fabrics and FRR, then deploys all three;
+enable the DCI handoffs before using it.
 
 ### Network Services
 

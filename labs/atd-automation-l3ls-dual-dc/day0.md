@@ -643,12 +643,21 @@ maps, and connected redistribution, and uses `no bgp ebgp-requires-policy` to
 allow eligible IPv4 routes to pass between the borders. FRR's own loopback is
 not advertised into BGP.
 
-The Containerlab FRR image supports SSH as `root` with a Linux shell and the
-public keys collected when Containerlab starts the lab. Verify access from the
-host running Ansible:
+Install the `community.docker` Ansible collection in the environment where you
+run the playbooks, such as the lab devcontainer. The FRR deployment playbook uses
+its `community.docker.docker` connection plugin:
 
 ```bash
-ssh root@192.168.0.250 true
+ansible-galaxy collection install community.docker
+ansible-galaxy collection list community.docker
+```
+
+Run deployment on the Containerlab host with the Docker CLI installed. Your
+Ansible user must be able to access the Docker daemon. Verify access to the
+running container:
+
+```bash
+docker exec --user root frr-core1 true
 ```
 
 After reviewing the generated file, apply it to the running container:
@@ -657,11 +666,8 @@ After reviewing the generated file, apply it to the running container:
 make deploy-frr
 ```
 
-The playbook uses `ansible.builtin.template` over SSH to install the reviewed
-`.cfg` file at `/etc/frr/frr.conf` with owner `frr:frr` and mode `0640`.
-`vtysh --dryrun` validates the candidate before replacing the file. The playbook
-also applies Linux interface MTUs from FRR's structured configuration using
-`ip link` because FRR has no `ip mtu` command.
+The playbook uses `ansible.builtin.copy` over the Docker connection as `root`
+inside the container to install the reviewed `.cfg` file at `/etc/frr/frr.conf`.
 
 A handler applies configuration changes with
 `/usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf`. This updates the running
@@ -669,16 +675,9 @@ configuration and removes obsolete settings. The file is already at FRR's
 startup path; a separate `write memory` is unnecessary and would only save the
 running configuration.
 
-Deployment does not rebuild the file or use Docker commands and sudo on the
-control host. To use a different SSH key, run:
-
-```bash
-make deploy-frr FRR_ANSIBLE_ARGS='--private-key /path/to/private_key'
-```
-
-The same option works with `make all`. Rebuild and review FRR's configuration
-before deploying changes to its inputs. Reapply it after recreating the lab
-with `make start`.
+Deployment uses the existing build artifacts. Rebuild and review FRR's
+configuration before deploying changes to its inputs. Reapply it after
+recreating the lab with `make start`.
 
 ### Verify the multivendor underlay
 
@@ -789,7 +788,7 @@ make all
 ```
 
 `make all` builds both AVD fabrics and FRR, then deploys their configurations.
-FRR deployment uses its own rendered configuration and connects over SSH.
+FRR deployment uses its own rendered configuration and connects through Docker.
 Use this command against the running lab after reviewing the intended changes.
 
 ### Verification
