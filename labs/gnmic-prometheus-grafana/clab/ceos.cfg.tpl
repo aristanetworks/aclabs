@@ -7,7 +7,7 @@ service routing protocols model multi-agent
 !
 vrf instance MGMT
 !
-interface Management0
+interface Management1
    description oob_management
    vrf MGMT
 {{ if .MgmtIPv4Address }}   ip address {{ .MgmtIPv4Address }}/{{ .MgmtIPv4PrefixLength }}{{end}}
