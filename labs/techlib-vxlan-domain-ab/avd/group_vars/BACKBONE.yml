@@ -12,10 +12,6 @@ dns_settings:
     - ip_address: 8.8.8.8
       vrf: use_mgmt_interface_vrf
   set_source_interfaces: false
-ntp_settings: null
-timezone: null
-event_monitor: null
-source_interfaces: null
 
 custom_structured_configuration_interface_defaults:
   mtu: 9214
