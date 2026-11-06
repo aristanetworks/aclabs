@@ -103,7 +103,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "gnmic_intf_config_ip{source=\"$Device\", job=\"gnmic\", interface_name=\"Management0\"}",
+          "expr": "gnmic_intf_config_ip{source=\"$Device\", job=\"gnmic\", interface_name=\"Management1\"}",
           "format": "table",
           "fullMetaSearch": false,
           "hide": false,

@@ -9,7 +9,7 @@ aaa_settings:
       privilege: 15
       role: network-admin
       sha512_password: "$6$7t1sx38LSYabjfkz$TNsa1HyVX4kehVvqFvJVF1omlYKxUkeAV4AfDlJ3tQnSoR1GfaaaicGyKjVJG/s63wxiTW1zgbchOH2dZ38lH."
-aaa_authorization:
+  authorization:
     exec:
       default: local
 
@@ -28,12 +28,17 @@ ntp_settings:
 custom_structured_configuration_spanning_tree:
   mode: mstp
 
-# hardcoding management0 for cEOS lab compatibility (default: Management1)
-mgmt_interface: Management0
+# AVD 6.x defaults cEOS-LAB to Management1. Map eth0→Management1 in clab/interfaces.json.
 mgmt_gateway: 172.144.100.1
-mgmt_interface_vrf: MGMT
+mgmt_interface_settings:
+  vrf: MGMT
 
-# Management eAPI | Required for this Lab
+# eAPI is no longer enabled by default in AVD 6.0 (required for ansible httpapi).
+management_eapi:
+  enabled: true
+  enable_https: true
+
+# Management eAPI SSL profile | Required for this Lab
 custom_structured_configuration_management_api_http:
   https_ssl_profile: eAPI
 
@@ -80,7 +85,7 @@ custom_structured_configuration_monitor_connectivity:
     - name: MGMT
       interface_sets:
         - name: MyIntfSet
-          interfaces: Management0
+          interfaces: Management1
       local_interfaces: MyIntfSet
       hosts:
         - name: google

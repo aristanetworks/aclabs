@@ -4,9 +4,9 @@
 
 !!! Info "Lab Details"
 
-    :fontawesome-solid-tag: **AVD Version:** 5.7.2<br>
-    :fontawesome-solid-network-wired: **cEOS-lab:** 4.34.2F  
-    :fontawesome-solid-flask: **Containerlab:** 0.72.0<br>
+    :fontawesome-solid-tag: **AVD Version:** 6.4.0<br>
+    :fontawesome-solid-network-wired: **cEOS-lab:** 4.36.2F  
+    :fontawesome-solid-flask: **Containerlab:** 0.81.1<br>
 
     ![lab topology](assets/img/aclabs-telemetrylab-A.png)
 

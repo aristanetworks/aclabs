@@ -103,7 +103,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "gnmic_intf_config_ip{job=\"gnmic\", interface_name=\"Management0\"}",
+            "expr": "gnmic_intf_config_ip{job=\"gnmic\", interface_name=\"Management1\"}",
             "format": "table",
             "hide": false,
             "instant": true,
