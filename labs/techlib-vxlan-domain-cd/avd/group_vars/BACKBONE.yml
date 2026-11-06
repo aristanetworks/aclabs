@@ -29,10 +29,6 @@ dns_settings:
     - ip_address: 8.8.8.8
       vrf: use_mgmt_interface_vrf
   set_source_interfaces: false
-ntp_settings: null
-timezone: null
-event_monitor: null
-source_interfaces: null
 
 custom_structured_configuration_interface_defaults:
   mtu: 9214
@@ -49,7 +45,7 @@ spine:
     loopback_ipv6_pool: 2001:db8:bb::/64
     isis_system_id_prefix: '0000.0000'
     isis_sr:
-      ipv6_node_sid_index_base: 0    
+      ipv6_node_sid_index_base: 0
     bgp_cluster_id: 10.0.0.0
     structured_config:
       spanning_tree:
@@ -57,7 +53,7 @@ spine:
       loopback_interfaces:
         - name: Loopback0
           node_segment:
-            ipv4_index: null   
+            ipv4_index: null
       router_isis:
         is_hostname: "{{ inventory_hostname }}"
         address_family_ipv4: null
