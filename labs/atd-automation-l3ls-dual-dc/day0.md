@@ -6,7 +6,7 @@ The AVD Lab Guide is a follow-along set of instructions to deploy a dual data ce
 
 In this example, the lab is used to create the L3LS Dual Data Center topology below. We will build and deploy configurations for Site 1 and Site 2 (blue areas) with AVD, then generate FRR's own structured configuration and provision the FRR node in the DCI Network cloud (orange area).
 
-<img src="images/l3ls_dualdc_topo.png" alt="Dual DC Topology" width="70%">
+<img src="images/dual_dc_topo.svg" alt="Dual DC Topology" width="70%">
 
 ### Host Addresses
 
@@ -642,15 +642,6 @@ The template configures `Loopback0` on Linux `lo`. It omits prefix lists, route
 maps, and connected redistribution, and uses `no bgp ebgp-requires-policy` to
 allow eligible IPv4 routes to pass between the borders. FRR's own loopback is
 not advertised into BGP.
-
-Install the `community.docker` Ansible collection in the environment where you
-run the playbooks, such as the lab devcontainer. The FRR deployment playbook uses
-its `community.docker.docker` connection plugin:
-
-```bash
-ansible-galaxy collection install community.docker
-ansible-galaxy collection list community.docker
-```
 
 After reviewing the generated file, apply it to the running container:
 

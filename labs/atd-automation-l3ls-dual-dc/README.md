@@ -587,16 +587,6 @@ The AVD-generated prefix lists and redistribution settings are not rendered
 into the FRR configuration. FRR's own loopback is configured locally but is not
 advertised into BGP.
 
-FRR deployment requires the `community.docker` Ansible collection for the
-[`community.docker.docker` connection plugin](https://docs.ansible.com/ansible/latest/collections/community/docker/docker_connection.html).
-Install it in the same environment where you run `ansible-playbook`, such as the
-lab devcontainer, and confirm it is available:
-
-```bash
-ansible-galaxy collection install community.docker
-ansible-galaxy collection list community.docker
-```
-
 Review the generated file, then provision the running container:
 
 ```bash
