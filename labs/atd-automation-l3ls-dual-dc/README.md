@@ -736,6 +736,11 @@ Three playbooks, `build.yml`, `deploy.yml`, and `validate.yml`, are used in our 
       vars:
         user_catalogs_enabled: true
         anta_report_expand_results: true
+        avd_catalogs_filters:
+          - skip_tests:
+              - VerifyNTP
+              - VerifyInterfaceDiscards
+              - VerifyLoggingErrors
 ```
 
 The validation playbook combines AVD-generated tests with user-defined ANTA

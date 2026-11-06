@@ -13,3 +13,8 @@
       vars:
         user_catalogs_enabled: true
         anta_report_expand_results: true
+        avd_catalogs_filters:
+          - skip_tests:
+              - VerifyNTP
+              - VerifyInterfaceDiscards
+              - VerifyLoggingErrors

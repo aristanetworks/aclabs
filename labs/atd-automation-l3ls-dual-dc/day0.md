@@ -105,7 +105,7 @@ git commit -m "saving snapshot"
 
 AVD creates a separate markdown and EOS configuration file per switch. In addition, you can review the files in the `documentation` and `intended` folders per site.
 
-<img src="images/docs-configs.png" alt="Docs and Configs" width="70%">
+<img src="images/docs-configs.png" alt="Docs and Configs" width="20%">
 
 Now, deploy the configurations to Site 1 switches.
 
