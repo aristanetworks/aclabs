@@ -643,15 +643,6 @@ maps, and connected redistribution, and uses `no bgp ebgp-requires-policy` to
 allow eligible IPv4 routes to pass between the borders. FRR's own loopback is
 not advertised into BGP.
 
-Install the `community.docker` Ansible collection in the environment where you
-run the playbooks, such as the lab devcontainer. The FRR deployment playbook uses
-its `community.docker.docker` connection plugin:
-
-```bash
-ansible-galaxy collection install community.docker
-ansible-galaxy collection list community.docker
-```
-
 After reviewing the generated file, apply it to the running container:
 
 ```bash
