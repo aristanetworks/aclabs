@@ -23,6 +23,3 @@ core:
     - name: frr-core1
       id: 1
       mgmt_ip: 192.168.0.250/24
-    # - name: frr-core2
-    #   id: 2
-    #   mgmt_ip: 192.168.0.11/24
