@@ -6,7 +6,7 @@ The AVD Lab Guide is a follow-along set of instructions to deploy a dual data ce
 
 In this example, the lab is used to create the L3LS Dual Data Center topology below. We will build and deploy configurations for Site 1 and Site 2 (blue areas) with AVD, then generate FRR's own structured configuration and provision the FRR node in the DCI Network cloud (orange area).
 
-<img src="images/l3ls_dualdc_topo.png" alt="Dual DC Topology" width="70%">
+<img src="images/dual_dc_topo.svg" alt="Dual DC Topology" width="70%">
 
 ### Host Addresses
 
