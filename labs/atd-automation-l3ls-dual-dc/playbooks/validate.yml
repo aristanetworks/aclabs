@@ -3,6 +3,7 @@
   hosts: "{{ target_hosts }}"
   connection: httpapi
   gather_facts: false
+  ignore_errors: true
 
   tasks:
 

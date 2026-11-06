@@ -1,0 +1,28 @@
+---
+- name: Build the FRR structured and CLI configurations
+  hosts: "{{ target_hosts }}"
+  gather_facts: false
+
+  tasks:
+
+    - name: Generate Structured Variables per Device
+      ansible.builtin.import_role:
+        name: arista.avd.eos_designs
+
+    - name: Load the device intended structured configuration
+      ansible.builtin.include_vars: "{{ inventory_dir }}/intended/structured_configs/{{ inventory_hostname }}.yml"
+      delegate_to: localhost
+
+    - name: Create the intended configuration directory
+      ansible.builtin.file:
+        path: "{{ inventory_dir }}/intended/configs"
+        state: directory
+        mode: '0755'
+      delegate_to: localhost
+
+    - name: Generate FRR configuration
+      ansible.builtin.template:
+        src: ../templates/frr.conf.j2
+        dest: '{{ inventory_dir }}/intended/configs/{{ inventory_hostname }}.cfg'
+        mode: '0664'
+      delegate_to: localhost

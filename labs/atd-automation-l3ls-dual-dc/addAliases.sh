@@ -21,3 +21,4 @@ echo "alias s1-host1='sshpass -p arista ssh -o \"StrictHostKeyChecking no\" aris
 echo "alias s1-host2='sshpass -p arista ssh -o \"StrictHostKeyChecking no\" arista@192.168.0.17'" >> ~/.zshrc
 echo "alias s2-host1='sshpass -p arista ssh -o \"StrictHostKeyChecking no\" arista@192.168.0.26'" >> ~/.zshrc
 echo "alias s2-host2='sshpass -p arista ssh -o \"StrictHostKeyChecking no\" arista@192.168.0.27'" >> ~/.zshrc
+echo "alias frr-core1='sshpass -p admin ssh -o \"StrictHostKeyChecking no\" admin@192.168.0.250'" >> ~/.zshrc

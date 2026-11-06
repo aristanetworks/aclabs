@@ -1,8 +1,10 @@
 # Dual DC L3LS
 
 > Lab Credentials
-> Username: arista
-> Password: arista
+>
+> EOS nodes: username `arista`, password `arista`.
+>
+> FRR node: username `admin`, password `admin`.
 
 ## Lab Inventory
 
@@ -30,6 +32,7 @@ This lab has the following devices:
 | s1-host2 | host | cEOS-lab, 4.36.2F | 192.168.0.17 | arista | arista |
 | s2-host1 | host | cEOS-lab, 4.36.2F | 192.168.0.26 | arista | arista |
 | s2-host2 | host | cEOS-lab, 4.36.2F | 192.168.0.27 | arista | arista |
+| frr-core1 | router | FRRouting | 192.168.0.250 | admin | admin |
 
 > To access any device, use `ssh <username>@<hostname>` or simply type `<hostname>` to use the SSH alias.
 
@@ -50,12 +53,20 @@ Throughout this section, we will use the following dual data center topology.
 
 <img src="images/l3ls_topo_overview.png" alt="L3LS Dual DC Topology" width="70%">
 
+The `frr-core1` node provides DCI transport between the two data centers,
+demonstrating interoperability between FRRouting and Arista EOS. Ansible and a
+Jinja template build its configuration from its own AVD structured configuration
+in [Day 0, Step 5](day0.md#step-5---connect-sites-to-dci-network).
+
 ## Ansible Inventory
 
 Our lab L3LS topology contains two sites, `Site 1` and `Site 2`. We need an Ansible inventory for each site. We have created a separate directory for each site under the `sites` sub-directory in our repo.
 
 ``` text
 sites/
+├── core/
+│   ├── frr-inv.yml
+│   └── group_vars/
 ├── site_1/
 │   ├── inventory.yml
 │   └── group_vars/
@@ -72,6 +83,11 @@ switches. Select one inventory per run and confirm the group membership:
 ansible-inventory -i sites/site_1/inventory.yml --graph SITE1_FABRIC
 ansible-inventory -i sites/site_2/inventory.yml --graph SITE2_FABRIC
 ```
+
+FRR has a separate inventory, [frr-inv.yml](sites/core/frr-inv.yml), with
+`frr-core1` in the `CORE` group. Its AVD node definition is in
+[group_vars/CORE.yml](sites/core/group_vars/CORE.yml). FRR build and
+deployment commands use this inventory and target `CORE`.
 
 The `SITE1_CONNECTED_ENDPOINTS` and `SITE2_CONNECTED_ENDPOINTS` groups apply
 host-facing port settings to fabric switches. The `servers` data model in their
@@ -193,7 +209,7 @@ l3leaf:
               remote_peers:
                 - hostname: s2-brdr1
                   bgp_as: 65203
-                  ip_address: 10.255.2.7
+                  ip_address: 10.250.2.7
         - name: s1-brdr2
           id: 6
           mgmt_ip: 192.168.0.101/24
@@ -202,7 +218,7 @@ l3leaf:
               remote_peers:
                 - hostname: s2-brdr2
                   bgp_as: 65203
-                  ip_address: 10.255.2.8
+                  ip_address: 10.250.2.8
 ```
 
 ### SITE1_SPINES
@@ -387,28 +403,40 @@ bgp_peer_groups:
   mlag_ipv4_underlay_peer:
     password: 4b21pAdCvWeAqpcKDFMdWw==
 
-# L3 Edge port definitions. This can be any port in the entire Fabric, where IP interfaces are defined.
+# FRR provides IPv4 transport between the EVPN gateways. It is external to AVD.
 l3_edge:
-  # Define a new IP pool that will be used to assign IP addresses to L3 Edge interfaces.
   p2p_links_ip_pools:
-    - name: S1_to_S2_IP_pool
+    - name: DCI
       ipv4_pool: 172.16.255.0/24
-  # Define a new link profile which will match the IP pool, the used ASNs and include the defined interface into underlay routing
+      prefix_size: 31
   p2p_links_profiles:
-    - name: S1_to_S2_profile
-      ip_pool: S1_to_S2_IP_pool
-      as: [ 65103, 65203 ]
+    - name: DCI
+      ip_pool: DCI
       include_in_underlay_protocol: true
-  # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
+      routing_protocol: ebgp
+      mtu: 1500
+      bfd: true
   p2p_links:
     - id: 1
-      nodes: [ s1-brdr1, s2-brdr1 ]
-      interfaces: [ Ethernet4, Ethernet4 ]
-      profile: S1_to_S2_profile
+      nodes: [ s1-brdr1, frr-core1 ]
+      interfaces: [ Ethernet4, eth1 ]
+      as: [ 65103, 65000 ]
+      profile: DCI
     - id: 2
-      nodes: [ s1-brdr2, s2-brdr2 ]
-      interfaces: [ Ethernet5, Ethernet5 ]
-      profile: S1_to_S2_profile
+      nodes: [ s1-brdr2, frr-core1 ]
+      interfaces: [ Ethernet4, eth2 ]
+      as: [ 65103, 65000 ]
+      profile: DCI
+    - id: 3
+      nodes: [ s2-brdr1, frr-core1 ]
+      interfaces: [ Ethernet4, eth3 ]
+      as: [ 65203, 65000 ]
+      profile: DCI
+    - id: 4
+      nodes: [ s2-brdr2, frr-core1 ]
+      interfaces: [ Ethernet4, eth4 ]
+      as: [ 65203, 65000 ]
+      profile: DCI
 ```
 
 ## Data Models
@@ -499,7 +527,7 @@ l3leaf:
             remote_peers:
               - hostname: s2-brdr1
                 bgp_as: 65203
-                ip_address: 10.255.2.7
+                ip_address: 10.250.2.7
         - name: s1-brdr2
           id: 6
           mgmt_ip: 192.168.0.101/24
@@ -508,41 +536,82 @@ l3leaf:
             remote_peers:
               - hostname: s2-brdr2
                 bgp_as: 65203
-                ip_address: 10.255.2.8
+                ip_address: 10.250.2.8
 ```
 
 #### L3 Edge Interfaces
 
-Inside the same global_dc_vars file, we define how the sites are linked to each other through their respective border leafs. In our example, the `core` switches are simply configured with layer 2 interfaces so each border leaf connects to its peer in a point-to-point manner. The `l3_edge` data model for both sites follows.
+The `l3_edge` block in `global_vars/global_dc_vars.yml` defines the border
+connections to the FRR DCI node. Students enable these links and provision FRR in
+[Day 0, Step 5](day0.md#step-5---connect-sites-to-dci-network), then enable the
+EVPN gateways in Step 6.
 
-``` yaml
-# L3 Edge port definitions. This can be any port in the entire Fabric, where IP interfaces are defined.
-l3_edge:
-  # Define a new IP pool that will be used to assign IP addresses to L3 Edge interfaces.
-  p2p_links_ip_pools:
-    - name: S1_to_S2_IP_pool
-      ipv4_pool: 172.16.255.0/24
-  # Define a new link profile which will match the IP pool, the used ASNs and include the defined interface into underlay routing
-  p2p_links_profiles:
-    - name: S1_to_S2_profile
-      ip_pool: S1_to_S2_IP_pool
-      as: [ 65103, 65203 ]
-      include_in_underlay_protocol: true
-  # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
-  p2p_links:
-    - id: 1
-      nodes: [ s1-brdr1, s2-brdr1 ]
-      interfaces: [ Ethernet4, Ethernet4 ]
-      profile: S1_to_S2_profile
-    - id: 2
-      nodes: [ s1-brdr2, s2-brdr2 ]
-      interfaces: [ Ethernet5, Ethernet5 ]
-      profile: S1_to_S2_profile
+### FRR Configuration
+
+FRR starts with a minimal configuration so that the lab can start before the
+border handoffs are enabled. After enabling `l3_edge`, build both sites and
+generate the FRR configuration:
+
+```bash
+make build-site-1 build-site-2
+make build-frr
 ```
 
-The following diagram shows the P2P links between the four border leafs. The DCI Network is pre-configured in our lab with the interfaces facing the border leafs as access ports in VLAN 1000. The l3_edge interfaces for the border leafs in `Site 1` and `Site 2` are configured and deployed with AVD.
+[build-frr.yml](playbooks/build-frr.yml) runs `arista.avd.eos_designs` for the
+`CORE` group. The node definition and shared `l3_edge` inputs generate
+`sites/core/intended/structured_configs/frr-core1.yml`. The playbook loads that
+file and renders [frr.conf.j2](templates/frr.conf.j2) to
+`sites/core/intended/configs/frr-core1.cfg`.
 
-<img src="images/l3ls_dci.png" alt="Core Interfaces" width="70%">
+The template uses these fields from FRR's structured configuration:
+
+| Structured configuration field | Use when provisioning FRR |
+| ------------------------------ | ---------------------------- |
+| `hostname` | FRR hostname |
+| `ethernet_interfaces[]` | Interface names, descriptions, addresses, and shutdown state |
+| `loopback_interfaces` entry for `Loopback0` | Address and description on Linux `lo` |
+| `router_bgp.as` and `router_bgp.router_id` | Local ASN and BGP router ID |
+| `router_bgp.peer_groups[]` | Peer groups, passwords, community settings, and route limits |
+| `router_bgp.neighbors[]` | Neighbor addresses, ASNs, peer groups, descriptions, and BFD |
+| `router_bgp.address_family_ipv4` | IPv4 neighbor and peer-group activation |
+| `router_bgp.maximum_paths.paths` | Maximum number of ECMP paths |
+
+The current inputs generate router ID `10.251.1.1` and four ECMP paths. The
+template decrypts EOS BGP passwords with `arista.avd.decrypt` for FRR. BGP
+neighbors with `bfd: true` create their BFD sessions dynamically.
+
+FRR exchanges eligible IPv4 routes learned from the borders without prefix
+lists, route maps, or connected-route redistribution. The template sets
+`no bgp ebgp-requires-policy` so this works with `frr defaults traditional`.
+The AVD-generated prefix lists and redistribution settings are not rendered
+into the FRR configuration. FRR's own loopback is configured locally but is not
+advertised into BGP.
+
+FRR deployment requires the `community.docker` Ansible collection for the
+[`community.docker.docker` connection plugin](https://docs.ansible.com/ansible/latest/collections/community/docker/docker_connection.html).
+Install it in the same environment where you run `ansible-playbook`, such as the
+lab devcontainer, and confirm it is available:
+
+```bash
+ansible-galaxy collection install community.docker
+ansible-galaxy collection list community.docker
+```
+
+Review the generated file, then provision the running container:
+
+```bash
+make deploy-frr
+```
+
+[deploy-frr.yml](playbooks/deploy-frr.yml) uses `ansible.builtin.copy` over the
+Docker connection to install the reviewed `.cfg` file at `/etc/frr/frr.conf`.
+
+When the configuration file changes, a handler runs
+`/usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf` to reconcile the running
+configuration, including removing obsolete settings. Installing the file alone
+does not apply it, and `write memory` only saves the running configuration.
+The rendered configuration is already stored at FRR's startup path, so a separate
+save is unnecessary.
 
 ### Network Services
 
@@ -667,6 +736,7 @@ Three playbooks, `build.yml`, `deploy.yml`, and `validate.yml`, are used in our 
   hosts: "{{ target_hosts }}"
   connection: httpapi
   gather_facts: false
+  ignore_errors: true
 
   tasks:
 

@@ -4,7 +4,7 @@
 
 The AVD Lab Guide is a follow-along set of instructions to deploy a dual data center L3LS EVPN VXLAN fabric design. The data model overview and details can be found [here](README.md). In the following steps, we will explore updating the data models to add services, ports, and DCI links to our fabrics and test traffic between sites.
 
-In this example, the lab is used to create the L3LS Dual Data Center topology below. The DCI Network cloud (orange area) is pre-provisioned and is comprised of the core nodes in the ATD topology. Our focus will be creating the L3LS AVD data models to build and deploy configurations for Site 1 and Site 2 (blue areas) and connect them to the DCI Network.
+In this example, the lab is used to create the L3LS Dual Data Center topology below. We will build and deploy configurations for Site 1 and Site 2 (blue areas) with AVD, then generate FRR's own structured configuration and provision the FRR node in the DCI Network cloud (orange area).
 
 <img src="images/l3ls_dualdc_topo.png" alt="Dual DC Topology" width="70%">
 
@@ -42,9 +42,9 @@ git config --global user.email "name@example.com"
 
 ### Validate Pre-configured Hosts
 
-The Core and Host nodes are preconfigured on lab startup. You can verify this by connecting to host1 and viewing the baseline configuration.
+The host nodes are preconfigured on lab startup. FRR starts with a minimal configuration and is provisioned in Step 5. You can verify the host configuration by connecting to host1 and viewing its baseline configuration.
 
-The border leafs from each site will connect to their specified peer with P2P links. The hosts (two per site) have port-channels to the leaf pairs and are pre-configured with an IP address and route to reach the other hosts.
+The border leaves connect to `frr-core1` over routed point-to-point links. The hosts (two per site) have port-channels to the leaf pairs and are pre-configured with an IP address and route to reach the other hosts.
 
 The preconfigured hosts are outside the Ansible inventories. Build, deployment,
 and validation commands target each site's fabric group. User-defined ANTA
@@ -550,242 +550,189 @@ At this point, you should be able to ping between hosts within a site but not be
 
 ## Step 5 - Connect Sites to DCI Network
 
-The DCI Network is defined by the `l3_edge` data model. Full data model documentation is located **[here](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#l3-edge-and-dci-settings)**.
+The `frr-core1` node provides DCI transport and demonstrates interoperability
+between FRRouting and Arista EOS. Configure the border handoffs with AVD, then
+use the `CORE` inventory to generate FRR's own AVD structured configuration and
+render its FRR configuration. Each border uses `Ethernet4`; FRR uses `eth1`
+through `eth4` and AS 65000.
 
-The data model defines P2P links (`/31s`) on the border leafs by using a combination of the ipv4_pool and the node id in the p2p_links section. See details in the graphic below. Each border leaf has a single link to its peer on interface `Ethernet4`.  In the data model, you will notice the parameter for **include_in_underlay_protocol**, which is set to ***true***.  This tells AVD to render the appropriate BGP configurations for route peering.
+### Enable the border handoffs
 
-<img src="images/l3ls_dci.png" alt="Core Interfaces" width="70%">
+Enable the `l3_edge` block in
+[global_dc_vars.yml](global_vars/global_dc_vars.yml), uncommenting it if needed.
+The completed block should match the example below. The /31 pool and link IDs
+let AVD allocate addresses for both the borders and FRR.
+The explicit `routing_protocol: ebgp` keeps these handoffs numbered IPv4 when
+RFC 5549 is enabled inside the fabrics.
 
-### Add P2P Links for DCI Connectivity for Sites 1 and 2
-
-Enable the `l3_edge` dictionary (shown below) by uncommenting it from the [global_vars/global_dc_vars.yml](global_vars/global_dc_vars.yml):
-
-``` yaml
-# L3 Edge port definitions. This can be any port in the entire Fabric, where IP interfaces are defined.
+```yaml
 l3_edge:
-  # Define a new IP pool that will be used to assign IP addresses to L3 Edge interfaces.
   p2p_links_ip_pools:
-    - name: S1_to_S2_IP_pool
+    - name: DCI
       ipv4_pool: 172.16.255.0/24
-  # Define a new link profile which will match the IP pool, the used ASNs and include the defined interface into underlay routing
+      prefix_size: 31
   p2p_links_profiles:
-    - name: S1_to_S2_profile
-      ip_pool: S1_to_S2_IP_pool
-      as: [ 65103, 65203 ]
+    - name: DCI
+      ip_pool: DCI
       include_in_underlay_protocol: true
-  # Define each P2P L3 link and link the nodes, the interfaces and the profile used.
+      routing_protocol: ebgp
+      mtu: 1500
+      bfd: true
   p2p_links:
     - id: 1
-      nodes: [ s1-brdr1, s2-brdr1 ]
-      interfaces: [ Ethernet4, Ethernet4 ]
-      profile: S1_to_S2_profile
+      nodes: [ s1-brdr1, frr-core1 ]
+      interfaces: [ Ethernet4, eth1 ]
+      as: [ 65103, 65000 ]
+      profile: DCI
     - id: 2
-      nodes: [ s1-brdr2, s2-brdr2 ]
-      interfaces: [ Ethernet5, Ethernet5 ]
-      profile: S1_to_S2_profile
+      nodes: [ s1-brdr2, frr-core1 ]
+      interfaces: [ Ethernet4, eth2 ]
+      as: [ 65103, 65000 ]
+      profile: DCI
+    - id: 3
+      nodes: [ s2-brdr1, frr-core1 ]
+      interfaces: [ Ethernet4, eth3 ]
+      as: [ 65203, 65000 ]
+      profile: DCI
+    - id: 4
+      nodes: [ s2-brdr2, frr-core1 ]
+      interfaces: [ Ethernet4, eth4 ]
+      as: [ 65203, 65000 ]
+      profile: DCI
 ```
 
-### Build and Deploy DCI Network Connectivity
+The `as` list follows the order in `nodes`: the border ASN comes first and
+FRR's ASN comes second. `include_in_underlay_protocol: true` adds the eBGP
+neighbor to the existing IPv4 underlay peer group, including its authentication.
+The FRR template reads its peer-group password and neighbor BFD settings from
+FRR's structured configuration.
 
-``` bash
-make all
+### Build and deploy both sites
+
+```bash
+make build-site-1 build-site-2
 ```
 
-> The `make all` command will run the build and deploy steps in one command.
+Review the four generated border configurations under each site's
+`intended/configs/` directory. Each border should have a routed Ethernet4
+interface and an IPv4 BGP neighbor in AS 65000. Then deploy:
 
-### Verification
+```bash
+make deploy-site-1 deploy-site-2
+```
 
-Now that we have built and deployed our configurations for our DCI IPv4 underlay connectivity, lets see what was done. Looking at the data model above, we see we only defined a pool of IP addresses with a **/24** mask which AVD will use to automatically alllocate a subnet per connection.  Additionally, we can see that `s1-brdr1` connects to its peer `s2-brdr1` via interface `Ethernet4`, and `s1-brdr2` connects to its peer `s2-brdr2` via interface `Ethernet5`.  Using that data model, here is what we expect to see configured.  You can verify this by logging into each border leaf and checking with **show ip interface brief**.
+### Build and provision FRR
 
-| Host     |  Interface   |   IP Address      |
-|:--------:|:------------:|:-----------------:|
-| s1-brdr1 |   Ethernet4  |  172.16.255.0/31  |
-| s2-brdr1 |   Ethernet4  |  172.16.255.1/31  |
-| s1-brdr2 |   Ethernet5  |  172.16.255.2/31  |
-| s2-brdr2 |   Ethernet5  |  172.16.255.3/31  |
+Build FRR using [its inventory](sites/core/frr-inv.yml) and
+[node definition](sites/core/group_vars/CORE.yml). The shared `l3_edge`
+inputs describe FRR's links to both sites:
 
-Now lets verify the underlay connectivity and routing across the DCI network.
+```bash
+make build-frr
+```
 
-1. From `s1-brdr1`, check the IPv4 underlay peering to its neighbor at Site 2, `s2-brdr1`.
+Open [the Jinja template](templates/frr.conf.j2) and compare it with
+`sites/core/intended/structured_configs/frr-core1.yml` and the generated
+`sites/core/intended/configs/frr-core1.cfg`. FRR's `eth1` address
+`172.16.255.1/31` comes from `ethernet_interfaces`, and neighbor `172.16.255.0`
+in AS 65103 comes from `router_bgp.neighbors`. Its router ID `10.251.1.1`,
+four ECMP paths, authentication, and BFD settings also come from this data.
 
-    **Command**
+The template configures `Loopback0` on Linux `lo`. It omits prefix lists, route
+maps, and connected redistribution, and uses `no bgp ebgp-requires-policy` to
+allow eligible IPv4 routes to pass between the borders. FRR's own loopback is
+not advertised into BGP.
 
-    ``` text
-    show ip bgp summary
-    ```
+Install the `community.docker` Ansible collection in the environment where you
+run the playbooks, such as the lab devcontainer. The FRR deployment playbook uses
+its `community.docker.docker` connection plugin:
 
-    **Expected Output**
+```bash
+ansible-galaxy collection install community.docker
+ansible-galaxy collection list community.docker
+```
 
-    ``` text
-    s1-brdr1#show ip bgp summary
-    BGP summary information for VRF default
-    Router identifier 10.250.1.7, local AS number 65103
-    Neighbor Status Codes: m - Under maintenance
-      Description              Neighbor     V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-      s1-brdr2                 10.252.1.9   4 65103            103       100    0    0 01:13:03 Estab   21     21
-      s1-spine1_Ethernet7      172.16.1.16  4 65100             98        99    0    0 01:13:03 Estab   7      7
-      s1-spine2_Ethernet7      172.16.1.18  4 65100             96        97    0    0 01:13:04 Estab   7      7
-      s2-brdr1                 172.16.255.1 4 65203             27        26    0    0 00:14:19 Estab   11     11
-    ```
+After reviewing the generated file, apply it to the running container:
 
-2. From `s1-brdr1`, check its routing table in the default VRF and look for any prefixes learned from peer `172.16.255.1` via interface `Ethernet4`.  We will be looking for anything with a third octet of **.2** which signifies Site 2.
+```bash
+make deploy-frr
+```
 
-    **Command**
+The playbook uses `ansible.builtin.copy` over the Docker connection as `root`
+inside the container to install the reviewed `.cfg` file at `/etc/frr/frr.conf`.
 
-    ``` text
-    show ip route
-    ```
+A handler applies configuration changes with
+`/usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf`. This updates the running
+configuration and removes obsolete settings. The file is already at FRR's
+startup path; a separate `write memory` is unnecessary and would only save the
+running configuration.
 
-    **Expected Output**
+### Verify the multivendor underlay
 
-    ``` text
-    s1-brdr1#show ip route
+On the Containerlab host, check FRR:
 
-    VRF: default
-    Source Codes:
-          C - connected, S - static, K - kernel,
-          O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
-          E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
-          N2 - OSPF NSSA external type2, B - Other BGP Routes,
-          B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
-          I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
-          A O - OSPF Summary, NG - Nexthop Group Static Route,
-          V - VXLAN Control Service, M - Martian,
-          DH - DHCP client installed default route,
-          DP - Dynamic Policy Route, L - VRF Leaked,
-          G  - gRIBI, RC - Route Cache Route,
-          CL - CBF Leaked Route
+```bash
+docker exec frr-core1 vtysh -c 'show bgp ipv4 unicast summary'
+docker exec frr-core1 vtysh -c 'show ip route bgp'
+docker exec frr-core1 vtysh -c 'show bfd peers'
+```
 
-    Gateway of last resort:
-    S        0.0.0.0/0 [1/0]
-              via 192.168.0.1, Management1
+Expect four established BGP sessions and routes to the border loopbacks.
+From `s1-brdr1`, check the other side of the BGP session and remote gateway
+reachability:
 
-    B E      10.250.1.1/32 [200/0]
-              via 172.16.1.16, Ethernet2
-    B E      10.250.1.2/32 [200/0]
-              via 172.16.1.18, Ethernet3
-    B E      10.250.1.3/32 [200/0]
-              via 172.16.1.16, Ethernet2
-              via 172.16.1.18, Ethernet3
-    B E      10.250.1.4/32 [200/0]
-              via 172.16.1.16, Ethernet2
-              via 172.16.1.18, Ethernet3
-    B E      10.250.1.5/32 [200/0]
-              via 172.16.1.16, Ethernet2
-              via 172.16.1.18, Ethernet3
-    B E      10.250.1.6/32 [200/0]
-              via 172.16.1.16, Ethernet2
-              via 172.16.1.18, Ethernet3
-    C        10.250.1.7/32
-              directly connected, Loopback0
-    B I      10.250.1.8/32 [200/0]
-              via 10.252.1.9, Vlan4093
-    B E      10.250.2.1/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    B E      10.250.2.2/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    B E      10.250.2.3/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    B E      10.250.2.4/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    B E      10.250.2.5/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    B E      10.250.2.6/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    B E      10.250.2.7/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    B E      10.250.2.8/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    C        10.251.1.8/31
-              directly connected, Vlan4094
-    C        10.252.1.8/31
-              directly connected, Vlan4093
-    B E      10.255.1.3/32 [200/0]
-              via 172.16.1.16, Ethernet2
-              via 172.16.1.18, Ethernet3
-    B E      10.255.1.5/32 [200/0]
-              via 172.16.1.16, Ethernet2
-              via 172.16.1.18, Ethernet3
-    C        10.255.1.7/32
-              directly connected, Loopback1
-    B E      10.255.2.3/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    B E      10.255.2.5/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    B E      10.255.2.7/32 [200/0]
-              via 172.16.255.1, Ethernet4
-    C        172.16.1.16/31
-              directly connected, Ethernet2
-    C        172.16.1.18/31
-              directly connected, Ethernet3
-    C        172.16.255.0/31
-              directly connected, Ethernet4
-    C        192.168.0.0/24
-              directly connected, Management1
-    ```
+```text
+show ip bgp summary
+show ip route 10.250.2.7
+ping 10.250.2.7 source Loopback0
+```
 
-3. From `s1-brdr2`, check the IPv4 underlay peering to its neighbor at Site 2, `s2-brdr2`.
+The FRR neighbor on `s1-brdr1` is `172.16.255.1` in AS 65000. On FRR, the
+same session has neighbor `172.16.255.0` in AS 65103. Compare the EOS and FRR
+configuration syntax: the protocol and addressing must agree on both sides.
 
-    **Command**
-
-    ``` text
-    show ip bgp summary
-    ```
-
-    **Expected Output**
-
-    ``` text
-    s1-brdr2#show ip bgp summary
-    BGP summary information for VRF default
-    Router identifier 10.250.1.8, local AS number 65103
-    Neighbor Status Codes: m - Under maintenance
-      Description              Neighbor     V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-      s1-brdr1                 10.252.1.8   4 65103            110       113    0    0 01:21:29 Estab   21     21
-      s1-spine1_Ethernet8      172.16.1.20  4 65100            107       112    0    0 01:21:30 Estab   7      7
-      s1-spine2_Ethernet8      172.16.1.22  4 65100            112       108    0    0 01:21:29 Estab   7      7
-      s2-brdr2                 172.16.255.3 4 65203             36        36    0    0 00:22:45 Estab   11     11
-    ```
-
-   > If your BGP peerings match those shown above and you have the correct routes in your routing table, the DCI network is successfully connected!
+The transport path is now in place. Next, enable EVPN peering between the
+Arista borders to carry tenant traffic.
 
 ## Step 6 - Enable EVPN Gateway Functionality
 
-Now that we have built and deployed our fabrics for both data centers, Site 1 and Site 2, we will need to enable EVPN gateway functionality on our border leafs so layer 2 and layer 3 traffic can move between the data centers across the EVPN overlay.
-
-In order to do this, we will need to uncomment the necessary data model to enable EVPN gateway for the border leafs.
-
-Below you will see the data model snippets from `SITE1_FABRIC.yml` and `SITE2_FABRIC.yml`, for the `S1_BRDR` and `S2_BRDR` node groups. To enable EVPN gateway functionality you will need to modify the [SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml) variable file, and uncomment the below highlighted sections.  Uncomment the same sections from the [SITE2_FABRIC.yml](sites/site_2/group_vars/SITE2_FABRIC.yml) variables file.
+Uncomment the `evpn_gateway` definitions on the border node groups and
+individual border nodes in
+[SITE1_FABRIC.yml](sites/site_1/group_vars/SITE1_FABRIC.yml) and
+[SITE2_FABRIC.yml](sites/site_2/group_vars/SITE2_FABRIC.yml). The completed
+sections should match the following snippets. Remote EVPN peers use Loopback0
+addresses; VXLAN tunnel sources use separate loopback addresses.
 
 **SITE1_FABRIC.yml**
 
 ``` yaml
 - group: S1_BRDR
   bgp_as: 65103
-  # evpn_gateway:
-  #   evpn_l2:
-  #     enabled: true
-  #   evpn_l3:
-  #     enabled: true
-  #     inter_domain: true
+  evpn_gateway:
+    evpn_l2:
+      enabled: true
+    evpn_l3:
+      enabled: true
+      inter_domain: true
   nodes:
     - name: s1-brdr1
       id: 5
       mgmt_ip: 192.168.0.100/24
       uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
-      # evpn_gateway:
-      #   remote_peers:
-      #     - hostname: s2-brdr1
-      #       bgp_as: 65203
-      #       ip_address: 10.250.2.7
+      evpn_gateway:
+        remote_peers:
+          - hostname: s2-brdr1
+            bgp_as: 65203
+            ip_address: 10.250.2.7
     - name: s1-brdr2
       id: 6
       mgmt_ip: 192.168.0.101/24
       uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
-      # evpn_gateway:
-      #   remote_peers:
-      #     - hostname: s2-brdr2
-      #       bgp_as: 65203
-      #       ip_address: 10.250.2.8
+      evpn_gateway:
+        remote_peers:
+          - hostname: s2-brdr2
+            bgp_as: 65203
+            ip_address: 10.250.2.8
 ```
 
 **SITE2_FABRIC.yml**
@@ -793,31 +740,31 @@ Below you will see the data model snippets from `SITE1_FABRIC.yml` and `SITE2_FA
 ``` yaml
 - group: S2_BRDR
   bgp_as: 65203
-  # evpn_gateway:
-  #   evpn_l2:
-  #     enabled: true
-  #   evpn_l3:
-  #     enabled: true
-  #     inter_domain: true
+  evpn_gateway:
+    evpn_l2:
+      enabled: true
+    evpn_l3:
+      enabled: true
+      inter_domain: true
   nodes:
     - name: s2-brdr1
       id: 5
       mgmt_ip: 192.168.0.200/24
       uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
-      # evpn_gateway:
-      #   remote_peers:
-      #     - hostname: s1-brdr1
-      #       bgp_as: 65103
-      #       ip_address: 10.250.1.7
+      evpn_gateway:
+        remote_peers:
+          - hostname: s1-brdr1
+            bgp_as: 65103
+            ip_address: 10.250.1.7
     - name: s2-brdr2
       id: 6
       mgmt_ip: 192.168.0.201/24
       uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
-      # evpn_gateway:
-      #   remote_peers:
-      #     - hostname: s1-brdr2
-      #       bgp_as: 65103
-      #       ip_address: 10.250.1.8
+      evpn_gateway:
+        remote_peers:
+          - hostname: s1-brdr2
+            bgp_as: 65103
+            ip_address: 10.250.1.8
 ```
 
 > If deploying a multi-site fabric with AVD, and using a single inventory file to contain all sites, the **evpn_gateway/remote_peers** variables for `bgp_as` and `ip_address` do **NOT** need to be populated. Since AVD will know about all these nodes from the single inventory file, it will know those variables and be able to use them to render the configuration.  Since we have split the sites for complexity's sake, we do have to define them here.
@@ -828,16 +775,9 @@ Below you will see the data model snippets from `SITE1_FABRIC.yml` and `SITE2_FA
 make all
 ```
 
-> `make all` is a shortcut to run the build and deploy playbooks for both sites in one command. Once again, the make entries will run sequentially.
-
-``` bash
-########################################################
-# Build and deploy all sites
-########################################################
-
-.PHONY: all
-all: build-site-1 build-site-2 deploy-site-1 deploy-site-2
-```
+`make all` builds both AVD fabrics and FRR, then deploys their configurations.
+FRR deployment uses its own rendered configuration and connects through Docker.
+Use this command against the running lab after reviewing the intended changes.
 
 ### Verification
 
@@ -867,9 +807,9 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
       neighbor EVPN-OVERLAY-CORE send-community
       neighbor EVPN-OVERLAY-CORE maximum-routes 0
       ...
-      neighbor 10.255.2.7 peer group EVPN-OVERLAY-CORE
-      neighbor 10.255.2.7 remote-as 65203
-      neighbor 10.255.2.7 description s2-brdr1
+      neighbor 10.250.2.7 peer group EVPN-OVERLAY-CORE
+      neighbor 10.250.2.7 remote-as 65203
+      neighbor 10.250.2.7 description s2-brdr1
       ...
       vlan 10
           ...
@@ -900,9 +840,9 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
       neighbor EVPN-OVERLAY-CORE send-community
       neighbor EVPN-OVERLAY-CORE maximum-routes 0
       ...
-      neighbor 10.255.2.8 peer group EVPN-OVERLAY-CORE
-      neighbor 10.255.2.8 remote-as 65203
-      neighbor 10.255.2.8 description s2-brdr2
+      neighbor 10.250.2.8 peer group EVPN-OVERLAY-CORE
+      neighbor 10.250.2.8 remote-as 65203
+      neighbor 10.250.2.8 description s2-brdr2
       ...
       vlan 10
           ...
