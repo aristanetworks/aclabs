@@ -652,14 +652,6 @@ ansible-galaxy collection install community.docker
 ansible-galaxy collection list community.docker
 ```
 
-Run deployment on the Containerlab host with the Docker CLI installed. Your
-Ansible user must be able to access the Docker daemon. Verify access to the
-running container:
-
-```bash
-docker exec --user root frr-core1 true
-```
-
 After reviewing the generated file, apply it to the running container:
 
 ```bash
@@ -674,10 +666,6 @@ A handler applies configuration changes with
 configuration and removes obsolete settings. The file is already at FRR's
 startup path; a separate `write memory` is unnecessary and would only save the
 running configuration.
-
-Deployment uses the existing build artifacts. Rebuild and review FRR's
-configuration before deploying changes to its inputs. Reapply it after
-recreating the lab with `make start`.
 
 ### Verify the multivendor underlay
 

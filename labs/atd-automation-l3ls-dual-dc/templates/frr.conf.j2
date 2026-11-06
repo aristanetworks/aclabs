@@ -1,6 +1,5 @@
 ! Generated from this device's AVD structured configuration. Do not edit.
 {# FRR is a BGP transit router: no route filters or connected redistribution. #}
-{# Linux interface MTUs must be configured outside frr.conf. #}
 frr defaults traditional
 hostname {{ hostname }}
 log stdout informational
@@ -59,9 +58,6 @@ router bgp {{ router_bgp.as }}
  address-family ipv4 unicast
 {% for peer_group in router_bgp.address_family_ipv4.peer_groups | default([]) %}
   {{ '' if peer_group.activate | default(false) else 'no ' }}neighbor {{ peer_group.name }} activate
-{% endfor %}
-{% for neighbor in router_bgp.address_family_ipv4.neighbors | default([]) %}
-  {{ '' if neighbor.activate | default(false) else 'no ' }}neighbor {{ neighbor.ip_address }} activate
 {% endfor %}
 {% for peer_group in router_bgp.peer_groups | default([]) %}
 {% if peer_group.send_community is defined %}

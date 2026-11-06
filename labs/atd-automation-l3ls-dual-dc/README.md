@@ -561,8 +561,7 @@ make build-frr
 `CORE` group. The node definition and shared `l3_edge` inputs generate
 `sites/core/intended/structured_configs/frr-core1.yml`. The playbook loads that
 file and renders [frr.conf.j2](templates/frr.conf.j2) to
-`sites/core/intended/configs/frr-core1.cfg`. The FRR build does not read either
-site's generated border configurations.
+`sites/core/intended/configs/frr-core1.cfg`.
 
 The template uses these fields from FRR's structured configuration:
 
@@ -598,15 +597,6 @@ ansible-galaxy collection install community.docker
 ansible-galaxy collection list community.docker
 ```
 
-Run deployment on the Containerlab host with the Docker CLI installed. The user
-running Ansible must have access to the Docker daemon and the running FRR
-container. The connection plugin uses `docker exec` as `root` inside the
-container. Check access before deploying:
-
-```bash
-docker exec --user root frr-core1 true
-```
-
 Review the generated file, then provision the running container:
 
 ```bash
@@ -614,9 +604,7 @@ make deploy-frr
 ```
 
 [deploy-frr.yml](playbooks/deploy-frr.yml) uses `ansible.builtin.copy` over the
-Docker connection to install the reviewed `.cfg` file at `/etc/frr/frr.conf`,
-owned by `frr:frr` with mode `0640`. Interface MTUs are Linux settings and are
-not changed by this playbook.
+Docker connection to install the reviewed `.cfg` file at `/etc/frr/frr.conf`.
 
 When the configuration file changes, a handler runs
 `/usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf` to reconcile the running
@@ -624,12 +612,6 @@ configuration, including removing obsolete settings. Installing the file alone
 does not apply it, and `write memory` only saves the running configuration.
 The rendered configuration is already stored at FRR's startup path, so a separate
 save is unnecessary.
-
-Deployment uses the existing build artifacts; run `make build-frr` and review
-the result first. Rebuild and deploy affected devices after changing the shared
-handoffs or FRR inputs. Reapply FRR's configuration after recreating the lab with
-`make start`. `make all` builds both fabrics and FRR, then deploys all three;
-enable the DCI handoffs before using it.
 
 ### Network Services
 
@@ -754,6 +736,7 @@ Three playbooks, `build.yml`, `deploy.yml`, and `validate.yml`, are used in our 
   hosts: "{{ target_hosts }}"
   connection: httpapi
   gather_facts: false
+  ignore_errors: true
 
   tasks:
 
