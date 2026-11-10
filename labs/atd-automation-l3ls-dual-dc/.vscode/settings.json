@@ -1,4 +1,5 @@
 {
+    "arista-avd-yaml.eulaAccepted": true,
     "containerlab.node.sshUserMapping": {"arista_ceos": "arista"},
     "containerlab.showWelcomePage": false,
     "containerlab.skipUpdateCheck": true,
