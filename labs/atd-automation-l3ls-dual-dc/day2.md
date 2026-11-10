@@ -109,6 +109,41 @@ Copy the following data model entries and paste them directly below the last VLA
 
 When complete, your variable files should look like this.
 
+
+SITE1_NETWORK_SERVICES.yml:
+
+``` yaml
+---
+tenants:
+  - name: S1_FABRIC
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: OVERLAY
+        vrf_vni: 10
+        vtep_diagnostic:
+          loopback: 10
+          loopback_ip_range: 10.1.0.0/24
+        svis:
+          - id: 10
+            name: 'Ten'
+            enabled: true
+            ip_address_virtual: 10.10.10.1/24
+          - id: 20
+            name: 'Twenty'
+            enabled: true
+            ip_address_virtual: 10.20.20.1/24
+          - id: 30
+            name: 'Thirty'
+            enabled: true
+            ip_address_virtual: 10.30.30.1/24
+          - id: 40
+            name: 'Forty'
+            enabled: true
+            ip_address_virtual: 10.40.40.1/24
+```
+
+SITE2_NETWORK_SERVICES.yml:
+
 ``` yaml
 ---
 tenants:
@@ -117,6 +152,9 @@ tenants:
     vrfs:
       - name: OVERLAY
         vrf_vni: 10
+        vtep_diagnostic:
+          loopback: 10
+          loopback_ip_range: 10.1.0.0/24
         svis:
           - id: 10
             name: 'Ten'
@@ -428,6 +466,9 @@ tenants:
     vrfs:
       - name: OVERLAY
         vrf_vni: 10
+        vtep_diagnostic:
+          loopback: 10
+          loopback_ip_range: 10.1.0.0/24
         svis:
           - id: 10
             name: 'Ten'
@@ -455,7 +496,7 @@ make build-site-1 deploy-site-1
 ```
 
 ```text
-s1-leaf1#show ip int b
+s1-leaf1#show ip interface brief
                                                                                 Address
 Interface         IP Address            Status       Protocol            MTU    Owner
 ----------------- --------------------- ------------ -------------- ----------- -------
@@ -489,6 +530,9 @@ tenants:
     vrfs:
       - name: OVERLAY
         vrf_vni: 10
+        vtep_diagnostic:
+          loopback: 10
+          loopback_ip_range: 10.1.0.0/24
         svis:
           - id: 10
             name: 'Ten'
@@ -539,7 +583,7 @@ make build-site-1 deploy-site-1
 We can now connect to s1-leaf3 and view the difference.
 
 ```text
-s1-leaf3#show ip int b
+s1-leaf3#show ip interface brief
                                                                                 Address
 Interface         IP Address            Status       Protocol            MTU    Owner
 ----------------- --------------------- ------------ -------------- ----------- -------

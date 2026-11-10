@@ -5,6 +5,9 @@
 #     vrfs:
 #       - name: OVERLAY
 #         vrf_vni: 10
+#         vtep_diagnostic:
+#           loopback: 10
+#           loopback_ip_range: 10.1.0.0/24
 #         svis:
 #           - id: 10
 #             name: 'Ten'
