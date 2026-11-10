@@ -42,7 +42,7 @@ This workshop will leverage open-source tools for configuration development, dep
 
 This section will cover the following:
 
-- Arista's Architect, Validate, and Deploy (AVD) Ansible Collection
+- Arista AVD network automation framework
 - Network Data Models
 - Initial Deployment (Day 0 Provisioning)
 - Ongoing Operations (Day 2 and Beyond)
