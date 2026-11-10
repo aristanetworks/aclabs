@@ -24,7 +24,7 @@ We will start by opening a new terminal.
 To open the integrated terminal:
 
 1. <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> on Windows
-2. <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> on Mac.
+2. <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> on Mac.
 
 Initialize Git and configure your global Git settings.
 
@@ -53,6 +53,11 @@ attachments after the services and host-facing ports are enabled.
 
 ```text
 ssh arista@s1-host1
+show ip interface brief 
+```
+
+```text
+ssh arista@s1-host1
 s1-host1#show ip int b
                                                                                        Address
 Interface           IP Address            Status       Protocol                 MTU    Owner
@@ -60,8 +65,9 @@ Interface           IP Address            Status       Protocol                 
 Management1         192.168.0.16/24       up           up                      1500
 Port-Channel1       10.10.10.100/24       down         lowerlayerdown          1500
 
-s1-host1#
 ```
+
+> Exit from the ssh session before continuing
 
 ## Step 2 - Deployment Overview
 
@@ -117,7 +123,7 @@ make deploy-site-1
 
 Now, let's log in to some switches to verify the current configs (`show run`) match the ones created in the `intended/configs` folder. We can also check the current state for MLAG, interfaces, BGP peerings for IPv4 underlay, and BGP EVPN overlay peerings.
 
-You can connect to devices by running `ssh arista@s1-spine1` or entering `s1-spine1` directly from the terminal.
+You can connect to devices by running `ssh arista@s1-leaf1` or entering `s1-leaf1` directly from the terminal.
 
 These outputs were taken from `s1-leaf1`:
 
@@ -197,10 +203,10 @@ These outputs were taken from `s1-leaf1`:
     BGP summary information for VRF default
     Router identifier 10.250.1.3, local AS number 65101
     Neighbor Status Codes: m - Under maintenance
-      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-      s1-leaf2                 10.252.1.1 4 65101             15        14    0    0 00:02:29 Estab   10     10
-      s1-spine1_Ethernet2      172.16.1.0 4 65100             13        18    0    0 00:02:30 Estab   7      7
-      s1-spine2_Ethernet2      172.16.1.2 4 65100             15        14    0    0 00:02:29 Estab   7      7
+      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
+      s1-leaf2_Vlan4093        10.252.1.1 4 65101             10        10    0    0 00:01:41 Estab   10     10     10
+      s1-spine1_Ethernet2      172.16.1.0 4 65100             12        13    0    0 00:01:46 Estab   7      7      10
+      s1-spine2_Ethernet2      172.16.1.2 4 65100             12         9    0    0 00:01:46 Estab   7      7      4
     ```
 
 4. Check eBGP/iBGP peerings for the EVPN overlay.
@@ -218,9 +224,9 @@ These outputs were taken from `s1-leaf1`:
     BGP summary information for VRF default
     Router identifier 10.250.1.3, local AS number 65101
     Neighbor Status Codes: m - Under maintenance
-      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-      s1-spine1                10.250.1.1 4 65100              5         5    0    0 00:01:39 Estab   0      0
-      s1-spine2                10.250.1.2 4 65100              5         6    0    0 00:01:40 Estab   0      0
+      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
+      s1-spine1_Loopback0      10.250.1.1 4 65100              7         7    0    0 00:02:35 Estab   0      0      0
+      s1-spine2_Loopback0      10.250.1.2 4 65100              7         6    0    0 00:02:36 Estab   0      0      0
     ```
 
     > The basic fabric with MLAG peers, P2P routed links between leaf nodes and spines, eBGP/iBGP IPv4 underlay peerings, and eBGP/iBGP EVPN overlay peerings is now created. Next up, we will add VLAN and SVI services to the fabric.
@@ -277,19 +283,28 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their I
     Vlan4097          unassigned            up           up                 9164
     ```
 
-    > You should notice some VLANs that we didn't define anywhere in the `_NETWORK_SERVICES.yml` data model which aren't related to **MLAG**. The additional VLANs will be used for underlay and overlay MLAG peering.
+    > You should notice some VLANs that we didn't define anywhere in the `SITE1_NETWORK_SERVICES.yml` data model which aren't related to **MLAG**. The additional VLANs will be used for underlay and overlay MLAG peering.
 
-**Overlay vrf BGP Peering**
-``` text
-s1-leaf1#show ip bgp summary vrf OVERLAY
-BGP summary information for VRF OVERLAY
-Router identifier 10.250.1.3, local AS number 65101
-Neighbor Status Codes: m - Under maintenance
-  Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
-  s1-leaf2_Vlan3009        10.252.1.1 4 65101             19        20    0    0 00:12:38 Estab   2      2      2
-```
+2. Overlay vrf BGP Peering
 
-2. Verify VLANs **10** and **20**, and vrf **OVERLAY** are now mapped to the appropriate VNIs under the `vxlan1` interface.
+    **Command**
+
+    ``` text
+    show ip bgp summary vrf OVERLAY
+    ```
+
+    **Expected Output**
+
+    ``` text
+    s1-leaf1#show ip bgp summary vrf OVERLAY
+    BGP summary information for VRF OVERLAY
+    Router identifier 10.250.1.3, local AS number 65101
+    Neighbor Status Codes: m - Under maintenance
+      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
+      s1-leaf2_Vlan3009        10.252.1.1 4 65101              7         7    0    0 00:02:37 Estab   2      2      2
+    ```
+
+3. Verify VLANs **10** and **20**, and vrf **OVERLAY** are now mapped to the appropriate VNIs under the `vxlan1` interface.
 
     **Command**
 
@@ -311,12 +326,11 @@ Neighbor Status Codes: m - Under maintenance
         vxlan vrf OVERLAY vni 10
       ```
 
-3. Verify we are flooding to the correct remote VTEPs based on what we have learned across the EVPN overlay.
+4. Verify we are flooding to the correct remote VTEPs based on what we have learned across the EVPN overlay.
 
     **Command**
 
     ```text
-    show interface vxlan1
     ```
 
     **Expected Output**
@@ -345,7 +359,7 @@ Neighbor Status Codes: m - Under maintenance
       MLAG Shared Router MAC is 021c.7301.2391
     ```
 
-4. Finally, lets verify we have **IMET** routes for each VLAN and VTEP in the EVPN overlay.  IMET (Type-3) routes are required for Broadcast, Unknown Unicast and Multicast (BUM) traffic delivery across EVPN networks.
+5. Finally, lets verify we have **IMET** routes for each VLAN and VTEP in the EVPN overlay. IMET (Type-3) routes are required for Broadcast, Unknown Unicast and Multicast (BUM) traffic delivery across EVPN networks.
 
     **Command**
 
@@ -364,43 +378,43 @@ Neighbor Status Codes: m - Under maintenance
     Origin codes: i - IGP, e - EGP, ? - incomplete
     AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
 
-              Network                Next Hop              Metric  LocPref Weight  Path
-    * >      RD: 10.250.1.3:10010 imet 10.255.1.3
-                                    -                     -       -       0       i
-    * >      RD: 10.250.1.3:10020 imet 10.255.1.3
-                                    -                     -       -       0       i
-    * >Ec    RD: 10.250.1.5:10010 imet 10.255.1.5
-                                    10.255.1.5            -       100     0       65100 65102 i
-    *  ec    RD: 10.250.1.5:10010 imet 10.255.1.5
-                                    10.255.1.5            -       100     0       65100 65102 i
-    * >Ec    RD: 10.250.1.5:10020 imet 10.255.1.5
-                                    10.255.1.5            -       100     0       65100 65102 i
-    *  ec    RD: 10.250.1.5:10020 imet 10.255.1.5
-                                    10.255.1.5            -       100     0       65100 65102 i
-    * >Ec    RD: 10.250.1.6:10010 imet 10.255.1.5
-                                    10.255.1.5            -       100     0       65100 65102 i
-    *  ec    RD: 10.250.1.6:10010 imet 10.255.1.5
-                                    10.255.1.5            -       100     0       65100 65102 i
-    * >Ec    RD: 10.250.1.6:10020 imet 10.255.1.5
-                                    10.255.1.5            -       100     0       65100 65102 i
-    *  ec    RD: 10.250.1.6:10020 imet 10.255.1.5
-                                    10.255.1.5            -       100     0       65100 65102 i
-    * >Ec    RD: 10.250.1.7:10010 imet 10.255.1.7
-                                    10.255.1.7            -       100     0       65100 65103 i
-    *  ec    RD: 10.250.1.7:10010 imet 10.255.1.7
-                                    10.255.1.7            -       100     0       65100 65103 i
-    * >Ec    RD: 10.250.1.7:10020 imet 10.255.1.7
-                                    10.255.1.7            -       100     0       65100 65103 i
-    *  ec    RD: 10.250.1.7:10020 imet 10.255.1.7
-                                    10.255.1.7            -       100     0       65100 65103 i
-    * >Ec    RD: 10.250.1.8:10010 imet 10.255.1.7
-                                    10.255.1.7            -       100     0       65100 65103 i
-    *  ec    RD: 10.250.1.8:10010 imet 10.255.1.7
-                                    10.255.1.7            -       100     0       65100 65103 i
-    * >Ec    RD: 10.250.1.8:10020 imet 10.255.1.7
-                                    10.255.1.7            -       100     0       65100 65103 i
-    *  ec    RD: 10.250.1.8:10020 imet 10.255.1.7
-                                    10.255.1.7            -       100     0       65100 65103 i
+                Network                Next Hop              Metric  LocPref Weight  Path
+    * >        RD: 10.250.1.3:10010 imet 10.255.1.3
+                                      -                     -       -       0       i
+    * >        RD: 10.250.1.3:10020 imet 10.255.1.3
+                                      -                     -       -       0       i
+    * >Ec      RD: 10.250.1.5:10010 imet 10.255.1.5
+                                      10.255.1.5            -       100     0       65100 65102 i
+    *  ec      RD: 10.250.1.5:10010 imet 10.255.1.5
+                                      10.255.1.5            -       100     0       65100 65102 i
+    * >Ec      RD: 10.250.1.5:10020 imet 10.255.1.5
+                                      10.255.1.5            -       100     0       65100 65102 i
+    *  ec      RD: 10.250.1.5:10020 imet 10.255.1.5
+                                      10.255.1.5            -       100     0       65100 65102 i
+    * >Ec      RD: 10.250.1.6:10010 imet 10.255.1.5
+                                      10.255.1.5            -       100     0       65100 65102 i
+    *  ec      RD: 10.250.1.6:10010 imet 10.255.1.5
+                                      10.255.1.5            -       100     0       65100 65102 i
+    * >Ec      RD: 10.250.1.6:10020 imet 10.255.1.5
+                                      10.255.1.5            -       100     0       65100 65102 i
+    *  ec      RD: 10.250.1.6:10020 imet 10.255.1.5
+                                      10.255.1.5            -       100     0       65100 65102 i
+    * >Ec      RD: 10.250.1.7:10010 imet 10.255.1.7
+                                      10.255.1.7            -       100     0       65100 65103 i
+    *  ec      RD: 10.250.1.7:10010 imet 10.255.1.7
+                                      10.255.1.7            -       100     0       65100 65103 i
+    * >Ec      RD: 10.250.1.7:10020 imet 10.255.1.7
+                                      10.255.1.7            -       100     0       65100 65103 i
+    *  ec      RD: 10.250.1.7:10020 imet 10.255.1.7
+                                      10.255.1.7            -       100     0       65100 65103 i
+    * >Ec      RD: 10.250.1.8:10010 imet 10.255.1.7
+                                      10.255.1.7            -       100     0       65100 65103 i
+    *  ec      RD: 10.250.1.8:10010 imet 10.255.1.7
+                                      10.255.1.7            -       100     0       65100 65103 i
+    * >Ec      RD: 10.250.1.8:10020 imet 10.255.1.7
+                                      10.255.1.7            -       100     0       65100 65103 i
+    *  ec      RD: 10.250.1.8:10020 imet 10.255.1.7
+                                      10.255.1.7            -       100     0       65100 65103 i
     ```
 
 You can verify the recent configuration session was created.
@@ -418,7 +432,7 @@ show configuration sessions detail
 List the recent checkpoints.
 
 ``` text
-show config checkpoints
+show configuration checkpoints
 ```
 
 View the contents of the latest checkpoint file.
@@ -433,6 +447,42 @@ See the difference between the running config and the latest checkpoint file.
 
 ``` text
 diff checkpoint:< filename > running-config
+```
+
+```text
+s1-leaf1#diff checkpoint:99f27a1 running-config
+--- checkpoint:99f27a1
++++ system:/running-config
+@@ -30,6 +30,16 @@
+    unsupported speed action error
+    unsupported error-correction action error
+ !
++vlan 10
++   name Ten
++!
++vlan 20
++   name Twenty
++!
++vlan 3009
++   name MLAG_L3_VRF_OVERLAY
++   trunk group MLAG
++!
+ vlan 4093
+    name MLAG_L3
+    trunk group MLAG
+...
+<redacted>
+...
++   vrf OVERLAY
++      rd 10.250.1.3:10
++      route-target import evpn 10:10
++      route-target export evpn 10:10
++      router-id 10.250.1.3
++      neighbor 10.252.1.1 peer group MLAG-IPv4-UNDERLAY-PEER
++      neighbor 10.252.1.1 description s1-leaf2_Vlan3009
++      redistribute connected route-map RM-CONN-2-BGP-VRFS
+ !
+ end
 ```
 
 ### Add Ports for Hosts
