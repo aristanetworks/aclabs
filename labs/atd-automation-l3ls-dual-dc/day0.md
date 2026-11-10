@@ -183,6 +183,7 @@ These outputs were taken from `s1-leaf1`:
     Ethernet3         172.16.1.3/31         up           up                 1500
     Loopback0         10.250.1.3/32         up           up                65535
     Loopback1         10.255.1.3/32         up           up                65535
+    Loopback10        10.1.0.3/32           up           up                65535           
     Management1       192.168.0.12/24       up           up                 1500
     Vlan4093          10.252.1.0/31         up           up                 1500
     Vlan4094          10.251.1.0/31         up           up                 1500
@@ -664,6 +665,13 @@ FRR's structured configuration.
 
 ### Build and deploy both sites
 
+> Run `git add` and `git commit` to create a snapshot of the current build state. This will help you view the differences between steps in the workshop.
+
+``` bash
+git add .
+git commit -m "saving snapshot"
+```
+
 ```bash
 make build-site-1 build-site-2
 ```
@@ -719,6 +727,23 @@ On the Containerlab host, check FRR:
 
 ```bash
 docker exec frr-core1 vtysh -c 'show bgp ipv4 unicast summary'
+```
+
+```text
+s1-brdr1#show ip bgp summary
+BGP summary information for VRF default
+Router identifier 10.250.1.7, local AS number 65103
+Neighbor Status Codes: m - Under maintenance
+  Description              Neighbor     V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
+  s1-brdr2_Vlan4093        10.252.1.9   4 65103             67        66    0    0 00:46:32 Estab   21     21     21
+  s1-spine1_Ethernet7      172.16.1.16  4 65100             65        65    0    0 00:46:37 Estab   7      7      16
+  s1-spine2_Ethernet7      172.16.1.18  4 65100             63        67    0    0 00:46:37 Estab   7      7      20
+  frr-core1                172.16.255.1 4 65000             12        13    0    0 00:01:18 Estab   11     11     11
+```
+
+Show additional validations. 
+
+```bash
 docker exec frr-core1 vtysh -c 'show ip route bgp'
 docker exec frr-core1 vtysh -c 'show bfd peers'
 ```
@@ -748,6 +773,13 @@ individual border nodes in
 [SITE2_FABRIC.yml](sites/site_2/group_vars/SITE2_FABRIC.yml). The completed
 sections should match the following snippets. Remote EVPN peers use Loopback0
 addresses; VXLAN tunnel sources use separate loopback addresses.
+
+> Run `git add` and `git commit` to create a snapshot of the current build state. This will help you view the differences between steps in the workshop.
+
+``` bash
+git add .
+git commit -m "saving snapshot"
+```
 
 **SITE1_FABRIC.yml**
 
