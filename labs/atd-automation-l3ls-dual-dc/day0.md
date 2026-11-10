@@ -332,6 +332,7 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their I
     **Command**
 
     ```text
+    show interfaces vxlan 1
     ```
 
     **Expected Output**
@@ -439,7 +440,7 @@ show configuration checkpoints
 View the contents of the latest checkpoint file.
 
 ``` text
-more checkpoint:< filename >
+more checkpoint:< Hash >
 ```
 
 See the difference between the running config and the latest checkpoint file.
@@ -447,7 +448,7 @@ See the difference between the running config and the latest checkpoint file.
 > This will show the differences between the current device configuration and the configuration before we did our `make deploy` command.
 
 ``` text
-diff checkpoint:< filename > running-config
+diff checkpoint:< Hash > running-config
 ```
 
 ```text
@@ -516,7 +517,7 @@ Management1         192.168.0.16/24       up           up                1500
 Port-Channel1       10.10.10.100/24       up           up                1500
 ```
 
-From `s1-host1`, run a ping to `s1-host2`.
+From `s1-host1`, run a ping to `s1-host2`. The host-to-host ping checks inter-VLAN routing.
 
 ``` text
 ping 10.20.20.100
@@ -542,25 +543,26 @@ user-defined catalog in
 anta.tests.connectivity:
   - VerifyReachability:
       filters:
-        tags: [s1-leaf1]
+        tags: [s1-leaf1, s1-leaf2, s1-leaf3, s1-leaf4]
       hosts:
         - destination: 10.10.10.100
-          source: Vlan10
+          source: Loopback10
           vrf: OVERLAY
           repeat: 5
   - VerifyReachability:
       filters:
-        tags: [s1-leaf3]
+        tags: [s1-leaf1, s1-leaf2, s1-leaf3, s1-leaf4]
       hosts:
         - destination: 10.20.20.100
-          source: Vlan20
+          source: Loopback10
           vrf: OVERLAY
           repeat: 5
 ```
 
-The hostname tags select the leaf that originates each probe. These tests check
-reachability from `s1-leaf1` to `s1-host1` and from `s1-leaf3` to `s1-host2` in
-their respective VLANs. The host-to-host ping above checks inter-VLAN routing.
+The hostname tags select the leafs that originates each probe. These tests check
+reachability from `s1-leaf1, s1-leaf2, s1-leaf3, s1-leaf4` to `s1-host1` and `s1-host2` in
+the OVERLAY VRF. Notice that we are sourcing from Loopback10 which is the vtep diagnostic interface.
+The Loopback10 interface is configured with virtual source-nat enable that allow us to do reachibility tests from each leaf.
 
 From the lab directory, run:
 
@@ -952,7 +954,7 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
     **s1-brdr1**
 
     ``` text
-    s1-brdr1#show bgp evpn summ
+    s1-brdr1#show bgp evpn summary
     BGP summary information for VRF default
     Router identifier 10.250.1.7, local AS number 65103
     Neighbor Status Codes: m - Under maintenance
@@ -1073,8 +1075,13 @@ ping 10.20.20.200
 
 From `s2-host1`, check connectivity to both Site 1 hosts:
 
-```text
+``` text
+# s1-host1
 ping 10.10.10.100
+```
+
+``` text
+# s1-host2
 ping 10.20.20.100
 ```
 
