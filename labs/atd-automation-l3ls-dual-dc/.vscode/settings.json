@@ -1,10 +1,10 @@
 {
-    "arista-avd-yaml.eulaAccepted": true,
     "containerlab.node.sshUserMapping": {"arista_ceos": "arista"},
     "containerlab.showWelcomePage": false,
     "containerlab.skipUpdateCheck": true,
     "chat.agent.enabled": false,
     "chat.disableAIFeatures": true,
+    "git.repositoryScanIgnoredFolders": ["clab"],
     "markdown.preview.doubleClickToSwitchToEditor": false,
     "redhat.telemetry.enabled": false,
     "terminal.integrated.suggest.enabled": true,
