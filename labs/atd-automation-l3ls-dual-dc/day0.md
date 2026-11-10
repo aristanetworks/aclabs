@@ -24,7 +24,7 @@ We will start by opening a new terminal.
 To open the integrated terminal:
 
 1. <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> on Windows
-2. <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> on Mac.
+2. <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> on Mac.
 
 Initialize Git and configure your global Git settings.
 
@@ -500,6 +500,11 @@ make deploy-site-1
 ```
 
 At this point, hosts should be able to ping each other across the fabric.
+
+```text
+ssh arista@s1-host1
+show ip interface brief
+```
 
 ```text
 s1-host1#show ip interface brief
