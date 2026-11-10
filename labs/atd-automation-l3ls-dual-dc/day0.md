@@ -958,10 +958,10 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
     BGP summary information for VRF default
     Router identifier 10.250.1.7, local AS number 65103
     Neighbor Status Codes: m - Under maintenance
-      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-      s1-spine1                10.250.1.1 4 65100            151       150    0    0 01:37:10 Estab   20     20
-      s1-spine2                10.250.1.2 4 65100            152       151    0    0 01:37:11 Estab   20     20
-      s2-brdr1                 10.250.2.7 4 65203             14        14    0    0 00:00:08 Estab   19     19
+      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
+      s1-spine1_Loopback0      10.250.1.1 4 65100            217       210    0    0 02:20:28 Estab   24     24     43
+      s1-spine2_Loopback0      10.250.1.2 4 65100            215       222    0    0 02:20:27 Estab   24     24     61
+      s2-brdr1                 10.250.2.7 4 65203             80        83    0    0 00:55:22 Estab   26     26     32
     ```
 
     **s1-brdr2**
@@ -971,10 +971,10 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
     BGP summary information for VRF default
     Router identifier 10.250.1.8, local AS number 65103
     Neighbor Status Codes: m - Under maintenance
-      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-      s1-spine1                10.250.1.1 4 65100            158       152    0    0 01:38:37 Estab   20     20
-      s1-spine2                10.250.1.2 4 65100            156       147    0    0 01:38:37 Estab   20     20
-      s2-brdr2                 10.250.2.8 4 65203             15        15    0    0 00:01:35 Estab   19     19
+      Description              Neighbor   V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
+      s1-spine1_Loopback0      10.250.1.1 4 65100            219       212    0    0 02:21:07 Estab   24     24     41
+      s1-spine2_Loopback0      10.250.1.2 4 65100            216       221    0    0 02:21:07 Estab   24     24     63
+      s2-brdr2                 10.250.2.8 4 65203             82        84    0    0 00:56:03 Estab   26     26     32
     ```
 
 3. Finally, lets verify which routes we are seeing in the EVPN table from Site 2.  If you recall when we checked this within each site, we had an **IMET** route per VLAN, from each VTEP.  In this instance, since we are using EVPN gateway functionality to summarize the routes from the other site, we should only see 1 **IMET** route per VLAN to the remote EVPN gateway.
