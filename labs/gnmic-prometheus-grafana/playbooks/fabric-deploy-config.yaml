@@ -22,4 +22,4 @@
     # - name: Validate states on EOS devices
     #   tags: [verify, never]
     #   import_role:
-    #     name: arista.avd.eos_validate_state
+    #     name: arista.avd.anta_runner
