@@ -24,7 +24,7 @@ We will start by opening a new terminal.
 To open the integrated terminal:
 
 1. <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> on Windows
-2. <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd> on Mac.
+2. <kbd>Ctrl</kbd> + <kbd>`</kbd> on Mac.
 
 Initialize Git and configure your global Git settings.
 
