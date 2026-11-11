@@ -1,6 +1,0 @@
----
-FRR:
-  children:
-    CORE:
-      hosts:
-        frr-core1:
