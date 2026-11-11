@@ -23,8 +23,8 @@ jobs:
     strategy:
       matrix:
         from_image: ["ghcr.io/aristanetworks/avd/universal"]
-        from_variant: ["python3.12-avd-v5.7.3", "python3.12-avd-v6.4.0"]
-        clab_version: ["0.81.1"]
+        from_variant: ["python3.12-avd-v6.4.0", "python3.12-avd-v6.5.0"]
+        clab_version: ["0.83.0"]
         user_id: ["1000", "1009"]
         include:
           - user_id: "1000"
@@ -121,4 +121,7 @@ jobs:
       # 2.7.1
       # - ContainerLab to 0.81.1
       # - AVD to 6.4.0
-      container_revision: "2.7.1"
+      # 2.7.2
+      # - Add AVD 6.5.0 and stop building AVD 5.7.3
+      # - ContainerLab to 0.83.0
+      container_revision: "2.7.2"
