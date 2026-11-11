@@ -84,8 +84,11 @@ ntp_settings:
 source_interfaces:
   http_client:
     mgmt_interface: true
-  ssh_client:
-    mgmt_interface: true
+
+ssh_settings:
+  client_vrfs:
+    - name: MGMT
+      source_interface: Management0
 
 timezone: America/Detroit
 
