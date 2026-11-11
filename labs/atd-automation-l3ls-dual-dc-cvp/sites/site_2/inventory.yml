@@ -1,0 +1,25 @@
+---
+SITE2:
+  children:
+    SITE2_FABRIC:
+      children:
+        SITE2_SPINES:
+          hosts:
+            s2-spine1:
+            s2-spine2:
+        SITE2_LEAFS:
+          hosts:
+            s2-leaf1:
+            s2-leaf2:
+            s2-leaf3:
+            s2-leaf4:
+            s2-brdr1:
+            s2-brdr2:
+    SITE2_NETWORK_SERVICES:
+      children:
+        SITE2_SPINES:
+        SITE2_LEAFS:
+    SITE2_CONNECTED_ENDPOINTS:
+      children:
+        SITE2_SPINES:
+        SITE2_LEAFS:

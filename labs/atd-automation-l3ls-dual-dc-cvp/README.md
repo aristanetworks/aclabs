@@ -1,0 +1,900 @@
+# Dual DC L3LS with CVP
+
+Lab environment: AVD **6.5.0**, Containerlab **0.83.0**, cEOS-lab **4.36.2F**,
+CloudVision **2026.1.0**, lab-base revision **2.7.2**.
+
+This is the CVP variant of `atd-automation-l3ls-dual-dc`. The fabric deployment
+commands use on-prem CloudVision; FRR retains its separate Docker deployment.
+
+## Access CloudVision
+
+Open [CloudVision]({{aclabs.cvp_url}}) and sign in with the lab credentials below.
+The launcher supplies the CVP instance at `192.168.100.5`, matching `cvp-avd-demo`.
+For another instance, change `CVURL` in the devcontainer configuration before
+creating the lab.
+
+The startup terminal waits for CVP, creates enrollment and service-account tokens,
+starts the topology, and checks device reachability and CloudVision streaming.
+Wait for **Lab is ready!**, then open a new terminal to load `CV_API_TOKEN`.
+In an existing terminal, run `source .vscode/runtime.env` instead.
+
+Each `make deploy-site-1` or `make deploy-site-2` submits a CloudVision workspace
+and approves and runs its change control. Review the intended configurations
+before deployment and inspect the workspace and change control in CloudVision.
+The preconfigured EOS hosts stream telemetry but remain outside the AVD fabric
+inventories. FRR is managed separately and does not stream to CloudVision.
+
+
+> Lab Credentials
+>
+> EOS nodes and CVP: username `{{aclabs.lab_username}}`, password `{{aclabs.lab_password}}`.
+>
+> FRR node: username `{{aclabs.lab_username}}`, password `{{aclabs.lab_password}}`.
+>
+> FRR opens a Linux shell; run `vtysh` to enter the routing CLI.
+
+## Lab Inventory
+
+This lab has the following devices:
+
+| Hostname | Type | OS | Management Address | Username | Password |
+| -------- | ---- | -- | ------------------ | -------- | -------- |
+| s1-spine1 | switch | cEOS-lab, 4.36.2F | 192.168.0.10 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s1-spine2 | switch | cEOS-lab, 4.36.2F | 192.168.0.11 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s1-leaf1 | switch | cEOS-lab, 4.36.2F | 192.168.0.12 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s1-leaf2 | switch | cEOS-lab, 4.36.2F | 192.168.0.13 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s1-leaf3 | switch | cEOS-lab, 4.36.2F | 192.168.0.14 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s1-leaf4 | switch | cEOS-lab, 4.36.2F | 192.168.0.15 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s1-brdr1 | switch | cEOS-lab, 4.36.2F | 192.168.0.100 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s1-brdr2 | switch | cEOS-lab, 4.36.2F | 192.168.0.101 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s2-spine1 | switch | cEOS-lab, 4.36.2F | 192.168.0.20 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s2-spine2 | switch | cEOS-lab, 4.36.2F | 192.168.0.21 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s2-leaf1 | switch | cEOS-lab, 4.36.2F | 192.168.0.22 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s2-leaf2 | switch | cEOS-lab, 4.36.2F | 192.168.0.23 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s2-leaf3 | switch | cEOS-lab, 4.36.2F | 192.168.0.24 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s2-leaf4 | switch | cEOS-lab, 4.36.2F | 192.168.0.25 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s2-brdr1 | switch | cEOS-lab, 4.36.2F | 192.168.0.200 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s2-brdr2 | switch | cEOS-lab, 4.36.2F | 192.168.0.201 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s1-host1 | host | cEOS-lab, 4.36.2F | 192.168.0.16 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s1-host2 | host | cEOS-lab, 4.36.2F | 192.168.0.17 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s2-host1 | host | cEOS-lab, 4.36.2F | 192.168.0.26 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| s2-host2 | host | cEOS-lab, 4.36.2F | 192.168.0.27 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+| frr-core1 | router | FRRouting | 192.168.0.250 | {{aclabs.lab_username}} | {{aclabs.lab_password}} |
+
+> To access any device, use `ssh <username>@<hostname>` or simply type `<hostname>` to use the SSH alias.
+
+# Arista CI Workshop - Layer 3 Leaf Spine with EVPN/VXLAN
+
+This workshop will leverage open-source tools for configuration development, deployment, and documentation of a Layer 3 Leaf Spine network with EVPN and VXLAN. In addition, the open-source tooling enables us to manage our network environment as code.
+
+This section will cover the following:
+
+- Arista AVD network automation framework
+- Network Data Models
+- Initial Deployment (Day 0 Provisioning)
+- Ongoing Operations (Day 2 and Beyond)
+
+## Lab Topology
+
+Throughout this section, we will use the following dual data center topology.
+
+<img src="images/l3ls_topo_overview.png" alt="L3LS Dual DC Topology" width="70%">
+
+The `frr-core1` node provides DCI transport between the two data centers,
+demonstrating interoperability between FRRouting and Arista EOS. Ansible and a
+Jinja template build its configuration from its own AVD structured configuration
+in [Day 0, Step 5](day0.md#step-5---connect-sites-to-dci-network).
+
+## Ansible Inventory
+
+Our lab L3LS topology contains two sites, `Site 1` and `Site 2`. We need an Ansible inventory for each site. We have created a separate directory for each site under the `sites` sub-directory in our repo.
+
+``` text
+sites/
+├── core/
+│   ├── frr-inv.yml
+│   └── group_vars/
+├── site_1/
+│   ├── inventory.yml
+│   └── group_vars/
+└── site_2/
+    ├── inventory.yml
+    └── group_vars/
+```
+
+Build, deployment, and validation playbooks target `SITE1_FABRIC` or
+`SITE2_FABRIC`. Each fabric group contains its site's spine, leaf, and border
+switches. Select one inventory per run and confirm the group membership:
+
+```bash
+ansible-inventory -i sites/site_1/inventory.yml --graph SITE1_FABRIC
+ansible-inventory -i sites/site_2/inventory.yml --graph SITE2_FABRIC
+```
+
+FRR has a separate inventory, [frr-inv.yml](sites/core/frr-inv.yml), with
+`frr-core1` in the `CORE` group. Its AVD node definition is in
+[group_vars/CORE.yml](sites/core/group_vars/CORE.yml). FRR build and
+deployment commands use this inventory and target `CORE`.
+
+The `SITE1_CONNECTED_ENDPOINTS` and `SITE2_CONNECTED_ENDPOINTS` groups apply
+host-facing port settings to fabric switches. The `servers` data model in their
+variable files describes the endpoint attachments. The preconfigured cEOS hosts
+are outside the Ansible inventories; user-defined ANTA tests run on selected leaf
+switches to check reachability to those hosts.
+
+The following is a graphical representation of the Ansible inventory groups and naming scheme used for `Site 1` in this example. This is replicated for `Site 2`.
+
+<img src="images/l3ls_ansible_groups.png" alt="Ansible Groups" width="70%">
+
+## AVD Fabric Variables
+
+To apply AVD variables to the nodes in the fabric, we make use of Ansible group_vars. How and where you define the variables is your choice. The group_vars table below is one example of AVD fabric variables for `Site 1`.
+
+| group_vars/                   | Description                                   |
+| ----------------------------- | --------------------------------------------- |
+| SITE1_FABRIC.yml              | Fabric, Topology, and Device settings         |
+| SITE1_SPINES.yml              | Device type for Spines                        |
+| SITE1_LEAFS.yml               | Device type for Leafs                         |
+| SITE1_NETWORK_SERVICES.yml    | VLANs, VRFs, SVIs                             |
+| SITE1_CONNECTED_ENDPOINTS.yml | Port Profiles and Connected Endpoint settings |
+
+### SITE1_FABRIC
+
+At the Fabric level (SITE1_FABRIC), the following variables are defined in **group_vars/SITE1_FABRIC.yml**. The fabric name, node type defaults, interface links, and EVPN gateway functionality are defined at this level. Because this is a Layer 3 Leaf Spine topology, the leaf nodes will require more variables than the spines. The variables needed for the spines include:
+
+- loopback_ipv4_pool
+- bgp_as
+
+The leaf nodes will need the following variables set:
+
+- spanning_tree_mode
+- loopback_ipv4_pool
+- loopback_ipv4_offset
+- vtep_loopback_ipv4_pool
+- uplink_switches
+- uplink_interfaces
+- uplink_ipv4_pool
+- mlag_interfaces
+- mlag_peer_ipv4_pool
+- mlag_peer_l3_ipv4_pool
+- virtual_router_mac_address
+
+Variables applied under the node key type (spine/l3leaf) defaults section are inherited by nodes under each type. These variables may be overwritten under the node itself.
+
+The spine interface used by a particular leaf is defined from the leaf's perspective with a variable called `uplink_switch_interfaces`. For example, s1-leaf1 has a unique variable `uplink_switch_interfaces: [Ethernet2, Ethernet2]` defined. This means that s1-leaf1 is connected to `s1-spine1` Ethernet2 and `s1-spine2` Ethernet2, respectively.
+
+``` yaml
+---
+fabric_name: SITE1_FABRIC
+
+# Spine Switches
+spine:
+  defaults:
+    platform: cEOS
+    loopback_ipv4_pool: 10.250.1.0/24
+    bgp_as: 65100
+  nodes:
+    - name: s1-spine1
+      id: 1
+      mgmt_ip: 192.168.0.10/24
+    - name: s1-spine2
+      id: 2
+      mgmt_ip: 192.168.0.11/24
+
+# Leaf Switches
+l3leaf:
+  defaults:
+    platform: cEOS
+    spanning_tree_mode: mstp
+    loopback_ipv4_pool: 10.250.1.0/24
+    loopback_ipv4_offset: 2
+    vtep_loopback_ipv4_pool: 10.255.1.0/24
+    uplink_switches: [ s1-spine1, s1-spine2 ]
+    uplink_interfaces: [ Ethernet2, Ethernet3 ]
+    uplink_ipv4_pool: 172.16.1.0/24
+    mlag_interfaces: [ Ethernet1, Ethernet6 ]
+    mlag_peer_ipv4_pool: 10.251.1.0/24
+    mlag_peer_l3_ipv4_pool: 10.252.1.0/24
+    virtual_router_mac_address: 00:1c:73:00:00:99
+  node_groups:
+    - group: S1_RACK1
+      bgp_as: 65101
+      nodes:
+        - name: s1-leaf1
+          id: 1
+          mgmt_ip: 192.168.0.12/24
+          uplink_switch_interfaces: [ Ethernet2, Ethernet2 ]
+        - name: s1-leaf2
+          id: 2
+          mgmt_ip: 192.168.0.13/24
+          uplink_switch_interfaces: [ Ethernet3, Ethernet3 ]
+    - group: S1_RACK2
+      bgp_as: 65102
+      nodes:
+        - name: s1-leaf3
+          id: 3
+          mgmt_ip: 192.168.0.14/24
+          uplink_switch_interfaces: [ Ethernet4, Ethernet4 ]
+        - name: s1-leaf4
+          id: 4
+          mgmt_ip: 192.168.0.15/24
+          uplink_switch_interfaces: [ Ethernet5, Ethernet5 ]
+    - group: S1_BRDR
+      bgp_as: 65103
+      evpn_gateway:
+          evpn_l2:
+            enabled: true
+          evpn_l3:
+            enabled: true
+            inter_domain: true
+      nodes:
+        - name: s1-brdr1
+          id: 5
+          mgmt_ip: 192.168.0.100/24
+          uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
+          evpn_gateway:
+              remote_peers:
+                - hostname: s2-brdr1
+                  bgp_as: 65203
+                  ip_address: 10.250.2.7
+        - name: s1-brdr2
+          id: 6
+          mgmt_ip: 192.168.0.101/24
+          uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
+          evpn_gateway:
+              remote_peers:
+                - hostname: s2-brdr2
+                  bgp_as: 65203
+                  ip_address: 10.250.2.8
+```
+
+### SITE1_SPINES
+
+In an L3LS design, there are two types of spine nodes: `spine` and `super_spine`. In AVD, the node type defines the functionality and the EOS CLI configuration to be generated. For our L3LS topology, we will use node type `spine`, as we do not have any inter-DC or inter-pod spines.
+
+``` yaml
+---
+type: spine
+```
+
+### SITE1_LEAFS
+
+In an L3LS design, we have two types of leaf nodes: `l3leaf` or `l2leaf`. This deployment will utilize `l3leaf` for all leafs as this sets the L3 network services and VTEP functionality for EVPN/VXLAN.
+
+``` yaml
+---
+type: l3leaf
+```
+
+### SITE1_NETWORK_SERVICES
+
+You add VLANs, VRFs, and EVPN specific parameters to the Fabric by updating the **group_vars/SITE1_NETWORK_SERVICES.yml**. Within the main tenant we will be configuring, we will supply a **mac_vrf_vni_base** value, which will be used for the VLAN to VNI mapping under the VXLAN interface. We will then define a VRF our VLANs will be part of and give that a VNI value for the VRF to VNI mapping. Finally, each VLAN SVI will be configured with a name and a single virtual IP address which will end up being configured on all `l3leaf` nodes.
+
+``` yaml
+---
+tenants:
+  - name: S1_FABRIC
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: OVERLAY
+        vrf_vni: 10
+        svis:
+          - id: 10
+            name: 'Ten'
+            enabled: true
+            ip_address_virtual: 10.10.10.1/24
+          - id: 20
+            name: 'Twenty'
+            enabled: true
+            ip_address_virtual: 10.20.20.1/24
+```
+
+### SITE1_CONNECTED_ENDPOINTS
+
+Our fabric would only be complete by connecting some devices to it. We define connected endpoints and port profiles in **group_vars/SITE1_CONNECTED_ENDPOINTS.yml**. Each endpoint adapter defines which switch port and port profile to use. Our lab has two hosts connected to the `site 1` fabric. The connected endpoints keys are used for logical separation and apply to interface descriptions. These variables are applied to the spine and leaf nodes since they are a part of this nested inventory group.
+
+``` yaml
+---
+port_profiles:
+
+  - profile: PP-VLAN10
+    mode: "access"
+    vlans: "10"
+    spanning_tree_portfast: edge
+  - profile: PP-VLAN20
+    mode: "access"
+    vlans: "20"
+    spanning_tree_portfast: edge
+
+###########################################################
+# ---------------- Endpoint Connectivity ---------------- #
+###########################################################
+
+servers:
+
+# --------------------------------------------------------#
+# Site1 RACK1 Endpoints
+# --------------------------------------------------------#
+
+  - name: s1-host1                                      # Server name
+    rack: RACK1                                         # Informational RACK (optional)
+    adapters:
+      - endpoint_ports: [ eth1, eth2 ]                  # Server port to connect (optional)
+        switch_ports: [ Ethernet4, Ethernet4 ]          # Switch port to connect server (required)
+        switches: [ s1-leaf1, s1-leaf2 ]                # Switch to connect server (required)
+        profile: PP-VLAN10                              # Port profile to apply (required)
+        port_channel:
+          mode: active
+
+# --------------------------------------------------------#
+# Site1 RACK2 Endpoints
+# --------------------------------------------------------#
+
+  - name: s1-host2                                      # Server name
+    rack: RACK2                                         # Informational RACK (optional)
+    adapters:
+      - endpoint_ports: [ eth1, eth2 ]                  # Server port to connect (optional)
+        switch_ports: [ Ethernet4, Ethernet4 ]          # Switch port to connect server (required)
+        switches: [ s1-leaf3, s1-leaf4 ]                # Switch to connect server (required)
+        profile: PP-VLAN20                              # Port profile to apply (required)
+        port_channel:
+          mode: active
+```
+
+## Global Variables
+
+In a multi-site environment, some variables can be applied to all sites. They include AAA, Local Users, NTP, Syslog, DNS, and TerminAttr. Instead of updating these same variables in multiple inventory group_vars, we can use a single global variable file and import the variables at playbook runtime. This allows us to make a single change applied to all sites.
+
+For example, in our lab, we use a global variable file `global_vars/global_dc_vars.yml`.
+
+AVD provides a [`global_vars`](https://avd.arista.com/6.4/docs/plugins/Vars_plugins/global_vars.html#global_vars) plugin that enables the use of global variables.
+
+The `global_vars` plugin must be enabled in the `ansible.cfg` file as shown below:
+
+``` yaml
+#enable global vars
+vars_plugins_enabled = arista.avd.global_vars, host_group_vars
+
+#define global vars path
+[vars_global_vars]
+paths = ../../global_vars
+```
+
+> If a folder is used as in the example above, all files in the folder will be parsed in alphabetical order.
+
+### Example Global Variables File
+
+`global_vars/global_dc_vars.yml`
+
+``` yaml
+---
+# Credentials for EOS Switches
+ansible_user: "{{ lookup('ansible.builtin.env', 'LABUSERNAME')) | default('arista', true) }}"
+ansible_password: "{{ lookup('ansible.builtin.env', 'LABPASSPHRASE')) | default('arista', true) }}"
+ansible_network_os: arista.eos.eos
+# Configure privilege escalation
+ansible_become: true
+ansible_become_method: enable
+# HTTPAPI configuration
+ansible_connection: httpapi
+ansible_httpapi_port: 443
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: false
+ansible_python_interpreter: $(which python3)
+
+# AAA settings and local users
+aaa_settings:
+  authorization:
+    exec:
+      default: local
+  local_users:
+    - name: "{{ ansible_user }}"
+      privilege: 15
+      role: network-admin
+      cleartext_password: "{{ ansible_password }}"
+
+# OOB Management network default gateway.
+mgmt_gateway: 192.168.0.1
+mgmt_interface_settings:
+  vrf: MGMT
+
+# NTP Servers IP or DNS name, first NTP server will be preferred, and sourced from Management VRF
+ntp_settings:
+  servers:
+    - name: time.google.com
+      iburst: true
+
+# DNS settings
+dns_settings:
+  domain: atd.lab
+  servers:
+    - ip_address: 192.168.0.1
+
+# Point to Point Links MTU Override for Lab
+p2p_uplinks_mtu: 1500
+
+# eAPI must be explicitly enabled in AVD 6.0.0
+management_eapi:
+  enabled: true
+
+# Set IPv4 Underlay Routing and EVPN Overlay Routing to use eBGP
+underlay_routing_protocol: ebgp
+overlay_routing_protocol: ebgp
+
+# Configure password authentication for BGP peerings
+bgp_peer_groups:
+  evpn_overlay_peers:
+    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
+  ipv4_underlay_peers:
+    password: 7x4B4rnJhZB438m9+BrBfQ==
+  mlag_ipv4_underlay_peer:
+    password: 4b21pAdCvWeAqpcKDFMdWw==
+
+# FRR provides IPv4 transport between the EVPN gateways. It is external to AVD.
+l3_edge:
+  p2p_links_ip_pools:
+    - name: DCI
+      ipv4_pool: 172.16.255.0/24
+      prefix_size: 31
+  p2p_links_profiles:
+    - name: DCI
+      ip_pool: DCI
+      include_in_underlay_protocol: true
+      routing_protocol: ebgp
+      mtu: 1500
+      bfd: true
+  p2p_links:
+    - id: 1
+      nodes: [ s1-brdr1, frr-core1 ]
+      interfaces: [ Ethernet4, eth1 ]
+      as: [ 65103, 65000 ]
+      profile: DCI
+    - id: 2
+      nodes: [ s1-brdr2, frr-core1 ]
+      interfaces: [ Ethernet4, eth2 ]
+      as: [ 65103, 65000 ]
+      profile: DCI
+    - id: 3
+      nodes: [ s2-brdr1, frr-core1 ]
+      interfaces: [ Ethernet4, eth3 ]
+      as: [ 65203, 65000 ]
+      profile: DCI
+    - id: 4
+      nodes: [ s2-brdr2, frr-core1 ]
+      interfaces: [ Ethernet4, eth4 ]
+      as: [ 65203, 65000 ]
+      profile: DCI
+```
+
+## Data Models
+
+AVD provides a network-wide data model that is typically broken into multiple group_vars files to simplify and categorize variables with their respective functions. We break the data model into three categories: topology, services, and ports.
+
+### Fabric Topology
+
+The physical fabric topology is defined by providing interface links between the spine and leaf nodes. The `group_vars/SITE1_FABRIC.yml` file defines this portion of the data model. In our lab, the spines provide layer 3 routing across the P2P links to the spines, as well as BGP for underlay and EVPN overlay, using a node type called `spine`. The leaf nodes are layer 3 and use node type `l3leaf`. An AVD L3LS design type provides many different node key types. AVD Node Type documentation can be found **[here](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#node-type-variables)**.
+
+#### Spine and Leaf Nodes
+
+The example data model below defines each site's spine and leaf nodes for each site. Refer to the inline comments for variable definitions. Under each node_type_key you have key/value pairs for defaults, node_groups, and nodes. Note that key/value pairs may be overwritten with the following descending order of precedence. The key/value closest to the node will be used.
+
+<node_type_key>
+
+1. defaults
+2. node_groups
+3. nodes
+
+``` yaml
+# Spine Switches
+spine:
+  defaults:
+    platform: cEOS
+    loopback_ipv4_pool: 10.250.1.0/24
+    bgp_as: 65100
+  nodes:
+    - name: s1-spine1
+      id: 1
+      mgmt_ip: 192.168.0.10/24
+    - name: s1-spine2
+      id: 2
+      mgmt_ip: 192.168.0.11/24
+
+# Leaf Switches
+l3leaf:
+  defaults:
+    platform: cEOS
+    spanning_tree_mode: mstp
+    loopback_ipv4_pool: 10.250.1.0/24
+    loopback_ipv4_offset: 2
+    vtep_loopback_ipv4_pool: 10.255.1.0/24
+    uplink_switches: [ s1-spine1, s1-spine2 ]
+    uplink_interfaces: [ Ethernet2, Ethernet3 ]
+    uplink_ipv4_pool: 172.16.1.0/24
+    mlag_interfaces: [ Ethernet1, Ethernet6 ]
+    mlag_peer_ipv4_pool: 10.251.1.0/24
+    mlag_peer_l3_ipv4_pool: 10.252.1.0/24
+    virtual_router_mac_address: 00:1c:73:00:00:99
+  node_groups:
+    - group: S1_RACK1
+      bgp_as: 65101
+      nodes:
+        - name: s1-leaf1
+          id: 1
+          mgmt_ip: 192.168.0.12/24
+          uplink_switch_interfaces: [ Ethernet2, Ethernet2 ]
+        - name: s1-leaf2
+          id: 2
+          mgmt_ip: 192.168.0.13/24
+          uplink_switch_interfaces: [ Ethernet3, Ethernet3 ]
+    - group: S1_RACK2
+      bgp_as: 65102
+      nodes:
+        - name: s1-leaf3
+          id: 3
+          mgmt_ip: 192.168.0.14/24
+          uplink_switch_interfaces: [ Ethernet4, Ethernet4 ]
+        - name: s1-leaf4
+          id: 4
+          mgmt_ip: 192.168.0.15/24
+          uplink_switch_interfaces: [ Ethernet5, Ethernet5 ]
+    - group: S1_BRDR
+      bgp_as: 65103
+      evpn_gateway:
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+          inter_domain: true
+      nodes:
+        - name: s1-brdr1
+          id: 5
+          mgmt_ip: 192.168.0.100/24
+          uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
+          evpn_gateway:
+            remote_peers:
+              - hostname: s2-brdr1
+                bgp_as: 65203
+                ip_address: 10.250.2.7
+        - name: s1-brdr2
+          id: 6
+          mgmt_ip: 192.168.0.101/24
+          uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
+          evpn_gateway:
+            remote_peers:
+              - hostname: s2-brdr2
+                bgp_as: 65203
+                ip_address: 10.250.2.8
+```
+
+#### L3 Edge Interfaces
+
+The `l3_edge` block in `global_vars/global_dc_vars.yml` defines the border
+connections to the FRR DCI node. Students enable these links and provision FRR in
+[Day 0, Step 5](day0.md#step-5---connect-sites-to-dci-network), then enable the
+EVPN gateways in Step 6.
+
+### FRR Configuration
+
+FRR starts with a minimal configuration so that the lab can start before the
+border handoffs are enabled. After enabling `l3_edge`, build both sites and
+generate the FRR configuration:
+
+```bash
+make build-site-1 build-site-2
+make build-frr
+```
+
+[build-frr.yml](playbooks/build-frr.yml) runs `arista.avd.eos_designs` for the
+`CORE` group. The node definition and shared `l3_edge` inputs generate
+`sites/core/intended/structured_configs/frr-core1.yml`. The playbook loads that
+file and renders [frr.conf.j2](templates/frr.conf.j2) to
+`sites/core/intended/configs/frr-core1.cfg`.
+
+The template uses these fields from FRR's structured configuration:
+
+| Structured configuration field | Use when provisioning FRR |
+| ------------------------------ | ---------------------------- |
+| `hostname` | FRR hostname |
+| `ethernet_interfaces[]` | Interface names, descriptions, addresses, and shutdown state |
+| `loopback_interfaces` entry for `Loopback0` | Address and description on Linux `lo` |
+| `router_bgp.as` and `router_bgp.router_id` | Local ASN and BGP router ID |
+| `router_bgp.peer_groups[]` | Peer groups, passwords, community settings, and route limits |
+| `router_bgp.neighbors[]` | Neighbor addresses, ASNs, peer groups, descriptions, and BFD |
+| `router_bgp.address_family_ipv4` | IPv4 neighbor and peer-group activation |
+| `router_bgp.maximum_paths.paths` | Maximum number of ECMP paths |
+
+The current inputs generate router ID `10.251.1.1` and four ECMP paths. The
+template decrypts EOS BGP passwords with `arista.avd.decrypt` for FRR. BGP
+neighbors with `bfd: true` create their BFD sessions dynamically.
+
+FRR exchanges eligible IPv4 routes learned from the borders without prefix
+lists, route maps, or connected-route redistribution. The template sets
+`no bgp ebgp-requires-policy` so this works with `frr defaults traditional`.
+The AVD-generated prefix lists and redistribution settings are not rendered
+into the FRR configuration. FRR's own loopback is configured locally but is not
+advertised into BGP.
+
+Review the generated file, then provision the running container:
+
+```bash
+make deploy-frr
+```
+
+[deploy-frr.yml](playbooks/deploy-frr.yml) uses `ansible.builtin.copy` over the
+Docker connection to install the reviewed `.cfg` file at `/etc/frr/frr.conf`.
+
+When the configuration file changes, a handler runs
+`/usr/lib/frr/frr-reload.py --reload /etc/frr/frr.conf` to reconcile the running
+configuration, including removing obsolete settings. Installing the file alone
+does not apply it, and `write memory` only saves the running configuration.
+The rendered configuration is already stored at FRR's startup path, so a separate
+save is unnecessary.
+
+### Network Services
+
+Network Services, such as VLANs, SVIs, and VRFs, are defined in this section. The following Site 1 example defines VLANs and SVIs for VLANs `10` and `20` in the OVERLAY VRF. We also have specified a mac VRF VNI base mapping of 10000.  This will add the base mapping to the VLAN ID to come up with the VNI for the VLAN to VNI mapping under the VXLAN interface. Since we have the same VLANs stretched across to Site 2, the network services data model will be exactly the same:
+
+``` yaml
+---
+tenants:
+  - name: S1_FABRIC
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: OVERLAY
+        vrf_vni: 10
+        svis:
+          - id: 10
+            name: 'Ten'
+            enabled: true
+            ip_address_virtual: 10.10.10.1/24
+          - id: 20
+            name: 'Twenty'
+            enabled: true
+            ip_address_virtual: 10.20.20.1/24
+```
+
+### Connected Endpoints
+
+The Fabric must define ports for southbound interfaces toward connected endpoints such as servers, appliances, firewalls, and other networking devices in the data center. This section uses port profiles and connected endpoints called `servers`. Documentation for [port_profiles](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#port-profiles-settings) and [connected endpoints](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#connected-endpoints-keys-settings) is available to see all the options available.
+
+The following data model defines two port profiles: PP-VLAN10 and PP-VLAN20. They define an access port profile for VLANs `10` and `20`, respectively. In addition, two server endpoints (s1-host1 and s1-host2) are created to use these port profiles. There are optional and required fields. The optional fields are used for port descriptions in the EOS intended configurations.
+
+``` yaml
+---
+port_profiles:
+
+  - profile: PP-VLAN10
+    mode: "access"
+    vlans: "10"
+    spanning_tree_portfast: edge
+  - profile: PP-VLAN20
+    mode: "access"
+    vlans: "20"
+    spanning_tree_portfast: edge
+
+###########################################################
+# ---------------- Endpoint Connectivity ---------------- #
+###########################################################
+
+servers:
+
+# --------------------------------------------------------#
+# Site1 RACK1 Endpoints
+# --------------------------------------------------------#
+
+  - name: s1-host1                                      # Server name
+    rack: RACK1                                         # Informational RACK (optional)
+    adapters:
+      - endpoint_ports: [ eth1, eth2 ]                  # Server port to connect (optional)
+        switch_ports: [ Ethernet4, Ethernet4 ]          # Switch port to connect server (required)
+        switches: [ s1-leaf1, s1-leaf2 ]                # Switch to connect server (required)
+        profile: PP-VLAN10                              # Port profile to apply (required)
+        port_channel:
+          mode: active
+
+# --------------------------------------------------------#
+# Site1 RACK2 Endpoints
+# --------------------------------------------------------#
+
+  - name: s1-host2                                      # Server name
+    rack: RACK2                                         # Informational RACK (optional)
+    adapters:
+      - endpoint_ports: [ eth1, eth2 ]                  # Server port to connect (optional)
+        switch_ports: [ Ethernet4, Ethernet4 ]          # Switch port to connect server (required)
+        switches: [ s1-leaf3, s1-leaf4 ]                # Switch to connect server (required)
+        profile: PP-VLAN20                              # Port profile to apply (required)
+        port_channel:
+          mode: active
+```
+
+## The Playbooks
+
+Three playbooks, `build.yml`, `deploy.yml`, and `validate.yml`, are used in our lab.
+
+`build.yml`
+
+``` yaml
+---
+- name: Build Switch configuration
+  hosts: "{{ target_hosts }}"
+  gather_facts: false
+
+  tasks:
+
+    - name: Generate Structured Variables per Device
+      ansible.builtin.import_role:
+        name: arista.avd.eos_designs
+
+    - name: Generate Intended Config and Documentation
+      ansible.builtin.import_role:
+        name: arista.avd.eos_cli_config_gen
+```
+
+`deploy.yml`
+
+``` yaml
+---
+- name: Deploy Switch configuration through CloudVision
+  hosts: "{{ target_hosts }}"
+  connection: local
+  gather_facts: false
+
+  tasks:
+
+    - name: Deploy AVD configurations through CloudVision
+      ansible.builtin.import_role:
+        name: arista.avd.cv_deploy
+      vars:
+        cv_server: "{{ lookup('ansible.builtin.env', 'CVURL') }}"
+        cv_token: "{{ lookup('ansible.builtin.env', 'CV_API_TOKEN') }}"
+        cv_verify_certs: false
+        cv_run_change_control: true
+```
+
+`validate.yml`
+
+```yaml
+---
+- name: Validate Network State
+  hosts: "{{ target_hosts }}"
+  connection: httpapi
+  gather_facts: false
+  ignore_errors: true
+
+  tasks:
+
+    - name: validate states on EOS devices
+      ansible.builtin.import_role:
+        name: arista.avd.anta_runner
+      vars:
+        user_catalogs_enabled: true
+        anta_report_expand_results: true
+        avd_catalogs_filters:
+          - skip_tests:
+              - VerifyNTP
+              - VerifyInterfaceDiscards
+              - VerifyLoggingErrors
+```
+
+The validation playbook combines AVD-generated tests with user-defined ANTA
+catalogs. AVD catalog generation remains enabled by default and uses the site's
+`intended/structured_configs/` files from the build. Run validation after building
+and deploying the current fabric configuration.
+
+Store user-defined catalogs in `sites/site_1/anta/user_catalogs/` or
+`sites/site_2/anta/user_catalogs/`. The role merges them with the generated tests
+for the selected inventory. Use hostname tags such as `s1-leaf1` to select the
+switch that originates each custom test.
+
+The Site 1 reachability catalog probes `s1-host1` from `s1-leaf1` using `Vlan10`
+and `s1-host2` from `s1-leaf3` using `Vlan20`. Both probes use the `OVERLAY` VRF.
+See [Validate Site 1 with ANTA](day0.md#validate-site-1-with-anta) for the catalog
+and the corresponding Site 2 setup.
+
+Generated catalogs are stored in each site's `anta/avd_catalogs/` directory.
+Reports are written to `anta/reports/` as Markdown, CSV, and JSON. The
+`anta_report_expand_results: true` setting expands individual checks in the
+Markdown report.
+
+To make our lives easier, we use a `Makefile` to create aliases to run the playbooks and provide the needed options. This eliminates mistakes and typing long commands.
+
+`Makefile`
+
+``` yaml
+.PHONY: help
+help: ## Display help message
+    @grep -E '^[0-9a-zA-Z_-]+\.*[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+########################################################
+# Site 1
+########################################################
+
+.PHONY: build-site-1
+build-site-1: ## Build Configs
+    ansible-playbook playbooks/build.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+
+.PHONY: deploy-site-1
+deploy-site-1: ## Deploy Configs via CloudVision
+    ansible-playbook playbooks/deploy.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+
+.PHONY: validate-site-1
+validate-site-1: ## Validate network state
+    ansible-playbook playbooks/validate.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+
+########################################################
+# Site 2
+########################################################
+
+.PHONY: build-site-2
+build-site-2: ## Build Configs
+    ansible-playbook playbooks/build.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+
+.PHONY: deploy-site-2
+deploy-site-2: ## Deploy Configs via CloudVision
+    ansible-playbook playbooks/deploy.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+
+.PHONY: validate-site-2
+validate-site-2: ## Validate network state
+    ansible-playbook playbooks/validate.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+```
+
+For example, if we wanted to run a playbook to build configurations for Site 1, we could enter the following command.
+
+``` bash
+ansible-playbook playbooks/build.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+```
+
+Thankfully, a convenient way to simplify the above command is with a Makefile entry like the one below.
+
+``` bash
+.PHONY: build-site-1
+build-site-1: ## Build Configs
+  ansible-playbook playbooks/build.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+```
+
+Now, you can type the following to issue the same ansible-playbook command.
+
+``` bash
+make build-site-1
+```
+
+In the upcoming lab, we will use the following `make` commands several times. First, review the above `Makefile` to see what each entry does.
+
+Build configurations
+
+``` bash
+# Build configs for Site 1
+make build-site-1
+
+# Build configs for Site 2
+make build-site-2
+```
+
+Deploy configurations
+
+``` bash
+# Deploy configs for Site 1
+make deploy-site-1
+
+# Deploy configs for Site 2
+make deploy-site-2
+```
+
+Validate network state after deploying each site's configuration. Enable the
+services and host-facing ports before running the custom reachability tests:
+
+```bash
+# Site 1: generated fabric tests and custom leaf-to-host tests
+make validate-site-1
+
+# Site 2: add its custom catalog to include leaf-to-host tests
+make validate-site-2
+```
+
+Both targets run the validation playbook against their site's fabric group. See
+the [final fabric test](day0.md#final-fabric-test) for the inter-DC connectivity
+checks.
+
+## Next Steps
+
+[Continue to Lab Guide](day0.md)
