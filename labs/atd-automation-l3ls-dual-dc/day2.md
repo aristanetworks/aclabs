@@ -17,7 +17,7 @@ git commit -m 'Your message here'
 ## Login Banner
 
 When we initially deployed our multi-site topology, we should have included a login banner on all our switches.
-Let's take a look at the **[AVD documentation site](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#other-management-settings)** to see what the
+Let's take a look at the **[AVD documentation site](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#other-management-settings)** to see what the
 data model is for this configuration.
 
 The banner on all of our switches will be the same. After reviewing the AVD documentation, we know we can accomplish this by defining the `banners` input variable
@@ -48,7 +48,7 @@ git commit -m 'add banner'
 
 ## Syslog Server
 
-Our next Day 2 change is adding a syslog server configuration to all of our switches. Once again, we'll take a look at the `logging_settings` within the **[management settings](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#logging)** data models.
+Our next Day 2 change is adding a syslog server configuration to all of our switches. Once again, we'll take a look at the `logging_settings` within the **[management settings](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#logging)** data models.
 
 Like our banner operation, the syslog server configuration will be consistent on all our switches. Because of this, we can also put this into
 our `global_vars/global_dc_vars.yml` file.
