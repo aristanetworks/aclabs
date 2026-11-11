@@ -58,4 +58,6 @@ jobs:
       # - Set base from_image to lab-base:python3.12-avd-v6.3.0-clab0.79.0-rev2.6.11-uid1009
       # 1.0.6:
       # - Set base from_image to lab-base:python3.12-avd-v6.4.0-clab0.81.1-rev2.7.1-uid1009
-      container_revision: "1.0.6"
+      # 1.0.7:
+      # - Set base from_image to lab-base:python3.12-avd-v6.5.0-clab0.83.0-rev2.7.3-uid1009
+      container_revision: "1.0.7"

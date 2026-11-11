@@ -65,4 +65,6 @@ jobs:
       # - init_lab.py: a node is probed only once containerlab lists its container ("WAITING FOR DEPLOY"); a deploy that ends without creating it reads "not deployed" with the deploy's error from .lab/deploy.status
       # 1.0.9
       # - Set base from_image to lab-base:python3.12-avd-v6.4.0-clab0.81.1-rev2.7.1-uid1009
-      container_revision: "1.0.9"
+      # 1.0.10
+      # - Set base from_image to lab-base:python3.12-avd-v6.5.0-clab0.83.0-rev2.7.3-uid1009
+      container_revision: "1.0.10"
