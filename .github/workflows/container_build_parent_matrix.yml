@@ -124,7 +124,7 @@ jobs:
       # 2.7.2
       # - Add AVD 6.5.0 and stop building AVD 5.7.3
       # - ContainerLab to 0.83.0
-      # 2.7.3
-      # - ContainerLab extension to 0.27.0
-      container_revision: "2.7.3"
+      # 2.6.12
+      # - (2.6 train is no CVP) ContainerLab extension to 0.27.0
+      container_revision: "2.6.12"
 
