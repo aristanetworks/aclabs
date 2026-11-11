@@ -1,5 +1,4 @@
 {
-    "containerlab.node.sshUserMapping": {"arista_ceos": "arista"},
     "containerlab.showWelcomePage": false,
     "containerlab.skipUpdateCheck": true,
     "chat.agent.enabled": false,

@@ -2,13 +2,20 @@
 
 set -euo pipefail
 
+LABUSERNAME="${LABUSERNAME:-arista}"
+LABPASSPHRASE="${LABPASSPHRASE:-arista}"
+
 # Trust the mounted lab repository even when GIT_INIT is disabled.
 # TODO: Remove this workaround once the main entrypoint sets safe.directory regardless of GIT_INIT.
 git config --global --add safe.directory "${CONTAINERWSF}"
 
 # License acceptance must be in code-server user settings, not workspace settings.
 settings_file="$HOME/.local/share/code-server/User/settings.json"
-jq '.["arista-avd-yaml.eulaAccepted"] = true' \
+jq --arg username "$LABUSERNAME" '
+    .["arista-avd-yaml.eulaAccepted"] = true
+    | .["containerlab.node.sshUserMapping"].arista_ceos = $username
+    | .["containerlab.node.sshUserMapping"].frr = $username
+' \
     "$settings_file" > "${settings_file}.tmp"
 mv -- "${settings_file}.tmp" "$settings_file"
 

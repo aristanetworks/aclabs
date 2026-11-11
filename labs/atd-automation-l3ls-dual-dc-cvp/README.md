@@ -13,6 +13,13 @@ The launcher supplies the CVP instance at `192.168.100.5`, matching `cvp-avd-dem
 For another instance, change `CVURL` in the devcontainer configuration before
 creating the lab.
 
+The host launcher must supply `LABUSERNAME` and `LABPASSPHRASE` matching the CVP
+login. This variant has no credential env file overriding the host values. Credentials
+default to `arista` when the host does not supply them, matching `cvp-avd-demo`.
+EOS bootstrap configs contain the default `arista/arista` account. Shared
+onboarding adds the host-supplied lab account alongside it before deployment,
+matching `cvp-avd-demo`. FRR and Ansible use the same host-supplied values.
+
 The startup terminal waits for CVP, creates enrollment and service-account tokens,
 starts the topology, and checks device reachability and CloudVision streaming.
 Wait for **Lab is ready!**, then open a new terminal to load `CV_API_TOKEN`.
@@ -369,8 +376,8 @@ paths = ../../global_vars
 ``` yaml
 ---
 # Credentials for EOS Switches
-ansible_user: "{{ lookup('ansible.builtin.env', 'LABUSERNAME')) | default('arista', true) }}"
-ansible_password: "{{ lookup('ansible.builtin.env', 'LABPASSPHRASE')) | default('arista', true) }}"
+ansible_user: "{{ lookup('ansible.builtin.env', 'LABUSERNAME', default='arista') }}"
+ansible_password: "{{ lookup('ansible.builtin.env', 'LABPASSPHRASE', default='arista') }}"
 ansible_network_os: arista.eos.eos
 # Configure privilege escalation
 ansible_become: true

@@ -118,12 +118,9 @@ topology:
       startup-config: init-configs/s2-host2.cfg
     frr-core1:
       kind: frr
-      credentials:
-        username: ${LABUSERNAME:-arista}
-        password: ${LABPASSPHRASE:-arista}
       env:
-        LABUSERNAME: ${LABUSERNAME:-arista}
-        LABPASSPHRASE: ${LABPASSPHRASE:-arista}
+        LABUSERNAME: ${LABUSERNAME}
+        LABPASSPHRASE: ${LABPASSPHRASE}
       binds:
         - configure-frr-user.sh:/usr/local/bin/configure-frr-user.sh:ro
       exec:

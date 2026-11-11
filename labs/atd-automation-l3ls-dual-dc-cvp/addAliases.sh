@@ -4,6 +4,7 @@ set +e
 
 LABUSERNAME="${LABUSERNAME:-arista}"
 LABPASSPHRASE="${LABPASSPHRASE:-arista}"
+
 echo "alias s1-spine1='sshpass -p \"${LABPASSPHRASE}\" ssh -o \"StrictHostKeyChecking no\" \"${LABUSERNAME}\"@192.168.0.10'" >> ~/.zshrc
 echo "alias s1-spine2='sshpass -p \"${LABPASSPHRASE}\" ssh -o \"StrictHostKeyChecking no\" \"${LABUSERNAME}\"@192.168.0.11'" >> ~/.zshrc
 echo "alias s1-leaf1='sshpass -p \"${LABPASSPHRASE}\" ssh -o \"StrictHostKeyChecking no\" \"${LABUSERNAME}\"@192.168.0.12'" >> ~/.zshrc
