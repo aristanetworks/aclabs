@@ -1,0 +1,12 @@
+{
+    "containerlab.showWelcomePage": false,
+    "containerlab.skipUpdateCheck": true,
+    "chat.agent.enabled": false,
+    "chat.disableAIFeatures": true,
+    "git.repositoryScanIgnoredFolders": ["clab"],
+    "markdown.preview.doubleClickToSwitchToEditor": false,
+    "redhat.telemetry.enabled": false,
+    "terminal.integrated.suggest.enabled": true,
+    "workbench.colorTheme": "Tomorrow Night Blue",
+    "workbench.editorAssociations": { "*.md": "vscode.markdown.preview.editor"}
+}

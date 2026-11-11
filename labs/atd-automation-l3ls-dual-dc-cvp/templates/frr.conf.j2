@@ -1,0 +1,80 @@
+! Generated from this device's AVD structured configuration. Do not edit.
+{# FRR is a BGP transit router: no route filters or connected redistribution. #}
+frr defaults traditional
+hostname {{ hostname }}
+log stdout informational
+service integrated-vtysh-config
+!
+{% for ethernet_interface in ethernet_interfaces | arista.avd.natural_sort(sort_key='name') %}
+interface {{ ethernet_interface.name }}
+{%     if ethernet_interface.description is arista.avd.defined %}
+ description {{ ethernet_interface.description }}
+{%     endif %}
+{%     if ethernet_interface.ip_address is arista.avd.defined %}
+ ip address {{ ethernet_interface.ip_address }}
+{%     endif %}
+ {{ 'shutdown' if ethernet_interface.shutdown | default(false) else 'no shutdown' }}
+exit
+!
+{% endfor %}
+{% for loopback_interface in loopback_interfaces | default([]) | selectattr('name', 'equalto', 'Loopback0') %}
+interface lo
+{%     if loopback_interface.description is arista.avd.defined %}
+ description {{ loopback_interface.description }}
+{%     endif %}
+ ip address {{ loopback_interface.ip_address }}
+ {{ 'shutdown' if loopback_interface.shutdown | default(false) else 'no shutdown' }}
+exit
+!
+{% endfor %}
+router bgp {{ router_bgp.as }}
+ bgp router-id {{ router_bgp.router_id }}
+{% if not router_bgp.bgp.default.ipv4_unicast | default(true) %}
+ no bgp default ipv4-unicast
+{% endif %}
+ no bgp ebgp-requires-policy
+{% for peer_group in router_bgp.peer_groups | arista.avd.natural_sort(sort_key='name') %}
+ neighbor {{ peer_group.name }} peer-group
+{%     if peer_group.password is arista.avd.defined %}
+ neighbor {{ peer_group.name }} password {{ peer_group.password | arista.avd.decrypt(passwd_type='bgp', key=peer_group.name) }}
+{%     endif %}
+{% endfor %}
+{% for neighbor in router_bgp.neighbors | arista.avd.natural_sort(sort_key='ip_address') %}
+ neighbor {{ neighbor.ip_address }} remote-as {{ neighbor.remote_as }}
+{%     if neighbor.peer_group is arista.avd.defined %}
+ neighbor {{ neighbor.ip_address }} peer-group {{ neighbor.peer_group }}
+{%     endif %}
+{%     if neighbor.description is arista.avd.defined %}
+ neighbor {{ neighbor.ip_address }} description {{ neighbor.description }}
+{%     endif %}
+{%     if neighbor.password is arista.avd.defined %}
+ neighbor {{ neighbor.ip_address }} password {{ neighbor.password | arista.avd.decrypt(passwd_type='bgp', key=neighbor.ip_address) }}
+{%     endif %}
+{%     if neighbor.bfd | default(false) %}
+ neighbor {{ neighbor.ip_address }} bfd
+{%     endif %}
+{% endfor %}
+ !
+ address-family ipv4 unicast
+{% for peer_group in router_bgp.address_family_ipv4.peer_groups | arista.avd.natural_sort(sort_key='name') %}
+  {{ '' if peer_group.activate | default(false) else 'no ' }}neighbor {{ peer_group.name }} activate
+{% endfor %}
+{% for peer_group in router_bgp.peer_groups | arista.avd.natural_sort(sort_key='name') %}
+{%     if peer_group.send_community is arista.avd.defined %}
+{%         if peer_group.send_community == 'all' %}
+  neighbor {{ peer_group.name }} send-community both
+  neighbor {{ peer_group.name }} send-community large
+{%         else %}
+  neighbor {{ peer_group.name }} send-community {{ peer_group.send_community }}
+{%         endif %}
+{%     endif %}
+{%     if peer_group.maximum_routes is arista.avd.defined %}
+  neighbor {{ peer_group.name }} maximum-prefix {{ peer_group.maximum_routes }}
+{%     endif %}
+{% endfor %}
+{% if router_bgp.maximum_paths.paths is arista.avd.defined %}
+  maximum-paths {{ router_bgp.maximum_paths.paths }}
+{% endif %}
+ exit-address-family
+exit
+!

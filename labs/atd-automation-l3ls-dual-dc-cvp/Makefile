@@ -1,0 +1,72 @@
+CURRENT_DIR := $(shell pwd)
+
+.PHONY: help
+help: ## Display help message
+	@grep -E '^[0-9a-zA-Z_-]+\.*[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: start
+start: ## Deploy the lab
+	sudo --preserve-env=LABUSERNAME,LABPASSPHRASE containerlab deploy --debug --topo $(CURRENT_DIR)/clab/topology.clab.yml --max-workers 10 --timeout 5m --reconfigure
+
+.PHONY: stop
+stop: ## Destroy the lab
+	sudo --preserve-env=LABUSERNAME,LABPASSPHRASE containerlab destroy --debug --topo $(CURRENT_DIR)/clab/topology.clab.yml --cleanup
+
+.PHONY: inspect
+inspect: ## Inspect the lab
+	@sudo --preserve-env=LABUSERNAME,LABPASSPHRASE containerlab inspect --topo $(CURRENT_DIR)/clab/topology.clab.yml
+	@echo ""
+	@echo "You can check the lab status, hostnames and management addresses above."
+	@echo "To connect to an EOS device, use its SSH alias and the credentials shown in README.md."
+
+########################################################
+# Site 1
+########################################################
+
+.PHONY: build-site-1
+build-site-1: ## Build Configs
+	ansible-playbook playbooks/build.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+
+.PHONY: deploy-site-1
+deploy-site-1: ## Deploy Configs via CloudVision
+	ansible-playbook playbooks/deploy.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+
+.PHONY: validate-site-1
+validate-site-1: ## Validate network state
+	ansible-playbook playbooks/validate.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+
+########################################################
+# Site 2
+########################################################
+
+.PHONY: build-site-2
+build-site-2: ## Build Configs
+	ansible-playbook playbooks/build.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+
+.PHONY: deploy-site-2
+deploy-site-2: ## Deploy Configs via CloudVision
+	ansible-playbook playbooks/deploy.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+
+.PHONY: validate-site-2
+validate-site-2: ## Validate network state
+	ansible-playbook playbooks/validate.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+
+########################################################
+# FRR DCI transport
+########################################################
+
+.PHONY: build-frr
+build-frr: ## Build FRR config from its AVD structured configuration
+	ansible-playbook playbooks/build-frr.yml -i sites/core/frr-inv.yml -e "target_hosts=CORE"
+
+.PHONY: deploy-frr
+FRR_ANSIBLE_ARGS ?=
+deploy-frr: ## Install the rendered FRR config over SSH and reload FRR
+	ansible-playbook playbooks/deploy-frr.yml -i sites/core/frr-inv.yml -e "target_hosts=CORE"
+
+########################################################
+# Build and deploy all sites and FRR
+########################################################
+
+.PHONY: all
+all: build-site-1 build-site-2 build-frr deploy-site-1 deploy-site-2 deploy-frr

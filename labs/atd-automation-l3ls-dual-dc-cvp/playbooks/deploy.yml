@@ -1,0 +1,16 @@
+---
+- name: Deploy Switch configuration through CloudVision
+  hosts: "{{ target_hosts }}"
+  connection: local
+  gather_facts: false
+
+  tasks:
+
+    - name: Deploy AVD configurations through CloudVision
+      ansible.builtin.import_role:
+        name: arista.avd.cv_deploy
+      vars:
+        cv_server: "{{ lookup('ansible.builtin.env', 'CVURL') }}"
+        cv_token: "{{ lookup('ansible.builtin.env', 'CV_API_TOKEN') }}"
+        cv_verify_certs: false
+        cv_run_change_control: true
