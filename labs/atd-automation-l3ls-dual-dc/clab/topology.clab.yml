@@ -18,6 +18,11 @@ topology:
       daemons:
         - bgpd
         - bfdd
+      exec:
+        - sh -c 'echo "/usr/bin/vtysh" >> /etc/shells'
+        - sh -c 'adduser -D -s /usr/bin/vtysh arista'
+        - sh -c 'echo "arista:arista" | chpasswd'
+        - sh -c 'adduser arista frrvty'
   defaults:
     kind: arista_ceos
   nodes:
