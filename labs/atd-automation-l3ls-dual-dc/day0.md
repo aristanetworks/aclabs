@@ -265,19 +265,23 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their I
 
     ``` text
     s1-leaf1#show ip interface brief
-                                                                                    Address
-    Interface         IP Address            Status       Protocol            MTU    Owner  
+                                                                                  Address
+    Interface         IP Address            Status       Protocol            MTU    Owner
     ----------------- --------------------- ------------ -------------- ----------- -------
-    Ethernet2         172.16.1.1/31         up           up                 1500           
-    Ethernet3         172.16.1.3/31         up           up                 1500           
-    Loopback0         10.250.1.3/32         up           up                65535           
-    Loopback1         10.255.1.3/32         up           up                65535           
-    Management1       192.168.0.12/24       up           up                 1500           
-    Vlan4093          10.252.1.0/31         up           up                 1500           
-    Vlan4094          10.251.1.0/31         up           up                 1500   
+    Ethernet2         172.16.1.1/31         up           up                 1500
+    Ethernet3         172.16.1.3/31         up           up                 1500
+    Loopback0         10.250.1.3/32         up           up                65535
+    Loopback1         10.255.1.3/32         up           up                65535
+    Management1       192.168.0.12/24       up           up                 1500
+    Vlan10            10.10.10.1/24         up           up                 1500
+    Vlan20            10.20.20.1/24         up           up                 1500
+    Vlan3009          10.252.1.0/31         up           up                 1500
+    Vlan4093          10.252.1.0/31         up           up                 1500
+    Vlan4094          10.251.1.0/31         up           up                 1500
+    Vlan4097          unassigned            up           up                 9164
     ```
 
-    > You should notice some VLANs that we didn't define anywhere in the `SITE1_NETWORK_SERVICES.yml` data model which aren't related to **MLAG**. The additional VLANs will be used for underlay and overlay MLAG peering.
+    > You should notice some VLANs that we didn't define anywhere in the `_NETWORK_SERVICES.yml` data model which aren't related to **MLAG**. The additional VLANs will be used for underlay and overlay MLAG peering.
 
 2. Overlay vrf BGP Peering
 
