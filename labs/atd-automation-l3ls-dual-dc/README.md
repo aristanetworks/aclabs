@@ -2,9 +2,7 @@
 
 > Lab Credentials
 >
-> EOS nodes: username `arista`, password `arista`.
->
-> FRR node: username `admin`, password `admin`.
+> All nodes: username `arista`, password `arista`.
 
 ## Lab Inventory
 
@@ -32,7 +30,7 @@ This lab has the following devices:
 | s1-host2 | host | cEOS-lab, 4.36.2F | 192.168.0.17 | arista | arista |
 | s2-host1 | host | cEOS-lab, 4.36.2F | 192.168.0.26 | arista | arista |
 | s2-host2 | host | cEOS-lab, 4.36.2F | 192.168.0.27 | arista | arista |
-| frr-core1 | router | FRRouting | 192.168.0.250 | admin | admin |
+| frr-core1 | router | FRRouting | 192.168.0.250 | arista | arista |
 
 > To access any device, use `ssh <username>@<hostname>` or simply type `<hostname>` to use the SSH alias.
 
