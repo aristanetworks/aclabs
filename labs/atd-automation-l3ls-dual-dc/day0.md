@@ -264,7 +264,7 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their I
     **Expected Output**
 
     ```console
-    s1-leaf1# show ip interface brief
+    s1-leaf1#show ip interface brief
                                                                                     Address
     Interface         IP Address            Status       Protocol            MTU    Owner
     ----------------- --------------------- ------------ -------------- ----------- -------
