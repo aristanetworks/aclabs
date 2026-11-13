@@ -9,7 +9,7 @@ Before going any further, let's ensure we have a clean repo by committing the ch
 up to this point. The CLI commands below can accomplish this, but the VS Code Source Control GUI
 can be used as well.
 
-``` bash
+```bash
 git add .
 git commit -m 'Your message here'
 ```
@@ -25,7 +25,7 @@ in our `global_vars/global_dc_vars.yml` file.
 
 Add the code block below to `global_vars/global_dc_vars.yml`.
 
-``` yaml
+```yaml
 management_settings:
   banners:
     motd: You shall not pass. Unless you are authorized. Then you shall pass.
@@ -33,7 +33,7 @@ management_settings:
 
 Next, let's build the configurations and documentation associated with this change.
 
-``` bash
+```bash
 make build-site-1 build-site-2
 ```
 
@@ -41,7 +41,7 @@ Please take a minute to review the results of our five lines of YAML. When finis
 
 As usual, there are a few ways of doing this, but the CLI commands below will get the job done:
 
-``` bash
+```bash
 git add .
 git commit -m 'add banner'
 ```
@@ -55,7 +55,7 @@ our `global_vars/global_dc_vars.yml` file.
 
 Add the code block below to [global_vars/global_dc_vars.yml](global_vars/global_dc_vars.yml).
 
-``` yaml
+```yaml
 # Syslog
 logging_settings:
   hosts:
@@ -65,7 +65,7 @@ logging_settings:
 
 Finally, let's build our configurations.
 
-``` bash
+```bash
 make build-site-1 build-site-2
 ```
 
@@ -74,14 +74,14 @@ of our work.
 
 At this point, our banner and syslog configurations are in place. Commit these changes before deploying them:
 
-``` bash
+```bash
 git add .
 git commit -m 'add syslog'
 ```
 
 Finally, let's deploy our changes.
 
-``` bash
+```bash
 make deploy-site-1 deploy-site-2
 ```
 
@@ -96,7 +96,7 @@ For this we will need to modify the two `NETWORK_SERVICES.yml` data model variab
 
 Copy the following data model entries and paste them directly below the last VLAN entry, in both [SITE1_NETWORK_SERVICES.yml](sites/site_1/group_vars/SITE1_NETWORK_SERVICES.yml) and [SITE2_NETWORK_SERVICES.yml](sites/site_2/group_vars/SITE2_NETWORK_SERVICES.yml).  Ensure the `-id:` entries all line up.
 
-``` yaml
+```yaml
           - id: 30
             name: 'Thirty'
             enabled: true
@@ -112,10 +112,10 @@ When complete, your variable files should look like this.
 
 SITE1_NETWORK_SERVICES.yml:
 
-``` yaml
+```yaml
 ---
 tenants:
-  - name: S1_FABRIC
+  - name: DC_TENANT
     mac_vrf_vni_base: 10000
     vrfs:
       - name: OVERLAY
@@ -144,17 +144,17 @@ tenants:
 
 SITE2_NETWORK_SERVICES.yml:
 
-``` yaml
+```yaml
 ---
 tenants:
-  - name: S2_FABRIC
+  - name: DC_TENANT
     mac_vrf_vni_base: 10000
     vrfs:
       - name: OVERLAY
         vrf_vni: 10
         vtep_diagnostic:
           loopback: 10
-          loopback_ip_range: 10.1.0.0/24
+          loopback_ip_range: 10.2.0.0/24
         svis:
           - id: 10
             name: 'Ten'
@@ -176,7 +176,7 @@ tenants:
 
 Finally, let's build and deploy our configurations.
 
-``` bash
+```bash
 make all
 ```
 
@@ -188,13 +188,13 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
     **Command**
 
-    ``` text
+    ```console
     show ip interface brief
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#show ip interface brief
                                                                                     Address
     Interface         IP Address            Status       Protocol            MTU    Owner
@@ -218,13 +218,13 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
     **Command**
 
-    ``` text
+    ```console
     show run interface vxlan 1
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#show run interface vxlan 1
     interface Vxlan1
       description s1-leaf1_VTEP
@@ -240,13 +240,13 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
     **Command**
 
-    ``` text
+    ```console
     show interface vxlan 1
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#show interface vxlan 1
     Vxlan1 is up, line protocol is up (connected)
       Hardware is Vxlan
@@ -277,13 +277,13 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
     **Command**
 
-    ``` text
+    ```console
     show bgp evpn vni 10030
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#sho bgp evpn vni 10030
     BGP routing table information for VRF default
     Router identifier 10.250.1.3, local AS number 65101
@@ -315,13 +315,13 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
     **Command**
 
-    ``` text
+    ```console
     show bgp evpn vni 10040
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#sho bgp evpn vni 10040
     BGP routing table information for VRF default
     Router identifier 10.250.1.3, local AS number 65101
@@ -355,13 +355,13 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
     **Command**
 
-    ``` text
+    ```console
     show bgp evpn vni 10030
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-brdr1#  sho bgp evpn vni 10030
     BGP routing table information for VRF default
     Router identifier 10.250.1.7, local AS number 65103
@@ -397,13 +397,13 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
 
     **Command**
 
-    ``` text
+    ```console
     show bgp evpn vni 10040
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-brdr1#  sho bgp evpn vni 10040
     BGP routing table information for VRF default
     Router identifier 10.250.1.7, local AS number 65103
@@ -461,7 +461,7 @@ We can then add the `allow_ten` tag to VLAN 10 within the [SITE1_NETWORK_SERVICE
 ```yaml
 ---
 tenants:
-  - name: S1_FABRIC
+  - name: DC_TENANT
     mac_vrf_vni_base: 10000
     vrfs:
       - name: OVERLAY
@@ -491,11 +491,11 @@ tenants:
 
 We can now build, deploy, and validate our updates on s1-leaf1.
 
-```text
+```console
 make build-site-1 deploy-site-1
 ```
 
-```text
+```console
 s1-leaf1#show ip interface brief
                                                                                 Address
 Interface         IP Address            Status       Protocol            MTU    Owner
@@ -525,7 +525,7 @@ We can start by removing the tags we added in the network services file.
 ```yaml
 ---
 tenants:
-  - name: S1_FABRIC
+  - name: DC_TENANT
     mac_vrf_vni_base: 10000
     vrfs:
       - name: OVERLAY
@@ -576,13 +576,13 @@ l3leaf:
 ...
 ```
 
-```shell
+```bash
 make build-site-1 deploy-site-1
 ```
 
 We can now connect to s1-leaf3 and view the difference.
 
-```text
+```console
 s1-leaf3#show ip interface brief
                                                                                 Address
 Interface         IP Address            Status       Protocol            MTU    Owner
@@ -621,7 +621,7 @@ Our network architect has another request: move the tenant's Layer 2 service ide
 
 An **RD** makes an EVPN route unique, while an **RT** controls which EVPN instances import that route. In this lab, AVD derives each VLAN's MAC-VRF VNI by adding the VLAN ID to `mac_vrf_vni_base`. With our existing default RD/RT settings and no overrides, AVD also uses that result for the RD's second field and both fields of the RT:
 
-``` text
+```text
 MAC-VRF VNI = mac_vrf_vni_base + VLAN ID
 RD          = router ID:MAC-VRF VNI
 RT          = MAC-VRF VNI:MAC-VRF VNI
@@ -637,18 +637,18 @@ If you completed the `only_vlans_in_use` exercise, set `l3leaf.defaults.filter.o
 
 In [SITE1_NETWORK_SERVICES.yml](sites/site_1/group_vars/SITE1_NETWORK_SERVICES.yml), change the existing tenant's `mac_vrf_vni_base` from `10000` to `20000`:
 
-``` yaml
+```yaml
 tenants:
-  - name: S1_FABRIC
+  - name: DC_TENANT
     mac_vrf_vni_base: 20000
     # Keep the existing VRFs and SVIs below this line.
 ```
 
 Make the same change in [SITE2_NETWORK_SERVICES.yml](sites/site_2/group_vars/SITE2_NETWORK_SERVICES.yml):
 
-``` yaml
+```yaml
 tenants:
-  - name: S2_FABRIC
+  - name: DC_TENANT
     mac_vrf_vni_base: 20000
     # Keep the existing VRFs and SVIs below this line.
 ```
@@ -669,13 +669,13 @@ VLANs 20, 30, and 40 will similarly use `20020`, `20030`, and `20040` for their 
 
 Build both sites:
 
-``` bash
+```bash
 make build-site-1 build-site-2
 ```
 
 Use VS Code Source Control to review the differences. In [s1-leaf1.cfg](sites/site_1/intended/configs/s1-leaf1.cfg), the VLAN 10 section under `router bgp 65101` should now contain:
 
-``` text
+```text
    vlan 10
       rd 10.250.1.3:20010
       route-target both 20010:20010
@@ -684,7 +684,7 @@ Use VS Code Source Control to review the differences. In [s1-leaf1.cfg](sites/si
 
 Under `interface Vxlan1`, check the updated VLAN mappings:
 
-``` text
+```text
    vxlan vlan 10 vni 20010
    vxlan vlan 20 vni 20020
    vxlan vlan 30 vni 20030
@@ -696,7 +696,7 @@ Review the Site 2 configurations as well. For example, `s2-leaf1` should have RD
 
 On [s1-brdr1.cfg](sites/site_1/intended/configs/s1-brdr1.cfg), also check the VLAN 10 RT used by the EVPN gateway's remote domain:
 
-``` text
+```text
       route-target import export evpn domain remote 20010:20010
 ```
 
@@ -706,7 +706,7 @@ Check the corresponding remote-domain RTs on the other border leaves. The `OVERL
 
 Once both sites' generated configurations agree, deploy the change:
 
-``` bash
+```bash
 make deploy-site-1 deploy-site-2
 ```
 
@@ -714,7 +714,7 @@ Expect an interruption to the affected services while the switches transition to
 
 Connect to `s1-leaf1` and inspect the deployed configuration and EVPN routes:
 
-``` text
+```console
 show running-config section router bgp
 show running-config interface Vxlan1
 show bgp evpn vni 20010 detail
@@ -724,13 +724,13 @@ Confirm that VLAN 10 maps to VNI `20010`, the local VLAN 10 RD is `10.250.1.3:20
 
 Finally, validate both sites and review endpoint reachability:
 
-``` bash
+```bash
 make validate-site-1 validate-site-2
 ```
 
 After reviewing the validation reports, save the change:
 
-``` bash
+```bash
 git add .
 git commit -m 'update tenant MAC-VRF VNI base and RD/RT values'
 ```
@@ -745,7 +745,7 @@ With AVD's RFC 5549 design, the underlay eBGP sessions use IPv6 link-local addre
 
 Open [global_vars/global_dc_vars.yml](global_vars/global_dc_vars.yml) and add `underlay_rfc5549: true` immediately below the underlay and overlay routing protocol settings. Keep all three keys at the top level:
 
-``` yaml
+```yaml
 underlay_routing_protocol: ebgp
 overlay_routing_protocol: ebgp
 underlay_rfc5549: true
@@ -757,13 +757,13 @@ Because this file is shared, the setting applies to the spines, leaves, and bord
 
 Generate the configurations before deploying the change:
 
-``` bash
+```bash
 make build-site-1 build-site-2
 ```
 
 Use VS Code Source Control to review the changes in both sites' `intended/configs/` directories. Start with [s1-leaf1.cfg](sites/site_1/intended/configs/s1-leaf1.cfg). Its `Ethernet2` and `Ethernet3` uplinks should now use `ipv6 enable` in place of their IPv4 `/31` addresses. For example:
 
-``` text
+```text
 interface Ethernet2
    description P2P_s1-spine1_Ethernet2
    no shutdown
@@ -774,7 +774,7 @@ interface Ethernet2
 
 The BGP configuration should now define the underlay peers by interface. Under the IPv4 address family, AVD enables IPv6 next hops. The relevant excerpt from `s1-leaf1.cfg` should look like this:
 
-``` text
+```text
 router bgp 65101
    neighbor interface Ethernet2 peer-group IPv4-UNDERLAY-PEERS remote-as 65100
    neighbor interface Ethernet3 peer-group IPv4-UNDERLAY-PEERS remote-as 65100
@@ -790,7 +790,7 @@ The peer-group name remains `IPv4-UNDERLAY-PEERS` because these peers exchange I
 
 Once the generated configurations look correct, deploy both sites:
 
-``` bash
+```bash
 make deploy-site-1 deploy-site-2
 ```
 
@@ -800,7 +800,7 @@ The underlay sessions will reestablish as the switches transition to interface-b
 
 Connect to `s1-leaf1` and check the uplinks and their IPv6 neighbors:
 
-``` text
+```console
 show ipv6 interface Ethernet2
 show ipv6 interface Ethernet3
 show ipv6 neighbors
@@ -810,7 +810,7 @@ Both uplinks should have IPv6 link-local addresses beginning with `fe80::`. The 
 
 Next, check the IPv4 BGP address family and a route to the remote VTEP on the other leaf pair:
 
-``` text
+```console
 show ip bgp summary
 show ip route 10.255.1.5
 ```
@@ -819,7 +819,7 @@ The underlay BGP peers should be established over IPv6 link-local addresses. The
 
 Check that the EVPN overlay has also recovered:
 
-``` text
+```console
 show bgp evpn summary
 ```
 
@@ -827,13 +827,13 @@ The EVPN sessions to `10.250.1.1` and `10.250.1.2` should be established. Repeat
 
 Finally, run the existing ANTA validation for both sites to check the deployed fabric and endpoint reachability:
 
-``` bash
+```bash
 make validate-site-1 validate-site-2
 ```
 
 Review the reports, then save the completed scenario:
 
-``` bash
+```bash
 git add .
 git commit -m 'enable RFC 5549 underlay'
 ```

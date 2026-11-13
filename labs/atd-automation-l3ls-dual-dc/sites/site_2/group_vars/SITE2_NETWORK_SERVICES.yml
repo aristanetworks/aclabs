@@ -1,6 +1,6 @@
 # ---
 # tenants:
-#   - name: S2_FABRIC
+#   - name: DC_TENANT
 #     mac_vrf_vni_base: 10000
 #     vrfs:
 #       - name: OVERLAY

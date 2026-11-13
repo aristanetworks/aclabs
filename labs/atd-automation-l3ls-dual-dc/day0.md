@@ -32,11 +32,11 @@ Initialize Git and configure your global Git settings.
 git init -b main
 ```
 
-``` bash
+```bash
 git config --global user.name "FirstName LastName"
 ```
 
-``` bash
+```bash
 git config --global user.email "name@example.com"
 ```
 
@@ -51,11 +51,11 @@ and validation commands target each site's fabric group. User-defined ANTA
 reachability tests run from leaf SVIs in the `OVERLAY` VRF to check the host
 attachments after the services and host-facing ports are enabled.
 
-```text
-show ip interface brief 
+```console
+show ip interface brief
 ```
 
-```text
+```console
 s1-host1#show ip interface brief
                                                                                        Address
 Interface           IP Address            Status       Protocol                 MTU    Owner
@@ -96,13 +96,13 @@ Review these files to understand how they relate to the topology above.
 
 At this point, we can build our initial configurations for the topology.
 
-``` bash
+```bash
 make build-site-1
 ```
 
 > Run `git add` and `git commit` to create a snapshot of the current build state. This will help you view the differences between steps in the workshop.
 
-``` bash
+```bash
 git add .
 git commit -m "saving snapshot"
 ```
@@ -113,7 +113,7 @@ AVD creates a separate markdown and EOS configuration file per switch. In additi
 
 Now, deploy the configurations to Site 1 switches.
 
-``` bash
+```bash
 make deploy-site-1
 ```
 
@@ -129,13 +129,13 @@ These outputs were taken from `s1-leaf1`:
 
     **Command**
 
-    ``` text
+    ```console
     show mlag
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#show mlag
     MLAG Configuration:
     domain-id                          :            S1_RACK1
@@ -166,13 +166,13 @@ These outputs were taken from `s1-leaf1`:
 
     **Command**
 
-    ``` text
+    ```console
     show ip interface brief
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#show ip interface brief
                                                                                     Address
     Interface         IP Address            Status       Protocol            MTU    Owner
@@ -190,13 +190,13 @@ These outputs were taken from `s1-leaf1`:
 
     **Commands**
 
-    ``` text
+    ```console
     show ip bgp summary
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#show ip bgp summary
     BGP summary information for VRF default
     Router identifier 10.250.1.3, local AS number 65101
@@ -211,13 +211,13 @@ These outputs were taken from `s1-leaf1`:
 
     **Commands**
 
-    ``` text
+    ```console
     show bgp evpn summary
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#show bgp evpn summary
     BGP summary information for VRF default
     Router identifier 10.250.1.3, local AS number 65101
@@ -239,13 +239,13 @@ Open [SITE1_NETWORK_SERVICES.yml](sites/site_1/group_vars/SITE1_NETWORK_SERVICES
 
 **Build the Configs**
 
-``` text
+```console
 make build-site-1
 ```
 
 **Deploy the Configs**
 
-``` text
+```console
 make deploy-site-1
 ```
 
@@ -257,13 +257,13 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their I
 
     **Command**
 
-    ``` text
+    ```console
     show ip interface brief
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#show ip interface brief
                                                                                   Address
     Interface         IP Address            Status       Protocol            MTU    Owner
@@ -287,13 +287,13 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their I
 
     **Command**
 
-    ``` text
+    ```console
     show ip bgp summary vrf OVERLAY
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-leaf1#show ip bgp summary vrf OVERLAY
     BGP summary information for VRF OVERLAY
     Router identifier 10.250.1.3, local AS number 65101
@@ -306,13 +306,13 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their I
 
     **Command**
 
-    ```text
+    ```console
     show run interface vxlan 1
     ```
 
     **Expected Output**
 
-      ```text
+      ```console
       s1-leaf1#show run int vxlan 1
       interface Vxlan1
         description s1-leaf1_VTEP
@@ -328,13 +328,13 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their I
 
     **Command**
 
-    ```text
+    ```console
     show interfaces vxlan 1
     ```
 
     **Expected Output**
 
-    ```text
+    ```console
     s1-leaf1#show interfaces vxlan 1
     Vxlan1 is up, line protocol is up (connected)
       Hardware is Vxlan
@@ -362,13 +362,13 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their I
 
     **Command**
 
-    ```text
+    ```console
     show bgp evpn route-type imet
     ```
 
     **Expected Output**
 
-    ```text
+    ```console
     s1-leaf1#show bgp evpn route-type imet
     BGP routing table information for VRF default
     Router identifier 10.250.1.3, local AS number 65101
@@ -420,23 +420,23 @@ You can verify the recent configuration session was created.
 
 When the configuration is applied via a configuration session, EOS will create a "checkpoint" of the configuration. This checkpoint is a snapshot of the device's running configuration as it was **prior** to the configuration session being committed.
 
-``` text
+```console
 show clock
 ```
 
-``` text
+```console
 show configuration sessions detail
 ```
 
 List the recent checkpoints.
 
-``` text
+```console
 show configuration checkpoints
 ```
 
 View the contents of the latest checkpoint file.
 
-``` text
+```console
 more checkpoint:< Hash >
 ```
 
@@ -444,7 +444,7 @@ See the difference between the running config and the latest checkpoint file.
 
 > This will show the differences between the current device configuration and the configuration before we did our `make deploy` command.
 
-``` text
+```console
 diff checkpoint:< Hash > running-config
 ```
 
@@ -490,21 +490,21 @@ Let's configure port-channels to our hosts (`s1-host1` and `s1-host2`).
 
 Open [SITE1_CONNECTED_ENDPOINTS.yml](sites/site_1/group_vars/SITE1_CONNECTED_ENDPOINTS.yml) and uncomment lines 17-45, then run the build & deploy process again.
 
-``` bash
+```bash
 make build-site-1
 ```
 
-``` bash
+```bash
 make deploy-site-1
 ```
 
 At this point, hosts should be able to ping each other across the fabric.
 
-```text
+```console
 show ip interface brief
 ```
 
-```text
+```console
 s1-host1#show ip interface brief
                                                                                  Address
 Interface           IP Address            Status       Protocol           MTU    Owner
@@ -515,11 +515,12 @@ Port-Channel1       10.10.10.100/24       up           up                1500
 
 From `s1-host1`, run a ping to `s1-host2`. The host-to-host ping checks inter-VLAN routing.
 
-``` text
+```console
 ping 10.20.20.100
 ```
 
-``` text
+```console
+s1-host1#ping 10.20.20.100
 PING 10.20.20.100 (10.20.20.100) 72(100) bytes of data.
 80 bytes from 10.20.20.100: icmp_seq=1 ttl=63 time=30.2 ms
 80 bytes from 10.20.20.100: icmp_seq=2 ttl=63 time=29.5 ms
@@ -685,8 +686,9 @@ make deploy-site-1 deploy-site-2
 ### Build and provision FRR
 
 Build FRR using [its inventory](sites/core/frr-inv.yml) and
-[node definition](sites/core/group_vars/CORE.yml). The shared `l3_edge`
-inputs describe FRR's links to both sites:
+[node definition](sites/core/group_vars/CORE.yml). In the node definition,
+we define a [custom node type](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#node-type-customization) `frr_core` with specific capabilities.
+The shared `l3_edge` inputs describe FRR's links to both sites:
 
 ```bash
 make build-frr
@@ -739,7 +741,7 @@ Neighbor Status Codes: m - Under maintenance
   frr-core1                172.16.255.1 4 65000             12        13    0    0 00:01:18 Estab   11     11     11
 ```
 
-Show additional validations. 
+Show additional validations.
 
 ```bash
 docker exec frr-core1 vtysh -c 'show ip route bgp'
@@ -750,10 +752,53 @@ Expect four established BGP sessions and routes to the border loopbacks.
 From `s1-brdr1`, check the other side of the BGP session and remote gateway
 reachability:
 
-```text
+```console
 show ip bgp summary
 show ip route 10.250.2.7
 ping 10.250.2.7 source Loopback0
+```
+
+```console
+s1-brdr1#show ip bgp summary
+BGP summary information for VRF default
+Router identifier 10.250.1.7, local AS number 65103
+Neighbor Status Codes: m - Under maintenance
+  Description              Neighbor     V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
+  s1-brdr2_Vlan4093        10.252.1.9   4 65103             13        13    0    0 00:01:39 Estab   21     21     21
+  s1-spine1_Ethernet7      172.16.1.16  4 65100             11        12    0    0 00:01:43 Estab   7      7      15
+  s1-spine2_Ethernet7      172.16.1.18  4 65100             12        14    0    0 00:01:43 Estab   7      7      21
+  frr-core1                172.16.255.1 4 65000             12        12    0    0 00:01:23 Estab   11     11     11
+s1-brdr1#show ip route 10.250.2.7
+
+VRF: default
+Source Codes:
+       C - connected, S - static, K - kernel,
+       O - OSPF, O IA - OSPF inter area, O E1 - OSPF external type 1,
+       O E2 - OSPF external type 2, O N1 - OSPF NSSA external type 1,
+       O N2 - OSPF NSSA external type2, O3 - OSPFv3,
+       O3 IA - OSPFv3 inter area, O3 E1 - OSPFv3 external type 1,
+       O3 E2 - OSPFv3 external type 2,
+       O3 N1 - OSPFv3 NSSA external type 1,
+       O3 N2 - OSPFv3 NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route,
+       CL - CBF Leaked Route
+
+ B E      10.250.2.7/32 [200/0]
+           via 172.16.255.1, Ethernet4
+
+s1-brdr1#ping 10.250.2.7 source Loopback0
+PING 10.250.2.7 (10.250.2.7) from 10.250.1.7 : 72(100) bytes of data.
+80 bytes from 10.250.2.7: icmp_seq=1 ttl=63 time=0.085 ms
+80 bytes from 10.250.2.7: icmp_seq=2 ttl=63 time=0.021 ms
+80 bytes from 10.250.2.7: icmp_seq=3 ttl=63 time=0.018 ms
+80 bytes from 10.250.2.7: icmp_seq=4 ttl=63 time=0.018 ms
+80 bytes from 10.250.2.7: icmp_seq=5 ttl=63 time=0.017 ms
 ```
 
 The FRR neighbor on `s1-brdr1` is `172.16.255.1` in AS 65000. On FRR, the
@@ -781,7 +826,7 @@ git commit -m "saving snapshot"
 
 **SITE1_FABRIC.yml**
 
-``` yaml
+```yaml
 - group: S1_BRDR
   bgp_as: 65103
   evpn_gateway:
@@ -813,7 +858,7 @@ git commit -m "saving snapshot"
 
 **SITE2_FABRIC.yml**
 
-``` yaml
+```yaml
 - group: S2_BRDR
   bgp_as: 65203
   evpn_gateway:
@@ -847,7 +892,7 @@ git commit -m "saving snapshot"
 
 ### Build and Deploy Changes for EVPN Gateway Functionality
 
-``` bash
+```bash
 make all
 ```
 
@@ -865,7 +910,7 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
     **Command**
 
-    ``` text
+    ```console
     show run section bgp
     ```
 
@@ -873,7 +918,8 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
     **s1-brdr1**
 
-    ``` text
+    ```console
+    s1-brdr1#show run section bgp
     router bgp 65103
       ...
       neighbor EVPN-OVERLAY-CORE peer group
@@ -906,7 +952,8 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
     **s1-brdr2**
 
-    ``` text
+    ```console
+    s1-brdr2#show run section bgp
     router bgp 65103
       ...
       neighbor EVPN-OVERLAY-CORE peer group
@@ -941,7 +988,7 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
     **Command**
 
-    ``` text
+    ```console
     show bgp evpn summary
     ```
 
@@ -949,7 +996,7 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
     **s1-brdr1**
 
-    ``` text
+    ```console
     s1-brdr1#show bgp evpn summary
     BGP summary information for VRF default
     Router identifier 10.250.1.7, local AS number 65103
@@ -962,7 +1009,7 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
     **s1-brdr2**
 
-    ``` text
+    ```console
     s1-brdr2#show bgp evpn summary
     BGP summary information for VRF default
     Router identifier 10.250.1.8, local AS number 65103
@@ -977,13 +1024,13 @@ From nodes `s1-brdr1` and `s1-brdr2`, we can check the following show commands.
 
     **Command**
 
-    ``` text
+    ```console
     show bgp evpn route-type imet
     ```
 
     **Expected Output**
 
-    ``` text
+    ```console
     s1-brdr1#show bgp evpn route-type imet
     BGP routing table information for VRF default
     Router identifier 10.250.1.7, local AS number 65103
@@ -1059,26 +1106,26 @@ connectivity and inter-DC routing, also run host-to-host pings across the DCI.
 
 From `s1-host1`, ping both `s2-host1` and `s2-host2`:
 
-``` text
-# s2-host1
-ping 10.10.10.200
+```console
+# ping s2-host1
+s1-host1#ping 10.10.10.200
 ```
 
-``` text
-# s2-host2
-ping 10.20.20.200
+```console
+# ping s2-host2
+s1-host1#ping 10.20.20.200
 ```
 
 From `s2-host1`, check connectivity to both Site 1 hosts:
 
-``` text
-# s1-host1
-ping 10.10.10.100
+```console
+# ping s1-host1
+s2-host1#ping 10.10.10.100
 ```
 
-``` text
-# s1-host2
-ping 10.20.20.100
+```console
+# ping s1-host2
+s2-host1#ping 10.20.20.100
 ```
 
 > You have built a multi-site L3LS network with an EVPN/VXLAN overlay and EVPN Gateway functionality!

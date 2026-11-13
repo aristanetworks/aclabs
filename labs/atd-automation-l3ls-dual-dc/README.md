@@ -109,6 +109,9 @@ To apply AVD variables to the nodes in the fabric, we make use of Ansible group_
 | SITE1_NETWORK_SERVICES.yml    | VLANs, VRFs, SVIs                             |
 | SITE1_CONNECTED_ENDPOINTS.yml | Port Profiles and Connected Endpoint settings |
 
+The YAML examples below show the completed lab configuration. Some settings are
+commented out in the starting files and enabled during the lab exercises.
+
 ### SITE1_FABRIC
 
 At the Fabric level (SITE1_FABRIC), the following variables are defined in **group_vars/SITE1_FABRIC.yml**. The fabric name, node type defaults, interface links, and EVPN gateway functionality are defined at this level. Because this is a Layer 3 Leaf Spine topology, the leaf nodes will require more variables than the spines. The variables needed for the spines include:
@@ -134,7 +137,7 @@ Variables applied under the node key type (spine/l3leaf) defaults section are in
 
 The spine interface used by a particular leaf is defined from the leaf's perspective with a variable called `uplink_switch_interfaces`. For example, s1-leaf1 has a unique variable `uplink_switch_interfaces: [Ethernet2, Ethernet2]` defined. This means that s1-leaf1 is connected to `s1-spine1` Ethernet2 and `s1-spine2` Ethernet2, respectively.
 
-``` yaml
+```yaml
 ---
 fabric_name: SITE1_FABRIC
 
@@ -193,37 +196,37 @@ l3leaf:
     - group: S1_BRDR
       bgp_as: 65103
       evpn_gateway:
-          evpn_l2:
-            enabled: true
-          evpn_l3:
-            enabled: true
-            inter_domain: true
+        evpn_l2:
+          enabled: true
+        evpn_l3:
+          enabled: true
+          inter_domain: true
       nodes:
         - name: s1-brdr1
           id: 5
           mgmt_ip: 192.168.0.100/24
           uplink_switch_interfaces: [ Ethernet7, Ethernet7 ]
           evpn_gateway:
-              remote_peers:
-                - hostname: s2-brdr1
-                  bgp_as: 65203
-                  ip_address: 10.250.2.7
+            remote_peers:
+              - hostname: s2-brdr1
+                bgp_as: 65203
+                ip_address: 10.250.2.7
         - name: s1-brdr2
           id: 6
           mgmt_ip: 192.168.0.101/24
           uplink_switch_interfaces: [ Ethernet8, Ethernet8 ]
           evpn_gateway:
-              remote_peers:
-                - hostname: s2-brdr2
-                  bgp_as: 65203
-                  ip_address: 10.250.2.8
+            remote_peers:
+              - hostname: s2-brdr2
+                bgp_as: 65203
+                ip_address: 10.250.2.8
 ```
 
 ### SITE1_SPINES
 
 In an L3LS design, there are two types of spine nodes: `spine` and `super_spine`. In AVD, the node type defines the functionality and the EOS CLI configuration to be generated. For our L3LS topology, we will use node type `spine`, as we do not have any inter-DC or inter-pod spines.
 
-``` yaml
+```yaml
 ---
 type: spine
 ```
@@ -232,7 +235,7 @@ type: spine
 
 In an L3LS design, we have two types of leaf nodes: `l3leaf` or `l2leaf`. This deployment will utilize `l3leaf` for all leafs as this sets the L3 network services and VTEP functionality for EVPN/VXLAN.
 
-``` yaml
+```yaml
 ---
 type: l3leaf
 ```
@@ -241,14 +244,17 @@ type: l3leaf
 
 You add VLANs, VRFs, and EVPN specific parameters to the Fabric by updating the **group_vars/SITE1_NETWORK_SERVICES.yml**. Within the main tenant we will be configuring, we will supply a **mac_vrf_vni_base** value, which will be used for the VLAN to VNI mapping under the VXLAN interface. We will then define a VRF our VLANs will be part of and give that a VNI value for the VRF to VNI mapping. Finally, each VLAN SVI will be configured with a name and a single virtual IP address which will end up being configured on all `l3leaf` nodes.
 
-``` yaml
+```yaml
 ---
 tenants:
-  - name: S1_FABRIC
+  - name: DC_TENANT
     mac_vrf_vni_base: 10000
     vrfs:
       - name: OVERLAY
         vrf_vni: 10
+        vtep_diagnostic:
+          loopback: 10
+          loopback_ip_range: 10.1.0.0/24
         svis:
           - id: 10
             name: 'Ten'
@@ -264,7 +270,7 @@ tenants:
 
 Our fabric would only be complete by connecting some devices to it. We define connected endpoints and port profiles in **group_vars/SITE1_CONNECTED_ENDPOINTS.yml**. Each endpoint adapter defines which switch port and port profile to use. Our lab has two hosts connected to the `site 1` fabric. The connected endpoints keys are used for logical separation and apply to interface descriptions. These variables are applied to the spine and leaf nodes since they are a part of this nested inventory group.
 
-``` yaml
+```yaml
 ---
 port_profiles:
 
@@ -318,11 +324,18 @@ In a multi-site environment, some variables can be applied to all sites. They in
 
 For example, in our lab, we use a global variable file `global_vars/global_dc_vars.yml`.
 
-AVD provides a [`global_vars`](https://avd.arista.com/6.4/docs/plugins/Vars_plugins/global_vars.html#global_vars) plugin that enables the use of global variables.
+AVD provides a [`global_vars`](https://avd.arista.com/6.5/docs/plugins/Vars_plugins/global_vars.html#global_vars) plugin that enables the use of global variables.
 
 The `global_vars` plugin must be enabled in the `ansible.cfg` file as shown below:
 
-``` yaml
+```ini
+[defaults]
+# Maximum number of forks that Ansible will use to execute tasks on target hosts
+forks = 15
+
+# Disable deprecation warnings
+deprecation_warnings = false
+
 #enable global vars
 vars_plugins_enabled = arista.avd.global_vars, host_group_vars
 
@@ -337,11 +350,11 @@ paths = ../../global_vars
 
 `global_vars/global_dc_vars.yml`
 
-``` yaml
+```yaml
 ---
 # Credentials for EOS Switches
-ansible_user: "{{ lookup('ansible.builtin.env', 'LABUSERNAME')) | default('arista', true) }}"
-ansible_password: "{{ lookup('ansible.builtin.env', 'LABPASSPHRASE')) | default('arista', true) }}"
+ansible_user: "{{ lookup('ansible.builtin.env', 'LABUSERNAME') | default('arista', true) }}"
+ansible_password: "{{ lookup('ansible.builtin.env', 'LABPASSPHRASE') | default('arista', true) }}"
 ansible_network_os: arista.eos.eos
 # Configure privilege escalation
 ansible_become: true
@@ -401,7 +414,7 @@ bgp_peer_groups:
   mlag_ipv4_underlay_peer:
     password: 4b21pAdCvWeAqpcKDFMdWw==
 
-# FRR provides IPv4 transport between the EVPN gateways. It is external to AVD.
+# Enable the border peerings with the FRR Core.
 l3_edge:
   p2p_links_ip_pools:
     - name: DCI
@@ -443,7 +456,7 @@ AVD provides a network-wide data model that is typically broken into multiple gr
 
 ### Fabric Topology
 
-The physical fabric topology is defined by providing interface links between the spine and leaf nodes. The `group_vars/SITE1_FABRIC.yml` file defines this portion of the data model. In our lab, the spines provide layer 3 routing across the P2P links to the spines, as well as BGP for underlay and EVPN overlay, using a node type called `spine`. The leaf nodes are layer 3 and use node type `l3leaf`. An AVD L3LS design type provides many different node key types. AVD Node Type documentation can be found **[here](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#node-type-variables)**.
+The physical fabric topology is defined by providing interface links between the spine and leaf nodes. The `group_vars/SITE1_FABRIC.yml` file defines this portion of the data model. In our lab, the spines provide layer 3 routing across the P2P links to the spines, as well as BGP for underlay and EVPN overlay, using a node type called `spine`. The leaf nodes are layer 3 and use node type `l3leaf`. An AVD L3LS design type provides many different node key types. AVD Node Type documentation can be found **[here](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#node-type-variables)**.
 
 #### Spine and Leaf Nodes
 
@@ -455,7 +468,7 @@ The example data model below defines each site's spine and leaf nodes for each s
 2. node_groups
 3. nodes
 
-``` yaml
+```yaml
 # Spine Switches
 spine:
   defaults:
@@ -546,6 +559,12 @@ EVPN gateways in Step 6.
 
 ### FRR Configuration
 
+FRR uses the custom node type key `frr_core`, defined in
+[group_vars/CORE.yml](sites/core/group_vars/CORE.yml). Both `key` and `type` in
+`custom_node_type_keys` are `frr_core`, the node selects `type: frr_core`, and
+its defaults and node list are under `frr_core:`. The inventory group and
+`fabric_name` remain `CORE`, and the inventory directory remains `sites/core/`.
+
 FRR starts with a minimal configuration so that the lab can start before the
 border handoffs are enabled. After enabling `l3_edge`, build both sites and
 generate the FRR configuration:
@@ -603,16 +622,19 @@ save is unnecessary.
 
 ### Network Services
 
-Network Services, such as VLANs, SVIs, and VRFs, are defined in this section. The following Site 1 example defines VLANs and SVIs for VLANs `10` and `20` in the OVERLAY VRF. We also have specified a mac VRF VNI base mapping of 10000.  This will add the base mapping to the VLAN ID to come up with the VNI for the VLAN to VNI mapping under the VXLAN interface. Since we have the same VLANs stretched across to Site 2, the network services data model will be exactly the same:
+Network Services, such as VLANs, SVIs, and VRFs, are defined in this section. The following Site 1 example defines VLANs and SVIs for VLANs `10` and `20` in the OVERLAY VRF. We also have specified a mac VRF VNI base mapping of 10000.  This will add the base mapping to the VLAN ID to come up with the VNI for the VLAN to VNI mapping under the VXLAN interface. Both sites share the VLAN, SVI, and VNI settings. Their diagnostic loopback pools differ: Site 1 uses `10.1.0.0/24`, while Site 2 uses `10.2.0.0/24`:
 
-``` yaml
+```yaml
 ---
 tenants:
-  - name: S1_FABRIC
+  - name: DC_TENANT
     mac_vrf_vni_base: 10000
     vrfs:
       - name: OVERLAY
         vrf_vni: 10
+        vtep_diagnostic:
+          loopback: 10
+          loopback_ip_range: 10.1.0.0/24
         svis:
           - id: 10
             name: 'Ten'
@@ -626,11 +648,11 @@ tenants:
 
 ### Connected Endpoints
 
-The Fabric must define ports for southbound interfaces toward connected endpoints such as servers, appliances, firewalls, and other networking devices in the data center. This section uses port profiles and connected endpoints called `servers`. Documentation for [port_profiles](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#port-profiles-settings) and [connected endpoints](https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#connected-endpoints-keys-settings) is available to see all the options available.
+The Fabric must define ports for southbound interfaces toward connected endpoints such as servers, appliances, firewalls, and other networking devices in the data center. This section uses port profiles and connected endpoints called `servers`. Documentation for [port_profiles](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#port-profiles-settings) and [connected endpoints](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#connected-endpoints-keys-settings) is available to see all the options available.
 
 The following data model defines two port profiles: PP-VLAN10 and PP-VLAN20. They define an access port profile for VLANs `10` and `20`, respectively. In addition, two server endpoints (s1-host1 and s1-host2) are created to use these port profiles. There are optional and required fields. The optional fields are used for port descriptions in the EOS intended configurations.
 
-``` yaml
+```yaml
 ---
 port_profiles:
 
@@ -684,7 +706,7 @@ Three playbooks, `build.yml`, `deploy.yml`, and `validate.yml`, are used in our 
 
 `build.yml`
 
-``` yaml
+```yaml
 ---
 - name: Build Switch configuration
   hosts: "{{ target_hosts }}"
@@ -703,7 +725,7 @@ Three playbooks, `build.yml`, `deploy.yml`, and `validate.yml`, are used in our 
 
 `deploy.yml`
 
-``` yaml
+```yaml
 ---
 - name: Deploy Switch configuration
   hosts: "{{ target_hosts }}"
@@ -751,8 +773,8 @@ Store user-defined catalogs in `sites/site_1/anta/user_catalogs/` or
 for the selected inventory. Use hostname tags such as `s1-leaf1` to select the
 switch that originates each custom test.
 
-The Site 1 reachability catalog probes `s1-host1` from `s1-leaf1` using `Vlan10`
-and `s1-host2` from `s1-leaf3` using `Vlan20`. Both probes use the `OVERLAY` VRF.
+The Site 1 reachability catalog probes both hosts from all four leaf switches,
+sourcing from `Loopback10` in the `OVERLAY` VRF.
 See [Validate Site 1 with ANTA](day0.md#validate-site-1-with-anta) for the catalog
 and the corresponding Site 2 setup.
 
@@ -765,10 +787,27 @@ To make our lives easier, we use a `Makefile` to create aliases to run the playb
 
 `Makefile`
 
-``` yaml
+```makefile
+CURRENT_DIR := $(shell pwd)
+
 .PHONY: help
 help: ## Display help message
-    @grep -E '^[0-9a-zA-Z_-]+\.*[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[0-9a-zA-Z_-]+\.*[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: start
+start: ## Deploy the lab
+	sudo containerlab deploy --debug --topo $(CURRENT_DIR)/clab/topology.clab.yml --max-workers 10 --timeout 5m --reconfigure
+
+.PHONY: stop
+stop: ## Destroy the lab
+	sudo containerlab destroy --debug --topo $(CURRENT_DIR)/clab/topology.clab.yml --cleanup
+
+.PHONY: inspect
+inspect: ## Inspect the lab
+	@sudo containerlab inspect --topo $(CURRENT_DIR)/clab/topology.clab.yml
+	@echo ""
+	@echo "You can check the lab status, hostnames and management addresses above."
+	@echo "To connect to a lab device use \`ssh arista@<hostname>\` and password \`arista\`."
 
 ########################################################
 # Site 1
@@ -776,15 +815,15 @@ help: ## Display help message
 
 .PHONY: build-site-1
 build-site-1: ## Build Configs
-    ansible-playbook playbooks/build.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+	ansible-playbook playbooks/build.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
 
 .PHONY: deploy-site-1
 deploy-site-1: ## Deploy Configs via eAPI
-    ansible-playbook playbooks/deploy.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+	ansible-playbook playbooks/deploy.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
 
 .PHONY: validate-site-1
 validate-site-1: ## Validate network state
-    ansible-playbook playbooks/validate.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+	ansible-playbook playbooks/validate.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
 
 ########################################################
 # Site 2
@@ -792,34 +831,54 @@ validate-site-1: ## Validate network state
 
 .PHONY: build-site-2
 build-site-2: ## Build Configs
-    ansible-playbook playbooks/build.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+	ansible-playbook playbooks/build.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
 
 .PHONY: deploy-site-2
 deploy-site-2: ## Deploy Configs via eAPI
-    ansible-playbook playbooks/deploy.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+	ansible-playbook playbooks/deploy.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
 
 .PHONY: validate-site-2
 validate-site-2: ## Validate network state
-    ansible-playbook playbooks/validate.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+	ansible-playbook playbooks/validate.yml -i sites/site_2/inventory.yml -e "target_hosts=SITE2_FABRIC"
+
+########################################################
+# FRR DCI transport
+########################################################
+
+.PHONY: build-frr
+build-frr: ## Build FRR config from its AVD structured configuration
+	ansible-playbook playbooks/build-frr.yml -i sites/core/frr-inv.yml -e "target_hosts=CORE"
+
+.PHONY: deploy-frr
+FRR_ANSIBLE_ARGS ?=
+deploy-frr: ## Install the rendered FRR config over Docker and reload FRR
+	ansible-playbook playbooks/deploy-frr.yml -i sites/core/frr-inv.yml -e "target_hosts=CORE"
+
+########################################################
+# Build and deploy all sites and FRR
+########################################################
+
+.PHONY: all
+all: build-site-1 build-site-2 build-frr deploy-site-1 deploy-site-2 deploy-frr
 ```
 
 For example, if we wanted to run a playbook to build configurations for Site 1, we could enter the following command.
 
-``` bash
+```bash
 ansible-playbook playbooks/build.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
 ```
 
 Thankfully, a convenient way to simplify the above command is with a Makefile entry like the one below.
 
-``` bash
+```makefile
 .PHONY: build-site-1
 build-site-1: ## Build Configs
-  ansible-playbook playbooks/build.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
+	ansible-playbook playbooks/build.yml -i sites/site_1/inventory.yml -e "target_hosts=SITE1_FABRIC"
 ```
 
 Now, you can type the following to issue the same ansible-playbook command.
 
-``` bash
+```bash
 make build-site-1
 ```
 
@@ -827,7 +886,7 @@ In the upcoming lab, we will use the following `make` commands several times. Fi
 
 Build configurations
 
-``` bash
+```bash
 # Build configs for Site 1
 make build-site-1
 
@@ -837,7 +896,7 @@ make build-site-2
 
 Deploy configurations
 
-``` bash
+```bash
 # Deploy configs for Site 1
 make deploy-site-1
 

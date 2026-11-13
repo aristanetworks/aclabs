@@ -1,8 +1,8 @@
 ---
 custom_node_type_keys:
 
-  - key: core
-    type: core
+  - key: frr_core
+    type: frr_core
     connected_endpoints: false
     mlag_support: false
     network_services:
@@ -11,10 +11,10 @@ custom_node_type_keys:
     default_overlay_routing_protocol: none
     default_underlay_routing_protocol: ebgp
 
-type: core
+type: frr_core
 fabric_name: CORE
 
-core:
+frr_core:
   defaults:
     platform: frr
     loopback_ipv4_pool: 10.251.1.0/24
