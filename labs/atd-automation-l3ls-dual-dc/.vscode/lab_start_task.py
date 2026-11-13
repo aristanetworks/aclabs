@@ -142,8 +142,24 @@ def wait_for_nodes(workspace: Path) -> bool:
     return False
 
 
+def disable_automatic_task(workspace: Path) -> None:
+    tasks_path = workspace / ".vscode" / "tasks.json"
+    lab_tasks = json.loads(tasks_path.read_text(encoding="utf-8"))
+    for task in lab_tasks["tasks"]:
+        if "lab_start_task.py" in task.get("command", ""):
+            task.setdefault("runOptions", {})["runOn"] = "default"
+    tasks_path.write_text(
+        json.dumps(lab_tasks, indent=4) + "\n", encoding="utf-8"
+    )
+
+
 def main() -> int:
     show_banner()
+    workspace = Path(__file__).resolve().parents[1]
+    try:
+        disable_automatic_task(workspace)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        console.print(f"Could not disable automatic task reruns: {error}", style="warning")
     deadline = time.monotonic() + WAIT_TIMEOUT_SECONDS
 
     status_text = Text("Waiting for lab startup... ")
@@ -175,7 +191,6 @@ def main() -> int:
             )
             return 1
 
-    workspace = Path(__file__).resolve().parents[1]
     try:
         return 0 if wait_for_nodes(workspace) else 1
     except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError) as error:
