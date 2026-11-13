@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "init_lab",
-            "command": "lab_start_task.py",
+            "command": "/avd-playground/.vscode/lab_start_task.py",
             "type": "shell",
             "presentation": {
                 "reveal": "always"
