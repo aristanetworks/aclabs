@@ -838,3 +838,19 @@ git commit -m 'enable RFC 5549 underlay'
 ```
 
 Congratulations. You have now successfully completed initial fabric builds and day 2 operational changes with AVD.
+
+## Challenge Labs
+
+1. Leverage the the pool manager for automatic node id assignment, while preserving the same node ID allocation.
+
+    - [Fabric Numbering](https://avd.arista.com/6.5/ansible_collectihttps://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#preview-fabric-numberingons/arista/avd/roles/eos_designs/docs/data-models.html#preview-fabric-numbering)
+    - Hint: You will need to preserve the ID on the *brdr* leafs.
+
+
+2. Update uplink management from leaf nodes to use [default interface settings](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#default-interface-settings), while preserving current uplink interface assignment.
+
+
+3. Change to overlay RD admin subfield to use the BGP AS of the node.
+
+    - [Overlay settings](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#overlay-settings)
+
