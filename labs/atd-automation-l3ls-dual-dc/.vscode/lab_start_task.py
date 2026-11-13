@@ -12,7 +12,10 @@ import paramiko
 import yaml
 
 from rich.console import Console
+from rich.live import Live
 from rich.panel import Panel
+from rich.spinner import Spinner
+from rich.table import Table
 from rich.text import Text
 from rich.theme import Theme
 
@@ -63,20 +66,6 @@ def read_state() -> dict[str, Any]:
     except (OSError, ValueError):
         return {}
     return data if isinstance(data, dict) else {}
-
-
-def print_new_log(offset: int) -> int:
-    try:
-        with open(LOG_PATH, "r", encoding="utf-8", errors="replace") as log_file:
-            log_file.seek(offset)
-            output = log_file.read()
-            new_offset = log_file.tell()
-    except OSError:
-        return offset
-
-    if output:
-        console.print(output, end="", markup=False)
-    return new_offset
 
 
 def topology_nodes(workspace: Path) -> dict[str, str]:
@@ -156,16 +145,17 @@ def wait_for_nodes(workspace: Path) -> bool:
 def main() -> int:
     show_banner()
     deadline = time.monotonic() + WAIT_TIMEOUT_SECONDS
-    offset = 0
 
-    with console.status("Waiting for lab startup...", spinner="dots") as progress:
+    status_text = Text("Waiting for lab startup... ")
+    progress = Table.grid(padding=0)
+    progress.add_row(status_text, Spinner("dots", style="bold cyan"))
+    with Live(progress, console=console, transient=True):
         while time.monotonic() < deadline:
-            offset = print_new_log(offset)
             state = read_state()
             status = state.get("status")
 
             message = str(state.get("message") or "Waiting for lab startup...")
-            progress.update(Text(message))
+            status_text.plain = message + " "
             # The shared controller's readiness result requires a remote command.
             # Once deployment finishes, use this task's authentication-only check.
             readiness_failed = status == "FAILED" and message.startswith(
@@ -194,4 +184,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    exit_code = main()
+    if exit_code:
+        console.print(f"Startup log: {LOG_PATH}", style="warning")
+    raise SystemExit(exit_code)
