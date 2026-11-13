@@ -119,17 +119,24 @@ def wait_for_nodes(workspace: Path) -> bool:
     deadline = time.monotonic() + DEVICE_READY_TIMEOUT_SECONDS
     console.log("Lab deployed; waiting for devices to accept SSH...", style="info")
 
-    with ThreadPoolExecutor(max_workers=min(len(nodes), 10)) as executor:
+    with console.status(
+        f"Waiting for SSH: 0/{len(nodes)} devices ready", spinner="dots"
+    ) as progress, ThreadPoolExecutor(max_workers=min(len(nodes), 10)) as executor:
         while time.monotonic() < deadline:
             futures = {
                 executor.submit(node_is_ready, nodes[node]): node
                 for node in unavailable
             }
-            unavailable = [
-                futures[future]
-                for future in as_completed(futures)
-                if not future.result()
-            ]
+            ready_count = len(nodes) - len(unavailable)
+            unavailable = []
+            for future in as_completed(futures):
+                if future.result():
+                    ready_count += 1
+                else:
+                    unavailable.append(futures[future])
+                progress.update(
+                    f"Waiting for SSH: {ready_count}/{len(nodes)} devices ready"
+                )
             if not unavailable:
                 console.log("Lab is ready!", style="info")
                 return True
@@ -151,35 +158,39 @@ def main() -> int:
     deadline = time.monotonic() + WAIT_TIMEOUT_SECONDS
     offset = 0
 
-    while time.monotonic() < deadline:
-        offset = print_new_log(offset)
-        state = read_state()
-        status = state.get("status")
+    with console.status("Waiting for lab startup...", spinner="dots") as progress:
+        while time.monotonic() < deadline:
+            offset = print_new_log(offset)
+            state = read_state()
+            status = state.get("status")
 
-        message = str(state.get("message", status))
-        # The shared controller's readiness result requires a remote command.
-        # Once deployment finishes, use this task's authentication-only check.
-        readiness_failed = status == "FAILED" and message.startswith(
-            "ERROR: Devices did not become ready within "
-        )
-        if status in {"VERIFYING", "READY"} or readiness_failed:
-            workspace = Path(__file__).resolve().parents[1]
-            try:
-                return 0 if wait_for_nodes(workspace) else 1
-            except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError) as error:
-                console.log(f"Failed to check SSH readiness: {error}", style="critical")
+            message = str(state.get("message") or "Waiting for lab startup...")
+            progress.update(Text(message))
+            # The shared controller's readiness result requires a remote command.
+            # Once deployment finishes, use this task's authentication-only check.
+            readiness_failed = status == "FAILED" and message.startswith(
+                "ERROR: Devices did not become ready within "
+            )
+            if status in {"VERIFYING", "READY"} or readiness_failed:
+                break
+            if status == "FAILED":
+                console.log(message, style="critical")
                 return 1
-        if status == "FAILED":
-            console.log(message, style="critical")
+            time.sleep(UI_REFRESH_INTERVAL_SECONDS)
+        else:
+            console.log(
+                f"Timed out waiting {WAIT_TIMEOUT_SECONDS} seconds "
+                "for automatic lab startup.",
+                style="critical",
+            )
             return 1
-        time.sleep(UI_REFRESH_INTERVAL_SECONDS)
 
-    console.log(
-        f"Timed out waiting {WAIT_TIMEOUT_SECONDS} seconds "
-        "for automatic lab startup.",
-        style="critical",
-    )
-    return 1
+    workspace = Path(__file__).resolve().parents[1]
+    try:
+        return 0 if wait_for_nodes(workspace) else 1
+    except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError) as error:
+        console.log(f"Failed to check SSH readiness: {error}", style="critical")
+        return 1
 
 
 if __name__ == "__main__":
