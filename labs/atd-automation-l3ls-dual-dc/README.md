@@ -394,9 +394,6 @@ dns_settings:
   servers:
     - ip_address: 192.168.0.1
 
-# Point to Point Links MTU Override for Lab
-p2p_uplinks_mtu: 1500
-
 # eAPI must be explicitly enabled in AVD 6.0.0
 management_eapi:
   enabled: true
@@ -425,7 +422,6 @@ l3_edge:
       ip_pool: DCI
       include_in_underlay_protocol: true
       routing_protocol: ebgp
-      mtu: 1500
       bfd: true
   p2p_links:
     - id: 1
@@ -523,6 +519,8 @@ l3leaf:
           uplink_switch_interfaces: [ Ethernet5, Ethernet5 ]
     - group: S1_BRDR
       bgp_as: 65103
+      filter:
+        only_vlans_in_use: false
       evpn_gateway:
         evpn_l2:
           enabled: true

@@ -55,6 +55,8 @@ l3leaf:
           uplink_switch_interfaces: [ Ethernet5, Ethernet5 ]
     - group: S1_BRDR
       bgp_as: 65103
+      filter:
+        only_vlans_in_use: false
       # evpn_gateway:
       #   evpn_l2:
       #     enabled: true

@@ -199,19 +199,20 @@ Now lets jump into one of the nodes, `s1-leaf1`, and check that our new VLAN SVI
                                                                                     Address
     Interface         IP Address            Status       Protocol            MTU    Owner
     ----------------- --------------------- ------------ -------------- ----------- -------
-    Ethernet2         172.16.1.1/31         up           up                 1500
-    Ethernet3         172.16.1.3/31         up           up                 1500
+    Ethernet2         172.16.1.1/31         up           up                 9214
+    Ethernet3         172.16.1.3/31         up           up                 9214
     Loopback0         10.250.1.3/32         up           up                65535
     Loopback1         10.255.1.3/32         up           up                65535
+    Loopback10        10.1.0.3/32           up           up                65535
     Management1       192.168.0.12/24       up           up                 1500
     Vlan10            10.10.10.1/24         up           up                 1500
     Vlan20            10.20.20.1/24         up           up                 1500
     Vlan30            10.30.30.1/24         up           up                 1500
     Vlan40            10.40.40.1/24         up           up                 1500
-    Vlan1199          unassigned            up           up                 9164
-    Vlan3009          10.252.1.0/31         up           up                 1500
-    Vlan4093          10.252.1.0/31         up           up                 1500
-    Vlan4094          10.251.1.0/31         up           up                 1500
+    Vlan3009          10.252.1.0/31         up           up                 9214
+    Vlan4093          10.252.1.0/31         up           up                 9214
+    Vlan4094          10.251.1.0/31         up           up                 9214
+    Vlan4097          unassigned            up           up                 9164
     ```
 
 2. Lets check the `VXLAN 1` interface and see what changes were made there.
@@ -500,25 +501,24 @@ s1-leaf1#show ip interface brief
                                                                                 Address
 Interface         IP Address            Status       Protocol            MTU    Owner
 ----------------- --------------------- ------------ -------------- ----------- -------
-Ethernet2         172.16.1.1/31         up           up                 1500
-Ethernet3         172.16.1.3/31         up           up                 1500
+Ethernet2         172.16.1.1/31         up           up                 9214
+Ethernet3         172.16.1.3/31         up           up                 9214
 Loopback0         10.250.1.3/32         up           up                65535
 Loopback1         10.255.1.3/32         up           up                65535
+Loopback10        10.1.0.3/32           up           up                65535
 Management1       192.168.0.12/24       up           up                 1500
 Vlan10            10.10.10.1/24         up           up                 1500
-Vlan3009          10.252.1.0/31         up           up                 1500
-Vlan4093          10.252.1.0/31         up           up                 1500
-Vlan4094          10.251.1.0/31         up           up                 1500
+Vlan3009          10.252.1.0/31         up           up                 9214
+Vlan4093          10.252.1.0/31         up           up                 9214
+Vlan4094          10.251.1.0/31         up           up                 9214
 Vlan4097          unassigned            up           up                 9164
-
-s1-leaf1#
 ```
 
 We can see the only VLAN deployed is 10.
 
 ### Filtering with VLANs Only in Use
 
-We have seen how filter tags can be useful to control where network services are provisioned. In a much larger environment this can be tedious. AVD has another feature that makes service deployments more dynamic. This would be the `only_vlans_in_use` filter. The filter works by only creating the relevant VRFs, VLANs, and SVIs when connected endpoints with that service are defined on a particular node.
+We have seen how filter tags can be useful to control where network services are provisioned. In a much larger environment this can be tedious. The `only_vlans_in_use` filter creates VLANs and SVIs based on endpoint and downstream Layer 2 switch definitions managed by `eos_designs`, including usage on the MLAG peer. VRFs without retained services are also removed unless explicitly included. This is based on AVD inputs; learned MAC addresses and remote EVPN routes do not mark a VLAN as in use.
 
 We can start by removing the tags we added in the network services file.
 
@@ -587,18 +587,17 @@ s1-leaf3#show ip interface brief
                                                                                 Address
 Interface         IP Address            Status       Protocol            MTU    Owner
 ----------------- --------------------- ------------ -------------- ----------- -------
-Ethernet2         172.16.1.9/31         up           up                 1500
-Ethernet3         172.16.1.11/31        up           up                 1500
+Ethernet2         172.16.1.9/31         up           up                 9214
+Ethernet3         172.16.1.11/31        up           up                 9214
 Loopback0         10.250.1.5/32         up           up                65535
 Loopback1         10.255.1.5/32         up           up                65535
+Loopback10        10.1.0.5/32           up           up                65535
 Management1       192.168.0.14/24       up           up                 1500
 Vlan20            10.20.20.1/24         up           up                 1500
-Vlan3009          10.252.1.4/31         up           up                 1500
-Vlan4093          10.252.1.4/31         up           up                 1500
-Vlan4094          10.251.1.4/31         up           up                 1500
+Vlan3009          10.252.1.4/31         up           up                 9214
+Vlan4093          10.252.1.4/31         up           up                 9214
+Vlan4094          10.251.1.4/31         up           up                 9214
 Vlan4097          unassigned            up           up                 9164
-
-s1-leaf3#
 ```
 
 We can see VLAN 20 is the only defined SVI that was provisioned for s1-leaf3 since there is an endpoint with that service defined in our connected endpoints file.
@@ -767,7 +766,7 @@ Use VS Code Source Control to review the changes in both sites' `intended/config
 interface Ethernet2
    description P2P_s1-spine1_Ethernet2
    no shutdown
-   mtu 1500
+   mtu 9214
    no switchport
    ipv6 enable
 ```
