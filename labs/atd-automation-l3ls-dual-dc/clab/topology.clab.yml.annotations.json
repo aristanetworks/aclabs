@@ -51,14 +51,14 @@
       "id": "s1-brdr1",
       "position": {
         "x": -380,
-        "y": 200
+        "y": 220
       }
     },
     {
       "id": "s1-brdr2",
       "position": {
         "x": -280,
-        "y": 200
+        "y": 220
       }
     },
     {
@@ -107,14 +107,14 @@
       "id": "s2-brdr1",
       "position": {
         "x": -180,
-        "y": 200
+        "y": 220
       }
     },
     {
       "id": "s2-brdr2",
       "position": {
         "x": -80,
-        "y": 200
+        "y": 220
       }
     },
     {
@@ -146,39 +146,10 @@
       }
     },
     {
-      "id": "s1-core1",
+      "id": "frr-core1",
       "position": {
-        "x": -380,
+        "x": -240,
         "y": 320
-      }
-    },
-    {
-      "id": "s1-core2",
-      "position": {
-        "x": -280,
-        "y": 320
-      }
-    },
-    {
-      "id": "s2-core1",
-      "position": {
-        "x": -180,
-        "y": 320
-      }
-    },
-    {
-      "id": "s2-core2",
-      "position": {
-        "x": -80,
-        "y": 320
-      }
-    },
-    {
-      "id": "ext-srl1",
-      "interfacePattern": "e1-{n}",
-      "position": {
-        "x": -380,
-        "y": 20
       }
     }
   ],

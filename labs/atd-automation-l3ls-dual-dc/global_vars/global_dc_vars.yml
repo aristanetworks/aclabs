@@ -41,9 +41,6 @@ dns_settings:
   servers:
     - ip_address: 192.168.0.1
 
-# Point to Point Links MTU Override for Lab
-p2p_uplinks_mtu: 1500
-
 # eAPI must be explicitly enabled in AVD 6.0.0
 management_eapi:
   enabled: true

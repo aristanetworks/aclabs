@@ -177,13 +177,13 @@ These outputs were taken from `s1-leaf1`:
                                                                                     Address
     Interface         IP Address            Status       Protocol            MTU    Owner
     ----------------- --------------------- ------------ -------------- ----------- -------
-    Ethernet2         172.16.1.1/31         up           up                 1500
-    Ethernet3         172.16.1.3/31         up           up                 1500
+    Ethernet2         172.16.1.1/31         up           up                 9214
+    Ethernet3         172.16.1.3/31         up           up                 9214
     Loopback0         10.250.1.3/32         up           up                65535
     Loopback1         10.255.1.3/32         up           up                65535
     Management1       192.168.0.12/24       up           up                 1500
-    Vlan4093          10.252.1.0/31         up           up                 1500
-    Vlan4094          10.251.1.0/31         up           up                 1500
+    Vlan4093          10.252.1.0/31         up           up                 9214
+    Vlan4094          10.251.1.0/31         up           up                 9214
     ```
 
 3. Check eBGP/iBGP peerings for IPv4 underlay routing.
@@ -265,19 +265,20 @@ Now lets go back to node `s1-leaf1` and verify the new SVIs exist. Check their I
 
     ```console
     s1-leaf1#show ip interface brief
-                                                                                  Address
+                                                                                    Address
     Interface         IP Address            Status       Protocol            MTU    Owner
     ----------------- --------------------- ------------ -------------- ----------- -------
-    Ethernet2         172.16.1.1/31         up           up                 1500
-    Ethernet3         172.16.1.3/31         up           up                 1500
+    Ethernet2         172.16.1.1/31         up           up                 9214
+    Ethernet3         172.16.1.3/31         up           up                 9214
     Loopback0         10.250.1.3/32         up           up                65535
     Loopback1         10.255.1.3/32         up           up                65535
+    Loopback10        10.1.0.3/32           up           up                65535
     Management1       192.168.0.12/24       up           up                 1500
     Vlan10            10.10.10.1/24         up           up                 1500
     Vlan20            10.20.20.1/24         up           up                 1500
-    Vlan3009          10.252.1.0/31         up           up                 1500
-    Vlan4093          10.252.1.0/31         up           up                 1500
-    Vlan4094          10.251.1.0/31         up           up                 1500
+    Vlan3009          10.252.1.0/31         up           up                 9214
+    Vlan4093          10.252.1.0/31         up           up                 9214
+    Vlan4094          10.251.1.0/31         up           up                 9214
     Vlan4097          unassigned            up           up                 9164
     ```
 
@@ -631,7 +632,6 @@ l3_edge:
       ip_pool: DCI
       include_in_underlay_protocol: true
       routing_protocol: ebgp
-      mtu: 1500
       bfd: true
   p2p_links:
     - id: 1
@@ -730,15 +730,19 @@ docker exec frr-core1 vtysh -c 'show bgp ipv4 unicast summary'
 ```
 
 ```text
-s1-brdr1#show ip bgp summary
-BGP summary information for VRF default
-Router identifier 10.250.1.7, local AS number 65103
-Neighbor Status Codes: m - Under maintenance
-  Description              Neighbor     V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc PfxAdv
-  s1-brdr2_Vlan4093        10.252.1.9   4 65103             67        66    0    0 00:46:32 Estab   21     21     21
-  s1-spine1_Ethernet7      172.16.1.16  4 65100             65        65    0    0 00:46:37 Estab   7      7      16
-  s1-spine2_Ethernet7      172.16.1.18  4 65100             63        67    0    0 00:46:37 Estab   7      7      20
-  frr-core1                172.16.255.1 4 65000             12        13    0    0 00:01:18 Estab   11     11     11
+BGP router identifier 10.251.1.1, local AS number 65000 VRF default vrf-id 0
+BGP table version 22
+RIB entries 22, using 3520 bytes of memory
+Peers 4, using 92 KiB of memory
+Peer groups 1, using 72 bytes of memory
+
+Neighbor        V         AS   MsgRcvd   MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd   PfxSnt Desc
+172.16.255.0    4      65103        16        15       22    0    0 00:04:37           11       22 s1-brdr1
+172.16.255.2    4      65103        15        15       22    0    0 00:04:37           11       22 s1-brdr2
+172.16.255.4    4      65203        15        15       22    0    0 00:04:37           11       22 s2-brdr1
+172.16.255.6    4      65203        15        15       22    0    0 00:04:37           11       22 s2-brdr2
+
+Total number of neighbors 4
 ```
 
 Show additional validations.
