@@ -841,16 +841,28 @@ Congratulations. You have now successfully completed initial fabric builds and d
 
 ## Challenge Labs
 
-1. Leverage the the pool manager for automatic node id assignment, while preserving the same node ID allocation.
+Before you start set `underlay_rfc5549: false` and commit with with `-m 'Start of Challenge'`.
+Commit after each challenge with `-m 'Challenge <#>'`, to be able to track you changes and show your result to the proctor.
 
-    - [Fabric Numbering](https://avd.arista.com/6.5/ansible_collectihttps://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#preview-fabric-numberingons/arista/avd/roles/eos_designs/docs/data-models.html#preview-fabric-numbering)
-    - Hint: You will need to preserve the ID on the *brdr* leafs.
-
-
-2. Update uplink management from leaf nodes to use [default interface settings](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#default-interface-settings), while preserving current uplink interface assignment.
-
-
-3. Change to overlay RD admin subfield to use the BGP AS of the node.
+1. Change to overlay RD admin subfield to use the BGP AS of the node.
 
     - [Overlay settings](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#overlay-settings)
 
+2. Update the description of p2p routing links to include the local interface e.g. `P2P_<local_interface>_TO_<peer>_<peer_interface>`.
+
+    - [Default description or name values](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/how-to/custom-descriptions-names.html#default-description-or-name-values)
+
+3. Update uplink management from leaf nodes to use auto assignment of interfaces, while preserving current uplink interface assignments.
+
+    - [default interface settings](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#default-interface-settings)
+
+4. Configure EVPN L2 Multicast in the DC_TENANT Tenant. Use 232.0.0.0/20 as your Source-Specific Multicast range.
+
+    - [EVPN settings](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#evpn-settings)
+    - [Fabric settings](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#fabric-settings)
+    - [Network services multicast configuration](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#network-services-multicast-configuration)
+
+5. Leverage the pool manager for automatic node ID assignment, while preserving the same node ID allocation.
+
+    - [Fabric Numbering](https://avd.arista.com/6.5/ansible_collectihttps://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#preview-fabric-numberingons/arista/avd/roles/eos_designs/docs/data-models.html#preview-fabric-numbering)
+    - Hint: You will need to keep the statically set IDs on the *brdr* leafs, since the pool manager assigns IDs alphabetically.
