@@ -864,5 +864,5 @@ Commit after each challenge with `-m 'Challenge <#>'`, to be able to track you c
 
 5. Leverage the pool manager for automatic node ID assignment, while preserving the same node ID allocation.
 
-    - [Fabric Numbering](https://avd.arista.com/6.5/ansible_collectihttps://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#preview-fabric-numberingons/arista/avd/roles/eos_designs/docs/data-models.html#preview-fabric-numbering)
+    - [Fabric Numbering](https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#preview-fabric-numberingons/arista/avd/roles/eos_designs/docs/data-models.html#preview-fabric-numbering)
     - Hint: You will need to keep the statically set IDs on the *brdr* leafs, since the pool manager assigns IDs alphabetically.
