@@ -10,7 +10,7 @@
 #
 #   TMODE          'lacp' | 'active-backup' | 'static' | 'none' (default)
 #                  Multi-homing mode for eth1+eth2:
-#                    lacp           — 802.3ad LAG (negotiated)
+#                    lacp           — 802.3ad LAG (negotiated, lacp_rate fast)
 #                    active-backup  — active/standby (uses TACTIVE)
 #                    static         — balance-xor LAG (no negotiation)
 #                    none           — no bonding, single uplink on eth1
@@ -134,8 +134,17 @@ UPLINK='eth1'
 
 if [[ "${TMODE}" == 'lacp' ]]; then
   UPLINK='bond0'
-  log "Configuring LACP (802.3ad) bond ${UPLINK} from eth1+eth2"
+  log "Configuring LACP (802.3ad, lacp_rate fast) bond ${UPLINK} from eth1+eth2"
   create_bond_if_missing "${UPLINK}" mode 802.3ad
+  # lacp_rate fast asks the partner (the leaf switches) to send an LACPDU
+  # every 1s instead of every 30s, so a member whose partner goes silent
+  # while the link stays up is timed out in ~3s instead of ~90s. The kernel
+  # only accepts lacp_rate while the bond is down, hence the explicit down:
+  # a fresh bond0 is already down, but a reused one may be up.
+  ip link set "${UPLINK}" down
+  if ! ip link set "${UPLINK}" type bond lacp_rate fast; then
+    log_warn "Could not set lacp_rate fast on ${UPLINK} (LACP rate left unchanged)"
+  fi
   enslave eth1 "${UPLINK}"
   enslave eth2 "${UPLINK}"
   ip link set "${UPLINK}" up
