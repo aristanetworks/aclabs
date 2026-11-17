@@ -4,8 +4,8 @@
       "id": "freeText_1763744891076_2",
       "text": "- IPv4: **10.10.10.101/24**\n- IPv6: **2001:db8:10:10::101/64**\n- MAC: **00:01:01:01:01:01**\n- VLAN: **10**",
       "position": {
-        "x": -433.8853943072858,
-        "y": 423.1732363176617
+        "x": -435.5,
+        "y": 433.97000061173486
       },
       "fontSize": 10,
       "fontColor": "#000000",
@@ -54,8 +54,8 @@
       "id": "freeText_1772032962543",
       "text": "- IPv4: **10.20.20.101/24**\n- IPv6: **2001:db8:20:20::101/64**\n- MAC: **00:01:02:02:02:02**\n- VLAN: **20**",
       "position": {
-        "x": -273.992118758928,
-        "y": 304.0534552696975
+        "x": -274.92095756698006,
+        "y": 316
       },
       "fontSize": 10,
       "fontColor": "#000000",
@@ -70,8 +70,8 @@
       "id": "freeText_1772033015572",
       "text": "- IPv4: **10.10.10.102/24**\n- IPv6: **2001:db8:10:10::102/64**\n- MAC: **00:03:03:03:03:03**\n- VLAN: **10**",
       "position": {
-        "x": -114.08149195836236,
-        "y": 425.0816344641604
+        "x": -110.48257052700464,
+        "y": 433.97000061173486
       },
       "fontSize": 10,
       "fontColor": "#000000",
@@ -99,8 +99,48 @@
       "fontFamily": "Arial"
     }
   ],
+  "freeShapeAnnotations": [
+    {
+      "id": "freeShape_1772032561710",
+      "shapeType": "rectangle",
+      "position": {
+        "x": -401.09065182324343,
+        "y": -46.281561829218596
+      },
+      "width": 438,
+      "height": 50,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 0,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "cornerRadius": 40,
+      "zIndex": -1
+    },
+    {
+      "id": "freeShape_1772032647708",
+      "shapeType": "rectangle",
+      "position": {
+        "x": -278.0157165665104,
+        "y": 159.08497605164087
+      },
+      "width": 195,
+      "height": 50,
+      "fillColor": "#7f7f7f",
+      "fillOpacity": 0.2,
+      "borderColor": "#3b3b3b",
+      "borderWidth": 0,
+      "borderStyle": "solid",
+      "rotation": 0,
+      "cornerRadius": 40,
+      "zIndex": -1
+    }
+  ],
+  "trafficRateAnnotations": [],
+  "scriptButtonAnnotations": [],
   "groupStyleAnnotations": [],
-  "cloudNodeAnnotations": [],
+  "networkNodeAnnotations": [],
   "nodeAnnotations": [
     {
       "id": "Host1",
@@ -198,44 +238,6 @@
       "interfacePattern": "eth{n}"
     }
   ],
-  "freeShapeAnnotations": [
-    {
-      "id": "freeShape_1772032561710",
-      "shapeType": "rectangle",
-      "position": {
-        "x": -401.09065182324343,
-        "y": -46.281561829218596
-      },
-      "width": 438,
-      "height": 50,
-      "fillColor": "#7f7f7f",
-      "fillOpacity": 0.2,
-      "borderColor": "#3b3b3b",
-      "borderWidth": 0,
-      "borderStyle": "solid",
-      "rotation": 0,
-      "cornerRadius": 40,
-      "zIndex": -1
-    },
-    {
-      "id": "freeShape_1772032647708",
-      "shapeType": "rectangle",
-      "position": {
-        "x": -278.0157165665104,
-        "y": 159.08497605164087
-      },
-      "width": 195,
-      "height": 50,
-      "fillColor": "#7f7f7f",
-      "fillOpacity": 0.2,
-      "borderColor": "#3b3b3b",
-      "borderWidth": 0,
-      "borderStyle": "solid",
-      "rotation": 0,
-      "cornerRadius": 40,
-      "zIndex": -1
-    }
-  ],
   "edgeAnnotations": [
     {
       "id": "Clab-Link4",
@@ -300,5 +302,10 @@
       "endpointLabelOffsetEnabled": true,
       "endpointLabelOffset": 30
     }
-  ]
+  ],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {
+    "nodeStyle": "boxed"
+  },
+  "cloudNodeAnnotations": []
 }
