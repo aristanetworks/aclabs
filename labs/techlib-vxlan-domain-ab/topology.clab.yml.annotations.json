@@ -1362,6 +1362,7 @@
   "aliasEndpointAnnotations": [],
   "viewerSettings": {
     "style": "default",
+    "nodeStyle": "boxed",
     "linkLabelMode": "show-all",
     "lastNonTelemetryLinkLabelMode": "show-all",
     "telemetryNodeSizePx": 40,

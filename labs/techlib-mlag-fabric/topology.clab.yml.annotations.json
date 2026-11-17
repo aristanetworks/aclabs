@@ -117,7 +117,7 @@
       "text": "- IP: **10.10.10.104**\n- MAC: **00:01:01:00:00:B4**\n- VLAN: **10**",
       "position": {
         "x": 617.3343199557901,
-        "y": -200.62011115509972
+        "y": -173
       },
       "fontSize": 10,
       "fontColor": "#000000",
@@ -164,8 +164,8 @@
       "id": "freeText_1773191834798",
       "text": "- IP: **10.10.10.102**\n- MAC: **00:01:01:00:00:A4**\n- VLAN: **10**",
       "position": {
-        "x": 618.7743300227871,
-        "y": 830.3410308323967
+        "x": 617.3343199557901,
+        "y": 790.1388705248011
       },
       "fontSize": 10,
       "fontColor": "#000000",
@@ -262,6 +262,7 @@
     }
   ],
   "trafficRateAnnotations": [],
+  "scriptButtonAnnotations": [],
   "groupStyleAnnotations": [],
   "networkNodeAnnotations": [],
   "nodeAnnotations": [
@@ -418,8 +419,8 @@
     {
       "id": "HostA4",
       "position": {
-        "x": 680,
-        "y": 760
+        "x": 681.8343199557901,
+        "y": 720
       },
       "icon": "client",
       "iconColor": "#16325b",
@@ -468,8 +469,8 @@
     {
       "id": "HostB4",
       "position": {
-        "x": 680,
-        "y": -120
+        "x": 681.8343199557901,
+        "y": -80
       },
       "icon": "client",
       "iconColor": "#16325b",
@@ -488,5 +489,7 @@
   ],
   "edgeAnnotations": [],
   "aliasEndpointAnnotations": [],
-  "viewerSettings": {}
+  "viewerSettings": {
+    "nodeStyle": "boxed"
+  }
 }
