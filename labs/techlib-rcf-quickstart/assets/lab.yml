@@ -22,7 +22,7 @@ display:
   # in the dashboard header.
   validated_with:
     cEOS: "4.36.2F"
-    Containerlab: "0.81.1"
+    Containerlab: "0.83.0"
   # Recommended host resources. Rendered as a badge row in the dashboard header.
   resources:
     CPUs: 16
