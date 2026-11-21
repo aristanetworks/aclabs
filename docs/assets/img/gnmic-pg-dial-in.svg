@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" font-family="Roboto, Arial, sans-serif" font-size="12">
+  <defs>
+    <marker id="arr-solid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5a6b7d"/>
+    </marker>
+    <marker id="arr-dashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#a23b72"/>
+    </marker>
+    <marker id="arr-return" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 10 0 L 0 5 L 10 10 z" fill="#6f9654"/>
+    </marker>
+    <style>
+      .title    { font-weight: 700; font-size: 15px; fill: #1a2733; }
+      .box-cli  { fill: #a23b72; stroke: #6e2751; stroke-width: 1.5; }
+      .box-srv  { fill: #2e86ab; stroke: #1f5a75; stroke-width: 1.5; }
+      .box-lbl  { fill: #fff; font-weight: 600; text-anchor: middle; }
+      .box-lbl2 { fill: #fff; font-size: 10px; font-weight: 400; text-anchor: middle; }
+      .arrow-solid  { stroke: #5a6b7d; stroke-width: 2; fill: none; marker-end: url(#arr-solid); }
+      .arrow-dashed { stroke: #a23b72; stroke-width: 1.8; fill: none; stroke-dasharray: 5 3; marker-end: url(#arr-dashed); }
+      .arrow-stream { stroke: #6f9654; stroke-width: 1.8; fill: none; stroke-dasharray: 2 3; marker-start: url(#arr-return); }
+      .step-num { fill: #fff; font-weight: 700; font-size: 11px; text-anchor: middle; }
+      .step-cir { fill: #f18f01; stroke: #b96e00; }
+      .label    { fill: #333; font-size: 12px; }
+      .caption  { fill: #666; font-size: 11px; text-anchor: middle; font-style: italic; }
+    </style>
+  </defs>
+  <text x="450" y="24" text-anchor="middle" class="title">gNMI Dial-In — how the collector reaches the switch</text>
+
+  <!-- Client / collector -->
+  <rect x="60" y="130" width="160" height="70" rx="8" class="box-cli"/>
+  <text x="140" y="155" class="box-lbl">gNMIc collector</text>
+  <text x="140" y="172" class="box-lbl2">container: gnmic</text>
+  <text x="140" y="188" class="box-lbl2">172.144.100.200</text>
+
+  <!-- Server -->
+  <rect x="680" y="130" width="160" height="70" rx="8" class="box-srv"/>
+  <text x="760" y="155" class="box-lbl">cEOS switch</text>
+  <text x="760" y="172" class="box-lbl2">management api gnmi</text>
+  <text x="760" y="188" class="box-lbl2">transport grpc MGMT :6030</text>
+
+  <!-- Step 1: TCP + TLS + gRPC connect -->
+  <line x1="220" y1="150" x2="680" y2="150" class="arrow-solid"/>
+  <circle cx="240" cy="140" r="11" class="step-cir"/>
+  <text x="240" y="144" class="step-num">1</text>
+  <text x="450" y="140" text-anchor="middle" class="label">TCP :6030 → TLS handshake → gRPC connect</text>
+
+  <!-- Step 2: Subscribe RPC request -->
+  <line x1="220" y1="175" x2="680" y2="175" class="arrow-dashed"/>
+  <circle cx="240" cy="185" r="11" class="step-cir"/>
+  <text x="240" y="189" class="step-num">2</text>
+  <text x="450" y="200" text-anchor="middle" class="label">SubscribeRequest (paths, mode, stream-mode, interval)</text>
+
+  <!-- Step 3: server pushes updates -->
+  <line x1="220" y1="220" x2="680" y2="220" class="arrow-stream"/>
+  <circle cx="680" cy="230" r="11" class="step-cir"/>
+  <text x="680" y="234" class="step-num">3</text>
+  <text x="450" y="240" text-anchor="middle" class="label">server pushes SubscribeResponse updates on the long-lived stream</text>
+
+  <!-- Legend -->
+  <g transform="translate(60,280)">
+    <line x1="0" y1="0" x2="30" y2="0" class="arrow-solid"/>
+    <text x="40" y="4" class="label">Connection initiated by collector (dial-in)</text>
+    <line x1="0" y1="18" x2="30" y2="18" class="arrow-dashed"/>
+    <text x="40" y="22" class="label">RPC request over the gRPC channel</text>
+    <line x1="0" y1="36" x2="30" y2="36" class="arrow-stream"/>
+    <text x="40" y="40" class="label">Server streams updates back</text>
+  </g>
+
+  <text x="450" y="355" class="caption">Dial-in is the model the lab uses. Dial-out (switch initiates via a gRPC tunnel to the collector) is a valid alternative when firewalls or NAT block the reverse direction.</text>
+</svg>

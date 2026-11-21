@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" font-family="Roboto, Arial, sans-serif" font-size="12">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5a6b7d"/>
+    </marker>
+    <style>
+      .box-switch { fill: #2e86ab; stroke: #1f5a75; stroke-width: 1.5; }
+      .box-gnmic  { fill: #a23b72; stroke: #6e2751; stroke-width: 1.5; }
+      .box-prom   { fill: #f5c518; stroke: #b08d10; stroke-width: 1.5; }
+      .box-graf   { fill: #6f9654; stroke: #4a6738; stroke-width: 1.5; }
+      .arrow      { stroke: #5a6b7d; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .title      { font-weight: 700; font-size: 15px; fill: #1a2733; }
+      .box-lbl    { fill: #fff; font-weight: 600; text-anchor: middle; }
+      .box-lbl2   { fill: #fff; font-size: 10px; font-weight: 400; text-anchor: middle; }
+      .box-lbl3   { fill: #333; font-size: 10px; font-weight: 400; text-anchor: middle; }
+      .hop-lbl    { fill: #444; font-size: 11px; text-anchor: middle; font-weight: 600; }
+      .detail     { fill: #666; font-size: 10px; text-anchor: middle; }
+    </style>
+  </defs>
+  <text x="480" y="24" text-anchor="middle" class="title">Telemetry Pipeline — YANG on the switch, PromQL on the dashboard</text>
+
+  <!-- Hop 1: switches -->
+  <rect x="40" y="150" width="150" height="80" rx="8" class="box-switch"/>
+  <text x="115" y="175" class="box-lbl">cEOS switches (×6)</text>
+  <text x="115" y="193" class="box-lbl2">management api gnmi</text>
+  <text x="115" y="207" class="box-lbl2">transport grpc MGMT</text>
+  <text x="115" y="221" class="box-lbl2">provider eos-native</text>
+
+  <!-- Hop 2: gnmic -->
+  <rect x="290" y="150" width="180" height="80" rx="8" class="box-gnmic"/>
+  <text x="380" y="175" class="box-lbl">gNMIc collector</text>
+  <text x="380" y="193" class="box-lbl2">17 subscriptions (stream)</text>
+  <text x="380" y="207" class="box-lbl2">5 event processors</text>
+  <text x="380" y="221" class="box-lbl2">exposes /metrics :9273</text>
+
+  <!-- Hop 3: prometheus -->
+  <rect x="570" y="150" width="170" height="80" rx="8" class="box-prom"/>
+  <text x="655" y="175" class="box-lbl" fill="#333">Prometheus TSDB</text>
+  <text x="655" y="193" class="box-lbl3">scrape_interval: 5s</text>
+  <text x="655" y="207" class="box-lbl3">gnmic:9273/metrics</text>
+  <text x="655" y="221" class="box-lbl3">time-series store</text>
+
+  <!-- Hop 4: grafana -->
+  <rect x="820" y="150" width="120" height="80" rx="8" class="box-graf"/>
+  <text x="880" y="175" class="box-lbl">Grafana</text>
+  <text x="880" y="193" class="box-lbl2">5 dashboards</text>
+  <text x="880" y="207" class="box-lbl2">PromQL queries</text>
+  <text x="880" y="221" class="box-lbl2">alerts / panels</text>
+
+  <!-- Arrows -->
+  <line x1="190" y1="190" x2="285" y2="190" class="arrow"/>
+  <line x1="470" y1="190" x2="565" y2="190" class="arrow"/>
+  <line x1="740" y1="190" x2="815" y2="190" class="arrow"/>
+
+  <!-- Hop labels -->
+  <text x="238" y="145" class="hop-lbl">gNMI :6030</text>
+  <text x="238" y="245" class="detail">subscribe, stream</text>
+  <text x="238" y="258" class="detail">JSON_IETF</text>
+
+  <text x="518" y="145" class="hop-lbl">HTTP scrape</text>
+  <text x="518" y="245" class="detail">every 5s</text>
+  <text x="518" y="258" class="detail">/metrics</text>
+
+  <text x="778" y="145" class="hop-lbl">PromQL</text>
+  <text x="778" y="245" class="detail">datasource</text>
+
+  <!-- Below: sample data flow -->
+  <g transform="translate(40,300)">
+    <text x="0" y="0" font-weight="600" fill="#1a2733">Example: interface oper-status from cEOS to Grafana</text>
+    <text x="0" y="20" fill="#333">1. Switch:  <tspan font-family="Roboto Mono, monospace">/interfaces/interface[name=Ethernet1]/state/oper-status</tspan>  →  <tspan font-family="Roboto Mono, monospace">"UP"</tspan></text>
+    <text x="0" y="40" fill="#333">2. gNMIc:   trim-prefixes strips path,  bounce-map converts UP→1,  DOWN→0</text>
+    <text x="0" y="60" fill="#333">3. Prom:    <tspan font-family="Roboto Mono, monospace">gnmic_intf_oper_state_oper_status{source="spine1",interface_name="Ethernet1"} 1</tspan></text>
+    <text x="0" y="80" fill="#333">4. Grafana: <tspan font-family="Roboto Mono, monospace">sum by (source)(gnmic_intf_oper_state_oper_status == 1)</tspan>  →  fabric-health tile</text>
+  </g>
+
+  <text x="480" y="435" class="detail" font-style="italic">Each hop is a single config file. When a Grafana panel looks wrong, the bug is on one of these four hops.</text>
+</svg>
